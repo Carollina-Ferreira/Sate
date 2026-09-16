@@ -1,0 +1,382 @@
+.card {
+  width: 100%;
+  max-width: 320px;
+
+  background: var(--branco);
+
+  border: 1px solid var(--borda);
+  border-radius: 30px;
+
+  overflow: hidden;
+
+  box-shadow: 0 8px 24px rgba(18, 38, 31, 0.08);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+
+  border-color: rgba(22, 168, 117, 0.25);
+
+  box-shadow: 0 14px 32px rgba(18, 38, 31, 0.14);
+}
+
+
+/* ========================================
+   IMAGEM
+======================================== */
+
+.imageContainer {
+  position: relative;
+
+  width: 100%;
+  height: 153px;
+
+  overflow: visible;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+
+/* ========================================
+   MODALIDADE
+======================================== */
+
+.modality {
+  position: absolute;
+
+  top: 12px;
+  left: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 11px;
+
+  border-radius: 20px;
+
+  color: var(--branco);
+
+  font-family: var(--fonte-base);
+  font-size: 10px;
+  font-weight: 700;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+
+  backdrop-filter: blur(4px);
+}
+
+.modality span {
+  font-size: 15px;
+}
+
+
+/* ========================================
+   ÍCONE SUPERIOR DIREITO
+======================================== */
+
+.topIcon {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--branco);
+
+  border: 1px solid rgba(255, 255, 255, 0.7);
+
+  border-radius: 50%;
+
+  box-shadow: 0 3px 8px rgba(18, 38, 31, 0.15);
+}
+
+.topIcon span {
+  color: var(--verde-principal);
+
+  font-size: 16px;
+}
+
+
+/* ========================================
+   ÍCONE DO ESPORTE
+======================================== */
+
+.sportIcon {
+  position: absolute;
+
+  left: 14px;
+  bottom: -20px;
+
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--branco);
+
+  border: 3px solid var(--branco);
+
+  border-radius: 13px;
+
+  box-shadow: 0 5px 12px rgba(18, 38, 31, 0.13);
+}
+
+.sportIcon span {
+  color: var(--verde-principal);
+
+  font-size: 27px;
+}
+
+
+/* ========================================
+   CONTEÚDO
+======================================== */
+
+.content {
+  padding: 22px 14px 13px;
+}
+
+
+/* ========================================
+   INFORMAÇÕES DA EQUIPE
+======================================== */
+
+.teamInfo {
+  margin-bottom: 12px;
+}
+
+.teamInfo h2 {
+  margin: 0 0 4px;
+
+  color: var(--texto);
+
+  font-family: var(--fonte-titulo);
+  font-size: 17px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: var(--texto-suave);
+
+  font-family: var(--fonte-base);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.details span + span::before {
+  content: '';
+
+  display: inline-block;
+
+  width: 3px;
+  height: 3px;
+
+  margin-right: 8px;
+
+  background: var(--texto-suave);
+
+  border-radius: 50%;
+
+  vertical-align: middle;
+}
+
+
+/* ========================================
+   ESTATÍSTICAS
+======================================== */
+
+.stats {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 7px;
+}
+
+.stat {
+  min-height: 58px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--cinza-100);
+
+  border: 1px solid var(--cinza-200);
+
+  border-radius: 12px;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.stat:hover {
+  background: var(--cinza-200);
+
+  transform: translateY(-2px);
+}
+
+.stat span {
+  margin-bottom: 3px;
+
+  color: var(--texto-suave);
+
+  font-family: var(--fonte-base);
+  font-size: 7px;
+  font-weight: 700;
+
+  letter-spacing: 0.4px;
+}
+
+.stat strong {
+  color: var(--texto);
+
+  font-family: var(--fonte-titulo);
+  font-size: 20px;
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+
+/* VITÓRIAS */
+
+.stat .victory {
+  color: var(--verde-principal);
+}
+
+
+/* DERROTAS */
+
+.stat .defeat {
+  color: var(--vermelho);
+}
+
+
+/* ========================================
+   PRÓXIMA PARTIDA
+======================================== */
+
+.nextGame {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  min-height: 52px;
+
+  padding: 8px 12px;
+
+  background: var(--cinza-100);
+
+  border-top: 1px solid var(--cinza-200);
+}
+
+.calendar {
+  width: 31px;
+  height: 31px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  background: rgba(78, 165, 217, 0.14);
+
+  border-radius: 9px;
+
+  color: var(--azul);
+}
+
+.calendar span {
+  font-size: 18px;
+}
+
+.nextGame > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.nextLabel {
+  margin-bottom: 2px;
+
+  color: var(--texto-suave);
+
+  font-family: var(--fonte-base);
+  font-size: 7px;
+  font-weight: 700;
+
+  letter-spacing: 0.4px;
+}
+
+.nextGame strong {
+  overflow: hidden;
+
+  color: var(--texto);
+
+  font-family: var(--fonte-base);
+  font-size: 9px;
+  font-weight: 600;
+
+  line-height: 1.3;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+@media (max-width: 700px) {
+  .card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .content {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .stats {
+    gap: 5px;
+  }
+
+  .stat {
+    min-height: 54px;
+  }
+}

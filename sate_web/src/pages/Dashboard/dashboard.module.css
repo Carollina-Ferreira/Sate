@@ -1,0 +1,38 @@
+/* =====================================
+   PÁGINA
+===================================== */
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+
+  background: var(--cinza-fundo);
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================
+   CONTEÚDO
+===================================== */
+
+.content {
+  min-height: 100vh;
+
+  padding: 40px;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================
+   TEXTO
+===================================== */
+
+.welcome {
+  margin: 0;
+
+  color: var(--texto-suave);
+
+  font-size: 15px;
+}

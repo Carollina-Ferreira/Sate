@@ -1,0 +1,800 @@
+/* =====================================
+   PÁGINA
+===================================== */
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+
+  overflow: hidden;
+
+  background: var(--cinza-fundo);
+}
+
+
+/* =====================================
+   LADO ESQUERDO
+===================================== */
+
+.left {
+  position: relative;
+
+  width: 52%;
+  min-height: 100vh;
+
+  overflow: hidden;
+
+  background: var(--verde-escuro);
+}
+
+
+/* =====================================
+   IMAGEM
+===================================== */
+
+.leftImage {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  z-index: 0;
+}
+
+
+/* =====================================
+   CURVAS COLORIDAS
+===================================== */
+
+.curves {
+  position: absolute;
+
+  bottom: -40px;
+  left: -60px;
+
+  width: 320px;
+  height: 320px;
+
+  opacity: 0.85;
+
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+
+/* =====================================
+   TEXTO
+===================================== */
+
+.leftContent {
+  position: absolute;
+
+  left: 20px;
+  bottom: 145px;
+
+  z-index: 3;
+
+  max-width: 440px;
+
+  color: var(--branco);
+}
+
+.leftContent h1 {
+  margin: 0 0 12px;
+
+  font-size: 27px;
+
+  line-height: 1.18;
+
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
+}
+
+.leftContent p {
+  margin: 0;
+
+  font-size: 11px;
+
+  line-height: 1.35;
+
+  font-weight: 400;
+
+  color: rgba(255, 255, 255, 0.88);
+}
+
+
+/* =====================================
+   ESTATÍSTICAS
+===================================== */
+
+.leftFooter {
+  position: absolute;
+
+  left: 34px;
+  bottom: 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 25px;
+
+  z-index: 4;
+
+  color: var(--branco);
+
+  font-size: 10px;
+}
+
+.leftFooter span {
+  font-size: 10px;
+
+  font-weight: 400;
+
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.leftFooter .dot {
+  color: var(--verde-principal);
+}
+
+
+/* =====================================
+   LADO DIREITO
+===================================== */
+
+.right {
+  position: relative;
+
+  width: 48%;
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      100% 100% at 100% 0%,
+      rgba(22, 168, 117, 0.10) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      80% 80% at 0% 100%,
+      rgba(78, 165, 217, 0.08) 0%,
+      transparent 45%
+    ),
+    var(--cinza-fundo);
+}
+
+
+/* =====================================
+   DECORAÇÕES
+===================================== */
+
+.decor {
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  overflow: hidden;
+}
+
+.dotGrid {
+  position: absolute;
+
+  inset: 0;
+
+  background-image:
+    radial-gradient(
+      rgba(18, 38, 31, 0.07) 1px,
+      transparent 1px
+    );
+
+  background-size: 22px 22px;
+
+  mask-image:
+    radial-gradient(
+      circle at 65% 35%,
+      rgba(0, 0, 0, 0.9) 0%,
+      transparent 65%
+    );
+
+  -webkit-mask-image:
+    radial-gradient(
+      circle at 65% 35%,
+      rgba(0, 0, 0, 0.9) 0%,
+      transparent 65%
+    );
+}
+
+
+/* =====================================
+   BLOBS
+===================================== */
+
+.blob {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(38px);
+}
+
+.blobGreen {
+  width: 260px;
+  height: 260px;
+
+  top: -60px;
+  right: -40px;
+
+  background: var(--verde-principal);
+
+  opacity: 0.35;
+}
+
+.blobBlue {
+  width: 220px;
+  height: 220px;
+
+  bottom: 10%;
+  right: 12%;
+
+  background: var(--azul);
+
+  opacity: 0.28;
+}
+
+.blobPink {
+  width: 180px;
+  height: 180px;
+
+  bottom: -40px;
+  left: 6%;
+
+  background: var(--rosa);
+
+  opacity: 0.22;
+}
+
+
+/* =====================================
+   ANIMAÇÃO
+===================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  .blob {
+    animation: floatSlow 10s ease-in-out infinite;
+  }
+
+  .blobBlue {
+    animation-duration: 12s;
+    animation-delay: 0.8s;
+  }
+
+  .blobPink {
+    animation-duration: 14s;
+    animation-delay: 1.4s;
+  }
+}
+
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(14px, -18px);
+  }
+}
+
+
+/* =====================================
+   GRÁFICO
+===================================== */
+
+.dataLine {
+  position: absolute;
+
+  top: 14%;
+  right: 4%;
+
+  width: 260px;
+  height: 120px;
+
+  opacity: 0.5;
+}
+
+
+/* =====================================
+   CARD
+===================================== */
+
+.formCard {
+  position: relative;
+
+  z-index: 5;
+
+  width: 100%;
+  max-width: 380px;
+
+  padding: 40px 36px;
+
+  background: var(--branco);
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 2px 6px rgba(18, 38, 31, 0.04),
+    0 24px 48px rgba(18, 38, 31, 0.09);
+
+  animation: fadeSlideUp 0.55s ease both;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =====================================
+   LOGO
+===================================== */
+
+.brandMark {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 18px;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--verde-principal),
+      var(--azul)
+    );
+}
+
+
+/* =====================================
+   TÍTULO
+===================================== */
+
+.formCard h2 {
+  margin: 0 0 6px;
+
+  color: var(--preto);
+
+  font-size: 25px;
+
+  line-height: 1.2;
+
+  font-weight: 700;
+}
+
+
+/* =====================================
+   SUBTÍTULO
+===================================== */
+
+.subtitle {
+  margin: 0 0 26px;
+
+  color: var(--cinza-texto);
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+/* =====================================
+   FORMULÁRIO
+===================================== */
+
+.form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+
+/* =====================================
+   CAMPOS
+===================================== */
+
+.field {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.field label {
+  color: var(--preto);
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.field input {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 13px;
+
+  box-sizing: border-box;
+
+  border: 1.5px solid #B8C2BE;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  background: var(--branco);
+
+  color: var(--preto);
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.field input:hover {
+  border-color: #8FA09A;
+}
+
+.field input:focus {
+  border-color: var(--verde-principal);
+
+  background: var(--branco);
+
+  box-shadow:
+    0 0 0 4px rgba(22, 168, 117, 0.12);
+}
+
+.field input:focus {
+  border-color: var(--verde-principal);
+
+  box-shadow:
+    0 0 0 4px rgba(22, 168, 117, 0.12);
+}
+
+
+/* =====================================
+   OPÇÕES
+===================================== */
+
+.rowBetween {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-top: 2px;
+}
+
+.checkboxLabel {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  cursor: pointer;
+
+  color: var(--preto);
+
+  font-size: 12px;
+}
+
+.checkboxLabel input {
+  width: 14px;
+  height: 14px;
+
+  margin: 0;
+
+  accent-color: var(--verde-principal);
+}
+
+.link {
+  color: var(--rosa);
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--vermelho);
+
+  text-decoration: underline;
+}
+
+
+/* =====================================
+   BOTÃO
+===================================== */
+
+.submitButton {
+  width: 100%;
+  height: 42px;
+
+  margin-top: 5px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: var(--verde-principal);
+
+  color: var(--branco);
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.submitButton:hover {
+  background: var(--verde-escuro);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 26px rgba(22, 168, 117, 0.28);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+}
+
+
+/* =====================================
+   CRIAR CONTA
+===================================== */
+
+.signupText {
+  margin: 20px 0 0;
+
+  text-align: center;
+
+  color: var(--cinza-texto);
+
+  font-size: 12px;
+}
+
+/* =====================================
+   CAMPO DE SENHA
+===================================== */
+
+.passwordWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.passwordWrapper input {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 42px 0 13px;
+
+  box-sizing: border-box;
+
+  border: 1.5px solid #B8C2BE;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  background: var(--branco);
+
+  color: var(--texto);
+
+  font-family: inherit;
+  font-size: 13px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.passwordWrapper input::placeholder {
+  color: #9AA8A3;
+}
+
+.passwordWrapper input:hover {
+  border-color: #8FA09A;
+}
+
+.passwordWrapper input:focus {
+  border-color: var(--verde-principal);
+
+  box-shadow:
+    0 0 0 4px rgba(22, 168, 117, 0.12);
+}
+
+
+/* Olho */
+
+.passwordToggle {
+  position: absolute;
+
+  top: 50%;
+  right: 12px;
+
+  transform: translateY(-50%);
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  background: transparent;
+
+  color: var(--texto-suave);
+
+  font-family: 'Material Icons';
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+.passwordToggle:hover {
+  color: var(--verde-principal);
+}
+
+/* =====================================
+   RESPONSIVIDADE
+===================================== */
+
+@media (max-width: 900px) {
+  .left {
+    width: 50%;
+  }
+
+  .right {
+    width: 50%;
+
+    padding: 30px;
+  }
+
+  .leftContent h1 {
+    font-size: 23px;
+  }
+}
+
+
+@media (max-width: 700px) {
+  .page {
+    flex-direction: column;
+  }
+
+  .left {
+    width: 100%;
+    min-height: 300px;
+  }
+
+  .right {
+    width: 100%;
+    min-height: 500px;
+
+    padding: 50px 20px;
+  }
+
+  .leftContent {
+    left: 25px;
+    bottom: 70px;
+  }
+
+  .leftFooter {
+    left: 25px;
+  }
+}
+
+
+@media (max-width: 450px) {
+  .left {
+    min-height: 260px;
+  }
+
+  .leftContent {
+    left: 20px;
+    bottom: 55px;
+  }
+
+  .leftContent h1 {
+    font-size: 20px;
+  }
+
+  .leftContent p {
+    font-size: 8px;
+  }
+
+  .leftContent p br {
+    display: none;
+  }
+
+  .leftFooter {
+    left: 20px;
+
+    gap: 12px;
+  }
+
+  .leftFooter span {
+    font-size: 8px;
+  }
+
+  .right {
+    padding: 40px 20px;
+  }
+
+  .formCard {
+    width: 85%;
+    max-width: 304px;
+
+    padding: 30px 24px;
+
+    border-radius: 20px;
+  }
+
+  .formCard h2 {
+    font-size: 21px;
+  }
+}

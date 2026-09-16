@@ -1,0 +1,68 @@
+/* =====================================
+   LAYOUT
+===================================== */
+
+.layout {
+  width: 100%;
+  min-height: 100vh;
+
+  background: var(--verde-dark);
+}
+
+
+/* =====================================
+   ÁREA PRINCIPAL
+===================================== */
+
+.main {
+  min-height: 100vh;
+
+  margin-left: 70px;
+
+  box-sizing: border-box;
+
+  transition: margin-left 0.25s ease;
+}
+
+
+/* =====================================
+   SIDEBAR EXPANDIDO
+===================================== */
+
+.mainExpanded {
+  margin-left: 230px;
+}
+
+
+/* =====================================
+   CONTEÚDO
+===================================== */
+
+.content {
+  min-height: calc(100vh - 48px);
+
+  padding: 40px;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================
+   RESPONSIVIDADE
+===================================== */
+
+@media (max-width: 700px) {
+
+  .main {
+    margin-left: 60px;
+  }
+
+  .mainExpanded {
+    margin-left: 210px;
+  }
+
+  .content {
+    padding: 30px 20px;
+  }
+
+}

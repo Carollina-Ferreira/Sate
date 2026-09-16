@@ -1,0 +1,658 @@
+/* =====================================================
+   PÁGINA
+===================================================== */
+
+.page {
+    min-height: calc(100vh - 72px);
+
+    background: var(--verde-fundo, var(--verde-dark));
+
+    padding: 32px 34px 50px;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+
+.header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 21px;
+}
+
+
+.title {
+    margin: 0;
+
+    color: var(--branco);
+
+    font-family: var(--fonte-titulo);
+
+    font-size: 30px;
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
+}
+
+
+/* =====================================================
+   BOTÃO NOVO ATLETA
+===================================================== */
+
+.newAthleteButton {
+    height: 57px;
+
+    padding: 0 20px;
+    border: none;
+    border-radius: 20px;
+
+    background: var(--verde-principal);
+
+    color: var(--branco);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    font-family: var(--fonte-base);
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+
+.newAthleteButton:hover {
+    background: var(--verde-escuro);
+}
+
+
+.newAthleteButton svg {
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   FILTROS
+===================================================== */
+
+.filters {
+    display: flex;
+    align-items: center;
+
+    gap: 17px;
+
+    margin-bottom: 78px;
+}
+
+
+/* =====================================================
+   BUSCA
+===================================================== */
+
+.searchBox {
+    width: 501px;
+    height: 46px;
+
+    background: var(--branco);
+
+    border: 1px solid var(--borda);
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 17px;
+
+    box-sizing: border-box;
+}
+
+
+.searchIcon {
+    color: var(--texto-suave);
+
+    flex-shrink: 0;
+
+    margin-right: 10px;
+}
+
+
+.searchBox input {
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: var(--texto);
+
+    font-family: var(--fonte-base);
+
+    font-size: 14px;
+}
+
+
+.searchBox input::placeholder {
+    color: var(--texto-suave);
+}
+
+
+/* =====================================================
+   SELECTS
+===================================================== */
+
+.selectWrapper {
+    position: relative;
+
+    width: 230px;
+    height: 46px;
+}
+
+
+.select {
+    width: 100%;
+    height: 46px;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    border: 1px solid var(--borda);
+
+    border-radius: 9px;
+
+    background: var(--branco);
+
+    color: var(--texto);
+
+    padding: 0 43px 0 17px;
+
+    outline: none;
+
+    font-family: var(--fonte-base);
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+
+.select:focus {
+    border-color: var(--verde-principal);
+}
+
+
+.selectIcon {
+    position: absolute;
+
+    right: 16px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    pointer-events: none;
+
+    color: var(--texto);
+}
+
+
+/* =====================================================
+   BOTÃO FILTROS
+===================================================== */
+
+.filterButton {
+    height: 46px;
+
+    padding: 0 17px;
+
+    border-radius: 9px;
+
+    border: 1px solid var(--azul);
+
+    background: var(--branco);
+
+    color: var(--azul);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    font-family: var(--fonte-base);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.filterButton:hover {
+    background: var(--cinza-100);
+}
+
+
+/* =====================================================
+   GRID
+===================================================== */
+
+.athletesGrid {
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    column-gap: 48px;
+    row-gap: 39px;
+
+    width: 100%;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.athleteCard {
+    position: relative;
+
+    width: 100%;
+    height: 225px;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   CARD NORMAL
+===================================================== */
+
+.cardNormal {
+    position: absolute;
+
+    inset: 0;
+
+    background: var(--branco);
+
+    padding: 12px 20px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    opacity: 1;
+
+    transition: opacity 0.18s ease;
+}
+
+
+/* =====================================================
+   AVATAR
+===================================================== */
+
+.avatar {
+    width: 66px;
+    height: 66px;
+
+    min-width: 66px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--branco);
+
+    font-family: var(--fonte-base);
+
+    font-size: 20px;
+    font-weight: 600;
+
+    margin-bottom: 13px;
+}
+
+
+/* =====================================================
+   CORES DOS AVATARES
+===================================================== */
+
+.avatar.verde {
+    background: var(--verde-principal);
+}
+
+
+.avatar.rosa {
+    background: var(--rosa);
+}
+
+
+.avatar.azul {
+    background: var(--azul);
+}
+
+
+/* =====================================================
+   INFORMAÇÕES
+===================================================== */
+
+.info h2 {
+    margin: 0 0 6px;
+
+    color: var(--texto);
+
+    font-family: var(--fonte-titulo);
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.team {
+    margin: 0 0 6px;
+
+    color: var(--texto-suave);
+
+    font-family: var(--fonte-base);
+
+    font-size: 16px;
+
+    line-height: 1.2;
+}
+
+
+.sport {
+    margin: 0;
+
+    color: var(--texto-suave);
+
+    font-family: var(--fonte-base);
+
+    font-size: 16px;
+
+    line-height: 1.2;
+}
+
+
+.sport span {
+    margin: 0 5px;
+}
+
+
+/* =====================================================
+   FREQUÊNCIA
+===================================================== */
+
+.frequency {
+    position: absolute;
+
+    right: 14px;
+    bottom: 12px;
+
+    padding: 4px 11px;
+
+    border-radius: 15px;
+
+    font-family: var(--fonte-base);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    line-height: 1.2;
+}
+
+
+/* VERDE */
+
+.frequency.verde {
+    color: var(--verde-principal);
+
+    background: var(--cinza-200);
+}
+
+
+/* ROSA */
+
+.frequency.rosa {
+    color: var(--rosa);
+
+    background: #fce0e7;
+}
+
+
+/* AZUL */
+
+.frequency.azul {
+    color: var(--azul);
+
+    background: #dff2fa;
+}
+
+
+/* =====================================================
+   CARD HOVER
+===================================================== */
+
+.cardHover {
+    position: absolute;
+
+    inset: 0;
+
+    background: var(--verde-escuro);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 16px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: opacity 0.18s ease;
+}
+
+
+/* =====================================================
+   ATIVAÇÃO DO HOVER
+===================================================== */
+
+.athleteCard:hover .cardNormal {
+    opacity: 0;
+}
+
+
+.athleteCard:hover .cardHover {
+    opacity: 1;
+
+    pointer-events: auto;
+}
+
+
+/* =====================================================
+   BOTÕES DO HOVER
+===================================================== */
+
+.hoverButton {
+    width: 202px;
+    height: 45px;
+
+    border-radius: 11px;
+
+    border: 1px solid var(--branco);
+
+    background: rgba(255, 255, 255, 0.16);
+
+    color: var(--branco);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    font-family: var(--fonte-base);
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.hoverButton:hover {
+    background: rgba(255, 255, 255, 0.28);
+
+    transform: scale(1.02);
+}
+
+
+.hoverButton svg {
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+
+@media (max-width: 1250px) {
+
+    .athletesGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+
+        column-gap: 30px;
+    }
+
+
+    .searchBox {
+        width: 400px;
+    }
+
+
+    .selectWrapper {
+        width: 190px;
+    }
+
+}
+
+
+@media (max-width: 950px) {
+
+    .filters {
+        flex-wrap: wrap;
+
+        margin-bottom: 40px;
+    }
+
+
+    .searchBox {
+        width: 100%;
+    }
+
+
+    .selectWrapper {
+        flex: 1;
+
+        min-width: 180px;
+    }
+
+
+    .athletesGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .page {
+        padding: 24px 18px 40px;
+    }
+
+
+    .header {
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+
+    .title {
+        font-size: 26px;
+    }
+
+
+    .newAthleteButton {
+        height: 45px;
+
+        border-radius: 14px;
+
+        padding: 0 14px;
+    }
+
+
+    .filters {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .searchBox {
+        width: 100%;
+    }
+
+
+    .selectWrapper {
+        width: 100%;
+    }
+
+
+    .filterButton {
+        width: 100%;
+    }
+
+
+    .athletesGrid {
+        grid-template-columns: 1fr;
+    }
+
+}

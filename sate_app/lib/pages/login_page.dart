@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'cadastro_page.dart';
 import 'esqueci_senha_page.dart';
 import 'atleta_vinculo_page.dart';
-import 'treinador_vinculo_page.dart';
+import './Treinador/treinador_navigation.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -49,15 +49,18 @@ class _LoginPageState extends State<LoginPage> {
           ),
 
           SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 40,
-                ),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 24,
+              ),
+              child: Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 430),
-                  child:  _loginContent(),
+                  constraints: const BoxConstraints(
+                    maxWidth: 430,
+                  ),
+                  child: _loginContent(),
                 ),
               ),
             ),
@@ -67,14 +70,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
-  // CARD
-  // ========================================================================
-
-  Widget  _loginContent() {
+  Widget _loginContent() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(42),
+      padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -89,23 +88,15 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ==================================================================
-          // LOGO
-          // ==================================================================
-
           Center(
             child: Image.asset(
-              'images/logoVerde_img.png',
+              'assets/images/logoVerde_img.png',
               width: 125,
               fit: BoxFit.contain,
             ),
           ),
 
-          const SizedBox(height: 25),
-
-          // ==================================================================
-          // TÍTULO
-          // ==================================================================
+          const SizedBox(height: 20),
 
           const Text(
             'Bem-vindo de volta!',
@@ -128,11 +119,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
 
-          const SizedBox(height: 28),
-
-          // ==================================================================
-          // PERFIL
-          // ==================================================================
+          const SizedBox(height: 22),
 
           _label('Perfil'),
 
@@ -143,7 +130,9 @@ class _LoginPageState extends State<LoginPage> {
             onTap: _selecionarPerfil,
             child: Container(
               height: 52,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -181,11 +170,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
 
-          const SizedBox(height: 20),
-
-          // ==================================================================
-          // EMAIL
-          // ==================================================================
+          const SizedBox(height: 18),
 
           _label('Email'),
 
@@ -201,11 +186,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
 
-          const SizedBox(height: 18),
-
-          // ==================================================================
-          // SENHA
-          // ==================================================================
+          const SizedBox(height: 16),
 
           _label('Senha'),
 
@@ -238,10 +219,6 @@ class _LoginPageState extends State<LoginPage> {
 
           const SizedBox(height: 12),
 
-          // ==================================================================
-          // LEMBRAR / ESQUECI
-          // ==================================================================
-
           Row(
             children: [
               SizedBox(
@@ -265,52 +242,39 @@ class _LoginPageState extends State<LoginPage> {
 
               const Text(
                 'Lembrar de mim',
-                style: TextStyle(fontSize: 12),
+                style: TextStyle(
+                  fontSize: 12,
+                ),
               ),
 
               const Spacer(),
 
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: _esqueciSenha,
-                  child: Text(
-                    'Esqueci minha senha',
-                    style: TextStyle(
-                      color: verde,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
+              GestureDetector(
+                onTap: _esqueciSenha,
+                child: Text(
+                  'Esqueci minha senha',
+                  style: TextStyle(
+                    color: verde,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             ],
           ),
 
-          const SizedBox(height: 22),
-
-          // ==================================================================
-          // ENTRAR
-          // ==================================================================
+          const SizedBox(height: 20),
 
           _mainButton(
             text: 'Entrar',
             onTap: _entrar,
           ),
 
-          const SizedBox(height: 22),
-
-          // ==================================================================
-          // DIVISOR
-          // ==================================================================
+          const SizedBox(height: 20),
 
           _divider(),
 
-          const SizedBox(height: 22),
-
-          // ==================================================================
-          // GOOGLE
-          // ==================================================================
+          const SizedBox(height: 20),
 
           _socialButton(
             icon: _googleIcon(),
@@ -318,11 +282,7 @@ class _LoginPageState extends State<LoginPage> {
             onTap: _entrarComGoogle,
           ),
 
-          const SizedBox(height: 12),
-
-          // ==================================================================
-          // APPLE
-          // ==================================================================
+          const SizedBox(height: 10),
 
           _socialButton(
             icon: const Icon(
@@ -334,11 +294,7 @@ class _LoginPageState extends State<LoginPage> {
             onTap: _entrarComApple,
           ),
 
-          const SizedBox(height: 25),
-
-          // ==================================================================
-          // CRIAR CONTA
-          // ==================================================================
+          const SizedBox(height: 20),
 
           Center(
             child: _HoverLink(
@@ -349,7 +305,8 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CadastroPage(),
+                    builder: (context) =>
+                        const CadastroPage(),
                   ),
                 );
               },
@@ -359,10 +316,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  // ========================================================================
-  // LABEL
-  // ========================================================================
 
   Widget _label(String text) {
     return Text(
@@ -374,10 +327,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  // ========================================================================
-  // INPUT
-  // ========================================================================
 
   InputDecoration _inputDecoration(
     String hint,
@@ -424,10 +373,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
-  // BOTÃO PRINCIPAL
-  // ========================================================================
-
   Widget _mainButton({
     required String text,
     required VoidCallback onTap,
@@ -456,10 +401,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
-  // DIVISOR
-  // ========================================================================
-
   Widget _divider() {
     return Row(
       children: [
@@ -471,7 +412,9 @@ class _LoginPageState extends State<LoginPage> {
         ),
 
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+          ),
           child: Text(
             'ou continue com',
             style: TextStyle(
@@ -491,56 +434,43 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
-  // GOOGLE / APPLE
-  // ========================================================================
-
   Widget _socialButton({
     required Widget icon,
     required String text,
     required VoidCallback onTap,
   }) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: OutlinedButton(
-          onPressed: onTap,
-          style: OutlinedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: const Color(0xFF222222),
-            side: BorderSide(
-              color: Colors.grey.shade300,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: OutlinedButton(
+        onPressed: onTap,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: const Color(0xFF222222),
+          side: BorderSide(
+            color: Colors.grey.shade300,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              icon,
-
-              const SizedBox(width: 10),
-
-              Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon,
+            const SizedBox(width: 10),
+            Text(
+              text,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
-
-  // ========================================================================
-  // GOOGLE
-  // ========================================================================
 
   Widget _googleIcon() {
     return const Text(
@@ -552,10 +482,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  // ========================================================================
-  // SELECIONAR PERFIL
-  // ========================================================================
 
   void _selecionarPerfil() {
     showModalBottomSheet(
@@ -615,10 +541,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
-  // OPÇÃO DE PERFIL
-  // ========================================================================
-
   Widget _perfilOption(
     String titulo,
     String descricao,
@@ -671,7 +593,8 @@ class _LoginPageState extends State<LoginPage> {
 
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
                 children: [
                   Text(
                     titulo,
@@ -705,9 +628,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
+  // ============================================================
   // LOGIN
-  // ========================================================================
+  // ============================================================
 
   void _entrar() {
     final email = emailController.text.trim();
@@ -728,30 +651,32 @@ class _LoginPageState extends State<LoginPage> {
     debugPrint('Login: $email');
     debugPrint('Perfil: $tipoUsuario');
 
-    // ================================================================
+    // ==========================================================
     // ATLETA
-    // ================================================================
+    // ==========================================================
 
     if (tipoUsuario == 'Atleta') {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const AtletaVinculoPage(),
+          builder: (context) =>
+              const AtletaVinculoPage(),
         ),
       );
 
       return;
     }
 
-    // ================================================================
+    // ==========================================================
     // TREINADOR
-    // ================================================================
+    // ==========================================================
 
     if (tipoUsuario == 'Treinador') {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const TreinadorVinculoPage(),
+          builder: (context) =>
+              const TreinadorNavigation(),
         ),
       );
 
@@ -759,13 +684,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // ========================================================================
-  // GOOGLE
-  // ========================================================================
-
   void _entrarComGoogle() {
-    debugPrint('Login com Google');
-
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
@@ -775,13 +694,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
-  // APPLE
-  // ========================================================================
-
   void _entrarComApple() {
-    debugPrint('Login com Apple');
-
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
@@ -791,23 +704,20 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
-  // ESQUECI SENHA
-  // ========================================================================
-
   void _esqueciSenha() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const EsqueciSenhaPage(),
+        builder: (context) =>
+            const EsqueciSenhaPage(),
       ),
     );
   }
 }
 
-// ============================================================================
-// LINK COM HOVER
-// ============================================================================
+// ================================================================
+// HOVER LINK
+// ================================================================
 
 class _HoverLink extends StatefulWidget {
   final Color verde;
@@ -823,7 +733,8 @@ class _HoverLink extends StatefulWidget {
   });
 
   @override
-  State<_HoverLink> createState() => _HoverLinkState();
+  State<_HoverLink> createState() =>
+      _HoverLinkState();
 }
 
 class _HoverLinkState extends State<_HoverLink> {
@@ -833,19 +744,16 @@ class _HoverLinkState extends State<_HoverLink> {
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-
       onEnter: (_) {
         setState(() {
           hover = true;
         });
       },
-
       onExit: (_) {
         setState(() {
           hover = false;
         });
       },
-
       child: GestureDetector(
         onTap: widget.onTap,
         child: RichText(
@@ -858,7 +766,6 @@ class _HoverLinkState extends State<_HoverLink> {
               TextSpan(
                 text: widget.normalText,
               ),
-
               TextSpan(
                 text: widget.linkText,
                 style: TextStyle(
@@ -879,9 +786,9 @@ class _HoverLinkState extends State<_HoverLink> {
   }
 }
 
-// ============================================================================
+// ================================================================
 // BACKGROUND
-// ============================================================================
+// ================================================================
 
 class BackgroundPainter extends CustomPainter {
   final Color verde;
@@ -895,49 +802,45 @@ class BackgroundPainter extends CustomPainter {
   });
 
   @override
-  void paint(Canvas canvas, Size size) {
-    // ================================================================
-    // BLOB ROSA
-    // ================================================================
-
+  void paint(
+    Canvas canvas,
+    Size size,
+  ) {
     final pinkPaint = Paint()
       ..color = rosa.withValues(alpha: 0.13);
 
     canvas.drawCircle(
-      Offset(size.width - 30, -20),
+      Offset(
+        size.width - 30,
+        -20,
+      ),
       150,
       pinkPaint,
     );
-
-    // ================================================================
-    // BLOB AZUL
-    // ================================================================
 
     final bluePaint = Paint()
       ..color = azul.withValues(alpha: 0.06);
 
     canvas.drawCircle(
-      Offset(size.width - 90, 150),
+      Offset(
+        size.width - 90,
+        150,
+      ),
       80,
       bluePaint,
     );
-
-    // ================================================================
-    // BLOB VERDE
-    // ================================================================
 
     final greenPaint = Paint()
       ..color = verde.withValues(alpha: 0.08);
 
     canvas.drawCircle(
-      Offset(-30, size.height - 50),
+      Offset(
+        -30,
+        size.height - 50,
+      ),
       150,
       greenPaint,
     );
-
-    // ================================================================
-    // GRID
-    // ================================================================
 
     final dotPaint = Paint()
       ..color = azul.withValues(alpha: 0.13);
@@ -961,10 +864,6 @@ class BackgroundPainter extends CustomPainter {
         );
       }
     }
-
-    // ================================================================
-    // GRÁFICO
-    // ================================================================
 
     final points = [
       Offset(size.width - 280, 210),
@@ -990,7 +889,11 @@ class BackgroundPainter extends CustomPainter {
       points[0].dy,
     );
 
-    for (int i = 1; i < points.length; i++) {
+    for (
+      int i = 1;
+      i < points.length;
+      i++
+    ) {
       path.lineTo(
         points[i].dx,
         points[i].dy,
@@ -1002,7 +905,11 @@ class BackgroundPainter extends CustomPainter {
       linePaint,
     );
 
-    for (int i = 0; i < points.length; i += 2) {
+    for (
+      int i = 0;
+      i < points.length;
+      i += 2
+    ) {
       final paint = Paint()
         ..color = i % 4 == 0
             ? rosa
@@ -1023,4 +930,3 @@ class BackgroundPainter extends CustomPainter {
     return false;
   }
 }
-

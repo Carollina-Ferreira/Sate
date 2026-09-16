@@ -97,7 +97,7 @@ class _CadastroPageState extends State<CadastroPage> {
 
           Center(
             child: Image.asset(
-              'images/logoVerde_img.png',
+              'assets/images/logoVerde_img.png',
               width: 125,
               fit: BoxFit.contain,
             ),

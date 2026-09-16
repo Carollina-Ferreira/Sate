@@ -1,5 +1,5 @@
-name: sate_app
-description: "A new Flutter project."
+name: "SATE"
+description: "Sistema de Acompanhamento e Treinamento Esportivo"
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -14,6 +14,16 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo_app.png"
+  min_sdk_android: 21

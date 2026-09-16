@@ -36,7 +36,7 @@ class _InicialPageState extends State<InicialPage> {
         children: [
           // PLANO DE FUNDO
           Image.asset(
-            'images/inicial_img.png',
+            'assets/images/inicial_img.png',
             fit: BoxFit.cover,
           ),
 
@@ -48,7 +48,7 @@ class _InicialPageState extends State<InicialPage> {
 
                 // LOGO
                 Image.asset(
-                  'images/logo_img.png',
+                  'assets/images/logo_img.png',
                   width: 125,
                 ),
 

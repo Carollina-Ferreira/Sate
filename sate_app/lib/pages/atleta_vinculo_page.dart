@@ -268,7 +268,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
               // LOGO
               Center(
                 child: Image.asset(
-                  'images/logoVerde_img.png',
+                  'assets/images/logoVerde_img.png',
                   width: 120,
                 ),
               ),

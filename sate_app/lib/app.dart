@@ -9,10 +9,12 @@ class SateApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'SATE',
+
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: 'Arial',
       ),
+
       home: const InicialPage(),
     );
   }

@@ -5,12 +5,14 @@ import Login from './pages/Login/login';
 import Cadastro from './pages/Cadastro/cadastro';
 import EsqueciSenha from './pages/EsqueciSenha/esqueciSenha';
 
+
 // Layout
 import Layout from './components/Layout/layout';
 
 // Páginas internas
 import Dashboard from './pages/Dashboard/dashboard';
 import Equipes from './pages/Equipes/equipes';
+import Altetas from './pages/Atletas/atletas';
 
 function App() {
   return (
@@ -59,11 +61,7 @@ function App() {
           {/* Atletas */}
           <Route
             path="/atletas"
-            element={
-              <div>
-                Atletas
-              </div>
-            }
+            element={<Altetas/>}
           />
 
           {/* Análise de vídeos */}

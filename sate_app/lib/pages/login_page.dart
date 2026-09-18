@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'cadastro_page.dart';
 import 'esqueci_senha_page.dart';
-import 'atleta_vinculo_page.dart';
+import 'Atleta/atleta_vinculo_page.dart';
 import './Treinador/treinador_navigation.dart';
 
 class LoginPage extends StatefulWidget {

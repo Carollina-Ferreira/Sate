@@ -1,505 +1,984 @@
 /* =========================
-   PÁGINA (FUNDO VERDE)
+   PÁGINA
 ========================= */
+
 .page {
+    width: 100%;
     min-height: 100vh;
-    background-color: #004d40;
-    padding: 24px 40px;
-    font-family: 'Poppins', sans-serif;
+
+    padding: 24px 50px 40px;
+
+    margin: 0;
+
     box-sizing: border-box;
+
+    font-family: 'Inter', sans-serif;
 }
 
-/* BOTÃO VOLTAR */
+
+/* =========================
+   VOLTAR
+========================= */
+
 .backButton {
     display: flex;
     align-items: center;
+
     gap: 8px;
-    background: transparent;
-    border: none;
-    color: #a7c6bd;
-    font-size: 14px;
-    cursor: pointer;
+
     padding: 0;
-    margin-bottom: 20px;
+
+    margin: 0 0 20px;
+
+    border: none;
+    background: transparent;
+
+    color: #a7c6bd;
+
     font-family: inherit;
-    transition: color 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
 }
 
 .backButton:hover {
     color: #ffffff;
 }
 
+
 /* =========================
-   CARD DO TOPO (PERFIL)
+   CARD DO PERFIL
 ========================= */
-.profileHeader {
+
+.profileCard {
+    width: 100%;
+
     background: #ffffff;
+
     border-radius: 12px;
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+    box-sizing: border-box;
+
+    overflow: hidden;
 }
+
+
+/* =========================
+   PARTE SUPERIOR DO PERFIL
+========================= */
+
+.profileTop {
+    width: 100%;
+
+    min-height: 200px;
+
+    padding: 24px 24px 22px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    box-sizing: border-box;
+}
+
 
 .profileHeaderLeft {
     display: flex;
-    gap: 20px;
+
     align-items: flex-start;
+
+    gap: 20px;
+
+    min-width: 0;
 }
+
+
+/* =========================
+   FOTO
+========================= */
 
 .photoContainer {
     position: relative;
-    width: 120px;
-    height: 120px;
+
+    width: 176px;
+    height: 160px;
+
     flex-shrink: 0;
 }
+
 
 .photo {
     width: 100%;
     height: 100%;
+
+    display: block;
+
     object-fit: cover;
-    border-radius: 8px;
+
+    border-radius: 6px;
 }
+
 
 .photoCheck {
     position: absolute;
-    bottom: -8px;
+
+    width: 30px;
+    height: 30px;
+
     right: -8px;
-    width: 24px;
-    height: 24px;
-    background: #2ecc71;
-    border-radius: 50%;
+    bottom: -8px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    border: 2px solid #fff;
+
+    background: #00a878;
+
+    color: #ffffff;
+
+    border: 2px solid #ffffff;
+
+    border-radius: 50%;
 }
 
+
+/* =========================
+   INFORMAÇÕES
+========================= */
+
 .profileHeaderInfo {
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
+
     gap: 8px;
 }
+
 
 .nameRow {
     display: flex;
+
     align-items: center;
+
     gap: 12px;
-}
 
-.nameRow h1 {
-    margin: 0;
-    font-size: 28px;
-    color: #000;
-}
-
-.categoryTag {
-    background: #d5f5e3;
-    color: #1e8449;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.photoHint {
-    margin: 0;
-    font-size: 12px;
-    color: #666;
-}
-
-.badgesRow {
-    display: flex;
-    gap: 10px;
     flex-wrap: wrap;
 }
 
-.badge {
-    background: #f0f0f0;
-    padding: 6px 12px;
+
+.nameRow h1 {
+    margin: 0;
+
+    color: #000000;
+
+    font-family: 'Sora', sans-serif;
+
+    font-size: 32px;
+    font-weight: 700;
+
+    line-height: 1.15;
+}
+
+
+.categoryTag {
+    padding: 5px 14px;
+
+    background: #d5f5e3;
+
+    color: #16835f;
+
     border-radius: 6px;
-    font-size: 12px;
-    color: #333;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.photoHint {
+    margin: 0;
+
+    color: #666666;
+
+    font-size: 13px;
+}
+
+
+.badgesRow {
     display: flex;
+
     align-items: center;
-    gap: 6px;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+
+.badge {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 32px;
+
+    padding: 0 12px;
+
+    background: #ffffff;
+
+    border: 1px solid #dddddd;
+
+    border-radius: 6px;
+
+    color: #333333;
+
+    font-size: 12px;
     font-weight: 500;
 }
 
+
 .statusRow {
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
+
 .statusBadge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 32px;
+
+    padding: 0 12px;
+
     background: #d5f5e3;
-    color: #1e8449;
-    padding: 6px 12px;
+
+    color: #00805e;
+
     border-radius: 6px;
+
     font-size: 12px;
     font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
 }
+
+
+/* =========================
+   BOTÕES DO PERFIL
+========================= */
 
 .profileHeaderActions {
     display: flex;
-    gap: 12px;
-    align-self: flex-end;
-}
 
-.discardButton {
-    display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    color: #333;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.2s;
+
+    gap: 12px;
+
+    flex-shrink: 0;
+
+    align-self: center;
 }
 
-.discardButton:hover {
-    background: #f5f5f5;
-}
 
+.discardButton,
 .saveButton {
+    height: 46px;
+
     display: flex;
+
     align-items: center;
+    justify-content: center;
+
     gap: 8px;
-    padding: 10px 20px;
-    background: #004d40;
-    border: none;
+
+    padding: 0 20px;
+
     border-radius: 8px;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+
     font-family: inherit;
-    transition: background 0.2s;
-}
 
-.saveButton:hover {
-    background: #00332a;
-}
-
-/* =========================
-   ABAS DE NAVEGAÇÃO (PÍLULAS)
-========================= */
-.tabsContainer {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.tabsLabel {
-    color: #a7c6bd;
-    font-size: 14px;
-    margin-right: 8px;
-}
-
-.tabButton {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 18px;
-    background: #e0e0e0;
-    border: none;
-    border-radius: 20px;
-    color: #333;
     font-size: 13px;
     font-weight: 600;
+
+    white-space: nowrap;
+
     cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
 }
 
-.tabButton:hover {
-    background: #d0d0d0;
+
+.discardButton {
+    background: #ffffff;
+
+    border: 1px solid #d7d7d7;
+
+    color: #222222;
 }
 
-.tabButton.tabActive {
-    background: #004d40;
+
+.discardButton:hover {
+    background: #f7f7f7;
+}
+
+
+.saveButton {
+    background: #006b4f;
+
+    border: 1px solid #006b4f;
+
     color: #ffffff;
 }
 
-/* =========================
-   CARD DO FORMULÁRIO
-========================= */
-.formCard {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+.saveButton:hover {
+    background: #005942;
 }
 
+
+/* =========================
+   DIVISÓRIA
+========================= */
+
+.divider {
+    width: calc(100% - 48px);
+
+    height: 1px;
+
+    margin: 0 auto;
+
+    background: #d5d5d5;
+}
+
+
+/* =========================
+   ABAS
+========================= */
+
+.tabsContainer {
+    min-height: 66px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 0 24px;
+
+    box-sizing: border-box;
+}
+
+
+.tabsLabel {
+    margin-right: 4px;
+
+    color: #888888;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* BOTÃO DAS ABAS */
+
+.tabButton {
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 16px;
+
+    border: none;
+
+    border-radius: 18px;
+
+    background: #eeeeee;
+
+    color: #222222;
+
+    font-family: inherit;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.tabButton:hover {
+    background: #e0e0e0;
+}
+
+
+/* ABA ATIVA */
+
+.tabActive {
+    background: #006b4f;
+
+    color: #ffffff;
+}
+
+
+.tabActive:hover {
+    background: #006b4f;
+}
+
+
+/* =========================
+   CARD DE CONTEÚDO
+========================= */
+
+.formCard {
+    width: 100%;
+
+    margin-top: 24px;
+
+    padding: 32px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border-radius: 8px;
+}
+
+
+/* =========================
+   TÍTULOS
+========================= */
+
 .formTitle {
-    margin: 0 0 20px 0;
-    font-size: 22px;
-    color: #000;
+    margin: 0 0 24px;
+
+    color: #000000;
+
+    font-family: 'Sora', sans-serif;
+
+    font-size: 30px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.sectionTitle {
+    margin: 42px 0 20px;
+
+    color: #000000;
+
+    font-family: 'Sora', sans-serif;
+
+    font-size: 28px;
     font-weight: 700;
 }
 
-/* GRIDS */
-.formGrid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-}
-
-.formGrid2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-}
-
-.formGrid3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-}
-
-.formGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.formGroup label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #333;
-}
-
-.required {
-    color: #e74c3c;
-}
-
-.formGroup input,
-.formGroup select {
-    width: 100%;
-    height: 42px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 0 14px;
-    font-family: inherit;
-    font-size: 14px;
-    outline: none;
-    box-sizing: border-box;
-    background: #fff;
-}
-
-.formGroup input:focus,
-.formGroup select:focus {
-    border-color: #004d40;
-    box-shadow: 0 0 0 2px rgba(0, 77, 64, 0.1);
-}
 
 /* =========================
-   SEÇÃO DE DOCUMENTOS
+   FORMULÁRIOS
 ========================= */
-.docsHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 24px;
+
+.formGrid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+
+    margin-bottom: 18px;
 }
+
+
+.formGrid2 {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 24px;
+
+    margin-bottom: 20px;
+}
+
+
+.formGrid3 {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 24px;
+
+    margin-bottom: 20px;
+}
+
+
+/* ENDEREÇO */
+
+.formGridAddress {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        0.8fr
+        2fr
+        0.5fr
+        1.5fr;
+
+    gap: 24px;
+}
+
+
+.formGroup,
+.formGroupSmall {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    min-width: 0;
+}
+
+
+.formGroup label,
+.formGroupSmall label {
+    color: #555555;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.required {
+    color: #e00000;
+
+    margin-left: 3px;
+}
+
+
+.formGroup input,
+.formGroup select,
+.formGroupSmall input {
+    width: 100%;
+
+    height: 46px;
+
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d9d9d9;
+
+    border-radius: 9px;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #222222;
+
+    font-family: inherit;
+
+    font-size: 14px;
+}
+
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroupSmall input:focus {
+    border-color: #006b4f;
+
+    box-shadow:
+        0 0 0 2px rgba(0, 107, 79, 0.08);
+}
+
+
+/* =========================
+   DOCUMENTOS
+========================= */
+
+.docsHeader {
+    width: 100%;
+
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 26px;
+}
+
 
 .docsSubtitle {
-    margin: 0;
-    font-size: 13px;
-    color: #666;
+    margin: -12px 0 0;
+
+    color: #666666;
+
+    font-size: 14px;
 }
+
 
 .uploadButton {
+    height: 44px;
+
     display: flex;
+
     align-items: center;
+    justify-content: center;
+
     gap: 8px;
-    padding: 10px 20px;
-    background: #004d40;
+
+    padding: 0 20px;
+
+    background: #006b4f;
+
     border: none;
+
     border-radius: 8px;
+
     color: #ffffff;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+
     font-family: inherit;
-    transition: background 0.2s;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    cursor: pointer;
 }
+
 
 .uploadButton:hover {
-    background: #00332a;
+    background: #005942;
 }
+
 
 .docsGrid {
+    width: 100%;
+
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 24px;
 }
 
+
 .docCard {
+    min-width: 0;
+
+    padding: 18px;
+
+    box-sizing: border-box;
+
     background: #f9f9f9;
-    border: 1px solid #eee;
+
+    border: 1px solid #eeeeee;
+
     border-radius: 10px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
 }
+
 
 .docCardHeader {
     display: flex;
-    justify-content: space-between;
+
     align-items: center;
-    margin-bottom: 4px;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
 }
+
 
 .docStatus {
-    background: #d5f5e3;
-    color: #1e8449;
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
     padding: 4px 10px;
+
+    background: #d5f5e3;
+
+    color: #16835f;
+
     border-radius: 20px;
+
     font-size: 11px;
     font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 4px;
 }
+
 
 .docMeta {
+    color: #999999;
+
     font-size: 11px;
-    color: #999;
-    font-weight: 500;
 }
+
 
 .docTitle {
-    margin: 0;
-    font-size: 14px;
+    margin: 0 0 7px;
+
+    color: #000000;
+
+    font-size: 15px;
     font-weight: 700;
-    color: #000;
-    line-height: 1.3;
+
+    line-height: 1.4;
 }
 
+
 .docValidity {
-    font-size: 11px;
-    color: #666;
+    color: #666666;
+
+    font-size: 12px;
 }
+
 
 .docCardFooter {
     display: flex;
+
     align-items: center;
-    gap: 12px;
-    margin-top: 12px;
-    padding-top: 12px;
+
+    gap: 14px;
+
+    margin-top: 18px;
+
+    padding-top: 14px;
+
     border-top: 1px solid #e0e0e0;
 }
 
+
 .docAction {
     display: flex;
+
     align-items: center;
-    gap: 4px;
+
+    gap: 5px;
+
+    padding: 0;
+
     background: transparent;
+
     border: none;
-    color: #333;
+
+    color: #333333;
+
+    font-family: inherit;
+
     font-size: 12px;
     font-weight: 600;
+
     cursor: pointer;
-    font-family: inherit;
-    padding: 0;
-    transition: color 0.2s;
 }
+
 
 .docAction:hover {
-    color: #004d40;
+    color: #006b4f;
 }
+
 
 .docActionIcon {
+    width: 28px;
+    height: 28px;
+
+    margin-left: auto;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
+    padding: 0;
+
     background: transparent;
+
     border: none;
-    color: #666;
+
+    border-radius: 5px;
+
+    color: #666666;
+
     cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    margin-left: auto;
-    transition: background 0.2s, color 0.2s;
 }
 
+
 .docActionIcon:hover {
-    background: #e0e0e0;
-    color: #004d40;
+    background: #eeeeee;
+
+    color: #006b4f;
 }
+
 
 /* =========================
    RESPONSIVO
 ========================= */
-@media (max-width: 900px) {
-    .profileHeader {
+
+@media (max-width: 1200px) {
+
+    .profileTop {
         flex-direction: column;
-        gap: 20px;
+
+        align-items: stretch;
     }
+
     .profileHeaderActions {
-        align-self: flex-start;
-        width: 100%;
-        justify-content: flex-end;
+        align-self: flex-end;
     }
-    .docsGrid {
-        grid-template-columns: repeat(2, 1fr);
+
+    .formGrid3 {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .formGridAddress {
+        grid-template-columns:
+            1fr 2fr;
     }
 }
 
-@media (max-width: 600px) {
+
+@media (max-width: 900px) {
+
     .page {
-        padding: 16px;
+        padding: 20px 30px 40px;
     }
-    .formGrid2, .formGrid3 {
-        grid-template-columns: 1fr;
+
+    .profileHeaderActions {
+        width: 100%;
     }
+
+    .discardButton,
+    .saveButton {
+        flex: 1;
+    }
+
+    .docsGrid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .page {
+        padding: 16px 20px 30px;
+    }
+
+    .profileTop {
+        padding: 20px;
+    }
+
     .profileHeaderLeft {
         flex-direction: column;
+
         align-items: center;
+
         text-align: center;
     }
+
     .nameRow {
-        flex-direction: column;
-        gap: 4px;
-    }
-    .badgesRow, .statusRow {
         justify-content: center;
     }
+
+    .badgesRow,
+    .statusRow {
+        justify-content: center;
+    }
+
+    .tabsContainer {
+        flex-wrap: wrap;
+
+        padding: 12px 20px;
+    }
+
+    .tabsLabel {
+        width: 100%;
+    }
+
+    .formCard {
+        padding: 24px 20px;
+    }
+
+    .formGrid2,
+    .formGrid3,
+    .formGridAddress {
+        grid-template-columns: 1fr;
+    }
+
+    .docsHeader {
+        flex-direction: column;
+    }
+
+    .uploadButton {
+        width: 100%;
+    }
+
+    .docsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .page {
+        padding: 14px;
+    }
+
     .profileHeaderActions {
         flex-direction: column;
     }
-    .discardButton, .saveButton {
+
+    .discardButton,
+    .saveButton {
         width: 100%;
-        justify-content: center;
+        flex: none;
     }
-    .tabsContainer {
-        flex-wrap: wrap;
+
+    .photoContainer {
+        width: 150px;
+        height: 140px;
     }
-    .docsHeader {
-        flex-direction: column;
-        gap: 16px;
+
+    .nameRow h1 {
+        font-size: 26px;
     }
-    .uploadButton {
-        width: 100%;
-        justify-content: center;
-    }
-    .docsGrid {
-        grid-template-columns: 1fr;
+
+    .formTitle {
+        font-size: 25px;
     }
 }

@@ -23,6 +23,11 @@ import Layout from './components/Layout/layout';
 import Dashboard from './pages/Dashboard/dashboard';
 import Equipes from './pages/Equipes/equipes';
 import Altetas from './pages/Atletas/atletas';
+import Comparacoes from './pages/Comparacoes/compracoes';
+import Estatisticas from './pages/Estatisticas/estatisticas';
+import Configuracoes from './pages/Configuracoes/configuracoes';
+import AnaliseVideo from './pages/AnaliseVideos/analiseVideos';
+
 
 function App() {
   return (
@@ -92,9 +97,7 @@ function App() {
           <Route
             path="/videos"
             element={
-              <div>
-                Análise de Vídeos
-              </div>
+              <AnaliseVideo/>
             }
           />
 
@@ -112,9 +115,7 @@ function App() {
           <Route
             path="/estatisticas"
             element={
-              <div>
-                Estatísticas
-              </div>
+             <Estatisticas/>
             }
           />
 
@@ -122,9 +123,7 @@ function App() {
           <Route
             path="/comparacoes"
             element={
-              <div>
-                Comparações
-              </div>
+              <Comparacoes/>
             }
           />
 
@@ -132,9 +131,7 @@ function App() {
           <Route
             path="/configuracoes"
             element={
-              <div>
-                Configurações
-              </div>
+                <Configuracoes/>
             }
           />
 

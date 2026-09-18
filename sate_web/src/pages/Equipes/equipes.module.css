@@ -11,6 +11,29 @@
 /* =========================
    CABEÇALHO
 ========================= */
+.teamClickable {
+  min-width: 0;
+
+  cursor: pointer;
+
+  border-radius: 14px;
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.teamClickable:hover {
+  transform: translateY(-4px);
+
+  filter: brightness(1.02);
+}
+
+.teamClickable:focus {
+  outline: 2px solid #16a875;
+
+  outline-offset: 3px;
+}
 
 .header {
   width: 100%;

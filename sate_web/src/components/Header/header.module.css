@@ -16,11 +16,11 @@
 
   background: var(--branco);
 
-  border-bottom: 1px solid rgba(18, 38, 31, 0.10);
+  border-bottom: 1px solid rgba(18, 38, 31, 0.1);
 
   position: relative;
 
-  z-index: 10;
+  z-index: 100;
 }
 
 
@@ -61,9 +61,13 @@
    PESQUISA
 ===================================== */
 
+.searchContainer {
+  position: relative;
+}
+
 .search {
-  width: 220px;
-  height: 30px;
+  width: 230px;
+  height: 32px;
 
   display: flex;
   align-items: center;
@@ -74,13 +78,25 @@
 
   box-sizing: border-box;
 
-  background: #F4F5F4;
+  background: #f4f5f4;
+
+  border: 1px solid transparent;
 
   border-radius: 9px;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
-.search .material-icons {
-  font-size: 18px;
+.search:focus-within {
+  background: #ffffff;
+
+  border-color: rgba(22, 168, 117, 0.45);
+}
+
+.search svg {
+  flex-shrink: 0;
 
   color: var(--texto-suave);
 }
@@ -89,6 +105,7 @@
   width: 100%;
 
   border: none;
+
   outline: none;
 
   background: transparent;
@@ -97,11 +114,206 @@
 
   font-family: inherit;
 
-  font-size: 9px;
+  font-size: 10px;
 }
 
 .search input::placeholder {
-  color: #8B9692;
+  color: #8b9692;
+}
+
+
+/* =====================================
+   DROPDOWN PESQUISA
+===================================== */
+
+.searchDropdown {
+  position: absolute;
+
+  top: calc(100% + 10px);
+
+  left: 0;
+
+  width: 290px;
+
+  max-height: 480px;
+
+  overflow-y: auto;
+
+  padding: 10px 14px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid rgba(18, 38, 31, 0.08);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 14px 35px rgba(0, 0, 0, 0.12);
+
+  animation: dropdownEnter 0.15s ease;
+}
+
+.searchSection {
+  padding: 7px 0 11px;
+
+  border-bottom: 1px solid #e8ecea;
+}
+
+.searchSection:last-child {
+  border-bottom: none;
+}
+
+.searchSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 6px;
+}
+
+.searchSectionHeader strong {
+  color: #18241f;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.searchSectionHeader button {
+  border: none;
+
+  background: transparent;
+
+  color: #f34e75;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.searchSectionHeader button:hover {
+  text-decoration: underline;
+}
+
+.searchSectionItems {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.searchResultItem {
+  width: 100%;
+
+  min-height: 43px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 5px 3px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+.searchResultItem:hover {
+  background: #f5f8f7;
+}
+
+.searchAvatar,
+.searchIconCircle {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #16a875;
+
+  color: white;
+}
+
+.searchAvatar {
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.searchResultText {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.searchResultText strong {
+  overflow: hidden;
+
+  color: #18241f;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.searchResultText span {
+  margin-top: 2px;
+
+  overflow: hidden;
+
+  color: #8b9692;
+
+  font-size: 8px;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.searchResultArrow {
+  flex-shrink: 0;
+
+  color: #6e7773;
+}
+
+.emptySearch {
+  padding: 22px 12px;
+
+  color: #8b9692;
+
+  font-size: 10px;
+
+  text-align: center;
 }
 
 
@@ -109,9 +321,15 @@
    NOTIFICAÇÃO
 ===================================== */
 
+.notificationContainer {
+  position: relative;
+}
+
 .notification {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
+
+  position: relative;
 
   display: flex;
   align-items: center;
@@ -121,25 +339,300 @@
 
   border: none;
 
+  border-radius: 8px;
+
   background: transparent;
 
   color: var(--texto);
 
   cursor: pointer;
-}
 
-.notification .material-icons {
-  font-size: 20px;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
 }
 
 .notification:hover {
+  background: #f3f6f5;
+
   color: var(--verde-principal);
+}
+
+.notificationBadge {
+  min-width: 14px;
+  height: 14px;
+
+  position: absolute;
+
+  top: -3px;
+  right: -4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 3px;
+
+  box-sizing: border-box;
+
+  border: 2px solid white;
+
+  border-radius: 999px;
+
+  background: #df001b;
+
+  color: #ffffff;
+
+  font-size: 7px;
+
+  font-weight: 700;
+}
+
+
+/* =====================================
+   DROPDOWN NOTIFICAÇÕES
+===================================== */
+
+.notificationsDropdown {
+  position: absolute;
+
+  top: calc(100% + 10px);
+
+  right: -80px;
+
+  width: 330px;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid rgba(18, 38, 31, 0.08);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 14px 35px rgba(0, 0, 0, 0.12);
+
+  animation: dropdownEnter 0.15s ease;
+}
+
+.notificationHeader {
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 18px;
+}
+
+.notificationTitleWrapper {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+.notificationTitleWrapper h2 {
+  margin: 0;
+
+  color: #18241f;
+
+  font-size: 17px;
+
+  font-weight: 700;
+}
+
+.notificationCount {
+  min-width: 20px;
+  height: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 5px;
+
+  border-radius: 999px;
+
+  background: #df001b;
+
+  color: white;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+.viewAll {
+  border: none;
+
+  background: transparent;
+
+  color: #f34e75;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.viewAll:hover {
+  text-decoration: underline;
+}
+
+.notificationList {
+  display: flex;
+  flex-direction: column;
+}
+
+.notificationItem {
+  width: 100%;
+
+  min-height: 59px;
+
+  position: relative;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  padding: 10px 18px 10px 12px;
+
+  box-sizing: border-box;
+
+  border: none;
+  border-top: 1px solid #f0f2f1;
+
+  background: #ffffff;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+.notificationItem:hover {
+  background: #f7faf9;
+}
+
+.notificationUnread {
+  background: #fff4f5;
+}
+
+.notificationUnread:hover {
+  background: #ffedef;
+}
+
+.notificationIcon {
+  width: 25px;
+  height: 25px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 2px;
+
+  border-radius: 50%;
+
+  color: white;
+}
+
+.notificationIconRed {
+  background: #df001b;
+}
+
+.notificationIconBlue {
+  background: #32b9dc;
+}
+
+.notificationIconPink {
+  background: #f34e75;
+}
+
+.notificationContent {
+  min-width: 0;
+
+  flex: 1;
+}
+
+.notificationTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+.notificationTop strong {
+  overflow: hidden;
+
+  color: #24312c;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.notificationTop span {
+  flex-shrink: 0;
+
+  color: #9ba39f;
+
+  font-size: 7px;
+}
+
+.notificationContent p {
+  margin: 3px 0 0;
+
+  color: #8a9490;
+
+  font-size: 7px;
+
+  line-height: 1.3;
+}
+
+.unreadDot {
+  width: 6px;
+  height: 6px;
+
+  position: absolute;
+
+  top: 9px;
+  right: 7px;
+
+  border-radius: 50%;
+
+  background: #df001b;
 }
 
 
 /* =====================================
    USUÁRIO
 ===================================== */
+
+.userContainer {
+  height: 100%;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+}
 
 .user {
   height: 100%;
@@ -148,6 +641,14 @@
   align-items: center;
 
   gap: 8px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  font-family: inherit;
 
   cursor: pointer;
 }
@@ -160,6 +661,8 @@
 .avatar {
   width: 28px;
   height: 28px;
+
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
@@ -188,6 +691,8 @@
   justify-content: center;
 
   line-height: 1.1;
+
+  text-align: left;
 }
 
 .userName {
@@ -215,10 +720,208 @@
    SETA
 ===================================== */
 
-.user > .material-icons {
-  font-size: 19px;
-
+.userArrow {
   color: var(--texto);
+
+  transition: transform 0.2s ease;
+}
+
+.userArrowOpen {
+  transform: rotate(180deg);
+}
+
+
+/* =====================================
+   DROPDOWN USUÁRIO
+===================================== */
+
+.userDropdown {
+  position: absolute;
+
+  top: calc(100% + 10px);
+
+  right: 0;
+
+  width: 215px;
+
+  padding: 11px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid rgba(18, 38, 31, 0.08);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 14px 35px rgba(0, 0, 0, 0.12);
+
+  animation: dropdownEnter 0.15s ease;
+}
+
+.userDropdownHeader {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 2px 12px;
+}
+
+.dropdownAvatar {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #16a875;
+
+  color: white;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.userDropdownHeader>div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.userDropdownHeader strong {
+  overflow: hidden;
+
+  color: #18241f;
+
+  font-size: 9px;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.userDropdownHeader span {
+  margin-top: 2px;
+
+  color: #727d78;
+
+  font-size: 8px;
+}
+
+.userMenu {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.userMenuItem {
+  width: 100%;
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 12px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #35433d;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 500;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.userMenuItem:hover {
+  background: #f3f6f5;
+}
+
+.userMenuActive {
+  background: #047a61;
+
+  color: #ffffff;
+}
+
+.userMenuActive:hover {
+  background: #006f59;
+}
+
+.userMenuDivider {
+  height: 1px;
+
+  margin: 10px 8px;
+
+  background: #d9dedc;
+}
+
+.logoutButton {
+  color: #39463f;
+}
+
+.logoutButton:hover {
+  background: #fff1f1;
+
+  color: #c52b2b;
+}
+
+
+/* =====================================
+   ANIMAÇÃO
+===================================== */
+
+@keyframes dropdownEnter {
+  from {
+    opacity: 0;
+
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+
+/* =====================================
+   SCROLL
+===================================== */
+
+.searchDropdown::-webkit-scrollbar {
+  width: 5px;
+}
+
+.searchDropdown::-webkit-scrollbar-thumb {
+  background: #d3dad7;
+
+  border-radius: 10px;
 }
 
 
@@ -227,20 +930,17 @@
 ===================================== */
 
 @media (max-width: 900px) {
-
   .search {
-    width: 180px;
+    width: 190px;
   }
 
   .right {
     gap: 14px;
   }
-
 }
 
 
 @media (max-width: 700px) {
-
   .header {
     height: 55px;
 
@@ -252,11 +952,64 @@
   }
 
   .search {
-    width: 160px;
+    width: 165px;
   }
 
   .userInfo {
     display: none;
   }
 
+  .notificationsDropdown {
+    right: -70px;
+
+    width: 310px;
+  }
+}
+
+
+@media (max-width: 550px) {
+  .title {
+    font-size: 16px;
+  }
+
+  .right {
+    gap: 7px;
+  }
+
+  .search {
+    width: 130px;
+  }
+
+  .search input {
+    font-size: 8px;
+  }
+
+  .searchDropdown {
+    position: fixed;
+
+    top: 62px;
+    left: 10px;
+    right: 10px;
+
+    width: auto;
+  }
+
+  .notificationsDropdown {
+    position: fixed;
+
+    top: 62px;
+    left: 10px;
+    right: 10px;
+
+    width: auto;
+  }
+
+  .userDropdown {
+    position: fixed;
+
+    top: 62px;
+    right: 10px;
+
+    width: 210px;
+  }
 }

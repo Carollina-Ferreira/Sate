@@ -1,0 +1,935 @@
+/* =====================================
+   OVERLAY
+===================================== */
+
+.overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  box-sizing: border-box;
+
+  background: rgba(0, 30, 22, 0.72);
+
+  backdrop-filter: blur(3px);
+
+  animation: fadeIn 0.18s ease;
+}
+
+
+/* =====================================
+   MODAL
+===================================== */
+
+.modal {
+  width: min(760px, 100%);
+  max-height: calc(100vh - 48px);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: #e7efeb;
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.28);
+
+  animation: modalEnter 0.2s ease;
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 22px 24px 18px;
+
+  border-bottom: 1px solid #cbd8d2;
+}
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #11845f;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+}
+
+.modalHeader h2 {
+  margin: 0;
+
+  color: #20332b;
+
+  font-size: 23px;
+
+  font-weight: 700;
+}
+
+.modalHeader p {
+  margin: 5px 0 0;
+
+  color: #6c7b74;
+
+  font-size: 10px;
+}
+
+.closeButton {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: #65756d;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.closeButton:hover {
+  background: #d9e4df;
+
+  color: #24362e;
+}
+
+
+/* =====================================
+   CONTEÚDO
+===================================== */
+
+.content {
+  flex: 1;
+
+  display: grid;
+
+  grid-template-columns: 190px 1fr;
+
+  gap: 22px;
+
+  overflow-y: auto;
+
+  padding: 22px 24px;
+
+  box-sizing: border-box;
+}
+
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #bfcec7;
+
+  border-radius: 10px;
+}
+
+
+/* =====================================
+   IMAGEM
+===================================== */
+
+.imageArea {
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  overflow: hidden;
+
+  padding: 0;
+
+  border: 1px dashed #9cb3a9;
+
+  border-radius: 13px;
+
+  background: #dce7e2;
+
+  color: #53655d;
+
+  font-family: inherit;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.imagePreview:hover {
+  border-color: #16a875;
+
+  background: #d4e4dc;
+}
+
+.imagePreview img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.cameraCircle {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #c5dbd0;
+
+  color: #087c59;
+}
+
+.imagePreview strong {
+  font-size: 10px;
+}
+
+.imagePreview span {
+  color: #839088;
+
+  font-size: 8px;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.changeImageButton {
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  border: 1px solid #c4d2cb;
+
+  border-radius: 8px;
+
+  background: #f5f8f6;
+
+  color: #41534a;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.changeImageButton:hover {
+  background: #ffffff;
+
+  border-color: #9fb3aa;
+}
+
+
+/* =====================================
+   FORM
+===================================== */
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.field label {
+  color: #42554c;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  outline: none;
+
+  border: 1px solid #c6d4cd;
+
+  border-radius: 8px;
+
+  background: #f7faf8;
+
+  color: #293a32;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.field input:hover,
+.field select:hover {
+  border-color: #aebfb7;
+}
+
+.field input:focus,
+.field select:focus {
+  background: #ffffff;
+
+  border-color: #16a875;
+
+  box-shadow:
+    0 0 0 3px rgba(22, 168, 117, 0.1);
+}
+
+.twoColumns {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 12px;
+}
+
+
+/* =====================================
+   MODALIDADES
+===================================== */
+
+.sports {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 7px;
+}
+
+.sportButton {
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 0 11px;
+
+  border: 1px solid #c8d5cf;
+
+  border-radius: 18px;
+
+  background: #f5f8f6;
+
+  color: #56675f;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sportButton:hover {
+  transform: translateY(-1px);
+
+  border-color: #9fb5aa;
+}
+
+.sportButtonActive {
+  border-color: #087b5b;
+
+  background: #087b5b;
+
+  color: #ffffff;
+}
+
+
+/* =====================================
+   PRÓXIMA PARTIDA
+===================================== */
+
+.matchSection {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  padding: 15px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #cbd8d2;
+
+  border-radius: 11px;
+
+  background: #dde8e3;
+}
+
+.matchSectionHeader {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.matchSectionIcon {
+  width: 33px;
+  height: 33px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #c5dbd0;
+
+  color: #087b5b;
+}
+
+.matchSectionHeader > div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.matchSectionHeader strong {
+  color: #2a3b33;
+
+  font-size: 10px;
+}
+
+.matchSectionHeader span {
+  margin-top: 1px;
+
+  color: #708078;
+
+  font-size: 8px;
+}
+
+
+/* =====================================
+   DATA E HORÁRIO
+===================================== */
+
+.dateTimeGrid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+}
+
+.dateInputWrapper {
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 10px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #c6d4cd;
+
+  border-radius: 8px;
+
+  background: #f7faf8;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.dateInputWrapper:hover {
+  border-color: #aebfb7;
+}
+
+.dateInputWrapper:focus-within {
+  background: #ffffff;
+
+  border-color: #16a875;
+
+  box-shadow:
+    0 0 0 3px rgba(22, 168, 117, 0.1);
+}
+
+.dateInputWrapper svg {
+  flex-shrink: 0;
+
+  color: #087b5b;
+}
+
+.dateInputWrapper input {
+  height: 100%;
+
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 0;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  box-shadow: none;
+
+  color: #293a32;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.dateInputWrapper input:focus {
+  border: none;
+
+  box-shadow: none;
+
+  background: transparent;
+}
+
+
+/* =====================================
+   PREVIEW DA PARTIDA
+===================================== */
+
+.matchPreview {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 10px 11px;
+
+  border-radius: 8px;
+
+  background: #cddfd6;
+
+  color: #356253;
+}
+
+.matchPreview svg {
+  flex-shrink: 0;
+}
+
+.matchPreview > div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.matchPreview span {
+  color: #718079;
+
+  font-size: 7px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+}
+
+.matchPreview strong {
+  overflow: hidden;
+
+  color: #29463c;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =====================================
+   CORES
+===================================== */
+
+.colors {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+}
+
+.colorButton {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 3px solid transparent;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.colorButton:hover {
+  transform: scale(1.08);
+}
+
+.colorSelected {
+  border-color: #ffffff;
+
+  box-shadow:
+    0 0 0 2px #244c3e,
+    0 3px 7px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =====================================
+   PREVIEW EQUIPE
+===================================== */
+
+.teamPreview {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  margin: 0 24px 20px;
+
+  padding: 12px 14px;
+
+  border-radius: 10px;
+
+  background: #d7e4de;
+}
+
+.previewAvatar {
+  width: 39px;
+  height: 39px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.teamPreview > div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.teamPreview span {
+  color: #7b8982;
+
+  font-size: 7px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.6px;
+}
+
+.teamPreview strong {
+  color: #263930;
+
+  font-size: 11px;
+}
+
+.teamPreview small {
+  color: #66766e;
+
+  font-size: 8px;
+}
+
+
+/* =====================================
+   FOOTER
+===================================== */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  padding: 16px 24px;
+
+  border-top: 1px solid #cbd8d2;
+
+  background: #dfe9e4;
+}
+
+.cancelButton,
+.createButton {
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 16px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.cancelButton {
+  border: 1px solid #bfcfc7;
+
+  background: transparent;
+
+  color: #586960;
+}
+
+.cancelButton:hover {
+  background: #d5e1db;
+
+  border-color: #a9bbb2;
+}
+
+.createButton {
+  border: none;
+
+  background: #087b5b;
+
+  color: #ffffff;
+}
+
+.createButton:hover:not(:disabled) {
+  background: #066b50;
+
+  transform: translateY(-1px);
+}
+
+.createButton:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+
+/* =====================================
+   ANIMAÇÕES
+===================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(8px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* =====================================
+   RESPONSIVIDADE
+===================================== */
+
+@media (max-width: 650px) {
+
+  .overlay {
+    padding: 10px;
+  }
+
+  .modal {
+    max-height:
+      calc(100vh - 20px);
+  }
+
+  .content {
+    grid-template-columns:
+      1fr;
+  }
+
+  .imagePreview {
+    height: 150px;
+  }
+
+  .twoColumns {
+    grid-template-columns:
+      1fr;
+  }
+
+  .dateTimeGrid {
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+
+@media (max-width: 430px) {
+
+  .modalHeader,
+  .content,
+  .footer {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .teamPreview {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .footer {
+    flex-direction: column-reverse;
+  }
+
+  .cancelButton,
+  .createButton {
+    width: 100%;
+  }
+
+  .sports {
+    gap: 6px;
+  }
+
+  .sportButton {
+    flex: 1;
+
+    min-width: 90px;
+
+    justify-content: center;
+  }
+
+}

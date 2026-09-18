@@ -1,0 +1,786 @@
+/* =====================================
+   PÁGINA
+===================================== */
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 32px 38px 40px;
+
+  box-sizing: border-box;
+
+  background: #005942;
+
+  font-family: 'Poppins', sans-serif;
+}
+
+
+/* =====================================
+   CABEÇALHO
+===================================== */
+
+.pageHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 24px;
+
+  margin-bottom: 24px;
+}
+
+.pageHeader h1 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 32px;
+
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
+}
+
+.pageHeader p {
+  margin: 7px 0 0;
+
+  color: rgba(255, 255, 255, 0.74);
+
+  font-size: 14px;
+}
+
+.newTeamButton {
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  border-radius: 10px;
+
+  background: #0b765b;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.newTeamButton:hover {
+  background: #0d8465;
+
+  transform: translateY(-1px);
+}
+
+
+/* =====================================
+   FILTROS
+===================================== */
+
+.filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+}
+
+.filterSelect {
+  min-width: 210px;
+  height: 44px;
+
+  position: relative;
+}
+
+.filterSelect select {
+  width: 100%;
+  height: 100%;
+
+  padding: 0 38px 0 14px;
+
+  box-sizing: border-box;
+
+  appearance: none;
+
+  outline: none;
+
+  border: 1px solid rgba(
+    255,
+    255,
+    255,
+    0.12
+  );
+
+  border-radius: 10px;
+
+  background: #e7efeb;
+
+  color: #31443c;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.filterSelect select:hover {
+  background: #eef4f1;
+}
+
+.filterSelect select:focus {
+  border-color: #31c895;
+
+  box-shadow:
+    0 0 0 3px rgba(49, 200, 149, 0.12);
+}
+
+.selectIcon {
+  position: absolute;
+
+  top: 50%;
+  right: 12px;
+
+  color: #5c6b65;
+
+  pointer-events: none;
+
+  transform: translateY(-50%);
+}
+
+.sportFilter {
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 18px;
+
+  border: none;
+
+  border-radius: 22px;
+
+  background: #0b765b;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sportFilter:hover {
+  background: #0d8465;
+
+  transform: translateY(-1px);
+}
+
+
+/* =====================================
+   CARDS DE RESUMO
+===================================== */
+
+.summaryGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 16px;
+
+  margin-bottom: 18px;
+}
+
+.summaryCard {
+  min-height: 110px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px 22px;
+
+  box-sizing: border-box;
+
+  background: #e7efeb;
+
+  border: 1px solid rgba(
+    255,
+    255,
+    255,
+    0.08
+  );
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.11);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.summaryCard:hover {
+  transform: translateY(-2px);
+
+  background: #edf3f0;
+}
+
+.summaryContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryContent strong {
+  color: #119167;
+
+  font-size: 30px;
+
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+.summaryContent span {
+  margin-top: 10px;
+
+  color: #66756e;
+
+  font-size: 12px;
+
+  font-weight: 500;
+}
+
+.summaryIcon {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #d3e5dc;
+
+  color: #087a57;
+}
+
+
+/* =====================================
+   GRID DOS GRÁFICOS
+===================================== */
+
+.chartsGrid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.8fr)
+    minmax(340px, 0.9fr);
+
+  gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+
+/* =====================================
+   CARD DOS GRÁFICOS
+===================================== */
+
+.chartCard {
+  min-width: 0;
+
+  padding: 22px 24px;
+
+  box-sizing: border-box;
+
+  background: #e7efeb;
+
+  border: 1px solid rgba(
+    255,
+    255,
+    255,
+    0.08
+  );
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.11);
+}
+
+.chartHeader {
+  min-height: 50px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-bottom: 12px;
+}
+
+.chartHeader h2 {
+  margin: 4px 0 0;
+
+  color: #21352d;
+
+  font-size: 17px;
+
+  font-weight: 700;
+}
+
+.chartEyebrow {
+  color: #7a8a83;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.6px;
+
+  text-transform: uppercase;
+}
+
+.teamTag {
+  padding: 6px 11px;
+
+  border-radius: 20px;
+
+  background: #d2e2da;
+
+  color: #527066;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+
+/* =====================================
+   SVG
+===================================== */
+
+.svgWrapper,
+.lineWrapper {
+  width: 100%;
+}
+
+.chartSvg {
+  width: 100%;
+  min-height: 320px;
+
+  display: block;
+
+  overflow: visible;
+}
+
+.lineSvg {
+  width: 100%;
+  min-height: 340px;
+
+  display: block;
+
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: #cbd8d2;
+
+  stroke-width: 1;
+}
+
+.axisText {
+  fill: #82918a;
+
+  font-size: 10px;
+
+  font-family: 'Poppins', sans-serif;
+}
+
+.categoryText {
+  fill: #697972;
+
+  font-size: 10px;
+
+  font-family: 'Poppins', sans-serif;
+}
+
+
+/* =====================================
+   GRÁFICO DE BARRAS
+===================================== */
+
+.barGoals {
+  fill: #568c4b;
+}
+
+.barAssists {
+  fill: #147ca2;
+}
+
+.chartLegend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 20px;
+
+  margin-top: 4px;
+}
+
+.chartLegend span,
+.legend span {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  color: #64736c;
+
+  font-size: 10px;
+
+  font-weight: 500;
+}
+
+.chartLegend i,
+.legend i {
+  width: 8px;
+  height: 8px;
+
+  display: block;
+
+  border-radius: 50%;
+}
+
+.goalLegend {
+  background: #568c4b;
+}
+
+.assistLegend {
+  background: #147ca2;
+}
+
+
+/* =====================================
+   DONUT
+===================================== */
+
+.donutArea {
+  min-height: 320px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.donutSvg {
+  width: 220px;
+  height: 220px;
+
+  display: block;
+}
+
+.donutCenter {
+  fill: #e7efeb;
+}
+
+.donutTotal {
+  fill: #20352c;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  font-family: 'Poppins', sans-serif;
+}
+
+.donutLabel {
+  fill: #778780;
+
+  font-size: 8px;
+
+  font-family: 'Poppins', sans-serif;
+}
+
+.donutLegend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  gap: 10px 14px;
+
+  margin-top: 8px;
+}
+
+.donutLegend span {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  color: #67766f;
+
+  font-size: 9px;
+}
+
+.donutLegend i {
+  width: 8px;
+  height: 8px;
+
+  display: inline-block;
+
+  border-radius: 50%;
+}
+
+.donutLegend strong {
+  margin-left: 2px;
+
+  color: #41534b;
+
+  font-size: 9px;
+}
+
+
+/* =====================================
+   EVOLUÇÃO
+===================================== */
+
+.evolutionCard {
+  width: 100%;
+}
+
+.legend {
+  display: flex;
+
+  gap: 16px;
+}
+
+.teamLegend {
+  background: #308e5a;
+}
+
+.opponentLegend {
+  background: #5a9ae6;
+}
+
+.teamLine {
+  stroke: #308e5a;
+
+  stroke-width: 2.8;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.opponentLine {
+  stroke: #5a9ae6;
+
+  stroke-width: 2.5;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.teamPoint {
+  fill: #e7efeb;
+
+  stroke: #308e5a;
+
+  stroke-width: 2;
+}
+
+.opponentPoint {
+  fill: #e7efeb;
+
+  stroke: #5a9ae6;
+
+  stroke-width: 2;
+}
+
+
+/* =====================================
+   ACESSIBILIDADE
+===================================== */
+
+.srOnly {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
+
+/* =====================================
+   RESPONSIVIDADE
+===================================== */
+
+@media (max-width: 1100px) {
+
+  .summaryGrid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 800px) {
+
+  .page {
+    padding: 24px 20px 30px;
+  }
+
+  .pageHeader {
+    align-items: flex-start;
+  }
+
+  .pageHeader h1 {
+    font-size: 27px;
+  }
+
+  .filters {
+    gap: 10px;
+  }
+
+  .filterSelect {
+    flex: 1;
+
+    min-width: 180px;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .page {
+    padding: 18px 12px 24px;
+  }
+
+  .pageHeader {
+    flex-direction: column;
+  }
+
+  .pageHeader h1 {
+    font-size: 24px;
+  }
+
+  .newTeamButton {
+    width: 100%;
+  }
+
+  .summaryGrid {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+  }
+
+  .summaryCard {
+    min-height: 90px;
+
+    padding: 15px;
+  }
+
+  .summaryContent strong {
+    font-size: 24px;
+  }
+
+  .summaryIcon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .chartCard {
+    padding: 17px 14px;
+  }
+
+  .chartHeader {
+    flex-direction: column;
+  }
+
+  .legend {
+    width: 100%;
+  }
+
+  .chartSvg {
+    min-height: 260px;
+  }
+
+  .lineSvg {
+    min-height: 280px;
+  }
+
+  .donutArea {
+    min-height: 260px;
+  }
+
+  .donutSvg {
+    width: 180px;
+    height: 180px;
+  }
+
+}
+
+
+@media (max-width: 400px) {
+
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+}

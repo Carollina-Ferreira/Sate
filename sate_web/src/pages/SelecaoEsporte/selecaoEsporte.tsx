@@ -98,7 +98,7 @@ export default function SelecaoEsporte() {
             esporteSelecionado
         );
 
-        navigate('/cadastro');
+        navigate('/inicio');
     };
 
     return (

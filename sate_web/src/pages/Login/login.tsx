@@ -37,8 +37,8 @@ const Login = () => {
 
         console.log('Login submit:', form);
 
-        // Depois de fazer o login, vai para a primeira página do site
-        navigate('/inicio');
+        
+        navigate('/boas-vindas');
     };
 
     return (

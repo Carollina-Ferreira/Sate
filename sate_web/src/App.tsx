@@ -1,15 +1,25 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Páginas de acesso
+// =================================
+// PÁGINAS DE ACESSO
+// =================================
 import Login from './pages/Login/login';
 import Cadastro from './pages/Cadastro/cadastro';
 import EsqueciSenha from './pages/EsqueciSenha/esqueciSenha';
 
-
-// Layout
+// =================================
+// PÁGINA DE BOAS-VINDAS
+// =================================
+import BoasVindas from './pages/BoasVindas/boasVindas';
+import SelecaoEsporte from './pages/SelecaoEsporte/selecaoEsporte';
+// =================================
+// LAYOUT
+// =================================
 import Layout from './components/Layout/layout';
 
-// Páginas internas
+// =================================
+// PÁGINAS INTERNAS
+// =================================
 import Dashboard from './pages/Dashboard/dashboard';
 import Equipes from './pages/Equipes/equipes';
 import Altetas from './pages/Atletas/atletas';
@@ -17,7 +27,6 @@ import Altetas from './pages/Atletas/atletas';
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
 
         {/* =================================
@@ -37,6 +46,22 @@ function App() {
         <Route
           path="/esqueci-senha"
           element={<EsqueciSenha />}
+        />
+
+        {/* =================================
+            PÁGINA DE BOAS-VINDAS
+            Aparece depois do login
+            e antes do início
+        ================================= */}
+
+        <Route
+          path="/boas-vindas"
+          element={<BoasVindas />}
+        />
+
+        <Route
+          path="/selecao-esporte"
+          element={<SelecaoEsporte />}
         />
 
         {/* =================================
@@ -116,7 +141,6 @@ function App() {
         </Route>
 
       </Routes>
-
     </BrowserRouter>
   );
 }

@@ -1,0 +1,436 @@
+.container {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px;
+
+    box-sizing: border-box;
+
+    position: relative;
+    overflow: hidden;
+
+    font-family: 'Inter', sans-serif;
+
+    color: #ffffff;
+
+    background-color: #004b3a;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    transition:
+        background-image 0.5s ease;
+}
+
+
+/* =========================
+   FUNDO INICIAL
+========================= */
+
+.fundoInicial {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(22, 168, 117, 0.28),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #004b3a,
+            #007c5d
+        );
+
+    z-index: 0;
+}
+
+
+/* =========================
+   CAMADA ESCURA
+========================= */
+
+.container::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0, 45, 35, 0.55),
+            rgba(0, 45, 35, 0.75)
+        );
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+.conteudo {
+    width: 100%;
+    max-width: 850px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* =========================
+   ETAPA
+========================= */
+
+.etapa {
+    padding: 8px 17px;
+
+    border-radius: 30px;
+
+    background: rgba(255, 255, 255, 0.14);
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+
+    backdrop-filter: blur(8px);
+
+    color: rgba(255, 255, 255, 0.9);
+
+    font-size: 11px;
+    font-weight: 500;
+
+    letter-spacing: 0.2px;
+
+    margin-bottom: 16px;
+}
+
+
+/* =========================
+   PROGRESSO
+========================= */
+
+.linhaProgresso {
+    width: 100%;
+    max-width: 360px;
+
+    height: 4px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 5px;
+
+    margin-bottom: 30px;
+}
+
+.linhaProgresso > div {
+    height: 4px;
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.28);
+}
+
+.linhaProgresso .progressoAtivo {
+    background: #63d9ad;
+}
+
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+.cabecalho {
+    text-align: center;
+
+    margin-bottom: 34px;
+}
+
+.cabecalho h1 {
+    margin: 0 0 12px;
+
+    font-family: 'Sora', sans-serif;
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    letter-spacing: -0.6px;
+}
+
+.cabecalho p {
+    width: 100%;
+    max-width: 500px;
+
+    margin: 0 auto;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.gridEsportes {
+    width: 100%;
+    max-width: 650px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.cardEsporte {
+    height: 115px;
+
+    position: relative;
+
+    border: 2px solid transparent;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.94);
+
+    color: #12261f;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    cursor: pointer;
+
+    font-family: 'Inter', sans-serif;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.15);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.cardEsporte:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.22);
+}
+
+.cardEsporte:focus-visible {
+    outline: 3px solid #63d9ad;
+
+    outline-offset: 3px;
+}
+
+
+/* =========================
+   ÍCONE
+========================= */
+
+.iconeEsporte {
+    font-size: 32px;
+
+    line-height: 1;
+}
+
+
+/* =========================
+   NOME
+========================= */
+
+.nomeEsporte {
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   SELECIONADO
+========================= */
+
+.cardSelecionado {
+    border-color: #63d9ad;
+
+    background: #effff8;
+
+    box-shadow:
+        0 0 0 3px rgba(99, 217, 173, 0.25),
+        0 14px 30px rgba(0, 0, 0, 0.2);
+
+    transform: translateY(-4px);
+}
+
+.cardSelecionado .nomeEsporte {
+    color: #005c45;
+
+    font-weight: 700;
+}
+
+
+/* =========================
+   CHECK
+========================= */
+
+.check {
+    position: absolute;
+
+    top: 9px;
+    right: 9px;
+
+    width: 22px;
+    height: 22px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #16a875;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =========================
+   RODAPÉ
+========================= */
+
+.rodape {
+    width: 100%;
+    max-width: 650px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 32px;
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+.botaoVoltar,
+.botaoProximo {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-family: 'Inter', sans-serif;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* VOLTAR */
+
+.botaoVoltar {
+    background: transparent;
+
+    color: #ffffff;
+
+    padding: 10px 4px;
+}
+
+.botaoVoltar:hover {
+    opacity: 0.75;
+}
+
+
+/* PRÓXIMO */
+
+.botaoProximo {
+    min-width: 105px;
+
+    height: 44px;
+
+    padding: 0 17px;
+
+    border-radius: 8px;
+
+    background: #16a875;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.botaoProximo:hover:not(:disabled) {
+    background: #0e8d62;
+
+    transform: translateY(-2px);
+}
+
+.botaoProximo:disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+}
+

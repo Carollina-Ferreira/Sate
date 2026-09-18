@@ -39,7 +39,6 @@ function App() {
           element={<EsqueciSenha />}
         />
 
-
         {/* =================================
             ÁREA INTERNA DO SATE
         ================================= */}
@@ -61,7 +60,7 @@ function App() {
           {/* Atletas */}
           <Route
             path="/atletas"
-            element={<Altetas/>}
+            element={<Altetas />}
           />
 
           {/* Análise de vídeos */}

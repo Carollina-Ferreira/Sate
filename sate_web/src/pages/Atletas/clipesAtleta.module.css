@@ -1,0 +1,365 @@
+.page {
+    min-height: 100vh;
+    background-color:  #005942;
+    padding: 24px 40px;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    color: #a7c6bd;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 20px;
+    font-family: inherit;
+    transition: color 0.2s;
+}
+
+.backButton:hover { color: #ffffff; }
+
+.toolbar {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.toolbarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.titleArea { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.titleRow { display: flex; align-items: center; gap: 12px; }
+.titleRow h1 { margin: 0; font-size: 32px; font-weight: 800; color: #000; }
+
+.countBadge {
+    background: #d5f5e3;
+    color: #1e8449;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.subtitle { margin: 0; font-size: 13px; color: #666; max-width: 600px; }
+
+.championshipSelectWrapper { position: relative; }
+
+.championshipSelect {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    min-width: 200px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.championshipSelect:hover { background: #e5e5e5; }
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    min-width: 200px;
+    z-index: 100;
+}
+
+.dropdownItem {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.dropdownItem:hover { background: #f0f0f0; }
+
+.filtersRow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.filterLabel { font-size: 14px; font-weight: 600; color: #666; margin-right: 4px; }
+
+.filterButton {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.filterButton:hover { background: #e5e5e5; }
+.filterActive { background: #004d40; color: #ffffff; }
+
+/* ============================================
+   GRID 2 COLUNAS
+============================================ */
+.clipesGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* CARD */
+.clipeCard {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 160px;
+}
+
+.clipeCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* VÍDEO */
+.videoWrapper {
+    position: relative;
+    width: 45%;
+    flex-shrink: 0;
+    cursor: pointer;
+    overflow: hidden;
+    background: #000;
+}
+
+.thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s;
+}
+
+.videoWrapper:hover .thumbnail { transform: scale(1.08); }
+
+.playOverlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 77, 64, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.videoWrapper:hover .playOverlay {
+    background: #004d40;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* INFO */
+.clipeInfo {
+    flex: 1;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    justify-content: center;
+}
+
+.timestamp {
+    font-size: 11px;
+    font-weight: 700;
+    color: #999;
+    letter-spacing: 0.5px;
+}
+
+.clipeTitle {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #000;
+    line-height: 1.2;
+}
+
+.matchName {
+    margin: 0;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.categoryTag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    background: #004d40;
+    width: fit-content;
+    margin-bottom: 6px;
+}
+
+.cardFooter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 8px;
+}
+
+.downloadButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 12px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 6px;
+    color: #333;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s;
+    width: fit-content;
+}
+
+.downloadButton:hover { background: #e0e0e0; }
+
+.shareButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 6px;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.shareButton:hover { background: #e0e0e0; }
+
+.emptyState {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 60px 20px;
+    text-align: center;
+    color: #666;
+    font-size: 15px;
+}
+
+/* MODAL DE VÍDEO */
+.videoModalOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 20, 15, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.videoModal {
+    position: relative;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 900px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.videoModalClose {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.videoModalClose:hover { background: rgba(0, 0, 0, 0.9); }
+
+.videoPlayer {
+    width: 100%;
+    display: block;
+    max-height: 70vh;
+    background: #000;
+}
+
+.videoModalInfo { padding: 16px 20px; background: #fff; color: #000; }
+.videoModalInfo h3 { margin: 0 0 4px; font-size: 18px; }
+.videoModalInfo p { margin: 0; font-size: 13px; color: #666; }
+
+/* RESPONSIVO */
+@media (max-width: 1000px) {
+    .clipesGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 700px) {
+    .page { padding: 16px; }
+    .toolbar { padding: 20px; }
+    .titleRow h1 { font-size: 24px; }
+    .toolbarHeader { flex-direction: column; }
+    .championshipSelect { width: 100%; justify-content: space-between; }
+    .clipeCard { flex-direction: column; height: auto; }
+    .videoWrapper { width: 100%; height: 180px; }
+}

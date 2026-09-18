@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import './treinador_home_page.dart';
+import './treinador_navigation.dart';
 
 class TreinadorVinculoPage extends StatefulWidget {
   const TreinadorVinculoPage({super.key});
@@ -75,7 +75,7 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const TreinadorHomePage(),
+        builder: (context) => const TreinadorNavigation(),
       ),
     );
   }

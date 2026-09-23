@@ -22,21 +22,21 @@ import Layout from './components/Layout/layout';
 // =================================
 import Dashboard from './pages/Dashboard/dashboard';
 import Equipes from './pages/Equipes/equipes';
+
 import Altetas from './pages/Atletas/atletas';
 import Comparacoes from './pages/Comparacoes/compracoes';
 import Estatisticas from './pages/Estatisticas/estatisticas';
 import Configuracoes from './pages/Configuracoes/configuracoes';
 import AnaliseVideo from './pages/AnaliseVideos/analiseVideos';
 
+import Partidas from './pages/Partidas/partidas';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* =================================
-            PÁGINAS DE ACESSO
-        ================================= */}
+        {/* PÁGINAS DE ACESSO */}
 
         <Route
           path="/"
@@ -52,6 +52,7 @@ function App() {
           path="/esqueci-senha"
           element={<EsqueciSenha />}
         />
+
 
         {/* =================================
             PÁGINA DE BOAS-VINDAS
@@ -73,6 +74,9 @@ function App() {
             ÁREA INTERNA DO SATE
         ================================= */}
 
+        {/* ÁREA INTERNA */}
+
+
         <Route element={<Layout />}>
 
           {/* Dashboard */}
@@ -91,24 +95,23 @@ function App() {
           <Route
             path="/atletas"
             element={<Altetas />}
+
+            
           />
 
-          {/* Análise de vídeos */}
+          {/* Análise de Vídeos */}
           <Route
             path="/videos"
             element={
               <AnaliseVideo/>
+              
             }
           />
 
           {/* Partidas */}
           <Route
             path="/partidas"
-            element={
-              <div>
-                Partidas
-              </div>
-            }
+            element={<Partidas />}
           />
 
           {/* Estatísticas */}
@@ -133,6 +136,7 @@ function App() {
             element={
                 <Configuracoes/>
             }
+
           />
 
         </Route>

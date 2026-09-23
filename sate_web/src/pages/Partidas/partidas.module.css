@@ -1,0 +1,342 @@
+.page {
+  width: 100%;
+  min-height: 100%;
+  padding: 30px;
+  box-sizing: border-box;
+  color: #ffffff;
+}
+
+
+/* =========================
+   TÍTULO
+========================= */
+
+.titleRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.titleRow h2 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+
+/* =========================
+   BOTÃO NOVA PARTIDA
+========================= */
+
+.newButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-width: 150px;
+  height: 44px;
+
+  padding: 0 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #007d62;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.newButton:hover {
+  background: #009875;
+  transform: translateY(-1px);
+}
+
+.newButton span {
+  font-size: 22px;
+}
+
+
+/* =========================
+   FILTROS
+========================= */
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  width: 100%;
+
+  margin-bottom: 24px;
+
+  overflow-x: auto;
+
+  scrollbar-width: none;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filters select {
+  height: 42px;
+
+  padding: 0 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+
+  background: #eeeeee;
+  color: #343434;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.filters select:focus {
+  border-color: #ffffff;
+}
+
+
+/* =========================
+   CAMPO DE DATA
+========================= */
+
+.dateInput {
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+
+  background: #eeeeee;
+  color: #343434;
+}
+
+.dateInput input {
+  width: 80px;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #343434;
+
+  font-size: 14px;
+}
+
+.dateInput input::placeholder {
+  color: #555555;
+}
+
+
+/* =========================
+   TABELA
+========================= */
+
+.tableContainer {
+  width: 100%;
+
+  overflow-x: auto;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.tableContainer table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  color: #222222;
+
+  font-size: 14px;
+}
+
+.tableContainer thead {
+  background: #f3f3f3;
+}
+
+.tableContainer th {
+  padding: 16px;
+
+  text-align: left;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  color: #555555;
+
+  white-space: nowrap;
+}
+
+.tableContainer td {
+  padding: 18px 16px;
+
+  border-top: 1px solid #eeeeee;
+
+  white-space: nowrap;
+}
+
+.tableContainer tbody tr {
+  transition: background 0.2s ease;
+}
+
+.tableContainer tbody tr:hover {
+  background: #f8f8f8;
+}
+
+
+/* =========================
+   CONFRONTO
+========================= */
+
+.confronto {
+  font-weight: 600;
+  color: #222222;
+}
+
+
+/* =========================
+   RESULTADO
+========================= */
+
+.resultado {
+  font-weight: 700;
+  color: #222222;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 90px;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.analisada {
+  background: #d9f3e8;
+  color: #087653;
+}
+
+.analise {
+  background: #fff0c9;
+  color: #946500;
+}
+
+.pendente {
+  background: #eeeeee;
+  color: #666666;
+}
+
+
+/* =========================
+   BOTÃO DETALHES
+========================= */
+
+.details {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #555555;
+
+  font-size: 24px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.details:hover {
+  background: #eeeeee;
+  color: #007d62;
+}
+
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 700px) {
+
+  .page {
+    padding: 20px;
+  }
+
+  .titleRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .newButton {
+    width: 100%;
+  }
+
+  .filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .filters select {
+    width: 100%;
+  }
+
+  .dateInput {
+    width: 100%;
+  }
+
+  .dateInput input {
+    width: 100%;
+  }
+
+}

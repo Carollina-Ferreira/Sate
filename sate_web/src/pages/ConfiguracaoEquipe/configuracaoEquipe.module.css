@@ -1,0 +1,489 @@
+.page {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+
+    position: relative;
+
+    background-color: #005942;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    color: #ffffff;
+
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    width: min(1050px, 100%);
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 42px 45px 34px;
+
+    box-sizing: border-box;
+}
+
+
+/* PROGRESSO */
+
+.progressArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 18px;
+}
+
+.stepBadge {
+    padding: 7px 19px;
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    color: #e9f4f0;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.progressSteps {
+    width: min(620px, 100%);
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 8px;
+}
+
+.progressComplete,
+.progressInactive {
+    height: 4px;
+    border-radius: 20px;
+}
+
+.progressComplete {
+    background: #42d4a2;
+}
+
+.progressInactive {
+    background: rgba(255, 255, 255, 0.82);
+}
+
+
+/* CABEÇALHO */
+
+.header {
+    margin-top: 32px;
+    margin-bottom: 29px;
+
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 29px;
+    font-weight: 700;
+}
+
+.header p {
+    max-width: 700px;
+
+    margin: 9px auto 0;
+
+    color: #cedfd8;
+
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+
+/* CARD */
+
+.formCard {
+    display: grid;
+
+    grid-template-columns:
+        220px
+        minmax(280px, 1fr)
+        220px;
+
+    gap: 28px;
+
+    padding: 28px;
+
+    box-sizing: border-box;
+
+    border-radius: 18px;
+
+    background: #f6f8f7;
+
+    color: #263930;
+
+    box-shadow:
+        0 18px 38px rgba(0, 35, 25, 0.2);
+}
+
+
+/* FOTO */
+
+.photoColumn {
+    display: flex;
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.photoArea {
+    width: 100%;
+    height: 205px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 15px;
+
+    box-sizing: border-box;
+
+    border: none;
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            rgba(0, 55, 42, 0.44),
+            rgba(0, 55, 42, 0.62)
+        ),
+        #d8e3de;
+
+    background-position: center;
+    background-size: cover;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    overflow: hidden;
+}
+
+.camera {
+    width: 53px;
+    height: 53px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    color: #173e31;
+
+    box-shadow:
+        0 7px 18px rgba(0, 0, 0, 0.16);
+}
+
+.photoArea strong {
+    margin-top: 5px;
+
+    font-size: 12px;
+}
+
+.photoArea span {
+    font-size: 9px;
+
+    color: #e1ece7;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.changePhoto {
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    border: 1px solid #c6d4cd;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #40564c;
+
+    font-family: inherit;
+
+    font-size: 10px;
+
+    cursor: pointer;
+}
+
+
+/* FORM */
+
+.formArea {
+    display: flex;
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.field label {
+    color: #344940;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.field label span {
+    margin-left: 4px;
+
+    color: #d74444;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    height: 43px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #ccd6d1;
+    border-radius: 8px;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #293b33;
+
+    font-family: inherit;
+
+    font-size: 11px;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: #20b982;
+
+    box-shadow:
+        0 0 0 3px rgba(32, 185, 130, 0.1);
+}
+
+.field select:disabled {
+    opacity: 1;
+
+    background: #edf2f0;
+
+    color: #64756d;
+
+    cursor: not-allowed;
+}
+
+.field small {
+    color: #87948e;
+
+    font-size: 8px;
+}
+
+
+/* PREVIEW */
+
+.preview {
+    align-self: center;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    background: #2cb17d;
+
+    color: #ffffff;
+}
+
+.previewTitle {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: rgba(255, 255, 255, 0.82);
+
+    font-size: 8px;
+}
+
+.previewContent {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+.avatar {
+    width: 47px;
+    height: 47px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #edf2f0;
+
+    background-position: center;
+    background-size: cover;
+
+    color: #263930;
+
+    font-size: 22px;
+}
+
+.previewContent > div:last-child {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.previewContent strong {
+    overflow: hidden;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.previewContent span {
+    margin-top: 2px;
+
+    color: rgba(255, 255, 255, 0.8);
+
+    font-size: 8px;
+}
+
+
+/* FOOTER */
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: auto;
+
+    padding-top: 34px;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.nextButton {
+    min-width: 135px;
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #21b983;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.nextButton:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+}
+
+
+/* RESPONSIVO */
+
+@media (max-width: 850px) {
+    .formCard {
+        grid-template-columns: 180px 1fr;
+    }
+
+    .preview {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 620px) {
+    .container {
+        padding: 28px 18px;
+    }
+
+    .formCard {
+        grid-template-columns: 1fr;
+    }
+
+    .photoArea {
+        height: 170px;
+    }
+
+    .preview {
+        grid-column: auto;
+    }
+}

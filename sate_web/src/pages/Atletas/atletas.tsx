@@ -1,5 +1,5 @@
-
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import styles from './atletas.module.css';
 
@@ -16,7 +16,6 @@ import {
     BarChart3,
     Scissors
 } from 'lucide-react';
-
 
 // ============================================================================
 // INTERFACES
@@ -73,19 +72,19 @@ interface Atleta {
     categoria?: string;
 }
 
-
 // ============================================================================
 // CONFIGURAÇÃO
 // ============================================================================
 
 const API_URL = 'http://localhost:3000';
 
-
 // ============================================================================
 // COMPONENTE
 // ============================================================================
 
 const Atletas = () => {
+
+    const navigate = useNavigate();
 
     const [telaAtual, setTelaAtual] = useState<
         'lista' | 'perfil' | 'editar' | 'clipes'
@@ -111,7 +110,6 @@ const Atletas = () => {
     const [atletaSelecionado, setAtletaSelecionado] =
         useState<AtletaBackend | null>(null);
 
-
     // ========================================================================
     // CORES DOS AVATARES
     // ========================================================================
@@ -121,7 +119,6 @@ const Atletas = () => {
         'rosa',
         'azul'
     ];
-
 
     // ========================================================================
     // PEGAR TOKEN
@@ -145,7 +142,6 @@ const Atletas = () => {
 
         return null;
     };
-
 
     // ========================================================================
     // CARREGAR ATLETAS DO BANCO
@@ -175,7 +171,6 @@ const Atletas = () => {
                 return;
             }
 
-
             // ------------------------------------------------------------
             // BUSCAR ATLETAS
             // ------------------------------------------------------------
@@ -195,7 +190,6 @@ const Atletas = () => {
                 }
             );
 
-
             // ------------------------------------------------------------
             // TENTAR LER RESPOSTA
             // ------------------------------------------------------------
@@ -210,7 +204,6 @@ const Atletas = () => {
 
                 dados = null;
             }
-
 
             // ------------------------------------------------------------
             // ERRO DA API
@@ -243,7 +236,6 @@ const Atletas = () => {
                 );
             }
 
-
             // ------------------------------------------------------------
             // GARANTIR QUE É UMA LISTA
             // ------------------------------------------------------------
@@ -260,14 +252,12 @@ const Atletas = () => {
                 );
             }
 
-
             // ------------------------------------------------------------
             // CONVERTER DADOS DO BANCO
             // ------------------------------------------------------------
 
             const atletasBanco: AtletaBackend[] =
                 dados;
-
 
             const atletasFormatados: Atleta[] =
                 atletasBanco.map(
@@ -284,13 +274,9 @@ const Atletas = () => {
 
                             nome,
 
-                            // Atualmente não existe equipe
-                            // no modelo Atleta.
                             equipe:
                                 'Sem equipe',
 
-                            // Enquanto posição/modalidade
-                            // não estiverem no banco.
                             posicao:
                                 atleta.categoria ||
                                 'Sem categoria',
@@ -298,8 +284,6 @@ const Atletas = () => {
                             modalidade:
                                 'Não informada',
 
-                            // Frequência ainda não existe
-                            // no modelo atual.
                             frequencia: 0,
 
                             cor:
@@ -317,7 +301,6 @@ const Atletas = () => {
                         };
                     }
                 );
-
 
             // ------------------------------------------------------------
             // SALVAR NA TELA
@@ -348,7 +331,6 @@ const Atletas = () => {
         }
     };
 
-
     // ========================================================================
     // CARREGAR AO ABRIR A PÁGINA
     // ========================================================================
@@ -358,7 +340,6 @@ const Atletas = () => {
         carregarAtletas();
 
     }, []);
-
 
     // ========================================================================
     // EQUIPES
@@ -385,7 +366,6 @@ const Atletas = () => {
 
     }, [atletas]);
 
-
     // ========================================================================
     // MODALIDADES
     // ========================================================================
@@ -410,7 +390,6 @@ const Atletas = () => {
         ];
 
     }, [atletas]);
-
 
     // ========================================================================
     // FILTROS
@@ -445,20 +424,17 @@ const Atletas = () => {
                             textoBusca
                         );
 
-
                 const correspondeEquipe =
                     equipeSelecionada ===
                         'Todas as equipes' ||
                     atleta.equipe ===
                         equipeSelecionada;
 
-
                 const correspondeModalidade =
                     modalidadeSelecionada ===
                         'Todas as modalidades' ||
                     atleta.modalidade ===
                         modalidadeSelecionada;
-
 
                 return (
                     correspondeBusca &&
@@ -474,7 +450,6 @@ const Atletas = () => {
         equipeSelecionada,
         modalidadeSelecionada
     ]);
-
 
     // ========================================================================
     // ABRIR PERFIL
@@ -498,7 +473,6 @@ const Atletas = () => {
                 return;
             }
 
-
             const resposta =
                 await fetch(
                     `${API_URL}/api/atletas/${id}`,
@@ -515,10 +489,8 @@ const Atletas = () => {
                     }
                 );
 
-
             const dados =
                 await resposta.json();
-
 
             if (!resposta.ok) {
 
@@ -527,7 +499,6 @@ const Atletas = () => {
                     'Erro ao buscar atleta.'
                 );
             }
-
 
             setAtletaSelecionado(
                 dados
@@ -552,7 +523,6 @@ const Atletas = () => {
         }
     };
 
-
     // ========================================================================
     // VOLTAR PARA LISTA
     // ========================================================================
@@ -567,7 +537,6 @@ const Atletas = () => {
             null
         );
     };
-
 
     // ========================================================================
     // TELA EDITAR
@@ -588,7 +557,6 @@ const Atletas = () => {
         );
     }
 
-
     // ========================================================================
     // TELA CLIPES
     // ========================================================================
@@ -607,7 +575,6 @@ const Atletas = () => {
             />
         );
     }
-
 
     // ========================================================================
     // TELA PERFIL
@@ -637,7 +604,6 @@ const Atletas = () => {
             />
         );
     }
-
 
     // ========================================================================
     // TELA PRINCIPAL
@@ -669,15 +635,14 @@ const Atletas = () => {
                     Veja seus atletas
                 </h1>
 
-
                 <button
                     className={
                         styles.newAthleteButton
                     }
 
                     onClick={() =>
-                        alert(
-                            'Cadastro em breve!'
+                        navigate(
+                            '/cadastro-atleta'
                         )
                     }
                 >
@@ -693,7 +658,6 @@ const Atletas = () => {
                 </button>
 
             </div>
-
 
             {/* ================================================================
                 FILTROS
@@ -718,7 +682,6 @@ const Atletas = () => {
                         }
                     />
 
-
                     <input
                         type="text"
 
@@ -738,7 +701,6 @@ const Atletas = () => {
                     />
 
                 </div>
-
 
                 <div
                     className={
@@ -782,7 +744,6 @@ const Atletas = () => {
 
                     </select>
 
-
                     <ChevronDown
                         size={21}
                         className={
@@ -791,7 +752,6 @@ const Atletas = () => {
                     />
 
                 </div>
-
 
                 <div
                     className={
@@ -835,7 +795,6 @@ const Atletas = () => {
 
                     </select>
 
-
                     <ChevronDown
                         size={21}
                         className={
@@ -844,7 +803,6 @@ const Atletas = () => {
                     />
 
                 </div>
-
 
                 <button
                     className={
@@ -864,7 +822,6 @@ const Atletas = () => {
 
             </div>
 
-
             {/* ================================================================
                 CARREGANDO
             ================================================================ */}
@@ -876,7 +833,6 @@ const Atletas = () => {
                 </div>
 
             )}
-
 
             {/* ================================================================
                 ERRO
@@ -891,7 +847,6 @@ const Atletas = () => {
 
                 )}
 
-
             {/* ================================================================
                 NENHUM ATLETA
             ================================================================ */}
@@ -905,7 +860,6 @@ const Atletas = () => {
                     </div>
 
                 )}
-
 
             {/* ================================================================
                 LISTA DE ATLETAS
@@ -971,7 +925,6 @@ const Atletas = () => {
 
                                         </div>
 
-
                                         <div
                                             className={
                                                 styles.info
@@ -984,7 +937,6 @@ const Atletas = () => {
                                                 }
                                             </h2>
 
-
                                             <p
                                                 className={
                                                     styles.team
@@ -994,7 +946,6 @@ const Atletas = () => {
                                                     atleta.equipe
                                                 }
                                             </p>
-
 
                                             <p
                                                 className={
@@ -1018,7 +969,6 @@ const Atletas = () => {
 
                                         </div>
 
-
                                         <span
                                             className={`
                                                 ${styles.frequency}
@@ -1031,7 +981,6 @@ const Atletas = () => {
                                         </span>
 
                                     </div>
-
 
                                     {/* ------------------------------------------------
                                         CARD HOVER
@@ -1065,7 +1014,6 @@ const Atletas = () => {
 
                                         </button>
 
-
                                         <button
                                             className={
                                                 styles.hoverButton
@@ -1081,7 +1029,6 @@ const Atletas = () => {
                                             </span>
 
                                         </button>
-
 
                                         <button
                                             className={
@@ -1158,6 +1105,4 @@ const Atletas = () => {
     );
 };
 
-
 export default Atletas;
-

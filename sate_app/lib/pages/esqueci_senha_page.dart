@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'link_enviado_page.dart';
 
 class EsqueciSenhaPage extends StatefulWidget {
@@ -11,9 +15,13 @@ class EsqueciSenhaPage extends StatefulWidget {
 class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
   final emailController = TextEditingController();
 
+  bool carregando = false;
+
   static const verde = Color(0xFF00845F);
   static const rosa = Color(0xFFE98BA8);
   static const azul = Color(0xFF001E98);
+
+  static const String apiUrl = 'http://localhost:3000';
 
   @override
   void dispose() {
@@ -27,10 +35,6 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
       backgroundColor: const Color(0xFFFCFCFC),
       body: Stack(
         children: [
-          // ================================================================
-          // FUNDO DECORATIVO
-          // ================================================================
-
           Positioned.fill(
             child: CustomPaint(
               painter: BackgroundPainter(
@@ -40,10 +44,6 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
               ),
             ),
           ),
-
-          // ================================================================
-          // CONTEÚDO
-          // ================================================================
 
           SafeArea(
             child: Center(
@@ -88,9 +88,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ================================================================
           // LOGO
-          // ================================================================
 
           Center(
             child: Image.asset(
@@ -102,9 +100,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
 
           const SizedBox(height: 28),
 
-          // ================================================================
           // TÍTULO
-          // ================================================================
 
           const Text(
             'Esqueceu sua senha?',
@@ -129,9 +125,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
 
           const SizedBox(height: 28),
 
-          // ================================================================
           // EMAIL
-          // ================================================================
 
           const Text(
             'Email',
@@ -148,6 +142,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.done,
+            enabled: !carregando,
             onSubmitted: (_) => _enviarLink(),
             decoration: InputDecoration(
               hintText: 'Digite seu email',
@@ -178,9 +173,11 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
                   color: Colors.grey.shade300,
                 ),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
+              focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12),
+                ),
+                borderSide: BorderSide(
                   color: verde,
                   width: 1.5,
                 ),
@@ -190,26 +187,30 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
 
           const SizedBox(height: 22),
 
-          // ================================================================
-          // BOTÃO ENVIAR LINK
-          // ================================================================
+          // BOTÃO
 
           SizedBox(
             width: double.infinity,
             height: 52,
             child: ElevatedButton(
-              onPressed: _enviarLink,
+              onPressed: carregando
+                  ? null
+                  : _enviarLink,
               style: ElevatedButton.styleFrom(
                 backgroundColor: verde,
                 foregroundColor: Colors.white,
+                disabledBackgroundColor:
+                    verde.withValues(alpha: 0.6),
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                'Enviar link',
-                style: TextStyle(
+              child: Text(
+                carregando
+                    ? 'Enviando...'
+                    : 'Enviar link',
+                style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -219,18 +220,18 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
 
           const SizedBox(height: 24),
 
-          // ================================================================
-          // VOLTAR PARA LOGIN
-          // ================================================================
+          // VOLTAR
 
           Center(
             child: _HoverLink(
               verde: verde,
               normalText: 'Lembrou da senha? ',
               linkText: 'Voltar para o login',
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: carregando
+                  ? () {}
+                  : () {
+                      Navigator.pop(context);
+                    },
             ),
           ),
         ],
@@ -242,51 +243,119 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
   // ENVIAR LINK
   // ========================================================================
 
-  void _enviarLink() {
+  Future<void> _enviarLink() async {
     final email = emailController.text.trim();
 
-    // ------------------------------------------------------------
-    // Campo vazio
-    // ------------------------------------------------------------
+    // EMAIL VAZIO
 
     if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Digite seu email.',
-          ),
-        ),
+      _mostrarMensagem(
+        'Digite seu email.',
       );
 
       return;
     }
 
-    // ------------------------------------------------------------
-    // Email inválido
-    // ------------------------------------------------------------
+    // EMAIL INVÁLIDO
 
-    if (!email.contains('@') || !email.contains('.')) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Digite um email válido.',
-          ),
-        ),
+    if (email.contains(' ') ||
+        !email.contains('@') ||
+        !email.contains('.')) {
+      _mostrarMensagem(
+        'Digite um email válido.',
       );
 
       return;
     }
 
-    // ------------------------------------------------------------
-    // Vai para tela de confirmação
-    // ------------------------------------------------------------
+    setState(() {
+      carregando = true;
+    });
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LinkEnviadoPage(
-          email: email,
+    try {
+      debugPrint('================================');
+      debugPrint('RECUPERAÇÃO DE SENHA');
+      debugPrint('Email: $email');
+      debugPrint('================================');
+
+      final resposta = await http.post(
+        Uri.parse(
+          '$apiUrl/api/password/esqueci-senha',
         ),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'email': email,
+        }),
+      );
+
+      debugPrint(
+        'Status da recuperação: ${resposta.statusCode}',
+      );
+
+      debugPrint(
+        'Resposta do servidor: ${resposta.body}',
+      );
+
+      if (!mounted) return;
+
+      final data = jsonDecode(resposta.body);
+
+      if (resposta.statusCode != 200) {
+        _mostrarMensagem(
+          data['mensagem'] ??
+              'Não foi possível solicitar a recuperação.',
+          erro: true,
+        );
+
+        return;
+      }
+
+      // ======================================================
+      // SUCESSO
+      // ======================================================
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => LinkEnviadoPage(
+            email: email,
+          ),
+        ),
+      );
+    } catch (error) {
+      if (!mounted) return;
+
+      debugPrint(
+        'Erro na recuperação de senha: $error',
+      );
+
+      _mostrarMensagem(
+        'Não foi possível conectar ao servidor.',
+        erro: true,
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          carregando = false;
+        });
+      }
+    }
+  }
+
+  // ========================================================================
+  // SNACKBAR
+  // ========================================================================
+
+  void _mostrarMensagem(
+    String mensagem, {
+    bool erro = false,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(mensagem),
+        backgroundColor: erro ? Colors.red : null,
       ),
     );
   }
@@ -320,19 +389,16 @@ class _HoverLinkState extends State<_HoverLink> {
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-
       onEnter: (_) {
         setState(() {
           hover = true;
         });
       },
-
       onExit: (_) {
         setState(() {
           hover = false;
         });
       },
-
       child: GestureDetector(
         onTap: widget.onTap,
         child: RichText(
@@ -381,10 +447,11 @@ class BackgroundPainter extends CustomPainter {
   });
 
   @override
-  void paint(Canvas canvas, Size size) {
-    // ================================================================
+  void paint(
+    Canvas canvas,
+    Size size,
+  ) {
     // BLOB ROSA
-    // ================================================================
 
     final pinkPaint = Paint()
       ..color = rosa.withValues(alpha: 0.13);
@@ -395,9 +462,7 @@ class BackgroundPainter extends CustomPainter {
       pinkPaint,
     );
 
-    // ================================================================
     // BLOB AZUL
-    // ================================================================
 
     final bluePaint = Paint()
       ..color = azul.withValues(alpha: 0.06);
@@ -408,9 +473,7 @@ class BackgroundPainter extends CustomPainter {
       bluePaint,
     );
 
-    // ================================================================
     // BLOB VERDE
-    // ================================================================
 
     final greenPaint = Paint()
       ..color = verde.withValues(alpha: 0.08);
@@ -421,9 +484,7 @@ class BackgroundPainter extends CustomPainter {
       greenPaint,
     );
 
-    // ================================================================
     // GRID DE PONTOS
-    // ================================================================
 
     final dotPaint = Paint()
       ..color = azul.withValues(alpha: 0.13);
@@ -448,9 +509,7 @@ class BackgroundPainter extends CustomPainter {
       }
     }
 
-    // ================================================================
     // GRÁFICO
-    // ================================================================
 
     final points = [
       Offset(size.width - 280, 210),
@@ -488,11 +547,13 @@ class BackgroundPainter extends CustomPainter {
       linePaint,
     );
 
-    // ================================================================
     // PONTOS DO GRÁFICO
-    // ================================================================
 
-    for (int i = 0; i < points.length; i += 2) {
+    for (
+      int i = 0;
+      i < points.length;
+      i += 2
+    ) {
       final paint = Paint()
         ..color = i % 4 == 0
             ? rosa

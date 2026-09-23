@@ -64,7 +64,7 @@ const Atletas = () => {
                 <h1 className={styles.title}>Veja seus atletas</h1>
                 <button
                     className={styles.newAthleteButton}
-                    onClick={() => alert('Cadastro em breve!')}
+                    onClick={() => ('/cadastro')}
                 >
                     <Plus size={24} />
                     <span>Novo atleta</span>

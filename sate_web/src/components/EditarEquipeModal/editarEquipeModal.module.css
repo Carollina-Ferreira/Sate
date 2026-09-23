@@ -1,0 +1,803 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 2000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  background: rgba(0, 44, 33, 0.58);
+
+  backdrop-filter: blur(7px);
+}
+
+
+/* =====================================
+   MODAL
+===================================== */
+
+.modal {
+  width: min(1080px, 100%);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border-radius: 26px;
+
+  background: #dfe7e3;
+
+  color: #273c33;
+
+  font-family: 'Poppins', sans-serif;
+
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.28);
+}
+
+
+/* =====================================
+   CABEÇALHO
+===================================== */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 22px 30px 16px;
+
+  border-bottom: 1px solid #c8d4ce;
+}
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #10845f;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 1.2px;
+
+  text-transform: uppercase;
+}
+
+.header h2 {
+  margin: 0;
+
+  color: #24372f;
+
+  font-size: 31px;
+  font-weight: 700;
+
+  line-height: 1.1;
+}
+
+.header p {
+  margin: 5px 0 0;
+
+  color: #6b7b74;
+
+  font-size: 13px;
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 11px;
+
+  background: transparent;
+
+  color: #6f7f78;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(0, 0, 0, 0.05);
+
+  color: #31483e;
+}
+
+
+/* =====================================
+   CONTEÚDO
+===================================== */
+
+.content {
+  display: grid;
+
+  grid-template-columns:
+    235px 1fr;
+
+  gap: 26px;
+
+  padding: 20px 30px 16px;
+
+  box-sizing: border-box;
+
+  overflow: visible;
+}
+
+
+/* =====================================
+   IMAGEM
+===================================== */
+
+.imageColumn {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 220px;
+
+  overflow: hidden;
+
+  padding: 0;
+
+  border: 1px dashed #9eb3aa;
+
+  border-radius: 18px;
+
+  background: #dbe5e0;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.imagePreview:hover {
+  border-color: #16a875;
+
+  background: #d5e2dc;
+}
+
+.imagePreview img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.imageEmpty {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  color: #586a62;
+}
+
+.cameraCircle {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #c7ddd3;
+
+  color: #0b8a62;
+}
+
+.imageEmpty strong {
+  font-size: 12px;
+}
+
+.imageEmpty span {
+  color: #85938c;
+
+  font-size: 10px;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.changeImage {
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  border: 1px solid #c5d3cc;
+
+  border-radius: 12px;
+
+  background: #edf3f0;
+
+  color: #566961;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.changeImage:hover {
+  border-color: #9fbab0;
+
+  background: #f5f8f6;
+}
+
+
+/* =====================================
+   FORMULÁRIO
+===================================== */
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 13px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.field label {
+  color: #44574f;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  height: 50px;
+
+  padding: 0 15px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #c6d4cd;
+
+  border-radius: 12px;
+
+  background: #f9fbfa;
+
+  color: #2d3d36;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.field input::placeholder {
+  color: #8c9892;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: #16a875;
+
+  box-shadow:
+    0 0 0 3px rgba(22, 168, 117, 0.1);
+
+  background: #ffffff;
+}
+
+.twoColumns {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 14px;
+}
+
+
+/* =====================================
+   CORES
+===================================== */
+
+.colorsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  flex-wrap: wrap;
+}
+
+.colorOptions {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+.colorButton {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 9px rgba(0, 0, 0, 0.13);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.colorButton:hover {
+  transform: scale(1.06);
+}
+
+.colorSelected {
+  outline: 3px solid #ffffff;
+
+  box-shadow:
+    0 0 0 2px #1a5a46,
+    0 3px 9px rgba(0, 0, 0, 0.13);
+}
+
+
+/* =====================================
+   RGB PERSONALIZADO
+===================================== */
+
+.rgbButton {
+  position: relative;
+
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.rgbButton input {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+
+  cursor: pointer;
+}
+
+.rgbIconOuter {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      #ff5f57,
+      #ffad3d,
+      #ffe45d,
+      #55d874,
+      #34c7f4,
+      #5d77ff,
+      #b45aff,
+      #ff5f57
+    );
+
+  box-shadow:
+    0 3px 9px rgba(0, 0, 0, 0.16);
+
+  transition:
+    transform 0.18s ease;
+}
+
+.rgbButton:hover .rgbIconOuter {
+  transform: scale(1.07);
+}
+
+.rgbIconInner {
+  width: 29px;
+  height: 29px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #ffffff;
+
+  border-radius: 50%;
+
+  background: #005b42;
+
+  color: #ffffff;
+}
+
+
+/* =====================================
+   COR SELECIONADA
+===================================== */
+
+.selectedColorBox {
+  min-width: 185px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  padding: 0 10px;
+
+  box-sizing: border-box;
+
+  border-radius: 10px;
+
+  background: #d1dbd6;
+}
+
+.selectedColorBox span {
+  margin-right: auto;
+
+  color: #7b8883;
+
+  font-size: 10px;
+}
+
+.selectedColorBox strong {
+  color: #41524a;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.selectedColorPreview {
+  width: 22px;
+  height: 22px;
+
+  flex-shrink: 0;
+
+  border: 2px solid #ffffff;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =====================================
+   PRÉVIA
+===================================== */
+
+.preview {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin: 0 30px 14px;
+
+  padding: 12px 15px;
+
+  box-sizing: border-box;
+
+  border-radius: 14px;
+
+  background: #d3ddd8;
+}
+
+.previewColor {
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.preview > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.preview span {
+  color: #8a9891;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.7px;
+
+  text-transform: uppercase;
+}
+
+.preview strong {
+  overflow: hidden;
+
+  color: #2b3b34;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.preview small {
+  margin-top: 1px;
+
+  color: #71817a;
+
+  font-size: 10px;
+}
+
+
+/* =====================================
+   RODAPÉ
+===================================== */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  padding: 15px 30px 18px;
+
+  border-top: 1px solid #c8d4ce;
+}
+
+.cancelButton,
+.saveButton {
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 19px;
+
+  border-radius: 12px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.cancelButton {
+  border: 1px solid #bccac4;
+
+  background: transparent;
+
+  color: #5d6e66;
+}
+
+.cancelButton:hover {
+  background: #d6dfda;
+}
+
+.saveButton {
+  border: none;
+
+  background: #0b875f;
+
+  color: #ffffff;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: #087251;
+
+  transform: translateY(-1px);
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+
+/* =====================================
+   TELAS MENORES
+===================================== */
+
+@media (max-width: 900px) {
+  .modal {
+    width: min(820px, 100%);
+  }
+
+  .content {
+    grid-template-columns:
+      210px 1fr;
+
+    gap: 20px;
+
+    padding:
+      18px 24px 14px;
+  }
+
+  .imagePreview {
+    height: 190px;
+  }
+
+  .header {
+    padding:
+      18px 24px 14px;
+  }
+
+  .header h2 {
+    font-size: 27px;
+  }
+
+  .preview {
+    margin:
+      0 24px 12px;
+  }
+
+  .footer {
+    padding:
+      13px 24px 16px;
+  }
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 650px) {
+  .overlay {
+    align-items: flex-start;
+
+    padding: 10px;
+
+    overflow-y: auto;
+  }
+
+  .modal {
+    margin: 10px 0;
+
+    border-radius: 20px;
+  }
+
+  .content {
+    grid-template-columns:
+      1fr;
+
+    overflow: visible;
+  }
+
+  .imagePreview {
+    height: 160px;
+  }
+
+  .twoColumns {
+    grid-template-columns:
+      1fr;
+  }
+
+  .colorsRow {
+    align-items: flex-start;
+  }
+
+  .selectedColorBox {
+    width: 100%;
+  }
+
+  .footer {
+    flex-direction: column-reverse;
+  }
+
+  .cancelButton,
+  .saveButton {
+    width: 100%;
+  }
+}

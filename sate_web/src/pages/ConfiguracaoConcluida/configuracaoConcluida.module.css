@@ -1,0 +1,462 @@
+.page {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+
+    background-color: #005942;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    color: #ffffff;
+
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    width: min(1000px, 100%);
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 42px 45px 34px;
+
+    box-sizing: border-box;
+}
+
+
+/* PROGRESSO */
+
+.progressArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 18px;
+}
+
+.stepBadge {
+    padding: 7px 19px;
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    color: #e9f4f0;
+
+    font-size: 11px;
+}
+
+.progressSteps {
+    width: min(620px, 100%);
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 8px;
+}
+
+.progressSteps > div {
+    height: 4px;
+
+    border-radius: 20px;
+
+    background: #42d4a2;
+}
+
+
+/* HEADER */
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-top: 35px;
+
+    text-align: center;
+}
+
+.completeIcon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 13px;
+
+    border-radius: 50%;
+
+    background: #36c995;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 10px 24px rgba(28, 180, 127, 0.25);
+}
+
+.header h1 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.header p {
+    margin: 7px 0 0;
+
+    color: #cedfd8;
+
+    font-size: 14px;
+}
+
+
+/* CARDS */
+
+.summaryArea {
+    width: min(700px, 100%);
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 80px;
+
+    align-items: center;
+
+    margin: 45px auto 0;
+}
+
+
+/* CAMPOS */
+
+.fieldsCard {
+    min-height: 245px;
+
+    padding: 23px;
+
+    box-sizing: border-box;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    color: #263930;
+
+    box-shadow:
+        0 18px 35px rgba(0, 32, 23, 0.2);
+}
+
+.sportHeader {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+.sportCircle {
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e4ece8;
+
+    font-size: 21px;
+}
+
+.sportHeader > div:last-child {
+    display: flex;
+    flex-direction: column;
+}
+
+.sportHeader strong {
+    color: #263930;
+
+    font-size: 13px;
+}
+
+.sportHeader span {
+    color: #8a9690;
+
+    font-size: 8px;
+}
+
+.divider {
+    height: 1px;
+
+    margin: 16px 0;
+
+    background: #e5ebe8;
+}
+
+.fieldsTitle {
+    color: #738078;
+
+    font-size: 10px;
+}
+
+.fieldsCard ul {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+
+    margin: 11px 0 0;
+
+    padding: 0;
+
+    list-style: none;
+}
+
+.fieldsCard li {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: #394b43;
+
+    font-size: 10px;
+}
+
+.fieldsCard li svg {
+    color: #1bb27d;
+}
+
+.moreFields {
+    display: block;
+
+    margin-top: 9px;
+
+    color: #138861;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+/* EQUIPE */
+
+.teamCard {
+    overflow: hidden;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    color: #263930;
+
+    box-shadow:
+        0 18px 35px rgba(0, 32, 23, 0.22);
+}
+
+.teamImage {
+    height: 150px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #dfe9e4;
+    background-position: center;
+    background-size: cover;
+
+    font-size: 50px;
+}
+
+.teamInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 18px 20px;
+}
+
+.teamInfo > div:first-child {
+    min-width: 0;
+}
+
+.teamInfo span {
+    color: #1b9a6e;
+
+    font-size: 7px;
+    font-weight: 700;
+
+    letter-spacing: 0.7px;
+}
+
+.teamInfo h2 {
+    overflow: hidden;
+
+    margin: 3px 0 2px;
+
+    color: #24372f;
+
+    font-size: 17px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.teamInfo p {
+    margin: 0;
+
+    color: #7b8882;
+
+    font-size: 9px;
+}
+
+.sportEmoji {
+    width: 43px;
+    height: 43px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #edf2f0;
+
+    font-size: 22px;
+}
+
+
+/* FOOTER */
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: auto;
+
+    padding-top: 34px;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.nextButton {
+    min-width: 165px;
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 0 18px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #21b983;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.nextButton:hover {
+    background: #159d6d;
+}
+
+
+/* RESPONSIVO */
+
+@media (max-width: 720px) {
+    .container {
+        padding: 28px 20px;
+    }
+
+    .summaryArea {
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+
+        width: min(420px, 100%);
+    }
+
+    .header h1 {
+        font-size: 27px;
+    }
+}
+
+.sportCircle .material-icons {
+    font-size: 22px;
+    color: #263930;
+}
+
+.teamImage .material-icons {
+    font-size: 52px;
+    color: #ffffff;
+}
+
+.sportEmoji .material-icons {
+    font-size: 22px;
+    color: #263930;
+}
+
+.sportCircle,
+.sportEmoji {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sportCircle svg,
+.sportEmoji svg {
+    color: #172a23;
+}
+
+.teamImage svg {
+    color: #ffffff;
+}
+
+.emptyFields {
+    margin: 12px 0 0;
+
+    color: #84918b;
+
+    font-size: 10px;
+}

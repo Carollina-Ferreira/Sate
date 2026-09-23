@@ -1,14 +1,29 @@
 import {
+  ArrowRightLeft,
   Check,
   CircleDot,
+  FastForward,
   Flag,
+  Handshake,
+  Palette,
+  Pencil,
   Play,
+  Plus,
   Save,
   Scissors,
   Search,
+  Shield,
+  ShieldCheck,
   Target,
+  Trash2,
   Video,
   X,
+  XCircle,
+  Zap,
+} from 'lucide-react';
+
+import type {
+  LucideIcon,
 } from 'lucide-react';
 
 import {
@@ -50,7 +65,147 @@ interface NovoClipe {
   fim: number;
 }
 
-const DURACAO_VIDEO = 45 * 60;
+interface CategoriaAcao {
+  id: number;
+  nome: string;
+  icon: LucideIcon;
+  cor: string;
+  mostrarTimeline: boolean;
+}
+
+interface CategoriaForm {
+  id: number | null;
+  nome: string;
+  iconId: string;
+  cor: string;
+  mostrarTimeline: boolean;
+}
+
+const DURACAO_VIDEO =
+  45 * 60;
+
+const opcoesIcones: {
+  id: string;
+  nome: string;
+  icon: LucideIcon;
+}[] = [
+  {
+    id: 'target',
+    nome: 'Alvo',
+    icon: Target,
+  },
+  {
+    id: 'passe',
+    nome: 'Passe',
+    icon: ArrowRightLeft,
+  },
+  {
+    id: 'assistencia',
+    nome: 'Assistência',
+    icon: Handshake,
+  },
+  {
+    id: 'raio',
+    nome: 'Raio',
+    icon: Zap,
+  },
+  {
+    id: 'escudo',
+    nome: 'Escudo',
+    icon: Shield,
+  },
+  {
+    id: 'defesa',
+    nome: 'Defesa',
+    icon: ShieldCheck,
+  },
+  {
+    id: 'contra',
+    nome: 'Avanço',
+    icon: FastForward,
+  },
+  {
+    id: 'bandeira',
+    nome: 'Bandeira',
+    icon: Flag,
+  },
+  {
+    id: 'erro',
+    nome: 'Erro',
+    icon: XCircle,
+  },
+  {
+    id: 'circulo',
+    nome: 'Ponto',
+    icon: CircleDot,
+  },
+];
+
+const categoriasIniciais: CategoriaAcao[] = [
+  {
+    id: 1,
+    nome: 'Gol',
+    icon: Target,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 2,
+    nome: 'Passe',
+    icon: ArrowRightLeft,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 3,
+    nome: 'Assistência',
+    icon: Handshake,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 4,
+    nome: 'Finalização',
+    icon: Zap,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 5,
+    nome: 'Defesa',
+    icon: Shield,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 6,
+    nome: 'Roubo de bola',
+    icon: ShieldCheck,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 7,
+    nome: 'Contra-ataque',
+    icon: FastForward,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 8,
+    nome: 'Falta',
+    icon: Flag,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 9,
+    nome: 'Erro',
+    icon: XCircle,
+    cor: '#E06C75',
+    mostrarTimeline: true,
+  },
+];
 
 const atletasMock: Atleta[] = [
   {
@@ -112,9 +267,16 @@ const eventosIniciais: EventoAnalise[] = [
   },
 ];
 
-const formatarTempo = (segundos: number) => {
-  const minutos = Math.floor(segundos / 60);
-  const resto = segundos % 60;
+const formatarTempo = (
+  segundos: number,
+) => {
+  const minutos =
+    Math.floor(
+      segundos / 60,
+    );
+
+  const resto =
+    segundos % 60;
 
   return `${minutos}:${resto
     .toString()
@@ -122,35 +284,65 @@ const formatarTempo = (segundos: number) => {
 };
 
 const AnaliseVideos = () => {
-  const [painelClipeAberto, setPainelClipeAberto] =
-    useState(false);
+  const [
+    painelClipeAberto,
+    setPainelClipeAberto,
+  ] = useState(false);
 
-  const [registroAberto, setRegistroAberto] =
-    useState(false);
+  const [
+    videoRodando,
+    setVideoRodando,
+  ] = useState(false);
 
-  const [videoRodando, setVideoRodando] =
-    useState(false);
+  const [
+    tempoAtual,
+    setTempoAtual,
+  ] = useState(
+    22 * 60 + 54,
+  );
 
-  const [tempoAtual, setTempoAtual] =
-    useState(22 * 60 + 54);
-
-  const [eventos, setEventos] =
+  const [
+    eventos,
+    setEventos,
+  ] =
     useState<EventoAnalise[]>(
       eventosIniciais,
     );
 
-  const [tipoAcao, setTipoAcao] =
-    useState('');
+  const [
+    categorias,
+    setCategorias,
+  ] =
+    useState<CategoriaAcao[]>(
+      categoriasIniciais,
+    );
 
   const [
-    avaliacaoRapida,
-    setAvaliacaoRapida,
-  ] = useState<Avaliacao | ''>('');
+    modalCategoriasAberto,
+    setModalCategoriasAberto,
+  ] = useState(false);
 
   const [
-    atletaRapido,
-    setAtletaRapido,
-  ] = useState(1);
+    formularioCategoriaAberto,
+    setFormularioCategoriaAberto,
+  ] = useState(false);
+
+  const [
+    confirmarExclusao,
+    setConfirmarExclusao,
+  ] = useState(false);
+
+  const [
+    categoriaForm,
+    setCategoriaForm,
+  ] =
+    useState<CategoriaForm>({
+      id: null,
+      nome: '',
+      iconId: 'target',
+      cor: '#4AA8D8',
+      mostrarTimeline: true,
+    });
 
   const [
     buscaAtleta,
@@ -160,42 +352,55 @@ const AnaliseVideos = () => {
   const [
     novoClipe,
     setNovoClipe,
-  ] = useState<NovoClipe>({
-    nome: '',
-    atletaId: null,
-    acao: '',
-    avaliacao: '',
-    observacao: '',
-    inicio: 10,
-    fim: 14,
-  });
+  ] =
+    useState<NovoClipe>({
+      nome: '',
+      atletaId: null,
+      acao: '',
+      avaliacao: '',
+      observacao: '',
+      inicio: 10,
+      fim: 14,
+    });
 
-  const atletasFiltrados = useMemo(() => {
-    const busca =
-      buscaAtleta.trim().toLowerCase();
+  const atletasFiltrados =
+    useMemo(() => {
+      const busca =
+        buscaAtleta
+          .trim()
+          .toLowerCase();
 
-    if (!busca) {
-      return atletasMock;
-    }
+      if (!busca) {
+        return atletasMock;
+      }
 
-    return atletasMock.filter(
-      (atleta) =>
-        atleta.nome
-          .toLowerCase()
-          .includes(busca) ||
-        atleta.posicao
-          .toLowerCase()
-          .includes(busca),
-    );
-  }, [buscaAtleta]);
+      return atletasMock.filter(
+        (atleta) =>
+          atleta.nome
+            .toLowerCase()
+            .includes(
+              busca,
+            ) ||
+          atleta.posicao
+            .toLowerCase()
+            .includes(
+              busca,
+            ),
+      );
+    }, [
+      buscaAtleta,
+    ]);
 
-  const atletaSelecionado = useMemo(() => {
-    return atletasMock.find(
-      (atleta) =>
-        atleta.id ===
-        novoClipe.atletaId,
-    );
-  }, [novoClipe.atletaId]);
+  const atletaSelecionado =
+    useMemo(() => {
+      return atletasMock.find(
+        (atleta) =>
+          atleta.id ===
+          novoClipe.atletaId,
+      );
+    }, [
+      novoClipe.atletaId,
+    ]);
 
   const duracao =
     Math.max(
@@ -212,58 +417,26 @@ const AnaliseVideos = () => {
     novoClipe.fim >
       novoClipe.inicio;
 
-  const registroValido =
-    tipoAcao !== '' &&
-    avaliacaoRapida !== '';
-
-  const registrarAcao = () => {
-    if (!registroValido) {
-      return;
-    }
-
-    const atleta =
-      atletasMock.find(
-        (item) =>
-          item.id ===
-          atletaRapido,
-      );
-
-    if (!atleta) {
-      return;
-    }
-
-    const novoEvento: EventoAnalise = {
-      id: Date.now(),
-      tipo: tipoAcao,
-      atleta: atleta.nome,
-      segundo: tempoAtual,
-      avaliacao:
-        avaliacaoRapida as Avaliacao,
-    };
-
-    setEventos((atuais) => [
-      ...atuais,
-      novoEvento,
-    ]);
-
-    setTipoAcao('');
-    setAvaliacaoRapida('');
-    setRegistroAberto(false);
-  };
-
   const selecionarAtleta = (
     atleta: Atleta,
   ) => {
-    setNovoClipe((atual) => ({
-      ...atual,
-      atletaId: atleta.id,
-    }));
+    setNovoClipe(
+      (atual) => ({
+        ...atual,
+        atletaId:
+          atleta.id,
+      }),
+    );
 
-    setBuscaAtleta(atleta.nome);
+    setBuscaAtleta(
+      atleta.nome,
+    );
   };
 
   const salvarClipe = () => {
-    if (!formularioValido) {
+    if (
+      !formularioValido
+    ) {
       return;
     }
 
@@ -278,21 +451,28 @@ const AnaliseVideos = () => {
       return;
     }
 
-    const novoEvento: EventoAnalise = {
-      id: Date.now(),
-      tipo: novoClipe.acao,
-      atleta: atleta.nome,
-      segundo:
-        novoClipe.fim * 60,
-      avaliacao:
-        novoClipe.avaliacao as Avaliacao,
-      clip: true,
-    };
+    const novoEvento:
+      EventoAnalise = {
+        id:
+          Date.now(),
+        tipo:
+          novoClipe.acao,
+        atleta:
+          atleta.nome,
+        segundo:
+          novoClipe.fim *
+          60,
+        avaliacao:
+          novoClipe.avaliacao as Avaliacao,
+        clip: true,
+      };
 
-    setEventos((atuais) => [
-      ...atuais,
-      novoEvento,
-    ]);
+    setEventos(
+      (atuais) => [
+        ...atuais,
+        novoEvento,
+      ],
+    );
 
     setNovoClipe({
       nome: '',
@@ -305,19 +485,221 @@ const AnaliseVideos = () => {
     });
 
     setBuscaAtleta('');
-
-    setPainelClipeAberto(false);
+    setPainelClipeAberto(
+      false,
+    );
   };
 
+  const abrirGerenciador =
+    () => {
+      setFormularioCategoriaAberto(
+        false,
+      );
+
+      setConfirmarExclusao(
+        false,
+      );
+
+      setModalCategoriasAberto(
+        true,
+      );
+    };
+
+  const abrirNovaCategoria =
+    () => {
+      setCategoriaForm({
+        id: null,
+        nome: '',
+        iconId: 'target',
+        cor: '#4AA8D8',
+        mostrarTimeline: true,
+      });
+
+      setConfirmarExclusao(
+        false,
+      );
+
+      setFormularioCategoriaAberto(
+        true,
+      );
+    };
+
+  const editarCategoria = (
+    categoria:
+      CategoriaAcao,
+  ) => {
+    const opcaoIcone =
+      opcoesIcones.find(
+        (opcao) =>
+          opcao.icon ===
+          categoria.icon,
+      );
+
+    setCategoriaForm({
+      id:
+        categoria.id,
+      nome:
+        categoria.nome,
+      iconId:
+        opcaoIcone?.id ??
+        'target',
+      cor:
+        categoria.cor,
+      mostrarTimeline:
+        categoria.mostrarTimeline,
+    });
+
+    setConfirmarExclusao(
+      false,
+    );
+
+    setFormularioCategoriaAberto(
+      true,
+    );
+  };
+
+  const voltarListaCategorias =
+    () => {
+      setFormularioCategoriaAberto(
+        false,
+      );
+
+      setConfirmarExclusao(
+        false,
+      );
+    };
+
+  const salvarCategoria =
+    () => {
+      const nome =
+        categoriaForm.nome.trim();
+
+      if (!nome) {
+        return;
+      }
+
+      const opcaoIcone =
+        opcoesIcones.find(
+          (opcao) =>
+            opcao.id ===
+            categoriaForm.iconId,
+        );
+
+      const Icone =
+        opcaoIcone?.icon ??
+        Target;
+
+      if (
+        categoriaForm.id ===
+        null
+      ) {
+        const novaCategoria:
+          CategoriaAcao = {
+            id:
+              Date.now(),
+            nome,
+            icon:
+              Icone,
+            cor:
+              categoriaForm.cor,
+            mostrarTimeline:
+              categoriaForm.mostrarTimeline,
+          };
+
+        setCategorias(
+          (atuais) => [
+            ...atuais,
+            novaCategoria,
+          ],
+        );
+      } else {
+        setCategorias(
+          (atuais) =>
+            atuais.map(
+              (
+                categoria,
+              ) =>
+                categoria.id ===
+                categoriaForm.id
+                  ? {
+                      ...categoria,
+                      nome,
+                      icon:
+                        Icone,
+                      cor:
+                        categoriaForm.cor,
+                      mostrarTimeline:
+                        categoriaForm.mostrarTimeline,
+                    }
+                  : categoria,
+            ),
+        );
+      }
+
+      voltarListaCategorias();
+    };
+
+  const excluirCategoria =
+    () => {
+      if (
+        categoriaForm.id ===
+        null
+      ) {
+        return;
+      }
+
+      if (
+        !confirmarExclusao
+      ) {
+        setConfirmarExclusao(
+          true,
+        );
+
+        return;
+      }
+
+      setCategorias(
+        (atuais) =>
+          atuais.filter(
+            (categoria) =>
+              categoria.id !==
+              categoriaForm.id,
+          ),
+      );
+
+      setEventos(
+        (atuais) =>
+          atuais.filter(
+            (evento) =>
+              evento.tipo !==
+              categoriaForm.nome,
+          ),
+      );
+
+      voltarListaCategorias();
+    };
+
   return (
-    <main className={styles.page}>
-      <div className={styles.pageHeader}>
+    <main
+      className={
+        styles.page
+      }
+    >
+      <div
+        className={
+          styles.pageHeader
+        }
+      >
         <div>
           <h1>
             Análise de Vídeos
           </h1>
 
-          <div className={styles.matchInfo}>
+          <div
+            className={
+              styles.matchInfo
+            }
+          >
             <span>
               Falcões FC vs Tigres FC
             </span>
@@ -336,347 +718,378 @@ const AnaliseVideos = () => {
           </div>
         </div>
 
-        <div className={styles.headerActions}>
+        <div
+          className={
+            styles.headerActions
+          }
+        >
           <button
             type="button"
-            className={styles.actionButtonBlue}
-            onClick={() =>
-              setRegistroAberto(
-                (atual) => !atual,
-              )
+            className={
+              styles.manageCategoriesButton
+            }
+            onClick={
+              abrirGerenciador
             }
           >
-            <CircleDot size={16} />
-            Registrar ação
+            <Pencil
+              size={16}
+            />
+            Gerenciar categorias
           </button>
 
           <button
             type="button"
-            className={styles.actionButtonRed}
+            className={
+              styles.actionButtonRed
+            }
             onClick={() =>
-              setPainelClipeAberto(true)
+              setPainelClipeAberto(
+                true,
+              )
             }
           >
-            <Scissors size={16} />
+            <Scissors
+              size={16}
+            />
             Criar clipe
           </button>
 
           <button
             type="button"
-            className={styles.actionButtonGreen}
+            className={
+              styles.actionButtonGreen
+            }
           >
-            <Save size={16} />
+            <Save
+              size={16}
+            />
             Salvar análise
           </button>
         </div>
       </div>
 
-      <section className={styles.analysisGrid}>
-        <article className={styles.videoCard}>
-          <div className={styles.videoArea}>
-            <button
-              type="button"
-              className={styles.playButton}
-              onClick={() =>
-                setVideoRodando(
-                  (atual) => !atual,
-                )
-              }
-            >
-              {videoRodando ? (
-                <span className={styles.pauseIcon}>
-                  ||
-                </span>
-              ) : (
-                <Play
-                  size={38}
-                  fill="currentColor"
-                />
-              )}
-            </button>
-
-            <span className={styles.videoTime}>
-              {formatarTempo(
-                tempoAtual,
-              )}{' '}
-              / 45:00
-            </span>
-          </div>
-
-          <div className={styles.timelineArea}>
+      <section
+        className={
+          styles.analysisGrid
+        }
+      >
+        <div
+          className={
+            styles.leftColumn
+          }
+        >
+          <article
+            className={
+              styles.videoCard
+            }
+          >
             <div
               className={
-                styles.timelineTrackWrapper
+                styles.videoArea
               }
             >
-              <input
-                type="range"
-                min="0"
-                max={DURACAO_VIDEO}
-                value={tempoAtual}
-                onChange={(event) =>
-                  setTempoAtual(
-                    Number(
-                      event.target.value,
-                    ),
+              <button
+                type="button"
+                className={
+                  styles.playButton
+                }
+                onClick={() =>
+                  setVideoRodando(
+                    (atual) =>
+                      !atual,
                   )
                 }
-                className={
-                  styles.videoRange
-                }
-              />
+              >
+                {videoRodando ? (
+                  <span
+                    className={
+                      styles.pauseIcon
+                    }
+                  >
+                    ||
+                  </span>
+                ) : (
+                  <Play
+                    size={38}
+                    fill="currentColor"
+                  />
+                )}
+              </button>
 
-              <div
+              <span
                 className={
-                  styles.analysisMarkers
+                  styles.videoTime
                 }
               >
-                {eventos.map(
-                  (evento) => {
-                    const posicao =
-                      (evento.segundo /
-                        DURACAO_VIDEO) *
-                      100;
-
-                    return (
-                      <button
-                        key={evento.id}
-                        type="button"
-                        className={`${styles.analysisMarker} ${
-                          styles[
-                            `marker_${evento.avaliacao}`
-                          ]
-                        }`}
-                        style={{
-                          left: `${posicao}%`,
-                        }}
-                        title={`${evento.tipo} - ${evento.atleta} - ${formatarTempo(
-                          evento.segundo,
-                        )}`}
-                        onClick={() =>
-                          setTempoAtual(
-                            evento.segundo,
-                          )
-                        }
-                      />
-                    );
-                  },
-                )}
-              </div>
+                {formatarTempo(
+                  tempoAtual,
+                )}{' '}
+                / 45:00
+              </span>
             </div>
 
             <div
               className={
-                styles.timelineLegend
+                styles.timelineArea
               }
             >
-              <TimelineLegend
-                label="Boa"
-                className={
-                  styles.goodMarker
-                }
-              />
-
-              <TimelineLegend
-                label="Ruim"
-                className={
-                  styles.badMarker
-                }
-              />
-
-              <TimelineLegend
-                label="Neutra"
-                className={
-                  styles.neutralMarker
-                }
-              />
-
-              <TimelineLegend
-                label="Destaque"
-                className={
-                  styles.highlightMarker
-                }
-              />
-            </div>
-
-            {registroAberto && (
               <div
                 className={
-                  styles.quickRegister
+                  styles.timelineTrackWrapper
                 }
               >
-                <div
-                  className={
-                    styles.quickRegisterHeader
+                <input
+                  type="range"
+                  min="0"
+                  max={
+                    DURACAO_VIDEO
                   }
-                >
-                  <div>
-                    <strong>
-                      Registrar ação
-                    </strong>
-
-                    <span>
-                      Momento:{' '}
-                      {formatarTempo(
-                        tempoAtual,
-                      )}
-                    </span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setRegistroAberto(false)
-                    }
-                  >
-                    <X size={17} />
-                  </button>
-                </div>
+                  value={
+                    tempoAtual
+                  }
+                  onChange={(
+                    event,
+                  ) =>
+                    setTempoAtual(
+                      Number(
+                        event
+                          .target
+                          .value,
+                      ),
+                    )
+                  }
+                  className={
+                    styles.videoRange
+                  }
+                />
 
                 <div
                   className={
-                    styles.quickRegisterGrid
+                    styles.analysisMarkers
                   }
                 >
-                  <div>
-                    <label>
-                      Atleta
-                    </label>
+                  {eventos.map(
+                    (
+                      evento,
+                    ) => {
+                      const categoria =
+                        categorias.find(
+                          (
+                            item,
+                          ) =>
+                            item.nome ===
+                            evento.tipo,
+                        );
 
-                    <select
-                      value={atletaRapido}
-                      onChange={(event) =>
-                        setAtletaRapido(
-                          Number(
-                            event.target.value,
-                          ),
-                        )
+                      if (
+                        categoria &&
+                        !categoria.mostrarTimeline
+                      ) {
+                        return null;
                       }
-                    >
-                      {atletasMock.map(
-                        (atleta) => (
-                          <option
-                            key={atleta.id}
-                            value={atleta.id}
-                          >
-                            {atleta.nome}
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  </div>
 
-                  <div>
-                    <label>
-                      Ação
-                    </label>
+                      const posicao =
+                        (
+                          evento.segundo /
+                          DURACAO_VIDEO
+                        ) *
+                        100;
 
-                    <select
-                      value={tipoAcao}
-                      onChange={(event) =>
-                        setTipoAcao(
-                          event.target.value,
-                        )
-                      }
-                    >
-                      <option value="">
-                        Selecionar
-                      </option>
-
-                      <option value="Gol">
-                        Gol
-                      </option>
-
-                      <option value="Passe">
-                        Passe
-                      </option>
-
-                      <option value="Finalização">
-                        Finalização
-                      </option>
-
-                      <option value="Tackle">
-                        Tackle
-                      </option>
-
-                      <option value="Erro">
-                        Erro
-                      </option>
-
-                      <option value="Duelo">
-                        Duelo
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                <div
-                  className={
-                    styles.quickRatings
-                  }
-                >
-                  {(
-                    [
-                      'boa',
-                      'ruim',
-                      'neutra',
-                      'destaque',
-                    ] as Avaliacao[]
-                  ).map(
-                    (avaliacao) => (
-                      <RatingButton
-                        key={avaliacao}
-                        label={
-                          avaliacao === 'boa'
-                            ? 'Boa'
-                            : avaliacao === 'ruim'
-                              ? 'Ruim'
-                              : avaliacao === 'neutra'
-                                ? 'Neutra'
-                                : 'Destaque'
-                        }
-                        type={avaliacao}
-                        active={
-                          avaliacaoRapida ===
-                          avaliacao
-                        }
-                        onClick={() =>
-                          setAvaliacaoRapida(
-                            avaliacao,
-                          )
-                        }
-                      />
-                    ),
+                      return (
+                        <button
+                          key={
+                            evento.id
+                          }
+                          type="button"
+                          className={`${styles.analysisMarker} ${
+                            styles[
+                              `marker_${evento.avaliacao}`
+                            ]
+                          }`}
+                          style={{
+                            left:
+                              `${posicao}%`,
+                          }}
+                          title={`${evento.tipo} - ${evento.atleta}`}
+                          onClick={() =>
+                            setTempoAtual(
+                              evento.segundo,
+                            )
+                          }
+                        />
+                      );
+                    },
                   )}
                 </div>
-
-                <button
-                  type="button"
-                  disabled={
-                    !registroValido
-                  }
-                  className={
-                    styles.quickSaveButton
-                  }
-                  onClick={registrarAcao}
-                >
-                  <Check size={16} />
-
-                  Registrar em{' '}
-                  {formatarTempo(
-                    tempoAtual,
-                  )}
-                </button>
               </div>
-            )}
-          </div>
-        </article>
 
-        <aside className={styles.eventsCard}>
-          <div className={styles.eventsHeader}>
+              <div
+                className={
+                  styles.timelineLegend
+                }
+              >
+                <TimelineLegend
+                  label="Boa"
+                  className={
+                    styles.goodMarker
+                  }
+                />
+
+                <TimelineLegend
+                  label="Ruim"
+                  className={
+                    styles.badMarker
+                  }
+                />
+
+                <TimelineLegend
+                  label="Neutra"
+                  className={
+                    styles.neutralMarker
+                  }
+                />
+
+                <TimelineLegend
+                  label="Destaque"
+                  className={
+                    styles.highlightMarker
+                  }
+                />
+              </div>
+            </div>
+          </article>
+
+          <section
+            className={
+              styles.actionTypesCard
+            }
+          >
+            <div
+              className={
+                styles.actionTypesHeader
+              }
+            >
+              <div>
+                <h2>
+                  Categorias da análise
+                </h2>
+
+                <p>
+                  Categorias disponíveis para esta análise de Futebol.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className={
+                  styles.editCategoriesSmall
+                }
+                onClick={
+                  abrirGerenciador
+                }
+              >
+                <Pencil
+                  size={14}
+                />
+                Editar
+              </button>
+            </div>
+
+            <div
+              className={
+                styles.actionTypesGrid
+              }
+            >
+              {categorias.map(
+                (
+                  categoria,
+                ) => {
+                  const Icon =
+                    categoria.icon;
+
+                  return (
+                    <div
+                      key={
+                        categoria.id
+                      }
+                      className={
+                        styles.categoryPreview
+                      }
+                    >
+                      <span
+                        className={
+                          styles.actionTypeIcon
+                        }
+                        style={{
+                          color:
+                            categoria.cor,
+                          backgroundColor:
+                            `${categoria.cor}18`,
+                        }}
+                      >
+                        <Icon
+                          size={19}
+                        />
+                      </span>
+
+                      <strong>
+                        {
+                          categoria.nome
+                        }
+                      </strong>
+
+                      {categoria.mostrarTimeline && (
+                        <span
+                          className={
+                            styles.timelineStatus
+                          }
+                        >
+                          <CircleDot
+                            size={11}
+                          />
+                        </span>
+                      )}
+                    </div>
+                  );
+                },
+              )}
+
+              <button
+                type="button"
+                className={
+                  styles.addCategoryCard
+                }
+                onClick={() => {
+                  setModalCategoriasAberto(
+                    true,
+                  );
+
+                  abrirNovaCategoria();
+                }}
+              >
+                <Plus
+                  size={19}
+                />
+                Adicionar categoria
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <aside
+          className={
+            styles.eventsCard
+          }
+        >
+          <div
+            className={
+              styles.eventsHeader
+            }
+          >
             <div>
               <h2>
-                Eventos de análise
+                Eventos da análise
               </h2>
 
               <span>
@@ -685,10 +1098,16 @@ const AnaliseVideos = () => {
               </span>
             </div>
 
-            <Video size={20} />
+            <Video
+              size={20}
+            />
           </div>
 
-          <div className={styles.eventsList}>
+          <div
+            className={
+              styles.eventsList
+            }
+          >
             {eventos
               .slice()
               .sort(
@@ -696,26 +1115,627 @@ const AnaliseVideos = () => {
                   a.segundo -
                   b.segundo,
               )
-              .map((evento) => (
-                <EventCard
-                  key={evento.id}
-                  evento={evento}
-                  onClick={() =>
-                    setTempoAtual(
-                      evento.segundo,
-                    )
-                  }
-                />
-              ))}
+              .map(
+                (
+                  evento,
+                ) => (
+                  <EventCard
+                    key={
+                      evento.id
+                    }
+                    evento={
+                      evento
+                    }
+                    onClick={() =>
+                      setTempoAtual(
+                        evento.segundo,
+                      )
+                    }
+                  />
+                ),
+              )}
           </div>
         </aside>
       </section>
 
+      {modalCategoriasAberto && (
+        <div
+          className={
+            styles.categoryOverlay
+          }
+          onMouseDown={() =>
+            setModalCategoriasAberto(
+              false,
+            )
+          }
+        >
+          <div
+            className={
+              styles.categoryModal
+            }
+            onMouseDown={(
+              event,
+            ) =>
+              event.stopPropagation()
+            }
+          >
+            <header
+              className={
+                styles.categoryModalHeader
+              }
+            >
+              <div>
+                <span>
+                  CONFIGURAÇÃO
+                </span>
+
+                <h2>
+                  Categorias da análise
+                </h2>
+
+                <p>
+                  Personalize as ações que podem ser utilizadas durante a análise.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setModalCategoriasAberto(
+                    false,
+                  )
+                }
+              >
+                <X
+                  size={21}
+                />
+              </button>
+            </header>
+
+            <div
+              className={
+                styles.categoryModalContent
+              }
+            >
+              {!formularioCategoriaAberto ? (
+                <>
+                  <div
+                    className={
+                      styles.categoryListToolbar
+                    }
+                  >
+                    <div>
+                      <strong>
+                        Suas categorias
+                      </strong>
+
+                      <span>
+                        Clique em editar para alterar uma categoria.
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      className={
+                        styles.newCategoryButton
+                      }
+                      onClick={
+                        abrirNovaCategoria
+                      }
+                    >
+                      <Plus
+                        size={17}
+                      />
+                      Nova categoria
+                    </button>
+                  </div>
+
+                  <div
+                    className={
+                      styles.categoriesList
+                    }
+                  >
+                    {categorias.map(
+                      (
+                        categoria,
+                      ) => {
+                        const Icon =
+                          categoria.icon;
+
+                        return (
+                          <div
+                            key={
+                              categoria.id
+                            }
+                            className={
+                              styles.categoryRow
+                            }
+                          >
+                            <div
+                              className={
+                                styles.categoryRowIcon
+                              }
+                              style={{
+                                color:
+                                  categoria.cor,
+                                backgroundColor:
+                                  `${categoria.cor}18`,
+                              }}
+                            >
+                              <Icon
+                                size={19}
+                              />
+                            </div>
+
+                            <div
+                              className={
+                                styles.categoryRowInfo
+                              }
+                            >
+                              <strong>
+                                {
+                                  categoria.nome
+                                }
+                              </strong>
+
+                              <span>
+                                {categoria.mostrarTimeline
+                                  ? 'Visível na timeline'
+                                  : 'Oculta na timeline'}
+                              </span>
+                            </div>
+
+                            <button
+                              type="button"
+                              className={
+                                styles.editCategoryButton
+                              }
+                              onClick={() =>
+                                editarCategoria(
+                                  categoria,
+                                )
+                              }
+                            >
+                              <Pencil
+                                size={15}
+                              />
+                              Editar
+                            </button>
+                          </div>
+                        );
+                      },
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div
+                  className={
+                    styles.categoryForm
+                  }
+                >
+                  <div
+                    className={
+                      styles.categoryFormGrid
+                    }
+                  >
+                    <div
+                      className={
+                        styles.categoryFormLeft
+                      }
+                    >
+                      <div
+                        className={
+                          styles.categoryField
+                        }
+                      >
+                        <label>
+                          Nome da categoria
+                        </label>
+
+                        <input
+                          type="text"
+                          placeholder="Ex.: Passe longo"
+                          value={
+                            categoriaForm.nome
+                          }
+                          onChange={(
+                            event,
+                          ) =>
+                            setCategoriaForm(
+                              (
+                                atual,
+                              ) => ({
+                                ...atual,
+                                nome:
+                                  event
+                                    .target
+                                    .value,
+                              }),
+                            )
+                          }
+                        />
+                      </div>
+
+                      <div
+                        className={
+                          styles.categoryField
+                        }
+                      >
+                        <label>
+                          Cor da categoria
+                        </label>
+
+                        <div
+                          className={
+                            styles.categoryColorArea
+                          }
+                        >
+                          {[
+                            '#4AA8D8',
+                            '#16A875',
+                            '#E58A2C',
+                            '#D15A8B',
+                            '#7862E8',
+                            '#D94B4B',
+                          ].map(
+                            (
+                              cor,
+                            ) => (
+                              <button
+                                key={
+                                  cor
+                                }
+                                type="button"
+                                className={`${styles.categoryColorButton} ${
+                                  categoriaForm.cor ===
+                                  cor
+                                    ? styles.categoryColorButtonActive
+                                    : ''
+                                }`}
+                                style={{
+                                  backgroundColor:
+                                    cor,
+                                }}
+                                onClick={() =>
+                                  setCategoriaForm(
+                                    (
+                                      atual,
+                                    ) => ({
+                                      ...atual,
+                                      cor,
+                                    }),
+                                  )
+                                }
+                              >
+                                {categoriaForm.cor ===
+                                  cor && (
+                                  <Check
+                                    size={14}
+                                  />
+                                )}
+                              </button>
+                            ),
+                          )}
+
+                          <label
+                            className={
+                              styles.paletteColorButton
+                            }
+                          >
+                            <div
+                              className={
+                                styles.paletteOuter
+                              }
+                            >
+                              <div
+                                className={
+                                  styles.paletteInner
+                                }
+                              >
+                                <Palette
+                                  size={15}
+                                />
+                              </div>
+                            </div>
+
+                            <input
+                              type="color"
+                              value={
+                                categoriaForm.cor
+                              }
+                              onChange={(
+                                event,
+                              ) =>
+                                setCategoriaForm(
+                                  (
+                                    atual,
+                                  ) => ({
+                                    ...atual,
+                                    cor:
+                                      event
+                                        .target
+                                        .value,
+                                  }),
+                                )
+                              }
+                            />
+                          </label>
+                        </div>
+                      </div>
+
+                      <div
+                        className={
+                          styles.timelineOption
+                        }
+                      >
+                        <div>
+                          <strong>
+                            Mostrar na timeline
+                          </strong>
+
+                          <span>
+                            Mostra uma marcação no vídeo quando essa categoria aparecer.
+                          </span>
+                        </div>
+
+                        <button
+                          type="button"
+                          className={`${styles.toggleButton} ${
+                            categoriaForm.mostrarTimeline
+                              ? styles.toggleButtonActive
+                              : ''
+                          }`}
+                          onClick={() =>
+                            setCategoriaForm(
+                              (
+                                atual,
+                              ) => ({
+                                ...atual,
+                                mostrarTimeline:
+                                  !atual.mostrarTimeline,
+                              }),
+                            )
+                          }
+                        >
+                          <span />
+                        </button>
+                      </div>
+
+                      <div
+                        className={
+                          styles.categoryPreviewForm
+                        }
+                      >
+                        {(() => {
+                          const opcao =
+                            opcoesIcones.find(
+                              (
+                                item,
+                              ) =>
+                                item.id ===
+                                categoriaForm.iconId,
+                            );
+
+                          const Icon =
+                            opcao?.icon ??
+                            Target;
+
+                          return (
+                            <>
+                              <div
+                                className={
+                                  styles.categoryPreviewFormIcon
+                                }
+                                style={{
+                                  color:
+                                    categoriaForm.cor,
+                                  backgroundColor:
+                                    `${categoriaForm.cor}18`,
+                                }}
+                              >
+                                <Icon
+                                  size={21}
+                                />
+                              </div>
+
+                              <div>
+                                <span>
+                                  PRÉVIA
+                                </span>
+
+                                <strong>
+                                  {categoriaForm.nome.trim() ||
+                                    'Nova categoria'}
+                                </strong>
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </div>
+
+                    <div
+                      className={
+                        styles.categoryIconsSide
+                      }
+                    >
+                      <span
+                        className={
+                          styles.iconsLabel
+                        }
+                      >
+                        Escolha um ícone
+                      </span>
+
+                      <div
+                        className={
+                          styles.categoryIconsGrid
+                        }
+                      >
+                        {opcoesIcones.map(
+                          (
+                            opcao,
+                          ) => {
+                            const Icon =
+                              opcao.icon;
+
+                            const ativo =
+                              categoriaForm.iconId ===
+                              opcao.id;
+
+                            return (
+                              <button
+                                key={
+                                  opcao.id
+                                }
+                                type="button"
+                                className={`${styles.categoryIconOption} ${
+                                  ativo
+                                    ? styles.categoryIconOptionActive
+                                    : ''
+                                }`}
+                                onClick={() =>
+                                  setCategoriaForm(
+                                    (
+                                      atual,
+                                    ) => ({
+                                      ...atual,
+                                      iconId:
+                                        opcao.id,
+                                    }),
+                                  )
+                                }
+                              >
+                                {ativo && (
+                                  <span
+                                    className={
+                                      styles.categoryIconCheck
+                                    }
+                                  >
+                                    <Check
+                                      size={11}
+                                      strokeWidth={
+                                        3
+                                      }
+                                    />
+                                  </span>
+                                )}
+
+                                <Icon
+                                  size={20}
+                                />
+
+                                <span>
+                                  {
+                                    opcao.nome
+                                  }
+                                </span>
+                              </button>
+                            );
+                          },
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    className={
+                      styles.categoryFormFooter
+                    }
+                  >
+                    <div
+                      className={
+                        styles.deleteArea
+                      }
+                    >
+                      {categoriaForm.id !==
+                        null && (
+                        <>
+                          <button
+                            type="button"
+                            className={`${styles.deleteCategoryButton} ${
+                              confirmarExclusao
+                                ? styles.deleteCategoryConfirm
+                                : ''
+                            }`}
+                            onClick={
+                              excluirCategoria
+                            }
+                          >
+                            <Trash2
+                              size={16}
+                            />
+
+                            {confirmarExclusao
+                              ? 'Confirmar exclusão'
+                              : 'Excluir categoria'}
+                          </button>
+
+                          {confirmarExclusao && (
+                            <span
+                              className={
+                                styles.deleteWarning
+                              }
+                            >
+                              Isso também remove os eventos dessa categoria.
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+
+                    <div
+                      className={
+                        styles.categoryFormActions
+                      }
+                    >
+                      <button
+                        type="button"
+                        className={
+                          styles.cancelCategoryButton
+                        }
+                        onClick={
+                          voltarListaCategorias
+                        }
+                      >
+                        Cancelar
+                      </button>
+
+                      <button
+                        type="button"
+                        className={
+                          styles.saveCategoryButton
+                        }
+                        disabled={
+                          !categoriaForm.nome.trim()
+                        }
+                        onClick={
+                          salvarCategoria
+                        }
+                      >
+                        <Check
+                          size={16}
+                        />
+                        Salvar categoria
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {painelClipeAberto && (
         <div
-          className={styles.overlay}
+          className={
+            styles.overlay
+          }
           onClick={() =>
-            setPainelClipeAberto(false)
+            setPainelClipeAberto(
+              false,
+            )
           }
         />
       )}
@@ -727,50 +1747,86 @@ const AnaliseVideos = () => {
             : ''
         }`}
       >
-        <div className={styles.clipPanelHeader}>
+        <div
+          className={
+            styles.clipPanelHeader
+          }
+        >
           <div>
-            <div className={styles.clipIcon}>
-              <Scissors size={18} />
+            <div
+              className={
+                styles.clipIcon
+              }
+            >
+              <Scissors
+                size={18}
+              />
             </div>
 
-            <h2>Criar clipe</h2>
+            <h2>
+              Criar clipe
+            </h2>
           </div>
 
           <button
             type="button"
-            className={styles.closeButton}
+            className={
+              styles.closeButton
+            }
             onClick={() =>
-              setPainelClipeAberto(false)
+              setPainelClipeAberto(
+                false,
+              )
             }
           >
-            <X size={19} />
+            <X
+              size={19}
+            />
           </button>
         </div>
 
-        <div className={styles.clipPanelContent}>
-          <div className={styles.formGroup}>
-            <label htmlFor="nome-clipe">
+        <div
+          className={
+            styles.clipPanelContent
+          }
+        >
+          <div
+            className={
+              styles.formGroup
+            }
+          >
+            <label>
               Nome do clipe
             </label>
 
             <input
-              id="nome-clipe"
               type="text"
-              placeholder="Ex: Contra-ataque - 2º Tempo"
-              value={novoClipe.nome}
-              onChange={(event) =>
+              value={
+                novoClipe.nome
+              }
+              onChange={(
+                event,
+              ) =>
                 setNovoClipe(
-                  (atual) => ({
+                  (
+                    atual,
+                  ) => ({
                     ...atual,
                     nome:
-                      event.target.value,
+                      event
+                        .target
+                        .value,
                   }),
                 )
               }
             />
           </div>
 
-          <div className={styles.formGroup}>
+          <div
+            className={
+              styles.formGroup
+            }
+          >
             <label>
               Atleta responsável
             </label>
@@ -780,21 +1836,31 @@ const AnaliseVideos = () => {
                 styles.searchAthlete
               }
             >
-              <Search size={17} />
+              <Search
+                size={17}
+              />
 
               <input
                 type="text"
-                placeholder="Pesquisar atleta..."
-                value={buscaAtleta}
-                onChange={(event) => {
+                value={
+                  buscaAtleta
+                }
+                onChange={(
+                  event,
+                ) => {
                   setBuscaAtleta(
-                    event.target.value,
+                    event
+                      .target
+                      .value,
                   );
 
                   setNovoClipe(
-                    (atual) => ({
+                    (
+                      atual,
+                    ) => ({
                       ...atual,
-                      atletaId: null,
+                      atletaId:
+                        null,
                     }),
                   );
                 }}
@@ -807,9 +1873,13 @@ const AnaliseVideos = () => {
               }
             >
               {atletasFiltrados.map(
-                (atleta) => (
+                (
+                  atleta,
+                ) => (
                   <button
-                    key={atleta.id}
+                    key={
+                      atleta.id
+                    }
                     type="button"
                     className={`${styles.athleteItem} ${
                       atletaSelecionado?.id ===
@@ -828,82 +1898,98 @@ const AnaliseVideos = () => {
                         styles.athleteAvatar
                       }
                     >
-                      {atleta.iniciais}
+                      {
+                        atleta.iniciais
+                      }
                     </div>
 
                     <div>
                       <strong>
-                        {atleta.nome}
+                        {
+                          atleta.nome
+                        }
                       </strong>
 
                       <span>
-                        {atleta.posicao}
+                        {
+                          atleta.posicao
+                        }
                       </span>
                     </div>
-
-                    {atletaSelecionado?.id ===
-                      atleta.id && (
-                      <Check size={16} />
-                    )}
                   </button>
                 ),
               )}
             </div>
           </div>
 
-          <div className={styles.formGroup}>
+          <div
+            className={
+              styles.formGroup
+            }
+          >
             <label>
-              Qual foi a ação?
+              Categoria
             </label>
 
             <select
-              value={novoClipe.acao}
-              onChange={(event) =>
+              value={
+                novoClipe.acao
+              }
+              onChange={(
+                event,
+              ) =>
                 setNovoClipe(
-                  (atual) => ({
+                  (
+                    atual,
+                  ) => ({
                     ...atual,
                     acao:
-                      event.target.value,
+                      event
+                        .target
+                        .value,
                   }),
                 )
               }
             >
               <option value="">
-                Selecionar ação
+                Selecionar categoria
               </option>
 
-              <option value="Gol">
-                Gol
-              </option>
-
-              <option value="Passe">
-                Passe
-              </option>
-
-              <option value="Tackle">
-                Tackle
-              </option>
-
-              <option value="Finalização">
-                Finalização
-              </option>
-
-              <option value="Erro">
-                Erro
-              </option>
-
-              <option value="Duelo">
-                Duelo
-              </option>
+              {categorias.map(
+                (
+                  categoria,
+                ) => (
+                  <option
+                    key={
+                      categoria.id
+                    }
+                    value={
+                      categoria.nome
+                    }
+                  >
+                    {
+                      categoria.nome
+                    }
+                  </option>
+                ),
+              )}
             </select>
           </div>
 
-          <div className={styles.formGroup}>
+          <div
+            className={
+              styles.formGroup
+            }
+          >
             <label>
-              Como foi a ação?
+              Avaliação
             </label>
 
-            <div className={styles.ratingGrid}>
+            <div
+              className={
+                styles.ratingGrid
+              }
+            >
               {(
                 [
                   'boa',
@@ -911,109 +1997,136 @@ const AnaliseVideos = () => {
                   'neutra',
                   'destaque',
                 ] as Avaliacao[]
-              ).map((avaliacao) => (
-                <RatingButton
-                  key={avaliacao}
-                  label={
-                    avaliacao === 'boa'
-                      ? 'Boa'
-                      : avaliacao === 'ruim'
-                        ? 'Ruim'
-                        : avaliacao === 'neutra'
-                          ? 'Neutra'
-                          : 'Destaque'
-                  }
-                  type={avaliacao}
-                  active={
-                    novoClipe.avaliacao ===
-                    avaliacao
-                  }
-                  onClick={() =>
-                    setNovoClipe(
-                      (atual) => ({
-                        ...atual,
-                        avaliacao,
-                      }),
-                    )
-                  }
-                />
-              ))}
+              ).map(
+                (
+                  avaliacao,
+                ) => (
+                  <RatingButton
+                    key={
+                      avaliacao
+                    }
+                    label={
+                      avaliacao
+                    }
+                    type={
+                      avaliacao
+                    }
+                    active={
+                      novoClipe.avaliacao ===
+                      avaliacao
+                    }
+                    onClick={() =>
+                      setNovoClipe(
+                        (
+                          atual,
+                        ) => ({
+                          ...atual,
+                          avaliacao,
+                        }),
+                      )
+                    }
+                  />
+                ),
+              )}
             </div>
           </div>
 
-          <div className={styles.formGroup}>
+          <div
+            className={
+              styles.formGroup
+            }
+          >
             <label>
               Observação
             </label>
 
             <textarea
-              placeholder="Ex: Boa tomada de decisão e excelente execução do passe."
               value={
                 novoClipe.observacao
               }
-              onChange={(event) =>
+              onChange={(
+                event,
+              ) =>
                 setNovoClipe(
-                  (atual) => ({
+                  (
+                    atual,
+                  ) => ({
                     ...atual,
                     observacao:
-                      event.target.value,
+                      event
+                        .target
+                        .value,
                   }),
                 )
               }
             />
           </div>
 
-          <div className={styles.durationSection}>
+          <div
+            className={
+              styles.durationSection
+            }
+          >
             <h3>
               Duração do clipe
             </h3>
 
-            <div className={styles.durationInfo}>
+            <div
+              className={
+                styles.durationInfo
+              }
+            >
               <span>
-                Início:{' '}
-                <strong>
-                  {novoClipe.inicio} min
-                </strong>
+                Início: {
+                  novoClipe.inicio
+                } min
               </span>
 
               <span>
-                Fim:{' '}
-                <strong>
-                  {novoClipe.fim} min
-                </strong>
+                Fim: {
+                  novoClipe.fim
+                } min
               </span>
 
               <span>
-                Duração:{' '}
-                <strong
-                  className={
-                    styles.durationValue
-                  }
-                >
-                  {duracao} min
-                </strong>
+                Duração: {
+                  duracao
+                } min
               </span>
             </div>
 
-            <div className={styles.rangeGroup}>
+            <div
+              className={
+                styles.rangeGroup
+              }
+            >
               <input
                 type="range"
                 min="0"
                 max="45"
-                value={novoClipe.inicio}
-                onChange={(event) => {
+                value={
+                  novoClipe.inicio
+                }
+                onChange={(
+                  event,
+                ) => {
                   const value =
                     Number(
-                      event.target.value,
+                      event
+                        .target
+                        .value,
                     );
 
                   setNovoClipe(
-                    (atual) => ({
+                    (
+                      atual,
+                    ) => ({
                       ...atual,
                       inicio:
                         Math.min(
                           value,
-                          atual.fim - 1,
+                          atual.fim -
+                            1,
                         ),
                     }),
                   );
@@ -1024,20 +2137,29 @@ const AnaliseVideos = () => {
                 type="range"
                 min="0"
                 max="45"
-                value={novoClipe.fim}
-                onChange={(event) => {
+                value={
+                  novoClipe.fim
+                }
+                onChange={(
+                  event,
+                ) => {
                   const value =
                     Number(
-                      event.target.value,
+                      event
+                        .target
+                        .value,
                     );
 
                   setNovoClipe(
-                    (atual) => ({
+                    (
+                      atual,
+                    ) => ({
                       ...atual,
                       fim:
                         Math.max(
                           value,
-                          atual.inicio + 1,
+                          atual.inicio +
+                            1,
                         ),
                     }),
                   );
@@ -1045,22 +2167,29 @@ const AnaliseVideos = () => {
               />
             </div>
           </div>
-
-          <p className={styles.formHint}>
-            Preencha nome, atleta, ação e avaliação para salvar o clipe.
-          </p>
         </div>
 
-        <div className={styles.clipPanelFooter}>
+        <div
+          className={
+            styles.clipPanelFooter
+          }
+        >
           <button
             type="button"
-            disabled={!formularioValido}
-            className={styles.saveClipButton}
-            onClick={salvarClipe}
+            disabled={
+              !formularioValido
+            }
+            className={
+              styles.saveClipButton
+            }
+            onClick={
+              salvarClipe
+            }
           >
-            <Scissors size={17} />
-
-            Salvar clipes
+            <Scissors
+              size={17}
+            />
+            Salvar clipe
           </button>
         </div>
       </aside>
@@ -1069,70 +2198,71 @@ const AnaliseVideos = () => {
 };
 
 interface EventCardProps {
-  evento: EventoAnalise;
-  onClick: () => void;
+  evento:
+    EventoAnalise;
+  onClick:
+    () => void;
 }
 
 const EventCard = ({
   evento,
   onClick,
-}: EventCardProps) => {
-  return (
-    <button
-      type="button"
-      className={styles.eventItem}
-      onClick={onClick}
-    >
-      <div
-        className={`${styles.eventIcon} ${
-          evento.avaliacao === 'boa'
-            ? styles.eventIconGood
+}: EventCardProps) => (
+  <button
+    type="button"
+    className={
+      styles.eventItem
+    }
+    onClick={
+      onClick
+    }
+  >
+    <div
+      className={`${styles.eventIcon} ${
+        evento.avaliacao ===
+        'boa'
+          ? styles.eventIconGood
+          : evento.avaliacao ===
+              'ruim'
+            ? styles.eventIconBad
             : evento.avaliacao ===
                 'destaque'
               ? styles.eventIconHighlight
-              : evento.avaliacao ===
-                  'neutra'
-                ? styles.eventIconNeutral
-                : styles.eventIconBad
-        }`}
-      >
-        {evento.tipo === 'Gol' ? (
-          <Target size={17} />
-        ) : evento.tipo ===
-          'Erro' ? (
-          <Flag size={17} />
-        ) : (
-          <CircleDot size={17} />
+              : styles.eventIconNeutral
+      }`}
+    >
+      <CircleDot
+        size={17}
+      />
+    </div>
+
+    <div
+      className={
+        styles.eventContent
+      }
+    >
+      <strong>
+        {evento.tipo}
+      </strong>
+
+      <span>
+        {evento.atleta}
+      </span>
+    </div>
+
+    <div
+      className={
+        styles.eventRight
+      }
+    >
+      <span>
+        {formatarTempo(
+          evento.segundo,
         )}
-      </div>
-
-      <div className={styles.eventContent}>
-        <strong>
-          {evento.tipo}
-        </strong>
-
-        <span>
-          {evento.atleta}
-        </span>
-      </div>
-
-      <div className={styles.eventRight}>
-        <span>
-          {formatarTempo(
-            evento.segundo,
-          )}
-        </span>
-
-        {evento.clip && (
-          <small>
-            <Scissors size={11} />
-            clipe
-          </small>
-        )}
-      </div>
-    </button>
-  );
-};
+      </span>
+    </div>
+  </button>
+);
 
 interface RatingButtonProps {
   label: string;
@@ -1146,33 +2276,34 @@ const RatingButton = ({
   type,
   active,
   onClick,
-}: RatingButtonProps) => {
-  return (
-    <button
-      type="button"
-      className={`${styles.ratingButton} ${
-        active
-          ? styles.ratingButtonActive
-          : ''
+}: RatingButtonProps) => (
+  <button
+    type="button"
+    className={`${styles.ratingButton} ${
+      active
+        ? styles.ratingButtonActive
+        : ''
+    }`}
+    onClick={
+      onClick
+    }
+  >
+    <span
+      className={`${styles.ratingDot} ${
+        type === 'boa'
+          ? styles.dotGood
+          : type === 'ruim'
+            ? styles.dotBad
+            : type ===
+                'destaque'
+              ? styles.dotHighlight
+              : styles.dotNeutral
       }`}
-      onClick={onClick}
-    >
-      <span
-        className={`${styles.ratingDot} ${
-          type === 'boa'
-            ? styles.dotGood
-            : type === 'ruim'
-              ? styles.dotBad
-              : type === 'destaque'
-                ? styles.dotHighlight
-                : styles.dotNeutral
-        }`}
-      />
+    />
 
-      {label}
-    </button>
-  );
-};
+    {label}
+  </button>
+);
 
 interface TimelineLegendProps {
   label: string;
@@ -1182,13 +2313,22 @@ interface TimelineLegendProps {
 const TimelineLegend = ({
   label,
   className,
-}: TimelineLegendProps) => {
-  return (
-    <div className={styles.timelineLegendItem}>
-      <span className={className} />
-      <small>{label}</small>
-    </div>
-  );
-};
+}: TimelineLegendProps) => (
+  <div
+    className={
+      styles.timelineLegendItem
+    }
+  >
+    <span
+      className={
+        className
+      }
+    />
+
+    <small>
+      {label}
+    </small>
+  </div>
+);
 
 export default AnaliseVideos;

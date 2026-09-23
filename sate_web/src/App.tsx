@@ -12,6 +12,9 @@ import EsqueciSenha from './pages/EsqueciSenha/esqueciSenha';
 // =================================
 import BoasVindas from './pages/BoasVindas/boasVindas';
 import SelecaoEsporte from './pages/SelecaoEsporte/selecaoEsporte';
+import ConfiguracaoAnalise from './pages/ConfiguracaoAnalise/configuracaoAnalise';
+import ConfiguracaoEquipe from './pages/ConfiguracaoEquipe/configuracaoEquipe';
+import ConfiguracaoConcluida from './pages/ConfiguracaoConcluida/configuracaoConcluida';
 // =================================
 // LAYOUT
 // =================================
@@ -28,7 +31,7 @@ import Comparacoes from './pages/Comparacoes/compracoes';
 import Estatisticas from './pages/Estatisticas/estatisticas';
 import Configuracoes from './pages/Configuracoes/configuracoes';
 import AnaliseVideo from './pages/AnaliseVideos/analiseVideos';
-
+import CadastroAtleta from './pages/Atletas/modalCadastroAtletas'
 import Partidas from './pages/Partidas/partidas';
 
 function App() {
@@ -70,6 +73,21 @@ function App() {
           element={<SelecaoEsporte />}
         />
 
+        <Route
+          path="/configuracao-analise"
+          element={<ConfiguracaoAnalise />}
+        />
+
+        <Route
+          path="/configuracao-equipe"
+          element={<ConfiguracaoEquipe />}
+        />
+
+        <Route
+          path="/configuracao-concluida"
+          element={<ConfiguracaoConcluida />}
+        />
+
         {/* =================================
             ÁREA INTERNA DO SATE
         ================================= */}
@@ -96,15 +114,16 @@ function App() {
             path="/atletas"
             element={<Altetas />}
 
-            
+
+
           />
 
           {/* Análise de Vídeos */}
           <Route
             path="/videos"
             element={
-              <AnaliseVideo/>
-              
+              <AnaliseVideo />
+
             }
           />
 
@@ -118,7 +137,7 @@ function App() {
           <Route
             path="/estatisticas"
             element={
-             <Estatisticas/>
+              <Estatisticas />
             }
           />
 
@@ -126,7 +145,7 @@ function App() {
           <Route
             path="/comparacoes"
             element={
-              <Comparacoes/>
+              <Comparacoes />
             }
           />
 
@@ -134,7 +153,7 @@ function App() {
           <Route
             path="/configuracoes"
             element={
-                <Configuracoes/>
+              <Configuracoes />
             }
 
           />

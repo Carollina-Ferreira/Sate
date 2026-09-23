@@ -3,6 +3,7 @@ import {
   Camera,
   Check,
   Clock3,
+  Palette,
   Plus,
   X,
 } from 'lucide-react';
@@ -33,33 +34,13 @@ export interface NovaEquipeData {
 interface NovaEquipeModalProps {
   open: boolean;
   onClose: () => void;
+
   onCreate: (
     equipe: NovaEquipeData,
   ) => void;
-}
 
-const modalidades = [
-  {
-    nome: 'Futebol',
-    icone: '⚽',
-  },
-  {
-    nome: 'Basquete',
-    icone: '🏀',
-  },
-  {
-    nome: 'Vôlei',
-    icone: '🏐',
-  },
-  {
-    nome: 'Rugby',
-    icone: '🏉',
-  },
-  {
-    nome: 'Tênis',
-    icone: '🎾',
-  },
-];
+  modalidadeInicial?: string;
+}
 
 const cores = [
   '#16A875',
@@ -96,15 +77,12 @@ const formatarProximaPartida = (
   const [ano, mes, dia] =
     data.split('-').map(Number);
 
-  /*
-    new Date(ano, mes - 1, dia) evita
-    problemas de fuso com "YYYY-MM-DD".
-  */
-  const dataPartida = new Date(
-    ano,
-    mes - 1,
-    dia,
-  );
+  const dataPartida =
+    new Date(
+      ano,
+      mes - 1,
+      dia,
+    );
 
   const diaSemana =
     diasSemana[
@@ -117,7 +95,9 @@ const formatarProximaPartida = (
   const horarioFormatado =
     minuto === '00'
       ? `${Number(hora)}h`
-      : `${Number(hora)}h${minuto}`;
+      : `${Number(
+          hora,
+        )}h${minuto}`;
 
   return `vs ${adversario.trim()} (${diaSemana}, ${horarioFormatado})`;
 };
@@ -126,19 +106,20 @@ const NovaEquipeModal = ({
   open,
   onClose,
   onCreate,
+  modalidadeInicial = 'Futebol',
 }: NovaEquipeModalProps) => {
   const fileInputRef =
     useRef<HTMLInputElement>(
       null,
     );
 
+  const colorInputRef =
+    useRef<HTMLInputElement>(
+      null,
+    );
+
   const [nome, setNome] =
     useState('');
-
-  const [
-    modalidade,
-    setModalidade,
-  ] = useState('Futebol');
 
   const [
     categoria,
@@ -152,6 +133,11 @@ const NovaEquipeModal = ({
 
   const [cor, setCor] =
     useState('#16A875');
+
+  const [
+    corPersonalizada,
+    setCorPersonalizada,
+  ] = useState('#005942');
 
   const [
     adversario,
@@ -175,6 +161,12 @@ const NovaEquipeModal = ({
     string | null
   >(null);
 
+  const modalidade =
+    modalidadeInicial ===
+    'Todos'
+      ? 'Futebol'
+      : modalidadeInicial;
+
   const proximaPartida =
     useMemo(() => {
       return formatarProximaPartida(
@@ -188,19 +180,20 @@ const NovaEquipeModal = ({
       horarioPartida,
     ]);
 
+  const corEhPersonalizada =
+    !cores.includes(cor);
+
   const formularioValido =
     useMemo(() => {
       return (
         nome.trim().length >=
           2 &&
-        modalidade !== '' &&
         categoria.trim() !==
           '' &&
         Number(atletas) >= 0
       );
     }, [
       nome,
-      modalidade,
       categoria,
       atletas,
     ]);
@@ -263,17 +256,34 @@ const NovaEquipeModal = ({
     setImagemPreview(url);
   };
 
+  const handleCorPersonalizada = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const novaCor =
+      event.target.value;
+
+    setCorPersonalizada(
+      novaCor,
+    );
+
+    setCor(novaCor);
+  };
+
   const resetFormulario =
     () => {
       setNome('');
-      setModalidade(
-        'Futebol',
-      );
+
       setCategoria(
         'Principal',
       );
+
       setAtletas('0');
+
       setCor('#16A875');
+
+      setCorPersonalizada(
+        '#005942',
+      );
 
       setAdversario('');
       setDataPartida('');
@@ -293,8 +303,11 @@ const NovaEquipeModal = ({
     }
 
     onCreate({
-      nome: nome.trim(),
+      nome:
+        nome.trim(),
+
       modalidade,
+
       categoria:
         categoria.trim(),
 
@@ -353,10 +366,9 @@ const NovaEquipeModal = ({
             </h2>
 
             <p>
-              Cadastre as
-              principais
-              informações do
-              novo time.
+              Cadastre as principais
+              informações do novo
+              time.
             </p>
           </div>
 
@@ -368,7 +380,6 @@ const NovaEquipeModal = ({
             onClick={
               fecharModal
             }
-            aria-label="Fechar"
           >
             <X size={20} />
           </button>
@@ -419,8 +430,7 @@ const NovaEquipeModal = ({
                   </div>
 
                   <strong>
-                    Adicionar
-                    imagem
+                    Adicionar imagem
                   </strong>
 
                   <span>
@@ -465,13 +475,15 @@ const NovaEquipeModal = ({
             )}
           </div>
 
-          {/* FORMULÁRIO */}
+          {/* FORM */}
 
           <div
             className={
               styles.form
             }
           >
+            {/* NOME */}
+
             <div
               className={
                 styles.field
@@ -501,55 +513,7 @@ const NovaEquipeModal = ({
               />
             </div>
 
-            {/* MODALIDADE */}
-
-            <div
-              className={
-                styles.field
-              }
-            >
-              <label>
-                Modalidade
-              </label>
-
-              <div
-                className={
-                  styles.sports
-                }
-              >
-                {modalidades.map(
-                  (item) => (
-                    <button
-                      key={
-                        item.nome
-                      }
-                      type="button"
-                      className={`${styles.sportButton} ${
-                        modalidade ===
-                        item.nome
-                          ? styles.sportButtonActive
-                          : ''
-                      }`}
-                      onClick={() =>
-                        setModalidade(
-                          item.nome,
-                        )
-                      }
-                    >
-                      <span>
-                        {
-                          item.icone
-                        }
-                      </span>
-
-                      {
-                        item.nome
-                      }
-                    </button>
-                  ),
-                )}
-              </div>
-            </div>
+            {/* CATEGORIA / ATLETAS */}
 
             <div
               className={
@@ -640,9 +604,7 @@ const NovaEquipeModal = ({
               </div>
             </div>
 
-            {/* =====================================
-                PRÓXIMA PARTIDA
-            ===================================== */}
+            {/* PRÓXIMA PARTIDA */}
 
             <div
               className={
@@ -666,8 +628,7 @@ const NovaEquipeModal = ({
 
                 <div>
                   <strong>
-                    Próxima
-                    partida
+                    Próxima partida
                   </strong>
 
                   <span>
@@ -713,8 +674,6 @@ const NovaEquipeModal = ({
                   styles.dateTimeGrid
                 }
               >
-                {/* DATA */}
-
                 <div
                   className={
                     styles.field
@@ -753,8 +712,6 @@ const NovaEquipeModal = ({
                     />
                   </div>
                 </div>
-
-                {/* HORA */}
 
                 <div
                   className={
@@ -796,8 +753,6 @@ const NovaEquipeModal = ({
                 </div>
               </div>
 
-              {/* PREVIEW DA PARTIDA */}
-
               {adversario.trim() && (
                 <div
                   className={
@@ -824,7 +779,7 @@ const NovaEquipeModal = ({
               )}
             </div>
 
-            {/* COR */}
+            {/* CORES */}
 
             <div
               className={
@@ -837,45 +792,128 @@ const NovaEquipeModal = ({
 
               <div
                 className={
-                  styles.colors
+                  styles.colorsArea
                 }
               >
-                {cores.map(
-                  (item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      className={`${styles.colorButton} ${
-                        cor ===
-                        item
-                          ? styles.colorSelected
-                          : ''
-                      }`}
-                      style={{
-                        background:
-                          item,
-                      }}
-                      onClick={() =>
-                        setCor(
-                          item,
-                        )
+                <div
+                  className={
+                    styles.colors
+                  }
+                >
+                  {cores.map(
+                    (item) => (
+                      <button
+                        key={item}
+                        type="button"
+                        className={`${styles.colorButton} ${
+                          cor === item
+                            ? styles.colorSelected
+                            : ''
+                        }`}
+                        style={{
+                          background:
+                            item,
+                        }}
+                        onClick={() =>
+                          setCor(
+                            item,
+                          )
+                        }
+                        title={item}
+                      >
+                        {cor ===
+                          item && (
+                          <Check
+                            size={16}
+                          />
+                        )}
+                      </button>
+                    ),
+                  )}
+
+                  {/* RGB PERSONALIZADO */}
+
+                  <button
+                    type="button"
+                    className={`${styles.customColorButton} ${
+                      corEhPersonalizada
+                        ? styles.customColorSelected
+                        : ''
+                    }`}
+                    onClick={() =>
+                      colorInputRef
+                        .current
+                        ?.click()
+                    }
+                    title="Escolher cor personalizada"
+                  >
+                    <div
+                      className={
+                        styles.rgbCircle
                       }
                     >
-                      {cor ===
-                        item && (
-                        <Check
-                          size={16}
+                      <div
+                        className={
+                          styles.rgbCircleCenter
+                        }
+                        style={{
+                          background:
+                            corPersonalizada,
+                        }}
+                      >
+                        <Palette
+                          size={14}
                         />
-                      )}
-                    </button>
-                  ),
-                )}
+                      </div>
+                    </div>
+                  </button>
+
+                  <input
+                    ref={
+                      colorInputRef
+                    }
+                    type="color"
+                    value={
+                      corPersonalizada
+                    }
+                    onChange={
+                      handleCorPersonalizada
+                    }
+                    className={
+                      styles.hiddenColorInput
+                    }
+                  />
+                </div>
+
+                <div
+                  className={
+                    styles.selectedColorInfo
+                  }
+                >
+                  <span>
+                    Cor selecionada
+                  </span>
+
+                  <strong>
+                    {cor.toUpperCase()}
+                  </strong>
+
+                  <div
+                    className={
+                      styles.selectedColorPreview
+                    }
+                    style={{
+                      background:
+                        cor,
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* PREVIEW EQUIPE */}
+        {/* PREVIEW */}
 
         <div
           className={
@@ -908,8 +946,6 @@ const NovaEquipeModal = ({
             </strong>
 
             <small>
-              {modalidade}
-              {' • '}
               {categoria}
             </small>
           </div>

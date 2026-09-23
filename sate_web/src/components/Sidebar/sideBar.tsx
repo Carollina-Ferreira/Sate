@@ -42,7 +42,6 @@ const Sidebar = ({
         />
       </div>
 
-
       {/* MENU */}
       <nav className={styles.menu}>
 
@@ -75,22 +74,25 @@ const Sidebar = ({
 
       </nav>
 
-
       {/* SAIR */}
-      <Link
-        to="/"
-        className={styles.logout}
-      >
+      <div className={styles.bottomMenu}>
 
-        <span className="material-icons">
-          logout
-        </span>
+        <Link
+          to="/"
+          className={styles.logout}
+        >
 
-        <span className={styles.label}>
-          Sair
-        </span>
+          <span className="material-icons">
+            logout
+          </span>
 
-      </Link>
+          <span className={styles.label}>
+            Sair
+          </span>
+
+        </Link>
+
+      </div>
 
     </aside>
   );

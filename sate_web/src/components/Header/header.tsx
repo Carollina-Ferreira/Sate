@@ -21,6 +21,8 @@ import {
   useState,
 } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import styles from './header.module.css';
 
 interface HeaderProps {
@@ -57,11 +59,25 @@ interface NotificationItem {
   read: boolean;
 }
 
+interface Usuario {
+  id?: number;
+  nome?: string;
+  email?: string;
+  tipo?: string;
+  avatarUrl?: string | null;
+}
+
 type OpenPanel =
   | 'search'
   | 'notifications'
   | 'user'
   | null;
+
+/* =====================================
+   API
+===================================== */
+
+const API_URL = 'http://localhost:3000';
 
 /* =====================================
    DADOS MOCKADOS - PESQUISA
@@ -155,6 +171,13 @@ const Header = ({
 
   onSearchResult,
 }: HeaderProps) => {
+
+  /* =====================================
+     NAVEGAÇÃO
+  ===================================== */
+
+  const navigate = useNavigate();
+
   const headerRef = useRef<HTMLElement>(null);
 
   const [openPanel, setOpenPanel] =
@@ -169,6 +192,147 @@ const Header = ({
   ] = useState<NotificationItem[]>(
     initialNotifications,
   );
+
+  /* =====================================
+     USUÁRIO LOGADO
+  ===================================== */
+
+  const [usuario, setUsuario] =
+    useState<Usuario | null>(null);
+
+  /* =====================================
+     CARREGAR USUÁRIO
+  ===================================== */
+
+  useEffect(() => {
+    const carregarUsuario = async () => {
+      const token =
+        localStorage.getItem('token') ||
+        sessionStorage.getItem('token');
+
+      /*
+       * Primeiro tenta pegar os dados já
+       * salvos no navegador.
+       */
+      const usuarioSalvo =
+        localStorage.getItem('usuario') ||
+        sessionStorage.getItem('usuario');
+
+      if (usuarioSalvo) {
+        try {
+          const usuarioLocal: Usuario =
+            JSON.parse(usuarioSalvo);
+
+          setUsuario(usuarioLocal);
+        } catch {
+          setUsuario(null);
+        }
+      }
+
+      /*
+       * Depois busca os dados atualizados
+       * diretamente do backend.
+       */
+      if (!token) {
+        return;
+      }
+
+      try {
+        const resposta = await fetch(
+          `${API_URL}/api/usuarios/perfil`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        if (!resposta.ok) {
+          return;
+        }
+
+        const dados =
+          await resposta.json();
+
+        const usuarioAtualizado: Usuario =
+          dados.usuario;
+
+        setUsuario(
+          usuarioAtualizado,
+        );
+
+        /*
+         * Mantém o storage sincronizado.
+         */
+        const estaNoLocalStorage =
+          localStorage.getItem('usuario') !== null;
+
+        if (estaNoLocalStorage) {
+          localStorage.setItem(
+            'usuario',
+            JSON.stringify(
+              usuarioAtualizado,
+            ),
+          );
+        } else {
+          sessionStorage.setItem(
+            'usuario',
+            JSON.stringify(
+              usuarioAtualizado,
+            ),
+          );
+        }
+      } catch (error) {
+        console.error(
+          'Erro ao carregar usuário do backend:',
+          error,
+        );
+      }
+    };
+
+    carregarUsuario();
+  }, []);
+
+  const nomeUsuario =
+    usuario?.nome || 'Treinador';
+
+  const iniciais =
+    nomeUsuario
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((nome) => nome[0])
+      .join('')
+      .toUpperCase();
+
+  const avatarUrl = usuario?.avatarUrl
+    ? `${API_URL}${usuario.avatarUrl}`
+    : null;
+
+  /* =====================================
+     SAIR
+  ===================================== */
+
+  const handleLogout = () => {
+
+    // Remove os dados do usuário
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('token');
+
+    sessionStorage.removeItem('usuario');
+    sessionStorage.removeItem('token');
+
+    // Fecha o menu
+    setOpenPanel(null);
+
+    // Mantém o callback caso outro componente
+    // esteja utilizando essa função
+    onLogout?.();
+
+    // Vai para a tela de login
+    navigate('/');
+  };
 
   /* =====================================
      FECHAR AO CLICAR FORA
@@ -307,6 +471,7 @@ const Header = ({
       ref={headerRef}
       className={styles.header}
     >
+
       {/* =====================================
           TÍTULO
       ===================================== */}
@@ -320,6 +485,7 @@ const Header = ({
       ===================================== */}
 
       <div className={styles.right}>
+
         {/* =====================================
             PESQUISA
         ===================================== */}
@@ -607,8 +773,18 @@ const Header = ({
               togglePanel('user')
             }
           >
+
+            {/* AVATAR PRINCIPAL */}
+
             <div className={styles.avatar}>
-              MF
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={`Foto de ${nomeUsuario}`}
+                />
+              ) : (
+                iniciais
+              )}
             </div>
 
             <div
@@ -619,7 +795,7 @@ const Header = ({
                   styles.userName
                 }
               >
-                Marcelo Ferreira
+                {nomeUsuario}
               </span>
 
               <span
@@ -654,17 +830,27 @@ const Header = ({
                   styles.userDropdownHeader
                 }
               >
+
+                {/* AVATAR DO MENU */}
+
                 <div
                   className={
                     styles.dropdownAvatar
                   }
                 >
-                  MF
+                  {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt={`Foto de ${nomeUsuario}`}
+                    />
+                  ) : (
+                    iniciais
+                  )}
                 </div>
 
                 <div>
                   <strong>
-                    Marcelo Ferreira
+                    {nomeUsuario}
                   </strong>
 
                   <span>
@@ -725,17 +911,19 @@ const Header = ({
                 }
               />
 
+              {/* =====================================
+                  SAIR
+              ===================================== */}
+
               <button
                 type="button"
                 className={`${styles.userMenuItem} ${styles.logoutButton}`}
-                onClick={() => {
-                  onLogout?.();
-                  setOpenPanel(null);
-                }}
+                onClick={handleLogout}
               >
                 <LogOut size={18} />
                 Sair
               </button>
+
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import styles from './cadastro.module.css';
 
@@ -14,7 +14,19 @@ interface CadastroFormState {
   termos: boolean;
 }
 
+interface CadastroResponse {
+  mensagem: string;
+  usuario?: {
+    id: number;
+    nome: string;
+    email: string;
+    tipo?: 'TREINADOR' | 'ATLETA' | null;
+  };
+}
+
 const Cadastro = () => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<CadastroFormState>({
     nome: '',
     email: '',
@@ -24,31 +36,127 @@ const Cadastro = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState('');
+  const [sucesso, setSucesso] = useState('');
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
     const { name, value, type, checked } = e.target;
 
     setForm((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]:
+        type === 'checkbox'
+          ? checked
+          : value,
     }));
+
+    if (erro) {
+      setErro('');
+    }
+
+    if (sucesso) {
+      setSucesso('');
+    }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
 
+    setErro('');
+    setSucesso('');
+
+    // Verifica se as senhas são iguais
     if (form.senha !== form.confirmarSenha) {
-      alert('As senhas não coincidem.');
+      setErro('As senhas não coincidem.');
       return;
     }
 
+    // Verifica os termos
     if (!form.termos) {
-      alert('Aceite os termos para continuar.');
+      setErro('Aceite os termos para continuar.');
       return;
     }
 
-    console.log('Cadastro:', form);
+    setLoading(true);
+
+    try {
+      const resposta = await fetch(
+        'http://localhost:3000/api/auth/cadastro',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nome: form.nome,
+            email: form.email,
+            senha: form.senha,
+          }),
+        },
+      );
+
+      const data: CadastroResponse =
+        await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          data.mensagem ||
+            'Não foi possível criar sua conta.',
+        );
+      }
+
+      /*
+       * O cadastro foi realizado.
+       *
+       * O backend não envia token neste momento,
+       * porque o tipo do usuário será definido
+       * no primeiro login.
+       */
+
+      if (!data.usuario) {
+        throw new Error(
+          'A conta foi criada, mas não foi possível obter os dados do usuário.',
+        );
+      }
+
+      setSucesso(
+        'Conta criada com sucesso! Você será direcionado para o login.',
+      );
+
+      /*
+       * Não salvamos token aqui.
+       *
+       * O usuário ainda precisa fazer login.
+       */
+
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
+
+    } catch (error) {
+      console.error(
+        'Erro no cadastro:',
+        error,
+      );
+
+      if (error instanceof Error) {
+        setErro(error.message);
+      } else {
+        setErro(
+          'Não foi possível conectar ao servidor.',
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -58,17 +166,14 @@ const Cadastro = () => {
 
       <section className={styles.left}>
 
-        {/* Imagem */}
         <img
           src={athleteImg}
           alt=""
           className={styles.leftImage}
         />
 
-        {/* Overlay verde */}
         <div className={styles.leftOverlay} />
 
-        {/* Círculos decorativos */}
         <div
           className={styles.rings}
           aria-hidden="true"
@@ -78,7 +183,6 @@ const Cadastro = () => {
           <span />
         </div>
 
-        {/* Curvas coloridas */}
         <svg
           className={styles.curves}
           viewBox="0 0 320 320"
@@ -100,7 +204,6 @@ const Cadastro = () => {
           />
         </svg>
 
-        {/* Conteúdo */}
         <div className={styles.leftContent}>
           <h1>
             Transforme seus dados
@@ -109,18 +212,21 @@ const Cadastro = () => {
           </h1>
 
           <p>
-            Crie sua conta e tenha acesso a uma plataforma completa
-            para acompanhar e evoluir o desempenho esportivo.
+            Crie sua conta e tenha acesso a
+            uma plataforma completa para
+            acompanhar e evoluir o desempenho
+            esportivo.
           </p>
         </div>
 
-        {/* Informações inferiores */}
         <div className={styles.leftFooter}>
           <span>50+ atletas</span>
 
           <span className={styles.dot}>•</span>
 
-          <span>100+ partidas analisadas</span>
+          <span>
+            100+ partidas analisadas
+          </span>
 
           <span className={styles.dot}>•</span>
 
@@ -134,16 +240,13 @@ const Cadastro = () => {
 
       <section className={styles.right}>
 
-        {/* Elementos decorativos */}
         <div
           className={styles.decor}
           aria-hidden="true"
         >
 
-          {/* Grade de pontos */}
           <div className={styles.dotGrid} />
 
-          {/* Blobs */}
           <span
             className={`${styles.blob} ${styles.blobGreen}`}
           />
@@ -163,7 +266,6 @@ const Cadastro = () => {
 
         <div className={styles.formContainer}>
 
-          {/* Logo */}
           <div
             className={styles.brandMark}
             aria-hidden="true"
@@ -183,17 +285,17 @@ const Cadastro = () => {
           </div>
 
 
-          {/* Título */}
           <h2>
             Crie sua conta
           </h2>
 
           <p className={styles.subtitle}>
-            Cadastre-se para começar a acompanhar o desempenho da sua equipe.
+            Cadastre-se para começar a
+            acompanhar o desempenho da sua
+            equipe.
           </p>
 
 
-          {/* Formulário */}
           <form
             className={styles.form}
             onSubmit={handleSubmit}
@@ -251,12 +353,20 @@ const Cadastro = () => {
                 Senha
               </label>
 
-              <div className={styles.passwordWrapper}>
+              <div
+                className={
+                  styles.passwordWrapper
+                }
+              >
 
                 <input
                   id="senha"
                   name="senha"
-                  type={showPassword ? 'text' : 'password'}
+                  type={
+                    showPassword
+                      ? 'text'
+                      : 'password'
+                  }
                   value={form.senha}
                   onChange={handleChange}
                   autoComplete="new-password"
@@ -267,9 +377,13 @@ const Cadastro = () => {
                 {form.senha.length > 0 && (
                   <button
                     type="button"
-                    className={styles.passwordToggle}
+                    className={
+                      styles.passwordToggle
+                    }
                     onClick={() =>
-                      setShowPassword((prev) => !prev)
+                      setShowPassword(
+                        (prev) => !prev,
+                      )
                     }
                     aria-label={
                       showPassword
@@ -296,7 +410,11 @@ const Cadastro = () => {
                 Confirmar senha
               </label>
 
-              <div className={styles.passwordWrapper}>
+              <div
+                className={
+                  styles.passwordWrapper
+                }
+              >
 
                 <input
                   id="confirmarSenha"
@@ -306,19 +424,26 @@ const Cadastro = () => {
                       ? 'text'
                       : 'password'
                   }
-                  value={form.confirmarSenha}
+                  value={
+                    form.confirmarSenha
+                  }
                   onChange={handleChange}
                   autoComplete="new-password"
                   placeholder="Digite sua senha novamente"
                   required
                 />
 
-                {form.confirmarSenha.length > 0 && (
+                {form.confirmarSenha.length >
+                  0 && (
                   <button
                     type="button"
-                    className={styles.passwordToggle}
+                    className={
+                      styles.passwordToggle
+                    }
                     onClick={() =>
-                      setShowConfirmPassword((prev) => !prev)
+                      setShowConfirmPassword(
+                        (prev) => !prev,
+                      )
                     }
                     aria-label={
                       showConfirmPassword
@@ -337,6 +462,44 @@ const Cadastro = () => {
             </div>
 
 
+            {/* Mensagem de erro */}
+
+            {erro && (
+              <div
+                style={{
+                  color: '#D52941',
+                  backgroundColor: '#FFF1F3',
+                  border:
+                    '1px solid #FFD5DB',
+                  borderRadius: '8px',
+                  padding: '10px 12px',
+                  fontSize: '14px',
+                }}
+              >
+                {erro}
+              </div>
+            )}
+
+
+            {/* Mensagem de sucesso */}
+
+            {sucesso && (
+              <div
+                style={{
+                  color: '#006B4F',
+                  backgroundColor: '#E8F5F0',
+                  border:
+                    '1px solid #BFE5D8',
+                  borderRadius: '8px',
+                  padding: '10px 12px',
+                  fontSize: '14px',
+                }}
+              >
+                {sucesso}
+              </div>
+            )}
+
+
             {/* Termos */}
 
             <label className={styles.terms}>
@@ -349,7 +512,8 @@ const Cadastro = () => {
               />
 
               <span>
-                Li e concordo com os termos de uso.
+                Li e concordo com os termos
+                de uso.
               </span>
 
             </label>
@@ -359,9 +523,14 @@ const Cadastro = () => {
 
             <button
               type="submit"
-              className={styles.submitButton}
+              className={
+                styles.submitButton
+              }
+              disabled={loading}
             >
-              Criar conta
+              {loading
+                ? 'Criando conta...'
+                : 'Criar conta'}
             </button>
 
           </form>

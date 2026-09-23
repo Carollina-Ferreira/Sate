@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class CadastroPage extends StatefulWidget {
   const CadastroPage({super.key});
@@ -17,10 +19,14 @@ class _CadastroPageState extends State<CadastroPage> {
   bool mostrarSenha = false;
   bool mostrarConfirmarSenha = false;
   bool termos = false;
+  bool carregando = false;
 
   static const verde = Color(0xFF00845F);
   static const rosa = Color(0xFFE98BA8);
   static const azul = Color(0xFF001E98);
+
+  // Depois podemos colocar isso em um arquivo de configuração.
+  static const String apiUrl = 'http://localhost:3000';
 
   @override
   void dispose() {
@@ -37,19 +43,16 @@ class _CadastroPageState extends State<CadastroPage> {
       backgroundColor: const Color(0xFFFCFCFC),
       body: Stack(
         children: [
-          // ================================================================
-          // FUNDO
-          // ================================================================
-
           Positioned.fill(
             child: CustomPaint(
-              painter: BackgroundPainter(verde: verde, rosa: rosa, azul: azul),
+              painter: BackgroundPainter(
+                verde: verde,
+                rosa: rosa,
+                azul: azul,
+              ),
             ),
           ),
 
-          // ================================================================
-          // CONTEÚDO
-          // ================================================================
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -58,7 +61,9 @@ class _CadastroPageState extends State<CadastroPage> {
                   vertical: 40,
                 ),
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 430),
+                  constraints: const BoxConstraints(
+                    maxWidth: 430,
+                  ),
                   child: _cadastroCard(),
                 ),
               ),
@@ -68,10 +73,6 @@ class _CadastroPageState extends State<CadastroPage> {
       ),
     );
   }
-
-  // ========================================================================
-  // CARD
-  // ========================================================================
 
   Widget _cadastroCard() {
     return Container(
@@ -91,10 +92,6 @@ class _CadastroPageState extends State<CadastroPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ================================================================
-          // LOGO
-          // ================================================================
-
           Center(
             child: Image.asset(
               'assets/images/logoVerde_img.png',
@@ -105,9 +102,6 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 28),
 
-          // ================================================================
-          // TÍTULO
-          // ================================================================
           const Text(
             'Crie sua conta',
             style: TextStyle(
@@ -131,9 +125,7 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 28),
 
-          // ================================================================
           // NOME
-          // ================================================================
           _label('Nome completo'),
 
           const SizedBox(height: 8),
@@ -141,6 +133,7 @@ class _CadastroPageState extends State<CadastroPage> {
           TextField(
             controller: nomeController,
             textInputAction: TextInputAction.next,
+            enabled: !carregando,
             decoration: _inputDecoration(
               'Digite seu nome',
               Icons.person_outline,
@@ -149,9 +142,7 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 18),
 
-          // ================================================================
           // EMAIL
-          // ================================================================
           _label('Email'),
 
           const SizedBox(height: 8),
@@ -160,6 +151,7 @@ class _CadastroPageState extends State<CadastroPage> {
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
+            enabled: !carregando,
             decoration: _inputDecoration(
               'Digite seu email',
               Icons.email_outlined,
@@ -168,9 +160,7 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 18),
 
-          // ================================================================
           // SENHA
-          // ================================================================
           _label('Senha'),
 
           const SizedBox(height: 8),
@@ -179,29 +169,32 @@ class _CadastroPageState extends State<CadastroPage> {
             controller: senhaController,
             obscureText: !mostrarSenha,
             textInputAction: TextInputAction.next,
-            decoration: _inputDecoration('Crie uma senha', Icons.lock_outline)
-                .copyWith(
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        mostrarSenha = !mostrarSenha;
-                      });
-                    },
-                    icon: Icon(
-                      mostrarSenha
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
+            enabled: !carregando,
+            decoration: _inputDecoration(
+              'Crie uma senha',
+              Icons.lock_outline,
+            ).copyWith(
+              suffixIcon: IconButton(
+                onPressed: carregando
+                    ? null
+                    : () {
+                        setState(() {
+                          mostrarSenha = !mostrarSenha;
+                        });
+                      },
+                icon: Icon(
+                  mostrarSenha
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  color: Colors.grey.shade500,
                 ),
+              ),
+            ),
           ),
 
           const SizedBox(height: 18),
 
-          // ================================================================
           // CONFIRMAR SENHA
-          // ================================================================
           _label('Confirmar senha'),
 
           const SizedBox(height: 8),
@@ -210,33 +203,34 @@ class _CadastroPageState extends State<CadastroPage> {
             controller: confirmarSenhaController,
             obscureText: !mostrarConfirmarSenha,
             textInputAction: TextInputAction.done,
+            enabled: !carregando,
             onSubmitted: (_) => _criarConta(),
-            decoration:
-                _inputDecoration(
-                  'Digite sua senha novamente',
-                  Icons.lock_outline,
-                ).copyWith(
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        mostrarConfirmarSenha = !mostrarConfirmarSenha;
-                      });
-                    },
-                    icon: Icon(
-                      mostrarConfirmarSenha
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
+            decoration: _inputDecoration(
+              'Digite sua senha novamente',
+              Icons.lock_outline,
+            ).copyWith(
+              suffixIcon: IconButton(
+                onPressed: carregando
+                    ? null
+                    : () {
+                        setState(() {
+                          mostrarConfirmarSenha =
+                              !mostrarConfirmarSenha;
+                        });
+                      },
+                icon: Icon(
+                  mostrarConfirmarSenha
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  color: Colors.grey.shade500,
                 ),
+              ),
+            ),
           ),
 
           const SizedBox(height: 14),
 
-          // ================================================================
           // TERMOS
-          // ================================================================
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -249,11 +243,13 @@ class _CadastroPageState extends State<CadastroPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      termos = value ?? false;
-                    });
-                  },
+                  onChanged: carregando
+                      ? null
+                      : (value) {
+                          setState(() {
+                            termos = value ?? false;
+                          });
+                        },
                 ),
               ),
 
@@ -275,83 +271,64 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 20),
 
-          // ================================================================
-          // CRIAR CONTA
-          // ================================================================
-          _mainButton(text: 'Criar conta', onTap: _criarConta),
+          // BOTÃO
+          _mainButton(
+            text: carregando
+                ? 'Criando conta...'
+                : 'Criar conta',
+            onTap: carregando
+                ? () {}
+                : _criarConta,
+          ),
 
           const SizedBox(height: 22),
 
-          // ================================================================
-          // DIVISOR
-          // ================================================================
           _divider(),
 
           const SizedBox(height: 22),
 
-          // ================================================================
           // GOOGLE
-          // ================================================================
           _socialButton(
             icon: _googleIcon(),
             text: 'Continuar com Google',
-            onTap: _cadastrarComGoogle,
+            onTap: carregando
+                ? () {}
+                : _cadastrarComGoogle,
           ),
 
           const SizedBox(height: 12),
 
-          // ================================================================
           // APPLE
-          // ================================================================
           _socialButton(
-            icon: const Icon(Icons.apple, color: Colors.black, size: 22),
+            icon: const Icon(
+              Icons.apple,
+              color: Colors.black,
+              size: 22,
+            ),
             text: 'Continuar com Apple',
-            onTap: _cadastrarComApple,
+            onTap: carregando
+                ? () {}
+                : _cadastrarComApple,
           ),
 
           const SizedBox(height: 25),
 
-          // ================================================================
-          // LOGIN
-          // ================================================================
           Center(
             child: _HoverLink(
               verde: verde,
               normalText: 'Já possui uma conta? ',
               linkText: 'Entrar',
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: carregando
+                  ? () {}
+                  : () {
+                      Navigator.pop(context);
+                    },
             ),
           ),
         ],
       ),
     );
   }
-
-  // ========================================================================
-  // LOGO
-  // ========================================================================
-
-  Widget _logo() {
-    return Container(
-      width: 48,
-      height: 48,
-      decoration: BoxDecoration(
-        color: verde,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: const Icon(
-        Icons.monitor_heart_outlined,
-        color: Colors.white,
-        size: 25,
-      ),
-    );
-  }
-
-  // ========================================================================
-  // LABEL
-  // ========================================================================
 
   Widget _label(String text) {
     return Text(
@@ -364,45 +341,55 @@ class _CadastroPageState extends State<CadastroPage> {
     );
   }
 
-  // ========================================================================
-  // INPUT
-  // ========================================================================
-
-  InputDecoration _inputDecoration(String hint, IconData icon) {
+  InputDecoration _inputDecoration(
+    String hint,
+    IconData icon,
+  ) {
     return InputDecoration(
       hintText: hint,
-
-      hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
-
-      prefixIcon: Icon(icon, size: 19, color: Colors.grey.shade500),
-
+      hintStyle: TextStyle(
+        color: Colors.grey.shade400,
+        fontSize: 13,
+      ),
+      prefixIcon: Icon(
+        icon,
+        size: 19,
+        color: Colors.grey.shade500,
+      ),
       filled: true,
       fillColor: Colors.white,
-
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 15,
+      ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: BorderSide(
+          color: Colors.grey.shade300,
+        ),
       ),
-
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: BorderSide(
+          color: Colors.grey.shade300,
+        ),
       ),
-
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: verde, width: 1.5),
+      focusedBorder: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(12),
+        ),
+        borderSide: BorderSide(
+          color: verde,
+          width: 1.5,
+        ),
       ),
     );
   }
 
-  // ========================================================================
-  // BOTÃO PRINCIPAL
-  // ========================================================================
-
-  Widget _mainButton({required String text, required VoidCallback onTap}) {
+  Widget _mainButton({
+    required String text,
+    required VoidCallback onTap,
+  }) {
     return SizedBox(
       width: double.infinity,
       height: 52,
@@ -418,37 +405,45 @@ class _CadastroPageState extends State<CadastroPage> {
         ),
         child: Text(
           text,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
   }
 
-  // ========================================================================
-  // DIVISOR
-  // ========================================================================
-
   Widget _divider() {
     return Row(
       children: [
-        Expanded(child: Divider(color: Colors.grey.shade300, thickness: 1)),
-
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Text(
-            'ou continue com',
-            style: TextStyle(color: Colors.grey.shade500, fontSize: 11),
+        Expanded(
+          child: Divider(
+            color: Colors.grey.shade300,
+            thickness: 1,
           ),
         ),
-
-        Expanded(child: Divider(color: Colors.grey.shade300, thickness: 1)),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+          ),
+          child: Text(
+            'ou continue com',
+            style: TextStyle(
+              color: Colors.grey.shade500,
+              fontSize: 11,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Divider(
+            color: Colors.grey.shade300,
+            thickness: 1,
+          ),
+        ),
       ],
     );
   }
-
-  // ========================================================================
-  // BOTÕES SOCIAIS
-  // ========================================================================
 
   Widget _socialButton({
     required Widget icon,
@@ -465,7 +460,9 @@ class _CadastroPageState extends State<CadastroPage> {
           style: OutlinedButton.styleFrom(
             backgroundColor: Colors.white,
             foregroundColor: const Color(0xFF222222),
-            side: BorderSide(color: Colors.grey.shade300),
+            side: BorderSide(
+              color: Colors.grey.shade300,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -474,9 +471,7 @@ class _CadastroPageState extends State<CadastroPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               icon,
-
               const SizedBox(width: 10),
-
               Text(
                 text,
                 style: const TextStyle(
@@ -491,10 +486,6 @@ class _CadastroPageState extends State<CadastroPage> {
     );
   }
 
-  // ========================================================================
-  // GOOGLE
-  // ========================================================================
-
   Widget _googleIcon() {
     return const Text(
       'G',
@@ -506,103 +497,165 @@ class _CadastroPageState extends State<CadastroPage> {
     );
   }
 
-  // ========================================================================
-  // CRIAR CONTA
-  // ========================================================================
-
-  void _criarConta() {
+  Future<void> _criarConta() async {
     final nome = nomeController.text.trim();
     final email = emailController.text.trim();
     final senha = senhaController.text;
     final confirmarSenha = confirmarSenhaController.text;
 
+    // VALIDAÇÕES
     if (nome.isEmpty ||
         email.isEmpty ||
         senha.isEmpty ||
         confirmarSenha.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Preencha todos os campos.')),
+      _mostrarMensagem(
+        'Preencha todos os campos.',
       );
-
       return;
     }
 
-    if (!email.contains('@')) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Digite um email válido.')));
-
+    if (email.contains(' ') || !email.contains('@')) {
+      _mostrarMensagem(
+        'Digite um email válido.',
+      );
       return;
     }
 
     if (senha.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('A senha deve ter pelo menos 6 caracteres.'),
-        ),
+      _mostrarMensagem(
+        'A senha deve ter pelo menos 6 caracteres.',
       );
-
       return;
     }
 
     if (senha != confirmarSenha) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('As senhas não coincidem.')));
-
+      _mostrarMensagem(
+        'As senhas não coincidem.',
+      );
       return;
     }
 
     if (!termos) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Aceite os termos de uso para continuar.'),
-        ),
+      _mostrarMensagem(
+        'Aceite os termos de uso para continuar.',
       );
-
       return;
     }
 
-    debugPrint('Cadastro: $nome');
-    debugPrint('Email: $email');
+    setState(() {
+      carregando = true;
+    });
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Conta criada com sucesso!')));
+    try {
+      debugPrint('================================');
+      debugPrint('CADASTRO');
+      debugPrint('Nome: $nome');
+      debugPrint('Email: $email');
+      debugPrint('================================');
+
+      final resposta = await http.post(
+        Uri.parse(
+          '$apiUrl/api/auth/cadastro',
+        ),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'nome': nome,
+          'email': email,
+          'senha': senha,
+        }),
+      );
+
+      debugPrint(
+        'Status do cadastro: ${resposta.statusCode}',
+      );
+
+      debugPrint(
+        'Resposta do servidor: ${resposta.body}',
+      );
+
+      if (!mounted) return;
+
+      final data = jsonDecode(resposta.body);
+
+      if (resposta.statusCode != 201) {
+        _mostrarMensagem(
+          data['mensagem'] ??
+              'Não foi possível criar a conta.',
+          erro: true,
+        );
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Conta criada com sucesso! Faça login para continuar.',
+          ),
+          backgroundColor: verde,
+        ),
+      );
+
+      await Future.delayed(
+        const Duration(milliseconds: 800),
+      );
+
+      if (!mounted) return;
+
+      Navigator.pop(context);
+    } catch (error) {
+      if (!mounted) return;
+
+      debugPrint(
+        'Erro no cadastro: $error',
+      );
+
+      _mostrarMensagem(
+        'Não foi possível conectar ao servidor.\n$error',
+        erro: true,
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          carregando = false;
+        });
+      }
+    }
   }
 
-  // ========================================================================
-  // GOOGLE
-  // ========================================================================
-
-  void _cadastrarComGoogle() {
-    debugPrint('Cadastro com Google');
-
+  void _mostrarMensagem(
+    String mensagem, {
+    bool erro = false,
+  }) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Cadastro com Google será configurado em breve.'),
+      SnackBar(
+        content: Text(mensagem),
+        backgroundColor: erro ? Colors.red : null,
       ),
     );
   }
 
-  // ========================================================================
-  // APPLE
-  // ========================================================================
-
-  void _cadastrarComApple() {
-    debugPrint('Cadastro com Apple');
-
+  void _cadastrarComGoogle() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Cadastro com Apple será configurado em breve.'),
+        content: Text(
+          'Cadastro com Google será configurado em breve.',
+        ),
+      ),
+    );
+  }
+
+  void _cadastrarComApple() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Cadastro com Apple será configurado em breve.',
+        ),
       ),
     );
   }
 }
-
-// ============================================================================
-// LINK COM HOVER
-// ============================================================================
 
 class _HoverLink extends StatefulWidget {
   final Color verde;
@@ -628,31 +681,34 @@ class _HoverLinkState extends State<_HoverLink> {
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-
       onEnter: (_) {
         setState(() {
           hover = true;
         });
       },
-
       onExit: (_) {
         setState(() {
           hover = false;
         });
       },
-
       child: GestureDetector(
         onTap: widget.onTap,
         child: RichText(
           text: TextSpan(
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+            style: TextStyle(
+              color: Colors.grey.shade600,
+              fontSize: 13,
+            ),
             children: [
-              TextSpan(text: widget.normalText),
-
+              TextSpan(
+                text: widget.normalText,
+              ),
               TextSpan(
                 text: widget.linkText,
                 style: TextStyle(
-                  color: hover ? const Color(0xFF006B4D) : widget.verde,
+                  color: hover
+                      ? const Color(0xFF006B4D)
+                      : widget.verde,
                   fontWeight: FontWeight.w700,
                   decoration: hover
                       ? TextDecoration.underline
@@ -667,10 +723,6 @@ class _HoverLinkState extends State<_HoverLink> {
   }
 }
 
-// ============================================================================
-// BACKGROUND
-// ============================================================================
-
 class BackgroundPainter extends CustomPainter {
   final Color verde;
   final Color rosa;
@@ -683,38 +735,59 @@ class BackgroundPainter extends CustomPainter {
   });
 
   @override
-  void paint(Canvas canvas, Size size) {
-    // BLOB ROSA
+  void paint(
+    Canvas canvas,
+    Size size,
+  ) {
+    final pinkPaint = Paint()
+      ..color = rosa.withValues(alpha: 0.13);
 
-    final pinkPaint = Paint()..color = rosa.withValues(alpha: 0.13);
+    canvas.drawCircle(
+      Offset(size.width - 30, -20),
+      150,
+      pinkPaint,
+    );
 
-    canvas.drawCircle(Offset(size.width - 30, -20), 150, pinkPaint);
+    final bluePaint = Paint()
+      ..color = azul.withValues(alpha: 0.06);
 
-    // BLOB AZUL
+    canvas.drawCircle(
+      Offset(size.width - 90, 150),
+      80,
+      bluePaint,
+    );
 
-    final bluePaint = Paint()..color = azul.withValues(alpha: 0.06);
+    final greenPaint = Paint()
+      ..color = verde.withValues(alpha: 0.08);
 
-    canvas.drawCircle(Offset(size.width - 90, 150), 80, bluePaint);
+    canvas.drawCircle(
+      Offset(-30, size.height - 50),
+      150,
+      greenPaint,
+    );
 
-    // BLOB VERDE
-
-    final greenPaint = Paint()..color = verde.withValues(alpha: 0.08);
-
-    canvas.drawCircle(Offset(-30, size.height - 50), 150, greenPaint);
-
-    // GRID
-
-    final dotPaint = Paint()..color = azul.withValues(alpha: 0.13);
+    final dotPaint = Paint()
+      ..color = azul.withValues(alpha: 0.13);
 
     const spacing = 13.0;
 
-    for (double x = size.width - 140; x < size.width - 30; x += spacing) {
-      for (double y = 45; y < 135; y += spacing) {
-        canvas.drawCircle(Offset(x, y), 1.6, dotPaint);
+    for (
+      double x = size.width - 140;
+      x < size.width - 30;
+      x += spacing
+    ) {
+      for (
+        double y = 45;
+        y < 135;
+        y += spacing
+      ) {
+        canvas.drawCircle(
+          Offset(x, y),
+          1.6,
+          dotPaint,
+        );
       }
     }
-
-    // GRÁFICO
 
     final points = [
       Offset(size.width - 280, 210),
@@ -735,23 +808,45 @@ class BackgroundPainter extends CustomPainter {
 
     final path = Path();
 
-    path.moveTo(points[0].dx, points[0].dy);
+    path.moveTo(
+      points[0].dx,
+      points[0].dy,
+    );
 
     for (int i = 1; i < points.length; i++) {
-      path.lineTo(points[i].dx, points[i].dy);
+      path.lineTo(
+        points[i].dx,
+        points[i].dy,
+      );
     }
 
-    canvas.drawPath(path, linePaint);
+    canvas.drawPath(
+      path,
+      linePaint,
+    );
 
-    for (int i = 0; i < points.length; i += 2) {
-      final paint = Paint()..color = i % 4 == 0 ? rosa : verde;
+    for (
+      int i = 0;
+      i < points.length;
+      i += 2
+    ) {
+      final paint = Paint()
+        ..color = i % 4 == 0
+            ? rosa
+            : verde;
 
-      canvas.drawCircle(points[i], 4, paint);
+      canvas.drawCircle(
+        points[i],
+        4,
+        paint,
+      );
     }
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
+  bool shouldRepaint(
+    CustomPainter oldDelegate,
+  ) {
     return false;
   }
 }

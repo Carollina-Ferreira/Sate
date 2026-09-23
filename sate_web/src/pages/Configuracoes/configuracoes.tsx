@@ -3,9 +3,11 @@ import {
   Check,
   Palette,
   ShieldCheck,
+  Save,
 } from 'lucide-react';
 
 import {
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -28,6 +30,16 @@ interface CorEquipe {
   nome: string;
   valor: string;
 }
+
+interface Usuario {
+  id?: number;
+  nome?: string;
+  email?: string;
+  tipo?: string;
+  avatarUrl?: string | null;
+}
+
+const API_URL = 'http://localhost:3000';
 
 const coresDisponiveis: CorEquipe[] = [
   {
@@ -66,16 +78,32 @@ const Configuracoes = () => {
   const fileInputRef =
     useRef<HTMLInputElement>(null);
 
-  const [nome, setNome] = useState(
-    'Marcelo Ferreira',
-  );
+  /* =====================================
+     USUÁRIO LOGADO
+  ===================================== */
 
-  const [email, setEmail] = useState(
-    'marcelo.ferreira@gmail.com',
-  );
+  const [usuario, setUsuario] =
+    useState<Usuario | null>(null);
+
+  const [nome, setNome] =
+    useState('');
+
+  const [email, setEmail] =
+    useState('');
+
+  /* =====================================
+     FOTO
+  ===================================== */
 
   const [avatarPreview, setAvatarPreview] =
     useState<string | null>(null);
+
+  const [novaFoto, setNovaFoto] =
+    useState<File | null>(null);
+
+  /* =====================================
+     PREFERÊNCIAS
+  ===================================== */
 
   const [preferencias, setPreferencias] =
     useState<Preferencias>({
@@ -84,12 +112,127 @@ const Configuracoes = () => {
       twoFactor: false,
     });
 
+  /* =====================================
+     CORES
+  ===================================== */
+
   const [coresSelecionadas, setCoresSelecionadas] =
     useState<string[]>([
       '#16A875',
       '#2F78C4',
       '#D652A2',
     ]);
+
+  /* =====================================
+     TOKEN
+  ===================================== */
+
+  const obterToken = () => {
+    return (
+      localStorage.getItem('token') ||
+      sessionStorage.getItem('token')
+    );
+  };
+
+  /* =====================================
+     CARREGAR USUÁRIO
+  ===================================== */
+
+  useEffect(() => {
+    const carregarUsuario = async () => {
+      const token = obterToken();
+
+      if (!token) {
+        return;
+      }
+
+      try {
+        const resposta = await fetch(
+          `${API_URL}/api/usuarios/perfil`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        if (!resposta.ok) {
+          throw new Error(
+            'Não foi possível carregar o perfil.',
+          );
+        }
+
+        const dados = await resposta.json();
+
+        const usuarioAtual: Usuario =
+          dados.usuario;
+
+        setUsuario(usuarioAtual);
+
+        setNome(
+          usuarioAtual.nome || '',
+        );
+
+        setEmail(
+          usuarioAtual.email || '',
+        );
+
+        if (usuarioAtual.avatarUrl) {
+          setAvatarPreview(
+            `${API_URL}${usuarioAtual.avatarUrl}`,
+          );
+        }
+      } catch (error) {
+        console.error(
+          'Erro ao carregar usuário:',
+          error,
+        );
+
+        /*
+         * Caso a API esteja indisponível,
+         * tenta carregar os dados antigos
+         * do storage.
+         */
+        const usuarioSalvo =
+          localStorage.getItem('usuario') ||
+          sessionStorage.getItem('usuario');
+
+        if (!usuarioSalvo) {
+          return;
+        }
+
+        try {
+          const usuarioLocal: Usuario =
+            JSON.parse(usuarioSalvo);
+
+          setUsuario(usuarioLocal);
+
+          setNome(
+            usuarioLocal.nome || '',
+          );
+
+          setEmail(
+            usuarioLocal.email || '',
+          );
+
+          if (usuarioLocal.avatarUrl) {
+            setAvatarPreview(
+              `${API_URL}${usuarioLocal.avatarUrl}`,
+            );
+          }
+        } catch {
+          setUsuario(null);
+        }
+      }
+    };
+
+    carregarUsuario();
+  }, []);
+
+  /* =====================================
+     INICIAIS
+  ===================================== */
 
   const iniciais = useMemo(() => {
     const partes = nome
@@ -98,7 +241,7 @@ const Configuracoes = () => {
       .filter(Boolean);
 
     if (partes.length === 0) {
-      return 'MF';
+      return 'TR';
     }
 
     if (partes.length === 1) {
@@ -112,6 +255,10 @@ const Configuracoes = () => {
     }`.toUpperCase();
   }, [nome]);
 
+  /* =====================================
+     FOTO
+  ===================================== */
+
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
@@ -119,17 +266,42 @@ const Configuracoes = () => {
   const handleAvatarChange = (
     event: ChangeEvent<HTMLInputElement>,
   ) => {
-    const file = event.target.files?.[0];
+    const file =
+      event.target.files?.[0];
 
     if (!file) {
       return;
     }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert(
+        'A imagem deve ter no máximo 5 MB.',
+      );
+
+      event.target.value = '';
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      alert(
+        'Selecione um arquivo de imagem.',
+      );
+
+      event.target.value = '';
+      return;
+    }
+
+    setNovaFoto(file);
 
     const imageUrl =
       URL.createObjectURL(file);
 
     setAvatarPreview(imageUrl);
   };
+
+  /* =====================================
+     PREFERÊNCIAS
+  ===================================== */
 
   const togglePreferencia = (
     key: keyof Preferencias,
@@ -139,6 +311,10 @@ const Configuracoes = () => {
       [key]: !atual[key],
     }));
   };
+
+  /* =====================================
+     CORES
+  ===================================== */
 
   const toggleCor = (cor: string) => {
     setCoresSelecionadas((atuais) => {
@@ -159,9 +335,158 @@ const Configuracoes = () => {
     });
   };
 
+  /* =====================================
+     SALVAR PERFIL
+  ===================================== */
+
+  const handleSalvar = async () => {
+    if (!usuario) {
+      alert(
+        'Usuário não encontrado.',
+      );
+
+      return;
+    }
+
+    const token = obterToken();
+
+    if (!token) {
+      alert(
+        'Sua sessão expirou. Faça login novamente.',
+      );
+
+      return;
+    }
+
+    if (!nome.trim()) {
+      alert(
+        'Informe seu nome.',
+      );
+
+      return;
+    }
+
+    if (!email.trim()) {
+      alert(
+        'Informe seu e-mail.',
+      );
+
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+
+      formData.append(
+        'nome',
+        nome.trim(),
+      );
+
+      formData.append(
+        'email',
+        email.trim(),
+      );
+
+      if (novaFoto) {
+        formData.append(
+          'avatar',
+          novaFoto,
+        );
+      }
+
+      const resposta = await fetch(
+        `${API_URL}/api/usuarios/perfil`,
+        {
+          method: 'PUT',
+
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+
+          body: formData,
+        },
+      );
+
+      const dados =
+        await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.mensagem ||
+          'Não foi possível atualizar o perfil.',
+        );
+      }
+
+      const usuarioAtualizado: Usuario =
+        dados.usuario;
+
+      setUsuario(
+        usuarioAtualizado,
+      );
+
+      setNome(
+        usuarioAtualizado.nome || '',
+      );
+
+      setEmail(
+        usuarioAtualizado.email || '',
+      );
+
+      if (usuarioAtualizado.avatarUrl) {
+        setAvatarPreview(
+          `${API_URL}${usuarioAtualizado.avatarUrl}`,
+        );
+      }
+
+      setNovaFoto(null);
+
+      /*
+       * Atualiza também o usuário salvo
+       * no navegador para o Header pegar
+       * o novo nome.
+       */
+      const estaNoLocalStorage =
+        localStorage.getItem('usuario') !== null;
+
+      if (estaNoLocalStorage) {
+        localStorage.setItem(
+          'usuario',
+          JSON.stringify(
+            usuarioAtualizado,
+          ),
+        );
+      } else {
+        sessionStorage.setItem(
+          'usuario',
+          JSON.stringify(
+            usuarioAtualizado,
+          ),
+        );
+      }
+
+      alert(
+        'Perfil atualizado com sucesso!',
+      );
+    } catch (error) {
+      console.error(
+        'Erro ao salvar perfil:',
+        error,
+      );
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Erro ao atualizar o perfil.',
+      );
+    }
+  };
+
   return (
     <main className={styles.page}>
-      {/* CABEÇALHO */}
+
+      {/* =====================================
+          CABEÇALHO
+      ===================================== */}
 
       <div className={styles.pageHeader}>
         <div>
@@ -174,12 +499,18 @@ const Configuracoes = () => {
       </div>
 
       <div className={styles.content}>
-        {/* PERFIL */}
+
+        {/* =====================================
+            PERFIL
+        ===================================== */}
 
         <section className={styles.card}>
+
           <div className={styles.cardHeader}>
             <div>
-              <h2>Perfil do usuário</h2>
+              <h2>
+                Perfil do usuário
+              </h2>
 
               <p>
                 Atualize suas informações pessoais.
@@ -188,8 +519,11 @@ const Configuracoes = () => {
           </div>
 
           <div className={styles.profileTop}>
+
             <div className={styles.avatarWrapper}>
+
               <div className={styles.avatar}>
+
                 {avatarPreview ? (
                   <img
                     src={avatarPreview}
@@ -198,14 +532,18 @@ const Configuracoes = () => {
                 ) : (
                   iniciais
                 )}
+
               </div>
 
               <button
                 type="button"
                 className={styles.photoButton}
-                onClick={handleAvatarClick}
+                onClick={
+                  handleAvatarClick
+                }
               >
                 <Camera size={17} />
+
                 Alterar foto
               </button>
 
@@ -213,14 +551,22 @@ const Configuracoes = () => {
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
-                className={styles.hiddenInput}
-                onChange={handleAvatarChange}
+                className={
+                  styles.hiddenInput
+                }
+                onChange={
+                  handleAvatarChange
+                }
               />
+
             </div>
+
           </div>
 
           <div className={styles.formGrid}>
+
             <div className={styles.field}>
+
               <label htmlFor="nome">
                 Nome
               </label>
@@ -235,9 +581,11 @@ const Configuracoes = () => {
                   )
                 }
               />
+
             </div>
 
             <div className={styles.field}>
+
               <label htmlFor="email">
                 Email
               </label>
@@ -252,15 +600,39 @@ const Configuracoes = () => {
                   )
                 }
               />
+
             </div>
+
           </div>
+
+          {/* BOTÃO SALVAR */}
+
+          <div className={styles.saveArea}>
+
+            <button
+              type="button"
+              className={styles.saveButton}
+              onClick={handleSalvar}
+            >
+              <Save size={17} />
+
+              Salvar alterações
+            </button>
+
+          </div>
+
         </section>
 
-        {/* PREFERÊNCIAS */}
+        {/* =====================================
+            PREFERÊNCIAS
+        ===================================== */}
 
         <section className={styles.card}>
+
           <div className={styles.cardHeader}>
+
             <div>
+
               <h2>
                 Preferências do sistema
               </h2>
@@ -268,29 +640,40 @@ const Configuracoes = () => {
               <p>
                 Notificações e segurança.
               </p>
+
             </div>
 
             <div className={styles.cardIcon}>
               <ShieldCheck size={20} />
             </div>
+
           </div>
 
           <div className={styles.preferences}>
+
             <PreferenceRow
               label="Notificações por e-mail"
               description="Receba novidades e avisos importantes por e-mail."
-              active={preferencias.email}
+              active={
+                preferencias.email
+              }
               onClick={() =>
-                togglePreferencia('email')
+                togglePreferencia(
+                  'email',
+                )
               }
             />
 
             <PreferenceRow
               label="Notificações de push"
               description="Receba alertas diretamente no sistema."
-              active={preferencias.push}
+              active={
+                preferencias.push
+              }
               onClick={() =>
-                togglePreferencia('push')
+                togglePreferencia(
+                  'push',
+                )
               }
             />
 
@@ -306,14 +689,21 @@ const Configuracoes = () => {
                 )
               }
             />
+
           </div>
+
         </section>
 
-        {/* PERSONALIZAÇÃO */}
+        {/* =====================================
+            PERSONALIZAÇÃO
+        ===================================== */}
 
         <section className={styles.card}>
+
           <div className={styles.cardHeader}>
+
             <div>
+
               <div
                 className={
                   styles.personalizationTitle
@@ -329,12 +719,16 @@ const Configuracoes = () => {
               <p>
                 Escolha até 3 cores para representar a identidade da sua equipe.
               </p>
+
             </div>
+
           </div>
 
           <div className={styles.colorList}>
+
             {coresDisponiveis.map(
               (cor) => {
+
                 const selecionada =
                   coresSelecionadas.includes(
                     cor.valor,
@@ -360,23 +754,39 @@ const Configuracoes = () => {
                       )
                     }
                   >
+
                     {selecionada && (
                       <Check
                         size={15}
                       />
                     )}
+
                   </button>
                 );
               },
             )}
+
           </div>
 
-          <div className={styles.paletteSection}>
-            <span>Paleta</span>
+          <div
+            className={
+              styles.paletteSection
+            }
+          >
 
-            <div className={styles.palettePreview}>
+            <span>
+              Paleta
+            </span>
+
+            <div
+              className={
+                styles.palettePreview
+              }
+            >
+
               {coresSelecionadas.length ===
               0 ? (
+
                 <div
                   className={
                     styles.emptyPalette
@@ -384,9 +794,12 @@ const Configuracoes = () => {
                 >
                   Selecione uma cor
                 </div>
+
               ) : (
+
                 coresSelecionadas.map(
                   (cor) => (
+
                     <div
                       key={cor}
                       className={
@@ -396,13 +809,20 @@ const Configuracoes = () => {
                         background: cor,
                       }}
                     />
+
                   ),
                 )
+
               )}
+
             </div>
+
           </div>
+
         </section>
+
       </div>
+
     </main>
   );
 };
@@ -420,12 +840,24 @@ const PreferenceRow = ({
   active,
   onClick,
 }: PreferenceRowProps) => {
-  return (
-    <div className={styles.preferenceRow}>
-      <div>
-        <strong>{label}</strong>
 
-        <span>{description}</span>
+  return (
+    <div
+      className={
+        styles.preferenceRow
+      }
+    >
+
+      <div>
+
+        <strong>
+          {label}
+        </strong>
+
+        <span>
+          {description}
+        </span>
+
       </div>
 
       <button
@@ -440,6 +872,7 @@ const PreferenceRow = ({
       >
         <span />
       </button>
+
     </div>
   );
 };

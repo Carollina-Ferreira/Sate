@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum TipoUsuario {
+  TREINADOR
+  ATLETA
+}
+
+enum Sexo {
+  MASCULINO
+  FEMININO
+  OUTRO
+  NAO_INFORMADO
+}
+
+model Usuario {
+  id        Int          @id @default(autoincrement())
+  nome      String?
+  email     String       @unique
+  senha     String
+  avatarUrl String?
+  tipo      TipoUsuario?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  
+  treinador Treinador?
+  atleta    Atleta?
+
+  passwordResetTokens PasswordResetToken[]
+}
+
+model Treinador {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  usuarioId Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+}
+
+model Atleta {
+  id             Int      @id @default(autoincrement())
+  nome           String?
+  cpf            String?  @unique
+  rg             String?
+  dataNascimento DateTime?
+  sexo           Sexo?
+  categoria      String?
+  telefone       String?
+  usuarioId      Int      @unique
+  responsavelId  Int?     @unique
+  enderecoId     Int?     @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  usuario     Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  responsavel Responsavel? @relation(fields: [responsavelId], references: [id])
+  endereco    Endereco?    @relation(fields: [enderecoId], references: [id])
+  documentos  Documento[]
+}
+
+model Responsavel {
+  id             Int      @id @default(autoincrement())
+  nome           String
+  grauParentesco String
+  telefone       String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  atleta Atleta?
+}
+
+model Endereco {
+  id          Int      @id @default(autoincrement())
+  cep         String
+  logradouro  String
+  numero      String
+  bairro      String
+  complemento String?
+  cidade      String?
+  estado      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  atleta Atleta?
+}
+
+model Documento {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  tipo      String
+  url       String
+  atletaId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  atleta Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  tokenHash String    @unique
+  usuarioId Int
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+}

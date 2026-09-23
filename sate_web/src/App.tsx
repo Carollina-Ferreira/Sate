@@ -12,23 +12,27 @@ import EsqueciSenha from './pages/EsqueciSenha/esqueciSenha';
 // =================================
 import BoasVindas from './pages/BoasVindas/boasVindas';
 import SelecaoEsporte from './pages/SelecaoEsporte/selecaoEsporte';
+
 // =================================
 // LAYOUT
 // =================================
 import Layout from './components/Layout/layout';
 
 // =================================
+// ROTA PRIVADA
+// =================================
+import RotaPrivada from './components/RotaPrivada/RotaPrivada';
+
+// =================================
 // PÁGINAS INTERNAS
 // =================================
 import Dashboard from './pages/Dashboard/dashboard';
 import Equipes from './pages/Equipes/equipes';
-
 import Altetas from './pages/Atletas/atletas';
 import Comparacoes from './pages/Comparacoes/compracoes';
 import Estatisticas from './pages/Estatisticas/estatisticas';
 import Configuracoes from './pages/Configuracoes/configuracoes';
 import AnaliseVideo from './pages/AnaliseVideos/analiseVideos';
-
 import Partidas from './pages/Partidas/partidas';
 
 function App() {
@@ -36,7 +40,9 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* PÁGINAS DE ACESSO */}
+        {/* =================================
+            PÁGINAS PÚBLICAS
+        ================================= */}
 
         <Route
           path="/"
@@ -55,89 +61,93 @@ function App() {
 
 
         {/* =================================
-            PÁGINA DE BOAS-VINDAS
-            Aparece depois do login
-            e antes do início
+            PÁGINAS PROTEGIDAS
         ================================= */}
 
-        <Route
-          path="/boas-vindas"
-          element={<BoasVindas />}
-        />
+        <Route element={<RotaPrivada />}>
 
-        <Route
-          path="/selecao-esporte"
-          element={<SelecaoEsporte />}
-        />
+          {/* ================================
+              BOAS-VINDAS
+          ================================= */}
 
-        {/* =================================
-            ÁREA INTERNA DO SATE
-        ================================= */}
-
-        {/* ÁREA INTERNA */}
-
-
-        <Route element={<Layout />}>
-
-          {/* Dashboard */}
           <Route
-            path="/inicio"
-            element={<Dashboard />}
+            path="/boas-vindas"
+            element={<BoasVindas />}
           />
 
-          {/* Equipes */}
+          {/* ================================
+              SELEÇÃO DE ESPORTE
+          ================================= */}
+
           <Route
-            path="/equipes"
-            element={<Equipes />}
+            path="/selecao-esporte"
+            element={<SelecaoEsporte />}
           />
 
-          {/* Atletas */}
-          <Route
-            path="/atletas"
-            element={<Altetas />}
 
-            
-          />
+          {/* ================================
+              ÁREA INTERNA DO SATE
+          ================================= */}
 
-          {/* Análise de Vídeos */}
-          <Route
-            path="/videos"
-            element={
-              <AnaliseVideo/>
-              
-            }
-          />
+          <Route element={<Layout />}>
 
-          {/* Partidas */}
-          <Route
-            path="/partidas"
-            element={<Partidas />}
-          />
+            {/* Dashboard */}
 
-          {/* Estatísticas */}
-          <Route
-            path="/estatisticas"
-            element={
-             <Estatisticas/>
-            }
-          />
+            <Route
+              path="/inicio"
+              element={<Dashboard />}
+            />
 
-          {/* Comparações */}
-          <Route
-            path="/comparacoes"
-            element={
-              <Comparacoes/>
-            }
-          />
+            {/* Equipes */}
 
-          {/* Configurações */}
-          <Route
-            path="/configuracoes"
-            element={
-                <Configuracoes/>
-            }
+            <Route
+              path="/equipes"
+              element={<Equipes />}
+            />
 
-          />
+            {/* Atletas */}
+
+            <Route
+              path="/atletas"
+              element={<Altetas />}
+            />
+
+            {/* Análise de Vídeos */}
+
+            <Route
+              path="/videos"
+              element={<AnaliseVideo />}
+            />
+
+            {/* Partidas */}
+
+            <Route
+              path="/partidas"
+              element={<Partidas />}
+            />
+
+            {/* Estatísticas */}
+
+            <Route
+              path="/estatisticas"
+              element={<Estatisticas />}
+            />
+
+            {/* Comparações */}
+
+            <Route
+              path="/comparacoes"
+              element={<Comparacoes />}
+            />
+
+            {/* Configurações */}
+
+            <Route
+              path="/configuracoes"
+              element={<Configuracoes />}
+            />
+
+          </Route>
 
         </Route>
 
@@ -147,3 +157,4 @@ function App() {
 }
 
 export default App;
+

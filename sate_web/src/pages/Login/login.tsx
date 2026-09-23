@@ -12,6 +12,16 @@ interface LoginFormState {
     lembrar: boolean;
 }
 
+interface LoginResponse {
+    mensagem: string;
+    token?: string;
+    usuario?: {
+        id: number;
+        email: string;
+        tipo: 'TREINADOR' | 'ATLETA';
+    };
+}
+
 const Login = () => {
     const navigate = useNavigate();
 
@@ -23,6 +33,9 @@ const Login = () => {
 
     const [showPassword, setShowPassword] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+    const [erro, setErro] = useState('');
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
 
@@ -30,15 +43,103 @@ const Login = () => {
             ...prev,
             [name]: type === 'checkbox' ? checked : value,
         }));
+
+        if (erro) {
+            setErro('');
+        }
     };
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log('Login submit:', form);
+        setErro('');
+        setLoading(true);
 
-        
-        navigate('/boas-vindas');
+        try {
+            const resposta = await fetch(
+                'http://localhost:3000/api/auth/login',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: form.email,
+                        senha: form.senha,
+
+                        // O site SATE é exclusivo para treinadores
+                        tipo: 'TREINADOR',
+                    }),
+                }
+            );
+
+            const data: LoginResponse = await resposta.json();
+
+            if (!resposta.ok) {
+                throw new Error(
+                    data.mensagem || 'Não foi possível realizar o login.'
+                );
+            }
+
+            if (!data.token || !data.usuario) {
+                throw new Error('Resposta inválida do servidor.');
+            }
+
+            /*
+             * Lembrar de mim
+             */
+            if (form.lembrar) {
+                localStorage.setItem('token', data.token);
+
+                localStorage.setItem(
+                    'usuario',
+                    JSON.stringify(data.usuario)
+                );
+
+                // Limpa uma sessão anterior, caso exista
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('usuario');
+            } else {
+                sessionStorage.setItem('token', data.token);
+
+                sessionStorage.setItem(
+                    'usuario',
+                    JSON.stringify(data.usuario)
+                );
+
+                // Limpa um login permanente anterior
+                localStorage.removeItem('token');
+                localStorage.removeItem('usuario');
+            }
+
+            console.log('Login realizado:', data.usuario);
+
+            /*
+             * O Web é exclusivo para TREINADOR.
+             */
+            if (data.usuario.tipo === 'TREINADOR') {
+                navigate('/boas-vindas');
+                return;
+            }
+
+            /*
+             * Caso uma conta de atleta tente entrar pelo Web.
+             */
+            setErro(
+                'Esta conta está cadastrada como Atleta e não pode acessar o sistema do treinador.'
+            );
+
+        } catch (error) {
+            console.error('Erro no login:', error);
+
+            if (error instanceof Error) {
+                setErro(error.message);
+            } else {
+                setErro('Não foi possível conectar ao servidor.');
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -48,17 +149,14 @@ const Login = () => {
 
             <section className={styles.left}>
 
-                {/* Imagem */}
                 <img
                     src={athleteImg}
                     alt=""
                     className={styles.leftImage}
                 />
 
-                {/* Overlay verde */}
                 <div className={styles.leftOverlay} />
 
-                {/* Círculos decorativos */}
                 <div
                     className={styles.rings}
                     aria-hidden="true"
@@ -68,7 +166,6 @@ const Login = () => {
                     <span />
                 </div>
 
-                {/* Curvas coloridas */}
                 <svg
                     className={styles.curves}
                     viewBox="0 0 320 320"
@@ -90,7 +187,6 @@ const Login = () => {
                     />
                 </svg>
 
-                {/* Conteúdo */}
                 <div className={styles.leftContent}>
                     <h1>
                         Dados que revelam o
@@ -104,7 +200,6 @@ const Login = () => {
                     </p>
                 </div>
 
-                {/* Informações inferiores */}
                 <div className={styles.leftFooter}>
                     <span>50+ atletas</span>
 
@@ -124,16 +219,13 @@ const Login = () => {
 
             <section className={styles.right}>
 
-                {/* Elementos decorativos */}
                 <div
                     className={styles.decor}
                     aria-hidden="true"
                 >
 
-                    {/* Grade de pontos */}
                     <div className={styles.dotGrid} />
 
-                    {/* Blobs */}
                     <span
                         className={`${styles.blob} ${styles.blobGreen}`}
                     />
@@ -146,7 +238,6 @@ const Login = () => {
                         className={`${styles.blob} ${styles.blobPink}`}
                     />
 
-                    {/* Gráfico */}
                     <svg
                         className={styles.dataLine}
                         viewBox="0 0 260 120"
@@ -187,7 +278,6 @@ const Login = () => {
 
                 <div className={styles.formCard}>
 
-                    {/* Logo */}
                     <div
                         className={styles.brandMark}
                         aria-hidden="true"
@@ -207,7 +297,6 @@ const Login = () => {
                     </div>
 
 
-                    {/* Título */}
                     <h2>
                         Bem-vindo de volta!
                     </h2>
@@ -217,13 +306,13 @@ const Login = () => {
                     </p>
 
 
-                    {/* Formulário */}
                     <form
                         className={styles.form}
                         onSubmit={handleSubmit}
                     >
 
-                        {/* Email */}
+                        {/* ===================== EMAIL ===================== */}
+
                         <div className={styles.field}>
 
                             <label htmlFor="email">
@@ -244,7 +333,8 @@ const Login = () => {
                         </div>
 
 
-                        {/* Senha */}
+                        {/* ===================== SENHA ===================== */}
+
                         <div className={styles.field}>
 
                             <label htmlFor="senha">
@@ -288,7 +378,26 @@ const Login = () => {
                         </div>
 
 
-                        {/* Opções */}
+                        {/* ===================== ERRO ===================== */}
+
+                        {erro && (
+                            <div
+                                style={{
+                                    color: '#D52941',
+                                    backgroundColor: '#FFF1F3',
+                                    border: '1px solid #FFD5DB',
+                                    borderRadius: '8px',
+                                    padding: '10px 12px',
+                                    fontSize: '14px',
+                                }}
+                            >
+                                {erro}
+                            </div>
+                        )}
+
+
+                        {/* ===================== OPÇÕES ===================== */}
+
                         <div className={styles.rowBetween}>
 
                             <label className={styles.checkboxLabel}>
@@ -317,18 +426,21 @@ const Login = () => {
                         </div>
 
 
-                        {/* Botão */}
+                        {/* ===================== BOTÃO ===================== */}
+
                         <button
                             type="submit"
                             className={styles.submitButton}
+                            disabled={loading}
                         >
-                            Entrar
+                            {loading ? 'Entrando...' : 'Entrar'}
                         </button>
 
                     </form>
 
 
-                    {/* Criar conta */}
+                    {/* ===================== CRIAR CONTA ===================== */}
+
                     <p className={styles.signupText}>
                         Ainda não possui uma conta?{' '}
 

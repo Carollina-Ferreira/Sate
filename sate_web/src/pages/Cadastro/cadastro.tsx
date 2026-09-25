@@ -73,13 +73,19 @@ const Cadastro = () => {
     setErro('');
     setSucesso('');
 
-    // Verifica se as senhas são iguais
+    // ------------------------------------------------------------
+    // VERIFICA SE AS SENHAS SÃO IGUAIS
+    // ------------------------------------------------------------
+
     if (form.senha !== form.confirmarSenha) {
       setErro('As senhas não coincidem.');
       return;
     }
 
-    // Verifica os termos
+    // ------------------------------------------------------------
+    // VERIFICA OS TERMOS
+    // ------------------------------------------------------------
+
     if (!form.termos) {
       setErro('Aceite os termos para continuar.');
       return;
@@ -92,19 +98,31 @@ const Cadastro = () => {
         'http://localhost:3000/api/auth/cadastro',
         {
           method: 'POST',
+
           headers: {
             'Content-Type': 'application/json',
           },
+
           body: JSON.stringify({
             nome: form.nome,
             email: form.email,
             senha: form.senha,
+
+            // ----------------------------------------------------
+            // CADASTRO DO SITE É SEMPRE DE TREINADOR
+            // ----------------------------------------------------
+
+            tipo: 'TREINADOR',
           }),
         },
       );
 
       const data: CadastroResponse =
         await resposta.json();
+
+      // ------------------------------------------------------------
+      // VERIFICA RESPOSTA DO BACKEND
+      // ------------------------------------------------------------
 
       if (!resposta.ok) {
         throw new Error(
@@ -113,13 +131,9 @@ const Cadastro = () => {
         );
       }
 
-      /*
-       * O cadastro foi realizado.
-       *
-       * O backend não envia token neste momento,
-       * porque o tipo do usuário será definido
-       * no primeiro login.
-       */
+      // ------------------------------------------------------------
+      // GARANTE QUE O USUÁRIO FOI RETORNADO
+      // ------------------------------------------------------------
 
       if (!data.usuario) {
         throw new Error(
@@ -127,15 +141,19 @@ const Cadastro = () => {
         );
       }
 
+      // ------------------------------------------------------------
+      // SUCESSO
+      // ------------------------------------------------------------
+
       setSucesso(
-        'Conta criada com sucesso! Você será direcionado para o login.',
+        'Conta de treinador criada com sucesso! Você será direcionado para o login.',
       );
 
-      /*
-       * Não salvamos token aqui.
-       *
-       * O usuário ainda precisa fazer login.
-       */
+      // ------------------------------------------------------------
+      // NÃO SALVA TOKEN AQUI
+      // ------------------------------------------------------------
+      // O usuário ainda precisa fazer login.
+      // ------------------------------------------------------------
 
       setTimeout(() => {
         navigate('/');

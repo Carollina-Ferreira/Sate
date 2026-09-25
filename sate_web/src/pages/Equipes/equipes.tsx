@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   CalendarDays,
@@ -41,6 +41,11 @@ import Futebol from '../../assets/img/futebol_img.png';
 import Basquete from '../../assets/img/basquete_img.png';
 import Volei from '../../assets/img/volei_img.png';
 import Rugby from '../../assets/img/rugby_img.png';
+
+
+// ======================================================
+// TIPOS
+// ======================================================
 
 type Modalidade =
   | 'Todos'
@@ -90,6 +95,11 @@ export interface Equipe {
   evolucao: number[];
 }
 
+
+// ======================================================
+// FILTROS
+// ======================================================
+
 const filtros: Filtro[] = [
   {
     nome: 'Todos',
@@ -117,6 +127,11 @@ const filtros: Filtro[] = [
   },
 ];
 
+
+// ======================================================
+// ÍCONES POR MODALIDADE
+// ======================================================
+
 const iconeReactPorModalidade: Record<
   string,
   IconType
@@ -128,147 +143,10 @@ const iconeReactPorModalidade: Record<
   Tênis: FaTableTennis,
 };
 
-const equipesIniciais: Equipe[] = [
-  {
-    id: 1,
-    nome: 'Falcões FC',
-    modalidade: 'Futebol',
-    categoria: 'Principal',
-    atletas: 24,
 
-    imagem: Futebol,
-    icone: 'sports_soccer',
-    cor: '#1674B8',
-
-    vitorias: 7,
-    empates: 2,
-    derrotas: 3,
-
-    proximaPartida:
-      'vs Tigres do Vale (Sáb, 16h)',
-
-    sigla: 'FC',
-    desempenho: 72,
-    videos: 12,
-
-    evolucao: [
-      58,
-      67,
-      62,
-      74,
-      70,
-      78,
-      84,
-    ],
-
-    elenco: [],
-  },
-
-  {
-    id: 2,
-    nome: 'Águias Basquete',
-    modalidade: 'Basquete',
-    categoria: 'Principal',
-    atletas: 14,
-
-    imagem: Basquete,
-    icone: 'sports_basketball',
-    cor: '#D9822B',
-
-    vitorias: 6,
-    empates: 10,
-    derrotas: 8,
-
-    proximaPartida:
-      'vs Panteras (Sex, 20h)',
-
-    sigla: 'ÁG',
-    desempenho: 55,
-    videos: 9,
-
-    evolucao: [
-      70,
-      72,
-      68,
-      64,
-      61,
-      58,
-      52,
-    ],
-
-    elenco: [],
-  },
-
-  {
-    id: 3,
-    nome: 'Falcões FC',
-    modalidade: 'Vôlei',
-    categoria: 'Principal',
-    atletas: 24,
-
-    imagem: Volei,
-    icone: 'sports_volleyball',
-    cor: '#B6B51A',
-
-    vitorias: 12,
-    empates: '-',
-    derrotas: 4,
-
-    proximaPartida:
-      'vs Tigres do Vale (Sáb, 16h)',
-
-    sigla: 'FV',
-    desempenho: 81,
-    videos: 15,
-
-    evolucao: [
-      72,
-      76,
-      78,
-      80,
-      81,
-      82,
-      82,
-    ],
-
-    elenco: [],
-  },
-
-  {
-    id: 4,
-    nome: 'Poli Rugby',
-    modalidade: 'Rugby',
-    categoria: 'Principal',
-    atletas: 22,
-
-    imagem: Rugby,
-    icone: 'sports_rugby',
-    cor: '#16A875',
-
-    vitorias: 8,
-    empates: 1,
-    derrotas: 2,
-
-    proximaPartida:
-      'vs Spartans (Dom, 14h)',
-
-    sigla: 'PR',
-    desempenho: 76,
-    videos: 18,
-
-    evolucao: [
-      55,
-      61,
-      66,
-      64,
-      72,
-      79,
-      83,
-    ],
-
-    elenco: [],
-  },
-];
+// ======================================================
+// IMAGEM POR MODALIDADE
+// ======================================================
 
 const imagemPorModalidade = (
   modalidade: string,
@@ -287,6 +165,11 @@ const imagemPorModalidade = (
       return Futebol;
   }
 };
+
+
+// ======================================================
+// ÍCONE POR MODALIDADE
+// ======================================================
 
 const iconePorModalidade = (
   modalidade: string,
@@ -308,6 +191,11 @@ const iconePorModalidade = (
       return 'sports_soccer';
   }
 };
+
+
+// ======================================================
+// CRIAR SIGLA
+// ======================================================
 
 const criarSigla = (
   nome: string,
@@ -334,7 +222,47 @@ const criarSigla = (
   }`.toUpperCase();
 };
 
+
+// ======================================================
+// FORMATAR PRÓXIMA PARTIDA
+// ======================================================
+
+const formatarProximaPartida = (
+  data: string,
+) => {
+  const dataPartida =
+    new Date(data);
+
+  if (
+    Number.isNaN(
+      dataPartida.getTime(),
+    )
+  ) {
+    return 'Data não informada';
+  }
+
+  return dataPartida.toLocaleString(
+    'pt-BR',
+    {
+      day: '2-digit',
+      month: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    },
+  );
+};
+
+
+// ======================================================
+// COMPONENTE
+// ======================================================
+
 const Equipes = () => {
+
+  // ====================================================
+  // ESTADOS
+  // ====================================================
+
   const [
     filtroAtivo,
     setFiltroAtivo,
@@ -345,9 +273,7 @@ const Equipes = () => {
   const [
     equipes,
     setEquipes,
-  ] = useState<Equipe[]>(
-    equipesIniciais,
-  );
+  ] = useState<Equipe[]>([]);
 
   const [
     equipeSelecionada,
@@ -373,6 +299,492 @@ const Equipes = () => {
     null,
   );
 
+  const [
+    carregando,
+    setCarregando,
+  ] = useState(true);
+
+
+  // ====================================================
+  // CARREGAR EQUIPES
+  // ====================================================
+
+  useEffect(() => {
+    carregarEquipes();
+  }, []);
+
+
+  // ====================================================
+  // GET /api/equipes
+  // ====================================================
+
+  const carregarEquipes = async () => {
+    try {
+      setCarregando(true);
+
+      const token =
+        localStorage.getItem(
+          'token',
+        );
+
+      const resposta =
+        await fetch(
+          'http://localhost:3000/api/equipes',
+          {
+            method: 'GET',
+
+            headers: {
+              'Content-Type':
+                'application/json',
+
+              Authorization:
+                `Bearer ${token}`,
+            },
+          },
+        );
+
+      const dados =
+        await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.mensagem ||
+            'Erro ao carregar equipes.',
+        );
+      }
+
+      const equipesFormatadas: Equipe[] =
+        dados.map(
+          (equipe: any) => ({
+            id: equipe.id,
+
+            nome: equipe.nome,
+
+            modalidade:
+              equipe.modalidade,
+
+            categoria:
+              equipe.categoria ||
+              'Não informada',
+
+            atletas:
+              equipe.numeroAtletas ??
+              0,
+
+            imagem:
+              equipe.imagem ||
+              imagemPorModalidade(
+                equipe.modalidade,
+              ),
+
+            icone:
+              iconePorModalidade(
+                equipe.modalidade,
+              ),
+
+            cor:
+              equipe.corEquipe ||
+              '#16A875',
+
+            vitorias: 0,
+
+            empates: 0,
+
+            derrotas: 0,
+
+            proximaPartida:
+              equipe.proximaPartida
+                ? formatarProximaPartida(
+                    equipe.proximaPartida,
+                  )
+                : 'Nenhuma partida agendada',
+
+            sigla:
+              criarSigla(
+                equipe.nome,
+              ),
+
+            desempenho: 0,
+
+            videos: 0,
+
+            elenco:
+              equipe.atletas?.map(
+                (atleta: any) => ({
+                  id: atleta.id,
+
+                  nome:
+                    atleta.nome ||
+                    'Atleta',
+
+                  posicao:
+                    atleta.categoria ||
+                    'Não informada',
+
+                  idade: 0,
+
+                  desempenho: 0,
+                }),
+              ) || [],
+
+            evolucao: [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+            ],
+          }),
+        );
+
+      setEquipes(
+        equipesFormatadas,
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Erro ao carregar equipes:',
+        error,
+      );
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Erro ao carregar equipes.',
+      );
+
+    } finally {
+
+      setCarregando(false);
+
+    }
+  };
+
+
+  // ====================================================
+  // CRIAR EQUIPE
+  // POST /api/equipes
+  // ====================================================
+
+  const adicionarEquipe =
+    async (
+      dados: NovaEquipeData,
+    ) => {
+
+      try {
+
+        const token =
+          localStorage.getItem(
+            'token',
+          );
+
+        const resposta =
+          await fetch(
+            'http://localhost:3000/api/equipes',
+            {
+              method: 'POST',
+
+              headers: {
+                'Content-Type':
+                  'application/json',
+
+                Authorization:
+                  `Bearer ${token}`,
+              },
+
+              body: JSON.stringify({
+                nome:
+                  dados.nome,
+
+                modalidade:
+                  dados.modalidade,
+
+                categoria:
+                  dados.categoria,
+
+                proximaPartida:
+                  dados.proximaPartida ||
+                  null,
+
+                imagem:
+                  dados.imagemPreview ||
+                  null,
+
+                corEquipe:
+                  dados.cor,
+              }),
+            },
+          );
+
+        const resultado =
+          await resposta.json();
+
+        if (!resposta.ok) {
+          throw new Error(
+            resultado.mensagem ||
+              'Erro ao criar equipe.',
+          );
+        }
+
+        const equipeCriada =
+          resultado.equipe;
+
+        const novaEquipe: Equipe = {
+          id:
+            equipeCriada.id,
+
+          nome:
+            equipeCriada.nome,
+
+          modalidade:
+            equipeCriada.modalidade,
+
+          categoria:
+            equipeCriada.categoria ||
+            'Não informada',
+
+          atletas:
+            equipeCriada.numeroAtletas ??
+            0,
+
+          imagem:
+            equipeCriada.imagem ||
+            imagemPorModalidade(
+              equipeCriada.modalidade,
+            ),
+
+          icone:
+            iconePorModalidade(
+              equipeCriada.modalidade,
+            ),
+
+          cor:
+            equipeCriada.corEquipe ||
+            '#16A875',
+
+          vitorias: 0,
+
+          empates: 0,
+
+          derrotas: 0,
+
+          proximaPartida:
+            equipeCriada.proximaPartida
+              ? formatarProximaPartida(
+                  equipeCriada.proximaPartida,
+                )
+              : 'Nenhuma partida agendada',
+
+          sigla:
+            criarSigla(
+              equipeCriada.nome,
+            ),
+
+          desempenho: 0,
+
+          videos: 0,
+
+          elenco: [],
+
+          evolucao: [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ],
+        };
+
+        setEquipes(
+          (atuais) => [
+            ...atuais,
+            novaEquipe,
+          ],
+        );
+
+        setFiltroAtivo(
+          'Todos',
+        );
+
+        setModalNovaEquipe(
+          false,
+        );
+
+      } catch (error) {
+
+        console.error(
+          'Erro ao criar equipe:',
+          error,
+        );
+
+        alert(
+          error instanceof Error
+            ? error.message
+            : 'Erro ao criar equipe.',
+        );
+
+      }
+    };
+
+
+  // ====================================================
+  // EDITAR EQUIPE
+  // PUT /api/equipes/:id
+  // ====================================================
+
+  const salvarEdicao =
+    async (
+      dados: EditarEquipeData,
+    ) => {
+
+      try {
+
+        const token =
+          localStorage.getItem(
+            'token',
+          );
+
+        const resposta =
+          await fetch(
+            `http://localhost:3000/api/equipes/${dados.id}`,
+            {
+              method: 'PUT',
+
+              headers: {
+                'Content-Type':
+                  'application/json',
+
+                Authorization:
+                  `Bearer ${token}`,
+              },
+
+              body: JSON.stringify({
+                nome:
+                  dados.nome,
+
+                modalidade:
+                  dados.modalidade,
+
+                categoria:
+                  dados.categoria,
+
+                proximaPartida:
+                  dados.proximaPartida ||
+                  null,
+
+                imagem:
+                  dados.imagem ||
+                  null,
+
+                corEquipe:
+                  dados.cor,
+              }),
+            },
+          );
+
+        const resultado =
+          await resposta.json();
+
+        if (!resposta.ok) {
+          throw new Error(
+            resultado.mensagem ||
+              'Erro ao atualizar equipe.',
+          );
+        }
+
+        const equipeAtualizada =
+          resultado.equipe;
+
+        setEquipes(
+          (atuais) =>
+            atuais.map(
+              (equipe) => {
+
+                if (
+                  equipe.id !==
+                  equipeAtualizada.id
+                ) {
+                  return equipe;
+                }
+
+                return {
+                  ...equipe,
+
+                  nome:
+                    equipeAtualizada.nome,
+
+                  modalidade:
+                    equipeAtualizada.modalidade,
+
+                  categoria:
+                    equipeAtualizada.categoria ||
+                    'Não informada',
+
+                  atletas:
+                    equipeAtualizada.numeroAtletas ??
+                    equipe.atletas,
+
+                  imagem:
+                    equipeAtualizada.imagem ||
+                    imagemPorModalidade(
+                      equipeAtualizada.modalidade,
+                    ),
+
+                  cor:
+                    equipeAtualizada.corEquipe ||
+                    '#16A875',
+
+                  proximaPartida:
+                    equipeAtualizada.proximaPartida
+                      ? formatarProximaPartida(
+                          equipeAtualizada.proximaPartida,
+                        )
+                      : 'Nenhuma partida agendada',
+
+                  sigla:
+                    criarSigla(
+                      equipeAtualizada.nome,
+                    ),
+
+                  icone:
+                    iconePorModalidade(
+                      equipeAtualizada.modalidade,
+                    ),
+                };
+              },
+            ),
+        );
+
+        setEquipeEmEdicao(
+          null,
+        );
+
+      } catch (error) {
+
+        console.error(
+          'Erro ao atualizar equipe:',
+          error,
+        );
+
+        alert(
+          error instanceof Error
+            ? error.message
+            : 'Erro ao atualizar equipe.',
+        );
+
+      }
+    };
+
+
+  // ====================================================
+  // FILTRO
+  // ====================================================
+
   const equipesFiltradas =
     filtroAtivo === 'Todos'
       ? equipes
@@ -382,128 +794,17 @@ const Equipes = () => {
             filtroAtivo,
         );
 
-  const adicionarEquipe = (
-    dados: NovaEquipeData,
-  ) => {
-    const novaEquipe: Equipe = {
-      id: Date.now(),
 
-      nome: dados.nome,
-      modalidade: dados.modalidade,
-      categoria: dados.categoria,
-      atletas: dados.atletas,
-
-      imagem:
-        dados.imagemPreview ??
-        imagemPorModalidade(
-          dados.modalidade,
-        ),
-
-      icone:
-        iconePorModalidade(
-          dados.modalidade,
-        ),
-
-      cor: dados.cor,
-
-      vitorias: 0,
-      empates: 0,
-      derrotas: 0,
-
-      proximaPartida:
-        dados.proximaPartida,
-
-      sigla:
-        criarSigla(
-          dados.nome,
-        ),
-
-      desempenho: 0,
-
-      videos: 0,
-
-      elenco: [],
-
-      evolucao: [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-      ],
-    };
-
-    setEquipes(
-      (atuais) => [
-        ...atuais,
-        novaEquipe,
-      ],
-    );
-
-    setFiltroAtivo(
-      'Todos',
-    );
-  };
-
-  const salvarEdicao = (
-    dados: EditarEquipeData,
-  ) => {
-    setEquipes(
-      (atuais) =>
-        atuais.map(
-          (equipe) => {
-            if (
-              equipe.id !==
-              dados.id
-            ) {
-              return equipe;
-            }
-
-            return {
-              ...equipe,
-
-              nome:
-                dados.nome,
-
-              modalidade:
-                dados.modalidade,
-
-              categoria:
-                dados.categoria,
-
-              atletas:
-                dados.atletas,
-
-              imagem:
-                dados.imagem,
-
-              cor:
-                dados.cor,
-
-              proximaPartida:
-                dados.proximaPartida,
-
-              sigla:
-                criarSigla(
-                  dados.nome,
-                ),
-
-              icone:
-                iconePorModalidade(
-                  dados.modalidade,
-                ),
-            };
-          },
-        ),
-    );
-  };
+  // ====================================================
+  // CLICAR NA EQUIPE
+  // ====================================================
 
   const clicarEquipe = (
     equipe: Equipe,
   ) => {
+
     if (modoEditar) {
+
       setEquipeEmEdicao(
         equipe,
       );
@@ -520,9 +821,15 @@ const Equipes = () => {
     );
   };
 
+
+  // ====================================================
+  // CALCULAR TENDÊNCIA
+  // ====================================================
+
   const calcularTendencia = (
     evolucao: number[],
   ) => {
+
     if (
       evolucao.length < 2
     ) {
@@ -557,9 +864,15 @@ const Equipes = () => {
     return 'estavel';
   };
 
+
+  // ====================================================
+  // DETALHES
+  // ====================================================
+
   if (
     equipeSelecionada
   ) {
+
     return (
       <DetalhesEquipe
         equipe={
@@ -574,6 +887,11 @@ const Equipes = () => {
     );
   }
 
+
+  // ====================================================
+  // TELA
+  // ====================================================
+
   return (
     <>
       <main
@@ -581,16 +899,23 @@ const Equipes = () => {
           styles.page
         }
       >
+
+        {/* ==========================================
+            CABEÇALHO
+        ========================================== */}
+
         <div
           className={
             styles.header
           }
         >
+
           <div
             className={
               styles.headerText
             }
           >
+
             <h1
               className={
                 styles.title
@@ -610,13 +935,16 @@ const Equipes = () => {
               seu portfólio de atletas
               em um só lugar.
             </p>
+
           </div>
+
 
           <div
             className={
               styles.headerActions
             }
           >
+
             <button
               type="button"
               className={`${styles.editTeamButton} ${
@@ -631,6 +959,7 @@ const Equipes = () => {
                 )
               }
             >
+
               <Pencil
                 size={17}
               />
@@ -638,7 +967,9 @@ const Equipes = () => {
               {modoEditar
                 ? 'Cancelar edição'
                 : 'Editar equipe'}
+
             </button>
+
 
             <button
               type="button"
@@ -651,14 +982,23 @@ const Equipes = () => {
                 )
               }
             >
+
               <Plus
                 size={19}
               />
 
               Nova Equipe
+
             </button>
+
           </div>
+
         </div>
+
+
+        {/* ==========================================
+            AVISO DE EDIÇÃO
+        ========================================== */}
 
         {modoEditar && (
           <div
@@ -666,22 +1006,31 @@ const Equipes = () => {
               styles.editNotice
             }
           >
+
             <Pencil
               size={15}
             />
 
             Clique na equipe que
             deseja editar.
+
           </div>
         )}
+
+
+        {/* ==========================================
+            FILTROS
+        ========================================== */}
 
         <div
           className={
             styles.filters
           }
         >
+
           {filtros.map(
             (filtro) => {
+
               const Icon =
                 filtro.icon;
 
@@ -706,295 +1055,425 @@ const Equipes = () => {
                     )
                   }
                 >
+
                   <span
                     className={
                       styles.filterIcon
                     }
                   >
+
                     <Icon
                       size={17}
                     />
+
                   </span>
 
                   {filtro.nome}
+
                 </button>
               );
             },
           )}
+
         </div>
 
-        <div
-          className={
-            styles.teamsGrid
-          }
-        >
-          {equipesFiltradas.map(
-            (equipe) => {
-              const IconeEsporte =
-                iconeReactPorModalidade[
-                  equipe.modalidade
-                ] ??
-                FaFutbol;
 
-              const tendencia =
-                calcularTendencia(
-                  equipe.evolucao,
-                );
+        {/* ==========================================
+            CARREGANDO
+        ========================================== */}
 
-              return (
-                <article
-                  key={
-                    equipe.id
-                  }
-                  className={`${styles.teamCard} ${
-                    modoEditar
-                      ? styles.teamEditable
-                      : ''
-                  }`}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() =>
-                    clicarEquipe(
-                      equipe,
-                    )
-                  }
-                  onKeyDown={(
-                    event,
-                  ) => {
-                    if (
-                      event.key ===
-                        'Enter' ||
-                      event.key ===
-                        ' '
-                    ) {
+        {carregando && (
+          <div
+            style={{
+              padding:
+                '40px 0',
+              textAlign:
+                'center',
+            }}
+          >
+            Carregando equipes...
+          </div>
+        )}
+
+
+        {/* ==========================================
+            GRID
+        ========================================== */}
+
+        {!carregando && (
+          <div
+            className={
+              styles.teamsGrid
+            }
+          >
+
+            {equipesFiltradas.map(
+              (equipe) => {
+
+                const IconeEsporte =
+                  iconeReactPorModalidade[
+                    equipe.modalidade
+                  ] ??
+                  FaFutbol;
+
+                const tendencia =
+                  calcularTendencia(
+                    equipe.evolucao,
+                  );
+
+                return (
+                  <article
+                    key={
+                      equipe.id
+                    }
+                    className={`${styles.teamCard} ${
+                      modoEditar
+                        ? styles.teamEditable
+                        : ''
+                    }`}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() =>
                       clicarEquipe(
                         equipe,
-                      );
+                      )
                     }
-                  }}
-                >
-                  <div
-                    className={
-                      styles.teamImageArea
-                    }
+                    onKeyDown={(
+                      event,
+                    ) => {
+
+                      if (
+                        event.key ===
+                          'Enter' ||
+                        event.key ===
+                          ' '
+                      ) {
+
+                        clicarEquipe(
+                          equipe,
+                        );
+                      }
+                    }}
                   >
-                    <img
-                      src={
-                        equipe.imagem
-                      }
-                      alt={
-                        equipe.nome
-                      }
-                      className={
-                        styles.teamImage
-                      }
-                    />
 
-                    <span
-                      className={
-                        styles.teamSportBadge
-                      }
-                      style={{
-                        backgroundColor:
-                          equipe.cor,
-                      }}
-                    >
-                      <IconeEsporte
-                        size={12}
-                      />
-
-                      {
-                        equipe.modalidade
-                      }
-                    </span>
-
-                    {tendencia ===
-                      'subiu' && (
-                      <span
-                        className={`${styles.trendIcon} ${styles.trendUp}`}
-                        title="Equipe em evolução"
-                      >
-                        <TrendingUp
-                          size={18}
-                        />
-                      </span>
-                    )}
-
-                    {tendencia ===
-                      'caiu' && (
-                      <span
-                        className={`${styles.trendIcon} ${styles.trendDown}`}
-                        title="Queda de desempenho"
-                      >
-                        <TrendingDown
-                          size={18}
-                        />
-                      </span>
-                    )}
-
-                    {tendencia ===
-                      'estavel' && (
-                      <span
-                        className={`${styles.trendIcon} ${styles.trendStable}`}
-                        title="Desempenho estável"
-                      >
-                        <Minus
-                          size={18}
-                        />
-                      </span>
-                    )}
-                  </div>
-
-                  <div
-                    className={
-                      styles.teamContent
-                    }
-                  >
-                    <div
-                      className={
-                        styles.teamFloatingIcon
-                      }
-                      style={{
-                        color:
-                          equipe.cor,
-                      }}
-                    >
-                      <IconeEsporte
-                        size={22}
-                      />
-                    </div>
-
-                    <h3
-                      className={
-                        styles.teamName
-                      }
-                    >
-                      {equipe.nome}
-                    </h3>
+                    {/* ==================================
+                        IMAGEM
+                    ================================== */}
 
                     <div
                       className={
-                        styles.teamMeta
+                        styles.teamImageArea
                       }
                     >
-                      <span>
+
+                      <img
+                        src={
+                          equipe.imagem
+                        }
+                        alt={
+                          equipe.nome
+                        }
+                        className={
+                          styles.teamImage
+                        }
+                      />
+
+
+                      <span
+                        className={
+                          styles.teamSportBadge
+                        }
+                        style={{
+                          backgroundColor:
+                            equipe.cor,
+                        }}
+                      >
+
+                        <IconeEsporte
+                          size={12}
+                        />
+
                         {
-                          equipe.categoria
+                          equipe.modalidade
                         }
+
                       </span>
 
-                      <span>
-                        •
-                      </span>
 
-                      <span>
+                      {tendencia ===
+                        'subiu' && (
+                        <span
+                          className={`${styles.trendIcon} ${styles.trendUp}`}
+                          title="Equipe em evolução"
+                        >
+
+                          <TrendingUp
+                            size={18}
+                          />
+
+                        </span>
+                      )}
+
+
+                      {tendencia ===
+                        'caiu' && (
+                        <span
+                          className={`${styles.trendIcon} ${styles.trendDown}`}
+                          title="Queda de desempenho"
+                        >
+
+                          <TrendingDown
+                            size={18}
+                          />
+
+                        </span>
+                      )}
+
+
+                      {tendencia ===
+                        'estavel' && (
+                        <span
+                          className={`${styles.trendIcon} ${styles.trendStable}`}
+                          title="Desempenho estável"
+                        >
+
+                          <Minus
+                            size={18}
+                          />
+
+                        </span>
+                      )}
+
+                    </div>
+
+
+                    {/* ==================================
+                        CONTEÚDO
+                    ================================== */}
+
+                    <div
+                      className={
+                        styles.teamContent
+                      }
+                    >
+
+                      <div
+                        className={
+                          styles.teamFloatingIcon
+                        }
+                        style={{
+                          color:
+                            equipe.cor,
+                        }}
+                      >
+
+                        <IconeEsporte
+                          size={22}
+                        />
+
+                      </div>
+
+
+                      <h3
+                        className={
+                          styles.teamName
+                        }
+                      >
                         {
-                          equipe.atletas
-                        }{' '}
-                        Atletas
-                      </span>
-                    </div>
-
-                    <div
-                      className={
-                        styles.teamStats
-                      }
-                    >
-                      <div
-                        className={
-                          styles.statBox
+                          equipe.nome
                         }
-                      >
-                        <span>
-                          VITÓRIAS
-                        </span>
+                      </h3>
 
-                        <strong
-                          className={
-                            styles.statWin
-                          }
-                        >
-                          {
-                            equipe.vitorias
-                          }
-                        </strong>
-                      </div>
 
                       <div
                         className={
-                          styles.statBox
+                          styles.teamMeta
                         }
                       >
+
                         <span>
-                          EMPATES
+                          {
+                            equipe.categoria
+                          }
                         </span>
 
-                        <strong
-                          className={
-                            styles.statDraw
-                          }
-                        >
+                        <span>
+                          •
+                        </span>
+
+                        <span>
                           {
-                            equipe.empates
-                          }
-                        </strong>
+                            equipe.atletas
+                          }{' '}
+                          Atletas
+                        </span>
+
                       </div>
+
+
+                      {/* ==================================
+                          ESTATÍSTICAS
+                      ================================== */}
 
                       <div
                         className={
-                          styles.statBox
+                          styles.teamStats
                         }
                       >
-                        <span>
-                          DERROTAS
-                        </span>
 
-                        <strong
+                        <div
                           className={
-                            styles.statLoss
+                            styles.statBox
                           }
                         >
-                          {
-                            equipe.derrotas
+
+                          <span>
+                            VITÓRIAS
+                          </span>
+
+                          <strong
+                            className={
+                              styles.statWin
+                            }
+                          >
+                            {
+                              equipe.vitorias
+                            }
+                          </strong>
+
+                        </div>
+
+
+                        <div
+                          className={
+                            styles.statBox
                           }
-                        </strong>
+                        >
+
+                          <span>
+                            EMPATES
+                          </span>
+
+                          <strong
+                            className={
+                              styles.statDraw
+                            }
+                          >
+                            {
+                              equipe.empates
+                            }
+                          </strong>
+
+                        </div>
+
+
+                        <div
+                          className={
+                            styles.statBox
+                          }
+                        >
+
+                          <span>
+                            DERROTAS
+                          </span>
+
+                          <strong
+                            className={
+                              styles.statLoss
+                            }
+                          >
+                            {
+                              equipe.derrotas
+                            }
+                          </strong>
+
+                        </div>
+
                       </div>
-                    </div>
-                  </div>
 
-                  <div
-                    className={
-                      styles.nextMatch
-                    }
-                  >
-                    <div
-                      className={
-                        styles.nextMatchIcon
-                      }
-                    >
-                      <CalendarDays
-                        size={16}
-                      />
                     </div>
 
-                    <div>
-                      <span>
+
+                    {/* ==================================
                         PRÓXIMA PARTIDA
-                      </span>
+                    ================================== */}
 
-                      <strong>
-                        {
-                          equipe.proximaPartida
+                    <div
+                      className={
+                        styles.nextMatch
+                      }
+                    >
+
+                      <div
+                        className={
+                          styles.nextMatchIcon
                         }
-                      </strong>
+                      >
+
+                        <CalendarDays
+                          size={16}
+                        />
+
+                      </div>
+
+
+                      <div>
+
+                        <span>
+                          PRÓXIMA PARTIDA
+                        </span>
+
+                        <strong>
+                          {
+                            equipe.proximaPartida
+                          }
+                        </strong>
+
+                      </div>
+
                     </div>
-                  </div>
-                </article>
-              );
-            },
+
+                  </article>
+                );
+              },
+            )}
+
+          </div>
+        )}
+
+
+        {/* ==========================================
+            NENHUMA EQUIPE
+        ========================================== */}
+
+        {!carregando &&
+          equipesFiltradas.length ===
+            0 && (
+            <div
+              style={{
+                padding:
+                  '50px 20px',
+                textAlign:
+                  'center',
+              }}
+            >
+              <h3>
+                Nenhuma equipe encontrada.
+              </h3>
+
+              <p>
+                Cadastre uma nova equipe
+                para começar.
+              </p>
+            </div>
           )}
-        </div>
+
       </main>
+
+
+      {/* ==========================================
+          MODAL NOVA EQUIPE
+      ========================================== */}
 
       <NovaEquipeModal
         open={
@@ -1013,6 +1492,11 @@ const Equipes = () => {
         }
       />
 
+
+      {/* ==========================================
+          MODAL EDITAR EQUIPE
+      ========================================== */}
+
       <EditarEquipeModal
         open={
           equipeEmEdicao !==
@@ -1030,6 +1514,7 @@ const Equipes = () => {
           salvarEdicao
         }
       />
+
     </>
   );
 };

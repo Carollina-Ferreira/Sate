@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -8,6 +7,7 @@ const atletaRoutes = require('./routes/atletaRoutes');
 const treinadorRoutes = require('./routes/treinadorRoutes');
 const passwordRoutes = require('./routes/passwordRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
+const equipeRoutes = require('./routes/equipeRoutes');
 
 const app = express();
 
@@ -77,6 +77,11 @@ app.use(
     usuarioRoutes
 );
 
+app.use(
+    '/api/equipes',
+    equipeRoutes
+);
+
 
 // ======================================================
 // TESTE DO SERVIDOR
@@ -136,4 +141,3 @@ app.listen(
 
     }
 );
-

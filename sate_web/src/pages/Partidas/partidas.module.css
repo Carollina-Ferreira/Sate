@@ -6,7 +6,6 @@
   color: #ffffff;
 }
 
-
 /* =========================
    TÍTULO
 ========================= */
@@ -27,6 +26,11 @@
   color: #ffffff;
 }
 
+.titleRow p {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+}
 
 /* =========================
    BOTÃO NOVA PARTIDA
@@ -37,26 +41,21 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-
   min-width: 150px;
   height: 44px;
-
   padding: 0 18px;
-
   border: none;
   border-radius: 8px;
-
   background: #007d62;
   color: #ffffff;
-
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     transform 0.2s ease;
+  position: relative;
+  z-index: 10;
 }
 
 .newButton:hover {
@@ -68,7 +67,6 @@
   font-size: 22px;
 }
 
-
 /* =========================
    FILTROS
 ========================= */
@@ -77,13 +75,9 @@
   display: flex;
   align-items: center;
   gap: 12px;
-
   width: 100%;
-
   margin-bottom: 24px;
-
   overflow-x: auto;
-
   scrollbar-width: none;
 }
 
@@ -91,28 +85,23 @@
   display: none;
 }
 
-.filters select {
+.filters select,
+.filters input[type="date"] {
   height: 42px;
-
   padding: 0 16px;
-
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 8px;
-
   background: #eeeeee;
   color: #343434;
-
   font-size: 14px;
-
   cursor: pointer;
-
   outline: none;
 }
 
-.filters select:focus {
+.filters select:focus,
+.filters input[type="date"]:focus {
   border-color: #ffffff;
 }
-
 
 /* =========================
    CAMPO DE DATA
@@ -120,39 +109,42 @@
 
 .dateInput {
   height: 42px;
-
   display: flex;
   align-items: center;
   gap: 8px;
-
   padding: 0 12px;
-
   box-sizing: border-box;
-
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 8px;
-
   background: #eeeeee;
   color: #343434;
 }
 
 .dateInput input {
-  width: 80px;
-
+  width: 125px;
   border: none;
   outline: none;
-
   background: transparent;
-
   color: #343434;
-
   font-size: 14px;
 }
 
-.dateInput input::placeholder {
+.clearDate {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
   color: #555555;
+  font-size: 18px;
+  line-height: 18px;
+  cursor: pointer;
 }
 
+.clearDate:hover {
+  background: #dddddd;
+}
 
 /* =========================
    TABELA
@@ -160,23 +152,16 @@
 
 .tableContainer {
   width: 100%;
-
   overflow-x: auto;
-
   border-radius: 10px;
-
   background: #ffffff;
-
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .tableContainer table {
   width: 100%;
-
   border-collapse: collapse;
-
   color: #222222;
-
   font-size: 14px;
 }
 
@@ -186,22 +171,16 @@
 
 .tableContainer th {
   padding: 16px;
-
   text-align: left;
-
   font-size: 12px;
   font-weight: 700;
-
   color: #555555;
-
   white-space: nowrap;
 }
 
 .tableContainer td {
   padding: 18px 16px;
-
   border-top: 1px solid #eeeeee;
-
   white-space: nowrap;
 }
 
@@ -213,7 +192,6 @@
   background: #f8f8f8;
 }
 
-
 /* =========================
    CONFRONTO
 ========================= */
@@ -222,7 +200,6 @@
   font-weight: 600;
   color: #222222;
 }
-
 
 /* =========================
    RESULTADO
@@ -233,7 +210,6 @@
   color: #222222;
 }
 
-
 /* =========================
    STATUS
 ========================= */
@@ -242,13 +218,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   min-width: 90px;
-
   padding: 6px 12px;
-
   border-radius: 20px;
-
   font-size: 12px;
   font-weight: 600;
 }
@@ -268,7 +240,6 @@
   color: #666666;
 }
 
-
 /* =========================
    BOTÃO DETALHES
 ========================= */
@@ -276,22 +247,15 @@
 .details {
   width: 32px;
   height: 32px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: none;
   border-radius: 50%;
-
   background: transparent;
-
   color: #555555;
-
   font-size: 24px;
-
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     color 0.2s ease;
@@ -302,13 +266,234 @@
   color: #007d62;
 }
 
+/* =========================
+   SEM RESULTADOS
+========================= */
+
+.empty {
+  padding: 40px !important;
+  text-align: center;
+  color: #777777;
+  font-size: 14px;
+}
+
+.empty h3 {
+  margin: 0 0 8px;
+}
+
+.empty p {
+  margin: 0;
+}
+
+/* =========================
+   MODAL / OVERLAY
+========================= */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* =========================
+   MODAL NOVA PARTIDA
+========================= */
+
+.modal {
+  position: relative;
+  z-index: 100000;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  overflow-x: hidden;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 24px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  color: #222222;
+  font-size: 20px;
+}
+
+.modalHeader p {
+  margin: 5px 0 0;
+  color: #777777;
+  font-size: 13px;
+}
+
+.closeButton {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #555555;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  background: #eeeeee;
+}
+
+.form {
+  padding: 24px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.formGroup label {
+  color: #333333;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  height: 42px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #333333;
+  font-size: 14px;
+  outline: none;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border-color: #007d62;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 18px 24px;
+  border-top: 1px solid #eeeeee;
+}
+
+.cancelButton,
+.saveButton {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancelButton {
+  border: 1px solid #dddddd;
+  background: #ffffff;
+  color: #555555;
+}
+
+.cancelButton:hover {
+  background: #f5f5f5;
+}
+
+.saveButton {
+  border: none;
+  background: #007d62;
+  color: #ffffff;
+}
+
+.saveButton:hover {
+  background: #009875;
+}
+
+/* =========================
+   MODAL DETALHES TEMPORÁRIO
+========================= */
+
+.selectedModal {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 30px;
+  box-sizing: border-box;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+  color: #222222;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.selectedModal .closeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.selectedModal h3 {
+  margin: 0 0 18px;
+  font-size: 20px;
+}
+
+.selectedModal strong {
+  display: block;
+  font-size: 16px;
+}
+
+.selectedModal p {
+  margin: 10px 0;
+  color: #666666;
+  font-size: 13px;
+}
+
+.selectedScore {
+  font-size: 28px !important;
+  font-weight: 800;
+  color: #222222 !important;
+}
+
+.nextStep {
+  margin-top: 20px !important;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  font-size: 12px !important;
+}
 
 /* =========================
    RESPONSIVIDADE
 ========================= */
 
 @media (max-width: 700px) {
-
   .page {
     padding: 20px;
   }
@@ -327,7 +512,8 @@
     flex-direction: column;
   }
 
-  .filters select {
+  .filters select,
+  .filters input[type="date"] {
     width: 100%;
   }
 
@@ -339,4 +525,17 @@
     width: 100%;
   }
 
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .modalActions {
+    flex-direction: column;
+  }
+
+  .cancelButton,
+  .saveButton {
+    width: 100%;
+  }
 }

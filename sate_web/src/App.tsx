@@ -1,42 +1,44 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // =================================
 // PÁGINAS DE ACESSO
 // =================================
-import Login from './pages/Login/login';
-import Cadastro from './pages/Cadastro/cadastro';
-import EsqueciSenha from './pages/EsqueciSenha/esqueciSenha';
+import Login from "./pages/Login/login";
+import Cadastro from "./pages/Cadastro/cadastro";
+import EsqueciSenha from "./pages/EsqueciSenha/esqueciSenha";
 
 // =================================
 // PÁGINA DE BOAS-VINDAS
 // =================================
-import BoasVindas from './pages/BoasVindas/boasVindas';
-import SelecaoEsporte from './pages/SelecaoEsporte/selecaoEsporte';
+import BoasVindas from "./pages/BoasVindas/boasVindas";
+import SelecaoEsporte from "./pages/SelecaoEsporte/selecaoEsporte";
+
 // =================================
 // LAYOUT
 // =================================
-import Layout from './components/Layout/layout';
+import Layout from "./components/Layout/layout";
 
 // =================================
 // PÁGINAS INTERNAS
 // =================================
-import Dashboard from './pages/Dashboard/dashboard';
-import Equipes from './pages/Equipes/equipes';
-
-import Altetas from './pages/Atletas/atletas';
-import Comparacoes from './pages/Comparacoes/compracoes';
-import Estatisticas from './pages/Estatisticas/estatisticas';
-import Configuracoes from './pages/Configuracoes/configuracoes';
-import AnaliseVideo from './pages/AnaliseVideos/analiseVideos';
-
-import Partidas from './pages/Partidas/partidas';
+import Dashboard from "./pages/Dashboard/dashboard";
+import Equipes from "./pages/Equipes/equipes";
+import Altetas from "./pages/Atletas/atletas";
+import Comparacoes from "./pages/Comparacoes/compracoes";
+import Estatisticas from "./pages/Estatisticas/estatisticas";
+import Configuracoes from "./pages/Configuracoes/configuracoes";
+import AnaliseVideo from "./pages/AnaliseVideos/analiseVideos";
+import Partidas from "./pages/Partidas/partidas";
+import DetalhesDaPartida from "./pages/DetalhesDaPartida/partidas2";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* PÁGINAS DE ACESSO */}
+        {/* =================================
+            PÁGINAS DE ACESSO
+        ================================= */}
 
         <Route
           path="/"
@@ -53,11 +55,8 @@ function App() {
           element={<EsqueciSenha />}
         />
 
-
         {/* =================================
-            PÁGINA DE BOAS-VINDAS
-            Aparece depois do login
-            e antes do início
+            BOAS-VINDAS
         ================================= */}
 
         <Route
@@ -73,9 +72,6 @@ function App() {
         {/* =================================
             ÁREA INTERNA DO SATE
         ================================= */}
-
-        {/* ÁREA INTERNA */}
-
 
         <Route element={<Layout />}>
 
@@ -95,17 +91,12 @@ function App() {
           <Route
             path="/atletas"
             element={<Altetas />}
-
-            
           />
 
           {/* Análise de Vídeos */}
           <Route
             path="/videos"
-            element={
-              <AnaliseVideo/>
-              
-            }
+            element={<AnaliseVideo />}
           />
 
           {/* Partidas */}
@@ -114,29 +105,28 @@ function App() {
             element={<Partidas />}
           />
 
+          {/* DETALHES DA PARTIDA */}
+          <Route
+            path="/detalhes-partida"
+            element={<DetalhesDaPartida />}
+          />
+
           {/* Estatísticas */}
           <Route
             path="/estatisticas"
-            element={
-             <Estatisticas/>
-            }
+            element={<Estatisticas />}
           />
 
           {/* Comparações */}
           <Route
             path="/comparacoes"
-            element={
-              <Comparacoes/>
-            }
+            element={<Comparacoes />}
           />
 
           {/* Configurações */}
           <Route
             path="/configuracoes"
-            element={
-                <Configuracoes/>
-            }
-
+            element={<Configuracoes />}
           />
 
         </Route>

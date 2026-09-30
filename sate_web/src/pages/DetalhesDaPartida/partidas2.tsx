@@ -1,75 +1,87 @@
-import styles from "./partidas.module.css";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import styles from "./partidas2.module.css";
+
+type PartidaRecebida = {
+  confronto: string;
+  modalidade: string;
+  data: string;
+  resultado: string;
+  status: string;
+  tipo: string;
+  temporada: string;
+};
 
 const eventos = [
   {
     horario: "22:54",
     tipo: "Gol",
-    jogador: "Rafael Souza",
+    atleta: "Rafael Souza",
     cor: "verde",
   },
   {
     horario: "22:54",
     tipo: "Erro",
-    jogador: "Bruno Alves",
+    atleta: "Bruno Alves",
     cor: "vermelho",
   },
   {
     horario: "22:54",
     tipo: "Finalização",
-    jogador: "Rafael Souza",
+    atleta: "Rafael Souza",
     cor: "azul",
   },
   {
     horario: "22:54",
     tipo: "Falta",
-    jogador: "Igor Tavares",
-    cor: "rosa",
+    atleta: "Igor Tavares",
+    cor: "laranja",
   },
   {
     horario: "22:54",
     tipo: "Gol",
-    jogador: "Bruno Alves",
+    atleta: "Bruno Alves",
     cor: "verde",
   },
   {
     horario: "22:54",
     tipo: "Assistência",
-    jogador: "Rafael Souza",
-    cor: "azul",
+    atleta: "Rafael Souza",
+    cor: "verde",
   },
   {
     horario: "22:54",
-    tipo: "Contra - Ataque",
-    jogador: "Rafael Souza",
+    tipo: "Contra-Ataque",
+    atleta: "Rafael Souza",
     cor: "amarelo",
   },
 ];
 
-const momentos = [
+const videos = [
   {
     titulo: "Gol de Rafael Souza",
     horario: "22:54",
-    status: "Gol",
-    tipo: "gol",
+    tipo: "Gol",
+    classe: "gol",
   },
   {
     titulo: "Gol de Rafael Souza",
     horario: "22:54",
-    status: "Gol",
-    tipo: "gol",
+    tipo: "Gol",
+    classe: "gol",
   },
   {
     titulo: "Gol de Rafael Souza",
     horario: "22:54",
-    status: "Destaque",
-    tipo: "destaque",
+    tipo: "Destaque",
+    classe: "destaque",
   },
 ];
 
 const atletas = [
   {
     iniciais: "RS",
-    nome: "Rafel Souza",
+    nome: "Rafael Souza",
   },
   {
     iniciais: "BA",
@@ -81,229 +93,350 @@ const atletas = [
   },
 ];
 
-export default function Partidas() {
+export default function DetalhesDaPartida() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const partida =
+    location.state?.partida as
+      | PartidaRecebida
+      | undefined;
+
+  const [videoSelecionado, setVideoSelecionado] =
+    useState<number | null>(null);
+
+  const voltarParaPartidas = () => {
+    navigate("/partidas");
+  };
+
+  /*
+    Caso a página seja aberta diretamente pela URL,
+    usamos estes dados como padrão.
+  */
+  const confronto =
+    partida?.confronto ||
+    "Falcões FC vs Tigres FC";
+
+  const modalidade =
+    partida?.modalidade || "Futebol";
+
+  const data =
+    partida?.data || "18/06/2026";
+
+  const resultado =
+    partida?.resultado || "3 - 1";
+
+  const status =
+    partida?.status || "Analisada";
+
+  const equipes = confronto.split(" vs ");
+
+  const equipeCasa =
+    equipes[0] || "Falcões FC";
+
+  const equipeVisitante =
+    equipes[1] || "Tigres FC";
+
   return (
-    <div className={styles.container}>
-      {/* ================= MENU LATERAL ================= */}
-      <aside className={styles.sidebar}>
-        <div className={styles.logo}>
-          <span>SATE</span>
-        </div>
+    <div className={styles.page}>
 
-        <nav className={styles.menu}>
-          <button className={styles.menuItem}>
-            <span>▣</span>
-          </button>
+      {/* VOLTAR */}
+      <button
+        className={styles.backButton}
+        onClick={voltarParaPartidas}
+      >
+        <span>‹</span>
+        Voltar para partidas
+      </button>
 
-          <button className={styles.menuItem}>
-            <span>♟</span>
-          </button>
+      {/* PLACAR */}
+      <section className={styles.scoreCard}>
 
-          <button className={styles.menuItem}>
-            <span>♟</span>
-          </button>
-
-          <button className={styles.menuItem}>
-            <span>▣</span>
-          </button>
-
-          <button className={`${styles.menuItem} ${styles.active}`}>
-            <span>🏆</span>
-          </button>
-
-          <button className={styles.menuItem}>
-            <span>▥</span>
-          </button>
-
-          <button className={styles.menuItem}>
-            <span>↝</span>
-          </button>
-
-          <button className={styles.menuItem}>
-            <span>⚙</span>
-          </button>
-        </nav>
-
-        <div className={styles.sidebarBottom}>
-          <button className={styles.menuItem}>
-            <span>⇥</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* ================= ÁREA PRINCIPAL ================= */}
-      <main className={styles.main}>
-        {/* ================= HEADER ================= */}
-        <header className={styles.header}>
-          <h1>Detalhes de Partidas</h1>
-
-          <div className={styles.headerRight}>
-            <div className={styles.search}>
-              <span className={styles.searchIcon}>⌕</span>
-
-              <input
-                type="text"
-                placeholder="Pesquisar atletas, equipes, partidas"
-              />
-            </div>
-
-            <button className={styles.notification}>
-              ♧
-            </button>
-
-            <div className={styles.profile}>
-              <div className={styles.avatar}>
-                MF
-              </div>
-
-              <div className={styles.profileInfo}>
-                <strong>Marcelo Ferreira</strong>
-                <small>Treinador</small>
-              </div>
-
-              <span className={styles.profileArrow}>
-               ⌄
-              </span>
-            </div>
-          </div>
-        </header>
-
-        {/* ================= CONTEÚDO ================= */}
-        <section className={styles.content}>
-
-          {/* VOLTAR */}
-          <button className={styles.backButton}>
-            ←
-            <span>Voltar para partidas</span>
-          </button>
-
-          {/* ================= PLACAR ================= */}
-          <section className={styles.scoreCard}>
-
-            {/* TIME 1 */}
-            <div className={styles.team}>
-              <div className={styles.teamCircle}>
-                FC
-              </div>
-
-              <strong>Falcões FC</strong>
-            </div>
-
-            {/* RESULTADO */}
-            <div className={styles.score}>
-              <div className={styles.scoreNumber}>
-                3 - 1
-              </div>
-
-              <div className={styles.matchInfo}>
-                18/06/2026&nbsp; Futebol
-              </div>
-
-              <span className={styles.analyzed}>
-                Analisada
-              </span>
-            </div>
-
-            {/* TIME 2 */}
-            <div className={styles.team}>
-              <div className={styles.teamCircle}>
-                TC
-              </div>
-
-              <strong>Tigres FC</strong>
-            </div>
-          </section>
-
-          {/* ================= DUAS COLUNAS ================= */}
-          <div className={styles.middleGrid}>
-
-            {/* ================= EVENTOS ================= */}
-            <section className={styles.eventsCard}>
-              <h2>Eventos Registrando</h2>
-
-              <div className={styles.eventsList}>
-                {eventos.map((evento, index) => (
-                  <div
-                    className={styles.event}
-                    key={index}
-                  >
-                    <span className={styles.eventTime}>
-                      {evento.horario}
-                    </span>
-
-                    <span
-                      className={`${styles.eventDot} ${
-                        styles[evento.cor]
-                      }`}
-                    ></span>
-
-                    <strong>{evento.tipo}</strong>
-
-                    <span className={styles.eventPlayer}>
-                      {evento.jogador}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* ================= MOMENTOS ================= */}
-            <section className={styles.momentsCard}>
-              <h2>Momentos Registrados</h2>
-
-              <div className={styles.momentsList}>
-                {momentos.map((momento, index) => (
-                  <div
-                    className={styles.moment}
-                    key={index}
-                  >
-                    <div className={styles.videoBox}>
-                      <span>▷</span>
-                    </div>
-
-                    <div className={styles.momentInfo}>
-                      <strong>{momento.titulo}</strong>
-                      <small>{momento.horario}</small>
-                    </div>
-
-                    <span
-                      className={`${styles.momentStatus} ${
-                        momento.tipo === "gol"
-                          ? styles.goalStatus
-                          : styles.highlightStatus
-                      }`}
-                    >
-                      <span></span>
-                      {momento.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </section>
+        <div className={styles.team}>
+          <div className={styles.teamIcon}>
+            {equipeCasa
+              .split(" ")
+              .map((item) => item[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase()}
           </div>
 
-          {/* ================= ATLETAS ================= */}
-          <section className={styles.athletesCard}>
-            <h2>Atletas participantes</h2>
+          <strong>{equipeCasa}</strong>
+        </div>
 
-            <div className={styles.athletesList}>
-              {atletas.map((atleta, index) => (
+        <div className={styles.scoreCenter}>
+
+          <div className={styles.score}>
+            {resultado}
+          </div>
+
+          <div className={styles.matchInfo}>
+            <span>{data}</span>
+            <span className={styles.separator}>
+              •
+            </span>
+            <span>{modalidade}</span>
+          </div>
+
+          <span className={styles.status}>
+            {status}
+          </span>
+
+        </div>
+
+        <div className={styles.team}>
+          <div className={styles.teamIcon}>
+            {equipeVisitante
+              .split(" ")
+              .map((item) => item[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase()}
+          </div>
+
+          <strong>{equipeVisitante}</strong>
+        </div>
+
+      </section>
+
+      {/* EVENTOS + MOMENTOS */}
+      <div className={styles.contentGrid}>
+
+        {/* EVENTOS */}
+        <section className={styles.card}>
+
+          <div className={styles.cardHeader}>
+            <h3>
+              Eventos Registrando
+            </h3>
+          </div>
+
+          <div className={styles.eventsList}>
+
+            {eventos.map(
+              (evento, index) => (
                 <div
-                  className={styles.athlete}
+                  className={styles.eventRow}
                   key={index}
                 >
-                  <div className={styles.athleteAvatar}>
-                    {atleta.iniciais}
-                  </div>
 
-                  <span>{atleta.nome}</span>
+                  <span
+                    className={styles.eventTime}
+                  >
+                    {evento.horario}
+                  </span>
+
+                  <span
+                    className={`${styles.eventDot} ${
+                      styles[evento.cor]
+                    }`}
+                  />
+
+                  <span
+                    className={styles.eventType}
+                  >
+                    {evento.tipo}
+                  </span>
+
+                  <span
+                    className={
+                      styles.eventAthlete
+                    }
+                  >
+                    {evento.atleta}
+                  </span>
+
                 </div>
-              ))}
-            </div>
-          </section>
+              )
+            )}
+
+          </div>
 
         </section>
-      </main>
+
+        {/* MOMENTOS */}
+        <section className={styles.card}>
+
+          <div className={styles.cardHeader}>
+            <h3>
+              Momentos Registrados
+            </h3>
+          </div>
+
+          <div className={styles.videosList}>
+
+            {videos.map(
+              (video, index) => (
+                <div
+                  className={styles.videoItem}
+                  key={index}
+                >
+
+                  <button
+                    className={
+                      styles.videoPreview
+                    }
+                    onClick={() =>
+                      setVideoSelecionado(
+                        index
+                      )
+                    }
+                  >
+                    <span
+                      className={
+                        styles.playIcon
+                      }
+                    >
+                      ▶
+                    </span>
+                  </button>
+
+                  <div
+                    className={
+                      styles.videoInfo
+                    }
+                  >
+
+                    <div
+                      className={
+                        styles.videoTitleRow
+                      }
+                    >
+                      <strong>
+                        {video.titulo}
+                      </strong>
+
+                      <span>
+                        {video.horario}
+                      </span>
+                    </div>
+
+                    <span
+                      className={`${styles.videoTag} ${
+                        styles[video.classe]
+                      }`}
+                    >
+                      <span
+                        className={
+                          styles.tagDot
+                        }
+                      />
+
+                      {video.tipo}
+                    </span>
+
+                  </div>
+
+                </div>
+              )
+            )}
+
+          </div>
+
+        </section>
+
+      </div>
+
+      {/* ATLETAS */}
+      <section
+        className={`${styles.card} ${styles.athletesCard}`}
+      >
+
+        <div className={styles.cardHeader}>
+          <h3>
+            Atletas participantes
+          </h3>
+        </div>
+
+        <div className={styles.athletesList}>
+
+          {atletas.map(
+            (atleta, index) => (
+              <div
+                className={styles.athlete}
+                key={index}
+              >
+
+                <div
+                  className={
+                    styles.athleteAvatar
+                  }
+                >
+                  {atleta.iniciais}
+                </div>
+
+                <strong>
+                  {atleta.nome}
+                </strong>
+
+              </div>
+            )
+          )}
+
+        </div>
+
+      </section>
+
+      {/* MODAL DO VÍDEO */}
+      {videoSelecionado !== null && (
+        <div
+          className={
+            styles.videoModalOverlay
+          }
+          onClick={() =>
+            setVideoSelecionado(null)
+          }
+        >
+
+          <div
+            className={styles.videoModal}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+
+            <button
+              className={styles.closeModal}
+              onClick={() =>
+                setVideoSelecionado(null)
+              }
+            >
+              ×
+            </button>
+
+            <div
+              className={styles.fakeVideo}
+            >
+              <span
+                className={styles.bigPlay}
+              >
+                ▶
+              </span>
+            </div>
+
+            <h3>
+              {
+                videos[
+                  videoSelecionado
+                ].titulo
+              }
+            </h3>
+
+            <p>
+              Momento registrado às{" "}
+              {
+                videos[
+                  videoSelecionado
+                ].horario
+              }
+            </p>
+
+          </div>
+
+        </div>
+      )}
+
     </div>
   );
 }

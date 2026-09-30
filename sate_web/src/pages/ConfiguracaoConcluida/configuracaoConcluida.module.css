@@ -28,50 +28,77 @@
 }
 
 
-/* PROGRESSO */
+/* =========================================================
+   CONTEÚDO
+========================================================= */
 
-.progressArea {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    gap: 18px;
+.conteudo {
+    width: 100%;
 }
 
-.stepBadge {
-    padding: 7px 19px;
 
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 999px;
+/* =========================================================
+   ETAPA
+========================================================= */
 
-    background: rgba(255, 255, 255, 0.15);
+.etapa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
 
     color: #e9f4f0;
 
-    font-size: 11px;
+    text-align: left;
 }
 
-.progressSteps {
-    width: min(620px, 100%);
+.etapa > span {
+    width: 28px;
+    height: 28px;
 
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    gap: 8px;
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 700;
 }
 
-.progressSteps > div {
-    height: 4px;
+.etapa > div {
+    display: flex;
+    flex-direction: column;
 
-    border-radius: 20px;
+    gap: 2px;
+}
 
-    background: #42d4a2;
+.etapa strong {
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.etapa small {
+    color: #b9d4ca;
+
+    font-size: 9px;
 }
 
 
-/* HEADER */
+/* =========================================================
+   INTRODUÇÃO / HEADER
+========================================================= */
 
-.header {
+.introducao {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -81,7 +108,7 @@
     text-align: center;
 }
 
-.completeIcon {
+.iconeCheck {
     width: 52px;
     height: 52px;
 
@@ -101,7 +128,7 @@
         0 10px 24px rgba(28, 180, 127, 0.25);
 }
 
-.header h1 {
+.introducao h1 {
     margin: 0;
 
     color: #ffffff;
@@ -110,146 +137,72 @@
     font-weight: 700;
 }
 
-.header p {
+.introducao p {
+    max-width: 570px;
+
     margin: 7px 0 0;
 
     color: #cedfd8;
 
     font-size: 14px;
+
+    line-height: 1.5;
 }
 
 
-/* CARDS */
+/* =========================================================
+   SEÇÕES
+========================================================= */
 
-.summaryArea {
+.secao {
+    width: 100%;
+}
+
+
+/* Os dois cards principais ficam lado a lado */
+.conteudo > .secao:nth-of-type(1) {
     width: min(700px, 100%);
-
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    gap: 80px;
-
-    align-items: center;
 
     margin: 45px auto 0;
 }
 
 
-/* CAMPOS */
+/* Segunda seção */
+.conteudo > .secao:nth-of-type(2) {
+    width: min(700px, 100%);
 
-.fieldsCard {
-    min-height: 245px;
-
-    padding: 23px;
-
-    box-sizing: border-box;
-
-    border-radius: 16px;
-
-    background: #ffffff;
-
-    color: #263930;
-
-    box-shadow:
-        0 18px 35px rgba(0, 32, 23, 0.2);
+    margin: 20px auto 0;
 }
 
-.sportHeader {
+.tituloSecao {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
-    gap: 11px;
+    margin-bottom: 10px;
 }
 
-.sportCircle {
-    width: 43px;
-    height: 43px;
+.tituloSecao h2 {
+    margin: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #e4ece8;
-
-    font-size: 21px;
-}
-
-.sportHeader > div:last-child {
-    display: flex;
-    flex-direction: column;
-}
-
-.sportHeader strong {
-    color: #263930;
+    color: #ffffff;
 
     font-size: 13px;
-}
-
-.sportHeader span {
-    color: #8a9690;
-
-    font-size: 8px;
-}
-
-.divider {
-    height: 1px;
-
-    margin: 16px 0;
-
-    background: #e5ebe8;
-}
-
-.fieldsTitle {
-    color: #738078;
-
-    font-size: 10px;
-}
-
-.fieldsCard ul {
-    display: flex;
-    flex-direction: column;
-
-    gap: 5px;
-
-    margin: 11px 0 0;
-
-    padding: 0;
-
-    list-style: none;
-}
-
-.fieldsCard li {
-    display: flex;
-    align-items: center;
-
-    gap: 7px;
-
-    color: #394b43;
-
-    font-size: 10px;
-}
-
-.fieldsCard li svg {
-    color: #1bb27d;
-}
-
-.moreFields {
-    display: block;
-
-    margin-top: 9px;
-
-    color: #138861;
-
-    font-size: 9px;
     font-weight: 600;
 }
 
+.tituloSecao span {
+    color: #a9c8bd;
 
-/* EQUIPE */
+    font-size: 9px;
+}
 
-.teamCard {
+
+/* =========================================================
+   CARD DA EQUIPE
+========================================================= */
+
+.cardEquipe {
     overflow: hidden;
 
     border-radius: 16px;
@@ -262,12 +215,14 @@
         0 18px 35px rgba(0, 32, 23, 0.22);
 }
 
-.teamImage {
+.imagemEquipe {
     height: 150px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    overflow: hidden;
 
     background-color: #dfe9e4;
     background-position: center;
@@ -276,7 +231,35 @@
     font-size: 50px;
 }
 
-.teamInfo {
+.imagemEquipe img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+.iconeEsporte {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #dfe9e4;
+
+    color: #172a23;
+
+    font-size: 50px;
+}
+
+.iconeEsporte svg {
+    color: #172a23;
+}
+
+.infoEquipe {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -286,20 +269,7 @@
     padding: 18px 20px;
 }
 
-.teamInfo > div:first-child {
-    min-width: 0;
-}
-
-.teamInfo span {
-    color: #1b9a6e;
-
-    font-size: 7px;
-    font-weight: 700;
-
-    letter-spacing: 0.7px;
-}
-
-.teamInfo h2 {
+.infoEquipe h3 {
     overflow: hidden;
 
     margin: 3px 0 2px;
@@ -307,22 +277,34 @@
     color: #24372f;
 
     font-size: 17px;
+    font-weight: 700;
 
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.teamInfo p {
-    margin: 0;
+.detalhesEquipe {
+    display: flex;
+    align-items: center;
 
+    gap: 7px;
+}
+
+.detalhesEquipe span {
     color: #7b8882;
 
     font-size: 9px;
 }
 
-.sportEmoji {
-    width: 43px;
-    height: 43px;
+.detalhesEquipe span:first-child {
+    color: #1b9a6e;
+
+    font-weight: 700;
+}
+
+.statusEquipe {
+    width: 30px;
+    height: 30px;
 
     flex-shrink: 0;
 
@@ -332,13 +314,151 @@
 
     border-radius: 50%;
 
-    background: #edf2f0;
+    background: #e4f5ee;
 
-    font-size: 22px;
+    color: #1bb27d;
 }
 
 
-/* FOOTER */
+/* =========================================================
+   CAMPOS DE ANÁLISE
+========================================================= */
+
+.campos {
+    min-height: 80px;
+
+    padding: 16px 18px;
+
+    box-sizing: border-box;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    color: #263930;
+
+    box-shadow:
+        0 18px 35px rgba(0, 32, 23, 0.2);
+
+    display: flex;
+    flex-wrap: wrap;
+
+    align-content: flex-start;
+
+    gap: 8px;
+}
+
+.campo {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 7px 10px;
+
+    border-radius: 999px;
+
+    background: #edf5f1;
+
+    color: #394b43;
+
+    font-size: 10px;
+}
+
+.campo svg {
+    flex-shrink: 0;
+
+    color: #1bb27d;
+}
+
+.semCampos {
+    min-height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 18px 35px rgba(0, 32, 23, 0.2);
+}
+
+.semCampos p {
+    margin: 0;
+
+    color: #84918b;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   MENSAGEM FINAL
+========================================================= */
+
+.mensagemFinal {
+    width: min(700px, 100%);
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 20px auto 0;
+
+    padding: 14px 17px;
+
+    box-sizing: border-box;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.09);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mensagemIcone {
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #36c995;
+
+    color: #ffffff;
+}
+
+.mensagemFinal strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 11px;
+}
+
+.mensagemFinal p {
+    margin: 3px 0 0;
+
+    color: #bcd4cb;
+
+    font-size: 9px;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
 
 .footer {
     display: flex;
@@ -350,7 +470,7 @@
     padding-top: 34px;
 }
 
-.backButton {
+.botaoVoltar {
     display: flex;
     align-items: center;
 
@@ -370,7 +490,17 @@
     cursor: pointer;
 }
 
-.nextButton {
+.botaoVoltar:hover {
+    opacity: 0.8;
+}
+
+.botaoVoltar:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}
+
+.botaoFinalizar {
     min-width: 165px;
     height: 43px;
 
@@ -395,68 +525,110 @@
     font-weight: 700;
 
     cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
 }
 
-.nextButton:hover {
+.botaoFinalizar:hover:not(:disabled) {
     background: #159d6d;
+
+    transform: translateY(-1px);
+}
+
+.botaoFinalizar:disabled {
+    opacity: 0.7;
+
+    cursor: not-allowed;
 }
 
 
-/* RESPONSIVO */
+/* =========================================================
+   LOADING
+========================================================= */
+
+.spinner {
+    width: 15px;
+    height: 15px;
+
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+
+    border-radius: 50%;
+
+    animation: girar 0.7s linear infinite;
+}
+
+@keyframes girar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
 
 @media (max-width: 720px) {
     .container {
         padding: 28px 20px;
     }
 
-    .summaryArea {
-        grid-template-columns: 1fr;
-
-        gap: 20px;
-
-        width: min(420px, 100%);
+    .introducao {
+        margin-top: 28px;
     }
 
-    .header h1 {
+    .introducao h1 {
         font-size: 27px;
     }
+
+    .introducao p {
+        font-size: 13px;
+    }
+
+    .conteudo > .secao:nth-of-type(1),
+    .conteudo > .secao:nth-of-type(2),
+    .mensagemFinal {
+        width: 100%;
+    }
+
+    .footer {
+        padding-top: 25px;
+    }
 }
 
-.sportCircle .material-icons {
-    font-size: 22px;
-    color: #263930;
-}
+@media (max-width: 480px) {
+    .container {
+        padding: 24px 16px;
+    }
 
-.teamImage .material-icons {
-    font-size: 52px;
-    color: #ffffff;
-}
+    .etapa {
+        justify-content: flex-start;
+    }
 
-.sportEmoji .material-icons {
-    font-size: 22px;
-    color: #263930;
-}
+    .imagemEquipe {
+        height: 130px;
+    }
 
-.sportCircle,
-.sportEmoji {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .infoEquipe {
+        padding: 15px;
+    }
 
-.sportCircle svg,
-.sportEmoji svg {
-    color: #172a23;
-}
+    .infoEquipe h3 {
+        font-size: 15px;
+    }
 
-.teamImage svg {
-    color: #ffffff;
-}
+    .mensagemFinal {
+        align-items: flex-start;
+    }
 
-.emptyFields {
-    margin: 12px 0 0;
+    .footer {
+        gap: 15px;
+    }
 
-    color: #84918b;
-
-    font-size: 10px;
+    .botaoFinalizar {
+        min-width: 145px;
+    }
 }

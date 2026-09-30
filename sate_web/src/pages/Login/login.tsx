@@ -19,6 +19,7 @@ interface LoginResponse {
         id: number;
         email: string;
         tipo: 'TREINADOR' | 'ATLETA';
+        primeiroAcesso: boolean;
     };
 }
 
@@ -118,7 +119,21 @@ const Login = () => {
              * O Web é exclusivo para TREINADOR.
              */
             if (data.usuario.tipo === 'TREINADOR') {
-                navigate('/boas-vindas');
+
+                /*
+                 * Primeiro acesso:
+                 * vai passar pelas 3 páginas de configuração.
+                 */
+                if (data.usuario.primeiroAcesso) {
+                    navigate('/boas-vindas');
+                    return;
+                }
+
+                /*
+                 * Usuário que já concluiu a configuração:
+                 * vai direto para a Dashboard.
+                 */
+                navigate('/inicio');
                 return;
             }
 

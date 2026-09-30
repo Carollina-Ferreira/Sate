@@ -248,9 +248,7 @@ const Estatisticas = () => {
       ? 'Falcões FC'
       : 'Poli Rugby';
 
-  const handleNovaEquipe = () => {
-    console.log('Nova equipe');
-  };
+
 
   return (
     <main className={styles.page}>
@@ -267,16 +265,6 @@ const Estatisticas = () => {
             atletas.
           </p>
         </div>
-
-        <button
-          type="button"
-          className={styles.newTeamButton}
-          onClick={handleNovaEquipe}
-        >
-          <Plus size={17} />
-
-          Nova equipe
-        </button>
       </div>
 
       {/* =====================================

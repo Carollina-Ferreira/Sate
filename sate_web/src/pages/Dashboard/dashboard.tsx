@@ -1,486 +1,1241 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {
+  Activity,
+  BarChart3,
+  ChevronDown,
+  Play,
+  Trophy,
+  Users,
+} from 'lucide-react';
+
+import {
+  useMemo,
+  useState,
+} from 'react';
+
+import {
+  useNavigate,
+} from 'react-router-dom';
+
 import styles from './dashboard.module.css';
 
-const meses = [
-  'Janeiro',
-  'Fevereiro',
-  'Março',
-  'Abril',
-  'Maio',
-  'Junho',
-  'Julho',
-  'Agosto',
-  'Setembro',
-  'Outubro',
-  'Novembro',
-  'Dezembro',
-];
 
-const partidas = [
-  {
-    equipes: 'Falcões FC vs Tigres FC',
-    modalidade: 'Futebol',
-    data: '18/08/26',
-    resultado: '3 - 1',
-    status: 'Analisada',
-    statusClass: 'analisada',
-  },
-  {
-    equipes: 'Águias B. vs Panteras B.',
-    modalidade: 'Basquete',
-    data: '15/08/26',
-    resultado: '88 - 76',
-    status: 'Analisada',
-    statusClass: 'analisada',
-  },
-  {
-    equipes: 'Fúria Vôlei vs Ventania',
-    modalidade: 'Vôlei',
-    data: '12/08/26',
-    resultado: '3 - 2',
-    status: 'Análise',
-    statusClass: 'analise',
-  },
-  {
-    equipes: 'Leões Rugby vs Torgus',
-    modalidade: 'Rugby',
-    data: '09/08/26',
-    resultado: '21 - 24',
-    status: 'Pendente',
-    statusClass: 'pendente',
-  },
-];
+type StatusPartida =
+  | 'Analisada'
+  | 'Em análise'
+  | 'Pendente';
 
-const atividades = [
-  {
-    tipo: 'pink',
-    texto: 'Vídeo Falcões FC x Tigres FC analisado',
-    tempo: 'há 2 horas',
-  },
-  {
-    tipo: 'green',
-    texto: 'Nova partida Fúria Vôlei x Ventania adicionada',
-    tempo: 'há 5 horas',
-  },
-  {
-    tipo: 'pink',
-    texto: 'Perfil de Carla Mendes atualizado',
-    tempo: 'ontem',
-  },
-];
 
-const equipes = [
-  {
-    nome: 'Falcões FC',
-    porcentagem: '78%',
-    classe: 'light',
-  },
-  {
-    nome: 'Águias Basquete',
-    porcentagem: '65%',
-    classe: 'medium',
-  },
-  {
-    nome: 'Fúria Vôlei',
-    porcentagem: '82%',
-    classe: 'dark',
-  },
-];
-
-function gerarDiasDoMes(ano: number, mes: number) {
-  const primeiroDia = new Date(ano, mes, 1).getDay();
-  const quantidadeDias = new Date(ano, mes + 1, 0).getDate();
-
-  const dias: (number | null)[] = [];
-
-  for (let i = 0; i < primeiroDia; i++) {
-    dias.push(null);
-  }
-
-  for (let dia = 1; dia <= quantidadeDias; dia++) {
-    dias.push(dia);
-  }
-
-  while (dias.length % 7 !== 0) {
-    dias.push(null);
-  }
-
-  return dias;
+interface Resumo {
+  id: number;
+  titulo: string;
+  valor: number;
+  detalhe: string;
+  variacao: number;
+  rota: string;
 }
 
-function Dashboard() {
-  const navigate = useNavigate();
 
-  const [mesAtual, setMesAtual] = useState(8);
-  const [anoAtual, setAnoAtual] = useState(2026);
-  const [diaSelecionado, setDiaSelecionado] = useState(18);
+interface AtividadeRecente {
+  id: number;
+  titulo: string;
+  horario: string;
 
-  const diasDoMes = gerarDiasDoMes(anoAtual, mesAtual);
+  tipo:
+    | 'video'
+    | 'partida'
+    | 'atleta'
+    | 'estatistica';
+}
 
-  function mesAnterior() {
-    if (mesAtual === 0) {
-      setMesAtual(11);
-      setAnoAtual(anoAtual - 1);
-    } else {
-      setMesAtual(mesAtual - 1);
-    }
 
-    setDiaSelecionado(0);
-  }
+interface Partida {
+  id: number;
+  equipe: string;
+  adversario: string;
+  modalidade: string;
+  data: string;
+  resultado: string;
+  status: StatusPartida;
+}
 
-  function proximoMes() {
-    if (mesAtual === 11) {
-      setMesAtual(0);
-      setAnoAtual(anoAtual + 1);
-    } else {
-      setMesAtual(mesAtual + 1);
-    }
 
-    setDiaSelecionado(0);
-  }
+interface Equipe {
+  id: number;
+  nome: string;
+  modalidade: string;
+  sigla: string;
+  desempenho: number;
+}
 
-  function abrirPartida(partida: (typeof partidas)[number]) {
-    alert(
-      `Partida selecionada:\n\n${partida.equipes}\n${partida.modalidade}\n${partida.data}\nResultado: ${partida.resultado}`,
+
+const resumos: Resumo[] = [
+  {
+    id: 1,
+    titulo: 'Atletas',
+    valor: 66,
+    detalhe: 'cadastrados',
+    variacao: 8,
+    rota: '/atletas',
+  },
+
+  {
+    id: 2,
+    titulo: 'Equipes',
+    valor: 4,
+    detalhe: 'equipes ativas',
+    variacao: 0,
+    rota: '/equipes',
+  },
+
+  {
+    id: 3,
+    titulo: 'Partidas',
+    valor: 46,
+    detalhe: 'analisadas',
+    variacao: 12,
+    rota: '/partidas',
+  },
+
+  {
+    id: 4,
+    titulo: 'Alertas',
+    valor: 5,
+    detalhe: 'precisam de atenção',
+    variacao: -3,
+    rota: '/estatisticas',
+  },
+];
+
+
+const atividades: AtividadeRecente[] = [
+  {
+    id: 1,
+    titulo:
+      'Falcões FC x Tigres FC analisado',
+    horario:
+      'Há 2 horas',
+    tipo:
+      'video',
+  },
+
+  {
+    id: 2,
+    titulo:
+      'Nova partida adicionada',
+    horario:
+      'Há 5 horas',
+    tipo:
+      'partida',
+  },
+
+  {
+    id: 3,
+    titulo:
+      'Perfil de Carla Mendes atualizado',
+    horario:
+      'Ontem',
+    tipo:
+      'atleta',
+  },
+
+  {
+    id: 4,
+    titulo:
+      'Estatística de aproveitamento criada',
+    horario:
+      'Ontem',
+    tipo:
+      'estatistica',
+  },
+];
+
+
+const partidas: Partida[] = [
+  {
+    id: 1,
+    equipe: 'Falcões FC',
+    adversario: 'Tigres FC',
+    modalidade: 'Futebol',
+    data: '18/09/2026',
+    resultado: '3 - 1',
+    status: 'Analisada',
+  },
+
+  {
+    id: 2,
+    equipe: 'Águias Basquete',
+    adversario: 'Panteras',
+    modalidade: 'Basquete',
+    data: '15/09/2026',
+    resultado: '88 - 76',
+    status: 'Analisada',
+  },
+
+  {
+    id: 3,
+    equipe: 'Fúria Vôlei',
+    adversario: 'Ventania',
+    modalidade: 'Vôlei',
+    data: '12/09/2026',
+    resultado: '3 - 2',
+    status: 'Em análise',
+  },
+
+  {
+    id: 4,
+    equipe: 'Poli Rugby',
+    adversario: 'Spartans',
+    modalidade: 'Rugby',
+    data: '09/09/2026',
+    resultado: '21 - 24',
+    status: 'Pendente',
+  },
+];
+
+
+const equipes: Equipe[] = [
+  {
+    id: 1,
+    nome: 'Falcões FC',
+    modalidade: 'Futebol',
+    sigla: 'FC',
+    desempenho: 78,
+  },
+
+  {
+    id: 2,
+    nome: 'Águias Basquete',
+    modalidade: 'Basquete',
+    sigla: 'AB',
+    desempenho: 65,
+  },
+
+  {
+    id: 3,
+    nome: 'Poli Rugby',
+    modalidade: 'Rugby',
+    sigla: 'PR',
+    desempenho: 76,
+  },
+];
+
+
+const grafico = {
+  'Últimas 7 partidas': {
+    equipe: [
+      58,
+      65,
+      63,
+      71,
+      69,
+      77,
+      82,
+    ],
+
+    adversario: [
+      54,
+      58,
+      61,
+      64,
+      62,
+      68,
+      70,
+    ],
+  },
+
+  'Últimas 5 partidas': {
+    equipe: [
+      63,
+      69,
+      68,
+      76,
+      82,
+    ],
+
+    adversario: [
+      59,
+      63,
+      62,
+      67,
+      70,
+    ],
+  },
+
+  'Últimas 3 partidas': {
+    equipe: [
+      69,
+      77,
+      82,
+    ],
+
+    adversario: [
+      62,
+      68,
+      71,
+    ],
+  },
+};
+
+
+const Dashboard = () => {
+  const navigate =
+    useNavigate();
+
+
+  const [
+    periodo,
+    setPeriodo,
+  ] =
+    useState(
+      'Últimas 7 partidas',
     );
-  }
 
-  function abrirAtividade(texto: string) {
-    alert(texto);
-  }
 
-  function abrirEquipe(nome: string) {
-    alert(`Equipe selecionada: ${nome}`);
-  }
+  const dados =
+    grafico[
+      periodo as keyof typeof grafico
+    ];
+
+
+  const linhaEquipe =
+    useMemo(
+      () =>
+        criarLinha(
+          dados.equipe,
+        ),
+      [dados],
+    );
+
+
+  const linhaAdversario =
+    useMemo(
+      () =>
+        criarLinha(
+          dados.adversario,
+        ),
+      [dados],
+    );
+
+
+  const abrirAtividade = (
+    atividade: AtividadeRecente,
+  ) => {
+    if (
+      atividade.tipo ===
+      'atleta'
+    ) {
+      navigate('/atletas');
+
+      return;
+    }
+
+
+    if (
+      atividade.tipo ===
+      'estatistica'
+    ) {
+      navigate(
+        '/estatisticas',
+      );
+
+      return;
+    }
+
+
+    navigate('/partidas');
+  };
+
 
   return (
-    <main className={styles.page}>
-      <section className={styles.content}>
-        <div className={styles.welcome}>
-          <h1>Olá, treinador Marcelo</h1>
+    <main
+      className={
+        styles.page
+      }
+    >
+      <div
+        className={
+          styles.dashboard
+        }
+      >
+        {/* =========================
+            TOPO
+        ========================= */}
 
-          <p>
-            Acompanhe o desempenho dos seus da sua equipe e analise seus
-            resultados
-          </p>
-        </div>
+        <header
+          className={
+            styles.header
+          }
+        >
+          <div>
+            <h1>
+              Olá, Marcelo
+            </h1>
 
-        <section className={styles.kpiGrid}>
-          <button
-            type="button"
-            className={`${styles.kpiCard} ${styles.kpiMint}`}
-            onClick={() => navigate('/atletas')}
+            <p>
+              Acompanhe o que está acontecendo com suas equipes.
+            </p>
+          </div>
+
+          <span
+            className={
+              styles.date
+            }
           >
-            <div className={`${styles.kpiIcon} ${styles.kpiIconMint}`}>
-              <span>♙</span>
-            </div>
-
-            <div className={styles.kpiTop}>
-              <span>Atletas</span>
-              <span className={styles.kpiBadge}>80%</span>
-            </div>
-
-            <strong className={styles.kpiValue}>66</strong>
-          </button>
-
-          <button
-            type="button"
-            className={`${styles.kpiCard} ${styles.kpiPink}`}
-            onClick={() => navigate('/equipes')}
-          >
-            <div className={`${styles.kpiIcon} ${styles.kpiIconPink}`}>
-              <span>♟</span>
-            </div>
-
-            <div className={styles.kpiTop}>
-              <span>Equipes</span>
-              <span className={styles.kpiBadge}>66%</span>
-            </div>
-
-            <strong className={`${styles.kpiValue} ${styles.valuePink}`}>
-              4
+            Setembro
+            <strong>
+              2026
             </strong>
-          </button>
+          </span>
+        </header>
 
-          <button
-            type="button"
-            className={`${styles.kpiCard} ${styles.kpiMint}`}
-            onClick={() => navigate('/partidas')}
-          >
-            <div className={`${styles.kpiIcon} ${styles.kpiIconBlue}`}>
-              <span>🏆</span>
-            </div>
 
-            <div className={styles.kpiTop}>
-              <span>Partidas</span>
-              <span className={styles.kpiBadge}>44%</span>
-            </div>
+        {/* =========================
+            FAIXA DE RESUMO
+        ========================= */}
 
-            <strong className={styles.kpiValue}>46</strong>
-          </button>
+        <section
+          className={
+            styles.scoreboard
+          }
+        >
+          {resumos.map(
+            (
+              item,
+            ) => (
+              <button
+                type="button"
+                key={
+                  item.id
+                }
+                className={
+                  styles.scoreItem
+                }
+                onClick={() =>
+                  navigate(
+                    item.rota,
+                  )
+                }
+              >
+                <div
+                  className={
+                    styles.scoreMain
+                  }
+                >
+                  <strong>
+                    {
+                      item.valor
+                    }
+                  </strong>
 
-          <button
-            type="button"
-            className={`${styles.kpiCard} ${styles.kpiPink}`}
-            onClick={() => navigate('/estatisticas')}
-          >
-            <div className={`${styles.kpiIcon} ${styles.kpiIconPink}`}>
-              <span>⌁</span>
-            </div>
+                  <span>
+                    {
+                      item.titulo
+                    }
+                  </span>
+                </div>
 
-            <div className={styles.kpiTop}>
-              <span>Desempenho</span>
-              <span className={styles.kpiBadge}>-5%</span>
-            </div>
+                <div
+                  className={
+                    styles.scoreFooter
+                  }
+                >
+                  <span>
+                    {
+                      item.detalhe
+                    }
+                  </span>
 
-            <strong className={`${styles.kpiValue} ${styles.valuePink}`}>
-              5
-            </strong>
-          </button>
+                  {item.variacao !==
+                    0 && (
+                    <small
+                      className={
+                        item.variacao >
+                        0
+                          ? styles.positive
+                          : styles.negative
+                      }
+                    >
+                      {item.variacao >
+                      0
+                        ? '+'
+                        : ''}
+
+                      {
+                        item.variacao
+                      }%
+                    </small>
+                  )}
+                </div>
+              </button>
+            ),
+          )}
         </section>
 
-        <section className={styles.mainGrid}>
-          <div className={styles.leftColumn}>
-            <article className={`${styles.card} ${styles.calendarCard}`}>
-              <div className={styles.calendarHeader}>
-                <button
-                  type="button"
-                  onClick={mesAnterior}
-                  aria-label="Mês anterior"
-                >
-                  ‹
-                </button>
 
+        {/* =========================
+            ÁREA PRINCIPAL
+        ========================= */}
+
+        <section
+          className={
+            styles.mainArea
+          }
+        >
+          {/* GRÁFICO */}
+
+          <article
+            className={
+              styles.performance
+            }
+          >
+            <div
+              className={
+                styles.sectionHeader
+              }
+            >
+              <div>
                 <h2>
-                  {meses[mesAtual]} {anoAtual}
+                  Evolução de desempenho
                 </h2>
 
-                <button
-                  type="button"
-                  onClick={proximoMes}
-                  aria-label="Próximo mês"
+                <p>
+                  Sua equipe comparada aos adversários
+                </p>
+              </div>
+
+              <div
+                className={
+                  styles.period
+                }
+              >
+                <select
+                  value={
+                    periodo
+                  }
+                  onChange={(
+                    event,
+                  ) =>
+                    setPeriodo(
+                      event
+                        .target
+                        .value,
+                    )
+                  }
                 >
-                  ›
-                </button>
+                  <option>
+                    Últimas 7 partidas
+                  </option>
+
+                  <option>
+                    Últimas 5 partidas
+                  </option>
+
+                  <option>
+                    Últimas 3 partidas
+                  </option>
+                </select>
+
+                <ChevronDown
+                  size={15}
+                />
+              </div>
+            </div>
+
+
+            <div
+              className={
+                styles.chartBody
+              }
+            >
+              <div
+                className={
+                  styles.axis
+                }
+              >
+                <span>
+                  100
+                </span>
+
+                <span>
+                  75
+                </span>
+
+                <span>
+                  50
+                </span>
+
+                <span>
+                  25
+                </span>
               </div>
 
-              <div className={styles.calendarWeek}>
-                <span>D</span>
-                <span>S</span>
-                <span>T</span>
-                <span>Q</span>
-                <span>Q</span>
-                <span>S</span>
-                <span>S</span>
-              </div>
+              <div
+                className={
+                  styles.chartArea
+                }
+              >
+                <span
+                  className={
+                    styles.horizontal1
+                  }
+                />
 
-              <div className={styles.calendarDays}>
-                {diasDoMes.map((dia, index) => (
-                  <div
-                    key={`${dia}-${index}`}
-                    className={
-                      dia !== null && dia === diaSelecionado
-                        ? styles.selectedDay
-                        : ''
+                <span
+                  className={
+                    styles.horizontal2
+                  }
+                />
+
+                <span
+                  className={
+                    styles.horizontal3
+                  }
+                />
+
+                <span
+                  className={
+                    styles.horizontal4
+                  }
+                />
+
+                <svg
+                  viewBox="0 0 700 185"
+                  preserveAspectRatio="none"
+                >
+                  <polyline
+                    points={
+                      linhaAdversario
                     }
-                    onClick={() => {
-                      if (dia !== null) {
-                        setDiaSelecionado(dia);
-                      }
-                    }}
-                    style={{
-                      cursor: dia !== null ? 'pointer' : 'default',
-                    }}
-                  >
-                    {dia}
-                  </div>
-                ))}
-              </div>
-            </article>
+                    className={
+                      styles.adversaryLine
+                    }
+                  />
 
-            <article className={`${styles.card} ${styles.matchesCard}`}>
-              <h2>Ultimas partidas</h2>
+                  <polyline
+                    points={
+                      linhaEquipe
+                    }
+                    className={
+                      styles.teamLine
+                    }
+                  />
 
-              <div className={styles.tableWrapper}>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>EQUIPES</th>
-                      <th>MODALIDADE</th>
-                      <th>DATA</th>
-                      <th>RESULTADO</th>
-                      <th>STATUS</th>
-                    </tr>
-                  </thead>
+                  {renderPoints(
+                    dados.adversario,
+                    'adversario',
+                  )}
 
-                  <tbody>
-                    {partidas.map((partida) => (
-                      <tr
-                        key={partida.equipes}
-                        onClick={() => abrirPartida(partida)}
-                        style={{ cursor: 'pointer' }}
+                  {renderPoints(
+                    dados.equipe,
+                    'equipe',
+                  )}
+                </svg>
+
+                <div
+                  className={
+                    styles.labels
+                  }
+                >
+                  {dados.equipe.map(
+                    (
+                      _,
+                      index,
+                    ) => (
+                      <span
+                        key={
+                          index
+                        }
                       >
-                        <td>{partida.equipes}</td>
-                        <td>{partida.modalidade}</td>
-                        <td>{partida.data}</td>
-                        <td>{partida.resultado}</td>
+                        J
+                        {
+                          index +
+                          1
+                        }
+                      </span>
+                    ),
+                  )}
+                </div>
+              </div>
+            </div>
+
+
+            <footer
+              className={
+                styles.chartFooter
+              }
+            >
+              <span>
+                <i
+                  className={
+                    styles.teamLegend
+                  }
+                />
+
+                Sua equipe
+              </span>
+
+              <span>
+                <i
+                  className={
+                    styles.adversaryLegend
+                  }
+                />
+
+                Adversário
+              </span>
+            </footer>
+          </article>
+
+
+          {/* ATIVIDADES */}
+
+          <aside
+            className={
+              styles.activities
+            }
+          >
+            <div
+              className={
+                styles.sectionHeader
+              }
+            >
+              <div>
+                <h2>
+                  Atividades recentes
+                </h2>
+
+                <p>
+                  Últimas movimentações
+                </p>
+              </div>
+            </div>
+
+            <div
+              className={
+                styles.activityList
+              }
+            >
+              {atividades.map(
+                (
+                  atividade,
+                  index,
+                ) => (
+                  <button
+                    type="button"
+                    key={
+                      atividade.id
+                    }
+                    className={
+                      styles.activity
+                    }
+                    onClick={() =>
+                      abrirAtividade(
+                        atividade,
+                      )
+                    }
+                  >
+                    <span
+                      className={
+                        styles.activityNumber
+                      }
+                    >
+                      0
+                      {
+                        index +
+                        1
+                      }
+                    </span>
+
+                    <div
+                      className={
+                        styles.activityContent
+                      }
+                    >
+                      <strong>
+                        {
+                          atividade.titulo
+                        }
+                      </strong>
+
+                      <span>
+                        {
+                          atividade.horario
+                        }
+                      </span>
+                    </div>
+
+                    <ActivityIcon
+                      tipo={
+                        atividade.tipo
+                      }
+                    />
+                  </button>
+                ),
+              )}
+            </div>
+          </aside>
+        </section>
+
+
+        {/* =========================
+            PARTE INFERIOR
+        ========================= */}
+
+        <section
+          className={
+            styles.bottomArea
+          }
+        >
+          {/* PARTIDAS */}
+
+          <article
+            className={
+              styles.matches
+            }
+          >
+            <div
+              className={
+                styles.sectionHeader
+              }
+            >
+              <div>
+                <h2>
+                  Últimas partidas
+                </h2>
+
+                <p>
+                  Resultados mais recentes
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className={
+                  styles.link
+                }
+                onClick={() =>
+                  navigate(
+                    '/partidas',
+                  )
+                }
+              >
+                Ver todas
+              </button>
+            </div>
+
+            <div
+              className={
+                styles.tableWrapper
+              }
+            >
+              <table>
+                <thead>
+                  <tr>
+                    <th>
+                      Equipes
+                    </th>
+
+                    <th>
+                      Modalidade
+                    </th>
+
+                    <th>
+                      Data
+                    </th>
+
+                    <th>
+                      Placar
+                    </th>
+
+                    <th>
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {partidas.map(
+                    (
+                      partida,
+                    ) => (
+                      <tr
+                        key={
+                          partida.id
+                        }
+                        onClick={() =>
+                          navigate(
+                            '/partidas',
+                          )
+                        }
+                      >
+                        <td>
+                          <strong>
+                            {
+                              partida.equipe
+                            }
+                          </strong>
+
+                          <span>
+                            {
+                              partida.adversario
+                            }
+                          </span>
+                        </td>
+
+                        <td>
+                          {
+                            partida.modalidade
+                          }
+                        </td>
+
+                        <td>
+                          {
+                            partida.data
+                          }
+                        </td>
+
+                        <td
+                          className={
+                            styles.result
+                          }
+                        >
+                          {
+                            partida.resultado
+                          }
+                        </td>
+
                         <td>
                           <span
                             className={`${styles.status} ${
-                              styles[partida.statusClass]
+                              styles[
+                                statusClass(
+                                  partida.status,
+                                )
+                              ]
                             }`}
                           >
-                            {partida.status}
+                            {
+                              partida.status
+                            }
                           </span>
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </article>
-          </div>
+                    ),
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </article>
 
-          <aside className={styles.rightColumn}>
-            <article
-              className={`${styles.card} ${styles.activitiesCard}`}
+
+          {/* EQUIPES */}
+
+          <aside
+            className={
+              styles.teams
+            }
+          >
+            <div
+              className={
+                styles.sectionHeader
+              }
             >
-              <h2>Atividades recentes</h2>
+              <div>
+                <h2>
+                  Equipes em destaque
+                </h2>
 
-              <div className={styles.activityList}>
-                {atividades.map((atividade, index) => (
-                  <div
-                    className={styles.activity}
-                    key={index}
-                    onClick={() => abrirAtividade(atividade.texto)}
-                    style={{ cursor: 'pointer' }}
+                <p>
+                  Desempenho recente
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className={
+                  styles.link
+                }
+                onClick={() =>
+                  navigate(
+                    '/equipes',
+                  )
+                }
+              >
+                Ver equipes
+              </button>
+            </div>
+
+            <div
+              className={
+                styles.teamList
+              }
+            >
+              {equipes.map(
+                (
+                  equipe,
+                  index,
+                ) => (
+                  <button
+                    type="button"
+                    key={
+                      equipe.id
+                    }
+                    className={
+                      styles.team
+                    }
+                    onClick={() =>
+                      navigate(
+                        '/equipes',
+                      )
+                    }
                   >
-                    <span
-                      className={`${styles.activityIcon} ${
-                        atividade.tipo === 'pink'
-                          ? styles.activityPink
-                          : styles.activityGreen
-                      }`}
+                    <div
+                      className={
+                        styles.teamPosition
+                      }
                     >
-                      {atividade.tipo === 'green' ? '🏆' : ''}
-                    </span>
-
-                    <div>
-                      <p>{atividade.texto}</p>
-                      <small>{atividade.tempo}</small>
+                      0
+                      {
+                        index +
+                        1
+                      }
                     </div>
-                  </div>
-                ))}
-              </div>
-            </article>
 
-            <article className={`${styles.card} ${styles.teamsCard}`}>
-              <h2>Equipes em destaque</h2>
+                    <div
+                      className={
+                        styles.teamBadge
+                      }
+                    >
+                      {
+                        equipe.sigla
+                      }
+                    </div>
 
-              <div className={styles.teamList}>
-                {equipes.map((equipe) => (
-                  <div
-                    className={styles.featuredTeam}
-                    key={equipe.nome}
-                    onClick={() => abrirEquipe(equipe.nome)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <span
-                      className={`${styles.teamCircle} ${
-                        styles[equipe.classe]
-                      }`}
-                    />
+                    <div
+                      className={
+                        styles.teamText
+                      }
+                    >
+                      <strong>
+                        {
+                          equipe.nome
+                        }
+                      </strong>
 
-                    <span className={styles.teamName}>
-                      {equipe.nome}
-                    </span>
+                      <span>
+                        {
+                          equipe.modalidade
+                        }
+                      </span>
+                    </div>
 
-                    <span className={styles.teamPercentage}>
-                      {equipe.porcentagem}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </article>
-
-            <article className={`${styles.card} ${styles.chartCard}`}>
-              <h2>Evolução de desempenho</h2>
-
-              <div className={styles.chart}>
-                <div className={styles.chartYAxis}>
-                  <span>20 mil</span>
-                  <span>15 mil</span>
-                  <span>10 mil</span>
-                  <span>5 mil</span>
-                  <span>0</span>
-                </div>
-
-                <svg
-                  className={styles.chartSvg}
-                  viewBox="0 0 500 220"
-                  preserveAspectRatio="none"
-                >
-                  <line x1="45" y1="20" x2="490" y2="20" />
-                  <line x1="45" y1="65" x2="490" y2="65" />
-                  <line x1="45" y1="110" x2="490" y2="110" />
-                  <line x1="45" y1="155" x2="490" y2="155" />
-                  <line x1="45" y1="200" x2="490" y2="200" />
-
-                  <polyline
-                    points="45,150 190,105 335,125 490,30"
-                    fill="none"
-                    stroke="#3385ff"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-
-                  <polyline
-                    points="45,175 190,165 335,100 490,100"
-                    fill="none"
-                    stroke="#00b074"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-
-                  <circle cx="45" cy="150" r="4" fill="#3385ff" />
-                  <circle cx="190" cy="105" r="4" fill="#3385ff" />
-                  <circle cx="335" cy="125" r="4" fill="#3385ff" />
-                  <circle cx="490" cy="30" r="4" fill="#3385ff" />
-
-                  <circle cx="45" cy="175" r="4" fill="#00b074" />
-                  <circle cx="190" cy="165" r="4" fill="#00b074" />
-                  <circle cx="335" cy="100" r="4" fill="#00b074" />
-                  <circle cx="490" cy="100" r="4" fill="#00b074" />
-                </svg>
-
-                <div className={styles.chartXAxis}>
-                  <span>P1</span>
-                  <span>P2</span>
-                  <span>P3</span>
-                  <span>P4</span>
-                </div>
-              </div>
-
-              <div className={styles.chartLegend}>
-                <span>
-                  <i className={styles.legendGreen}></i>
-                  Adversários
-                </span>
-
-                <span>
-                  <i className={styles.legendBlue}></i>
-                  Sua equipe
-                </span>
-              </div>
-            </article>
+                    <strong
+                      className={
+                        styles.teamValue
+                      }
+                    >
+                      {
+                        equipe.desempenho
+                      }
+                      <small>
+                        %
+                      </small>
+                    </strong>
+                  </button>
+                ),
+              )}
+            </div>
           </aside>
         </section>
-      </section>
+      </div>
     </main>
   );
+};
+
+
+const ActivityIcon = ({
+  tipo,
+}: {
+  tipo:
+    AtividadeRecente['tipo'];
+}) => {
+  if (
+    tipo ===
+    'video'
+  ) {
+    return (
+      <Play
+        className={
+          styles.activityIcon
+        }
+        size={15}
+      />
+    );
+  }
+
+
+  if (
+    tipo ===
+    'partida'
+  ) {
+    return (
+      <Trophy
+        className={
+          styles.activityIcon
+        }
+        size={15}
+      />
+    );
+  }
+
+
+  if (
+    tipo ===
+    'atleta'
+  ) {
+    return (
+      <Users
+        className={
+          styles.activityIcon
+        }
+        size={15}
+      />
+    );
+  }
+
+
+  return (
+    <BarChart3
+      className={
+        styles.activityIcon
+      }
+      size={15}
+    />
+  );
+};
+
+
+function criarLinha(
+  valores: number[],
+) {
+  const largura =
+    700;
+
+  const altura =
+    160;
+
+
+  return valores
+    .map(
+      (
+        valor,
+        index,
+      ) => {
+        const x =
+          valores.length ===
+          1
+            ? largura /
+              2
+            : (index *
+                largura) /
+              (valores.length -
+                1);
+
+
+        const y =
+          altura -
+          (valor /
+            100) *
+            altura +
+          10;
+
+
+        return `${x},${y}`;
+      },
+    )
+    .join(' ');
 }
+
+
+function renderPoints(
+  valores: number[],
+
+  tipo:
+    | 'equipe'
+    | 'adversario',
+) {
+  const largura =
+    700;
+
+  const altura =
+    160;
+
+
+  return valores.map(
+    (
+      valor,
+      index,
+    ) => {
+      const x =
+        valores.length ===
+        1
+          ? largura /
+            2
+          : (index *
+              largura) /
+            (valores.length -
+              1);
+
+
+      const y =
+        altura -
+        (valor /
+          100) *
+          altura +
+        10;
+
+
+      return (
+        <circle
+          key={`${tipo}-${index}`}
+          cx={x}
+          cy={y}
+          r="4"
+          className={
+            tipo ===
+            'equipe'
+              ? styles.teamPoint
+              : styles.adversaryPoint
+          }
+        />
+      );
+    },
+  );
+}
+
+
+function statusClass(
+  status:
+    StatusPartida,
+) {
+  if (
+    status ===
+    'Analisada'
+  ) {
+    return 'statusDone';
+  }
+
+
+  if (
+    status ===
+    'Em análise'
+  ) {
+    return 'statusAnalysis';
+  }
+
+
+  return 'statusPending';
+}
+
 
 export default Dashboard;

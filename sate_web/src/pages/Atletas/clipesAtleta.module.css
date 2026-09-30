@@ -1,6 +1,6 @@
 .page {
     min-height: 100vh;
-    background-color:  #005942;
+    background-color: #005942;
     padding: 24px 40px;
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
@@ -21,7 +21,9 @@
     transition: color 0.2s;
 }
 
-.backButton:hover { color: #ffffff; }
+.backButton:hover {
+    color: #ffffff;
+}
 
 .toolbar {
     background: #ffffff;
@@ -42,9 +44,25 @@
     flex-wrap: wrap;
 }
 
-.titleArea { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-.titleRow { display: flex; align-items: center; gap: 12px; }
-.titleRow h1 { margin: 0; font-size: 32px; font-weight: 800; color: #000; }
+.titleArea {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.titleRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.titleRow h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    color: #000;
+}
 
 .countBadge {
     background: #d5f5e3;
@@ -55,9 +73,16 @@
     font-weight: 700;
 }
 
-.subtitle { margin: 0; font-size: 13px; color: #666; max-width: 600px; }
+.subtitle {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+    max-width: 600px;
+}
 
-.championshipSelectWrapper { position: relative; }
+.championshipSelectWrapper {
+    position: relative;
+}
 
 .championshipSelect {
     display: flex;
@@ -75,7 +100,9 @@
     transition: background 0.2s;
 }
 
-.championshipSelect:hover { background: #e5e5e5; }
+.championshipSelect:hover {
+    background: #e5e5e5;
+}
 
 .dropdown {
     position: absolute;
@@ -106,10 +133,23 @@
     transition: background 0.2s;
 }
 
-.dropdownItem:hover { background: #f0f0f0; }
+.dropdownItem:hover {
+    background: #f0f0f0;
+}
 
-.filtersRow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.filterLabel { font-size: 14px; font-weight: 600; color: #666; margin-right: 4px; }
+.filtersRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filterLabel {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-right: 4px;
+}
 
 .filterButton {
     display: flex;
@@ -127,19 +167,332 @@
     transition: all 0.2s;
 }
 
-.filterButton:hover { background: #e5e5e5; }
-.filterActive { background: #004d40; color: #ffffff; }
+.filterButton:hover {
+    background: #e5e5e5;
+}
 
-/* ============================================
-   GRID 2 COLUNAS
-============================================ */
+.filterActive {
+    background: #004d40;
+    color: #ffffff;
+}
+
+/* =====================================================
+   TRY — PLAYER + OUTROS CLIPES
+===================================================== */
+
+.tryLayout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 22px;
+    align-items: stretch;
+}
+
+/* PLAYER PRINCIPAL */
+
+.mainPlayerCard {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.mainVideo {
+    position: relative;
+    width: 100%;
+    height: 470px;
+    background: #000;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.mainThumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.mainPlayButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: rgba(0, 40, 30, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.mainPlayButton:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+    background: rgba(0, 77, 50, 0.85);
+}
+
+.mainPlayButton svg {
+    margin-left: 4px;
+}
+
+/* CONTROLES */
+
+.videoControls {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    height: 54px;
+    background: rgba(0, 0, 0, 0.88);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+.controlPlay {
+    width: 34px;
+    height: 34px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.progressContainer {
+    flex: 1;
+}
+
+.progressTrack {
+    position: relative;
+    width: 100%;
+    height: 4px;
+    background: #ffffff;
+    border-radius: 10px;
+}
+
+.progressPlayed {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 38%;
+    background: #75d5ad;
+    border-radius: 10px;
+}
+
+.progressIndicator {
+    position: absolute;
+    left: 38%;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    background: #ffffff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.videoTime {
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 38px;
+}
+
+/* INFORMAÇÕES ABAIXO DO PLAYER */
+
+.mainVideoInfo {
+    padding: 18px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.mainVideoTime {
+    display: block;
+    color: #999;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.mainVideoInfo h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #111;
+    font-weight: 800;
+}
+
+.mainVideoInfo p {
+    margin: 3px 0 0;
+    color: #666;
+    font-size: 13px;
+}
+
+.mainActions {
+    display: flex;
+    gap: 8px;
+}
+
+.mainActions button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    background: #f1f1f1;
+    color: #333;
+    border-radius: 7px;
+    padding: 9px 12px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.mainActions button:hover {
+    background: #e3e3e3;
+}
+
+/* =====================================================
+   OUTROS CLIPES
+===================================================== */
+
+.otherClipsCard {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.otherClipsCard h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    color: #111;
+    font-weight: 800;
+}
+
+.otherClipsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.otherClip {
+    width: 100%;
+    min-height: 84px;
+    border: none;
+    background: #f1f3f3;
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.otherClip:hover {
+    background: #e8ebea;
+    transform: translateY(-1px);
+}
+
+.otherClipActive {
+    background: #004d32;
+    color: #ffffff;
+}
+
+.otherClipActive:hover {
+    background: #004d32;
+}
+
+.otherThumbnail {
+    width: 82px;
+    height: 66px;
+    border-radius: 7px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #222;
+}
+
+.otherThumbnail img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.otherClipInfo {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.otherClipInfo strong {
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.otherClipInfo span {
+    font-size: 10px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.otherClipActive .otherClipInfo span {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.otherPlay {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    border-radius: 50%;
+    border: 1.5px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #222;
+    background: #fff;
+}
+
+.otherClipActive .otherPlay {
+    background: #55c99b;
+    border-color: #55c99b;
+    color: #fff;
+}
+
+.otherPlay svg {
+    margin-left: 1px;
+}
+
+/* =====================================================
+   GRID ORIGINAL DOS OUTROS FILTROS
+===================================================== */
+
 .clipesGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
-/* CARD */
 .clipeCard {
     background: #ffffff;
     border-radius: 12px;
@@ -156,7 +509,6 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* VÍDEO */
 .videoWrapper {
     position: relative;
     width: 45%;
@@ -174,7 +526,9 @@
     transition: transform 0.4s;
 }
 
-.videoWrapper:hover .thumbnail { transform: scale(1.08); }
+.videoWrapper:hover .thumbnail {
+    transform: scale(1.08);
+}
 
 .playOverlay {
     position: absolute;
@@ -197,7 +551,6 @@
     transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* INFO */
 .clipeInfo {
     flex: 1;
     padding: 14px 16px;
@@ -269,7 +622,9 @@
     width: fit-content;
 }
 
-.downloadButton:hover { background: #e0e0e0; }
+.downloadButton:hover {
+    background: #e0e0e0;
+}
 
 .shareButton {
     display: flex;
@@ -285,7 +640,9 @@
     transition: background 0.2s;
 }
 
-.shareButton:hover { background: #e0e0e0; }
+.shareButton:hover {
+    background: #e0e0e0;
+}
 
 .emptyState {
     background: #ffffff;
@@ -296,7 +653,10 @@
     font-size: 15px;
 }
 
-/* MODAL DE VÍDEO */
+/* =====================================================
+   MODAL
+===================================================== */
+
 .videoModalOverlay {
     position: fixed;
     inset: 0;
@@ -336,7 +696,9 @@
     transition: background 0.2s;
 }
 
-.videoModalClose:hover { background: rgba(0, 0, 0, 0.9); }
+.videoModalClose:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
 
 .videoPlayer {
     width: 100%;
@@ -345,21 +707,100 @@
     background: #000;
 }
 
-.videoModalInfo { padding: 16px 20px; background: #fff; color: #000; }
-.videoModalInfo h3 { margin: 0 0 4px; font-size: 18px; }
-.videoModalInfo p { margin: 0; font-size: 13px; color: #666; }
+.videoModalInfo {
+    padding: 16px 20px;
+    background: #fff;
+    color: #000;
+}
 
-/* RESPONSIVO */
+.videoModalInfo h3 {
+    margin: 0 0 4px;
+    font-size: 18px;
+}
+
+.videoModalInfo p {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+}
+
+/* =====================================================
+   RESPONSIVO
+===================================================== */
+
+@media (max-width: 1100px) {
+
+    .tryLayout {
+        grid-template-columns: 1fr;
+    }
+
+    .otherClipsCard {
+        width: 100%;
+    }
+
+    .otherClipsList {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
 @media (max-width: 1000px) {
-    .clipesGrid { grid-template-columns: 1fr; }
+
+    .clipesGrid {
+        grid-template-columns: 1fr;
+    }
+
 }
 
 @media (max-width: 700px) {
-    .page { padding: 16px; }
-    .toolbar { padding: 20px; }
-    .titleRow h1 { font-size: 24px; }
-    .toolbarHeader { flex-direction: column; }
-    .championshipSelect { width: 100%; justify-content: space-between; }
-    .clipeCard { flex-direction: column; height: auto; }
-    .videoWrapper { width: 100%; height: 180px; }
+
+    .page {
+        padding: 16px;
+    }
+
+    .toolbar {
+        padding: 20px;
+    }
+
+    .titleRow h1 {
+        font-size: 24px;
+    }
+
+    .toolbarHeader {
+        flex-direction: column;
+    }
+
+    .championshipSelect {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .clipeCard {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .videoWrapper {
+        width: 100%;
+        height: 180px;
+    }
+
+    .mainVideo {
+        height: 300px;
+    }
+
+    .mainVideoInfo {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .mainActions {
+        width: 100%;
+    }
+
+    .otherClipsList {
+        grid-template-columns: 1fr;
+    }
+
 }

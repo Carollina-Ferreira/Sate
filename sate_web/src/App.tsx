@@ -1,43 +1,44 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // =================================
 // PÁGINAS DE ACESSO
 // =================================
-import Login from './pages/Login/login';
-import Cadastro from './pages/Cadastro/cadastro';
-import EsqueciSenha from './pages/EsqueciSenha/esqueciSenha';
+import Login from "./pages/Login/login";
+import Cadastro from "./pages/Cadastro/cadastro";
+import EsqueciSenha from "./pages/EsqueciSenha/esqueciSenha";
 
 // =================================
 // PÁGINAS DE BOAS-VINDAS / CONFIGURAÇÃO
 // =================================
-import BoasVindas from './pages/BoasVindas/boasVindas';
-import SelecaoEsporte from './pages/SelecaoEsporte/selecaoEsporte';
-import ConfiguracaoAnalise from './pages/ConfiguracaoAnalise/configuracaoAnalise';
-import ConfiguracaoEquipe from './pages/ConfiguracaoEquipe/configuracaoEquipe';
-import ConfiguracaoConcluida from './pages/ConfiguracaoConcluida/configuracaoConcluida';
+import BoasVindas from "./pages/BoasVindas/boasVindas";
+import SelecaoEsporte from "./pages/SelecaoEsporte/selecaoEsporte";
+import ConfiguracaoAnalise from "./pages/ConfiguracaoAnalise/configuracaoAnalise";
+import ConfiguracaoEquipe from "./pages/ConfiguracaoEquipe/configuracaoEquipe";
+import ConfiguracaoConcluida from "./pages/ConfiguracaoConcluida/configuracaoConcluida";
 
 // =================================
 // LAYOUT
 // =================================
-import Layout from './components/Layout/layout';
+import Layout from "./components/Layout/layout";
 
 // =================================
 // ROTA PRIVADA
 // =================================
-import RotaPrivada from './components/RotaPrivada/RotaPrivada';
+import RotaPrivada from "./components/RotaPrivada/RotaPrivada";
 
 // =================================
 // PÁGINAS INTERNAS
 // =================================
-import Dashboard from './pages/Dashboard/dashboard';
-import Equipes from './pages/Equipes/equipes';
-import Altetas from './pages/Atletas/atletas';
-import Comparacoes from './pages/Comparacoes/compracoes';
-import Estatisticas from './pages/Estatisticas/estatisticas';
-import Configuracoes from './pages/Configuracoes/configuracoes';
-import AnaliseVideo from './pages/AnaliseVideos/analiseVideos';
-import CadastroAtleta from './pages/Atletas/modalCadastroAtletas';
-import Partidas from './pages/Partidas/partidas';
+import Dashboard from "./pages/Dashboard/dashboard";
+import Equipes from "./pages/Equipes/equipes";
+import Altetas from "./pages/Atletas/atletas";
+import Comparacoes from "./pages/Comparacoes/compracoes";
+import Estatisticas from "./pages/Estatisticas/estatisticas";
+import Configuracoes from "./pages/Configuracoes/configuracoes";
+import AnaliseVideo from "./pages/AnaliseVideos/analiseVideos";
+import CadastroAtleta from "./pages/Atletas/modalCadastroAtletas";
+import Partidas from "./pages/Partidas/partidas";
+import DetalhesDaPartida from "./pages/DetalhesDaPartida/partidas2";
 
 function App() {
   return (
@@ -100,7 +101,7 @@ function App() {
 
           <Route element={<Layout />}>
 
-            {/* ================================
+            {/* =================================
                 DASHBOARD
             ================================= */}
 
@@ -109,7 +110,7 @@ function App() {
               element={<Dashboard />}
             />
 
-            {/* ================================
+            {/* =================================
                 EQUIPES
             ================================= */}
 
@@ -118,7 +119,7 @@ function App() {
               element={<Equipes />}
             />
 
-            {/* ================================
+            {/* =================================
                 ATLETAS
             ================================= */}
 
@@ -127,7 +128,7 @@ function App() {
               element={<Altetas />}
             />
 
-            {/* ================================
+            {/* =================================
                 CADASTRO DE ATLETA
             ================================= */}
 
@@ -136,7 +137,7 @@ function App() {
               element={<CadastroAtleta />}
             />
 
-            {/* ================================
+            {/* =================================
                 ANÁLISE DE VÍDEOS
             ================================= */}
 
@@ -145,7 +146,7 @@ function App() {
               element={<AnaliseVideo />}
             />
 
-            {/* ================================
+            {/* =================================
                 PARTIDAS
             ================================= */}
 
@@ -154,7 +155,16 @@ function App() {
               element={<Partidas />}
             />
 
-            {/* ================================
+            {/* =================================
+                DETALHES DA PARTIDA
+            ================================= */}
+
+            <Route
+              path="/detalhes-partida"
+              element={<DetalhesDaPartida />}
+            />
+
+            {/* =================================
                 ESTATÍSTICAS
             ================================= */}
 
@@ -163,7 +173,7 @@ function App() {
               element={<Estatisticas />}
             />
 
-            {/* ================================
+            {/* =================================
                 COMPARAÇÕES
             ================================= */}
 
@@ -172,7 +182,7 @@ function App() {
               element={<Comparacoes />}
             />
 
-            {/* ================================
+            {/* =================================
                 CONFIGURAÇÕES
             ================================= */}
 

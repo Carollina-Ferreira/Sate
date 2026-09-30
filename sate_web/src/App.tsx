@@ -8,15 +8,23 @@ import Cadastro from "./pages/Cadastro/cadastro";
 import EsqueciSenha from "./pages/EsqueciSenha/esqueciSenha";
 
 // =================================
-// PÁGINA DE BOAS-VINDAS
+// PÁGINAS DE BOAS-VINDAS / CONFIGURAÇÃO
 // =================================
 import BoasVindas from "./pages/BoasVindas/boasVindas";
 import SelecaoEsporte from "./pages/SelecaoEsporte/selecaoEsporte";
+import ConfiguracaoAnalise from "./pages/ConfiguracaoAnalise/configuracaoAnalise";
+import ConfiguracaoEquipe from "./pages/ConfiguracaoEquipe/configuracaoEquipe";
+import ConfiguracaoConcluida from "./pages/ConfiguracaoConcluida/configuracaoConcluida";
 
 // =================================
 // LAYOUT
 // =================================
 import Layout from "./components/Layout/layout";
+
+// =================================
+// ROTA PRIVADA
+// =================================
+import RotaPrivada from "./components/RotaPrivada/RotaPrivada";
 
 // =================================
 // PÁGINAS INTERNAS
@@ -28,6 +36,7 @@ import Comparacoes from "./pages/Comparacoes/compracoes";
 import Estatisticas from "./pages/Estatisticas/estatisticas";
 import Configuracoes from "./pages/Configuracoes/configuracoes";
 import AnaliseVideo from "./pages/AnaliseVideos/analiseVideos";
+import CadastroAtleta from "./pages/Atletas/modalCadastroAtletas";
 import Partidas from "./pages/Partidas/partidas";
 import DetalhesDaPartida from "./pages/DetalhesDaPartida/partidas2";
 
@@ -37,7 +46,7 @@ function App() {
       <Routes>
 
         {/* =================================
-            PÁGINAS DE ACESSO
+            PÁGINAS PÚBLICAS
         ================================= */}
 
         <Route
@@ -56,7 +65,7 @@ function App() {
         />
 
         {/* =================================
-            BOAS-VINDAS
+            PÁGINAS DE BOAS-VINDAS / CONFIGURAÇÃO
         ================================= */}
 
         <Route
@@ -69,65 +78,120 @@ function App() {
           element={<SelecaoEsporte />}
         />
 
+        <Route
+          path="/configuracao-analise"
+          element={<ConfiguracaoAnalise />}
+        />
+
+        <Route
+          path="/configuracao-equipe"
+          element={<ConfiguracaoEquipe />}
+        />
+
+        <Route
+          path="/configuracao-concluida"
+          element={<ConfiguracaoConcluida />}
+        />
+
         {/* =================================
             ÁREA INTERNA DO SATE
         ================================= */}
 
-        <Route element={<Layout />}>
+        <Route element={<RotaPrivada />}>
 
-          {/* Dashboard */}
-          <Route
-            path="/inicio"
-            element={<Dashboard />}
-          />
+          <Route element={<Layout />}>
 
-          {/* Equipes */}
-          <Route
-            path="/equipes"
-            element={<Equipes />}
-          />
+            {/* =================================
+                DASHBOARD
+            ================================= */}
 
-          {/* Atletas */}
-          <Route
-            path="/atletas"
-            element={<Altetas />}
-          />
+            <Route
+              path="/inicio"
+              element={<Dashboard />}
+            />
 
-          {/* Análise de Vídeos */}
-          <Route
-            path="/videos"
-            element={<AnaliseVideo />}
-          />
+            {/* =================================
+                EQUIPES
+            ================================= */}
 
-          {/* Partidas */}
-          <Route
-            path="/partidas"
-            element={<Partidas />}
-          />
+            <Route
+              path="/equipes"
+              element={<Equipes />}
+            />
 
-          {/* DETALHES DA PARTIDA */}
-          <Route
-            path="/detalhes-partida"
-            element={<DetalhesDaPartida />}
-          />
+            {/* =================================
+                ATLETAS
+            ================================= */}
 
-          {/* Estatísticas */}
-          <Route
-            path="/estatisticas"
-            element={<Estatisticas />}
-          />
+            <Route
+              path="/atletas"
+              element={<Altetas />}
+            />
 
-          {/* Comparações */}
-          <Route
-            path="/comparacoes"
-            element={<Comparacoes />}
-          />
+            {/* =================================
+                CADASTRO DE ATLETA
+            ================================= */}
 
-          {/* Configurações */}
-          <Route
-            path="/configuracoes"
-            element={<Configuracoes />}
-          />
+            <Route
+              path="/cadastro-atleta"
+              element={<CadastroAtleta />}
+            />
+
+            {/* =================================
+                ANÁLISE DE VÍDEOS
+            ================================= */}
+
+            <Route
+              path="/videos"
+              element={<AnaliseVideo />}
+            />
+
+            {/* =================================
+                PARTIDAS
+            ================================= */}
+
+            <Route
+              path="/partidas"
+              element={<Partidas />}
+            />
+
+            {/* =================================
+                DETALHES DA PARTIDA
+            ================================= */}
+
+            <Route
+              path="/detalhes-partida"
+              element={<DetalhesDaPartida />}
+            />
+
+            {/* =================================
+                ESTATÍSTICAS
+            ================================= */}
+
+            <Route
+              path="/estatisticas"
+              element={<Estatisticas />}
+            />
+
+            {/* =================================
+                COMPARAÇÕES
+            ================================= */}
+
+            <Route
+              path="/comparacoes"
+              element={<Comparacoes />}
+            />
+
+            {/* =================================
+                CONFIGURAÇÕES
+            ================================= */}
+
+            <Route
+              path="/configuracoes"
+              element={<Configuracoes />}
+            />
+
+          </Route>
 
         </Route>
 

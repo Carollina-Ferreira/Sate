@@ -10,6 +10,10 @@ interface ForgotPasswordState {
   email: string;
 }
 
+interface ForgotPasswordResponse {
+  mensagem: string;
+}
+
 const EsqueciSenha = () => {
   const [form, setForm] = useState<ForgotPasswordState>({
     email: '',
@@ -18,20 +22,73 @@ const EsqueciSenha = () => {
   const [emailEnviado, setEmailEnviado] = useState(false);
   const [reenviando, setReenviando] = useState(false);
   const [mensagemReenvio, setMensagemReenvio] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({
       email: e.target.value,
     });
+
+    if (erro) {
+      setErro('');
+    }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const solicitarRecuperacao = async () => {
+    const resposta = await fetch(
+      'http://localhost:3000/api/password/esqueci-senha',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: form.email,
+        }),
+      }
+    );
+
+    const data: ForgotPasswordResponse = await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        data.mensagem || 'Não foi possível solicitar a recuperação.'
+      );
+    }
+
+    return data;
+  };
+
+  const handleSubmit = async (
+    e: FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
-    console.log('Recuperação de senha:', form);
-
+    setErro('');
     setMensagemReenvio('');
-    setEmailEnviado(true);
+    setLoading(true);
+
+    try {
+      await solicitarRecuperacao();
+
+      setEmailEnviado(true);
+    } catch (error) {
+      console.error(
+        'Erro ao solicitar recuperação:',
+        error
+      );
+
+      if (error instanceof Error) {
+        setErro(error.message);
+      } else {
+        setErro(
+          'Não foi possível conectar ao servidor.'
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fecharModal = () => {
@@ -39,15 +96,28 @@ const EsqueciSenha = () => {
     setMensagemReenvio('');
   };
 
-  const reenviarEmail = () => {
+  const reenviarEmail = async () => {
     setReenviando(true);
     setMensagemReenvio('');
 
-    // Simulação do reenvio do e-mail
-    setTimeout(() => {
+    try {
+      await solicitarRecuperacao();
+
+      setMensagemReenvio(
+        'E-mail reenviado com sucesso!'
+      );
+    } catch (error) {
+      console.error(
+        'Erro ao reenviar email:',
+        error
+      );
+
+      setMensagemReenvio(
+        'Não foi possível reenviar o e-mail.'
+      );
+    } finally {
       setReenviando(false);
-      setMensagemReenvio('E-mail reenviado com sucesso!');
-    }, 1500);
+    }
   };
 
   return (
@@ -205,16 +275,31 @@ const EsqueciSenha = () => {
                 autoComplete="email"
                 placeholder="Digite seu email"
                 required
+                disabled={loading}
               />
 
             </div>
 
 
+            {erro && (
+              <p
+                style={{
+                  color: '#D52941',
+                  marginTop: '8px',
+                  fontSize: '14px',
+                }}
+              >
+                {erro}
+              </p>
+            )}
+
+
             <button
               type="submit"
               className={styles.submitButton}
+              disabled={loading}
             >
-              Enviar link
+              {loading ? 'Enviando...' : 'Enviar link'}
             </button>
 
           </form>
@@ -312,7 +397,9 @@ const EsqueciSenha = () => {
               onClick={reenviarEmail}
               disabled={reenviando}
             >
-              {reenviando ? 'Reenviando...' : 'Reenviar e-mail'}
+              {reenviando
+                ? 'Reenviando...'
+                : 'Reenviar e-mail'}
             </button>
 
 

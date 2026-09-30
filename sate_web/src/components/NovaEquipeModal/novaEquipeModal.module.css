@@ -4,7 +4,6 @@
 
 .overlay {
   position: fixed;
-
   inset: 0;
 
   z-index: 1000;
@@ -13,15 +12,15 @@
   align-items: center;
   justify-content: center;
 
-  padding: 24px;
+  padding: 14px;
 
   box-sizing: border-box;
 
-  background: rgba(0, 30, 22, 0.72);
+  background: rgba(0, 30, 22, 0.68);
 
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
 
-  animation: fadeIn 0.18s ease;
+  overflow: hidden;
 }
 
 
@@ -30,8 +29,8 @@
 ===================================== */
 
 .modal {
-  width: min(760px, 100%);
-  max-height: calc(100vh - 48px);
+  width: min(1080px, calc(100vw - 28px));
+  max-height: calc(100vh - 28px);
 
   display: flex;
   flex-direction: column;
@@ -46,8 +45,6 @@
 
   box-shadow:
     0 24px 60px rgba(0, 0, 0, 0.28);
-
-  animation: modalEnter 0.2s ease;
 }
 
 
@@ -60,9 +57,9 @@
   align-items: flex-start;
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 24px;
 
-  padding: 22px 24px 18px;
+  padding: 18px 26px 15px;
 
   border-bottom: 1px solid #cbd8d2;
 }
@@ -74,7 +71,7 @@
 
   color: #11845f;
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -86,7 +83,7 @@
 
   color: #20332b;
 
-  font-size: 23px;
+  font-size: 27px;
 
   font-weight: 700;
 }
@@ -94,14 +91,14 @@
 .modalHeader p {
   margin: 5px 0 0;
 
-  color: #6c7b74;
+  color: #6d7b74;
 
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .closeButton {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
 
   flex-shrink: 0;
 
@@ -113,7 +110,7 @@
 
   border: none;
 
-  border-radius: 9px;
+  border-radius: 10px;
 
   background: transparent;
 
@@ -127,7 +124,7 @@
 }
 
 .closeButton:hover {
-  background: #d9e4df;
+  background: #d7e2dd;
 
   color: #24362e;
 }
@@ -138,29 +135,15 @@
 ===================================== */
 
 .content {
-  flex: 1;
-
   display: grid;
 
-  grid-template-columns: 190px 1fr;
+  grid-template-columns: 210px minmax(0, 1fr);
 
-  gap: 22px;
+  gap: 24px;
 
-  overflow-y: auto;
-
-  padding: 22px 24px;
+  padding: 18px 26px 14px;
 
   box-sizing: border-box;
-}
-
-.content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.content::-webkit-scrollbar-thumb {
-  background: #bfcec7;
-
-  border-radius: 10px;
 }
 
 
@@ -172,31 +155,31 @@
   display: flex;
   flex-direction: column;
 
-  gap: 9px;
+  gap: 10px;
 }
 
 .imagePreview {
   width: 100%;
-  height: 180px;
+  height: 185px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  gap: 7px;
+  gap: 8px;
 
   overflow: hidden;
 
   padding: 0;
 
-  border: 1px dashed #9cb3a9;
+  border: 1px dashed #9eb4aa;
 
   border-radius: 13px;
 
   background: #dce7e2;
 
-  color: #53655d;
+  color: #52635b;
 
   font-family: inherit;
 
@@ -210,7 +193,7 @@
 .imagePreview:hover {
   border-color: #16a875;
 
-  background: #d4e4dc;
+  background: #d6e4dd;
 }
 
 .imagePreview img {
@@ -221,8 +204,8 @@
 }
 
 .cameraCircle {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
 
   display: flex;
   align-items: center;
@@ -232,17 +215,17 @@
 
   background: #c5dbd0;
 
-  color: #087c59;
+  color: #087b5b;
 }
 
 .imagePreview strong {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .imagePreview span {
-  color: #839088;
+  color: #829088;
 
-  font-size: 8px;
+  font-size: 9px;
 }
 
 .hiddenInput {
@@ -250,37 +233,27 @@
 }
 
 .changeImageButton {
-  height: 34px;
+  height: 38px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 6px;
+  gap: 7px;
 
   border: 1px solid #c4d2cb;
 
   border-radius: 8px;
 
-  background: #f5f8f6;
+  background: #f6f9f7;
 
   color: #41534a;
 
   font-family: inherit;
 
-  font-size: 9px;
+  font-size: 10px;
 
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.changeImageButton:hover {
-  background: #ffffff;
-
-  border-color: #9fb3aa;
 }
 
 
@@ -292,20 +265,20 @@
   display: flex;
   flex-direction: column;
 
-  gap: 16px;
+  gap: 13px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
 
-  gap: 7px;
+  gap: 6px;
 }
 
 .field label {
   color: #42554c;
 
-  font-size: 10px;
+  font-size: 12px;
 
   font-weight: 600;
 }
@@ -313,9 +286,9 @@
 .field input,
 .field select {
   width: 100%;
-  height: 42px;
+  height: 46px;
 
-  padding: 0 12px;
+  padding: 0 14px;
 
   box-sizing: border-box;
 
@@ -323,15 +296,15 @@
 
   border: 1px solid #c6d4cd;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
-  background: #f7faf8;
+  background: #f8faf9;
 
   color: #293a32;
 
   font-family: inherit;
 
-  font-size: 10px;
+  font-size: 13px;
 
   transition:
     border-color 0.2s ease,
@@ -339,16 +312,11 @@
     background 0.2s ease;
 }
 
-.field input:hover,
-.field select:hover {
-  border-color: #aebfb7;
-}
-
 .field input:focus,
 .field select:focus {
-  background: #ffffff;
-
   border-color: #16a875;
+
+  background: #ffffff;
 
   box-shadow:
     0 0 0 3px rgba(22, 168, 117, 0.1);
@@ -359,7 +327,7 @@
 
   grid-template-columns: 1fr 1fr;
 
-  gap: 12px;
+  gap: 14px;
 }
 
 
@@ -371,22 +339,22 @@
   display: flex;
   flex-wrap: wrap;
 
-  gap: 7px;
+  gap: 8px;
 }
 
 .sportButton {
-  height: 34px;
+  height: 38px;
 
   display: flex;
   align-items: center;
 
-  gap: 5px;
+  gap: 6px;
 
-  padding: 0 11px;
+  padding: 0 13px;
 
   border: 1px solid #c8d5cf;
 
-  border-radius: 18px;
+  border-radius: 20px;
 
   background: #f5f8f6;
 
@@ -394,21 +362,14 @@
 
   font-family: inherit;
 
-  font-size: 9px;
+  font-size: 11px;
 
   cursor: pointer;
 
   transition:
     background 0.2s ease,
     color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.sportButton:hover {
-  transform: translateY(-1px);
-
-  border-color: #9fb5aa;
+    border-color 0.2s ease;
 }
 
 .sportButtonActive {
@@ -425,32 +386,42 @@
 ===================================== */
 
 .matchSection {
-  display: flex;
-  flex-direction: column;
+  display: grid;
 
-  gap: 14px;
+  grid-template-columns:
+    minmax(220px, 1.2fr)
+    minmax(150px, 0.8fr)
+    minmax(150px, 0.8fr);
 
-  padding: 15px;
+  gap: 12px;
+
+  align-items: end;
+
+  padding: 14px;
 
   box-sizing: border-box;
 
   border: 1px solid #cbd8d2;
 
-  border-radius: 11px;
+  border-radius: 12px;
 
   background: #dde8e3;
 }
 
 .matchSectionHeader {
+  grid-column: 1 / -1;
+
   display: flex;
   align-items: center;
 
-  gap: 9px;
+  gap: 10px;
+
+  margin-bottom: 2px;
 }
 
 .matchSectionIcon {
-  width: 33px;
-  height: 33px;
+  width: 38px;
+  height: 38px;
 
   flex-shrink: 0;
 
@@ -458,7 +429,7 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 9px;
+  border-radius: 10px;
 
   background: #c5dbd0;
 
@@ -473,15 +444,13 @@
 .matchSectionHeader strong {
   color: #2a3b33;
 
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .matchSectionHeader span {
-  margin-top: 1px;
-
   color: #708078;
 
-  font-size: 8px;
+  font-size: 9px;
 }
 
 
@@ -490,44 +459,29 @@
 ===================================== */
 
 .dateTimeGrid {
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 10px;
+  display: contents;
 }
 
 .dateInputWrapper {
-  height: 42px;
+  height: 46px;
 
   display: flex;
   align-items: center;
 
   gap: 8px;
 
-  padding: 0 10px;
+  padding: 0 11px;
 
   box-sizing: border-box;
 
   border: 1px solid #c6d4cd;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
-  background: #f7faf8;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
-}
-
-.dateInputWrapper:hover {
-  border-color: #aebfb7;
+  background: #f8faf9;
 }
 
 .dateInputWrapper:focus-within {
-  background: #ffffff;
-
   border-color: #16a875;
 
   box-shadow:
@@ -541,11 +495,10 @@
 }
 
 .dateInputWrapper input {
-  height: 100%;
-
   flex: 1;
 
   min-width: 0;
+  height: 100%;
 
   padding: 0;
 
@@ -555,23 +508,15 @@
 
   background: transparent;
 
-  box-shadow: none;
-
   color: #293a32;
 
   font-family: inherit;
 
-  font-size: 10px;
-
-  cursor: pointer;
+  font-size: 12px;
 }
 
 .dateInputWrapper input:focus {
-  border: none;
-
   box-shadow: none;
-
-  background: transparent;
 }
 
 
@@ -580,22 +525,20 @@
 ===================================== */
 
 .matchPreview {
+  grid-column: 1 / -1;
+
   display: flex;
   align-items: center;
 
   gap: 8px;
 
-  padding: 10px 11px;
+  padding: 9px 11px;
 
   border-radius: 8px;
 
-  background: #cddfd6;
+  background: #cfdfd7;
 
   color: #356253;
-}
-
-.matchPreview svg {
-  flex-shrink: 0;
 }
 
 .matchPreview > div {
@@ -620,9 +563,7 @@
 
   color: #29463c;
 
-  font-size: 9px;
-
-  font-weight: 600;
+  font-size: 10px;
 
   white-space: nowrap;
 
@@ -634,24 +575,35 @@
    CORES
 ===================================== */
 
+.colorsArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+}
+
 .colors {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
 
-  gap: 10px;
+  gap: 7px;
 }
 
 .colorButton {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  flex-shrink: 0;
+
   padding: 0;
 
-  border: 3px solid transparent;
+  border: 2px solid transparent;
 
   border-radius: 50%;
 
@@ -660,7 +612,7 @@
   cursor: pointer;
 
   box-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.12);
+    0 2px 4px rgba(0, 0, 0, 0.1);
 
   transition:
     transform 0.2s ease,
@@ -675,8 +627,152 @@
   border-color: #ffffff;
 
   box-shadow:
+    0 0 0 2px #244c3e;
+}
+
+
+/* =====================================
+   COR PERSONALIZADA / RGB
+===================================== */
+
+.customColorButton {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.customColorButton:hover {
+  transform: scale(1.08);
+}
+
+.rgbCircle {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 3px;
+
+  box-sizing: border-box;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      #ff3b30,
+      #ff9500,
+      #ffcc00,
+      #34c759,
+      #00c7be,
+      #007aff,
+      #5856d6,
+      #af52de,
+      #ff2d55,
+      #ff3b30
+    );
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.18);
+}
+
+.rgbCircleCenter {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #ffffff;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  box-sizing: border-box;
+}
+
+.customColorSelected .rgbCircle {
+  box-shadow:
     0 0 0 2px #244c3e,
-    0 3px 7px rgba(0, 0, 0, 0.15);
+    0 3px 7px rgba(0, 0, 0, 0.2);
+}
+
+.hiddenColorInput {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* =====================================
+   COR SELECIONADA
+===================================== */
+
+.selectedColorInfo {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 5px 8px;
+
+  border-radius: 8px;
+
+  background: #d8e4de;
+}
+
+.selectedColorInfo span {
+  color: #718078;
+
+  font-size: 8px;
+}
+
+.selectedColorInfo strong {
+  color: #35483f;
+
+  font-size: 9px;
+
+  font-weight: 600;
+}
+
+.selectedColorPreview {
+  width: 19px;
+  height: 19px;
+
+  flex-shrink: 0;
+
+  border: 2px solid #ffffff;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 
@@ -688,11 +784,11 @@
   display: flex;
   align-items: center;
 
-  gap: 11px;
+  gap: 12px;
 
-  margin: 0 24px 20px;
+  margin: 0 26px 12px;
 
-  padding: 12px 14px;
+  padding: 11px 14px;
 
   border-radius: 10px;
 
@@ -700,8 +796,8 @@
 }
 
 .previewAvatar {
-  width: 39px;
-  height: 39px;
+  width: 42px;
+  height: 42px;
 
   flex-shrink: 0;
 
@@ -729,20 +825,18 @@
   font-size: 7px;
 
   font-weight: 700;
-
-  letter-spacing: 0.6px;
 }
 
 .teamPreview strong {
   color: #263930;
 
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .teamPreview small {
   color: #66766e;
 
-  font-size: 8px;
+  font-size: 9px;
 }
 
 
@@ -755,9 +849,9 @@
   align-items: center;
   justify-content: flex-end;
 
-  gap: 9px;
+  gap: 10px;
 
-  padding: 16px 24px;
+  padding: 12px 26px;
 
   border-top: 1px solid #cbd8d2;
 
@@ -766,7 +860,7 @@
 
 .cancelButton,
 .createButton {
-  height: 39px;
+  height: 40px;
 
   display: flex;
   align-items: center;
@@ -774,22 +868,17 @@
 
   gap: 7px;
 
-  padding: 0 16px;
+  padding: 0 18px;
 
   border-radius: 8px;
 
   font-family: inherit;
 
-  font-size: 10px;
+  font-size: 11px;
 
   font-weight: 600;
 
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
 }
 
 .cancelButton {
@@ -800,24 +889,12 @@
   color: #586960;
 }
 
-.cancelButton:hover {
-  background: #d5e1db;
-
-  border-color: #a9bbb2;
-}
-
 .createButton {
   border: none;
 
   background: #087b5b;
 
   color: #ffffff;
-}
-
-.createButton:hover:not(:disabled) {
-  background: #066b50;
-
-  transform: translateY(-1px);
 }
 
 .createButton:disabled {
@@ -828,108 +905,60 @@
 
 
 /* =====================================
-   ANIMAÇÕES
-===================================== */
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes modalEnter {
-  from {
-    opacity: 0;
-
-    transform:
-      translateY(8px)
-      scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-
-    transform:
-      translateY(0)
-      scale(1);
-  }
-}
-
-
-/* =====================================
    RESPONSIVIDADE
 ===================================== */
 
-@media (max-width: 650px) {
-
-  .overlay {
-    padding: 10px;
-  }
+@media (max-width: 900px) {
 
   .modal {
-    max-height:
-      calc(100vh - 20px);
+    width: calc(100vw - 20px);
   }
 
   .content {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 180px 1fr;
+
+    gap: 18px;
   }
 
-  .imagePreview {
-    height: 150px;
+  .matchSection {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .twoColumns {
-    grid-template-columns:
-      1fr;
-  }
-
-  .dateTimeGrid {
-    grid-template-columns:
-      1fr;
+  .matchSection > .field:first-of-type {
+    grid-column: 1 / -1;
   }
 
 }
 
 
-@media (max-width: 430px) {
+@media (max-width: 620px) {
 
-  .modalHeader,
-  .content,
-  .footer {
-    padding-left: 15px;
-    padding-right: 15px;
+  .overlay {
+    align-items: flex-start;
   }
 
-  .teamPreview {
-    margin-left: 15px;
-    margin-right: 15px;
+  .content {
+    grid-template-columns: 1fr;
   }
 
-  .footer {
-    flex-direction: column-reverse;
+  .imageArea {
+    display: grid;
+
+    grid-template-columns: 160px 1fr;
   }
 
-  .cancelButton,
-  .createButton {
-    width: 100%;
+  .twoColumns {
+    grid-template-columns: 1fr;
   }
 
-  .sports {
-    gap: 6px;
+  .matchSection {
+    grid-template-columns: 1fr;
   }
 
-  .sportButton {
-    flex: 1;
+  .dateTimeGrid {
+    display: grid;
 
-    min-width: 90px;
-
-    justify-content: center;
+    grid-template-columns: 1fr;
   }
 
 }

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -79,7 +78,7 @@ export default function SelecaoEsporte() {
         useState<string | null>(null);
 
     const esporteAtual = esportes.find(
-        (esporte) => esporte.id === esporteSelecionado
+        (esporte) => esporte.id === esporteSelecionado,
     );
 
     const selecionarEsporte = (id: string) => {
@@ -91,14 +90,26 @@ export default function SelecaoEsporte() {
     };
 
     const proximo = () => {
-        if (!esporteSelecionado) return;
+        if (!esporteAtual) {
+            return;
+        }
 
-        console.log(
-            'Esporte selecionado:',
-            esporteSelecionado
+        sessionStorage.setItem(
+            'sate-modalidade',
+            esporteAtual.nome,
         );
 
-        navigate('/inicio');
+        sessionStorage.setItem(
+            'sate-imagem-esporte',
+            esporteAtual.imagem,
+        );
+
+        navigate('/configuracao-analise', {
+            state: {
+                modalidade: esporteAtual.nome,
+                imagem: esporteAtual.imagem,
+            },
+        });
     };
 
     return (
@@ -108,11 +119,11 @@ export default function SelecaoEsporte() {
                 esporteAtual
                     ? {
                           backgroundImage: `
-                              linear-gradient(
-                                  rgba(0, 55, 42, 0.72),
-                                  rgba(0, 55, 42, 0.82)
-                              ),
-                              url(${esporteAtual.imagem})
+                            linear-gradient(
+                                rgba(0, 55, 42, 0.72),
+                                rgba(0, 55, 42, 0.82)
+                            ),
+                            url(${esporteAtual.imagem})
                           `,
                       }
                     : undefined
@@ -123,13 +134,14 @@ export default function SelecaoEsporte() {
             )}
 
             <div className={styles.conteudo}>
-
                 {/* ETAPA */}
+
                 <div className={styles.etapa}>
                     Etapa 1 de 4 · Configuração do esporte
                 </div>
 
                 {/* PROGRESSO */}
+
                 <div className={styles.linhaProgresso}>
                     <div className={styles.progressoAtivo} />
                     <div />
@@ -138,6 +150,7 @@ export default function SelecaoEsporte() {
                 </div>
 
                 {/* CABEÇALHO */}
+
                 <section className={styles.cabecalho}>
                     <h1>
                         Qual é o seu esporte?
@@ -151,8 +164,8 @@ export default function SelecaoEsporte() {
                 </section>
 
                 {/* ESPORTES */}
-                <section className={styles.gridEsportes}>
 
+                <section className={styles.gridEsportes}>
                     {esportes.map((esporte) => {
                         const selecionado =
                             esporteSelecionado === esporte.id;
@@ -171,39 +184,30 @@ export default function SelecaoEsporte() {
                                 }
                                 aria-pressed={selecionado}
                             >
-
-                                <span
-                                    className={styles.iconeEsporte}
-                                >
+                                <span className={styles.iconeEsporte}>
                                     {esporte.emoji}
                                 </span>
 
-                                <span
-                                    className={styles.nomeEsporte}
-                                >
+                                <span className={styles.nomeEsporte}>
                                     {esporte.nome}
                                 </span>
 
                                 {selecionado && (
-                                    <span
-                                        className={styles.check}
-                                    >
+                                    <span className={styles.check}>
                                         <Check
                                             size={13}
                                             strokeWidth={3}
                                         />
                                     </span>
                                 )}
-
                             </button>
                         );
                     })}
-
                 </section>
 
                 {/* RODAPÉ */}
-                <div className={styles.rodape}>
 
+                <div className={styles.rodape}>
                     <button
                         type="button"
                         className={styles.botaoVoltar}
@@ -222,11 +226,8 @@ export default function SelecaoEsporte() {
                         Próximo
                         <ArrowRight size={17} />
                     </button>
-
                 </div>
-
             </div>
         </main>
     );
 }
-

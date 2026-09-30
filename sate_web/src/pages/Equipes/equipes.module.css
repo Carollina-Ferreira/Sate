@@ -1,46 +1,21 @@
-
 .page {
   width: 100%;
   min-height: 100%;
+
   padding: 30px;
+
   box-sizing: border-box;
-  
-}
-
-
-/* =========================
-   CABEÇALHO
-========================= */
-.teamClickable {
-  min-width: 0;
-
-  cursor: pointer;
-
-  border-radius: 14px;
-
-  transition:
-    transform 0.2s ease,
-    filter 0.2s ease;
-}
-
-.teamClickable:hover {
-  transform: translateY(-4px);
-
-  filter: brightness(1.02);
-}
-
-.teamClickable:focus {
-  outline: 2px solid #16a875;
-
-  outline-offset: 3px;
 }
 
 .header {
   width: 100%;
+
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
   gap: 30px;
+
   margin-bottom: 18px;
 }
 
@@ -50,74 +25,134 @@
 
 .title {
   margin: 0;
+
+  color: #ffffff;
+
   font-size: 30px;
   font-weight: 700;
+
   line-height: 1.2;
-  color: #ffffff;
 }
 
 .description {
   margin: 12px 0 0;
+
   max-width: 620px;
-  font-size: 16px;
-  line-height: 1.35;
+
   color: rgba(255, 255, 255, 0.78);
+
+  font-size: 16px;
+
+  line-height: 1.35;
 }
 
-
-/* =========================
-   BOTÃO NOVA EQUIPE
-========================= */
-
-.newTeamButton {
+.headerActions {
   display: flex;
   align-items: center;
-  justify-content: center;
+
   gap: 10px;
 
+  flex-shrink: 0;
+}
+
+.newTeamButton,
+.editTeamButton {
   min-width: 148px;
   height: 46px;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
   padding: 0 18px;
 
-  border: none;
-  border-radius: 8px;
+  border-radius: 9px;
 
-  background: #007d62;
-  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
 
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
+
+  white-space: nowrap;
 
   cursor: pointer;
 
   transition:
     background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
     transform 0.2s ease;
+}
+
+.newTeamButton {
+  border: none;
+
+  background: #007d62;
+
+  color: #ffffff;
 }
 
 .newTeamButton:hover {
   background: #009875;
+
   transform: translateY(-1px);
 }
 
-.plus {
-  font-size: 25px;
-  font-weight: 300;
-  line-height: 1;
+.editTeamButton {
+  border: 1px solid rgba(255, 255, 255, 0.55);
+
+  background: rgba(255, 255, 255, 0.08);
+
+  color: #ffffff;
 }
 
+.editTeamButton:hover {
+  border-color: #ffffff;
 
-/* =========================
-   FILTROS
-========================= */
+  background: rgba(255, 255, 255, 0.14);
 
-.filters {
+  transform: translateY(-1px);
+}
+
+.editTeamButtonActive {
+  border-color: #ffffff;
+
+  background: #ffffff;
+
+  color: #087b5b;
+}
+
+.editNotice {
+  width: fit-content;
+
   display: flex;
   align-items: center;
-  gap: 12px;
 
+  gap: 7px;
+
+  margin: -2px 0 16px;
+
+  padding: 8px 12px;
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.filters {
   width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
 
   margin-bottom: 22px;
 
@@ -131,20 +166,27 @@
 }
 
 .filterButton {
+  height: 42px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
 
-  height: 42px;
+  gap: 9px;
 
   padding: 0 18px;
 
+  flex-shrink: 0;
+
   border: 1px solid rgba(255, 255, 255, 0.35);
+
   border-radius: 22px;
 
   background: #eeeeee;
+
   color: #343434;
+
+  font-family: 'Poppins', sans-serif;
 
   font-size: 14px;
   font-weight: 500;
@@ -153,40 +195,362 @@
 
   cursor: pointer;
 
-  transition: all 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .filterButton:hover {
   background: #ffffff;
+
+  transform: translateY(-1px);
 }
 
-.filterButton.active {
-  background: #ffffff;
+.active {
   border-color: #ffffff;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 11px rgba(0, 0, 0, 0.08);
 }
 
 .filterIcon {
+  width: 19px;
+  height: 19px;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 16px;
+  color: #171717;
 }
 
-
-/* =========================
-   GRID DOS CARDS
-========================= */
+.active .filterIcon {
+  color: #087b5b;
+}
 
 .teamsGrid {
+  width: 100%;
+
   display: grid;
 
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(280px, 1fr)
-  );
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(280px, 1fr)
+    );
 
-  gap: 16px;
+  gap: 22px;
+}
 
+.teamCard {
   width: 100%;
+
+  overflow: hidden;
+
+  position: relative;
+
+  border-radius: 20px;
+
+  background: #f7f8f7;
+
+  color: #20352d;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.teamCard:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.16);
+}
+
+.teamEditable {
+  outline: 2px dashed rgba(255, 255, 255, 0.45);
+
+  outline-offset: 4px;
+}
+
+.teamEditable:hover {
+  outline-color: #66ddb7;
+}
+
+.teamImageArea {
+  height: 165px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background: #d8e2dd;
+}
+
+.teamImage {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition: transform 0.3s ease;
+}
+
+.teamCard:hover .teamImage {
+  transform: scale(1.025);
+}
+
+.teamSportBadge {
+  position: absolute;
+
+  top: 14px;
+  left: 14px;
+
+  min-height: 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 11px;
+
+  border-radius: 999px;
+
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.trendIcon {
+  position: absolute;
+
+  top: 13px;
+  right: 13px;
+
+  width: 33px;
+  height: 33px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.trendUp {
+  color: #0aaa71;
+}
+
+.trendDown {
+  color: #df4646;
+}
+
+.trendStable {
+  color: #68756f;
+}
+
+.teamContent {
+  position: relative;
+
+  padding: 24px 16px 15px;
+}
+
+.teamFloatingIcon {
+  width: 48px;
+  height: 48px;
+
+  position: absolute;
+
+  top: -31px;
+  left: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 5px solid #ffffff;
+
+  border-radius: 13px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 11px rgba(0, 0, 0, 0.12);
+}
+
+.teamName {
+  margin: 0 0 3px;
+
+  color: #172b23;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.teamMeta {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 14px;
+
+  color: #728079;
+
+  font-size: 9px;
+}
+
+.teamStats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 9px;
+}
+
+.statBox {
+  min-height: 64px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e0e6e3;
+
+  border-radius: 12px;
+
+  background: #f0f3f1;
+}
+
+.statBox span {
+  margin-bottom: 4px;
+
+  color: #75837c;
+
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.statBox strong {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.statWin {
+  color: #13ad69;
+}
+
+.statDraw {
+  color: #25372f;
+}
+
+.statLoss {
+  color: #d73939;
+}
+
+.nextMatch {
+  min-height: 57px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 0 14px;
+
+  border-top: 1px solid #e2e8e5;
+
+  background: #edf2ef;
+}
+
+.nextMatchIcon {
+  width: 31px;
+  height: 31px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #d9edf5;
+
+  color: #1685be;
+}
+
+.nextMatch > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.nextMatch span {
+  color: #74837b;
+
+  font-size: 6.5px;
+  font-weight: 700;
+}
+
+.nextMatch strong {
+  overflow: hidden;
+
+  margin-top: 2px;
+
+  color: #263b32;
+
+  font-size: 8px;
+  font-weight: 600;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 800px) {
+  .page {
+    padding: 22px;
+  }
+
+  .header {
+    flex-direction: column;
+  }
+
+  .headerActions {
+    width: 100%;
+  }
+
+  .newTeamButton,
+  .editTeamButton {
+    flex: 1;
+  }
+}
+
+@media (max-width: 650px) {
+  .teamsGrid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const prisma = require('../lib/prisma');
 
-
 // ============================================================================
 // CADASTRO
 // ============================================================================
@@ -12,37 +11,23 @@ async function cadastro(req, res) {
         const {
             nome,
             email,
-            senha,
-            tipo
+            senha
         } = req.body;
 
-        // ------------------------------------------------------------
-        // VALIDAÇÃO
-        // ------------------------------------------------------------
+        // O cadastro não define o tipo de usuário.
+        // O tipo será definido posteriormente no login,
+        // quando o usuário escolher Atleta ou Treinador.
 
-        if (!nome || !email || !senha || !tipo) {
+        if (!nome || !email || !senha) {
             return res.status(400).json({
-                mensagem: 'Nome, email, senha e tipo são obrigatórios.'
-            });
-        }
-
-        // ------------------------------------------------------------
-        // VALIDA TIPO
-        // ------------------------------------------------------------
-
-        if (!['ATLETA', 'TREINADOR'].includes(tipo)) {
-            return res.status(400).json({
-                mensagem: 'Tipo de usuário inválido.'
+                mensagem: 'Nome, email e senha são obrigatórios.'
             });
         }
 
         const nomeNormalizado = nome.trim();
         const emailNormalizado = email.trim().toLowerCase();
 
-        // ------------------------------------------------------------
-        // VERIFICA SE O EMAIL JÁ EXISTE
-        // ------------------------------------------------------------
-
+        // Verifica se o email já existe
         const usuarioExistente = await prisma.usuario.findUnique({
             where: {
                 email: emailNormalizado
@@ -55,109 +40,37 @@ async function cadastro(req, res) {
             });
         }
 
-        // ------------------------------------------------------------
-        // CRIPTOGRAFA A SENHA
-        // ------------------------------------------------------------
-
+        // Criptografa a senha
         const senhaHash = await bcrypt.hash(senha, 10);
 
-        // ------------------------------------------------------------
-        // CRIA USUARIO + PERFIL
-        // ------------------------------------------------------------
+        // Cria o usuário sem definir o tipo
+        const usuario = await prisma.usuario.create({
+            data: {
+                nome: nomeNormalizado,
+                email: emailNormalizado,
+                senha: senhaHash,
 
-        const resultado = await prisma.$transaction(
-            async (tx) => {
+                // Será definido no login
+                tipo: null,
 
-                // --------------------------------------------------------
-                // CRIA USUARIO
-                // --------------------------------------------------------
-
-                const usuario = await tx.usuario.create({
-                    data: {
-                        nome: nomeNormalizado,
-                        email: emailNormalizado,
-                        senha: senhaHash,
-                        tipo
-                    }
-                });
-
-                // --------------------------------------------------------
-                // CRIA PERFIL DE ATLETA
-                // --------------------------------------------------------
-
-                if (tipo === 'ATLETA') {
-
-                    const atleta = await tx.atleta.create({
-                        data: {
-                            nome: nomeNormalizado,
-                            usuarioId: usuario.id
-                        }
-                    });
-
-                    return {
-                        usuario,
-                        atleta,
-                        treinador: null
-                    };
-                }
-
-                // --------------------------------------------------------
-                // CRIA PERFIL DE TREINADOR
-                // --------------------------------------------------------
-
-                const treinador = await tx.treinador.create({
-                    data: {
-                        nome: nomeNormalizado,
-                        usuarioId: usuario.id
-                    }
-                });
-
-                return {
-                    usuario,
-                    atleta: null,
-                    treinador
-                };
-            },
-            {
-                maxWait: 10000,
-                timeout: 30000
+                // Ainda não escolheu o perfil
+                primeiroAcesso: false
             }
-        );
-
-        // ------------------------------------------------------------
-        // RESPOSTA
-        // ------------------------------------------------------------
+        });
 
         return res.status(201).json({
-            mensagem:
-                tipo === 'ATLETA'
-                    ? 'Atleta cadastrado com sucesso.'
-                    : 'Treinador cadastrado com sucesso.',
+            mensagem: 'Conta criada com sucesso.',
 
             usuario: {
-                id: resultado.usuario.id,
-                nome: resultado.usuario.nome,
-                email: resultado.usuario.email,
-                tipo: resultado.usuario.tipo
-            },
-
-            atleta: resultado.atleta
-                ? {
-                    id: resultado.atleta.id,
-                    nome: resultado.atleta.nome
-                }
-                : null,
-
-            treinador: resultado.treinador
-                ? {
-                    id: resultado.treinador.id,
-                    nome: resultado.treinador.nome
-                }
-                : null
+                id: usuario.id,
+                nome: usuario.nome,
+                email: usuario.email,
+                tipo: usuario.tipo,
+                primeiroAcesso: usuario.primeiroAcesso
+            }
         });
 
     } catch (error) {
-
         console.error('=================================');
         console.error('ERRO NO CADASTRO:');
         console.error(error);
@@ -183,16 +96,14 @@ async function login(req, res) {
             tipo
         } = req.body;
 
-        // ------------------------------------------------------------
-        // VALIDAÇÃO
-        // ------------------------------------------------------------
-
+        // Email, senha e tipo são necessários no login
         if (!email || !senha || !tipo) {
             return res.status(400).json({
                 mensagem: 'Email, senha e tipo são obrigatórios.'
             });
         }
 
+        // Verifica se o tipo escolhido é válido
         if (!['TREINADOR', 'ATLETA'].includes(tipo)) {
             return res.status(400).json({
                 mensagem: 'Tipo de usuário inválido.'
@@ -201,10 +112,7 @@ async function login(req, res) {
 
         const emailNormalizado = email.trim().toLowerCase();
 
-        // ------------------------------------------------------------
-        // BUSCAR USUÁRIO
-        // ------------------------------------------------------------
-
+        // Procura o usuário pelo email
         const usuario = await prisma.usuario.findUnique({
             where: {
                 email: emailNormalizado
@@ -217,10 +125,7 @@ async function login(req, res) {
             });
         }
 
-        // ------------------------------------------------------------
-        // VALIDAR SENHA
-        // ------------------------------------------------------------
-
+        // Compara a senha digitada com a senha criptografada
         const senhaValida = await bcrypt.compare(
             senha,
             usuario.senha
@@ -233,8 +138,10 @@ async function login(req, res) {
         }
 
         // ====================================================================
-        // CONTA ANTIGA SEM TIPO
+        // PRIMEIRO LOGIN
         // ====================================================================
+        // Se o usuário foi criado pelo cadastro e ainda não possui tipo,
+        // usamos o tipo escolhido no login.
 
         if (usuario.tipo === null) {
 
@@ -244,13 +151,18 @@ async function login(req, res) {
                 },
 
                 data: {
-                    tipo
+                    tipo: tipo,
+
+                    primeiroAcesso:
+                        tipo === 'TREINADOR'
+                            ? true
+                            : false
                 }
             });
 
-            // --------------------------------------------------------
-            // PRIMEIRO LOGIN COMO TREINADOR
-            // --------------------------------------------------------
+            // ---------------------------------------------------------------
+            // CRIA PERFIL DE TREINADOR
+            // ---------------------------------------------------------------
 
             if (tipo === 'TREINADOR') {
 
@@ -262,7 +174,6 @@ async function login(req, res) {
                     });
 
                 if (!treinadorExistente) {
-
                     await prisma.treinador.create({
                         data: {
                             nome:
@@ -276,9 +187,9 @@ async function login(req, res) {
                 }
             }
 
-            // --------------------------------------------------------
-            // PRIMEIRO LOGIN COMO ATLETA
-            // --------------------------------------------------------
+            // ---------------------------------------------------------------
+            // CRIA PERFIL DE ATLETA
+            // ---------------------------------------------------------------
 
             if (tipo === 'ATLETA') {
 
@@ -290,11 +201,11 @@ async function login(req, res) {
                     });
 
                 if (!atletaExistente) {
-
                     await prisma.atleta.create({
                         data: {
                             nome:
-                                usuarioAtualizado.nome,
+                                usuarioAtualizado.nome ||
+                                'Atleta',
 
                             usuarioId:
                                 usuarioAtualizado.id
@@ -303,9 +214,9 @@ async function login(req, res) {
                 }
             }
 
-            // --------------------------------------------------------
-            // JWT
-            // --------------------------------------------------------
+            // ---------------------------------------------------------------
+            // GERA TOKEN
+            // ---------------------------------------------------------------
 
             const token = jwt.sign(
                 {
@@ -320,20 +231,21 @@ async function login(req, res) {
 
             return res.json({
                 mensagem: 'Login realizado com sucesso.',
-
                 token,
 
                 usuario: {
                     id: usuarioAtualizado.id,
                     nome: usuarioAtualizado.nome,
                     email: usuarioAtualizado.email,
-                    tipo: usuarioAtualizado.tipo
+                    tipo: usuarioAtualizado.tipo,
+                    primeiroAcesso:
+                        usuarioAtualizado.primeiroAcesso
                 }
             });
         }
 
         // ====================================================================
-        // VERIFICAR TIPO DA CONTA
+        // USUÁRIO JÁ POSSUI TIPO
         // ====================================================================
 
         if (usuario.tipo !== tipo) {
@@ -350,7 +262,7 @@ async function login(req, res) {
         }
 
         // ====================================================================
-        // GARANTIR PERFIL DE ATLETA
+        // GARANTE PERFIL DE ATLETA
         // ====================================================================
 
         if (usuario.tipo === 'ATLETA') {
@@ -363,18 +275,21 @@ async function login(req, res) {
                 });
 
             if (!atletaExistente) {
-
                 await prisma.atleta.create({
                     data: {
-                        nome: usuario.nome,
-                        usuarioId: usuario.id
+                        nome:
+                            usuario.nome ||
+                            'Atleta',
+
+                        usuarioId:
+                            usuario.id
                     }
                 });
             }
         }
 
         // ====================================================================
-        // GARANTIR PERFIL DE TREINADOR
+        // GARANTE PERFIL DE TREINADOR
         // ====================================================================
 
         if (usuario.tipo === 'TREINADOR') {
@@ -387,21 +302,21 @@ async function login(req, res) {
                 });
 
             if (!treinadorExistente) {
-
                 await prisma.treinador.create({
                     data: {
                         nome:
                             usuario.nome ||
                             'Treinador',
 
-                        usuarioId: usuario.id
+                        usuarioId:
+                            usuario.id
                     }
                 });
             }
         }
 
         // ====================================================================
-        // GERAR JWT
+        // GERA TOKEN
         // ====================================================================
 
         const token = jwt.sign(
@@ -421,20 +336,23 @@ async function login(req, res) {
 
         return res.json({
             mensagem: 'Login realizado com sucesso.',
-
             token,
 
             usuario: {
                 id: usuario.id,
                 nome: usuario.nome,
                 email: usuario.email,
-                tipo: usuario.tipo
+                tipo: usuario.tipo,
+                primeiroAcesso: usuario.primeiroAcesso
             }
         });
 
     } catch (error) {
 
-        console.error('Erro no login:', error);
+        console.error('=================================');
+        console.error('ERRO NO LOGIN:');
+        console.error(error);
+        console.error('=================================');
 
         return res.status(500).json({
             mensagem: 'Erro ao realizar login.',

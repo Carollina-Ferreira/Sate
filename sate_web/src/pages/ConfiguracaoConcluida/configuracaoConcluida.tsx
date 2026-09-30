@@ -1,300 +1,405 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import {
-    ArrowLeft,
-    ArrowRight,
-    Check,
+  ArrowLeft,
+  ArrowRight,
+  Check,
 } from 'lucide-react';
 
-import type { IconType } from 'react-icons';
-
 import {
-    FaBasketballBall,
-    FaFootballBall,
-    FaFutbol,
-    FaRunning,
-    FaSwimmer,
-    FaTableTennis,
-    FaVolleyballBall,
+  FaFutbol,
+  FaBasketballBall,
+  FaVolleyballBall,
+  FaRunning,
+  FaWater,
+  FaTableTennis,
+  FaHandsHelping,
 } from 'react-icons/fa';
 
-import { GiHand } from 'react-icons/gi';
-
-import styles from './configuracaoConcluida.module.css';
+import styles from './ConfiguracaoConcluida.module.css';
 
 interface EstadoNavegacao {
-    modalidade?: string;
-    imagem?: string;
+  modalidade?: string;
+  imagem?: string;
 }
 
-const iconePorEsporte: Record<string, IconType> = {
-    Futebol: FaFutbol,
-    Basquete: FaBasketballBall,
-    Vôlei: FaVolleyballBall,
-    Handebol: GiHand,
-    Rugby: FaFootballBall,
-    Natação: FaSwimmer,
-    Atletismo: FaRunning,
-    Tênis: FaTableTennis,
+const iconePorEsporte: Record<string, React.ReactNode> = {
+  Futebol: <FaFutbol />,
+  Basquete: <FaBasketballBall />,
+  Vôlei: <FaVolleyballBall />,
+  Handebol: <FaHandsHelping />,
+  Rugby: <FaRunning />,
+  Natação: <FaWater />,
+  Atletismo: <FaRunning />,
+  Tênis: <FaTableTennis />,
 };
 
 export default function ConfiguracaoConcluida() {
-    const navigate = useNavigate();
-    const location = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const state =
-        location.state as EstadoNavegacao | null;
+  const [salvando, setSalvando] = useState(false);
 
-    const modalidade =
-        state?.modalidade ||
-        sessionStorage.getItem('sate-modalidade') ||
-        'Futebol';
+  const state = location.state as EstadoNavegacao | null;
 
-    const imagemEsporte =
-        state?.imagem ||
-        sessionStorage.getItem('sate-imagem-esporte') ||
-        '';
+  const modalidade =
+    state?.modalidade ||
+    sessionStorage.getItem('sate-modalidade') ||
+    'Futebol';
 
-    const nomeEquipe =
-        sessionStorage.getItem('sate-nome-equipe') ||
-        'Minha equipe';
+  const imagemEsporte =
+    state?.imagem ||
+    sessionStorage.getItem('sate-imagem-esporte') ||
+    '';
 
-    const categoria =
-        sessionStorage.getItem('sate-categoria-equipe') ||
-        'Principal';
+  const nomeEquipe =
+    sessionStorage.getItem('sate-nome-equipe') ||
+    'Minha equipe';
 
-    const imagemEquipe =
-        sessionStorage.getItem('sate-imagem-equipe') ||
-        '';
+  const categoria =
+    sessionStorage.getItem('sate-categoria-equipe') ||
+    'Principal';
 
-    const IconeEsporte =
-        iconePorEsporte[modalidade] || FaFutbol;
+  const imagemEquipe =
+    sessionStorage.getItem('sate-imagem-equipe') ||
+    '';
 
-    const camposSelecionados = useMemo(() => {
-        try {
-            const salvo =
-                sessionStorage.getItem(
-                    'sate-campos-analise',
-                );
-
-            if (!salvo) {
-                return [];
-            }
-
-            const campos = JSON.parse(salvo);
-
-            if (!Array.isArray(campos)) {
-                return [];
-            }
-
-            return campos
-                .map((campo) => {
-                    if (typeof campo === 'string') {
-                        return campo;
-                    }
-
-                    if (
-                        campo &&
-                        typeof campo.nome === 'string'
-                    ) {
-                        return campo.nome;
-                    }
-
-                    return null;
-                })
-                .filter(
-                    (campo): campo is string =>
-                        Boolean(campo),
-                );
-        } catch {
-            return [];
-        }
-    }, []);
-
-    const voltar = () => {
-        navigate('/configuracao-equipe', {
-            state: {
-                modalidade,
-                imagem: imagemEsporte,
-            },
-        });
-    };
-
-    const finalizar = () => {
-        navigate('/inicio');
-    };
-
-    return (
-        <main
-            className={styles.page}
-            style={
-                imagemEsporte
-                    ? {
-                          backgroundImage: `
-                            linear-gradient(
-                                rgba(0, 66, 49, 0.92),
-                                rgba(0, 66, 49, 0.96)
-                            ),
-                            url(${imagemEsporte})
-                          `,
-                      }
-                    : undefined
-            }
-        >
-            <div className={styles.container}>
-                {/* PROGRESSO */}
-
-                <div className={styles.progressArea}>
-                    <div className={styles.stepBadge}>
-                        Etapa 4 de 4 · Configuração concluída
-                    </div>
-
-                    <div className={styles.progressSteps}>
-                        <div />
-                        <div />
-                        <div />
-                        <div />
-                    </div>
-                </div>
-
-                {/* CABEÇALHO */}
-
-                <section className={styles.header}>
-                    <div className={styles.completeIcon}>
-                        <Check
-                            size={25}
-                            strokeWidth={3}
-                        />
-                    </div>
-
-                    <h1>
-                        Tudo pronto!
-                    </h1>
-
-                    <p>
-                        Agora você já pode começar a acompanhar
-                        o desempenho da sua equipe.
-                    </p>
-                </section>
-
-                {/* RESUMO */}
-
-                <section className={styles.summaryArea}>
-                    {/* CAMPOS SELECIONADOS */}
-
-                    <article className={styles.fieldsCard}>
-                        <div className={styles.sportHeader}>
-                            <div className={styles.sportCircle}>
-                                <IconeEsporte size={21} />
-                            </div>
-
-                            <div>
-                                <strong>
-                                    {modalidade}
-                                </strong>
-
-                                <span>
-                                    Configuração da análise
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className={styles.divider} />
-
-                        <span className={styles.fieldsTitle}>
-                            Campos selecionados
-                        </span>
-
-                        <ul>
-                            {camposSelecionados.map(
-                                (campo) => (
-                                    <li key={campo}>
-                                        <Check size={13} />
-
-                                        {campo}
-                                    </li>
-                                ),
-                            )}
-                        </ul>
-
-                        {camposSelecionados.length === 0 && (
-                            <p className={styles.emptyFields}>
-                                Nenhum campo selecionado.
-                            </p>
-                        )}
-                    </article>
-
-                    {/* EQUIPE */}
-
-                    <article className={styles.teamCard}>
-                        <div
-                            className={styles.teamImage}
-                            style={
-                                imagemEquipe || imagemEsporte
-                                    ? {
-                                          backgroundImage: `url(${
-                                              imagemEquipe ||
-                                              imagemEsporte
-                                          })`,
-                                      }
-                                    : undefined
-                            }
-                        >
-                            {!imagemEquipe &&
-                                !imagemEsporte && (
-                                    <IconeEsporte
-                                        size={48}
-                                    />
-                                )}
-                        </div>
-
-                        <div className={styles.teamInfo}>
-                            <div>
-                                <span>
-                                    SUA EQUIPE
-                                </span>
-
-                                <h2>
-                                    {nomeEquipe}
-                                </h2>
-
-                                <p>
-                                    {modalidade} · {categoria}
-                                </p>
-                            </div>
-
-                            <div className={styles.sportEmoji}>
-                                <IconeEsporte size={22} />
-                            </div>
-                        </div>
-                    </article>
-                </section>
-
-                {/* RODAPÉ */}
-
-                <footer className={styles.footer}>
-                    <button
-                        type="button"
-                        className={styles.backButton}
-                        onClick={voltar}
-                    >
-                        <ArrowLeft size={21} />
-
-                        Voltar
-                    </button>
-
-                    <button
-                        type="button"
-                        className={styles.nextButton}
-                        onClick={finalizar}
-                    >
-                        Ir para o início
-
-                        <ArrowRight size={21} />
-                    </button>
-                </footer>
-            </div>
-        </main>
+  const camposSelecionados = useMemo(() => {
+    const campos = sessionStorage.getItem(
+      'sate-campos-analise'
     );
+
+    if (!campos) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(campos);
+    } catch (error) {
+      console.error(
+        'Erro ao carregar campos:',
+        error
+      );
+
+      return [];
+    }
+  }, []);
+
+  const voltar = () => {
+    navigate('/configuracao-equipe', {
+      state: {
+        modalidade,
+        imagem: imagemEsporte,
+      },
+    });
+  };
+
+  const finalizar = async () => {
+    if (salvando) return;
+
+    try {
+      setSalvando(true);
+
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        alert(
+          'Sessão não encontrada. Faça login novamente.'
+        );
+
+        navigate('/login');
+        return;
+      }
+
+      const resposta = await fetch(
+        'http://localhost:3000/api/equipes',
+        {
+          method: 'POST',
+
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+
+          body: JSON.stringify({
+            nome: nomeEquipe,
+            modalidade: modalidade,
+            categoria: categoria,
+            imagem:
+              imagemEquipe ||
+              imagemEsporte ||
+              null,
+            corEquipe: '#16A875',
+            proximaPartida: null,
+          }),
+        }
+      );
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.mensagem ||
+            'Não foi possível salvar a equipe.'
+        );
+      }
+
+      console.log(
+        'Equipe criada:',
+        dados
+      );
+
+      sessionStorage.removeItem(
+        'sate-nome-equipe'
+      );
+
+      sessionStorage.removeItem(
+        'sate-categoria-equipe'
+      );
+
+      sessionStorage.removeItem(
+        'sate-imagem-equipe'
+      );
+
+      sessionStorage.removeItem(
+        'sate-imagem-esporte'
+      );
+
+      sessionStorage.removeItem(
+        'sate-campos-analise'
+      );
+
+      sessionStorage.removeItem(
+        'sate-modalidade'
+      );
+
+      navigate('/inicio');
+    } catch (error) {
+      console.error(
+        'Erro ao salvar equipe:',
+        error
+      );
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Não foi possível salvar a equipe.'
+      );
+
+      setSalvando(false);
+    }
+  };
+
+  return (
+    <div className={styles.page}>
+      <div className={styles.container}>
+
+        {/* PROGRESSO */}
+        <div className={styles.progressArea}>
+
+          <div className={styles.stepBadge}>
+            Etapa 4 de 4
+          </div>
+
+          <div className={styles.progressSteps}>
+            <div />
+            <div />
+            <div />
+            <div />
+          </div>
+
+        </div>
+
+        {/* HEADER */}
+        <header className={styles.header}>
+
+          <div className={styles.completeIcon}>
+            <Check size={27} strokeWidth={3} />
+          </div>
+
+          <h1>Tudo pronto!</h1>
+
+          <p>
+            Sua equipe foi configurada.
+            Confira as informações antes de começar.
+          </p>
+
+        </header>
+
+        {/* CARDS */}
+        <div className={styles.summaryArea}>
+
+          {/* CAMPOS */}
+          <div className={styles.fieldsCard}>
+
+            <div className={styles.sportHeader}>
+
+              <div className={styles.sportCircle}>
+                {
+                  iconePorEsporte[modalidade] ||
+                  <FaRunning />
+                }
+              </div>
+
+              <div>
+                <strong>{modalidade}</strong>
+
+                <span>
+                  CAMPOS DE ANÁLISE
+                </span>
+              </div>
+
+            </div>
+
+            <div className={styles.divider} />
+
+            <span className={styles.fieldsTitle}>
+              Informações selecionadas
+            </span>
+
+            {camposSelecionados.length > 0 ? (
+              <ul>
+                {camposSelecionados
+                  .slice(0, 6)
+                  .map(
+                    (
+                      campo: string,
+                      index: number
+                    ) => (
+                      <li
+                        key={`${campo}-${index}`}
+                      >
+                        <Check size={13} />
+                        {campo}
+                      </li>
+                    )
+                  )}
+              </ul>
+            ) : (
+              <p className={styles.emptyFields}>
+                Nenhum campo selecionado.
+              </p>
+            )}
+
+            {camposSelecionados.length > 6 && (
+              <span className={styles.moreFields}>
+                +{camposSelecionados.length - 6}{' '}
+                campos selecionados
+              </span>
+            )}
+
+          </div>
+
+          {/* EQUIPE */}
+          <div className={styles.teamCard}>
+
+            <div
+              className={styles.teamImage}
+              style={
+                imagemEquipe
+                  ? {
+                      backgroundImage: `url(${imagemEquipe})`,
+                    }
+                  : undefined
+              }
+            >
+
+              {!imagemEquipe && (
+                iconePorEsporte[modalidade] ||
+                <FaRunning />
+              )}
+
+            </div>
+
+            <div className={styles.teamInfo}>
+
+              <div>
+
+                <span>
+                  {modalidade.toUpperCase()}
+                </span>
+
+                <h2>
+                  {nomeEquipe}
+                </h2>
+
+                <p>
+                  Categoria: {categoria}
+                </p>
+
+              </div>
+
+              <div className={styles.sportEmoji}>
+                {
+                  iconePorEsporte[modalidade] ||
+                  <FaRunning />
+                }
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* MENSAGEM */}
+        <div className={styles.finalMessage}>
+
+          <div className={styles.finalMessageIcon}>
+            <Check size={17} />
+          </div>
+
+          <div>
+            <strong>
+              Sua equipe está pronta!
+            </strong>
+
+            <span>
+              Agora você pode começar a acompanhar
+              seus atletas e treinamentos.
+            </span>
+          </div>
+
+        </div>
+
+        {/* FOOTER */}
+        <footer className={styles.footer}>
+
+          <button
+            type="button"
+            className={styles.backButton}
+            onClick={voltar}
+            disabled={salvando}
+          >
+            <ArrowLeft size={18} />
+
+            Voltar
+          </button>
+
+          <button
+            type="button"
+            className={styles.nextButton}
+            onClick={finalizar}
+            disabled={salvando}
+          >
+            {salvando ? (
+              <>
+                <span className={styles.spinner} />
+
+                Salvando...
+              </>
+            ) : (
+              <>
+                Ir para o início
+
+                <ArrowRight size={18} />
+              </>
+            )}
+          </button>
+
+        </footer>
+
+      </div>
+    </div>
+  );
 }

@@ -94,6 +94,12 @@ export default function SelecaoEsporte() {
             return;
         }
 
+        /*
+         * Guarda temporariamente a modalidade escolhida.
+         *
+         * Esses dados serão enviados definitivamente
+         * para o backend ao finalizar o onboarding.
+         */
         sessionStorage.setItem(
             'sate-modalidade',
             esporteAtual.nome,
@@ -134,13 +140,15 @@ export default function SelecaoEsporte() {
             )}
 
             <div className={styles.conteudo}>
-                {/* ETAPA */}
+
+                {/* ===================== ETAPA ===================== */}
 
                 <div className={styles.etapa}>
                     Etapa 1 de 4 · Configuração do esporte
                 </div>
 
-                {/* PROGRESSO */}
+
+                {/* ===================== PROGRESSO ===================== */}
 
                 <div className={styles.linhaProgresso}>
                     <div className={styles.progressoAtivo} />
@@ -149,7 +157,8 @@ export default function SelecaoEsporte() {
                     <div />
                 </div>
 
-                {/* CABEÇALHO */}
+
+                {/* ===================== CABEÇALHO ===================== */}
 
                 <section className={styles.cabecalho}>
                     <h1>
@@ -163,7 +172,8 @@ export default function SelecaoEsporte() {
                     </p>
                 </section>
 
-                {/* ESPORTES */}
+
+                {/* ===================== ESPORTES ===================== */}
 
                 <section className={styles.gridEsportes}>
                     {esportes.map((esporte) => {
@@ -205,9 +215,11 @@ export default function SelecaoEsporte() {
                     })}
                 </section>
 
-                {/* RODAPÉ */}
+
+                {/* ===================== RODAPÉ ===================== */}
 
                 <div className={styles.rodape}>
+
                     <button
                         type="button"
                         className={styles.botaoVoltar}
@@ -216,6 +228,7 @@ export default function SelecaoEsporte() {
                         <ArrowLeft size={17} />
                         Voltar
                     </button>
+
 
                     <button
                         type="button"
@@ -226,8 +239,11 @@ export default function SelecaoEsporte() {
                         Próximo
                         <ArrowRight size={17} />
                     </button>
+
                 </div>
+
             </div>
         </main>
     );
 }
+

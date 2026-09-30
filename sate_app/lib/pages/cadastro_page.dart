@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -25,7 +26,6 @@ class _CadastroPageState extends State<CadastroPage> {
   static const rosa = Color(0xFFE98BA8);
   static const azul = Color(0xFF001E98);
 
-  // Depois podemos colocar isso em um arquivo de configuração.
   static const String apiUrl = 'http://localhost:3000';
 
   @override
@@ -52,7 +52,6 @@ class _CadastroPageState extends State<CadastroPage> {
               ),
             ),
           ),
-
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -125,7 +124,6 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 28),
 
-          // NOME
           _label('Nome completo'),
 
           const SizedBox(height: 8),
@@ -142,7 +140,6 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 18),
 
-          // EMAIL
           _label('Email'),
 
           const SizedBox(height: 8),
@@ -160,7 +157,6 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 18),
 
-          // SENHA
           _label('Senha'),
 
           const SizedBox(height: 8),
@@ -194,7 +190,6 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 18),
 
-          // CONFIRMAR SENHA
           _label('Confirmar senha'),
 
           const SizedBox(height: 8),
@@ -230,7 +225,6 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 14),
 
-          // TERMOS
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -271,7 +265,6 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 20),
 
-          // BOTÃO
           _mainButton(
             text: carregando
                 ? 'Criando conta...'
@@ -287,7 +280,6 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 22),
 
-          // GOOGLE
           _socialButton(
             icon: _googleIcon(),
             text: 'Continuar com Google',
@@ -298,7 +290,6 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 12),
 
-          // APPLE
           _socialButton(
             icon: const Icon(
               Icons.apple,
@@ -424,9 +415,7 @@ class _CadastroPageState extends State<CadastroPage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
             'ou continue com',
             style: TextStyle(
@@ -497,26 +486,46 @@ class _CadastroPageState extends State<CadastroPage> {
     );
   }
 
+  // ==========================================================================
+  // CRIAR CONTA
+  // ==========================================================================
+
   Future<void> _criarConta() async {
     final nome = nomeController.text.trim();
     final email = emailController.text.trim();
     final senha = senhaController.text;
     final confirmarSenha = confirmarSenhaController.text;
 
-    // VALIDAÇÕES
-    if (nome.isEmpty ||
-        email.isEmpty ||
-        senha.isEmpty ||
-        confirmarSenha.isEmpty) {
+    if (nome.isEmpty) {
       _mostrarMensagem(
-        'Preencha todos os campos.',
+        'Digite seu nome completo.',
+        erro: true,
       );
       return;
     }
 
-    if (email.contains(' ') || !email.contains('@')) {
+    if (email.isEmpty) {
+      _mostrarMensagem(
+        'Digite seu email.',
+        erro: true,
+      );
+      return;
+    }
+
+    if (email.contains(' ') ||
+        !email.contains('@') ||
+        !email.contains('.')) {
       _mostrarMensagem(
         'Digite um email válido.',
+        erro: true,
+      );
+      return;
+    }
+
+    if (senha.isEmpty) {
+      _mostrarMensagem(
+        'Digite uma senha.',
+        erro: true,
       );
       return;
     }
@@ -524,6 +533,15 @@ class _CadastroPageState extends State<CadastroPage> {
     if (senha.length < 6) {
       _mostrarMensagem(
         'A senha deve ter pelo menos 6 caracteres.',
+        erro: true,
+      );
+      return;
+    }
+
+    if (confirmarSenha.isEmpty) {
+      _mostrarMensagem(
+        'Confirme sua senha.',
+        erro: true,
       );
       return;
     }
@@ -531,6 +549,7 @@ class _CadastroPageState extends State<CadastroPage> {
     if (senha != confirmarSenha) {
       _mostrarMensagem(
         'As senhas não coincidem.',
+        erro: true,
       );
       return;
     }
@@ -538,6 +557,7 @@ class _CadastroPageState extends State<CadastroPage> {
     if (!termos) {
       _mostrarMensagem(
         'Aceite os termos de uso para continuar.',
+        erro: true,
       );
       return;
     }
@@ -547,63 +567,120 @@ class _CadastroPageState extends State<CadastroPage> {
     });
 
     try {
+      // O tipo NÃO é enviado pelo aplicativo.
+      // O backend define automaticamente como TREINADOR.
+
+      final dadosCadastro = {
+        'nome': nome,
+        'email': email,
+        'senha': senha,
+      };
+
       debugPrint('================================');
-      debugPrint('CADASTRO');
+      debugPrint('SATE - CADASTRO');
+      debugPrint('================================');
+      debugPrint('URL: $apiUrl/api/auth/cadastro');
       debugPrint('Nome: $nome');
       debugPrint('Email: $email');
+      debugPrint('Senha preenchida: ${senha.isNotEmpty}');
+      debugPrint(
+        'JSON enviado: ${jsonEncode(dadosCadastro)}',
+      );
       debugPrint('================================');
 
-      final resposta = await http.post(
-        Uri.parse(
-          '$apiUrl/api/auth/cadastro',
-        ),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'nome': nome,
-          'email': email,
-          'senha': senha,
-        }),
-      );
+      final resposta = await http
+          .post(
+            Uri.parse(
+              '$apiUrl/api/auth/cadastro',
+            ),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: jsonEncode(dadosCadastro),
+          )
+          .timeout(
+            const Duration(seconds: 15),
+          );
 
-      debugPrint(
-        'Status do cadastro: ${resposta.statusCode}',
-      );
-
-      debugPrint(
-        'Resposta do servidor: ${resposta.body}',
-      );
+      debugPrint('================================');
+      debugPrint('RESPOSTA DO BACKEND');
+      debugPrint('Status: ${resposta.statusCode}');
+      debugPrint('Body: ${resposta.body}');
+      debugPrint('================================');
 
       if (!mounted) return;
 
-      final data = jsonDecode(resposta.body);
+      dynamic data;
 
-      if (resposta.statusCode != 201) {
-        _mostrarMensagem(
-          data['mensagem'] ??
-              'Não foi possível criar a conta.',
-          erro: true,
+      try {
+        data = jsonDecode(resposta.body);
+      } catch (e) {
+        data = null;
+      }
+
+      if (resposta.statusCode == 201) {
+        String mensagem = 'Conta criada com sucesso!';
+
+        if (data is Map && data['mensagem'] != null) {
+          mensagem = data['mensagem'].toString();
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '$mensagem Faça login para continuar.',
+            ),
+            backgroundColor: verde,
+          ),
         );
+
+        await Future.delayed(
+          const Duration(milliseconds: 800),
+        );
+
+        if (!mounted) return;
+
+        Navigator.pop(context);
+
         return;
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Conta criada com sucesso! Faça login para continuar.',
-          ),
-          backgroundColor: verde,
-        ),
-      );
+      String mensagemErro =
+          'Não foi possível criar a conta.';
 
-      await Future.delayed(
-        const Duration(milliseconds: 800),
-      );
+      if (data is Map && data['mensagem'] != null) {
+        mensagemErro = data['mensagem'].toString();
+      } else if (resposta.body.isNotEmpty) {
+        mensagemErro = resposta.body;
+      }
 
+      _mostrarMensagem(
+        mensagemErro,
+        erro: true,
+      );
+    } on http.ClientException catch (error) {
       if (!mounted) return;
 
-      Navigator.pop(context);
+      debugPrint(
+        'Erro de conexão HTTP: $error',
+      );
+
+      _mostrarMensagem(
+        'Não foi possível conectar ao servidor.',
+        erro: true,
+      );
+    } on FormatException catch (error) {
+      if (!mounted) return;
+
+      debugPrint(
+        'Erro de JSON: $error',
+      );
+
+      _mostrarMensagem(
+        'Resposta inválida do servidor.',
+        erro: true,
+      );
     } catch (error) {
       if (!mounted) return;
 
@@ -612,7 +689,7 @@ class _CadastroPageState extends State<CadastroPage> {
       );
 
       _mostrarMensagem(
-        'Não foi possível conectar ao servidor.\n$error',
+        'Não foi possível conectar ao servidor.',
         erro: true,
       );
     } finally {
@@ -656,6 +733,10 @@ class _CadastroPageState extends State<CadastroPage> {
     );
   }
 }
+
+// ============================================================================
+// HOVER LINK
+// ============================================================================
 
 class _HoverLink extends StatefulWidget {
   final Color verde;
@@ -722,6 +803,10 @@ class _HoverLinkState extends State<_HoverLink> {
     );
   }
 }
+
+// ============================================================================
+// BACKGROUND
+// ============================================================================
 
 class BackgroundPainter extends CustomPainter {
   final Color verde;
@@ -825,11 +910,7 @@ class BackgroundPainter extends CustomPainter {
       linePaint,
     );
 
-    for (
-      int i = 0;
-      i < points.length;
-      i += 2
-    ) {
+    for (int i = 0; i < points.length; i += 2) {
       final paint = Paint()
         ..color = i % 4 == 0
             ? rosa

@@ -58,47 +58,81 @@ export default function ConfiguracaoEquipe() {
     const fileInputRef =
         useRef<HTMLInputElement>(null);
 
+    /*
+     * Dados recebidos da tela anterior.
+     */
     const state =
         location.state as EstadoNavegacao | null;
 
+    /*
+     * Recupera a modalidade pelo Router ou pelo
+     * sessionStorage caso a página seja recarregada.
+     */
     const modalidade =
         state?.modalidade ||
         sessionStorage.getItem('sate-modalidade') ||
         'Futebol';
 
+    /*
+     * Recupera a imagem do esporte.
+     */
     const imagemEsporte =
         state?.imagem ||
         sessionStorage.getItem('sate-imagem-esporte') ||
         '';
 
+    /*
+     * Nome da equipe.
+     */
     const [nomeEquipe, setNomeEquipe] =
         useState(
-            sessionStorage.getItem('sate-nome-equipe') || '',
+            sessionStorage.getItem(
+                'sate-nome-equipe',
+            ) || '',
         );
 
+    /*
+     * Categoria da equipe.
+     */
     const [categoria, setCategoria] =
         useState(
-            sessionStorage.getItem('sate-categoria-equipe') ||
-                'Principal',
+            sessionStorage.getItem(
+                'sate-categoria-equipe',
+            ) || 'Principal',
         );
 
+    /*
+     * Imagem da equipe.
+     */
     const [imagemEquipe, setImagemEquipe] =
         useState(
-            sessionStorage.getItem('sate-imagem-equipe') ||
-                '',
+            sessionStorage.getItem(
+                'sate-imagem-equipe',
+            ) || '',
         );
 
+    /*
+     * Ícone correspondente à modalidade.
+     */
     const IconeEsporte =
-        iconePorEsporte[modalidade] || FaFutbol;
+        iconePorEsporte[modalidade] ||
+        FaFutbol;
 
-    const formularioValido =
-        useMemo(() => {
-            return (
-                nomeEquipe.trim().length >= 2 &&
-                categoria.trim().length > 0
-            );
-        }, [nomeEquipe, categoria]);
+    /*
+     * Verifica se os campos obrigatórios
+     * estão preenchidos.
+     */
+    const formularioValido = useMemo(() => {
+        return (
+            nomeEquipe.trim().length >= 2 &&
+            categoria.trim().length > 0
+        );
+    }, [nomeEquipe, categoria]);
 
+    /*
+     * Mantém modalidade e imagem do esporte
+     * salvas durante o onboarding.
+     */
     useEffect(() => {
         sessionStorage.setItem(
             'sate-modalidade',
@@ -111,8 +145,14 @@ export default function ConfiguracaoEquipe() {
                 imagemEsporte,
             );
         }
-    }, [modalidade, imagemEsporte]);
+    }, [
+        modalidade,
+        imagemEsporte,
+    ]);
 
+    /*
+     * Seleção da imagem da equipe.
+     */
     const selecionarImagem = (
         event: ChangeEvent<HTMLInputElement>,
     ) => {
@@ -123,6 +163,9 @@ export default function ConfiguracaoEquipe() {
             return;
         }
 
+        /*
+         * Aceita somente imagens.
+         */
         if (!arquivo.type.startsWith('image/')) {
             return;
         }
@@ -131,9 +174,12 @@ export default function ConfiguracaoEquipe() {
 
         reader.onload = () => {
             if (
-                typeof reader.result === 'string'
+                typeof reader.result ===
+                'string'
             ) {
-                setImagemEquipe(reader.result);
+                setImagemEquipe(
+                    reader.result,
+                );
 
                 try {
                     sessionStorage.setItem(
@@ -151,20 +197,35 @@ export default function ConfiguracaoEquipe() {
         reader.readAsDataURL(arquivo);
     };
 
+    /*
+     * Voltar para a 3ª etapa.
+     */
     const voltar = () => {
-        navigate('/configuracao-analise', {
-            state: {
-                modalidade,
-                imagem: imagemEsporte,
+        navigate(
+            '/configuracao-analise',
+            {
+                state: {
+                    modalidade,
+                    imagem: imagemEsporte,
+                },
             },
-        });
+        );
     };
 
+    /*
+     * Avançar para a 5ª e última etapa.
+     */
     const proximo = () => {
         if (!formularioValido) {
             return;
         }
 
+        /*
+         * Salva os dados temporariamente.
+         *
+         * O envio definitivo para o backend será
+         * feito somente na última etapa do onboarding.
+         */
         sessionStorage.setItem(
             'sate-nome-equipe',
             nomeEquipe.trim(),
@@ -175,12 +236,35 @@ export default function ConfiguracaoEquipe() {
             categoria,
         );
 
-        navigate('/configuracao-concluida', {
-            state: {
-                modalidade,
-                imagem: imagemEsporte,
+        /*
+         * Se houver imagem, garante que ela
+         * esteja salva.
+         */
+        if (imagemEquipe) {
+            try {
+                sessionStorage.setItem(
+                    'sate-imagem-equipe',
+                    imagemEquipe,
+                );
+            } catch {
+                console.warn(
+                    'Não foi possível salvar a imagem temporariamente.',
+                );
+            }
+        }
+
+        /*
+         * Vai para a tela de configuração concluída.
+         */
+        navigate(
+            '/configuracao-concluida',
+            {
+                state: {
+                    modalidade,
+                    imagem: imagemEsporte,
+                },
             },
-        });
+        );
     };
 
     return (
@@ -201,41 +285,102 @@ export default function ConfiguracaoEquipe() {
             }
         >
             <div className={styles.container}>
-                <div className={styles.progressArea}>
-                    <div className={styles.stepBadge}>
-                        Etapa 3 de 4 · Configuração da equipe
+
+                {/* ================= PROGRESSO ================= */}
+
+                <div
+                    className={
+                        styles.progressArea
+                    }
+                >
+                    <div
+                        className={
+                            styles.stepBadge
+                        }
+                    >
+                        Etapa 3 de 4 · Configuração
+                        da equipe
                     </div>
 
-                    <div className={styles.progressSteps}>
-                        <div className={styles.progressComplete} />
-                        <div className={styles.progressComplete} />
-                        <div className={styles.progressComplete} />
-                        <div className={styles.progressInactive} />
+                    <div
+                        className={
+                            styles.progressSteps
+                        }
+                    >
+                        <div
+                            className={
+                                styles.progressComplete
+                            }
+                        />
+
+                        <div
+                            className={
+                                styles.progressComplete
+                            }
+                        />
+
+                        <div
+                            className={
+                                styles.progressComplete
+                            }
+                        />
+
+                        <div
+                            className={
+                                styles.progressInactive
+                            }
+                        />
                     </div>
                 </div>
 
-                <section className={styles.header}>
+                {/* ================= CABEÇALHO ================= */}
+
+                <section
+                    className={
+                        styles.header
+                    }
+                >
                     <h1>
-                        Finalize a configuração do seu registro
+                        Finalize a configuração
+                        do seu registro
                     </h1>
 
                     <p>
-                        Agora vamos configurar sua equipe.
-                        Essas informações vão aparecer no seu painel
-                        e ajudar na organização dos treinos e jogos.
+                        Agora vamos configurar
+                        sua equipe. Essas
+                        informações vão aparecer
+                        no seu painel e ajudar na
+                        organização dos treinos
+                        e jogos.
                     </p>
                 </section>
 
-                <section className={styles.formCard}>
-                    <div className={styles.photoColumn}>
+                {/* ================= FORMULÁRIO ================= */}
+
+                <section
+                    className={
+                        styles.formCard
+                    }
+                >
+
+                    {/* ================= FOTO ================= */}
+
+                    <div
+                        className={
+                            styles.photoColumn
+                        }
+                    >
                         <button
                             type="button"
-                            className={styles.photoArea}
+                            className={
+                                styles.photoArea
+                            }
                             onClick={() =>
                                 fileInputRef.current?.click()
                             }
                             style={
-                                imagemEquipe || imagemEsporte
+                                imagemEquipe ||
+                                imagemEsporte
                                     ? {
                                           backgroundImage: `
                                             linear-gradient(
@@ -251,8 +396,14 @@ export default function ConfiguracaoEquipe() {
                                     : undefined
                             }
                         >
-                            <div className={styles.camera}>
-                                <Camera size={28} />
+                            <div
+                                className={
+                                    styles.camera
+                                }
+                            >
+                                <Camera
+                                    size={28}
+                                />
                             </div>
 
                             <strong>
@@ -267,29 +418,53 @@ export default function ConfiguracaoEquipe() {
                         </button>
 
                         <input
-                            ref={fileInputRef}
+                            ref={
+                                fileInputRef
+                            }
                             type="file"
                             accept="image/png,image/jpeg,image/webp"
-                            className={styles.hiddenInput}
-                            onChange={selecionarImagem}
+                            className={
+                                styles.hiddenInput
+                            }
+                            onChange={
+                                selecionarImagem
+                            }
                         />
 
                         {imagemEquipe && (
                             <button
                                 type="button"
-                                className={styles.changePhoto}
+                                className={
+                                    styles.changePhoto
+                                }
                                 onClick={() =>
                                     fileInputRef.current?.click()
                                 }
                             >
-                                <ImagePlus size={16} />
+                                <ImagePlus
+                                    size={16}
+                                />
+
                                 Trocar imagem
                             </button>
                         )}
                     </div>
 
-                    <div className={styles.formArea}>
-                        <div className={styles.field}>
+                    {/* ================= CAMPOS ================= */}
+
+                    <div
+                        className={
+                            styles.formArea
+                        }
+                    >
+
+                        {/* NOME */}
+
+                        <div
+                            className={
+                                styles.field
+                            }
+                        >
                             <label htmlFor="nome-equipe">
                                 Nome da equipe
                                 <span>*</span>
@@ -299,16 +474,27 @@ export default function ConfiguracaoEquipe() {
                                 id="nome-equipe"
                                 type="text"
                                 placeholder="Digite o nome da equipe..."
-                                value={nomeEquipe}
-                                onChange={(event) =>
+                                value={
+                                    nomeEquipe
+                                }
+                                onChange={(
+                                    event,
+                                ) =>
                                     setNomeEquipe(
                                         event.target.value,
                                     )
                                 }
+                                maxLength={100}
                             />
                         </div>
 
-                        <div className={styles.field}>
+                        {/* CATEGORIA */}
+
+                        <div
+                            className={
+                                styles.field
+                            }
+                        >
                             <label htmlFor="categoria">
                                 Categoria
                                 <span>*</span>
@@ -316,58 +502,106 @@ export default function ConfiguracaoEquipe() {
 
                             <select
                                 id="categoria"
-                                value={categoria}
-                                onChange={(event) =>
+                                value={
+                                    categoria
+                                }
+                                onChange={(
+                                    event,
+                                ) =>
                                     setCategoria(
                                         event.target.value,
                                     )
                                 }
                             >
-                                {categorias.map((item) => (
-                                    <option
-                                        key={item}
-                                        value={item}
-                                    >
-                                        {item}
-                                    </option>
-                                ))}
+                                {categorias.map(
+                                    (
+                                        item,
+                                    ) => (
+                                        <option
+                                            key={
+                                                item
+                                            }
+                                            value={
+                                                item
+                                            }
+                                        >
+                                            {
+                                                item
+                                            }
+                                        </option>
+                                    ),
+                                )}
                             </select>
                         </div>
 
-                        <div className={styles.field}>
+                        {/* MODALIDADE */}
+
+                        <div
+                            className={
+                                styles.field
+                            }
+                        >
                             <label htmlFor="modalidade">
                                 Modalidade
                             </label>
 
                             <select
                                 id="modalidade"
-                                value={modalidade}
+                                value={
+                                    modalidade
+                                }
                                 disabled
                             >
-                                <option value={modalidade}>
-                                    {modalidade}
+                                <option
+                                    value={
+                                        modalidade
+                                    }
+                                >
+                                    {
+                                        modalidade
+                                    }
                                 </option>
                             </select>
 
                             <small>
-                                Para alterar o esporte, volte para
-                                a primeira etapa.
+                                Para alterar o
+                                esporte, volte
+                                para a primeira
+                                etapa.
                             </small>
                         </div>
                     </div>
 
-                    <aside className={styles.preview}>
-                        <span className={styles.previewTitle}>
+                    {/* ================= PRÉVIA ================= */}
+
+                    <aside
+                        className={
+                            styles.preview
+                        }
+                    >
+                        <span
+                            className={
+                                styles.previewTitle
+                            }
+                        >
                             Prévia da equipe
                         </span>
 
-                        <div className={styles.previewContent}>
+                        <div
+                            className={
+                                styles.previewContent
+                            }
+                        >
                             <div
-                                className={styles.avatar}
+                                className={
+                                    styles.avatar
+                                }
                                 style={
                                     imagemEquipe
                                         ? {
-                                              backgroundImage: `url(${imagemEquipe})`,
+                                              backgroundImage: `
+                                                url(${imagemEquipe})
+                                              `,
                                           }
                                         : undefined
                                 }
@@ -386,31 +620,55 @@ export default function ConfiguracaoEquipe() {
                                 </strong>
 
                                 <span>
-                                    {modalidade} · {categoria}
+                                    {modalidade}
+                                    {' · '}
+                                    {categoria}
                                 </span>
                             </div>
                         </div>
                     </aside>
                 </section>
 
-                <footer className={styles.footer}>
+                {/* ================= RODAPÉ ================= */}
+
+                <footer
+                    className={
+                        styles.footer
+                    }
+                >
                     <button
                         type="button"
-                        className={styles.backButton}
-                        onClick={voltar}
+                        className={
+                            styles.backButton
+                        }
+                        onClick={
+                            voltar
+                        }
                     >
-                        <ArrowLeft size={21} />
+                        <ArrowLeft
+                            size={21}
+                        />
+
                         Voltar
                     </button>
 
                     <button
                         type="button"
-                        className={styles.nextButton}
-                        disabled={!formularioValido}
-                        onClick={proximo}
+                        className={
+                            styles.nextButton
+                        }
+                        disabled={
+                            !formularioValido
+                        }
+                        onClick={
+                            proximo
+                        }
                     >
                         Próximo
-                        <ArrowRight size={21} />
+
+                        <ArrowRight
+                            size={21}
+                        />
                     </button>
                 </footer>
             </div>

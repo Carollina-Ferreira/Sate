@@ -42,7 +42,6 @@ const Sidebar = ({
         />
       </div>
 
-
       {/* MENU */}
       <nav className={styles.menu}>
 
@@ -59,7 +58,6 @@ const Sidebar = ({
                 isActive ? styles.active : ''
               }`}
             >
-
               <span className="material-icons">
                 {item.icon}
               </span>
@@ -67,30 +65,29 @@ const Sidebar = ({
               <span className={styles.label}>
                 {item.label}
               </span>
-
             </Link>
           );
 
         })}
 
+        {/* LINHA SEPARADORA */}
+        <div className={styles.menuDivider} />
+
+        {/* SAIR */}
+        <Link
+          to="/"
+          className={styles.menuItem}
+        >
+          <span className="material-icons">
+            logout
+          </span>
+
+          <span className={styles.label}>
+            Sair
+          </span>
+        </Link>
+
       </nav>
-
-
-      {/* SAIR */}
-      <Link
-        to="/"
-        className={styles.logout}
-      >
-
-        <span className="material-icons">
-          logout
-        </span>
-
-        <span className={styles.label}>
-          Sair
-        </span>
-
-      </Link>
 
     </aside>
   );

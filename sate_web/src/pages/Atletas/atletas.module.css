@@ -1,0 +1,1520 @@
+.page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 48px 70px 60px;
+
+  box-sizing: border-box;
+
+  background: #005942;
+
+  font-family: 'Poppins', sans-serif;
+}
+
+
+/* ============================================================
+   CABEÇALHO
+============================================================ */
+
+.top {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 30px;
+}
+
+.titleArea {
+  min-width: 0;
+}
+
+.titleArea h1 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 34px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.titleArea p {
+  max-width: 620px;
+
+  margin: 8px 0 0;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   NOVO ATLETA
+============================================================ */
+
+.newAthleteButton {
+  min-width: 160px;
+  height: 52px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  padding: 0 21px;
+
+  box-sizing: border-box;
+
+  border: none;
+
+  border-radius: 11px;
+
+  background: #16a875;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 18px rgba(0, 37, 26, 0.18);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.newAthleteButton:hover {
+  background: #129d6c;
+
+  transform: translateY(-2px);
+}
+
+
+/* ============================================================
+   FILTROS
+============================================================ */
+
+.filters {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(280px, 1fr)
+    minmax(180px, 220px)
+    minmax(190px, 230px)
+    118px;
+
+  gap: 13px;
+
+  margin-bottom: 40px;
+}
+
+
+/* ============================================================
+   BUSCA
+============================================================ */
+
+.searchBox {
+  width: 100%;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 0 16px;
+
+  box-sizing: border-box;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  color: #738078;
+}
+
+.searchBox svg {
+  flex-shrink: 0;
+}
+
+.searchBox input {
+  width: 100%;
+  min-width: 0;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #263930;
+
+  font-family: inherit;
+
+  font-size: 14px;
+}
+
+.searchBox input::placeholder {
+  color: #909b96;
+}
+
+
+/* ============================================================
+   SELECT
+============================================================ */
+
+.selectBox {
+  width: 100%;
+  height: 54px;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+}
+
+.selectBox select {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+
+  padding: 0 42px 0 15px;
+
+  box-sizing: border-box;
+
+  border: none;
+
+  outline: none;
+
+  appearance: none;
+
+  background: transparent;
+
+  color: #2a3b33;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  text-overflow: ellipsis;
+
+  cursor: pointer;
+}
+
+.selectBox svg {
+  position: absolute;
+
+  right: 13px;
+
+  flex-shrink: 0;
+
+  color: #43564d;
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   BOTÃO FILTROS
+============================================================ */
+
+.filterButton {
+  width: 100%;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  border: none;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  color: #3297c6;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   GRID DOS ATLETAS
+============================================================ */
+
+.athletesGrid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 20px;
+}
+
+
+/* ============================================================
+   CARD
+============================================================ */
+
+.athleteCard {
+  width: 100%;
+  min-width: 0;
+  min-height: 250px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 15px;
+
+  background: #e7efeb;
+
+  box-shadow:
+    0 8px 20px rgba(0, 31, 22, 0.14);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.athleteCard:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 13px 26px rgba(0, 31, 22, 0.22);
+}
+
+
+/* ============================================================
+   CARD NORMAL
+============================================================ */
+
+.cardContent {
+  width: 100%;
+  min-height: 250px;
+
+  position: relative;
+
+  padding: 23px;
+
+  box-sizing: border-box;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.athleteCard:hover .cardContent {
+  opacity: 0;
+
+  transform: scale(0.97);
+}
+
+
+/* ============================================================
+   AVATAR
+============================================================ */
+
+.avatar {
+  width: 68px;
+  height: 68px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 18px;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.verde {
+  background: #16ad7a;
+}
+
+.rosa {
+  background: #ed4e78;
+}
+
+.azul {
+  background: #4aa8da;
+}
+
+.roxo {
+  background: #7665dc;
+}
+
+.laranja {
+  background: #e58a32;
+}
+
+
+/* ============================================================
+   CARD INFO
+============================================================ */
+
+.cardInfo {
+  width: 100%;
+  min-width: 0;
+}
+
+.cardInfo h2 {
+  overflow: hidden;
+
+  margin: 0;
+
+  color: #1c3027;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  line-height: 1.3;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.team {
+  display: block;
+
+  overflow: hidden;
+
+  margin-top: 4px;
+
+  color: #607168;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.cardInfo p {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  overflow: hidden;
+
+  margin: 8px 0 0;
+
+  color: #74827b;
+
+  font-size: 13px;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.cardInfo p span {
+  color: #a1aca6;
+
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   FREQUÊNCIA
+============================================================ */
+
+.frequency {
+  position: absolute;
+
+  right: 19px;
+  bottom: 18px;
+
+  min-width: 50px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 10px;
+
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  background: #d5e8df;
+
+  color: #0d9668;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   HOVER DO CARD
+============================================================ */
+
+.cardHover {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 5;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  gap: 11px;
+
+  padding: 22px;
+
+  box-sizing: border-box;
+
+  opacity: 0;
+  visibility: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #08785b,
+      #08694f
+    );
+
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.athleteCard:hover .cardHover {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cardHover button {
+  width: 100%;
+  height: 50px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.7);
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.1);
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.cardHover button:hover {
+  background:
+    rgba(255, 255, 255, 0.21);
+
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   ESTADOS
+============================================================ */
+
+.message,
+.empty {
+  width: 100%;
+  min-height: 220px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+
+  border-radius: 15px;
+
+  background: #e7efeb;
+
+  color: #66776f;
+
+  text-align: center;
+}
+
+.message strong,
+.empty strong {
+  color: #263a31;
+
+  font-size: 15px;
+}
+
+.message span,
+.empty span {
+  max-width: 500px;
+
+  font-size: 12px;
+}
+
+.message button {
+  height: 38px;
+
+  margin-top: 7px;
+
+  padding: 0 14px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #087b5b;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  cursor: pointer;
+}
+
+.empty {
+  grid-column: 1 / -1;
+}
+
+
+/* ============================================================
+   OVERLAY MODAL
+============================================================ */
+
+.modalOverlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 5000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  background:
+    rgba(0, 38, 28, 0.72);
+
+  backdrop-filter:
+    blur(5px);
+}
+
+
+/* ============================================================
+   MODAL
+============================================================ */
+
+.newAthleteModal {
+  width: min(
+    1040px,
+    calc(100vw - 36px)
+  );
+
+  max-width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background: #e7efeb;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.32);
+}
+
+
+/* ============================================================
+   HEADER MODAL
+============================================================ */
+
+.modalHeader {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 16px 22px 13px;
+
+  box-sizing: border-box;
+
+  border-bottom:
+    1px solid #cbd8d2;
+
+  background: #e7efeb;
+}
+
+.modalHeader > div:first-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.modalHeader > div > span {
+  color: #0e8662;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+}
+
+.modalHeader h2 {
+  margin: 2px 0 0;
+
+  color: #24382f;
+
+  font-size: 23px;
+  font-weight: 700;
+
+  line-height: 1.25;
+}
+
+.modalHeader p {
+  margin: 3px 0 0;
+
+  color: #6e7d76;
+
+  font-size: 10px;
+
+  line-height: 1.4;
+}
+
+.closeModalButton {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #d9e5df;
+
+  color: #52675d;
+
+  cursor: pointer;
+}
+
+.closeModalButton:hover {
+  background: #cddcd5;
+}
+
+
+/* ============================================================
+   CORPO MODAL
+============================================================ */
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+
+  gap: 15px;
+
+  padding: 15px 22px 14px;
+
+  box-sizing: border-box;
+
+  overflow: visible;
+}
+
+
+/* ============================================================
+   SEÇÕES
+============================================================ */
+
+.formSection {
+  padding-bottom: 14px;
+
+  border-bottom:
+    1px solid #ced9d4;
+}
+
+.formSection:last-of-type {
+  padding-bottom: 0;
+
+  border-bottom: none;
+}
+
+.sectionHeader {
+  margin-bottom: 9px;
+}
+
+.sectionHeader h3 {
+  margin: 0;
+
+  color: #263a31;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.sectionHeader span {
+  display: block;
+
+  margin-top: 1px;
+
+  color: #798780;
+
+  font-size: 9px;
+}
+
+
+/* ============================================================
+   DADOS PESSOAIS
+============================================================ */
+
+.formGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 10px 12px;
+}
+
+.fullField {
+  grid-column: 1 / -1;
+}
+
+
+/* ============================================================
+   RESPONSÁVEL
+============================================================ */
+
+.responsibleGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 12px;
+}
+
+
+/* ============================================================
+   CAMPOS
+============================================================ */
+
+.formField {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.formField label {
+  min-width: 0;
+
+  color: #3d5147;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  line-height: 1.3;
+}
+
+.formField label b {
+  margin-left: 3px;
+
+  color: #d84b4b;
+}
+
+.formField input,
+.formField select {
+  width: 100%;
+  min-width: 0;
+  height: 39px;
+
+  padding: 0 11px;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid #c8d3ce;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #263a31;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.formField input::placeholder {
+  color: #929e98;
+}
+
+.formField input:focus,
+.formField select:focus {
+  border-color: #17a875;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(22, 168, 117, 0.1);
+}
+
+
+/* ============================================================
+   ERRO
+============================================================ */
+
+.formError {
+  padding: 9px 11px;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid #efc1c1;
+
+  border-radius: 8px;
+
+  background: #fff1f1;
+
+  color: #ba4646;
+
+  font-size: 10px;
+  font-weight: 500;
+}
+
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+.modalFooter {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  padding: 11px 22px 13px;
+
+  box-sizing: border-box;
+
+  border-top:
+    1px solid #cbd8d2;
+
+  background: #e7efeb;
+}
+
+.cancelButton,
+.submitButton {
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 15px;
+
+  box-sizing: border-box;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+}
+
+.cancelButton {
+  border:
+    1px solid #becdc6;
+
+  background: transparent;
+
+  color: #54675e;
+}
+
+.cancelButton:hover {
+  background: #dce7e2;
+}
+
+.submitButton {
+  border: none;
+
+  background: #087b5b;
+
+  color: #ffffff;
+}
+
+.submitButton:hover {
+  background: #076d51;
+}
+
+
+/* ============================================================
+   NOTEBOOK PEQUENO
+============================================================ */
+
+@media (max-width: 1200px) {
+  .page {
+    padding:
+      42px
+      38px
+      50px;
+  }
+
+  .filters {
+    grid-template-columns:
+      minmax(260px, 1fr)
+      190px
+      200px
+      110px;
+  }
+
+  .athletesGrid {
+    gap: 16px;
+  }
+
+  .cardContent {
+    padding: 20px;
+  }
+
+  .cardInfo h2 {
+    font-size: 18px;
+  }
+}
+
+
+/* ============================================================
+   TABLET / NOTEBOOK ESTREITO
+============================================================ */
+
+@media (max-width: 1000px) {
+  .page {
+    padding:
+      36px
+      28px
+      46px;
+  }
+
+  .top {
+    margin-bottom: 25px;
+  }
+
+  .filters {
+    grid-template-columns:
+      1fr
+      1fr;
+
+    margin-bottom: 30px;
+  }
+
+  .searchBox {
+    grid-column: 1 / -1;
+  }
+
+  .filterButton {
+    width: 100%;
+  }
+
+  .athletesGrid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .newAthleteModal {
+    width: min(
+      900px,
+      calc(100vw - 32px)
+    );
+  }
+
+  .formGrid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .responsibleGrid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+  .fullField {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media (max-width: 760px) {
+  .page {
+    padding:
+      30px
+      20px
+      40px;
+  }
+
+  .top {
+    align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 18px;
+  }
+
+  .titleArea h1 {
+    font-size: 30px;
+  }
+
+  .titleArea p {
+    font-size: 13px;
+  }
+
+  .newAthleteButton {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .filters {
+    grid-template-columns:
+      1fr;
+
+    gap: 10px;
+  }
+
+  .searchBox {
+    grid-column: auto;
+  }
+
+  .athletesGrid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .athleteCard,
+  .cardContent {
+    min-height: 230px;
+  }
+
+  .modalOverlay {
+    padding: 12px;
+  }
+
+  .newAthleteModal {
+    width: 100%;
+
+    border-radius: 16px;
+  }
+
+  .modalHeader {
+    padding:
+      15px
+      18px
+      12px;
+  }
+
+  .modalBody {
+    padding:
+      14px
+      18px
+      12px;
+  }
+
+  .modalFooter {
+    padding:
+      11px
+      18px
+      14px;
+  }
+
+  .formGrid {
+    grid-template-columns:
+      1fr
+      1fr;
+  }
+
+  .responsibleGrid {
+    grid-template-columns:
+      1fr
+      1fr;
+  }
+
+  .responsibleGrid .formField:last-child {
+    grid-column:
+      1 / -1;
+  }
+}
+
+
+/* ============================================================
+   CELULAR
+============================================================ */
+
+@media (max-width: 560px) {
+  .page {
+    padding:
+      24px
+      14px
+      34px;
+  }
+
+  .titleArea h1 {
+    font-size: 27px;
+  }
+
+  .titleArea p {
+    font-size: 12px;
+  }
+
+  .newAthleteButton {
+    height: 48px;
+
+    font-size: 13px;
+  }
+
+  .searchBox,
+  .selectBox,
+  .filterButton {
+    height: 49px;
+  }
+
+  .athleteCard,
+  .cardContent {
+    min-height: 220px;
+  }
+
+  .avatar {
+    width: 60px;
+    height: 60px;
+
+    font-size: 18px;
+  }
+
+  .cardInfo h2 {
+    font-size: 18px;
+  }
+
+  .team {
+    font-size: 13px;
+  }
+
+  .cardInfo p {
+    font-size: 12px;
+  }
+
+  .cardHover {
+    padding: 18px;
+  }
+
+  .cardHover button {
+    height: 46px;
+
+    font-size: 13px;
+  }
+
+
+  /* O modal continua sem scroll interno.
+     Em celular, quem pode rolar é o overlay inteiro
+     para nada ficar cortado. */
+
+  .modalOverlay {
+    align-items: flex-start;
+
+    padding: 10px;
+
+    overflow-y: auto;
+  }
+
+  .newAthleteModal {
+    width: 100%;
+
+    margin:
+      8px
+      0;
+
+    overflow: hidden;
+  }
+
+  .modalHeader {
+    padding:
+      14px
+      15px
+      11px;
+  }
+
+  .modalHeader h2 {
+    font-size: 21px;
+  }
+
+  .modalHeader p {
+    max-width: 260px;
+
+    font-size: 9px;
+  }
+
+  .modalBody {
+    gap: 13px;
+
+    padding:
+      13px
+      15px
+      12px;
+  }
+
+  .sectionHeader h3 {
+    font-size: 16px;
+  }
+
+  .formGrid,
+  .responsibleGrid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .fullField,
+  .responsibleGrid .formField:last-child {
+    grid-column:
+      auto;
+  }
+
+  .formField input,
+  .formField select {
+    height: 42px;
+
+    font-size: 12px;
+  }
+
+  .formField label {
+    font-size: 11px;
+  }
+
+  .modalFooter {
+    flex-direction:
+      column-reverse;
+
+    padding:
+      11px
+      15px
+      14px;
+  }
+
+  .cancelButton,
+  .submitButton {
+    width: 100%;
+    height: 42px;
+
+    font-size: 12px;
+  }
+}
+
+
+/* ============================================================
+   CELULAR MUITO PEQUENO
+============================================================ */
+
+@media (max-width: 380px) {
+  .page {
+    padding:
+      20px
+      10px
+      30px;
+  }
+
+  .titleArea h1 {
+    font-size: 25px;
+  }
+
+  .cardContent {
+    padding: 18px;
+  }
+
+  .frequency {
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .modalOverlay {
+    padding: 6px;
+  }
+
+  .newAthleteModal {
+    border-radius: 13px;
+  }
+}
+
+
+/* ============================================================
+   TELAS BAIXAS
+============================================================ */
+
+@media (max-height: 700px) and (min-width: 561px) {
+  .modalOverlay {
+    align-items: flex-start;
+
+    overflow-y: auto;
+  }
+
+  .newAthleteModal {
+    margin:
+      12px
+      0;
+  }
+
+  .modalHeader {
+    padding-top: 12px;
+    padding-bottom: 10px;
+  }
+
+  .modalBody {
+    gap: 11px;
+
+    padding-top: 11px;
+    padding-bottom: 10px;
+  }
+
+  .formSection {
+    padding-bottom: 10px;
+  }
+
+  .sectionHeader {
+    margin-bottom: 7px;
+  }
+
+  .formField input,
+  .formField select {
+    height: 36px;
+  }
+
+  .modalFooter {
+    padding-top: 9px;
+    padding-bottom: 10px;
+  }
+}

@@ -1,0 +1,715 @@
+.page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+
+  background-color: #005942;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  color: #ffffff;
+
+  font-family: 'Poppins', sans-serif;
+}
+
+.container {
+  width: min(1000px, 100%);
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 34px 40px 28px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PROGRESSO
+========================================================= */
+
+.progressArea {
+  width: min(760px, 100%);
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 13px;
+}
+
+.stepBadge {
+  width: fit-content;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  line-height: 1.2;
+
+  white-space: nowrap;
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.progressSteps {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 9px;
+}
+
+.progressSteps > div {
+  height: 4px;
+
+  border-radius: 999px;
+
+  background: #58deb2;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+  width: min(760px, 100%);
+
+  margin: 27px auto 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.completeIcon {
+  width: 54px;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 13px;
+
+  border-radius: 50%;
+
+  background: #3bcf9c;
+
+  color: #ffffff;
+
+  box-shadow:
+    0 8px 20px rgba(0, 45, 32, 0.18);
+}
+
+.header h1 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 32px;
+  font-weight: 700;
+
+  line-height: 1.1;
+}
+
+.header p {
+  max-width: 600px;
+
+  margin: 9px 0 0;
+
+  color: #d6e8e1;
+
+  font-size: 13px;
+
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   ÁREA DOS CARDS
+========================================================= */
+
+.summaryArea {
+  width: min(760px, 100%);
+
+  margin: 27px auto 0;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 18px;
+}
+
+
+/* =========================================================
+   CARD DOS CAMPOS
+========================================================= */
+
+.fieldsCard {
+  min-height: 205px;
+
+  padding: 18px;
+
+  box-sizing: border-box;
+
+  border-radius: 16px;
+
+  background: #f7faf8;
+
+  color: #263930;
+
+  box-shadow:
+    0 12px 28px rgba(0, 30, 22, 0.16);
+}
+
+.sportHeader {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.sportCircle {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e4f4ee;
+
+  color: #1ca577;
+
+  font-size: 18px;
+}
+
+.sportHeader > div:last-child {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1px;
+}
+
+.sportHeader strong {
+  color: #21372e;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sportHeader span {
+  color: #7d8d86;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+
+  margin: 14px 0;
+
+  background: #dce7e2;
+}
+
+.fieldsTitle {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #43574e;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.fieldsCard ul {
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  list-style: none;
+}
+
+.fieldsCard li {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 6px 9px;
+
+  border-radius: 999px;
+
+  background: #eaf4ef;
+
+  color: #35483f;
+
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.fieldsCard li svg {
+  flex-shrink: 0;
+
+  color: #18a875;
+}
+
+.emptyFields {
+  margin: 10px 0 0;
+
+  color: #87958f;
+
+  font-size: 9px;
+}
+
+.moreFields {
+  display: block;
+
+  margin-top: 10px;
+
+  color: #159c6e;
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   CARD DA EQUIPE
+========================================================= */
+
+.teamCard {
+  min-height: 205px;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  color: #263930;
+
+  box-shadow:
+    0 12px 28px rgba(0, 30, 22, 0.16);
+}
+
+.teamImage {
+  height: 128px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #dbe8e2;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  color: #ffffff;
+
+  font-size: 40px;
+}
+
+.teamInfo {
+  min-height: 77px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 13px 16px;
+
+  box-sizing: border-box;
+}
+
+.teamInfo > div:first-child {
+  min-width: 0;
+}
+
+.teamInfo span {
+  display: block;
+
+  margin-bottom: 2px;
+
+  color: #159c6e;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+}
+
+.teamInfo h2 {
+  overflow: hidden;
+
+  margin: 0;
+
+  color: #24372f;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.teamInfo p {
+  margin: 3px 0 0;
+
+  color: #7a8982;
+
+  font-size: 9px;
+}
+
+.sportEmoji {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e4f4ee;
+
+  color: #1ca577;
+
+  font-size: 16px;
+}
+
+
+/* =========================================================
+   MENSAGEM FINAL
+========================================================= */
+
+.finalMessage {
+  width: min(760px, 100%);
+
+  margin: 14px auto 0;
+
+  padding: 10px 13px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.1);
+
+  border-radius: 11px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.finalMessageIcon {
+  width: 28px;
+  height: 28px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #3bcf9c;
+
+  color: #ffffff;
+}
+
+.finalMessage > div:last-child {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1px;
+}
+
+.finalMessage strong {
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.finalMessage span {
+  color: #c9ddd5;
+
+  font-size: 8px;
+
+  line-height: 1.35;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+  width: min(760px, 100%);
+
+  margin: auto auto 0;
+
+  padding-top: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.backButton:hover:not(:disabled) {
+  opacity: 0.8;
+
+  transform: translateX(-2px);
+}
+
+.backButton:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.nextButton {
+  min-width: 150px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 15px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #21b983;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nextButton:hover:not(:disabled) {
+  background: #169d70;
+
+  transform: translateY(-1px);
+}
+
+.nextButton:disabled {
+  opacity: 0.7;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.spinner {
+  width: 13px;
+  height: 13px;
+
+  border:
+    2px solid
+    rgba(255, 255, 255, 0.35);
+
+  border-top-color: #ffffff;
+
+  border-radius: 50%;
+
+  animation: girar 0.7s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 800px) {
+  .container {
+    padding: 28px 20px 24px;
+  }
+
+  .summaryArea {
+    grid-template-columns: 1fr;
+  }
+
+  .fieldsCard,
+  .teamCard {
+    min-height: auto;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 500px) {
+  .container {
+    padding: 22px 15px;
+  }
+
+  .stepBadge {
+    padding: 6px 15px;
+
+    font-size: 9px;
+  }
+
+  .progressSteps {
+    gap: 6px;
+  }
+
+  .header {
+    margin-top: 24px;
+  }
+
+  .completeIcon {
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-size: 25px;
+  }
+
+  .header p {
+    font-size: 11px;
+  }
+
+  .summaryArea {
+    margin-top: 24px;
+
+    gap: 14px;
+  }
+
+  .fieldsCard {
+    padding: 16px;
+  }
+
+  .teamImage {
+    height: 115px;
+  }
+
+  .teamInfo {
+    padding: 12px 14px;
+  }
+
+  .finalMessage {
+    align-items: flex-start;
+  }
+
+  .footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+
+    padding-top: 18px;
+  }
+
+  .backButton {
+    justify-content: center;
+  }
+
+  .nextButton {
+    width: 100%;
+  }
+}

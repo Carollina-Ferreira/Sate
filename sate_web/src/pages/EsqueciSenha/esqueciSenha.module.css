@@ -1,3 +1,4 @@
+
 /* =====================================
    PÁGINA
 ===================================== */
@@ -5,14 +6,10 @@
 .page {
   width: 100%;
   min-height: 100vh;
-
   display: flex;
-
   overflow: hidden;
-
   background: var(--cinza-100);
 }
-
 
 /* =====================================
    LADO ESQUERDO
@@ -20,14 +17,10 @@
 
 .left {
   position: relative;
-
   width: 52%;
   min-height: 100vh;
-
   overflow: hidden;
-
 }
-
 
 /* =====================================
    IMAGEM
@@ -35,16 +28,11 @@
 
 .leftImage {
   position: absolute;
-
   inset: 0;
-
   width: 100%;
   height: 100%;
-
   object-fit: cover;
-
   object-position: center;
-
   z-index: 0;
 }
 
@@ -54,20 +42,14 @@
 
 .curves {
   position: absolute;
-
   bottom: -40px;
   left: -60px;
-
   width: 320px;
   height: 320px;
-
   opacity: 0.85;
-
   z-index: 2;
-
   pointer-events: none;
 }
-
 
 /* =====================================
    CONTEÚDO ESQUERDO
@@ -75,45 +57,30 @@
 
 .leftContent {
   position: absolute;
-
   left: 20px;
   bottom: 145px;
-
   z-index: 3;
-
   max-width: 440px;
-
   color: var(--branco);
 }
 
 .leftContent h1 {
   margin: 0 0 12px;
-
   font-family: var(--fonte-titulo);
-
   font-size: 27px;
-
   line-height: 1.18;
-
   font-weight: 700;
-
   letter-spacing: -0.5px;
 }
 
 .leftContent p {
   margin: 0;
-
   font-family: var(--fonte-base);
-
   font-size: 11px;
-
   line-height: 1.35;
-
   font-weight: 400;
-
   color: rgba(255, 255, 255, 0.88);
 }
-
 
 /* =====================================
    ESTATÍSTICAS
@@ -121,28 +88,19 @@
 
 .leftFooter {
   position: absolute;
-
   left: 34px;
   bottom: 13px;
-
   display: flex;
-
   align-items: center;
-
   gap: 25px;
-
   z-index: 4;
-
   color: var(--branco);
-
   font-size: 10px;
 }
 
 .leftFooter span {
   font-size: 10px;
-
   font-weight: 400;
-
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -150,24 +108,18 @@
   color: var(--verde-principal);
 }
 
-
 /* =====================================
    LADO DIREITO
 ===================================== */
 
 .right {
   position: relative;
-
   width: 48%;
   min-height: 100vh;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   padding: 40px;
-
   overflow: hidden;
 
   background:
@@ -184,21 +136,16 @@
     var(--cinza-100);
 }
 
-
 /* =====================================
    DECORAÇÕES
 ===================================== */
 
 .decor {
   position: absolute;
-
   inset: 0;
-
   pointer-events: none;
-
   overflow: hidden;
 }
-
 
 /* =====================================
    GRADE DE PONTOS
@@ -206,7 +153,6 @@
 
 .dotGrid {
   position: absolute;
-
   inset: 0;
 
   background-image:
@@ -232,62 +178,48 @@
     );
 }
 
-
 /* =====================================
    BLOBS
 ===================================== */
 
 .blob {
   position: absolute;
-
   border-radius: 50%;
-
   filter: blur(38px);
 }
 
 .blobGreen {
   width: 260px;
   height: 260px;
-
   top: -60px;
   right: -40px;
-
   background: var(--verde-principal);
-
   opacity: 0.35;
 }
 
 .blobBlue {
   width: 220px;
   height: 220px;
-
   bottom: 10%;
   right: 12%;
-
   background: var(--azul);
-
   opacity: 0.28;
 }
 
 .blobPink {
   width: 180px;
   height: 180px;
-
   bottom: -40px;
   left: 6%;
-
   background: var(--rosa);
-
   opacity: 0.22;
 }
-
 
 /* =====================================
    ANIMAÇÃO
 ===================================== */
 
 @media (prefers-reduced-motion: no-preference) {
-
   .blob {
     animation: floatSlow 10s ease-in-out infinite;
   }
@@ -304,7 +236,6 @@
 }
 
 @keyframes floatSlow {
-
   0%,
   100% {
     transform: translate(0, 0);
@@ -315,23 +246,17 @@
   }
 }
 
-
 /* =====================================
    FORMULÁRIO
 ===================================== */
 
 .formContainer {
   position: relative;
-
   z-index: 5;
-
   width: 100%;
   max-width: 380px;
-
   padding: 40px 36px;
-
   background: var(--branco);
-
   border-radius: 24px;
 
   box-shadow:
@@ -342,7 +267,6 @@
 }
 
 @keyframes fadeSlideUp {
-
   from {
     opacity: 0;
     transform: translateY(18px);
@@ -354,7 +278,6 @@
   }
 }
 
-
 /* =====================================
    LOGO
 ===================================== */
@@ -362,14 +285,10 @@
 .brandMark {
   width: 38px;
   height: 38px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   margin-bottom: 18px;
-
   border-radius: 11px;
 
   background:
@@ -380,25 +299,18 @@
     );
 }
 
-
 /* =====================================
    TÍTULO
 ===================================== */
 
 .formContainer h2 {
   margin: 0 0 6px;
-
   font-family: var(--fonte-titulo);
-
   color: var(--texto);
-
   font-size: 25px;
-
   line-height: 1.2;
-
   font-weight: 700;
 }
-
 
 /* =====================================
    SUBTÍTULO
@@ -406,18 +318,12 @@
 
 .subtitle {
   margin: 0 0 26px;
-
   color: var(--texto-suave);
-
   font-family: var(--fonte-base);
-
   font-size: 13px;
-
   line-height: 1.5;
-
   font-weight: 400;
 }
-
 
 /* =====================================
    FORM
@@ -425,12 +331,9 @@
 
 .form {
   display: flex;
-
   flex-direction: column;
-
   gap: 16px;
 }
-
 
 /* =====================================
    CAMPOS
@@ -438,40 +341,29 @@
 
 .inputGroup {
   display: flex;
-
   flex-direction: column;
-
   gap: 6px;
 }
 
 .inputGroup label {
   color: var(--texto);
-
   font-size: 12px;
-
   font-weight: 600;
 }
 
 .inputGroup input {
   width: 100%;
   height: 42px;
-
   padding: 0 13px;
-
   box-sizing: border-box;
 
   border: 1.5px solid #B8C2BE;
-
   border-radius: 10px;
-
   outline: none;
 
   background: var(--branco);
-
   color: var(--texto);
-
   font-family: inherit;
-
   font-size: 13px;
 
   transition:
@@ -490,13 +382,11 @@
 
 .inputGroup input:focus {
   border-color: var(--verde-principal);
-
   background: var(--branco);
 
   box-shadow:
     0 0 0 4px rgba(22, 168, 117, 0.12);
 }
-
 
 /* =====================================
    BOTÃO
@@ -505,30 +395,24 @@
 .submitButton {
   width: 100%;
   height: 42px;
-
   margin-top: 5px;
 
   border: none;
-
   border-radius: 10px;
 
   background: var(--verde-principal);
   color: var(--branco);
 
   font-family: var(--fonte-base);
-
   font-size: 13px;
-
   font-weight: 700;
 
   cursor: pointer;
-
   transition: 0.2s;
 }
 
 .submitButton:hover {
   background: var(--verde-escuro);
-
   transform: translateY(-2px);
 
   box-shadow:
@@ -539,27 +423,21 @@
   transform: translateY(0);
 }
 
-
 /* =====================================
    LINK
 ===================================== */
 
 .link {
   color: var(--rosa);
-
   font-size: 12px;
-
   font-weight: 600;
-
   text-decoration: none;
 }
 
 .link:hover {
   color: var(--vermelho);
-
   text-decoration: underline;
 }
-
 
 /* =====================================
    TEXTO VOLTAR
@@ -567,28 +445,255 @@
 
 .backText {
   margin: 20px 0 0;
-
   text-align: center;
-
   color: var(--texto-suave);
-
   font-size: 12px;
 }
 
+/* =====================================
+   MODAL DE CONFIRMAÇÃO
+===================================== */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(10, 30, 23, 0.72);
+  backdrop-filter: blur(5px);
+}
+
+/* =====================================
+   CARD DE CONFIRMAÇÃO
+===================================== */
+
+.confirmationCard {
+  position: relative;
+
+  width: 100%;
+  max-width: 380px;
+
+  padding: 36px 30px;
+
+  border-radius: 24px;
+
+  background: var(--branco);
+
+  text-align: center;
+
+  box-shadow:
+    0 20px 60px rgba(18, 38, 31, 0.20);
+
+  animation: modalAppear 0.25s ease;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =====================================
+   BOTÃO FECHAR
+===================================== */
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+
+  border: none;
+  background: transparent;
+
+  color: var(--texto-suave);
+  font-size: 26px;
+
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: var(--texto);
+}
+
+/* =====================================
+   ÍCONE DE SUCESSO
+===================================== */
+
+.successIcon {
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 20px;
+
+  border-radius: 50%;
+
+  background: rgba(22, 168, 117, 0.12);
+  color: var(--verde-principal);
+
+  font-size: 30px;
+  font-weight: 700;
+}
+
+/* =====================================
+   TEXTOS DO MODAL
+===================================== */
+
+.confirmationCard h2 {
+  margin: 0 0 12px;
+
+  color: var(--texto);
+  font-family: var(--fonte-titulo);
+  font-size: 24px;
+}
+
+.confirmationCard p {
+  margin: 0 auto 12px;
+
+  color: var(--texto-suave);
+  font-family: var(--fonte-base);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.emailText {
+  display: block;
+
+  margin: 14px 0 18px;
+
+  color: var(--verde-escuro);
+
+  font-size: 13px;
+  font-weight: 700;
+
+  overflow-wrap: anywhere;
+}
+
+.instruction {
+  margin-bottom: 24px !important;
+  font-size: 12px !important;
+}
+
+/* =====================================
+   BOTÃO ENTENDI
+===================================== */
+
+.confirmationButton {
+  width: 100%;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: var(--verde-principal);
+  color: var(--branco);
+
+  font-family: var(--fonte-base);
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.confirmationButton:hover {
+  background: var(--verde-escuro);
+}
+
+/* =====================================
+   BOTÃO REENVIAR E-MAIL
+===================================== */
+
+.resendButton {
+  width: 100%;
+
+  margin-top: 12px;
+  padding: 11px;
+
+  border: 1px solid var(--verde-principal);
+  border-radius: 10px;
+
+  background: transparent;
+  color: var(--verde-principal);
+
+  font-family: var(--fonte-base);
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.resendButton:hover {
+  background: rgba(22, 168, 117, 0.08);
+}
+
+.resendButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =====================================
+   MENSAGEM DE REENVIO
+===================================== */
+
+.resendMessage {
+  margin-top: 12px !important;
+
+  color: var(--verde-principal) !important;
+
+  font-size: 12px !important;
+  font-weight: 600;
+}
+
+/* =====================================
+   LINK DO MODAL
+===================================== */
+
+.confirmationLink {
+  display: block;
+
+  margin-top: 20px;
+
+  color: var(--rosa);
+
+  font-size: 12px;
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.confirmationLink:hover {
+  color: var(--vermelho);
+  text-decoration: underline;
+}
 
 /* =====================================
    RESPONSIVIDADE
 ===================================== */
 
 @media (max-width: 900px) {
-
   .left {
     width: 50%;
   }
 
   .right {
     width: 50%;
-
     padding: 30px;
   }
 
@@ -597,9 +702,7 @@
   }
 }
 
-
 @media (max-width: 700px) {
-
   .page {
     flex-direction: column;
   }
@@ -612,7 +715,6 @@
   .right {
     width: 100%;
     min-height: 500px;
-
     padding: 50px 20px;
   }
 
@@ -626,9 +728,7 @@
   }
 }
 
-
 @media (max-width: 450px) {
-
   .left {
     min-height: 260px;
   }
@@ -652,7 +752,6 @@
 
   .leftFooter {
     left: 20px;
-
     gap: 12px;
   }
 
@@ -667,13 +766,21 @@
   .formContainer {
     width: 85%;
     max-width: 304px;
-
     padding: 30px 24px;
-
     border-radius: 20px;
   }
 
   .formContainer h2 {
+    font-size: 21px;
+  }
+
+  .confirmationCard {
+    max-width: 304px;
+    padding: 32px 24px;
+    border-radius: 20px;
+  }
+
+  .confirmationCard h2 {
     font-size: 21px;
   }
 }

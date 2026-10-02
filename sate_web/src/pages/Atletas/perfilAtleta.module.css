@@ -1,0 +1,345 @@
+.container {
+    min-height: 100vh;
+    background-color: #004d40; /* Fundo verde escuro */
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* HEADER */
+.header {
+    background: #ffffff;
+    padding: 10px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo {
+    font-weight: 900;
+    font-size: 20px;
+    color: #004d40;
+    font-style: italic;
+}
+
+.headerTitle h1 {
+    font-size: 16px;
+    margin: 0;
+    color: #000;
+}
+
+.headerTitle span {
+    font-size: 12px;
+    color: #666;
+}
+
+.headerSearch {
+    flex: 1;
+    max-width: 400px;
+    margin: 0 24px;
+    position: relative;
+}
+
+.headerSearch svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+.headerSearch input {
+    width: 100%;
+    padding: 8px 12px 8px 40px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    font-size: 14px;
+    outline: none;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.userProfile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.avatarSmall {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #004d40;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.userProfile div {
+    display: flex;
+    flex-direction: column;
+}
+
+.userProfile strong {
+    font-size: 14px;
+}
+
+.userProfile span {
+    font-size: 12px;
+    color: #666;
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    padding: 24px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    color: #a7c6bd;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 16px;
+    font-family: inherit;
+    transition: color 0.2s;
+}
+
+.backButton:hover {
+    color: #ffffff;
+}
+
+/* CARD DO PERFIL */
+.profileCard {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.profileInfo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.avatarLarge {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #3498db;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.profileDetails h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    color: #000;
+}
+
+.profileDetails p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.performanceIndex {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.indexValue {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3498db;
+}
+
+.indexLabel {
+    font-size: 12px;
+    color: #999;
+}
+
+/* BOTÕES DE AÇÃO */
+.actionsRow {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.actionButton {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.actionButton:hover {
+    border-color: #004d40;
+    background: #f0fdf9;
+}
+
+/* CARDS DE ESTATÍSTICAS */
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.statCard {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-top: 4px solid #ccc;
+}
+
+.statValue {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.statLabel {
+    font-size: 14px;
+    color: #666;
+}
+
+.statGood { border-color: #2ecc71; }
+.statGood .statValue { color: #2ecc71; }
+
+.statBad { border-color: #e74c3c; }
+.statBad .statValue { color: #e74c3c; }
+
+.statNeutral { border-color: #3498db; }
+.statNeutral .statValue { color: #3498db; }
+
+.statHighlight { border-color: #e74c3c; }
+.statHighlight .statValue { color: #e74c3c; }
+
+/* GRÁFICOS */
+.chartsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.chartCard {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.chartCard h3 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.chartContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px;
+}
+
+.lineChart {
+    width: 100%;
+    height: 100%;
+}
+
+.radarChart {
+    width: 100%;
+    height: 100%;
+    max-width: 250px;
+}
+
+/* RESPONSIVO */
+@media (max-width: 900px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .chartsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    .headerSearch {
+        width: 100%;
+        margin: 10px 0;
+    }
+    .main {
+        padding: 16px;
+    }
+    .profileCard {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .performanceIndex {
+        align-items: flex-start;
+    }
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+    .actionsRow {
+        flex-direction: column;
+    }
+    .actionButton {
+        width: 100%;
+        justify-content: center;
+    }
+}

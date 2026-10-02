@@ -1,0 +1,337 @@
+/* =========================
+   ESTRUTURA DO MODAL (SEM SCROLL)
+========================= */
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: rgba(0, 27, 21, 0.72);
+}
+
+.modal {
+    position: relative;
+    width: min(900px, 100%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+    background: #00775b;
+    border-radius: 12px;
+    padding: 15px 25px 20px;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    max-height: 98vh; 
+}
+
+/* =========================
+   ETAPAS (STEPPER COM PROGRESSO)
+========================= */
+.steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 15px;
+    flex-shrink: 0;
+}
+
+.stepLine {
+    position: absolute;
+    top: 16px;
+    left: 16.66%;
+    right: 16.66%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    z-index: 0;
+    border-radius: 2px;
+}
+
+.stepLineProgress {
+    height: 100%;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+}
+
+.step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.stepCircle {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f2f2f2;
+    color: #999;
+    font-size: 16px;
+    font-weight: 600;
+    border: 2px solid #ddd;
+}
+
+.stepCircle.active {
+    color: white;
+    background: var(--verde-principal, #16a875);
+    border-color: var(--verde-principal, #16a875);
+}
+
+.stepLabel {
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.stepLabelActive {
+    font-weight: 700;
+}
+
+/* =========================
+   BOTÃO FECHAR E CONTEÚDO
+========================= */
+.closeButton {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.content {
+    width: 100%;
+    flex-grow: 1;
+    overflow: hidden; /* Remove o scroll */
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================
+   ETAPA 1
+========================= */
+.stepOne {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 15px;
+    align-items: start;
+    height: 100%;
+}
+
+.manualCard, .importCard {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.manualCard h2, .importCard h2 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #090909;
+}
+
+/* =========================
+   FORMULÁRIOS COMPACTOS
+========================= */
+.formGroup, .formGroupSmall {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 6px;
+}
+
+.formGroup label, .formGroupSmall label {
+    padding-left: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #090909;
+}
+
+.formGroup input, .formGroup select, .formGroupSmall input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 36px;
+    border: 1px solid #d4d4d4;
+    border-radius: 6px;
+    padding: 0 10px;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+}
+
+.formGroup input:focus, .formGroup select:focus {
+    border-color: var(--verde-principal, #16a875);
+    box-shadow: 0 0 0 2px rgba(22, 168, 117, 0.12);
+}
+
+.twoColumns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.photoUpload {
+    width: 100%;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: #d8d8d8;
+    color: #ababab;
+    cursor: pointer;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+.primaryButton {
+    width: 100%;
+    height: 38px;
+    border: none;
+    border-radius: 6px;
+    background: var(--verde-principal, #16a875);
+    color: white;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.primaryButton:hover { background: var(--verde-escuro, #0e7a54); }
+.primaryButton:disabled { background: #a7c6bd; cursor: not-allowed; }
+
+.backButton {
+    height: 38px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid var(--verde-principal, #16a875);
+    border-radius: 6px;
+    background: white;
+    color: var(--verde-principal, #16a875);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* =========================
+   IMPORTAÇÃO
+========================= */
+.importCard { display: flex; flex-direction: column; }
+
+.dropzone {
+    flex-grow: 1;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 2px dashed #d8d8d8;
+    border-radius: 8px;
+    background: #f9f9f9;
+    color: #999;
+    text-align: center;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 15px;
+}
+
+/* =========================
+   ETAPA 2 E 3
+========================= */
+.formCard {
+    width: min(500px, 100%);
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+}
+
+.addressRow { display: grid; grid-template-columns: 1fr 80px; gap: 10px; }
+
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.actions .primaryButton { width: 220px; margin-top: 0; }
+
+/* =========================
+   REVISÃO
+========================= */
+.reviewCard {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+}
+
+.reviewCard > p { margin: 0 0 10px; font-size: 13px; color: #555; }
+
+.reviewTable {
+    width: 100%;
+    border: 1px solid #d5d5d5;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.reviewHeader, .reviewRow {
+    display: grid;
+    grid-template-columns: 1.5fr 1.4fr 0.8fr 1.3fr;
+    gap: 10px;
+    padding: 10px 14px;
+    align-items: center;
+}
+
+.reviewHeader { background: #f0f0f0; border-bottom: 1px solid #d5d5d5; }
+.reviewHeader span { font-size: 12px; font-weight: 700; color: #333; }
+.reviewRow { border-bottom: 1px solid #eee; }
+.reviewRow:last-child { border-bottom: none; }
+.reviewRow > div { display: flex; flex-direction: column; gap: 3px; }
+.reviewRow b { font-size: 13px; color: #111; }
+.reviewRow span { font-size: 11px; color: #666; }
+
+/* =========================
+   RESPONSIVO
+========================= */
+@media (max-width: 800px) {
+    .stepOne { grid-template-columns: 1fr; }
+    .importCard { margin-top: 10px; }
+}
+
+@media (max-width: 480px) {
+    .modal { padding: 10px; max-height: 100vh; border-radius: 0; }
+    .twoColumns { grid-template-columns: 1fr; }
+    .addressRow { grid-template-columns: 1fr; }
+    .actions { flex-direction: column-reverse; }
+    .actions .primaryButton, .backButton { width: 100%; }
+    .reviewHeader { display: none; }
+    .reviewRow { grid-template-columns: 1fr; gap: 5px; padding: 10px; }
+    .reviewRow > div { border-bottom: 1px dashed #eee; padding-bottom: 5px; }
+    .reviewRow > div:last-child { border-bottom: none; }
+}

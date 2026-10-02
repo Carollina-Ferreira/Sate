@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'cadastro_page.dart';
 import 'esqueci_senha_page.dart';
-import 'atleta_vinculo_page.dart';
-import 'treinador_vinculo_page.dart';
+import 'Atleta/atleta_vinculo_page.dart';
+import 'Treinador/treinador_vinculo_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,13 +20,15 @@ class _LoginPageState extends State<LoginPage> {
   final senhaController = TextEditingController();
 
   bool mostrarSenha = false;
-  bool lembrar = true;
+  bool carregando = false;
 
   String tipoUsuario = 'Atleta';
 
   static const verde = Color(0xFF00845F);
   static const rosa = Color(0xFFE98BA8);
   static const azul = Color(0xFF001E98);
+
+  static const String apiUrl = 'http://localhost:3000';
 
   @override
   void dispose() {
@@ -56,8 +61,10 @@ class _LoginPageState extends State<LoginPage> {
                   vertical: 40,
                 ),
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 430),
-                  child:  _loginContent(),
+                  constraints: const BoxConstraints(
+                    maxWidth: 430,
+                  ),
+                  child: _loginCard(),
                 ),
               ),
             ),
@@ -67,11 +74,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
-  // CARD
-  // ========================================================================
-
-  Widget  _loginContent() {
+  Widget _loginCard() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(42),
@@ -89,23 +92,15 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ==================================================================
-          // LOGO
-          // ==================================================================
-
           Center(
             child: Image.asset(
-              'images/logoVerde_img.png',
+              'assets/images/logoVerde_img.png',
               width: 125,
               fit: BoxFit.contain,
             ),
           ),
 
-          const SizedBox(height: 25),
-
-          // ==================================================================
-          // TÍTULO
-          // ==================================================================
+          const SizedBox(height: 28),
 
           const Text(
             'Bem-vindo de volta!',
@@ -119,8 +114,8 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(height: 10),
 
           Text(
-            'Entre para continuar acompanhando o '
-            'treinamento da sua equipe.',
+            'Entre na sua conta para continuar '
+            'acompanhando seu desempenho.',
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
@@ -130,20 +125,19 @@ class _LoginPageState extends State<LoginPage> {
 
           const SizedBox(height: 28),
 
-          // ==================================================================
-          // PERFIL
-          // ==================================================================
-
-          _label('Perfil'),
+          // TIPO DE USUÁRIO
+          _label('Entrar como'),
 
           const SizedBox(height: 8),
 
           InkWell(
             borderRadius: BorderRadius.circular(12),
-            onTap: _selecionarPerfil,
+            onTap: carregando ? null : _selecionarPerfil,
             child: Container(
               height: 52,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -168,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                       tipoUsuario,
                       style: const TextStyle(
                         fontSize: 14,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -181,12 +176,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
 
-          // ==================================================================
           // EMAIL
-          // ==================================================================
-
           _label('Email'),
 
           const SizedBox(height: 8),
@@ -195,6 +187,7 @@ class _LoginPageState extends State<LoginPage> {
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
+            enabled: !carregando,
             decoration: _inputDecoration(
               'Digite seu email',
               Icons.email_outlined,
@@ -203,10 +196,7 @@ class _LoginPageState extends State<LoginPage> {
 
           const SizedBox(height: 18),
 
-          // ==================================================================
           // SENHA
-          // ==================================================================
-
           _label('Senha'),
 
           const SizedBox(height: 8),
@@ -215,17 +205,20 @@ class _LoginPageState extends State<LoginPage> {
             controller: senhaController,
             obscureText: !mostrarSenha,
             textInputAction: TextInputAction.done,
+            enabled: !carregando,
             onSubmitted: (_) => _entrar(),
             decoration: _inputDecoration(
               'Digite sua senha',
               Icons.lock_outline,
             ).copyWith(
               suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    mostrarSenha = !mostrarSenha;
-                  });
-                },
+                onPressed: carregando
+                    ? null
+                    : () {
+                        setState(() {
+                          mostrarSenha = !mostrarSenha;
+                        });
+                      },
                 icon: Icon(
                   mostrarSenha
                       ? Icons.visibility_off_outlined
@@ -236,94 +229,64 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
 
-          // ==================================================================
-          // LEMBRAR / ESQUECI
-          // ==================================================================
-
-          Row(
-            children: [
-              SizedBox(
-                width: 24,
-                height: 24,
-                child: Checkbox(
-                  value: lembrar,
-                  activeColor: verde,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      lembrar = value ?? false;
-                    });
-                  },
+          // ESQUECI SENHA
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: carregando
+                  ? null
+                  : () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              const EsqueciSenhaPage(),
+                        ),
+                      );
+                    },
+              child: const Text(
+                'Esqueci minha senha',
+                style: TextStyle(
+                  color: verde,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-
-              const SizedBox(width: 7),
-
-              const Text(
-                'Lembrar de mim',
-                style: TextStyle(fontSize: 12),
-              ),
-
-              const Spacer(),
-
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: _esqueciSenha,
-                  child: Text(
-                    'Esqueci minha senha',
-                    style: TextStyle(
-                      color: verde,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
 
-          const SizedBox(height: 22),
+          const SizedBox(height: 10),
 
-          // ==================================================================
           // ENTRAR
-          // ==================================================================
-
           _mainButton(
-            text: 'Entrar',
-            onTap: _entrar,
+            text: carregando
+                ? 'Entrando...'
+                : 'Entrar',
+            onTap: carregando
+                ? () {}
+                : _entrar,
           ),
 
           const SizedBox(height: 22),
-
-          // ==================================================================
-          // DIVISOR
-          // ==================================================================
 
           _divider(),
 
           const SizedBox(height: 22),
 
-          // ==================================================================
           // GOOGLE
-          // ==================================================================
-
           _socialButton(
             icon: _googleIcon(),
             text: 'Continuar com Google',
-            onTap: _entrarComGoogle,
+            onTap: carregando
+                ? () {}
+                : _entrarComGoogle,
           ),
 
           const SizedBox(height: 12),
 
-          // ==================================================================
           // APPLE
-          // ==================================================================
-
           _socialButton(
             icon: const Icon(
               Icons.apple,
@@ -331,28 +294,29 @@ class _LoginPageState extends State<LoginPage> {
               size: 22,
             ),
             text: 'Continuar com Apple',
-            onTap: _entrarComApple,
+            onTap: carregando
+                ? () {}
+                : _entrarComApple,
           ),
 
           const SizedBox(height: 25),
-
-          // ==================================================================
-          // CRIAR CONTA
-          // ==================================================================
 
           Center(
             child: _HoverLink(
               verde: verde,
               normalText: 'Ainda não possui uma conta? ',
               linkText: 'Criar conta',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CadastroPage(),
-                  ),
-                );
-              },
+              onTap: carregando
+                  ? () {}
+                  : () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              const CadastroPage(),
+                        ),
+                      );
+                    },
             ),
           ),
         ],
@@ -360,202 +324,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
-  // LABEL
-  // ========================================================================
-
-  Widget _label(String text) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 13,
-        fontWeight: FontWeight.w600,
-        color: Color(0xFF242424),
-      ),
-    );
-  }
-
-  // ========================================================================
-  // INPUT
-  // ========================================================================
-
-  InputDecoration _inputDecoration(
-    String hint,
-    IconData icon,
-  ) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: TextStyle(
-        color: Colors.grey.shade400,
-        fontSize: 13,
-      ),
-      prefixIcon: Icon(
-        icon,
-        size: 19,
-        color: Colors.grey.shade500,
-      ),
-      filled: true,
-      fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 15,
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Colors.grey.shade300,
-        ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Colors.grey.shade300,
-        ),
-      ),
-      focusedBorder: const OutlineInputBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(12),
-        ),
-        borderSide: BorderSide(
-          color: verde,
-          width: 1.5,
-        ),
-      ),
-    );
-  }
-
-  // ========================================================================
-  // BOTÃO PRINCIPAL
-  // ========================================================================
-
-  Widget _mainButton({
-    required String text,
-    required VoidCallback onTap,
-  }) {
-    return SizedBox(
-      width: double.infinity,
-      height: 52,
-      child: ElevatedButton(
-        onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: verde,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ========================================================================
-  // DIVISOR
-  // ========================================================================
-
-  Widget _divider() {
-    return Row(
-      children: [
-        Expanded(
-          child: Divider(
-            color: Colors.grey.shade300,
-            thickness: 1,
-          ),
-        ),
-
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Text(
-            'ou continue com',
-            style: TextStyle(
-              color: Colors.grey.shade500,
-              fontSize: 11,
-            ),
-          ),
-        ),
-
-        Expanded(
-          child: Divider(
-            color: Colors.grey.shade300,
-            thickness: 1,
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ========================================================================
-  // GOOGLE / APPLE
-  // ========================================================================
-
-  Widget _socialButton({
-    required Widget icon,
-    required String text,
-    required VoidCallback onTap,
-  }) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: OutlinedButton(
-          onPressed: onTap,
-          style: OutlinedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: const Color(0xFF222222),
-            side: BorderSide(
-              color: Colors.grey.shade300,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              icon,
-
-              const SizedBox(width: 10),
-
-              Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ========================================================================
-  // GOOGLE
-  // ========================================================================
-
-  Widget _googleIcon() {
-    return const Text(
-      'G',
-      style: TextStyle(
-        fontSize: 19,
-        fontWeight: FontWeight.w700,
-        color: Color(0xFF4285F4),
-      ),
-    );
-  }
-
-  // ========================================================================
+  // ============================================================
   // SELECIONAR PERFIL
-  // ========================================================================
+  // ============================================================
 
   void _selecionarPerfil() {
     showModalBottomSheet(
@@ -574,7 +345,7 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Escolha seu perfil',
+                'Como você vai entrar?',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -584,7 +355,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 8),
 
               Text(
-                'Selecione como deseja acessar a plataforma.',
+                'Selecione o tipo de perfil que deseja acessar.',
                 style: TextStyle(
                   color: Colors.grey.shade600,
                   fontSize: 13,
@@ -595,7 +366,7 @@ class _LoginPageState extends State<LoginPage> {
 
               _perfilOption(
                 'Atleta',
-                'Acompanhe seu desempenho e evolução.',
+                'Acesse seus treinos e acompanhe sua evolução.',
                 Icons.directions_run,
               ),
 
@@ -603,7 +374,7 @@ class _LoginPageState extends State<LoginPage> {
 
               _perfilOption(
                 'Treinador',
-                'Gerencie atletas e treinamentos.',
+                'Gerencie atletas, treinos e equipes.',
                 Icons.sports,
               ),
 
@@ -614,10 +385,6 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
-
-  // ========================================================================
-  // OPÇÃO DE PERFIL
-  // ========================================================================
 
   Widget _perfilOption(
     String titulo,
@@ -671,7 +438,8 @@ class _LoginPageState extends State<LoginPage> {
 
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
                 children: [
                   Text(
                     titulo,
@@ -705,109 +473,334 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ========================================================================
+  // ============================================================
   // LOGIN
-  // ========================================================================
+  // ============================================================
 
-  void _entrar() {
+  Future<void> _entrar() async {
     final email = emailController.text.trim();
-    final senha = senhaController.text.trim();
+    final senha = senhaController.text;
 
     if (email.isEmpty || senha.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Preencha seu email e senha.',
+      _mostrarMensagem(
+        'Preencha seu email e sua senha.',
+      );
+      return;
+    }
+
+    if (email.contains(' ') || !email.contains('@')) {
+      _mostrarMensagem(
+        'Digite um email válido.',
+      );
+      return;
+    }
+
+    setState(() {
+      carregando = true;
+    });
+
+    try {
+      final tipo = tipoUsuario == 'Atleta'
+          ? 'ATLETA'
+          : 'TREINADOR';
+
+      debugPrint('================================');
+      debugPrint('LOGIN');
+      debugPrint('Email: $email');
+      debugPrint('Tipo escolhido: $tipo');
+      debugPrint('================================');
+
+      final resposta = await http.post(
+        Uri.parse(
+          '$apiUrl/api/auth/login',
+        ),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'email': email,
+          'senha': senha,
+          'tipo': tipo,
+        }),
+      );
+
+      debugPrint(
+        'Status do login: ${resposta.statusCode}',
+      );
+
+      debugPrint(
+        'Resposta do servidor: ${resposta.body}',
+      );
+
+      if (!mounted) return;
+
+      final data = jsonDecode(resposta.body);
+
+      if (resposta.statusCode != 200) {
+        _mostrarMensagem(
+          data['mensagem'] ??
+              'Não foi possível realizar o login.',
+          erro: true,
+        );
+        return;
+      }
+
+      final usuario = data['usuario'];
+
+      if (usuario == null) {
+        _mostrarMensagem(
+          'Resposta inválida do servidor.',
+          erro: true,
+        );
+        return;
+      }
+
+      final tipoRetornado = usuario['tipo'];
+
+      // ========================================================
+      // VERIFICA O TIPO RETORNADO PELO BACKEND
+      // ========================================================
+
+      if (tipoRetornado == 'ATLETA') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                const AtletaVinculoPage(),
+          ),
+        );
+      } else if (tipoRetornado == 'TREINADOR') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                const TreinadorVinculoPage(),
+          ),
+        );
+      } else {
+        _mostrarMensagem(
+          'Tipo de usuário inválido.',
+          erro: true,
+        );
+      }
+
+    } catch (error) {
+      if (!mounted) return;
+
+      debugPrint(
+        'Erro no login: $error',
+      );
+
+      _mostrarMensagem(
+        'Não foi possível conectar ao servidor.\n$error',
+        erro: true,
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          carregando = false;
+        });
+      }
+    }
+  }
+
+  // ============================================================
+  // ESTILO
+  // ============================================================
+
+  Widget _label(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF242424),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(
+    String hint,
+    IconData icon,
+  ) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: TextStyle(
+        color: Colors.grey.shade400,
+        fontSize: 13,
+      ),
+      prefixIcon: Icon(
+        icon,
+        size: 19,
+        color: Colors.grey.shade500,
+      ),
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 15,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: Colors.grey.shade300,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: Colors.grey.shade300,
+        ),
+      ),
+      focusedBorder: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(12),
+        ),
+        borderSide: BorderSide(
+          color: verde,
+          width: 1.5,
+        ),
+      ),
+    );
+  }
+
+  Widget _mainButton({
+    required String text,
+    required VoidCallback onTap,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: verde,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
-      );
-
-      return;
-    }
-
-    debugPrint('Login: $email');
-    debugPrint('Perfil: $tipoUsuario');
-
-    // ================================================================
-    // ATLETA
-    // ================================================================
-
-    if (tipoUsuario == 'Atleta') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const AtletaVinculoPage(),
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-      );
-
-      return;
-    }
-
-    // ================================================================
-    // TREINADOR
-    // ================================================================
-
-    if (tipoUsuario == 'Treinador') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const TreinadorVinculoPage(),
-        ),
-      );
-
-      return;
-    }
+      ),
+    );
   }
 
-  // ========================================================================
-  // GOOGLE
-  // ========================================================================
+  Widget _divider() {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(
+            color: Colors.grey.shade300,
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+          ),
+          child: Text(
+            'ou continue com',
+            style: TextStyle(
+              color: Colors.grey.shade500,
+              fontSize: 11,
+            ),
+          ),
+        ),
+
+        Expanded(
+          child: Divider(
+            color: Colors.grey.shade300,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _socialButton({
+    required Widget icon,
+    required String text,
+    required VoidCallback onTap,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: OutlinedButton(
+        onPressed: onTap,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: const Color(0xFF222222),
+          side: BorderSide(
+            color: Colors.grey.shade300,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.center,
+          children: [
+            icon,
+            const SizedBox(width: 10),
+            Text(
+              text,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _googleIcon() {
+    return const Text(
+      'G',
+      style: TextStyle(
+        fontSize: 19,
+        fontWeight: FontWeight.w700,
+        color: Color(0xFF4285F4),
+      ),
+    );
+  }
 
   void _entrarComGoogle() {
-    debugPrint('Login com Google');
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Login com Google será configurado em breve.',
-        ),
-      ),
+    _mostrarMensagem(
+      'Login com Google será configurado em breve.',
     );
   }
-
-  // ========================================================================
-  // APPLE
-  // ========================================================================
 
   void _entrarComApple() {
-    debugPrint('Login com Apple');
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Login com Apple será configurado em breve.',
-        ),
-      ),
+    _mostrarMensagem(
+      'Login com Apple será configurado em breve.',
     );
   }
 
-  // ========================================================================
-  // ESQUECI SENHA
-  // ========================================================================
-
-  void _esqueciSenha() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const EsqueciSenhaPage(),
+  void _mostrarMensagem(
+    String mensagem, {
+    bool erro = false,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(mensagem),
+        backgroundColor: erro ? Colors.red : null,
       ),
     );
   }
 }
 
-// ============================================================================
+// ============================================================
 // LINK COM HOVER
-// ============================================================================
+// ============================================================
 
 class _HoverLink extends StatefulWidget {
   final Color verde;
@@ -833,19 +826,16 @@ class _HoverLinkState extends State<_HoverLink> {
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-
       onEnter: (_) {
         setState(() {
           hover = true;
         });
       },
-
       onExit: (_) {
         setState(() {
           hover = false;
         });
       },
-
       child: GestureDetector(
         onTap: widget.onTap,
         child: RichText(
@@ -858,7 +848,6 @@ class _HoverLinkState extends State<_HoverLink> {
               TextSpan(
                 text: widget.normalText,
               ),
-
               TextSpan(
                 text: widget.linkText,
                 style: TextStyle(
@@ -879,9 +868,9 @@ class _HoverLinkState extends State<_HoverLink> {
   }
 }
 
-// ============================================================================
-// BACKGROUND
-// ============================================================================
+// ============================================================
+// FUNDO
+// ============================================================
 
 class BackgroundPainter extends CustomPainter {
   final Color verde;
@@ -895,11 +884,10 @@ class BackgroundPainter extends CustomPainter {
   });
 
   @override
-  void paint(Canvas canvas, Size size) {
-    // ================================================================
-    // BLOB ROSA
-    // ================================================================
-
+  void paint(
+    Canvas canvas,
+    Size size,
+  ) {
     final pinkPaint = Paint()
       ..color = rosa.withValues(alpha: 0.13);
 
@@ -908,10 +896,6 @@ class BackgroundPainter extends CustomPainter {
       150,
       pinkPaint,
     );
-
-    // ================================================================
-    // BLOB AZUL
-    // ================================================================
 
     final bluePaint = Paint()
       ..color = azul.withValues(alpha: 0.06);
@@ -922,10 +906,6 @@ class BackgroundPainter extends CustomPainter {
       bluePaint,
     );
 
-    // ================================================================
-    // BLOB VERDE
-    // ================================================================
-
     final greenPaint = Paint()
       ..color = verde.withValues(alpha: 0.08);
 
@@ -934,10 +914,6 @@ class BackgroundPainter extends CustomPainter {
       150,
       greenPaint,
     );
-
-    // ================================================================
-    // GRID
-    // ================================================================
 
     final dotPaint = Paint()
       ..color = azul.withValues(alpha: 0.13);
@@ -961,10 +937,6 @@ class BackgroundPainter extends CustomPainter {
         );
       }
     }
-
-    // ================================================================
-    // GRÁFICO
-    // ================================================================
 
     final points = [
       Offset(size.width - 280, 210),
@@ -1002,7 +974,11 @@ class BackgroundPainter extends CustomPainter {
       linePaint,
     );
 
-    for (int i = 0; i < points.length; i += 2) {
+    for (
+      int i = 0;
+      i < points.length;
+      i += 2
+    ) {
       final paint = Paint()
         ..color = i % 4 == 0
             ? rosa
@@ -1023,4 +999,3 @@ class BackgroundPainter extends CustomPainter {
     return false;
   }
 }
-

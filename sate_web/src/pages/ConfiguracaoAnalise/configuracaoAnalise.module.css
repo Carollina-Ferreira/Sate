@@ -1,0 +1,634 @@
+.page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+
+  position: relative;
+
+  box-sizing: border-box;
+
+  background-color: #005942;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  font-family: 'Poppins', sans-serif;
+
+  color: #ffffff;
+}
+
+
+/* =====================================
+   CAMADA SOBRE A FOTO
+===================================== */
+
+.page::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      rgba(0, 66, 49, 0.82),
+      rgba(0, 66, 49, 0.9)
+    );
+
+  pointer-events: none;
+}
+
+
+/* =====================================
+   CONTAINER
+===================================== */
+
+.container {
+  width: min(1050px, 100%);
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+
+  z-index: 1;
+
+  padding: 40px 42px 32px;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================
+   PROGRESSO
+===================================== */
+
+.progressArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 18px;
+}
+
+.stepBadge {
+  padding: 8px 19px;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 500;
+}
+
+.progressSteps {
+  width: min(520px, 100%);
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 8px;
+}
+
+.progressComplete,
+.progressActive,
+.progressInactive {
+  height: 4px;
+
+  border-radius: 20px;
+}
+
+.progressComplete,
+.progressActive {
+  background: #59dcb0;
+}
+
+.progressInactive {
+  background: rgba(255, 255, 255, 0.27);
+}
+
+
+/* =====================================
+   CABEÇALHO
+===================================== */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 29px;
+  margin-bottom: 27px;
+
+  text-align: center;
+}
+
+.sportBadge {
+  margin-bottom: 7px;
+
+  color: #76e8c1;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 30px;
+
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.header p {
+  max-width: 690px;
+
+  margin: 10px 0 0;
+
+  color: #d3e4de;
+
+  font-size: 13px;
+
+  line-height: 1.55;
+}
+
+.header strong {
+  color: #ffffff;
+}
+
+
+/* =====================================
+   GRID
+===================================== */
+
+.fieldsGrid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 14px 17px;
+}
+
+
+/* =====================================
+   CARD DO CAMPO
+===================================== */
+
+.fieldCard {
+  min-height: 72px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  position: relative;
+
+  padding: 10px 17px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dde5e1;
+
+  border-radius: 15px;
+
+  background: #f7f9f8;
+
+  color: #23382f;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 12px rgba(0, 32, 23, 0.12);
+
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.fieldCard:hover {
+  transform: translateY(-2px);
+
+  border-color: #94cfb9;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 8px 18px rgba(0, 32, 23, 0.16);
+}
+
+
+/* =====================================
+   CARD SELECIONADO
+===================================== */
+
+.fieldCardSelected {
+  border-color: #39cfa0;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 7px 18px rgba(0, 72, 52, 0.17);
+}
+
+
+/* =====================================
+   BOLINHA DE SELEÇÃO
+===================================== */
+
+.checkbox {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border: 2px solid #b8c7c0;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: transparent;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.fieldCard:hover .checkbox {
+  border-color: #85bca8;
+}
+
+.checkboxSelected {
+  border-color: #39cfa0;
+
+  background: #39cfa0;
+
+  color: #ffffff;
+
+  transform: scale(1.04);
+
+  box-shadow:
+    0 5px 12px rgba(18, 170, 120, 0.24);
+}
+
+
+/* =====================================
+   TEXTO
+===================================== */
+
+.fieldName {
+  flex: 1;
+
+  color: #263b32;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  line-height: 1.2;
+}
+
+
+/* =====================================
+   ÍCONE À DIREITA
+===================================== */
+
+.fieldIcon {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: auto;
+
+  border-radius: 11px;
+
+  background: #e4f2ed;
+
+  color: #147456;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.fieldCard:hover .fieldIcon {
+  transform: scale(1.04);
+
+  background: #dcefe8;
+}
+
+.fieldCardSelected .fieldIcon {
+  background: #d7f2e8;
+
+  color: #0d8b62;
+}
+
+
+/* =====================================
+   ADICIONAR CAMPO
+===================================== */
+
+.addField {
+  min-height: 72px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 10px 17px;
+
+  box-sizing: border-box;
+
+  border: 2px dashed #87cbb2;
+
+  border-radius: 15px;
+
+  background: #f4f8f6;
+
+  color: #263b32;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 12px rgba(0, 32, 23, 0.08);
+
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.addField:hover {
+  transform: translateY(-2px);
+
+  border-color: #20b982;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 7px 17px rgba(0, 32, 23, 0.13);
+}
+
+.addIcon {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #20b982;
+
+  color: #ffffff;
+}
+
+.addText {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+}
+
+.addText strong {
+  color: #263b32;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.addText span {
+  margin-top: 2px;
+
+  color: #75867e;
+
+  font-size: 10px;
+}
+
+
+/* =====================================
+   FOOTER
+===================================== */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: auto;
+
+  padding-top: 31px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 9px 3px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.backButton:hover {
+  color: #76e8c1;
+
+  transform: translateX(-2px);
+}
+
+.footerRight {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.selectedCounter {
+  color: #c7dcd4;
+
+  font-size: 11px;
+}
+
+.nextButton {
+  min-width: 135px;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 18px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #20b982;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 12px rgba(0, 40, 28, 0.15);
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.nextButton:hover:not(:disabled) {
+  background: #169d6e;
+
+  transform: translateY(-1px);
+}
+
+.nextButton:disabled {
+  opacity: 0.38;
+
+  cursor: not-allowed;
+
+  box-shadow: none;
+}
+
+
+/* =====================================
+   RESPONSIVO
+===================================== */
+
+@media (max-width: 760px) {
+  .container {
+    padding: 30px 22px 25px;
+  }
+
+  .fieldsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .header h1 {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 500px) {
+  .container {
+    padding: 23px 15px;
+  }
+
+  .header {
+    margin-top: 24px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .fieldCard,
+  .addField {
+    min-height: 67px;
+
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .checkbox {
+    width: 29px;
+    height: 29px;
+  }
+
+  .fieldIcon {
+    width: 37px;
+    height: 37px;
+  }
+
+  .fieldName {
+    font-size: 14px;
+  }
+
+  .selectedCounter {
+    display: none;
+  }
+}

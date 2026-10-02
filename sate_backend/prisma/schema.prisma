@@ -32,6 +32,7 @@ model Treinador {
 
   usuario Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   equipes Equipe[]
+  atletas Atleta[]
 }
 
 model Atleta {
@@ -43,21 +44,26 @@ model Atleta {
   sexo           Sexo?
   categoria      String?
   telefone       String?
-  usuarioId      Int       @unique
-  responsavelId  Int?      @unique
-  enderecoId     Int?      @unique
-  equipeId       Int?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+
+  usuarioId     Int  @unique
+  responsavelId Int? @unique
+  enderecoId    Int? @unique
+  equipeId      Int?
+  treinadorId   Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   endereco    Endereco?    @relation(fields: [enderecoId], references: [id])
   responsavel Responsavel? @relation(fields: [responsavelId], references: [id])
-  usuario     Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  usuario     Usuario      @relation(fields: [usuarioId], references: [id])
   equipe      Equipe?      @relation(fields: [equipeId], references: [id], onDelete: SetNull)
+  treinador   Treinador?   @relation(fields: [treinadorId], references: [id], onDelete: SetNull)
 
   documentos Documento[]
 
-  @@index([equipeId], map: "Atleta_equipeId_fkey")
+  @@index([equipeId])
+  @@index([treinadorId])
 }
 
 model Equipe {

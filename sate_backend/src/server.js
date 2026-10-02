@@ -8,6 +8,7 @@ const treinadorRoutes = require('./routes/treinadorRoutes');
 const passwordRoutes = require('./routes/passwordRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const equipeRoutes = require('./routes/equipeRoutes');
+const partidaRoutes = require('./routes/partidaRoutes');
 
 const app = express();
 
@@ -80,6 +81,12 @@ app.use(
 app.use(
     '/api/equipes',
     equipeRoutes
+);
+
+
+app.use(
+    '/api/partidas',
+    partidaRoutes
 );
 
 

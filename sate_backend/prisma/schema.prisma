@@ -74,9 +74,35 @@ model Equipe {
 
   treinador Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
   atletas   Atleta[]
+   partidas  Partida[]
 
   @@index([treinadorId], map: "Equipe_treinadorId_fkey")
 }
+
+model Partida {
+  id Int @id @default(autoincrement())
+  equipeId Int
+  adversario String
+  data DateTime
+  local String?
+  campeonato String?
+  rodada String?
+  observacoes String?
+
+  status StatusPartida @default(AGENDADA)
+
+  golsEquipe Int?
+  golsAdversario Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  equipe Equipe @relation(fields: [equipeId], references: [id], onDelete: Cascade)
+
+  @@index([equipeId], map: "Partida_equipeId_fkey")
+  @@index([data])
+}
+
 
 model Responsavel {
   id             Int      @id @default(autoincrement())
@@ -141,4 +167,11 @@ enum Sexo {
   FEMININO
   OUTRO
   NAO_INFORMADO
+}
+
+enum StatusPartida {
+  AGENDADA
+  EM_ANDAMENTO
+  FINALIZADA
+  CANCELADA
 }

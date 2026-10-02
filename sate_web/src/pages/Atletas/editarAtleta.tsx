@@ -480,10 +480,19 @@ const EditarAtleta = ({
             return;
         }
 
+
+        // VALIDAR TIPO
+
+        const tiposPermitidos = [
+            'image/jpeg',
+            'image/jpg',
+            'image/png',
+        ];
+
         if (
-            !arquivo.type.includes('jpeg') &&
-            !arquivo.type.includes('jpg') &&
-            !arquivo.type.includes('png')
+            !tiposPermitidos.includes(
+                arquivo.type
+            )
         ) {
             setErro(
                 'A foto precisa estar no formato JPG ou PNG.'
@@ -493,6 +502,9 @@ const EditarAtleta = ({
 
             return;
         }
+
+
+        // VALIDAR TAMANHO
 
         if (
             arquivo.size >
@@ -507,10 +519,14 @@ const EditarAtleta = ({
             return;
         }
 
+
         setErro('');
         setSucesso('');
 
         setFotoArquivo(arquivo);
+
+
+        // PREVIEW
 
         const reader =
             new FileReader();
@@ -521,10 +537,20 @@ const EditarAtleta = ({
                 typeof reader.result ===
                 'string'
             ) {
+
                 setFotoPreview(
                     reader.result
                 );
+
             }
+        };
+
+        reader.onerror = () => {
+
+            setErro(
+                'Não foi possível carregar a foto.'
+            );
+
         };
 
         reader.readAsDataURL(arquivo);
@@ -532,6 +558,14 @@ const EditarAtleta = ({
 
 
     const abrirSeletorFoto = () => {
+
+        if (
+            salvando ||
+            excluindo
+        ) {
+            return;
+        }
+
         inputFotoRef.current?.click();
     };
 
@@ -542,12 +576,20 @@ const EditarAtleta = ({
 
     const salvarAlteracoes = async () => {
 
+        if (salvando) {
+            return;
+        }
+
         try {
 
             setSalvando(true);
             setErro('');
             setSucesso('');
 
+
+            // ==================================================
+            // VALIDAÇÕES
+            // ==================================================
 
             if (!nome.trim()) {
 
@@ -558,6 +600,20 @@ const EditarAtleta = ({
                 return;
             }
 
+
+            if (!email.trim()) {
+
+                setErro(
+                    'O e-mail do atleta é obrigatório.'
+                );
+
+                return;
+            }
+
+
+            // ==================================================
+            // DADOS
+            // ==================================================
 
             const dados: Record<string, unknown> = {
 
@@ -591,10 +647,19 @@ const EditarAtleta = ({
                     telefone.trim() ||
                     null,
 
+
+                // ==============================================
                 // FOTO
+                // ==============================================
+
                 avatarUrl:
                     fotoPreview ||
                     null,
+
+
+                // ==============================================
+                // RESPONSÁVEL
+                // ==============================================
 
                 responsavel:
                     responsavelNome.trim()
@@ -609,6 +674,11 @@ const EditarAtleta = ({
                                 responsavelTelefone.trim(),
                         }
                         : null,
+
+
+                // ==============================================
+                // ENDEREÇO
+                // ==============================================
 
                 endereco:
                     cep.trim() ||
@@ -644,14 +714,39 @@ const EditarAtleta = ({
             };
 
 
+            console.log(
+                'Dados enviados para atualizar atleta:',
+                {
+                    ...dados,
+                    avatarUrl: fotoPreview
+                        ? `Base64 (${fotoPreview.length} caracteres)`
+                        : null,
+                }
+            );
+
+
+            // ==================================================
+            // SALVAR
+            // ==================================================
+
             if (onSave) {
 
                 await onSave(
                     dados
                 );
 
+            } else {
+
+                throw new Error(
+                    'A função de salvamento do atleta não foi configurada.'
+                );
+
             }
 
+
+            // ==================================================
+            // FINALIZADO
+            // ==================================================
 
             setFotoArquivo(null);
 
@@ -665,6 +760,7 @@ const EditarAtleta = ({
                 'Erro ao salvar atleta:',
                 error
             );
+
 
             setErro(
                 error instanceof Error
@@ -694,13 +790,16 @@ const EditarAtleta = ({
             return;
         }
 
+
         try {
 
             setExcluindo(true);
             setErro('');
 
             if (onDelete) {
+
                 await onDelete();
+
                 return;
             }
 
@@ -772,7 +871,10 @@ const EditarAtleta = ({
                 type="button"
                 className={styles.backButton}
                 onClick={onBack}
-                disabled={salvando || excluindo}
+                disabled={
+                    salvando ||
+                    excluindo
+                }
             >
                 <ArrowLeft size={17} />
 
@@ -794,7 +896,9 @@ const EditarAtleta = ({
                         }
                     >
 
-                        {/* FOTO */}
+                        {/* =================================================
+                            FOTO
+                        ================================================= */}
 
                         <div
                             className={
@@ -802,35 +906,38 @@ const EditarAtleta = ({
                             }
                         >
 
-                            {fotoPreview ? (
+                            <div
+                                className={
+                                    styles.photoWrapper
+                                }
+                            >
 
-                                <img
-                                    src={fotoPreview}
-                                    alt={
-                                        `Foto de ${nomeExibicao}`
-                                    }
-                                    className={
-                                        styles.photo
-                                    }
-                                />
+                                {fotoPreview ? (
 
-                            ) : (
+                                    <img
+                                        src={fotoPreview}
+                                        alt={
+                                            `Foto de ${nomeExibicao}`
+                                        }
+                                        className={
+                                            styles.photo
+                                        }
+                                    />
 
-                                <div
-                                    className={
-                                        styles.photo
-                                    }
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        fontSize: '32px',
-                                        fontWeight: 700,
-                                    }}
-                                >
-                                    {inicial}
-                                </div>
-                            )}
+                                ) : (
+
+                                    <div
+                                        className={
+                                            styles.photoFallback
+                                        }
+                                    >
+                                        {inicial}
+                                    </div>
+
+                                )}
+
+                            </div>
+
 
                             <div
                                 className={
@@ -843,7 +950,9 @@ const EditarAtleta = ({
                         </div>
 
 
-                        {/* INFORMAÇÕES */}
+                        {/* =================================================
+                            INFORMAÇÕES
+                        ================================================= */}
 
                         <div
                             className={
@@ -902,6 +1011,7 @@ const EditarAtleta = ({
                                     }}
                                 />
 
+
                                 <button
                                     type="button"
                                     onClick={
@@ -925,12 +1035,14 @@ const EditarAtleta = ({
                                         fontSize: '13px',
                                     }}
                                 >
+
                                     <Camera size={15} />
 
                                     {fotoPreview
                                         ? 'Trocar foto'
                                         : 'Adicionar foto'
                                     }
+
                                 </button>
 
                             </div>
@@ -947,6 +1059,7 @@ const EditarAtleta = ({
                                         styles.badge
                                     }
                                 >
+
                                     <FileText size={14} />
 
                                     {idade !== null
@@ -968,6 +1081,7 @@ const EditarAtleta = ({
                                         styles.badge
                                     }
                                 >
+
                                     <FileText size={14} />
 
                                     CPF: {cpfExibicao}
@@ -988,6 +1102,7 @@ const EditarAtleta = ({
                                         styles.statusBadge
                                     }
                                 >
+
                                     <Check size={14} />
 
                                     Status dos Documentos:{' '}
@@ -1010,7 +1125,9 @@ const EditarAtleta = ({
                     </div>
 
 
-                    {/* BOTÕES */}
+                    {/* =================================================
+                        BOTÕES
+                    ================================================= */}
 
                     <div
                         className={
@@ -1048,6 +1165,7 @@ const EditarAtleta = ({
                                 excluindo
                             }
                         >
+
                             <Check size={18} />
 
                             {salvando
@@ -1081,12 +1199,14 @@ const EditarAtleta = ({
                                 cursor: 'pointer',
                             }}
                         >
+
                             <Trash2 size={17} />
 
                             {excluindo
                                 ? 'Excluindo...'
                                 : 'Excluir atleta'
                             }
+
                         </button>
 
                     </div>
@@ -1200,6 +1320,7 @@ const EditarAtleta = ({
                 >
                     {erro}
                 </div>
+
             )}
 
 
@@ -1217,6 +1338,7 @@ const EditarAtleta = ({
                 >
                     {sucesso}
                 </div>
+
             )}
 
 
@@ -1255,6 +1377,7 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Nome completo do atleta
 
@@ -1267,6 +1390,7 @@ const EditarAtleta = ({
                                     </span>
                                 </label>
 
+
                                 <input
                                     type="text"
                                     value={nome}
@@ -1276,6 +1400,7 @@ const EditarAtleta = ({
                                         )
                                     }
                                 />
+
                             </div>
 
                         </div>
@@ -1292,6 +1417,7 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Data de Nascimento
 
@@ -1304,6 +1430,7 @@ const EditarAtleta = ({
                                     </span>
                                 </label>
 
+
                                 <input
                                     type="date"
                                     value={
@@ -1315,6 +1442,7 @@ const EditarAtleta = ({
                                         )
                                     }
                                 />
+
                             </div>
 
 
@@ -1323,9 +1451,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Sexo
                                 </label>
+
 
                                 <select
                                     value={sexo}
@@ -1335,6 +1465,7 @@ const EditarAtleta = ({
                                         )
                                     }
                                 >
+
                                     <option value="">
                                         Selecione
                                     </option>
@@ -1356,6 +1487,7 @@ const EditarAtleta = ({
                                     </option>
 
                                 </select>
+
                             </div>
 
 
@@ -1364,9 +1496,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Categoria
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -1377,6 +1511,7 @@ const EditarAtleta = ({
                                         )
                                     }
                                 />
+
                             </div>
 
                         </div>
@@ -1393,9 +1528,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Registro Geral (RG)
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -1407,6 +1544,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="Digite o RG..."
                                 />
+
                             </div>
 
 
@@ -1415,9 +1553,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Cadastro de Pessoa Física (CPF)
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -1428,6 +1568,7 @@ const EditarAtleta = ({
                                         )
                                     }
                                 />
+
                             </div>
 
                         </div>
@@ -1444,9 +1585,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     E-mail
                                 </label>
+
 
                                 <input
                                     type="email"
@@ -1458,6 +1601,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="Digite o e-mail..."
                                 />
+
                             </div>
 
 
@@ -1466,9 +1610,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Telefone
                                 </label>
+
 
                                 <input
                                     type="tel"
@@ -1480,6 +1626,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="Digite o telefone..."
                                 />
+
                             </div>
 
                         </div>
@@ -1514,9 +1661,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Nome do Responsável
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -1530,6 +1679,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="Digite o nome..."
                                 />
+
                             </div>
 
 
@@ -1538,9 +1688,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Grau de Parentesco
                                 </label>
+
 
                                 <select
                                     value={
@@ -1552,6 +1704,7 @@ const EditarAtleta = ({
                                         )
                                     }
                                 >
+
                                     <option value="">
                                         Selecione
                                     </option>
@@ -1573,6 +1726,7 @@ const EditarAtleta = ({
                                     </option>
 
                                 </select>
+
                             </div>
 
 
@@ -1581,9 +1735,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Telefone
                                 </label>
+
 
                                 <input
                                     type="tel"
@@ -1597,6 +1753,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="Digite o telefone..."
                                 />
+
                             </div>
 
                         </div>
@@ -1622,9 +1779,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     CEP
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -1636,6 +1795,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="00000-000"
                                 />
+
                             </div>
 
 
@@ -1644,9 +1804,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Endereço
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -1658,6 +1820,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="Digite o endereço..."
                                 />
+
                             </div>
 
 
@@ -1666,9 +1829,11 @@ const EditarAtleta = ({
                                     styles.formGroupSmall
                                 }
                             >
+
                                 <label>
                                     Nº
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -1680,6 +1845,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="Nº"
                                 />
+
                             </div>
 
 
@@ -1688,9 +1854,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Bairro
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -1702,6 +1870,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="Digite o bairro..."
                                 />
+
                             </div>
 
                         </div>
@@ -1718,9 +1887,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Complemento
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -1732,6 +1903,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="Apartamento, bloco..."
                                 />
+
                             </div>
 
 
@@ -1740,9 +1912,11 @@ const EditarAtleta = ({
                                     styles.formGroup
                                 }
                             >
+
                                 <label>
                                     Cidade
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -1754,6 +1928,7 @@ const EditarAtleta = ({
                                     }
                                     placeholder="Digite a cidade..."
                                 />
+
                             </div>
 
                         </div>
@@ -1820,6 +1995,7 @@ const EditarAtleta = ({
                                     color: '#6B7D76',
                                 }}
                             >
+
                                 <FileText
                                     size={34}
                                     style={{
@@ -1863,9 +2039,11 @@ const EditarAtleta = ({
                                                         styles.docStatus
                                                     }
                                                 >
+
                                                     <Check size={12} />
 
                                                     Válido
+
                                                 </span>
 
 
@@ -1916,9 +2094,11 @@ const EditarAtleta = ({
                                                         )
                                                     }
                                                 >
+
                                                     <Eye size={14} />
 
                                                     Visualizar
+
                                                 </button>
 
 
@@ -1930,9 +2110,11 @@ const EditarAtleta = ({
                                                         styles.docAction
                                                     }
                                                 >
+
                                                     <Download size={14} />
 
                                                     PDF
+
                                                 </a>
 
 
@@ -1943,18 +2125,22 @@ const EditarAtleta = ({
                                                     }
                                                     title="Atualizar"
                                                 >
+
                                                     <RefreshCw
                                                         size={16}
                                                     />
+
                                                 </button>
 
                                             </div>
 
                                         </div>
+
                                     )
                                 )}
 
                             </div>
+
                         )}
 
                     </>

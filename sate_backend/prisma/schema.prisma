@@ -15,7 +15,7 @@ model Usuario {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   nome           String?
-  avatarUrl      String?
+  avatarUrl      String?      @db.LongText
   primeiroAcesso Boolean      @default(true)
 
   atleta              Atleta?

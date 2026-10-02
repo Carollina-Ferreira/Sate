@@ -1,200 +1,314 @@
 .page {
-    width: 100%;
-    min-height: 100vh;
+  width: 100%;
+  min-height: 100vh;
 
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 
-    background-color: #005942;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  background-color: #005942;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 
-    color: #ffffff;
+  color: #ffffff;
 
-    font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .container {
-    width: min(1000px, 100%);
-    min-height: 100vh;
+  width: min(1000px, 100%);
+  min-height: 100vh;
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    padding: 42px 45px 34px;
+  padding: 34px 40px 28px;
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 
 /* =========================================================
-   CONTEÚDO
+   PROGRESSO
 ========================================================= */
 
-.conteudo {
-    width: 100%;
+.progressArea {
+  width: min(760px, 100%);
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 13px;
+}
+
+.stepBadge {
+  width: fit-content;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  line-height: 1.2;
+
+  white-space: nowrap;
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.progressSteps {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 9px;
+}
+
+.progressSteps > div {
+  height: 4px;
+
+  border-radius: 999px;
+
+  background: #58deb2;
 }
 
 
 /* =========================================================
-   ETAPA
+   HEADER
 ========================================================= */
 
-.etapa {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.header {
+  width: min(760px, 100%);
 
-    gap: 10px;
+  margin: 27px auto 0;
 
-    color: #e9f4f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    text-align: left;
+  text-align: center;
 }
 
-.etapa > span {
-    width: 28px;
-    height: 28px;
+.completeIcon {
+  width: 54px;
+  height: 54px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    border-radius: 50%;
+  margin-bottom: 13px;
 
-    background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
 
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #3bcf9c;
 
-    color: #ffffff;
+  color: #ffffff;
 
-    font-size: 12px;
-    font-weight: 700;
+  box-shadow:
+    0 8px 20px rgba(0, 45, 32, 0.18);
 }
 
-.etapa > div {
-    display: flex;
-    flex-direction: column;
+.header h1 {
+  margin: 0;
 
-    gap: 2px;
+  color: #ffffff;
+
+  font-size: 32px;
+  font-weight: 700;
+
+  line-height: 1.1;
 }
 
-.etapa strong {
-    color: #ffffff;
+.header p {
+  max-width: 600px;
 
-    font-size: 12px;
-    font-weight: 600;
-}
+  margin: 9px 0 0;
 
-.etapa small {
-    color: #b9d4ca;
+  color: #d6e8e1;
 
-    font-size: 9px;
+  font-size: 13px;
+
+  line-height: 1.45;
 }
 
 
 /* =========================================================
-   INTRODUÇÃO / HEADER
+   ÁREA DOS CARDS
 ========================================================= */
 
-.introducao {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.summaryArea {
+  width: min(760px, 100%);
 
-    margin-top: 35px;
+  margin: 27px auto 0;
 
-    text-align: center;
-}
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 
-.iconeCheck {
-    width: 52px;
-    height: 52px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-bottom: 13px;
-
-    border-radius: 50%;
-
-    background: #36c995;
-
-    color: #ffffff;
-
-    box-shadow:
-        0 10px 24px rgba(28, 180, 127, 0.25);
-}
-
-.introducao h1 {
-    margin: 0;
-
-    color: #ffffff;
-
-    font-size: 32px;
-    font-weight: 700;
-}
-
-.introducao p {
-    max-width: 570px;
-
-    margin: 7px 0 0;
-
-    color: #cedfd8;
-
-    font-size: 14px;
-
-    line-height: 1.5;
+  gap: 18px;
 }
 
 
 /* =========================================================
-   SEÇÕES
+   CARD DOS CAMPOS
 ========================================================= */
 
-.secao {
-    width: 100%;
+.fieldsCard {
+  min-height: 205px;
+
+  padding: 18px;
+
+  box-sizing: border-box;
+
+  border-radius: 16px;
+
+  background: #f7faf8;
+
+  color: #263930;
+
+  box-shadow:
+    0 12px 28px rgba(0, 30, 22, 0.16);
 }
 
+.sportHeader {
+  display: flex;
+  align-items: center;
 
-/* Os dois cards principais ficam lado a lado */
-.conteudo > .secao:nth-of-type(1) {
-    width: min(700px, 100%);
-
-    margin: 45px auto 0;
+  gap: 10px;
 }
 
+.sportCircle {
+  width: 38px;
+  height: 38px;
 
-/* Segunda seção */
-.conteudo > .secao:nth-of-type(2) {
-    width: min(700px, 100%);
+  flex-shrink: 0;
 
-    margin: 20px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e4f4ee;
+
+  color: #1ca577;
+
+  font-size: 18px;
 }
 
-.tituloSecao {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.sportHeader > div:last-child {
+  display: flex;
+  flex-direction: column;
 
-    margin-bottom: 10px;
+  gap: 1px;
 }
 
-.tituloSecao h2 {
-    margin: 0;
+.sportHeader strong {
+  color: #21372e;
 
-    color: #ffffff;
-
-    font-size: 13px;
-    font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
 }
 
-.tituloSecao span {
-    color: #a9c8bd;
+.sportHeader span {
+  color: #7d8d86;
 
-    font-size: 9px;
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+
+  margin: 14px 0;
+
+  background: #dce7e2;
+}
+
+.fieldsTitle {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #43574e;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.fieldsCard ul {
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  list-style: none;
+}
+
+.fieldsCard li {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 6px 9px;
+
+  border-radius: 999px;
+
+  background: #eaf4ef;
+
+  color: #35483f;
+
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.fieldsCard li svg {
+  flex-shrink: 0;
+
+  color: #18a875;
+}
+
+.emptyFields {
+  margin: 10px 0 0;
+
+  color: #87958f;
+
+  font-size: 9px;
+}
+
+.moreFields {
+  display: block;
+
+  margin-top: 10px;
+
+  color: #159c6e;
+
+  font-size: 9px;
+  font-weight: 600;
 }
 
 
@@ -202,196 +316,109 @@
    CARD DA EQUIPE
 ========================================================= */
 
-.cardEquipe {
-    overflow: hidden;
+.teamCard {
+  min-height: 205px;
 
-    border-radius: 16px;
+  overflow: hidden;
 
-    background: #ffffff;
+  border-radius: 16px;
 
-    color: #263930;
+  background: #ffffff;
 
-    box-shadow:
-        0 18px 35px rgba(0, 32, 23, 0.22);
+  color: #263930;
+
+  box-shadow:
+    0 12px 28px rgba(0, 30, 22, 0.16);
 }
 
-.imagemEquipe {
-    height: 150px;
+.teamImage {
+  height: 128px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    overflow: hidden;
+  background-color: #dbe8e2;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 
-    background-color: #dfe9e4;
-    background-position: center;
-    background-size: cover;
+  color: #ffffff;
 
-    font-size: 50px;
+  font-size: 40px;
 }
 
-.imagemEquipe img {
-    width: 100%;
-    height: 100%;
+.teamInfo {
+  min-height: 77px;
 
-    display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    object-fit: cover;
+  gap: 12px;
+
+  padding: 13px 16px;
+
+  box-sizing: border-box;
 }
 
-.iconeEsporte {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #dfe9e4;
-
-    color: #172a23;
-
-    font-size: 50px;
+.teamInfo > div:first-child {
+  min-width: 0;
 }
 
-.iconeEsporte svg {
-    color: #172a23;
+.teamInfo span {
+  display: block;
+
+  margin-bottom: 2px;
+
+  color: #159c6e;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
 }
 
-.infoEquipe {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.teamInfo h2 {
+  overflow: hidden;
 
-    gap: 15px;
+  margin: 0;
 
-    padding: 18px 20px;
+  color: #24372f;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
 }
 
-.infoEquipe h3 {
-    overflow: hidden;
+.teamInfo p {
+  margin: 3px 0 0;
 
-    margin: 3px 0 2px;
+  color: #7a8982;
 
-    color: #24372f;
-
-    font-size: 17px;
-    font-weight: 700;
-
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  font-size: 9px;
 }
 
-.detalhesEquipe {
-    display: flex;
-    align-items: center;
+.sportEmoji {
+  width: 34px;
+  height: 34px;
 
-    gap: 7px;
-}
+  flex-shrink: 0;
 
-.detalhesEquipe span {
-    color: #7b8882;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    font-size: 9px;
-}
+  border-radius: 50%;
 
-.detalhesEquipe span:first-child {
-    color: #1b9a6e;
+  background: #e4f4ee;
 
-    font-weight: 700;
-}
+  color: #1ca577;
 
-.statusEquipe {
-    width: 30px;
-    height: 30px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #e4f5ee;
-
-    color: #1bb27d;
-}
-
-
-/* =========================================================
-   CAMPOS DE ANÁLISE
-========================================================= */
-
-.campos {
-    min-height: 80px;
-
-    padding: 16px 18px;
-
-    box-sizing: border-box;
-
-    border-radius: 16px;
-
-    background: #ffffff;
-
-    color: #263930;
-
-    box-shadow:
-        0 18px 35px rgba(0, 32, 23, 0.2);
-
-    display: flex;
-    flex-wrap: wrap;
-
-    align-content: flex-start;
-
-    gap: 8px;
-}
-
-.campo {
-    display: flex;
-    align-items: center;
-
-    gap: 6px;
-
-    padding: 7px 10px;
-
-    border-radius: 999px;
-
-    background: #edf5f1;
-
-    color: #394b43;
-
-    font-size: 10px;
-}
-
-.campo svg {
-    flex-shrink: 0;
-
-    color: #1bb27d;
-}
-
-.semCampos {
-    min-height: 70px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 16px;
-
-    background: #ffffff;
-
-    box-shadow:
-        0 18px 35px rgba(0, 32, 23, 0.2);
-}
-
-.semCampos p {
-    margin: 0;
-
-    color: #84918b;
-
-    font-size: 10px;
+  font-size: 16px;
 }
 
 
@@ -399,60 +426,69 @@
    MENSAGEM FINAL
 ========================================================= */
 
-.mensagemFinal {
-    width: min(700px, 100%);
+.finalMessage {
+  width: min(760px, 100%);
 
-    display: flex;
-    align-items: center;
+  margin: 14px auto 0;
 
-    gap: 12px;
+  padding: 10px 13px;
 
-    margin: 20px auto 0;
+  box-sizing: border-box;
 
-    padding: 14px 17px;
+  display: flex;
+  align-items: center;
 
-    box-sizing: border-box;
+  gap: 10px;
 
-    border-radius: 12px;
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.1);
 
-    background: rgba(255, 255, 255, 0.09);
+  border-radius: 11px;
 
-    border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-.mensagemIcone {
-    width: 32px;
-    height: 32px;
+.finalMessageIcon {
+  width: 28px;
+  height: 28px;
 
-    flex-shrink: 0;
+  flex-shrink: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    border-radius: 50%;
+  border-radius: 50%;
 
-    background: #36c995;
+  background: #3bcf9c;
 
-    color: #ffffff;
+  color: #ffffff;
 }
 
-.mensagemFinal strong {
-    display: block;
+.finalMessage > div:last-child {
+  display: flex;
+  flex-direction: column;
 
-    color: #ffffff;
-
-    font-size: 11px;
+  gap: 1px;
 }
 
-.mensagemFinal p {
-    margin: 3px 0 0;
+.finalMessage strong {
+  color: #ffffff;
 
-    color: #bcd4cb;
+  font-size: 10px;
+  font-weight: 700;
+}
 
-    font-size: 9px;
+.finalMessage span {
+  color: #c9ddd5;
 
-    line-height: 1.4;
+  font-size: 8px;
+
+  line-height: 1.35;
 }
 
 
@@ -461,86 +497,99 @@
 ========================================================= */
 
 .footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  width: min(760px, 100%);
 
-    margin-top: auto;
+  margin: auto auto 0;
 
-    padding-top: 34px;
+  padding-top: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
 }
 
-.botaoVoltar {
-    display: flex;
-    align-items: center;
+.backButton {
+  display: flex;
+  align-items: center;
 
-    gap: 9px;
+  gap: 7px;
 
-    border: none;
+  padding: 0;
 
-    background: transparent;
+  border: none;
 
-    color: #ffffff;
+  background: transparent;
 
-    font-family: inherit;
+  color: #ffffff;
 
-    font-size: 13px;
-    font-weight: 600;
+  font-family: inherit;
 
-    cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
-.botaoVoltar:hover {
-    opacity: 0.8;
+.backButton:hover:not(:disabled) {
+  opacity: 0.8;
+
+  transform: translateX(-2px);
 }
 
-.botaoVoltar:disabled {
-    opacity: 0.5;
+.backButton:disabled {
+  opacity: 0.5;
 
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
-.botaoFinalizar {
-    min-width: 165px;
-    height: 43px;
+.nextButton {
+  min-width: 150px;
+  height: 38px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    gap: 8px;
+  gap: 7px;
 
-    padding: 0 18px;
+  padding: 0 15px;
 
-    border: none;
-    border-radius: 9px;
+  border: none;
 
-    background: #21b983;
+  border-radius: 8px;
 
-    color: #ffffff;
+  background: #21b983;
 
-    font-family: inherit;
+  color: #ffffff;
 
-    font-size: 13px;
-    font-weight: 700;
+  font-family: inherit;
 
-    cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
 
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease;
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-.botaoFinalizar:hover:not(:disabled) {
-    background: #159d6d;
+.nextButton:hover:not(:disabled) {
+  background: #169d70;
 
-    transform: translateY(-1px);
+  transform: translateY(-1px);
 }
 
-.botaoFinalizar:disabled {
-    opacity: 0.7;
+.nextButton:disabled {
+  opacity: 0.7;
 
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
 
@@ -549,21 +598,24 @@
 ========================================================= */
 
 .spinner {
-    width: 15px;
-    height: 15px;
+  width: 13px;
+  height: 13px;
 
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    border-top-color: #ffffff;
+  border:
+    2px solid
+    rgba(255, 255, 255, 0.35);
 
-    border-radius: 50%;
+  border-top-color: #ffffff;
 
-    animation: girar 0.7s linear infinite;
+  border-radius: 50%;
+
+  animation: girar 0.7s linear infinite;
 }
 
 @keyframes girar {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 
@@ -571,64 +623,93 @@
    RESPONSIVO
 ========================================================= */
 
-@media (max-width: 720px) {
-    .container {
-        padding: 28px 20px;
-    }
+@media (max-width: 800px) {
+  .container {
+    padding: 28px 20px 24px;
+  }
 
-    .introducao {
-        margin-top: 28px;
-    }
+  .summaryArea {
+    grid-template-columns: 1fr;
+  }
 
-    .introducao h1 {
-        font-size: 27px;
-    }
+  .fieldsCard,
+  .teamCard {
+    min-height: auto;
+  }
 
-    .introducao p {
-        font-size: 13px;
-    }
-
-    .conteudo > .secao:nth-of-type(1),
-    .conteudo > .secao:nth-of-type(2),
-    .mensagemFinal {
-        width: 100%;
-    }
-
-    .footer {
-        padding-top: 25px;
-    }
+  .header h1 {
+    font-size: 28px;
+  }
 }
 
-@media (max-width: 480px) {
-    .container {
-        padding: 24px 16px;
-    }
+@media (max-width: 500px) {
+  .container {
+    padding: 22px 15px;
+  }
 
-    .etapa {
-        justify-content: flex-start;
-    }
+  .stepBadge {
+    padding: 6px 15px;
 
-    .imagemEquipe {
-        height: 130px;
-    }
+    font-size: 9px;
+  }
 
-    .infoEquipe {
-        padding: 15px;
-    }
+  .progressSteps {
+    gap: 6px;
+  }
 
-    .infoEquipe h3 {
-        font-size: 15px;
-    }
+  .header {
+    margin-top: 24px;
+  }
 
-    .mensagemFinal {
-        align-items: flex-start;
-    }
+  .completeIcon {
+    width: 48px;
+    height: 48px;
 
-    .footer {
-        gap: 15px;
-    }
+    margin-bottom: 12px;
+  }
 
-    .botaoFinalizar {
-        min-width: 145px;
-    }
+  .header h1 {
+    font-size: 25px;
+  }
+
+  .header p {
+    font-size: 11px;
+  }
+
+  .summaryArea {
+    margin-top: 24px;
+
+    gap: 14px;
+  }
+
+  .fieldsCard {
+    padding: 16px;
+  }
+
+  .teamImage {
+    height: 115px;
+  }
+
+  .teamInfo {
+    padding: 12px 14px;
+  }
+
+  .finalMessage {
+    align-items: flex-start;
+  }
+
+  .footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+
+    padding-top: 18px;
+  }
+
+  .backButton {
+    justify-content: center;
+  }
+
+  .nextButton {
+    width: 100%;
+  }
 }

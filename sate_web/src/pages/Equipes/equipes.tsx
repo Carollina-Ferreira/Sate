@@ -27,6 +27,7 @@ import NovaEquipeModal from '../../components/NovaEquipeModal/novaEquipeModal';
 
 import type {
   NovaEquipeData,
+  AtletaDisponivel,
 } from '../../components/NovaEquipeModal/novaEquipeModal';
 
 import EditarEquipeModal from '../../components/EditarEquipeModal/editarEquipeModal';
@@ -276,6 +277,11 @@ const Equipes = () => {
   ] = useState<Equipe[]>([]);
 
   const [
+    atletasDisponiveis,
+    setAtletasDisponiveis,
+  ] = useState<AtletaDisponivel[]>([]);
+
+  const [
     equipeSelecionada,
     setEquipeSelecionada,
   ] = useState<Equipe | null>(
@@ -304,13 +310,19 @@ const Equipes = () => {
     setCarregando,
   ] = useState(true);
 
+  const [
+    carregandoAtletas,
+    setCarregandoAtletas,
+  ] = useState(false);
+
 
   // ====================================================
-  // CARREGAR EQUIPES
+  // CARREGAR DADOS
   // ====================================================
 
   useEffect(() => {
     carregarEquipes();
+    carregarAtletas();
   }, []);
 
 
@@ -353,8 +365,13 @@ const Equipes = () => {
         );
       }
 
+      const lista =
+        Array.isArray(dados)
+          ? dados
+          : dados.equipes || [];
+
       const equipesFormatadas: Equipe[] =
-        dados.map(
+        lista.map(
           (equipe: any) => ({
             id: equipe.id,
 
@@ -369,6 +386,7 @@ const Equipes = () => {
 
             atletas:
               equipe.numeroAtletas ??
+              equipe.atletas?.length ??
               0,
 
             imagem:
@@ -465,6 +483,104 @@ const Equipes = () => {
 
 
   // ====================================================
+  // GET /api/atletas/disponiveis
+  // ====================================================
+
+  const carregarAtletas = async () => {
+    try {
+
+      setCarregandoAtletas(true);
+
+      const token =
+        localStorage.getItem(
+          'token',
+        );
+
+      const resposta =
+        await fetch(
+          'http://localhost:3000/api/atletas/disponiveis',
+          {
+            method: 'GET',
+
+            headers: {
+              'Content-Type':
+                'application/json',
+
+              Authorization:
+                `Bearer ${token}`,
+            },
+          },
+        );
+
+      const dados =
+        await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.mensagem ||
+            'Erro ao carregar atletas disponíveis.',
+        );
+      }
+
+      const lista =
+        Array.isArray(dados)
+          ? dados
+          : dados.atletas || [];
+
+      const atletasFormatados:
+        AtletaDisponivel[] =
+        lista.map(
+          (atleta: any) => ({
+            id: atleta.id,
+
+            nome:
+              atleta.nome ||
+              'Atleta sem nome',
+
+            categoria:
+              atleta.categoria ||
+              null,
+
+            usuario:
+              atleta.usuario
+                ? {
+                    email:
+                      atleta.usuario.email,
+
+                    avatarUrl:
+                      atleta.usuario.avatarUrl ||
+                      null,
+                  }
+                : undefined,
+          }),
+        );
+
+      setAtletasDisponiveis(
+        atletasFormatados,
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Erro ao carregar atletas disponíveis:',
+        error,
+      );
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Erro ao carregar atletas disponíveis.',
+      );
+
+    } finally {
+
+      setCarregandoAtletas(false);
+
+    }
+  };
+
+
+  // ====================================================
   // CRIAR EQUIPE
   // POST /api/equipes
   // ====================================================
@@ -505,6 +621,9 @@ const Equipes = () => {
                 categoria:
                   dados.categoria,
 
+                atletasIds:
+                  dados.atletasIds,
+
                 proximaPartida:
                   dados.proximaPartida ||
                   null,
@@ -529,83 +648,21 @@ const Equipes = () => {
           );
         }
 
-        const equipeCriada =
-          resultado.equipe;
-
-        const novaEquipe: Equipe = {
-          id:
-            equipeCriada.id,
-
-          nome:
-            equipeCriada.nome,
-
-          modalidade:
-            equipeCriada.modalidade,
-
-          categoria:
-            equipeCriada.categoria ||
-            'Não informada',
-
-          atletas:
-            equipeCriada.numeroAtletas ??
-            0,
-
-          imagem:
-            equipeCriada.imagem ||
-            imagemPorModalidade(
-              equipeCriada.modalidade,
-            ),
-
-          icone:
-            iconePorModalidade(
-              equipeCriada.modalidade,
-            ),
-
-          cor:
-            equipeCriada.corEquipe ||
-            '#16A875',
-
-          vitorias: 0,
-
-          empates: 0,
-
-          derrotas: 0,
-
-          proximaPartida:
-            equipeCriada.proximaPartida
-              ? formatarProximaPartida(
-                  equipeCriada.proximaPartida,
-                )
-              : 'Nenhuma partida agendada',
-
-          sigla:
-            criarSigla(
-              equipeCriada.nome,
-            ),
-
-          desempenho: 0,
-
-          videos: 0,
-
-          elenco: [],
-
-          evolucao: [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-          ],
-        };
-
-        setEquipes(
-          (atuais) => [
-            ...atuais,
-            novaEquipe,
-          ],
-        );
+        /*
+         * Depois que a equipe foi criada,
+         * recarregamos os dados diretamente
+         * do backend.
+         *
+         * Isso garante que:
+         * - a equipe apareça com os dados reais;
+         * - a quantidade de atletas esteja correta;
+         * - os atletas vinculados desapareçam
+         *   da lista de disponíveis.
+         */
+        await Promise.all([
+          carregarEquipes(),
+          carregarAtletas(),
+        ]);
 
         setFiltroAtivo(
           'Todos',
@@ -760,6 +817,13 @@ const Equipes = () => {
             ),
         );
 
+        /*
+         * Recarrega as equipes para garantir
+         * que os dados exibidos estejam iguais
+         * aos dados do banco.
+         */
+        await carregarEquipes();
+
         setEquipeEmEdicao(
           null,
         );
@@ -900,9 +964,7 @@ const Equipes = () => {
         }
       >
 
-        {/* ==========================================
-            CABEÇALHO
-        ========================================== */}
+        {/* CABEÇALHO */}
 
         <div
           className={
@@ -981,13 +1043,18 @@ const Equipes = () => {
                   true,
                 )
               }
+              disabled={
+                carregandoAtletas
+              }
             >
 
               <Plus
                 size={19}
               />
 
-              Nova Equipe
+              {carregandoAtletas
+                ? 'Carregando atletas...'
+                : 'Nova Equipe'}
 
             </button>
 
@@ -996,9 +1063,7 @@ const Equipes = () => {
         </div>
 
 
-        {/* ==========================================
-            AVISO DE EDIÇÃO
-        ========================================== */}
+        {/* AVISO DE EDIÇÃO */}
 
         {modoEditar && (
           <div
@@ -1018,9 +1083,7 @@ const Equipes = () => {
         )}
 
 
-        {/* ==========================================
-            FILTROS
-        ========================================== */}
+        {/* FILTROS */}
 
         <div
           className={
@@ -1078,9 +1141,7 @@ const Equipes = () => {
         </div>
 
 
-        {/* ==========================================
-            CARREGANDO
-        ========================================== */}
+        {/* CARREGANDO */}
 
         {carregando && (
           <div
@@ -1096,9 +1157,7 @@ const Equipes = () => {
         )}
 
 
-        {/* ==========================================
-            GRID
-        ========================================== */}
+        {/* GRID */}
 
         {!carregando && (
           <div
@@ -1149,6 +1208,8 @@ const Equipes = () => {
                           ' '
                       ) {
 
+                        event.preventDefault();
+
                         clicarEquipe(
                           equipe,
                         );
@@ -1156,9 +1217,7 @@ const Equipes = () => {
                     }}
                   >
 
-                    {/* ==================================
-                        IMAGEM
-                    ================================== */}
+                    {/* IMAGEM */}
 
                     <div
                       className={
@@ -1247,9 +1306,7 @@ const Equipes = () => {
                     </div>
 
 
-                    {/* ==================================
-                        CONTEÚDO
-                    ================================== */}
+                    {/* CONTEÚDO */}
 
                     <div
                       className={
@@ -1311,9 +1368,7 @@ const Equipes = () => {
                       </div>
 
 
-                      {/* ==================================
-                          ESTATÍSTICAS
-                      ================================== */}
+                      {/* ESTATÍSTICAS */}
 
                       <div
                         className={
@@ -1394,9 +1449,7 @@ const Equipes = () => {
                     </div>
 
 
-                    {/* ==================================
-                        PRÓXIMA PARTIDA
-                    ================================== */}
+                    {/* PRÓXIMA PARTIDA */}
 
                     <div
                       className={
@@ -1442,9 +1495,7 @@ const Equipes = () => {
         )}
 
 
-        {/* ==========================================
-            NENHUMA EQUIPE
-        ========================================== */}
+        {/* NENHUMA EQUIPE */}
 
         {!carregando &&
           equipesFiltradas.length ===
@@ -1471,45 +1522,53 @@ const Equipes = () => {
       </main>
 
 
-      {/* ==========================================
-          MODAL NOVA EQUIPE
-      ========================================== */}
+      {/* MODAL NOVA EQUIPE */}
 
       <NovaEquipeModal
         open={
           modalNovaEquipe
         }
+
         modalidadeInicial={
-          filtroAtivo
+          filtroAtivo === 'Todos'
+            ? 'Futebol'
+            : filtroAtivo
         }
+
+        atletasDisponiveis={
+          atletasDisponiveis
+        }
+
         onClose={() =>
           setModalNovaEquipe(
             false,
           )
         }
+
         onCreate={
           adicionarEquipe
         }
       />
 
 
-      {/* ==========================================
-          MODAL EDITAR EQUIPE
-      ========================================== */}
+      {/* MODAL EDITAR EQUIPE */}
 
       <EditarEquipeModal
         open={
           equipeEmEdicao !==
           null
         }
+
         equipe={
           equipeEmEdicao
         }
+
         onClose={() =>
           setEquipeEmEdicao(
             null,
           )
         }
+
         onSave={
           salvarEdicao
         }

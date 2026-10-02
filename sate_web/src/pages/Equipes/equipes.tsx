@@ -1,27 +1,21 @@
-import { useEffect, useState } from 'react';
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+import type {
+  CSSProperties,
+} from 'react';
 
 import {
-  CalendarDays,
-  Minus,
   Pencil,
-  Plus,
-  TrendingDown,
-  TrendingUp,
+  Trash2,
+  X,
 } from 'lucide-react';
 
-import type { IconType } from 'react-icons';
-
-import {
-  FaBasketballBall,
-  FaFootballBall,
-  FaFutbol,
-  FaTableTennis,
-  FaVolleyballBall,
-} from 'react-icons/fa';
-
-import { MdSports } from 'react-icons/md';
-
 import styles from './equipes.module.css';
+
+import CardEquipe from '../../components/CardEquipe/cardEquipe';
 
 import NovaEquipeModal from '../../components/NovaEquipeModal/novaEquipeModal';
 
@@ -29,12 +23,6 @@ import type {
   NovaEquipeData,
   AtletaDisponivel,
 } from '../../components/NovaEquipeModal/novaEquipeModal';
-
-import EditarEquipeModal from '../../components/EditarEquipeModal/editarEquipeModal';
-
-import type {
-  EditarEquipeData,
-} from '../../components/EditarEquipeModal/editarEquipeModal';
 
 import DetalhesEquipe from './detalhesEquipe';
 
@@ -44,10 +32,6 @@ import Volei from '../../assets/img/volei_img.png';
 import Rugby from '../../assets/img/rugby_img.png';
 
 
-// ======================================================
-// TIPOS
-// ======================================================
-
 type Modalidade =
   | 'Todos'
   | 'Futebol'
@@ -56,33 +40,41 @@ type Modalidade =
   | 'Rugby'
   | 'Tênis';
 
-interface Filtro {
-  nome: Modalidade;
-  icon: IconType;
+
+interface EquipeBackend {
+  id: number;
+  nome: string;
+  modalidade: string;
+  categoria?: string | null;
+  proximaPartida?: string | null;
+  imagem?: string | null;
+  corEquipe?: string | null;
+  treinadorId?: number;
+  numeroAtletas?: number;
+  atletas?: unknown[];
+
+  _count?: {
+    atletas?: number;
+  };
 }
+
 
 export interface Equipe {
   id: number;
-
   nome: string;
   modalidade: string;
   categoria: string;
   atletas: number;
-
   imagem: string;
   icone: string;
   cor: string;
-
   vitorias: number;
   empates: number | string;
   derrotas: number;
-
   proximaPartida: string;
-
+  proximaPartidaRaw?: string | null;
   sigla: string;
-
   desempenho: number;
-
   videos: number;
 
   elenco: {
@@ -97,61 +89,30 @@ export interface Equipe {
 }
 
 
-// ======================================================
-// FILTROS
-// ======================================================
-
-const filtros: Filtro[] = [
-  {
-    nome: 'Todos',
-    icon: MdSports,
-  },
-  {
-    nome: 'Futebol',
-    icon: FaFutbol,
-  },
-  {
-    nome: 'Basquete',
-    icon: FaBasketballBall,
-  },
-  {
-    nome: 'Vôlei',
-    icon: FaVolleyballBall,
-  },
-  {
-    nome: 'Rugby',
-    icon: FaFootballBall,
-  },
-  {
-    nome: 'Tênis',
-    icon: FaTableTennis,
-  },
-];
+interface DadosEdicao {
+  nome: string;
+  modalidade: string;
+  categoria: string;
+  cor: string;
+  proximaPartida: string;
+}
 
 
-// ======================================================
-// ÍCONES POR MODALIDADE
-// ======================================================
-
-const iconeReactPorModalidade: Record<
-  string,
-  IconType
-> = {
-  Futebol: FaFutbol,
-  Basquete: FaBasketballBall,
-  Vôlei: FaVolleyballBall,
-  Rugby: FaFootballBall,
-  Tênis: FaTableTennis,
-};
+const API_URL =
+  'http://localhost:3000/api';
 
 
-// ======================================================
-// IMAGEM POR MODALIDADE
-// ======================================================
+function obterToken() {
+  return (
+    localStorage.getItem('token') ||
+    sessionStorage.getItem('token')
+  );
+}
 
-const imagemPorModalidade = (
+
+function imagemPorModalidade(
   modalidade: string,
-) => {
+) {
   switch (modalidade) {
     case 'Basquete':
       return Basquete;
@@ -165,16 +126,12 @@ const imagemPorModalidade = (
     default:
       return Futebol;
   }
-};
+}
 
 
-// ======================================================
-// ÍCONE POR MODALIDADE
-// ======================================================
-
-const iconePorModalidade = (
+function iconePorModalidade(
   modalidade: string,
-) => {
+) {
   switch (modalidade) {
     case 'Basquete':
       return 'sports_basketball';
@@ -191,58 +148,63 @@ const iconePorModalidade = (
     default:
       return 'sports_soccer';
   }
-};
+}
 
 
-// ======================================================
-// CRIAR SIGLA
-// ======================================================
-
-const criarSigla = (
+function criarSigla(
   nome: string,
-) => {
-  const palavras = nome
-    .trim()
-    .split(' ')
-    .filter(Boolean);
+) {
+  const palavras =
+    nome
+      .trim()
+      .split(' ')
+      .filter(Boolean);
 
-  if (palavras.length === 0) {
+
+  if (
+    palavras.length === 0
+  ) {
     return 'EQ';
   }
 
-  if (palavras.length === 1) {
+
+  if (
+    palavras.length === 1
+  ) {
     return palavras[0]
       .slice(0, 2)
       .toUpperCase();
   }
 
-  return `${palavras[0][0]}${
-    palavras[
-      palavras.length - 1
-    ][0]
-  }`.toUpperCase();
-};
+
+  return `${palavras[0][0]}${palavras[
+    palavras.length - 1
+  ][0]}`.toUpperCase();
+}
 
 
-// ======================================================
-// FORMATAR PRÓXIMA PARTIDA
-// ======================================================
+function formatarProximaPartida(
+  data?: string | null,
+) {
+  if (!data) {
+    return 'Nenhuma partida agendada';
+  }
 
-const formatarProximaPartida = (
-  data: string,
-) => {
-  const dataPartida =
+
+  const valor =
     new Date(data);
+
 
   if (
     Number.isNaN(
-      dataPartida.getTime(),
+      valor.getTime(),
     )
   ) {
-    return 'Data não informada';
+    return 'Nenhuma partida agendada';
   }
 
-  return dataPartida.toLocaleString(
+
+  return valor.toLocaleString(
     'pt-BR',
     {
       day: '2-digit',
@@ -251,214 +213,976 @@ const formatarProximaPartida = (
       minute: '2-digit',
     },
   );
-};
+}
 
 
-// ======================================================
-// COMPONENTE
-// ======================================================
+function paraDateTimeLocal(
+  data?: string | null,
+) {
+  if (!data) {
+    return '';
+  }
+
+
+  const valor =
+    new Date(data);
+
+
+  if (
+    Number.isNaN(
+      valor.getTime(),
+    )
+  ) {
+    return '';
+  }
+
+
+  const ano =
+    valor.getFullYear();
+
+  const mes =
+    String(
+      valor.getMonth() + 1,
+    ).padStart(2, '0');
+
+  const dia =
+    String(
+      valor.getDate(),
+    ).padStart(2, '0');
+
+  const hora =
+    String(
+      valor.getHours(),
+    ).padStart(2, '0');
+
+  const minuto =
+    String(
+      valor.getMinutes(),
+    ).padStart(2, '0');
+
+
+  return `${ano}-${mes}-${dia}T${hora}:${minuto}`;
+}
+
+
+function converterEquipe(
+  equipe: EquipeBackend,
+): Equipe {
+
+  let quantidadeAtletas =
+    0;
+
+
+  if (
+    typeof equipe.numeroAtletas ===
+    'number'
+  ) {
+    quantidadeAtletas =
+      equipe.numeroAtletas;
+
+  } else if (
+    typeof equipe._count
+      ?.atletas ===
+    'number'
+  ) {
+    quantidadeAtletas =
+      equipe._count.atletas;
+
+  } else if (
+    Array.isArray(
+      equipe.atletas,
+    )
+  ) {
+    quantidadeAtletas =
+      equipe.atletas.length;
+  }
+
+
+  return {
+    id:
+      equipe.id,
+
+    nome:
+      equipe.nome,
+
+    modalidade:
+      equipe.modalidade,
+
+    categoria:
+      equipe.categoria ||
+      'Sem categoria',
+
+    atletas:
+      quantidadeAtletas,
+
+    imagem:
+      equipe.imagem ||
+      imagemPorModalidade(
+        equipe.modalidade,
+      ),
+
+    icone:
+      iconePorModalidade(
+        equipe.modalidade,
+      ),
+
+    cor:
+      equipe.corEquipe ||
+      '#16A875',
+
+    vitorias:
+      0,
+
+    empates:
+      0,
+
+    derrotas:
+      0,
+
+    proximaPartida:
+      formatarProximaPartida(
+        equipe.proximaPartida,
+      ),
+
+    proximaPartidaRaw:
+      equipe.proximaPartida ||
+      null,
+
+    sigla:
+      criarSigla(
+        equipe.nome,
+      ),
+
+    desempenho:
+      0,
+
+    videos:
+      0,
+
+    elenco:
+      [],
+
+    evolucao: [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+  };
+}
+
+
+function pegarMensagemErro(
+  dados: unknown,
+  padrao: string,
+) {
+  if (
+    typeof dados ===
+      'object' &&
+    dados !== null
+  ) {
+    const objeto =
+      dados as Record<
+        string,
+        unknown
+      >;
+
+
+    if (
+      typeof objeto.erro ===
+      'string'
+    ) {
+      return objeto.erro;
+    }
+
+
+    if (
+      typeof objeto.mensagem ===
+      'string'
+    ) {
+      return objeto.mensagem;
+    }
+  }
+
+
+  return padrao;
+}
+
+
+function extrairEquipes(
+  dados: unknown,
+): EquipeBackend[] {
+
+  if (
+    Array.isArray(dados)
+  ) {
+    return dados as EquipeBackend[];
+  }
+
+
+  if (
+    typeof dados ===
+      'object' &&
+    dados !== null
+  ) {
+    const objeto =
+      dados as Record<
+        string,
+        unknown
+      >;
+
+
+    if (
+      Array.isArray(
+        objeto.equipes,
+      )
+    ) {
+      return objeto.equipes as EquipeBackend[];
+    }
+
+
+    if (
+      Array.isArray(
+        objeto.data,
+      )
+    ) {
+      return objeto.data as EquipeBackend[];
+    }
+  }
+
+
+  return [];
+}
+
+
+/* ============================================================
+   MODAL DE EDIÇÃO
+============================================================ */
+
+const overlayStyle:
+  CSSProperties = {
+    position: 'fixed',
+    inset: 0,
+    zIndex: 9999,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '20px',
+    boxSizing: 'border-box',
+    background:
+      'rgba(0, 35, 26, 0.68)',
+    backdropFilter:
+      'blur(4px)',
+  };
+
+
+const modalStyle:
+  CSSProperties = {
+    width:
+      'min(560px, 100%)',
+    maxHeight:
+      '90vh',
+    overflowY:
+      'auto',
+    padding:
+      '24px',
+    boxSizing:
+      'border-box',
+    borderRadius:
+      '18px',
+    background:
+      '#eef4f1',
+    color:
+      '#18352d',
+    boxShadow:
+      '0 24px 60px rgba(0,0,0,.25)',
+    fontFamily:
+      "'Poppins', sans-serif",
+  };
+
+
+const inputStyle:
+  CSSProperties = {
+    width: '100%',
+    height: '44px',
+    padding: '0 12px',
+    boxSizing: 'border-box',
+    border:
+      '1px solid #c7d8d1',
+    borderRadius: '9px',
+    outline: 'none',
+    background: '#ffffff',
+    color: '#18352d',
+    fontFamily: 'inherit',
+    fontSize: '13px',
+  };
+
+
+interface EditarEquipeModalProps {
+  equipe:
+    | Equipe
+    | null;
+
+  salvando: boolean;
+
+  onClose: () => void;
+
+  onSave: (
+    dados: DadosEdicao,
+  ) => Promise<void>;
+
+  onDelete: () =>
+    Promise<void>;
+}
+
+
+function EditarEquipeModalInterno({
+  equipe,
+  salvando,
+  onClose,
+  onSave,
+  onDelete,
+}: EditarEquipeModalProps) {
+
+  const [
+    formulario,
+    setFormulario,
+  ] =
+    useState<DadosEdicao>({
+      nome: '',
+      modalidade:
+        'Futebol',
+      categoria: '',
+      cor: '#16A875',
+      proximaPartida:
+        '',
+    });
+
+
+  useEffect(() => {
+    if (!equipe) {
+      return;
+    }
+
+
+    setFormulario({
+      nome:
+        equipe.nome,
+
+      modalidade:
+        equipe.modalidade,
+
+      categoria:
+        equipe.categoria ===
+        'Sem categoria'
+          ? ''
+          : equipe.categoria,
+
+      cor:
+        equipe.cor,
+
+      proximaPartida:
+        paraDateTimeLocal(
+          equipe.proximaPartidaRaw,
+        ),
+    });
+
+  }, [equipe]);
+
+
+  if (!equipe) {
+    return null;
+  }
+
+
+  function alterar(
+    campo:
+      keyof DadosEdicao,
+    valor: string,
+  ) {
+    setFormulario(
+      (anterior) => ({
+        ...anterior,
+        [campo]: valor,
+      }),
+    );
+  }
+
+
+  return (
+    <div
+      style={
+        overlayStyle
+      }
+      onClick={() => {
+        if (!salvando) {
+          onClose();
+        }
+      }}
+    >
+
+      <div
+        style={
+          modalStyle
+        }
+        onClick={(
+          event,
+        ) =>
+          event.stopPropagation()
+        }
+      >
+
+        <div
+          style={{
+            display:
+              'flex',
+            alignItems:
+              'center',
+            justifyContent:
+              'space-between',
+            marginBottom:
+              '20px',
+          }}
+        >
+
+          <h2
+            style={{
+              margin: 0,
+              fontSize:
+                '22px',
+            }}
+          >
+            Editar equipe
+          </h2>
+
+
+          <button
+            type="button"
+            onClick={
+              onClose
+            }
+            disabled={
+              salvando
+            }
+            style={{
+              width: '38px',
+              height: '38px',
+              border: 'none',
+              borderRadius:
+                '10px',
+              display: 'flex',
+              alignItems:
+                'center',
+              justifyContent:
+                'center',
+              background:
+                '#dce8e3',
+              cursor:
+                'pointer',
+            }}
+          >
+            <X
+              size={18}
+            />
+          </button>
+
+        </div>
+
+
+        <div
+          style={{
+            display:
+              'flex',
+            flexDirection:
+              'column',
+            gap: '14px',
+          }}
+        >
+
+          <label>
+            <span
+              style={{
+                display:
+                  'block',
+                marginBottom:
+                  '6px',
+                fontSize:
+                  '12px',
+                fontWeight:
+                  600,
+              }}
+            >
+              Nome
+            </span>
+
+            <input
+              style={
+                inputStyle
+              }
+              value={
+                formulario.nome
+              }
+              onChange={(
+                event,
+              ) =>
+                alterar(
+                  'nome',
+                  event.target
+                    .value,
+                )
+              }
+            />
+          </label>
+
+
+          <div
+            style={{
+              display:
+                'grid',
+              gridTemplateColumns:
+                '1fr 1fr',
+              gap: '12px',
+            }}
+          >
+
+            <label>
+              <span
+                style={{
+                  display:
+                    'block',
+                  marginBottom:
+                    '6px',
+                  fontSize:
+                    '12px',
+                  fontWeight:
+                    600,
+                }}
+              >
+                Modalidade
+              </span>
+
+              <select
+                style={
+                  inputStyle
+                }
+                value={
+                  formulario.modalidade
+                }
+                onChange={(
+                  event,
+                ) =>
+                  alterar(
+                    'modalidade',
+                    event.target
+                      .value,
+                  )
+                }
+              >
+                <option value="Futebol">
+                  Futebol
+                </option>
+
+                <option value="Basquete">
+                  Basquete
+                </option>
+
+                <option value="Vôlei">
+                  Vôlei
+                </option>
+
+                <option value="Rugby">
+                  Rugby
+                </option>
+
+                <option value="Tênis">
+                  Tênis
+                </option>
+              </select>
+            </label>
+
+
+            <label>
+              <span
+                style={{
+                  display:
+                    'block',
+                  marginBottom:
+                    '6px',
+                  fontSize:
+                    '12px',
+                  fontWeight:
+                    600,
+                }}
+              >
+                Categoria
+              </span>
+
+              <input
+                style={
+                  inputStyle
+                }
+                value={
+                  formulario.categoria
+                }
+                onChange={(
+                  event,
+                ) =>
+                  alterar(
+                    'categoria',
+                    event.target
+                      .value,
+                  )
+                }
+              />
+            </label>
+
+          </div>
+
+
+          <div
+            style={{
+              display:
+                'grid',
+              gridTemplateColumns:
+                '1fr 1fr',
+              gap: '12px',
+            }}
+          >
+
+            <label>
+              <span
+                style={{
+                  display:
+                    'block',
+                  marginBottom:
+                    '6px',
+                  fontSize:
+                    '12px',
+                  fontWeight:
+                    600,
+                }}
+              >
+                Cor
+              </span>
+
+              <input
+                type="color"
+                style={{
+                  ...inputStyle,
+                  padding:
+                    '5px 8px',
+                }}
+                value={
+                  formulario.cor
+                }
+                onChange={(
+                  event,
+                ) =>
+                  alterar(
+                    'cor',
+                    event.target
+                      .value,
+                  )
+                }
+              />
+            </label>
+
+
+            <label>
+              <span
+                style={{
+                  display:
+                    'block',
+                  marginBottom:
+                    '6px',
+                  fontSize:
+                    '12px',
+                  fontWeight:
+                    600,
+                }}
+              >
+                Próxima partida
+              </span>
+
+              <input
+                type="datetime-local"
+                style={
+                  inputStyle
+                }
+                value={
+                  formulario
+                    .proximaPartida
+                }
+                onChange={(
+                  event,
+                ) =>
+                  alterar(
+                    'proximaPartida',
+                    event.target
+                      .value,
+                  )
+                }
+              />
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div
+          style={{
+            display:
+              'flex',
+            alignItems:
+              'center',
+            justifyContent:
+              'space-between',
+            gap: '12px',
+            marginTop:
+              '22px',
+          }}
+        >
+
+          <button
+            type="button"
+            onClick={
+              onDelete
+            }
+            disabled={
+              salvando
+            }
+            style={{
+              height: '42px',
+              display:
+                'flex',
+              alignItems:
+                'center',
+              gap: '7px',
+              padding:
+                '0 15px',
+              border:
+                '1px solid #dfb8b8',
+              borderRadius:
+                '9px',
+              background:
+                '#fff5f5',
+              color:
+                '#b53d3d',
+              fontFamily:
+                'inherit',
+              fontWeight:
+                600,
+              cursor:
+                'pointer',
+            }}
+          >
+            <Trash2
+              size={15}
+            />
+
+            Excluir
+          </button>
+
+
+          <button
+            type="button"
+            onClick={() =>
+              void onSave(
+                formulario,
+              )
+            }
+            disabled={
+              salvando
+            }
+            style={{
+              height: '42px',
+              padding:
+                '0 20px',
+              border:
+                'none',
+              borderRadius:
+                '9px',
+              background:
+                '#16a875',
+              color:
+                '#ffffff',
+              fontFamily:
+                'inherit',
+              fontWeight:
+                700,
+              cursor:
+                'pointer',
+            }}
+          >
+            {salvando
+              ? 'Salvando...'
+              : 'Salvar alterações'}
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+
+/* ============================================================
+   COMPONENTE
+============================================================ */
 
 const Equipes = () => {
-
-  // ====================================================
-  // ESTADOS
-  // ====================================================
 
   const [
     filtroAtivo,
     setFiltroAtivo,
-  ] = useState<Modalidade>(
-    'Todos',
-  );
+  ] =
+    useState<Modalidade>(
+      'Todos',
+    );
+
 
   const [
     equipes,
     setEquipes,
-  ] = useState<Equipe[]>([]);
+  ] =
+    useState<Equipe[]>([]);
 
-  const [
-    atletasDisponiveis,
-    setAtletasDisponiveis,
-  ] = useState<AtletaDisponivel[]>([]);
-
-  const [
-    equipeSelecionada,
-    setEquipeSelecionada,
-  ] = useState<Equipe | null>(
-    null,
-  );
-
-  const [
-    modalNovaEquipe,
-    setModalNovaEquipe,
-  ] = useState(false);
-
-  const [
-    modoEditar,
-    setModoEditar,
-  ] = useState(false);
-
-  const [
-    equipeEmEdicao,
-    setEquipeEmEdicao,
-  ] = useState<Equipe | null>(
-    null,
-  );
 
   const [
     carregando,
     setCarregando,
-  ] = useState(true);
+  ] =
+    useState(true);
+
+
+  const [
+    atletasDisponiveis,
+    setAtletasDisponiveis,
+  ] =
+    useState<
+      AtletaDisponivel[]
+    >([]);
+
 
   const [
     carregandoAtletas,
     setCarregandoAtletas,
-  ] = useState(false);
+  ] =
+    useState(false);
 
 
-  // ====================================================
-  // CARREGAR DADOS
-  // ====================================================
+  const [
+    equipeSelecionada,
+    setEquipeSelecionada,
+  ] =
+    useState<
+      Equipe | null
+    >(null);
 
-  useEffect(() => {
-    carregarEquipes();
-    carregarAtletas();
-  }, []);
+
+  const [
+    modalNovaEquipe,
+    setModalNovaEquipe,
+  ] =
+    useState(false);
 
 
-  // ====================================================
-  // GET /api/equipes
-  // ====================================================
+  const [
+    modoEditar,
+    setModoEditar,
+  ] =
+    useState(false);
 
-  const carregarEquipes = async () => {
+
+  const [
+    equipeEmEdicao,
+    setEquipeEmEdicao,
+  ] =
+    useState<
+      Equipe | null
+    >(null);
+
+
+  const [
+    salvandoEdicao,
+    setSalvandoEdicao,
+  ] =
+    useState(false);
+
+
+  async function carregarEquipes() {
+
     try {
-      setCarregando(true);
+
+      setCarregando(
+        true,
+      );
+
 
       const token =
-        localStorage.getItem(
-          'token',
-        );
+        obterToken();
+
+
+      if (!token) {
+
+        setEquipes([]);
+
+        return;
+      }
+
 
       const resposta =
         await fetch(
-          'http://localhost:3000/api/equipes',
+          `${API_URL}/equipes`,
           {
-            method: 'GET',
+            method:
+              'GET',
 
             headers: {
-              'Content-Type':
-                'application/json',
-
               Authorization:
                 `Bearer ${token}`,
             },
           },
         );
 
-      const dados =
-        await resposta.json();
 
-      if (!resposta.ok) {
+      const dados:
+        unknown =
+        await resposta
+          .json()
+          .catch(
+            () => [],
+          );
+
+
+      if (
+        !resposta.ok
+      ) {
         throw new Error(
-          dados.mensagem ||
+          pegarMensagemErro(
+            dados,
             'Erro ao carregar equipes.',
+          ),
         );
       }
 
+
       const lista =
-        Array.isArray(dados)
-          ? dados
-          : dados.equipes || [];
-
-      const equipesFormatadas: Equipe[] =
-        lista.map(
-          (equipe: any) => ({
-            id: equipe.id,
-
-            nome: equipe.nome,
-
-            modalidade:
-              equipe.modalidade,
-
-            categoria:
-              equipe.categoria ||
-              'Não informada',
-
-            atletas:
-              equipe.numeroAtletas ??
-              equipe.atletas?.length ??
-              0,
-
-            imagem:
-              equipe.imagem ||
-              imagemPorModalidade(
-                equipe.modalidade,
-              ),
-
-            icone:
-              iconePorModalidade(
-                equipe.modalidade,
-              ),
-
-            cor:
-              equipe.corEquipe ||
-              '#16A875',
-
-            vitorias: 0,
-
-            empates: 0,
-
-            derrotas: 0,
-
-            proximaPartida:
-              equipe.proximaPartida
-                ? formatarProximaPartida(
-                    equipe.proximaPartida,
-                  )
-                : 'Nenhuma partida agendada',
-
-            sigla:
-              criarSigla(
-                equipe.nome,
-              ),
-
-            desempenho: 0,
-
-            videos: 0,
-
-            elenco:
-              equipe.atletas?.map(
-                (atleta: any) => ({
-                  id: atleta.id,
-
-                  nome:
-                    atleta.nome ||
-                    'Atleta',
-
-                  posicao:
-                    atleta.categoria ||
-                    'Não informada',
-
-                  idade: 0,
-
-                  desempenho: 0,
-                }),
-              ) || [],
-
-            evolucao: [
-              0,
-              0,
-              0,
-              0,
-              0,
-              0,
-              0,
-            ],
-          }),
+        extrairEquipes(
+          dados,
         );
 
+
       setEquipes(
-        equipesFormatadas,
+        lista.map(
+          converterEquipe,
+        ),
       );
 
     } catch (error) {
@@ -468,39 +1192,49 @@ const Equipes = () => {
         error,
       );
 
-      alert(
-        error instanceof Error
-          ? error.message
-          : 'Erro ao carregar equipes.',
-      );
+
+      setEquipes([]);
 
     } finally {
 
-      setCarregando(false);
+      setCarregando(
+        false,
+      );
 
     }
-  };
+
+  }
 
 
-  // ====================================================
-  // GET /api/atletas/disponiveis
-  // ====================================================
+  async function carregarAtletas() {
 
-  const carregarAtletas = async () => {
     try {
 
-      setCarregandoAtletas(true);
+      setCarregandoAtletas(
+        true,
+      );
+
 
       const token =
-        localStorage.getItem(
-          'token',
+        obterToken();
+
+
+      if (!token) {
+
+        setAtletasDisponiveis(
+          [],
         );
+
+        return;
+      }
+
 
       const resposta =
         await fetch(
-          'http://localhost:3000/api/atletas/disponiveis',
+          `${API_URL}/atletas/disponiveis`,
           {
-            method: 'GET',
+            method:
+              'GET',
 
             headers: {
               'Content-Type':
@@ -512,51 +1246,115 @@ const Equipes = () => {
           },
         );
 
-      const dados =
-        await resposta.json();
 
-      if (!resposta.ok) {
-        throw new Error(
-          dados.mensagem ||
-            'Erro ao carregar atletas disponíveis.',
+      const dados:
+        unknown =
+        await resposta
+          .json()
+          .catch(
+            () => [],
+          );
+
+
+      if (
+        !resposta.ok
+      ) {
+        console.warn(
+          'Não foi possível carregar atletas disponíveis.',
+          dados,
         );
+
+        setAtletasDisponiveis(
+          [],
+        );
+
+        return;
       }
 
-      const lista =
-        Array.isArray(dados)
-          ? dados
-          : dados.atletas || [];
 
-      const atletasFormatados:
-        AtletaDisponivel[] =
+      let lista:
+        unknown[] = [];
+
+
+      if (
+        Array.isArray(
+          dados,
+        )
+      ) {
+        lista =
+          dados;
+
+      } else if (
+        typeof dados ===
+          'object' &&
+        dados !== null
+      ) {
+        const objeto =
+          dados as Record<
+            string,
+            unknown
+          >;
+
+
+        if (
+          Array.isArray(
+            objeto.atletas,
+          )
+        ) {
+          lista =
+            objeto.atletas;
+        }
+      }
+
+
+      const formatados =
         lista.map(
-          (atleta: any) => ({
-            id: atleta.id,
+          (item) => {
 
-            nome:
-              atleta.nome ||
-              'Atleta sem nome',
+            const atleta =
+              item as {
+                id: number;
+                nome?: string | null;
+                categoria?: string | null;
 
-            categoria:
-              atleta.categoria ||
-              null,
+                usuario?: {
+                  email?: string;
+                  avatarUrl?: string | null;
+                } | null;
+              };
 
-            usuario:
-              atleta.usuario
-                ? {
-                    email:
-                      atleta.usuario.email,
 
-                    avatarUrl:
-                      atleta.usuario.avatarUrl ||
-                      null,
-                  }
-                : undefined,
-          }),
+            return {
+              id:
+                atleta.id,
+
+              nome:
+                atleta.nome ||
+                'Atleta sem nome',
+
+              categoria:
+                atleta.categoria ||
+                null,
+
+              usuario:
+                atleta.usuario
+                  ? {
+                      email:
+                        atleta.usuario.email ||
+                        '',
+
+                      avatarUrl:
+                        atleta.usuario.avatarUrl ||
+                        null,
+                    }
+                  : undefined,
+            } as AtletaDisponivel;
+          },
         );
 
+
       setAtletasDisponiveis(
-        atletasFormatados,
+        formatados,
       );
 
     } catch (error) {
@@ -566,291 +1364,34 @@ const Equipes = () => {
         error,
       );
 
-      alert(
-        error instanceof Error
-          ? error.message
-          : 'Erro ao carregar atletas disponíveis.',
+
+      setAtletasDisponiveis(
+        [],
       );
 
     } finally {
 
-      setCarregandoAtletas(false);
+      setCarregandoAtletas(
+        false,
+      );
 
     }
-  };
+
+  }
 
 
-  // ====================================================
-  // CRIAR EQUIPE
-  // POST /api/equipes
-  // ====================================================
+  useEffect(() => {
 
-  const adicionarEquipe =
-    async (
-      dados: NovaEquipeData,
-    ) => {
+    void carregarEquipes();
 
-      try {
+    void carregarAtletas();
 
-        const token =
-          localStorage.getItem(
-            'token',
-          );
+  }, []);
 
-        const resposta =
-          await fetch(
-            'http://localhost:3000/api/equipes',
-            {
-              method: 'POST',
-
-              headers: {
-                'Content-Type':
-                  'application/json',
-
-                Authorization:
-                  `Bearer ${token}`,
-              },
-
-              body: JSON.stringify({
-                nome:
-                  dados.nome,
-
-                modalidade:
-                  dados.modalidade,
-
-                categoria:
-                  dados.categoria,
-
-                atletasIds:
-                  dados.atletasIds,
-
-                proximaPartida:
-                  dados.proximaPartida ||
-                  null,
-
-                imagem:
-                  dados.imagemPreview ||
-                  null,
-
-                corEquipe:
-                  dados.cor,
-              }),
-            },
-          );
-
-        const resultado =
-          await resposta.json();
-
-        if (!resposta.ok) {
-          throw new Error(
-            resultado.mensagem ||
-              'Erro ao criar equipe.',
-          );
-        }
-
-        /*
-         * Depois que a equipe foi criada,
-         * recarregamos os dados diretamente
-         * do backend.
-         *
-         * Isso garante que:
-         * - a equipe apareça com os dados reais;
-         * - a quantidade de atletas esteja correta;
-         * - os atletas vinculados desapareçam
-         *   da lista de disponíveis.
-         */
-        await Promise.all([
-          carregarEquipes(),
-          carregarAtletas(),
-        ]);
-
-        setFiltroAtivo(
-          'Todos',
-        );
-
-        setModalNovaEquipe(
-          false,
-        );
-
-      } catch (error) {
-
-        console.error(
-          'Erro ao criar equipe:',
-          error,
-        );
-
-        alert(
-          error instanceof Error
-            ? error.message
-            : 'Erro ao criar equipe.',
-        );
-
-      }
-    };
-
-
-  // ====================================================
-  // EDITAR EQUIPE
-  // PUT /api/equipes/:id
-  // ====================================================
-
-  const salvarEdicao =
-    async (
-      dados: EditarEquipeData,
-    ) => {
-
-      try {
-
-        const token =
-          localStorage.getItem(
-            'token',
-          );
-
-        const resposta =
-          await fetch(
-            `http://localhost:3000/api/equipes/${dados.id}`,
-            {
-              method: 'PUT',
-
-              headers: {
-                'Content-Type':
-                  'application/json',
-
-                Authorization:
-                  `Bearer ${token}`,
-              },
-
-              body: JSON.stringify({
-                nome:
-                  dados.nome,
-
-                modalidade:
-                  dados.modalidade,
-
-                categoria:
-                  dados.categoria,
-
-                proximaPartida:
-                  dados.proximaPartida ||
-                  null,
-
-                imagem:
-                  dados.imagem ||
-                  null,
-
-                corEquipe:
-                  dados.cor,
-              }),
-            },
-          );
-
-        const resultado =
-          await resposta.json();
-
-        if (!resposta.ok) {
-          throw new Error(
-            resultado.mensagem ||
-              'Erro ao atualizar equipe.',
-          );
-        }
-
-        const equipeAtualizada =
-          resultado.equipe;
-
-        setEquipes(
-          (atuais) =>
-            atuais.map(
-              (equipe) => {
-
-                if (
-                  equipe.id !==
-                  equipeAtualizada.id
-                ) {
-                  return equipe;
-                }
-
-                return {
-                  ...equipe,
-
-                  nome:
-                    equipeAtualizada.nome,
-
-                  modalidade:
-                    equipeAtualizada.modalidade,
-
-                  categoria:
-                    equipeAtualizada.categoria ||
-                    'Não informada',
-
-                  atletas:
-                    equipeAtualizada.numeroAtletas ??
-                    equipe.atletas,
-
-                  imagem:
-                    equipeAtualizada.imagem ||
-                    imagemPorModalidade(
-                      equipeAtualizada.modalidade,
-                    ),
-
-                  cor:
-                    equipeAtualizada.corEquipe ||
-                    '#16A875',
-
-                  proximaPartida:
-                    equipeAtualizada.proximaPartida
-                      ? formatarProximaPartida(
-                          equipeAtualizada.proximaPartida,
-                        )
-                      : 'Nenhuma partida agendada',
-
-                  sigla:
-                    criarSigla(
-                      equipeAtualizada.nome,
-                    ),
-
-                  icone:
-                    iconePorModalidade(
-                      equipeAtualizada.modalidade,
-                    ),
-                };
-              },
-            ),
-        );
-
-        /*
-         * Recarrega as equipes para garantir
-         * que os dados exibidos estejam iguais
-         * aos dados do banco.
-         */
-        await carregarEquipes();
-
-        setEquipeEmEdicao(
-          null,
-        );
-
-      } catch (error) {
-
-        console.error(
-          'Erro ao atualizar equipe:',
-          error,
-        );
-
-        alert(
-          error instanceof Error
-            ? error.message
-            : 'Erro ao atualizar equipe.',
-        );
-
-      }
-    };
-
-
-  // ====================================================
-  // FILTRO
-  // ====================================================
 
   const equipesFiltradas =
-    filtroAtivo === 'Todos'
+    filtroAtivo ===
+    'Todos'
       ? equipes
       : equipes.filter(
           (equipe) =>
@@ -859,13 +1400,145 @@ const Equipes = () => {
         );
 
 
-  // ====================================================
-  // CLICAR NA EQUIPE
-  // ====================================================
+  async function adicionarEquipe(
+    dados:
+      NovaEquipeData,
+  ) {
 
-  const clicarEquipe = (
+    try {
+
+      const token =
+        obterToken();
+
+
+      if (!token) {
+
+        alert(
+          'Sessão não encontrada. Faça login novamente.',
+        );
+
+        return;
+      }
+
+
+      const extras =
+        dados as NovaEquipeData & {
+          atletasIds?: number[];
+
+          proximaPartida?:
+            | string
+            | null;
+        };
+
+
+      const resposta =
+        await fetch(
+          `${API_URL}/equipes`,
+          {
+            method:
+              'POST',
+
+            headers: {
+              'Content-Type':
+                'application/json',
+
+              Authorization:
+                `Bearer ${token}`,
+            },
+
+            body:
+              JSON.stringify({
+                nome:
+                  dados.nome.trim(),
+
+                modalidade:
+                  dados.modalidade,
+
+                categoria:
+                  dados.categoria ||
+                  null,
+
+                imagem:
+                  null,
+
+                corEquipe:
+                  dados.cor ||
+                  '#16A875',
+
+                proximaPartida:
+                  extras.proximaPartida ||
+                  null,
+
+                atletasIds:
+                  extras.atletasIds ||
+                  [],
+              }),
+          },
+        );
+
+
+      const respostaDados:
+        unknown =
+        await resposta
+          .json()
+          .catch(
+            () => ({}),
+          );
+
+
+      if (
+        !resposta.ok
+      ) {
+        throw new Error(
+          pegarMensagemErro(
+            respostaDados,
+            'Erro ao criar equipe.',
+          ),
+        );
+      }
+
+
+      setModalNovaEquipe(
+        false,
+      );
+
+      setFiltroAtivo(
+        'Todos',
+      );
+
+
+      await Promise.all([
+        carregarEquipes(),
+        carregarAtletas(),
+      ]);
+
+
+      alert(
+        'Equipe criada com sucesso!',
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Erro ao criar equipe:',
+        error,
+      );
+
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Erro ao criar equipe.',
+      );
+
+    }
+
+  }
+
+
+  function clicarEquipe(
     equipe: Equipe,
-  ) => {
+  ) {
 
     if (modoEditar) {
 
@@ -873,65 +1546,279 @@ const Equipes = () => {
         equipe,
       );
 
-      setModoEditar(
-        false,
+      return;
+    }
+
+
+    setEquipeSelecionada(
+      equipe,
+    );
+
+  }
+
+
+  async function salvarEdicao(
+    dados:
+      DadosEdicao,
+  ) {
+
+    if (
+      !equipeEmEdicao
+    ) {
+      return;
+    }
+
+
+    if (
+      !dados.nome.trim()
+    ) {
+      alert(
+        'Informe o nome da equipe.',
       );
 
       return;
     }
 
-    setEquipeSelecionada(
-      equipe,
-    );
-  };
+
+    try {
+
+      setSalvandoEdicao(
+        true,
+      );
 
 
-  // ====================================================
-  // CALCULAR TENDÊNCIA
-  // ====================================================
+      const token =
+        obterToken();
 
-  const calcularTendencia = (
-    evolucao: number[],
-  ) => {
 
-    if (
-      evolucao.length < 2
-    ) {
-      return 'estavel';
+      if (!token) {
+
+        alert(
+          'Sessão não encontrada.',
+        );
+
+        return;
+      }
+
+
+      const resposta =
+        await fetch(
+          `${API_URL}/equipes/${equipeEmEdicao.id}`,
+          {
+            method:
+              'PUT',
+
+            headers: {
+              'Content-Type':
+                'application/json',
+
+              Authorization:
+                `Bearer ${token}`,
+            },
+
+            body:
+              JSON.stringify({
+                nome:
+                  dados.nome.trim(),
+
+                modalidade:
+                  dados.modalidade,
+
+                categoria:
+                  dados.categoria.trim() ||
+                  null,
+
+                corEquipe:
+                  dados.cor,
+
+                proximaPartida:
+                  dados.proximaPartida
+                    ? new Date(
+                        dados.proximaPartida,
+                      ).toISOString()
+                    : null,
+              }),
+          },
+        );
+
+
+      const respostaDados:
+        unknown =
+        await resposta
+          .json()
+          .catch(
+            () => ({}),
+          );
+
+
+      if (
+        !resposta.ok
+      ) {
+        throw new Error(
+          pegarMensagemErro(
+            respostaDados,
+            'Erro ao editar equipe.',
+          ),
+        );
+      }
+
+
+      setEquipeEmEdicao(
+        null,
+      );
+
+      setModoEditar(
+        false,
+      );
+
+
+      await carregarEquipes();
+
+
+      alert(
+        'Equipe atualizada com sucesso!',
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Erro ao editar equipe:',
+        error,
+      );
+
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Erro ao editar equipe.',
+      );
+
+    } finally {
+
+      setSalvandoEdicao(
+        false,
+      );
+
     }
 
-    const atual =
-      evolucao[
-        evolucao.length - 1
-      ];
+  }
 
-    const anterior =
-      evolucao[
-        evolucao.length - 2
-      ];
 
-    const diferenca =
-      atual - anterior;
+  async function excluirEquipe() {
 
     if (
-      diferenca >= 3
+      !equipeEmEdicao
     ) {
-      return 'subiu';
+      return;
     }
 
-    if (
-      diferenca <= -3
-    ) {
-      return 'caiu';
+
+    const confirmou =
+      window.confirm(
+        `Deseja realmente excluir a equipe "${equipeEmEdicao.nome}"?`,
+      );
+
+
+    if (!confirmou) {
+      return;
     }
 
-    return 'estavel';
-  };
+
+    try {
+
+      setSalvandoEdicao(
+        true,
+      );
 
 
-  // ====================================================
-  // DETALHES
-  // ====================================================
+      const token =
+        obterToken();
+
+
+      if (!token) {
+        return;
+      }
+
+
+      const resposta =
+        await fetch(
+          `${API_URL}/equipes/${equipeEmEdicao.id}`,
+          {
+            method:
+              'DELETE',
+
+            headers: {
+              Authorization:
+                `Bearer ${token}`,
+            },
+          },
+        );
+
+
+      const dados:
+        unknown =
+        await resposta
+          .json()
+          .catch(
+            () => ({}),
+          );
+
+
+      if (
+        !resposta.ok
+      ) {
+        throw new Error(
+          pegarMensagemErro(
+            dados,
+            'Erro ao excluir equipe.',
+          ),
+        );
+      }
+
+
+      setEquipeEmEdicao(
+        null,
+      );
+
+      setModoEditar(
+        false,
+      );
+
+
+      await Promise.all([
+        carregarEquipes(),
+        carregarAtletas(),
+      ]);
+
+
+      alert(
+        'Equipe excluída com sucesso!',
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Erro ao excluir equipe:',
+        error,
+      );
+
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Erro ao excluir equipe.',
+      );
+
+    } finally {
+
+      setSalvandoEdicao(
+        false,
+      );
+
+    }
+
+  }
+
 
   if (
     equipeSelecionada
@@ -942,6 +1829,7 @@ const Equipes = () => {
         equipe={
           equipeSelecionada
         }
+
         onBack={() =>
           setEquipeSelecionada(
             null,
@@ -949,22 +1837,18 @@ const Equipes = () => {
         }
       />
     );
+
   }
 
 
-  // ====================================================
-  // TELA
-  // ====================================================
-
   return (
     <>
+
       <main
         className={
           styles.page
         }
       >
-
-        {/* CABEÇALHO */}
 
         <div
           className={
@@ -986,6 +1870,7 @@ const Equipes = () => {
               Minhas Equipes
             </h1>
 
+
             <p
               className={
                 styles.description
@@ -1002,26 +1887,32 @@ const Equipes = () => {
 
 
           <div
-            className={
-              styles.headerActions
-            }
+            style={{
+              display: 'flex',
+              alignItems:
+                'center',
+              gap: '12px',
+            }}
           >
 
             <button
               type="button"
-              className={`${styles.editTeamButton} ${
-                modoEditar
-                  ? styles.editTeamButtonActive
-                  : ''
-              }`}
-              onClick={() =>
-                setModoEditar(
-                  (atual) =>
-                    !atual,
-                )
+              className={
+                styles.newTeamButton
               }
-            >
+              onClick={() => {
 
+                setModoEditar(
+                  (valor) =>
+                    !valor,
+                );
+
+                setEquipeEmEdicao(
+                  null,
+                );
+
+              }}
+            >
               <Pencil
                 size={17}
               />
@@ -1029,7 +1920,6 @@ const Equipes = () => {
               {modoEditar
                 ? 'Cancelar edição'
                 : 'Editar equipe'}
-
             </button>
 
 
@@ -1038,22 +1928,27 @@ const Equipes = () => {
               className={
                 styles.newTeamButton
               }
+              disabled={
+                carregandoAtletas
+              }
               onClick={() =>
                 setModalNovaEquipe(
                   true,
                 )
               }
-              disabled={
-                carregandoAtletas
-              }
             >
 
-              <Plus
-                size={19}
-              />
+              <span
+                className={
+                  styles.plus
+                }
+              >
+                +
+              </span>
+
 
               {carregandoAtletas
-                ? 'Carregando atletas...'
+                ? 'Carregando...'
                 : 'Nova Equipe'}
 
             </button>
@@ -1063,27 +1958,36 @@ const Equipes = () => {
         </div>
 
 
-        {/* AVISO DE EDIÇÃO */}
-
         {modoEditar && (
           <div
-            className={
-              styles.editNotice
-            }
+            style={{
+              display: 'flex',
+              alignItems:
+                'center',
+              gap: '8px',
+              marginBottom:
+                '16px',
+              padding:
+                '10px 14px',
+              borderRadius:
+                '9px',
+              background:
+                'rgba(255,255,255,.12)',
+              color:
+                '#ffffff',
+              fontSize:
+                '12px',
+            }}
           >
-
             <Pencil
               size={15}
             />
 
-            Clique na equipe que
-            deseja editar.
-
+            Clique na equipe
+            que deseja editar.
           </div>
         )}
 
-
-        {/* FILTROS */}
 
         <div
           className={
@@ -1091,73 +1995,93 @@ const Equipes = () => {
           }
         >
 
-          {filtros.map(
-            (filtro) => {
+          {[
+            [
+              'Todos',
+              '⚽',
+            ],
 
-              const Icon =
-                filtro.icon;
+            [
+              'Futebol',
+              '⚽',
+            ],
 
-              const ativo =
-                filtroAtivo ===
-                filtro.nome;
+            [
+              'Basquete',
+              '🏀',
+            ],
 
-              return (
-                <button
-                  key={
-                    filtro.nome
-                  }
-                  type="button"
-                  className={`${styles.filterButton} ${
-                    ativo
-                      ? styles.active
-                      : ''
-                  }`}
-                  onClick={() =>
-                    setFiltroAtivo(
-                      filtro.nome,
-                    )
+            [
+              'Vôlei',
+              '🏐',
+            ],
+
+            [
+              'Rugby',
+              '🏉',
+            ],
+
+            [
+              'Tênis',
+              '🎾',
+            ],
+          ].map(
+            ([
+              nome,
+              icone,
+            ]) => (
+
+              <button
+                key={
+                  nome
+                }
+                type="button"
+                className={`${styles.filterButton} ${
+                  filtroAtivo ===
+                  nome
+                    ? styles.active
+                    : ''
+                }`}
+                onClick={() =>
+                  setFiltroAtivo(
+                    nome as Modalidade,
+                  )
+                }
+              >
+
+                <span
+                  className={
+                    styles.filterIcon
                   }
                 >
+                  {icone}
+                </span>
 
-                  <span
-                    className={
-                      styles.filterIcon
-                    }
-                  >
+                {nome}
 
-                    <Icon
-                      size={17}
-                    />
+              </button>
 
-                  </span>
-
-                  {filtro.nome}
-
-                </button>
-              );
-            },
+            ),
           )}
 
         </div>
 
 
-        {/* CARREGANDO */}
-
         {carregando && (
           <div
             style={{
               padding:
-                '40px 0',
+                '50px 20px',
               textAlign:
                 'center',
+              color:
+                '#ffffff',
             }}
           >
             Carregando equipes...
           </div>
         )}
 
-
-        {/* GRID */}
 
         {!carregando && (
           <div
@@ -1167,335 +2091,98 @@ const Equipes = () => {
           >
 
             {equipesFiltradas.map(
-              (equipe) => {
+              (equipe) => (
 
-                const IconeEsporte =
-                  iconeReactPorModalidade[
-                    equipe.modalidade
-                  ] ??
-                  FaFutbol;
+                <div
+                  key={
+                    equipe.id
+                  }
+                  className={
+                    styles.teamClickable
+                  }
+                  role="button"
+                  tabIndex={0}
+                  onClick={() =>
+                    clicarEquipe(
+                      equipe,
+                    )
+                  }
+                  onKeyDown={(
+                    event,
+                  ) => {
 
-                const tendencia =
-                  calcularTendencia(
-                    equipe.evolucao,
-                  );
+                    if (
+                      event.key ===
+                        'Enter' ||
+                      event.key ===
+                        ' '
+                    ) {
 
-                return (
-                  <article
-                    key={
-                      equipe.id
-                    }
-                    className={`${styles.teamCard} ${
-                      modoEditar
-                        ? styles.teamEditable
-                        : ''
-                    }`}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() =>
+                      event.preventDefault();
+
                       clicarEquipe(
                         equipe,
-                      )
+                      );
+
                     }
-                    onKeyDown={(
-                      event,
-                    ) => {
 
-                      if (
-                        event.key ===
-                          'Enter' ||
-                        event.key ===
-                          ' '
-                      ) {
+                  }}
+                >
 
-                        event.preventDefault();
+                  <CardEquipe
+                    nome={
+                      equipe.nome
+                    }
 
-                        clicarEquipe(
-                          equipe,
-                        );
-                      }
-                    }}
-                  >
+                    modalidade={
+                      equipe.modalidade
+                    }
 
-                    {/* IMAGEM */}
+                    categoria={
+                      equipe.categoria
+                    }
 
-                    <div
-                      className={
-                        styles.teamImageArea
-                      }
-                    >
+                    atletas={
+                      equipe.atletas
+                    }
 
-                      <img
-                        src={
-                          equipe.imagem
-                        }
-                        alt={
-                          equipe.nome
-                        }
-                        className={
-                          styles.teamImage
-                        }
-                      />
+                    imagem={
+                      equipe.imagem
+                    }
 
+                    icone={
+                      equipe.icone
+                    }
 
-                      <span
-                        className={
-                          styles.teamSportBadge
-                        }
-                        style={{
-                          backgroundColor:
-                            equipe.cor,
-                        }}
-                      >
+                    cor={
+                      equipe.cor
+                    }
 
-                        <IconeEsporte
-                          size={12}
-                        />
+                    vitorias={
+                      equipe.vitorias
+                    }
 
-                        {
-                          equipe.modalidade
-                        }
+                    empates={
+                      equipe.empates
+                    }
 
-                      </span>
+                    derrotas={
+                      equipe.derrotas
+                    }
 
+                    proximaPartida={
+                      equipe.proximaPartida
+                    }
+                  />
 
-                      {tendencia ===
-                        'subiu' && (
-                        <span
-                          className={`${styles.trendIcon} ${styles.trendUp}`}
-                          title="Equipe em evolução"
-                        >
+                </div>
 
-                          <TrendingUp
-                            size={18}
-                          />
-
-                        </span>
-                      )}
-
-
-                      {tendencia ===
-                        'caiu' && (
-                        <span
-                          className={`${styles.trendIcon} ${styles.trendDown}`}
-                          title="Queda de desempenho"
-                        >
-
-                          <TrendingDown
-                            size={18}
-                          />
-
-                        </span>
-                      )}
-
-
-                      {tendencia ===
-                        'estavel' && (
-                        <span
-                          className={`${styles.trendIcon} ${styles.trendStable}`}
-                          title="Desempenho estável"
-                        >
-
-                          <Minus
-                            size={18}
-                          />
-
-                        </span>
-                      )}
-
-                    </div>
-
-
-                    {/* CONTEÚDO */}
-
-                    <div
-                      className={
-                        styles.teamContent
-                      }
-                    >
-
-                      <div
-                        className={
-                          styles.teamFloatingIcon
-                        }
-                        style={{
-                          color:
-                            equipe.cor,
-                        }}
-                      >
-
-                        <IconeEsporte
-                          size={22}
-                        />
-
-                      </div>
-
-
-                      <h3
-                        className={
-                          styles.teamName
-                        }
-                      >
-                        {
-                          equipe.nome
-                        }
-                      </h3>
-
-
-                      <div
-                        className={
-                          styles.teamMeta
-                        }
-                      >
-
-                        <span>
-                          {
-                            equipe.categoria
-                          }
-                        </span>
-
-                        <span>
-                          •
-                        </span>
-
-                        <span>
-                          {
-                            equipe.atletas
-                          }{' '}
-                          Atletas
-                        </span>
-
-                      </div>
-
-
-                      {/* ESTATÍSTICAS */}
-
-                      <div
-                        className={
-                          styles.teamStats
-                        }
-                      >
-
-                        <div
-                          className={
-                            styles.statBox
-                          }
-                        >
-
-                          <span>
-                            VITÓRIAS
-                          </span>
-
-                          <strong
-                            className={
-                              styles.statWin
-                            }
-                          >
-                            {
-                              equipe.vitorias
-                            }
-                          </strong>
-
-                        </div>
-
-
-                        <div
-                          className={
-                            styles.statBox
-                          }
-                        >
-
-                          <span>
-                            EMPATES
-                          </span>
-
-                          <strong
-                            className={
-                              styles.statDraw
-                            }
-                          >
-                            {
-                              equipe.empates
-                            }
-                          </strong>
-
-                        </div>
-
-
-                        <div
-                          className={
-                            styles.statBox
-                          }
-                        >
-
-                          <span>
-                            DERROTAS
-                          </span>
-
-                          <strong
-                            className={
-                              styles.statLoss
-                            }
-                          >
-                            {
-                              equipe.derrotas
-                            }
-                          </strong>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
-
-                    {/* PRÓXIMA PARTIDA */}
-
-                    <div
-                      className={
-                        styles.nextMatch
-                      }
-                    >
-
-                      <div
-                        className={
-                          styles.nextMatchIcon
-                        }
-                      >
-
-                        <CalendarDays
-                          size={16}
-                        />
-
-                      </div>
-
-
-                      <div>
-
-                        <span>
-                          PRÓXIMA PARTIDA
-                        </span>
-
-                        <strong>
-                          {
-                            equipe.proximaPartida
-                          }
-                        </strong>
-
-                      </div>
-
-                    </div>
-
-                  </article>
-                );
-              },
+              ),
             )}
 
           </div>
         )}
 
-
-        {/* NENHUMA EQUIPE */}
 
         {!carregando &&
           equipesFiltradas.length ===
@@ -1506,6 +2193,8 @@ const Equipes = () => {
                   '50px 20px',
                 textAlign:
                   'center',
+                color:
+                  '#ffffff',
               }}
             >
               <h3>
@@ -1522,15 +2211,14 @@ const Equipes = () => {
       </main>
 
 
-      {/* MODAL NOVA EQUIPE */}
-
       <NovaEquipeModal
         open={
           modalNovaEquipe
         }
 
         modalidadeInicial={
-          filtroAtivo === 'Todos'
+          filtroAtivo ===
+          'Todos'
             ? 'Futebol'
             : filtroAtivo
         }
@@ -1551,16 +2239,13 @@ const Equipes = () => {
       />
 
 
-      {/* MODAL EDITAR EQUIPE */}
-
-      <EditarEquipeModal
-        open={
-          equipeEmEdicao !==
-          null
-        }
-
+      <EditarEquipeModalInterno
         equipe={
           equipeEmEdicao
+        }
+
+        salvando={
+          salvandoEdicao
         }
 
         onClose={() =>
@@ -1572,10 +2257,15 @@ const Equipes = () => {
         onSave={
           salvarEdicao
         }
+
+        onDelete={
+          excluirEquipe
+        }
       />
 
     </>
   );
 };
+
 
 export default Equipes;

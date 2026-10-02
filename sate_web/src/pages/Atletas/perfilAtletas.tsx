@@ -60,6 +60,7 @@ interface PerfilAtletaProps {
     atleta: AtletaPerfil;
     onBack: () => void;
     onEdit: () => void;
+    onInformacoes: () => void;
     onClipes: () => void;
 }
 
@@ -67,6 +68,7 @@ const PerfilAtleta = ({
     atleta,
     onBack,
     onEdit,
+    onInformacoes,
     onClipes,
 }: PerfilAtletaProps) => {
 
@@ -290,6 +292,8 @@ const PerfilAtleta = ({
 
             <div className={styles.actionsRow}>
 
+                {/* EDITAR */}
+
                 <button
                     type="button"
                     className={styles.actionButton}
@@ -300,14 +304,19 @@ const PerfilAtleta = ({
                 </button>
 
 
+                {/* INFORMAÇÕES */}
+
                 <button
                     type="button"
                     className={styles.actionButton}
+                    onClick={onInformacoes}
                 >
                     <Info size={16} />
                     Ver informações do atleta
                 </button>
 
+
+                {/* PARTIDAS */}
 
                 <button
                     type="button"
@@ -317,6 +326,8 @@ const PerfilAtleta = ({
                     Ver partidas
                 </button>
 
+
+                {/* CLIPES */}
 
                 <button
                     type="button"

@@ -272,10 +272,6 @@ export default function ModalCampoPersonalizado({
                 <strong>
                   Escolha um ícone
                 </strong>
-
-                <span>
-                  Selecione o símbolo que melhor representa esse campo.
-                </span>
               </div>
             </div>
 

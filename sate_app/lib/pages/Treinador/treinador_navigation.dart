@@ -46,6 +46,8 @@ class _TreinadorNavigationState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFFCFCFC),
+
       body: IndexedStack(
         index: indiceSelecionado,
         children: paginas,
@@ -53,7 +55,6 @@ class _TreinadorNavigationState
 
       bottomNavigationBar: MenuInferiorTreinador(
         indiceSelecionado: indiceSelecionado,
-
         onItemSelecionado: (indice) {
           mudarPagina(indice);
         },

@@ -20,6 +20,7 @@ import styles from './atletas.module.css';
 import PerfilAtleta from './perfilAtletas.tsx';
 import EditarAtleta from './editarAtleta.tsx';
 import ClipesAtleta from './clipesAtleta.tsx';
+import InformacoesAtleta from './InformacoesAtleta.tsx';
 
 
 // ============================================================
@@ -118,6 +119,7 @@ type TelaAtual =
     | 'lista'
     | 'perfil'
     | 'editar'
+    | 'informacoes'
     | 'clipes';
 
 
@@ -201,7 +203,9 @@ const Atletas = () => {
     // ========================================================
 
     const headersAutenticacao = () => {
-        const token = obterToken();
+
+        const token =
+            obterToken();
 
         return {
             'Content-Type': 'application/json',
@@ -221,13 +225,15 @@ const Atletas = () => {
             setCarregando(true);
             setErro('');
 
-            const resposta = await fetch(
-                `${API_URL}/api/atletas`,
-                {
-                    method: 'GET',
-                    headers: headersAutenticacao(),
-                }
-            );
+            const resposta =
+                await fetch(
+                    `${API_URL}/api/atletas`,
+                    {
+                        method: 'GET',
+                        headers:
+                            headersAutenticacao(),
+                    }
+                );
 
             if (!resposta.ok) {
 
@@ -242,11 +248,13 @@ const Atletas = () => {
                 );
             }
 
-            const dados: AtletaBackend[] =
+            const dados:
+                AtletaBackend[] =
                 await resposta.json();
 
 
-            const atletasFormatados: Atleta[] =
+            const atletasFormatados:
+                Atleta[] =
                 dados.map((atleta) => ({
 
                     id: atleta.id,
@@ -281,17 +289,15 @@ const Atletas = () => {
                         atleta.usuario?.email ||
                         undefined,
 
-                    // ====================================================
-                    // FOTO DO ATLETA
-                    // ====================================================
-
                     avatarUrl:
                         atleta.usuario?.avatarUrl ||
                         null,
                 }));
 
 
-            setAtletas(atletasFormatados);
+            setAtletas(
+                atletasFormatados
+            );
 
         } catch (error) {
 
@@ -332,13 +338,15 @@ const Atletas = () => {
 
         try {
 
-            const resposta = await fetch(
-                `${API_URL}/api/atletas/${id}`,
-                {
-                    method: 'GET',
-                    headers: headersAutenticacao(),
-                }
-            );
+            const resposta =
+                await fetch(
+                    `${API_URL}/api/atletas/${id}`,
+                    {
+                        method: 'GET',
+                        headers:
+                            headersAutenticacao(),
+                    }
+                );
 
             if (!resposta.ok) {
 
@@ -353,7 +361,8 @@ const Atletas = () => {
                 );
             }
 
-            const dados: AtletaBackend =
+            const dados:
+                AtletaBackend =
                 await resposta.json();
 
             return dados;
@@ -393,19 +402,40 @@ const Atletas = () => {
             return;
         }
 
-        setAtletaSelecionado(atleta);
-        setTelaAtual('perfil');
+        setAtletaSelecionado(
+            atleta
+        );
+
+        setTelaAtual(
+            'perfil'
+        );
     };
 
 
     // ========================================================
-    // INFORMAÇÕES
+    // ABRIR INFORMAÇÕES
     // ========================================================
 
     const abrirInformacoes = async (
         id: number
     ) => {
-        await abrirPerfil(id);
+
+        setErro('');
+
+        const atleta =
+            await buscarAtletaPorId(id);
+
+        if (!atleta) {
+            return;
+        }
+
+        setAtletaSelecionado(
+            atleta
+        );
+
+        setTelaAtual(
+            'informacoes'
+        );
     };
 
 
@@ -426,8 +456,13 @@ const Atletas = () => {
             return;
         }
 
-        setAtletaSelecionado(atleta);
-        setTelaAtual('clipes');
+        setAtletaSelecionado(
+            atleta
+        );
+
+        setTelaAtual(
+            'clipes'
+        );
     };
 
 
@@ -437,8 +472,14 @@ const Atletas = () => {
 
     const voltarParaLista = () => {
 
-        setAtletaSelecionado(null);
-        setTelaAtual('lista');
+        setAtletaSelecionado(
+            null
+        );
+
+        setTelaAtual(
+            'lista'
+        );
+
         setErro('');
     };
 
@@ -450,11 +491,17 @@ const Atletas = () => {
     const voltarParaPerfil = () => {
 
         if (!atletaSelecionado) {
-            setTelaAtual('lista');
+
+            setTelaAtual(
+                'lista'
+            );
+
             return;
         }
 
-        setTelaAtual('perfil');
+        setTelaAtual(
+            'perfil'
+        );
     };
 
 
@@ -468,7 +515,9 @@ const Atletas = () => {
             return;
         }
 
-        setTelaAtual('editar');
+        setTelaAtual(
+            'editar'
+        );
     };
 
 
@@ -480,6 +529,7 @@ const Atletas = () => {
 
         return [
             'Todas',
+
             ...Array.from(
                 new Set(
                     atletas
@@ -499,6 +549,7 @@ const Atletas = () => {
 
         return [
             'Todas',
+
             ...Array.from(
                 new Set(
                     atletas
@@ -518,6 +569,7 @@ const Atletas = () => {
 
         return [
             'Todas',
+
             ...Array.from(
                 new Set(
                     atletas
@@ -544,39 +596,44 @@ const Atletas = () => {
                 .trim()
                 .toLowerCase();
 
-        return atletas.filter((atleta) => {
+        return atletas.filter(
+            (atleta) => {
 
-            const correspondeBusca =
-                !textoBusca ||
-                atleta.nome
-                    .toLowerCase()
-                    .includes(textoBusca) ||
-                atleta.equipe
-                    .toLowerCase()
-                    .includes(textoBusca) ||
-                atleta.modalidade
-                    .toLowerCase()
-                    .includes(textoBusca);
+                const correspondeBusca =
+                    !textoBusca ||
+                    atleta.nome
+                        .toLowerCase()
+                        .includes(textoBusca) ||
+                    atleta.equipe
+                        .toLowerCase()
+                        .includes(textoBusca) ||
+                    atleta.modalidade
+                        .toLowerCase()
+                        .includes(textoBusca);
 
-            const correspondeModalidade =
-                filtroModalidade === 'Todas' ||
-                atleta.modalidade === filtroModalidade;
+                const correspondeModalidade =
+                    filtroModalidade === 'Todas' ||
+                    atleta.modalidade ===
+                    filtroModalidade;
 
-            const correspondeCategoria =
-                filtroCategoria === 'Todas' ||
-                atleta.categoria === filtroCategoria;
+                const correspondeCategoria =
+                    filtroCategoria === 'Todas' ||
+                    atleta.categoria ===
+                    filtroCategoria;
 
-            const correspondeEquipe =
-                filtroEquipe === 'Todas' ||
-                atleta.equipe === filtroEquipe;
+                const correspondeEquipe =
+                    filtroEquipe === 'Todas' ||
+                    atleta.equipe ===
+                    filtroEquipe;
 
-            return (
-                correspondeBusca &&
-                correspondeModalidade &&
-                correspondeCategoria &&
-                correspondeEquipe
-            );
-        });
+                return (
+                    correspondeBusca &&
+                    correspondeModalidade &&
+                    correspondeCategoria &&
+                    correspondeEquipe
+                );
+            }
+        );
 
     }, [
         atletas,
@@ -593,9 +650,18 @@ const Atletas = () => {
 
     const limparFiltros = () => {
 
-        setFiltroModalidade('Todas');
-        setFiltroCategoria('Todas');
-        setFiltroEquipe('Todas');
+        setFiltroModalidade(
+            'Todas'
+        );
+
+        setFiltroCategoria(
+            'Todas'
+        );
+
+        setFiltroEquipe(
+            'Todas'
+        );
+
         setBusca('');
     };
 
@@ -609,10 +675,12 @@ const Atletas = () => {
         valor: string
     ) => {
 
-        setNovoAtleta((atual) => ({
-            ...atual,
-            [campo]: valor,
-        }));
+        setNovoAtleta(
+            (atual) => ({
+                ...atual,
+                [campo]: valor,
+            })
+        );
     };
 
 
@@ -626,67 +694,75 @@ const Atletas = () => {
 
             setErro('');
 
-            const resposta = await fetch(
-                `${API_URL}/api/atletas`,
-                {
-                    method: 'POST',
-                    headers: headersAutenticacao(),
+            const resposta =
+                await fetch(
+                    `${API_URL}/api/atletas`,
+                    {
+                        method: 'POST',
+                        headers:
+                            headersAutenticacao(),
 
-                    body: JSON.stringify({
+                        body: JSON.stringify({
 
-                        nome: novoAtleta.nome,
+                            nome:
+                                novoAtleta.nome,
 
-                        dataNascimento:
-                            novoAtleta.dataNascimento ||
-                            null,
+                            dataNascimento:
+                                novoAtleta.dataNascimento ||
+                                null,
 
-                        sexo:
-                            novoAtleta.sexo ||
-                            null,
+                            sexo:
+                                novoAtleta.sexo ||
+                                null,
 
-                        categoria:
-                            novoAtleta.categoria ||
-                            null,
+                            categoria:
+                                novoAtleta.categoria ||
+                                null,
 
-                        rg:
-                            novoAtleta.rg ||
-                            null,
+                            rg:
+                                novoAtleta.rg ||
+                                null,
 
-                        cpf:
-                            novoAtleta.cpf ||
-                            null,
+                            cpf:
+                                novoAtleta.cpf ||
+                                null,
 
-                        email:
-                            novoAtleta.email,
+                            email:
+                                novoAtleta.email,
 
-                        telefone:
-                            novoAtleta.telefone ||
-                            null,
+                            telefone:
+                                novoAtleta.telefone ||
+                                null,
 
-                        responsavel:
-                            novoAtleta.responsavelNome
-                                ? {
-                                    nome:
-                                        novoAtleta
-                                            .responsavelNome,
+                            responsavel:
+                                novoAtleta
+                                    .responsavelNome
+                                    ? {
 
-                                    grauParentesco:
-                                        novoAtleta
-                                            .responsavelGrau,
+                                        nome:
+                                            novoAtleta
+                                                .responsavelNome,
 
-                                    telefone:
-                                        novoAtleta
-                                            .responsavelTelefone,
-                                }
-                                : null,
-                    }),
-                }
-            );
+                                        grauParentesco:
+                                            novoAtleta
+                                                .responsavelGrau,
+
+                                        telefone:
+                                            novoAtleta
+                                                .responsavelTelefone,
+
+                                    }
+                                    : null,
+                        }),
+                    }
+                );
+
 
             const dados =
                 await resposta
                     .json()
                     .catch(() => null);
+
 
             if (!resposta.ok) {
 
@@ -696,7 +772,9 @@ const Atletas = () => {
                 );
             }
 
+
             setNovoAtleta({
+
                 nome: '',
                 dataNascimento: '',
                 sexo: '',
@@ -708,9 +786,13 @@ const Atletas = () => {
                 responsavelNome: '',
                 responsavelGrau: '',
                 responsavelTelefone: '',
+
             });
 
-            setMostrarCadastro(false);
+
+            setMostrarCadastro(
+                false
+            );
 
             await carregarAtletas();
 
@@ -746,19 +828,25 @@ const Atletas = () => {
 
             setErro('');
 
-            const resposta = await fetch(
-                `${API_URL}/api/atletas/${atletaSelecionado.id}`,
-                {
-                    method: 'PUT',
-                    headers: headersAutenticacao(),
-                    body: JSON.stringify(dados),
-                }
-            );
+            const resposta =
+                await fetch(
+                    `${API_URL}/api/atletas/${atletaSelecionado.id}`,
+                    {
+                        method: 'PUT',
+                        headers:
+                            headersAutenticacao(),
+                        body: JSON.stringify(
+                            dados
+                        ),
+                    }
+                );
+
 
             const resultado =
                 await resposta
                     .json()
                     .catch(() => null);
+
 
             if (!resposta.ok) {
 
@@ -768,10 +856,12 @@ const Atletas = () => {
                 );
             }
 
+
             const atletaAtualizado =
                 await buscarAtletaPorId(
                     atletaSelecionado.id
                 );
+
 
             if (atletaAtualizado) {
 
@@ -780,9 +870,13 @@ const Atletas = () => {
                 );
             }
 
+
             await carregarAtletas();
 
-            setTelaAtual('perfil');
+
+            setTelaAtual(
+                'perfil'
+            );
 
         } catch (error) {
 
@@ -812,9 +906,38 @@ const Atletas = () => {
 
         return (
             <EditarAtleta
-                atleta={atletaSelecionado}
-                onBack={voltarParaPerfil}
-                onSave={atualizarAtletaSelecionado}
+                atleta={
+                    atletaSelecionado
+                }
+                onBack={
+                    voltarParaPerfil
+                }
+                onSave={
+                    atualizarAtletaSelecionado
+                }
+            />
+        );
+    }
+
+
+    // ========================================================
+    // TELA DE INFORMAÇÕES
+    // ========================================================
+
+    if (telaAtual === 'informacoes') {
+
+        if (!atletaSelecionado) {
+            return null;
+        }
+
+        return (
+            <InformacoesAtleta
+                atleta={
+                    atletaSelecionado
+                }
+                onBack={
+                    voltarParaPerfil
+                }
             />
         );
     }
@@ -832,7 +955,9 @@ const Atletas = () => {
 
         return (
             <ClipesAtleta
-                onBack={voltarParaPerfil}
+                onBack={
+                    voltarParaPerfil
+                }
             />
         );
     }
@@ -850,9 +975,24 @@ const Atletas = () => {
 
         return (
             <PerfilAtleta
-                atleta={atletaSelecionado}
-                onBack={voltarParaLista}
-                onEdit={abrirEdicao}
+                atleta={
+                    atletaSelecionado
+                }
+
+                onBack={
+                    voltarParaLista
+                }
+
+                onEdit={
+                    abrirEdicao
+                }
+
+                onInformacoes={() =>
+                    abrirInformacoes(
+                        atletaSelecionado.id
+                    )
+                }
+
                 onClipes={() =>
                     abrirClipes(
                         atletaSelecionado.id
@@ -891,9 +1031,13 @@ const Atletas = () => {
 
                 <button
                     type="button"
-                    className={styles.newAthleteButton}
+                    className={
+                        styles.newAthleteButton
+                    }
                     onClick={() =>
-                        setMostrarCadastro(true)
+                        setMostrarCadastro(
+                            true
+                        )
                     }
                 >
                     <Plus size={18} />
@@ -910,7 +1054,11 @@ const Atletas = () => {
 
             {erro && (
 
-                <div className={styles.message}>
+                <div
+                    className={
+                        styles.message
+                    }
+                >
 
                     <strong>
                         Ocorreu um erro
@@ -937,9 +1085,17 @@ const Atletas = () => {
                 FILTROS / BUSCA
             ================================================== */}
 
-            <div className={styles.filters}>
+            <div
+                className={
+                    styles.filters
+                }
+            >
 
-                <div className={styles.searchBox}>
+                <div
+                    className={
+                        styles.searchBox
+                    }
+                >
 
                     <Search size={19} />
 
@@ -974,31 +1130,46 @@ const Atletas = () => {
                         >
                             <X size={16} />
                         </button>
+
                     )}
 
                 </div>
 
 
-                <div className={styles.selectBox}>
+                <div
+                    className={
+                        styles.selectBox
+                    }
+                >
 
                     <select
-                        value={filtroModalidade}
+                        value={
+                            filtroModalidade
+                        }
                         onChange={(event) =>
                             setFiltroModalidade(
                                 event.target.value
                             )
                         }
                     >
+
                         {modalidades.map(
                             (modalidade) => (
+
                                 <option
-                                    key={modalidade}
-                                    value={modalidade}
+                                    key={
+                                        modalidade
+                                    }
+                                    value={
+                                        modalidade
+                                    }
                                 >
                                     {modalidade}
                                 </option>
+
                             )
                         )}
+
                     </select>
 
                     <ChevronDown size={17} />
@@ -1006,26 +1177,40 @@ const Atletas = () => {
                 </div>
 
 
-                <div className={styles.selectBox}>
+                <div
+                    className={
+                        styles.selectBox
+                    }
+                >
 
                     <select
-                        value={filtroCategoria}
+                        value={
+                            filtroCategoria
+                        }
                         onChange={(event) =>
                             setFiltroCategoria(
                                 event.target.value
                             )
                         }
                     >
+
                         {categorias.map(
                             (categoria) => (
+
                                 <option
-                                    key={categoria}
-                                    value={categoria}
+                                    key={
+                                        categoria
+                                    }
+                                    value={
+                                        categoria
+                                    }
                                 >
                                     {categoria}
                                 </option>
+
                             )
                         )}
+
                     </select>
 
                     <ChevronDown size={17} />
@@ -1035,7 +1220,9 @@ const Atletas = () => {
 
                 <button
                     type="button"
-                    className={styles.filterButton}
+                    className={
+                        styles.filterButton
+                    }
                     onClick={() =>
                         setMostrarFiltros(
                             (atual) => !atual
@@ -1071,26 +1258,36 @@ const Atletas = () => {
                     }}
                 >
 
-                    <div className={styles.selectBox}>
+                    <div
+                        className={
+                            styles.selectBox
+                        }
+                    >
 
                         <select
-                            value={filtroEquipe}
+                            value={
+                                filtroEquipe
+                            }
                             onChange={(event) =>
                                 setFiltroEquipe(
                                     event.target.value
                                 )
                             }
                         >
+
                             {equipes.map(
                                 (equipe) => (
+
                                     <option
                                         key={equipe}
                                         value={equipe}
                                     >
                                         {equipe}
                                     </option>
+
                                 )
                             )}
+
                         </select>
 
                         <ChevronDown size={17} />
@@ -1108,11 +1305,13 @@ const Atletas = () => {
             <div
                 style={{
                     marginBottom: '16px',
-                    color: 'rgba(255,255,255,0.72)',
+                    color:
+                        'rgba(255,255,255,0.72)',
                     fontSize: '13px',
                     fontWeight: 500,
                 }}
             >
+
                 {carregando
                     ? 'Carregando atletas...'
                     : `${atletasFiltrados.length} ${
@@ -1121,6 +1320,7 @@ const Atletas = () => {
                             : 'atletas'
                     }`
                 }
+
             </div>
 
 
@@ -1130,7 +1330,11 @@ const Atletas = () => {
 
             {carregando && (
 
-                <div className={styles.empty}>
+                <div
+                    className={
+                        styles.empty
+                    }
+                >
 
                     <strong>
                         Carregando atletas...
@@ -1151,7 +1355,11 @@ const Atletas = () => {
             {!carregando &&
                 atletasFiltrados.length === 0 && (
 
-                    <div className={styles.empty}>
+                    <div
+                        className={
+                            styles.empty
+                        }
+                    >
 
                         <UserRound size={28} />
 
@@ -1181,16 +1389,20 @@ const Atletas = () => {
 
                                 <button
                                     type="button"
-                                    className={styles.submitButton}
+                                    className={
+                                        styles.submitButton
+                                    }
                                     onClick={() =>
                                         setMostrarCadastro(
                                             true
                                         )
                                     }
                                 >
+
                                     <Plus size={16} />
 
                                     Novo atleta
+
                                 </button>
                             )}
 
@@ -1205,18 +1417,28 @@ const Atletas = () => {
             {!carregando &&
                 atletasFiltrados.length > 0 && (
 
-                    <div className={styles.athletesGrid}>
+                    <div
+                        className={
+                            styles.athletesGrid
+                        }
+                    >
 
                         {atletasFiltrados.map(
                             (atleta) => (
 
                                 <div
-                                    key={atleta.id}
-                                    className={styles.athleteCard}
+                                    key={
+                                        atleta.id
+                                    }
+                                    className={
+                                        styles.athleteCard
+                                    }
                                 >
 
                                     <div
-                                        className={styles.cardContent}
+                                        className={
+                                            styles.cardContent
+                                        }
                                     >
 
                                         <div
@@ -1229,8 +1451,12 @@ const Atletas = () => {
                                             {atleta.avatarUrl ? (
 
                                                 <img
-                                                    src={atleta.avatarUrl}
-                                                    alt={`Foto de ${atleta.nome}`}
+                                                    src={
+                                                        atleta.avatarUrl
+                                                    }
+                                                    alt={
+                                                        `Foto de ${atleta.nome}`
+                                                    }
                                                     style={{
                                                         width: '100%',
                                                         height: '100%',
@@ -1251,7 +1477,9 @@ const Atletas = () => {
 
 
                                         <div
-                                            className={styles.cardInfo}
+                                            className={
+                                                styles.cardInfo
+                                            }
                                         >
 
                                             <h2>
@@ -1259,27 +1487,36 @@ const Atletas = () => {
                                             </h2>
 
                                             <span
-                                                className={styles.team}
+                                                className={
+                                                    styles.team
+                                                }
                                             >
                                                 {atleta.equipe}
                                             </span>
 
                                             <p>
+
                                                 <span>
                                                     Modalidade:
                                                 </span>
 
                                                 {atleta.modalidade}
+
                                             </p>
+
 
                                             {atleta.categoria && (
 
                                                 <p>
+
                                                     <span>
                                                         Categoria:
                                                     </span>
 
-                                                    {atleta.categoria}
+                                                    {
+                                                        atleta.categoria
+                                                    }
+
                                                 </p>
                                             )}
 
@@ -1287,16 +1524,22 @@ const Atletas = () => {
 
 
                                         <div
-                                            className={styles.frequency}
+                                            className={
+                                                styles.frequency
+                                            }
                                         >
-                                            {atleta.frequencia}%
+                                            {
+                                                atleta.frequencia
+                                            }%
                                         </div>
 
                                     </div>
 
 
                                     <div
-                                        className={styles.cardHover}
+                                        className={
+                                            styles.cardHover
+                                        }
                                     >
 
                                         <button
@@ -1307,9 +1550,11 @@ const Atletas = () => {
                                                 )
                                             }
                                         >
+
                                             <Eye size={17} />
 
                                             Perfil
+
                                         </button>
 
 
@@ -1321,11 +1566,13 @@ const Atletas = () => {
                                                 )
                                             }
                                         >
+
                                             <UserRound
                                                 size={17}
                                             />
 
                                             Informações
+
                                         </button>
 
 
@@ -1337,11 +1584,13 @@ const Atletas = () => {
                                                 )
                                             }
                                         >
+
                                             <Scissors
                                                 size={17}
                                             />
 
                                             Clipes
+
                                         </button>
 
                                     </div>
@@ -1361,14 +1610,20 @@ const Atletas = () => {
             {mostrarCadastro && (
 
                 <div
-                    className={styles.modalOverlay}
+                    className={
+                        styles.modalOverlay
+                    }
                     onMouseDown={() =>
-                        setMostrarCadastro(false)
+                        setMostrarCadastro(
+                            false
+                        )
                     }
                 >
 
                     <div
-                        className={styles.newAthleteModal}
+                        className={
+                            styles.newAthleteModal
+                        }
                         onMouseDown={(event) =>
                             event.stopPropagation()
                         }
@@ -1377,7 +1632,9 @@ const Atletas = () => {
                         {/* HEADER */}
 
                         <div
-                            className={styles.modalHeader}
+                            className={
+                                styles.modalHeader
+                            }
                         >
 
                             <div>
@@ -1418,11 +1675,15 @@ const Atletas = () => {
                         {/* CORPO */}
 
                         <form
-                            onSubmit={cadastrarAtleta}
+                            onSubmit={
+                                cadastrarAtleta
+                            }
                         >
 
                             <div
-                                className={styles.modalBody}
+                                className={
+                                    styles.modalBody
+                                }
                             >
 
                                 {/* ============================

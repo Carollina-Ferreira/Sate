@@ -48,6 +48,46 @@
 
 
 /* =====================================
+   ESTADOS
+===================================== */
+
+.stateCard {
+  width: 100%;
+
+  padding: 28px;
+
+  box-sizing: border-box;
+
+  border-radius: 14px;
+
+  background: #e7efeb;
+
+  color: #24332d;
+
+  text-align: center;
+
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.11);
+}
+
+.stateCard h2 {
+  margin: 0;
+
+  font-size: 18px;
+
+  font-weight: 700;
+}
+
+.stateCard p {
+  margin: 7px 0 0;
+
+  color: #687970;
+
+  font-size: 12px;
+}
+
+
+/* =====================================
    CARD DE SELEÇÃO
 ===================================== */
 
@@ -55,7 +95,9 @@
   width: 100%;
 
   display: grid;
-  grid-template-columns: 1fr 42px 1fr;
+
+  grid-template-columns:
+    1fr 42px 1fr;
 
   align-items: end;
 
@@ -69,12 +111,15 @@
 
   background: #e7efeb;
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
 
   border-radius: 14px;
 
   box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.11);
+    0 6px 18px
+    rgba(0, 0, 0, 0.11);
 }
 
 
@@ -84,6 +129,7 @@
 
 .selectGroup {
   display: flex;
+
   flex-direction: column;
 
   gap: 7px;
@@ -106,11 +152,15 @@
   width: 100%;
   height: 42px;
 
-  padding: 0 38px 0 13px;
+  padding:
+    0 38px
+    0 13px;
 
   box-sizing: border-box;
 
-  border: 1px solid #c7d6cf;
+  border:
+    1px solid
+    #c7d6cf;
 
   border-radius: 8px;
 
@@ -134,7 +184,7 @@
     background 0.2s ease;
 }
 
-.selectGroup select:hover {
+.selectGroup select:hover:not(:disabled) {
   background: #eef4f1;
 
   border-color: #a8bbb2;
@@ -146,7 +196,14 @@
   border-color: #16a875;
 
   box-shadow:
-    0 0 0 3px rgba(22, 168, 117, 0.1);
+    0 0 0 3px
+    rgba(22, 168, 117, 0.1);
+}
+
+.selectGroup select:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
 }
 
 
@@ -159,7 +216,9 @@
   height: 42px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   padding: 0;
@@ -179,17 +238,23 @@
     transform 0.2s ease;
 }
 
-.switchButton:hover {
+.switchButton:hover:not(:disabled) {
   background: #00795e;
 }
 
-.switchButton:active {
+.switchButton:active:not(:disabled) {
   transform: scale(0.95);
+}
+
+.switchButton:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
 }
 
 
 /* =====================================
-   CARD PRINCIPAL DA COMPARAÇÃO
+   CARD PRINCIPAL
 ===================================== */
 
 .comparison {
@@ -201,12 +266,15 @@
 
   background: #e7efeb;
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
 
   border-radius: 14px;
 
   box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.11);
+    0 6px 18px
+    rgba(0, 0, 0, 0.11);
 }
 
 
@@ -218,7 +286,9 @@
   width: 100%;
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr;
 
   gap: 30px;
 }
@@ -234,7 +304,7 @@
 
 
 /* =====================================
-   LABEL PARTIDA A / B
+   LABEL
 ===================================== */
 
 .matchLabel {
@@ -286,15 +356,50 @@
 
 
 /* =====================================
-   INFORMAÇÕES DA PARTIDA
+   PLACAR
+===================================== */
+
+.matchScore {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 7px;
+
+  color: #24332d;
+
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+.matchRight .matchScore {
+  justify-content: flex-end;
+}
+
+.matchScore span {
+  color: #8b9993;
+
+  font-size: 12px;
+
+  font-weight: 500;
+}
+
+
+/* =====================================
+   INFORMAÇÕES
 ===================================== */
 
 .matchMeta {
   display: flex;
 
+  flex-wrap: wrap;
+
   gap: 8px;
 
-  margin-top: 7px;
+  margin-top: 8px;
 }
 
 .matchRight .matchMeta {
@@ -302,7 +407,8 @@
 }
 
 .matchMeta span {
-  padding: 4px 9px;
+  padding:
+    4px 9px;
 
   border-radius: 20px;
 
@@ -336,6 +442,7 @@
 
 .stats {
   display: flex;
+
   flex-direction: column;
 
   gap: 18px;
@@ -347,12 +454,14 @@
 
 
 /* =====================================
-   VALORES / NOMES
+   VALORES
 ===================================== */
 
 .statValues {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+
+  grid-template-columns:
+    1fr auto 1fr;
 
   align-items: center;
 
@@ -379,7 +488,7 @@
 }
 
 .statName {
-  min-width: 150px;
+  min-width: 160px;
 
   color: #56665f;
 
@@ -392,7 +501,7 @@
 
 
 /* =====================================
-   ÁREA DAS BARRAS
+   BARRAS
 ===================================== */
 
 .barArea {
@@ -400,17 +509,14 @@
   height: 9px;
 
   display: grid;
-  grid-template-columns: 1fr 2px 1fr;
+
+  grid-template-columns:
+    1fr 2px 1fr;
 
   gap: 5px;
 
   align-items: center;
 }
-
-
-/* =====================================
-   FUNDO DAS BARRAS
-===================================== */
 
 .barSideLeft,
 .barSideRight {
@@ -427,17 +533,19 @@
 
 .barSideLeft {
   display: flex;
+
   justify-content: flex-end;
 }
 
 .barSideRight {
   display: flex;
+
   justify-content: flex-start;
 }
 
 
 /* =====================================
-   BARRA VERDE
+   BARRA A
 ===================================== */
 
 .barA {
@@ -447,12 +555,13 @@
 
   border-radius: 20px;
 
-  transition: width 0.3s ease;
+  transition:
+    width 0.3s ease;
 }
 
 
 /* =====================================
-   BARRA AZUL
+   BARRA B
 ===================================== */
 
 .barB {
@@ -462,12 +571,13 @@
 
   border-radius: 20px;
 
-  transition: width 0.3s ease;
+  transition:
+    width 0.3s ease;
 }
 
 
 /* =====================================
-   LINHA CENTRAL
+   CENTRO
 ===================================== */
 
 .barCenter {
@@ -485,9 +595,10 @@
 ===================================== */
 
 @media (max-width: 900px) {
-
   .page {
-    padding: 22px 20px 28px;
+    padding:
+      22px 20px
+      28px;
   }
 
   .pageHeader h1 {
@@ -497,14 +608,13 @@
   .matchHeader h2 {
     font-size: 15px;
   }
-
 }
 
 
 @media (max-width: 800px) {
-
   .selectionCard {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      1fr;
 
     gap: 12px;
   }
@@ -516,14 +626,14 @@
   .matchHeader {
     gap: 18px;
   }
-
 }
 
 
 @media (max-width: 600px) {
-
   .page {
-    padding: 18px 12px 24px;
+    padding:
+      18px 12px
+      24px;
   }
 
   .pageHeader h1 {
@@ -531,21 +641,25 @@
   }
 
   .comparison {
-    padding: 17px 13px;
+    padding:
+      17px 13px;
   }
 
   .matchHeader {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      1fr;
 
-    gap: 15px;
+    gap: 18px;
   }
 
   .matchRight {
     text-align: left;
   }
 
-  .matchRight .matchMeta {
-    justify-content: flex-start;
+  .matchRight .matchMeta,
+  .matchRight .matchScore {
+    justify-content:
+      flex-start;
   }
 
   .statName {
@@ -558,26 +672,26 @@
   .valueB {
     font-size: 12px;
   }
-
 }
 
 
 @media (max-width: 450px) {
-
   .selectionCard {
     padding: 13px;
   }
 
   .comparison {
-    padding: 15px 11px;
+    padding:
+      15px 11px;
   }
 
   .statValues {
-    grid-template-columns: 55px 1fr 55px;
+    grid-template-columns:
+      55px 1fr
+      55px;
   }
 
   .statName {
     min-width: 0;
   }
-
 }

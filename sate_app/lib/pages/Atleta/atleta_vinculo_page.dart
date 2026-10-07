@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'atleta_home_page.dart';
+import 'atleta_navigation.dart';
 
 class AtletaVinculoPage extends StatefulWidget {
-  const AtletaVinculoPage({super.key});
+  final String nomeUsuario;
+
+  const AtletaVinculoPage({
+    super.key,
+    required this.nomeUsuario,
+  });
 
   @override
   State<AtletaVinculoPage> createState() => _AtletaVinculoPageState();
@@ -225,7 +230,9 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AtletaHomePage(),
+                          builder: (context) => AtletaNavigation(
+                            nomeUsuario: widget.nomeUsuario,
+                          ),
                         ),
                       );
                     },

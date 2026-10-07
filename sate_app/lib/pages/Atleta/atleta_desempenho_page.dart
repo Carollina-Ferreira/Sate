@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../assets/menu_inferior_atleta.dart';
-import 'atleta_home_page.dart';
-import 'atleta_treino_page.dart';
-import 'atleta_feed_page.dart';
-import 'atleta_perfil_page.dart';
 import 'atleta_notificacao_page.dart';
 
 class AtletaDesempenhoPage extends StatefulWidget {
@@ -41,15 +36,10 @@ class _AtletaDesempenhoPageState
     return Scaffold(
       backgroundColor: fundo,
 
-      // ========================================================
-      // APP BAR
-      // ========================================================
-
       appBar: AppBar(
         backgroundColor: fundo,
         elevation: 0,
         centerTitle: false,
-
         title: const Text(
           'Minha evolução',
           style: TextStyle(
@@ -58,7 +48,6 @@ class _AtletaDesempenhoPageState
             fontWeight: FontWeight.bold,
           ),
         ),
-
         actions: [
           IconButton(
             onPressed: () {
@@ -78,10 +67,6 @@ class _AtletaDesempenhoPageState
           ),
         ],
       ),
-
-      // ========================================================
-      // CONTEÚDO
-      // ========================================================
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -242,69 +227,8 @@ class _AtletaDesempenhoPageState
           ),
         ),
       ),
-
-      // ========================================================
-      // MENU INFERIOR
-      // ========================================================
-
-      bottomNavigationBar: MenuInferiorAtleta(
-        indiceSelecionado: 2,
-        onItemSelecionado: (index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) =>
-                    const AtletaHomePage(),
-              ),
-            );
-            return;
-          }
-
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) =>
-                    const AtletaTreinoPage(),
-              ),
-            );
-            return;
-          }
-
-          if (index == 2) {
-            return;
-          }
-
-          if (index == 3) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) =>
-                    const AtletaFeedPage(),
-              ),
-            );
-            return;
-          }
-
-          if (index == 4) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) =>
-                    const AtletaPerfilPage(),
-              ),
-            );
-            return;
-          }
-        },
-      ),
     );
   }
-
-  // ============================================================
-  // CABEÇALHO
-  // ============================================================
 
   Widget _buildHeader() {
     return Container(
@@ -332,9 +256,7 @@ class _AtletaDesempenhoPageState
               size: 28,
             ),
           ),
-
           const SizedBox(width: 14),
-
           const Expanded(
             child: Column(
               crossAxisAlignment:
@@ -364,10 +286,6 @@ class _AtletaDesempenhoPageState
       ),
     );
   }
-
-  // ============================================================
-  // PERÍODO
-  // ============================================================
 
   Widget _buildPeriodo() {
     return SizedBox(
@@ -425,10 +343,6 @@ class _AtletaDesempenhoPageState
     );
   }
 
-  // ============================================================
-  // GRÁFICO DE DESEMPENHO
-  // ============================================================
-
   Widget _buildGraficoDesempenho() {
     return Container(
       height: 190,
@@ -464,7 +378,6 @@ class _AtletaDesempenhoPageState
               child: Container(),
             ),
           ),
-
           Row(
             mainAxisAlignment:
                 MainAxisAlignment.spaceAround,
@@ -482,10 +395,6 @@ class _AtletaDesempenhoPageState
       ),
     );
   }
-
-  // ============================================================
-  // GRÁFICO DE FREQUÊNCIA
-  // ============================================================
 
   Widget _buildGraficoFrequencia() {
     final valores = [
@@ -547,9 +456,7 @@ class _AtletaDesempenhoPageState
                     color: verde,
                   ),
                 ),
-
                 const SizedBox(height: 5),
-
                 Container(
                   width: 25,
                   height:
@@ -560,9 +467,7 @@ class _AtletaDesempenhoPageState
                         BorderRadius.circular(12),
                   ),
                 ),
-
                 const SizedBox(height: 8),
-
                 Text(
                   meses[index],
                   style: TextStyle(
@@ -578,10 +483,6 @@ class _AtletaDesempenhoPageState
       ),
     );
   }
-
-  // ============================================================
-  // CARD RESUMO
-  // ============================================================
 
   Widget _buildResumoCard({
     required String titulo,
@@ -625,9 +526,7 @@ class _AtletaDesempenhoPageState
               color: verde,
             ),
           ),
-
           const SizedBox(height: 12),
-
           Text(
             titulo,
             maxLines: 2,
@@ -636,9 +535,7 @@ class _AtletaDesempenhoPageState
               color: Colors.grey.shade600,
             ),
           ),
-
           const SizedBox(height: 3),
-
           Text(
             valor,
             style: const TextStyle(
@@ -651,10 +548,6 @@ class _AtletaDesempenhoPageState
       ),
     );
   }
-
-  // ============================================================
-  // AVALIAÇÃO FÍSICA
-  // ============================================================
 
   Widget _buildAvaliacaoFisica() {
     return Container(
@@ -726,9 +619,7 @@ class _AtletaDesempenhoPageState
                   'ml/kg/min',
                 ),
               ),
-
               _buildDivisor(),
-
               Expanded(
                 child: _buildIndicador(
                   'IMC',
@@ -736,9 +627,7 @@ class _AtletaDesempenhoPageState
                   'Normal',
                 ),
               ),
-
               _buildDivisor(),
-
               Expanded(
                 child: _buildIndicador(
                   'Gordura Corporal',
@@ -768,9 +657,7 @@ class _AtletaDesempenhoPageState
             color: Colors.grey.shade600,
           ),
         ),
-
         const SizedBox(height: 7),
-
         Text(
           valor,
           style: const TextStyle(
@@ -779,19 +666,16 @@ class _AtletaDesempenhoPageState
             color: Colors.black87,
           ),
         ),
-
         const SizedBox(height: 3),
-
         Text(
           legenda,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 9,
-            color:
-                legenda == 'Ideal' ||
-                        legenda == 'Normal'
-                    ? verde
-                    : Colors.grey.shade500,
+            color: legenda == 'Ideal' ||
+                    legenda == 'Normal'
+                ? verde
+                : Colors.grey.shade500,
           ),
         ),
       ],
@@ -805,10 +689,6 @@ class _AtletaDesempenhoPageState
       color: Colors.grey.shade200,
     );
   }
-
-  // ============================================================
-  // ÚLTIMAS AVALIAÇÕES
-  // ============================================================
 
   Widget _buildUltimasAvaliacoes() {
     final avaliacoes = [
@@ -921,10 +801,6 @@ class _AtletaDesempenhoPageState
     );
   }
 
-  // ============================================================
-  // HISTÓRICO
-  // ============================================================
-
   Widget _buildHistorico() {
     return Column(
       children: [
@@ -1001,9 +877,7 @@ class _AtletaDesempenhoPageState
                     color: Colors.black87,
                   ),
                 ),
-
                 const SizedBox(height: 3),
-
                 Text(
                   data,
                   style: TextStyle(
@@ -1024,10 +898,6 @@ class _AtletaDesempenhoPageState
       ),
     );
   }
-
-  // ============================================================
-  // RELATÓRIOS
-  // ============================================================
 
   Widget _buildRelatorios() {
     return SizedBox(
@@ -1084,10 +954,6 @@ class _AtletaDesempenhoPageState
       ),
     );
   }
-
-  // ============================================================
-  // GRÁFICO DO RELATÓRIO
-  // ============================================================
 
   Widget _buildGraficoRelatorio() {
     return Container(
@@ -1179,10 +1045,6 @@ class _AtletaDesempenhoPageState
     );
   }
 
-  // ============================================================
-  // BOTÃO EXPORTAR
-  // ============================================================
-
   Widget _buildBotaoExportar() {
     return SizedBox(
       width: double.infinity,
@@ -1223,10 +1085,6 @@ class _AtletaDesempenhoPageState
   }
 }
 
-// ================================================================
-// LEGENDA DO GRÁFICO
-// ================================================================
-
 class _LegendaGrafico extends StatelessWidget {
   final String texto;
 
@@ -1245,10 +1103,6 @@ class _LegendaGrafico extends StatelessWidget {
     );
   }
 }
-
-// ================================================================
-// PAINTER - GRÁFICO DE LINHA
-// ================================================================
 
 class _GraficoLinhaPainter
     extends CustomPainter {
@@ -1367,10 +1221,6 @@ class _GraficoLinhaPainter
   }
 }
 
-// ================================================================
-// PAINTER - GRÁFICO DE AVALIAÇÃO
-// ================================================================
-
 class _GraficoAvaliacaoPainter
     extends CustomPainter {
   @override
@@ -1475,10 +1325,6 @@ class _GraficoAvaliacaoPainter
     return false;
   }
 }
-
-// ================================================================
-// PAINTER - GRÁFICO DE BARRAS
-// ================================================================
 
 class _GraficoBarrasPainter
     extends CustomPainter {

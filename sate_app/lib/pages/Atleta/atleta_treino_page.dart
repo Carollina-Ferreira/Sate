@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../assets/menu_inferior_atleta.dart';
-import 'atleta_home_page.dart';
-import 'atleta_desempenho_page.dart';
-import 'atleta_feed_page.dart';
-import 'atleta_perfil_page.dart';
 import 'atleta_notificacao_page.dart';
 
 class AtletaTreinoPage extends StatefulWidget {
@@ -193,54 +188,6 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           ),
         ),
       ),
-      bottomNavigationBar: MenuInferiorAtleta(
-        indiceSelecionado: 1,
-        onItemSelecionado: (index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaHomePage(),
-              ),
-            );
-            return;
-          }
-
-          if (index == 1) {
-            return;
-          }
-
-          if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaDesempenhoPage(),
-              ),
-            );
-            return;
-          }
-
-          if (index == 3) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaFeedPage(),
-              ),
-            );
-            return;
-          }
-
-          if (index == 4) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaPerfilPage(),
-              ),
-            );
-            return;
-          }
-        },
-      ),
     );
   }
 
@@ -361,7 +308,6 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
 
     final quantidadeDias = ultimoDia.day;
-
     final primeiroDiaSemana = primeiroDia.weekday;
 
     final List<Widget> dias = [];
@@ -425,9 +371,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   ),
                 ),
               ),
-
               const SizedBox(width: 10),
-
               Expanded(
                 child: Center(
                   child: Text(
@@ -440,9 +384,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   ),
                 ),
               ),
-
               const SizedBox(width: 10),
-
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -536,7 +478,6 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
 
     final int? indiceTreino = _getIndiceTreino(data);
-
     final bool temTreino = indiceTreino != null;
 
     return GestureDetector(
@@ -576,9 +517,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                     : Colors.black87,
               ),
             ),
-
             const SizedBox(height: 5),
-
             Container(
               width: 6,
               height: 6,
@@ -641,9 +580,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 size: 27,
               ),
             ),
-
             const SizedBox(height: 12),
-
             Text(
               _formatarData(diaSelecionado),
               style: const TextStyle(
@@ -652,9 +589,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 color: Colors.black87,
               ),
             ),
-
             const SizedBox(height: 5),
-
             Text(
               'Nenhum treino programado para este dia.',
               textAlign: TextAlign.center,
@@ -706,9 +641,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   size: 21,
                 ),
               ),
-
               const SizedBox(width: 11),
-
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -720,9 +653,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                         color: Colors.grey.shade600,
                       ),
                     ),
-
                     const SizedBox(height: 3),
-
                     const Text(
                       'Treino programado',
                       style: TextStyle(
@@ -765,9 +696,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   size: 23,
                 ),
               ),
-
               const SizedBox(width: 12),
-
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -790,9 +719,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 7),
-
                     Text(
                       treino['titulo'],
                       style: const TextStyle(
@@ -804,7 +731,6 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   ],
                 ),
               ),
-
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 9,
@@ -839,9 +765,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 size: 15,
                 color: Colors.grey.shade600,
               ),
-
               const SizedBox(width: 5),
-
               Text(
                 treino['horario'],
                 style: TextStyle(
@@ -849,17 +773,13 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   color: Colors.grey.shade600,
                 ),
               ),
-
               const SizedBox(width: 14),
-
               Icon(
                 Icons.timelapse_rounded,
                 size: 15,
                 color: Colors.grey.shade600,
               ),
-
               const SizedBox(width: 5),
-
               Text(
                 treino['duracao'],
                 style: TextStyle(
@@ -902,9 +822,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(width: 5),
-
                   Icon(
                     mostrandoDetalhes
                         ? Icons.keyboard_arrow_up_rounded
@@ -960,9 +878,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                         color: Colors.grey.shade600,
                       ),
                     ),
-
                     const SizedBox(height: 4),
-
                     Text(
                       treino['titulo'],
                       style: const TextStyle(
@@ -974,7 +890,6 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   ],
                 ),
               ),
-
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -1011,7 +926,6 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   _formatarData(diaSelecionado),
                 ),
               ),
-
               Expanded(
                 child: _buildInfoItem(
                   Icons.access_time_rounded,
@@ -1019,7 +933,6 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   treino['horario'],
                 ),
               ),
-
               Expanded(
                 child: _buildInfoItem(
                   Icons.timelapse_rounded,
@@ -1066,7 +979,6 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   ),
                 ),
               ),
-
               Text(
                 '${treino['exercicios'].length} exercícios',
                 style: TextStyle(
@@ -1154,9 +1066,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           size: 17,
           color: verde,
         ),
-
         const SizedBox(height: 5),
-
         Text(
           titulo,
           style: TextStyle(
@@ -1164,9 +1074,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             color: Colors.grey.shade500,
           ),
         ),
-
         const SizedBox(height: 2),
-
         Text(
           valor,
           style: const TextStyle(
@@ -1211,9 +1119,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               ),
             ),
           ),
-
           const SizedBox(width: 11),
-
           Container(
             width: 35,
             height: 35,
@@ -1227,9 +1133,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               color: Colors.black54,
             ),
           ),
-
           const SizedBox(width: 10),
-
           Expanded(
             child: Column(
               crossAxisAlignment:
@@ -1243,9 +1147,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                     color: Colors.black87,
                   ),
                 ),
-
                 const SizedBox(height: 3),
-
                 Text(
                   '${exercicio['series']} • ${exercicio['descricao']}',
                   style: TextStyle(
@@ -1256,7 +1158,6 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               ],
             ),
           ),
-
           const Icon(
             Icons.chevron_right_rounded,
             size: 20,

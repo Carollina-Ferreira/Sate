@@ -38,32 +38,28 @@ interface PartidaBackend {
 
   data: string;
 
-  local?: string | null;
-
-  campeonato?: string | null;
-
-  rodada?: string | null;
-
-  observacoes?: string | null;
-
   status:
     | 'AGENDADA'
     | 'EM_ANDAMENTO'
     | 'FINALIZADA'
     | 'CANCELADA';
 
-  golsEquipe?: number | null;
+  golsEquipe?:
+    | number
+    | null;
 
-  golsAdversario?: number | null;
+  golsAdversario?:
+    | number
+    | null;
 
   equipe: EquipeBackend;
 }
 
 
-interface Estatistica {
+interface EstatisticaEquipe {
   nome: string;
 
-  valor: number | null;
+  valor: number;
 
   formato:
     | 'numero'
@@ -71,71 +67,53 @@ interface Estatistica {
 }
 
 
-/* ============================================================
-   DATA
-============================================================ */
+interface ResumoEquipe {
+  jogos: number;
 
-function formatarData(
-  data: string,
-) {
-  if (!data) {
-    return 'Data não informada';
-  }
+  vitorias: number;
 
-  const dataLimpa =
-    data.includes('T')
-      ? data.split('T')[0]
-      : data;
+  empates: number;
 
-  const partes =
-    dataLimpa.split('-');
+  derrotas: number;
 
-  if (
-    partes.length !== 3
-  ) {
-    return data;
-  }
+  pontosFeitos: number;
 
-  return `${partes[2]}/${partes[1]}/${partes[0]}`;
+  pontosSofridos: number;
+
+  saldo: number;
+
+  aproveitamento: number;
 }
 
 
 /* ============================================================
-   STATUS
+   TOKEN
 ============================================================ */
 
-function formatarStatus(
-  status: PartidaBackend['status'],
-) {
-  switch (status) {
-    case 'AGENDADA':
-      return 'Agendada';
-
-    case 'EM_ANDAMENTO':
-      return 'Em andamento';
-
-    case 'FINALIZADA':
-      return 'Finalizada';
-
-    case 'CANCELADA':
-      return 'Cancelada';
-
-    default:
-      return status;
-  }
+function obterToken() {
+  return (
+    localStorage.getItem(
+      'token',
+    ) ||
+    sessionStorage.getItem(
+      'token',
+    )
+  );
 }
 
 
 /* ============================================================
-   PEGAR ERRO DA API
+   ERRO
 ============================================================ */
 
 function pegarMensagemErro(
   dados: unknown,
-  padrao: string,
+
+  mensagemPadrao: string,
 ) {
   if (
-    typeof dados === 'object' &&
+    typeof dados ===
+      'object' &&
     dados !== null
   ) {
     const objeto =
@@ -144,12 +122,6 @@ function pegarMensagemErro(
         unknown
       >;
 
-    if (
-      typeof objeto.erro ===
-      'string'
-    ) {
-      return objeto.erro;
-    }
 
     if (
       typeof objeto.mensagem ===
@@ -157,9 +129,69 @@ function pegarMensagemErro(
     ) {
       return objeto.mensagem;
     }
+
+
+    if (
+      typeof objeto.erro ===
+      'string'
+    ) {
+      return objeto.erro;
+    }
   }
 
-  return padrao;
+
+  return mensagemPadrao;
+}
+
+
+/* ============================================================
+   EXTRAIR EQUIPES
+============================================================ */
+
+function extrairEquipes(
+  dados: unknown,
+): EquipeBackend[] {
+  if (
+    Array.isArray(
+      dados,
+    )
+  ) {
+    return dados as EquipeBackend[];
+  }
+
+
+  if (
+    typeof dados ===
+      'object' &&
+    dados !== null
+  ) {
+    const objeto =
+      dados as Record<
+        string,
+        unknown
+      >;
+
+
+    if (
+      Array.isArray(
+        objeto.equipes,
+      )
+    ) {
+      return objeto.equipes as EquipeBackend[];
+    }
+
+
+    if (
+      Array.isArray(
+        objeto.data,
+      )
+    ) {
+      return objeto.data as EquipeBackend[];
+    }
+  }
+
+
+  return [];
 }
 
 
@@ -171,13 +203,17 @@ function extrairPartidas(
   dados: unknown,
 ): PartidaBackend[] {
   if (
-    Array.isArray(dados)
+    Array.isArray(
+      dados,
+    )
   ) {
     return dados as PartidaBackend[];
   }
 
+
   if (
-    typeof dados === 'object' &&
+    typeof dados ===
+      'object' &&
     dados !== null
   ) {
     const objeto =
@@ -186,6 +222,7 @@ function extrairPartidas(
         unknown
       >;
 
+
     if (
       Array.isArray(
         objeto.partidas,
@@ -193,6 +230,7 @@ function extrairPartidas(
     ) {
       return objeto.partidas as PartidaBackend[];
     }
+
 
     if (
       Array.isArray(
@@ -203,65 +241,161 @@ function extrairPartidas(
     }
   }
 
+
   return [];
 }
 
 
 /* ============================================================
-   GERAR ESTATÍSTICAS REAIS DA PARTIDA
+   RESUMO DA EQUIPE
+============================================================ */
+
+function calcularResumoEquipe(
+  equipeId: number,
+
+  partidas:
+    PartidaBackend[],
+): ResumoEquipe {
+  /*
+    Só entram no desempenho partidas que já possuem placar.
+
+    Isso também aceita partidas antigas que tenham placar,
+    mesmo se o status antigo ainda estiver como AGENDADA.
+  */
+
+  const partidasComResultado =
+    partidas.filter(
+      (partida) =>
+        partida.equipeId ===
+          equipeId &&
+        partida.golsEquipe !==
+          null &&
+        partida.golsEquipe !==
+          undefined &&
+        partida.golsAdversario !==
+          null &&
+        partida.golsAdversario !==
+          undefined,
+    );
+
+
+  let vitorias = 0;
+
+  let empates = 0;
+
+  let derrotas = 0;
+
+  let pontosFeitos = 0;
+
+  let pontosSofridos = 0;
+
+
+  partidasComResultado.forEach(
+    (partida) => {
+      const feitos =
+        Number(
+          partida.golsEquipe,
+        );
+
+
+      const sofridos =
+        Number(
+          partida.golsAdversario,
+        );
+
+
+      pontosFeitos +=
+        feitos;
+
+
+      pontosSofridos +=
+        sofridos;
+
+
+      if (
+        feitos > sofridos
+      ) {
+        vitorias += 1;
+
+      } else if (
+        feitos === sofridos
+      ) {
+        empates += 1;
+
+      } else {
+        derrotas += 1;
+      }
+    },
+  );
+
+
+  const jogos =
+    partidasComResultado.length;
+
+
+  /*
+    Vitória = 3 pontos
+    Empate = 1 ponto
+
+    É apenas um indicador percentual para comparação.
+  */
+
+  const pontosPossiveis =
+    jogos * 3;
+
+
+  const pontosObtidos =
+    vitorias * 3 +
+    empates;
+
+
+  const aproveitamento =
+    pontosPossiveis > 0
+      ? Math.round(
+          (
+            pontosObtidos /
+            pontosPossiveis
+          ) * 100,
+        )
+      : 0;
+
+
+  return {
+    jogos,
+
+    vitorias,
+
+    empates,
+
+    derrotas,
+
+    pontosFeitos,
+
+    pontosSofridos,
+
+    saldo:
+      pontosFeitos -
+      pontosSofridos,
+
+    aproveitamento,
+  };
+}
+
+
+/* ============================================================
+   ESTATÍSTICAS
 ============================================================ */
 
 function criarEstatisticas(
-  partida: PartidaBackend,
-): Estatistica[] {
-  const placarEquipe =
-    partida.golsEquipe ??
-    null;
-
-  const placarAdversario =
-    partida.golsAdversario ??
-    null;
-
-
-  const temPlacar =
-    placarEquipe !== null &&
-    placarAdversario !== null;
-
-
-  const saldo =
-    temPlacar
-      ? placarEquipe -
-        placarAdversario
-      : null;
-
-
-  const totalPontos =
-    temPlacar
-      ? placarEquipe +
-        placarAdversario
-      : null;
-
-
-  const participacao =
-    totalPontos !== null &&
-    totalPontos > 0 &&
-    placarEquipe !== null
-      ? Math.round(
-          (
-            placarEquipe /
-            totalPontos
-          ) * 100,
-        )
-      : null;
-
-
+  resumo: ResumoEquipe,
+): EstatisticaEquipe[] {
   return [
     {
       nome:
-        'Placar da equipe',
+        'Jogos disputados',
 
       valor:
-        placarEquipe,
+        resumo.jogos,
 
       formato:
         'numero',
@@ -269,10 +403,10 @@ function criarEstatisticas(
 
     {
       nome:
-        'Placar adversário',
+        'Vitórias',
 
       valor:
-        placarAdversario,
+        resumo.vitorias,
 
       formato:
         'numero',
@@ -280,10 +414,10 @@ function criarEstatisticas(
 
     {
       nome:
-        'Saldo da partida',
+        'Empates',
 
       valor:
-        saldo,
+        resumo.empates,
 
       formato:
         'numero',
@@ -291,10 +425,54 @@ function criarEstatisticas(
 
     {
       nome:
-        'Participação no placar',
+        'Derrotas',
 
       valor:
-        participacao,
+        resumo.derrotas,
+
+      formato:
+        'numero',
+    },
+
+    {
+      nome:
+        'Pontos / gols feitos',
+
+      valor:
+        resumo.pontosFeitos,
+
+      formato:
+        'numero',
+    },
+
+    {
+      nome:
+        'Pontos / gols sofridos',
+
+      valor:
+        resumo.pontosSofridos,
+
+      formato:
+        'numero',
+    },
+
+    {
+      nome:
+        'Saldo',
+
+      valor:
+        resumo.saldo,
+
+      formato:
+        'numero',
+    },
+
+    {
+      nome:
+        'Aproveitamento',
+
+      valor:
+        resumo.aproveitamento,
 
       formato:
         'porcentagem',
@@ -307,9 +485,18 @@ function criarEstatisticas(
    COMPONENTE
 ============================================================ */
 
-const Comparacoes = () => {
+export default function Comparacoes() {
   const navigate =
     useNavigate();
+
+
+  const [
+    equipes,
+    setEquipes,
+  ] =
+    useState<
+      EquipeBackend[]
+    >([]);
 
 
   const [
@@ -322,8 +509,8 @@ const Comparacoes = () => {
 
 
   const [
-    partidaAId,
-    setPartidaAId,
+    equipeAId,
+    setEquipeAId,
   ] =
     useState<
       number | null
@@ -331,8 +518,8 @@ const Comparacoes = () => {
 
 
   const [
-    partidaBId,
-    setPartidaBId,
+    equipeBId,
+    setEquipeBId,
   ] =
     useState<
       number | null
@@ -354,111 +541,171 @@ const Comparacoes = () => {
 
 
   /* ============================================================
-     CARREGAR PARTIDAS DO BANCO
+     CARREGAR EQUIPES + PARTIDAS
   ============================================================ */
 
   useEffect(() => {
-    async function carregarPartidas() {
+    async function carregarDados() {
       try {
-        setCarregando(true);
+        setCarregando(
+          true,
+        );
 
         setErro('');
 
 
         const token =
-          localStorage.getItem(
-            'token',
-          );
+          obterToken();
 
 
         if (!token) {
-          navigate('/login');
+          navigate(
+            '/login',
+          );
 
           return;
         }
 
 
-        const resposta =
-          await fetch(
-            `${API_URL}/partidas`,
-            {
-              method: 'GET',
-
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
+        const [
+          respostaEquipes,
+          respostaPartidas,
+        ] =
+          await Promise.all([
+            fetch(
+              `${API_URL}/equipes`,
+              {
+                headers: {
+                  Authorization:
+                    `Bearer ${token}`,
+                },
               },
-            },
-          );
+            ),
 
-
-        const dados: unknown =
-          await resposta
-            .json()
-            .catch(() => []);
-
-
-        console.log(
-          'PARTIDAS EM COMPARAÇÕES:',
-          dados,
-        );
+            fetch(
+              `${API_URL}/partidas`,
+              {
+                headers: {
+                  Authorization:
+                    `Bearer ${token}`,
+                },
+              },
+            ),
+          ]);
 
 
         if (
-          resposta.status ===
-          401
+          respostaEquipes.status ===
+            401 ||
+          respostaPartidas.status ===
+            401
         ) {
           localStorage.removeItem(
             'token',
           );
 
-          navigate('/login');
+          sessionStorage.removeItem(
+            'token',
+          );
+
+          navigate(
+            '/login',
+          );
 
           return;
         }
 
 
-        if (!resposta.ok) {
+        const dadosEquipes:
+          unknown =
+          await respostaEquipes
+            .json()
+            .catch(
+              () => [],
+            );
+
+
+        const dadosPartidas:
+          unknown =
+          await respostaPartidas
+            .json()
+            .catch(
+              () => [],
+            );
+
+
+        if (
+          !respostaEquipes.ok
+        ) {
           throw new Error(
             pegarMensagemErro(
-              dados,
+              dadosEquipes,
+
+              'Erro ao carregar equipes.',
+            ),
+          );
+        }
+
+
+        if (
+          !respostaPartidas.ok
+        ) {
+          throw new Error(
+            pegarMensagemErro(
+              dadosPartidas,
+
               'Erro ao carregar partidas.',
             ),
           );
         }
 
 
-        const lista =
-          extrairPartidas(
-            dados,
+        const listaEquipes =
+          extrairEquipes(
+            dadosEquipes,
           );
 
 
+        const listaPartidas =
+          extrairPartidas(
+            dadosPartidas,
+          );
+
+
+        setEquipes(
+          listaEquipes,
+        );
+
+
         setPartidas(
-          lista,
+          listaPartidas,
         );
 
 
         if (
-          lista.length >= 1
+          listaEquipes.length >=
+          1
         ) {
-          setPartidaAId(
-            lista[0].id,
+          setEquipeAId(
+            listaEquipes[0]
+              .id,
           );
         }
 
 
         if (
-          lista.length >= 2
+          listaEquipes.length >=
+          2
         ) {
-          setPartidaBId(
-            lista[1].id,
+          setEquipeBId(
+            listaEquipes[1]
+              .id,
           );
         }
 
       } catch (error) {
         console.error(
-          'Erro ao carregar partidas:',
+          'Erro em comparações:',
           error,
         );
 
@@ -466,72 +713,108 @@ const Comparacoes = () => {
         setErro(
           error instanceof Error
             ? error.message
-            : 'Erro ao carregar partidas.',
+            : 'Não foi possível carregar os dados.',
         );
 
+
+        setEquipes([]);
 
         setPartidas([]);
 
       } finally {
-        setCarregando(false);
+        setCarregando(
+          false,
+        );
       }
     }
 
 
-    carregarPartidas();
+    carregarDados();
 
   }, [navigate]);
 
 
   /* ============================================================
-     PARTIDA A
+     EQUIPES SELECIONADAS
   ============================================================ */
 
-  const partidaA =
+  const equipeA =
     useMemo(() => {
-      if (
-        partidaAId === null
-      ) {
-        return null;
-      }
-
       return (
-        partidas.find(
-          (partida) =>
-            partida.id ===
-            partidaAId,
-        ) ??
-        null
+        equipes.find(
+          (equipe) =>
+            equipe.id ===
+            equipeAId,
+        ) ?? null
       );
+
     }, [
-      partidas,
-      partidaAId,
+      equipes,
+      equipeAId,
+    ]);
+
+
+  const equipeB =
+    useMemo(() => {
+      return (
+        equipes.find(
+          (equipe) =>
+            equipe.id ===
+            equipeBId,
+        ) ?? null
+      );
+
+    }, [
+      equipes,
+      equipeBId,
     ]);
 
 
   /* ============================================================
-     PARTIDA B
+     RESUMOS
   ============================================================ */
 
-  const partidaB =
+  const resumoA =
     useMemo(() => {
       if (
-        partidaBId === null
+        equipeAId ===
+        null
       ) {
         return null;
       }
 
-      return (
-        partidas.find(
-          (partida) =>
-            partida.id ===
-            partidaBId,
-        ) ??
-        null
+
+      return calcularResumoEquipe(
+        equipeAId,
+
+        partidas,
       );
+
     }, [
+      equipeAId,
       partidas,
-      partidaBId,
+    ]);
+
+
+  const resumoB =
+    useMemo(() => {
+      if (
+        equipeBId ===
+        null
+      ) {
+        return null;
+      }
+
+
+      return calcularResumoEquipe(
+        equipeBId,
+
+        partidas,
+      );
+
+    }, [
+      equipeBId,
+      partidas,
     ]);
 
 
@@ -541,44 +824,98 @@ const Comparacoes = () => {
 
   const estatisticasA =
     useMemo(() => {
-      if (!partidaA) {
+      if (!resumoA) {
         return [];
       }
 
+
       return criarEstatisticas(
-        partidaA,
+        resumoA,
       );
-    }, [partidaA]);
+
+    }, [resumoA]);
 
 
   const estatisticasB =
     useMemo(() => {
-      if (!partidaB) {
+      if (!resumoB) {
         return [];
       }
 
+
       return criarEstatisticas(
-        partidaB,
+        resumoB,
       );
-    }, [partidaB]);
+
+    }, [resumoB]);
 
 
   /* ============================================================
-     FORMATAR VALOR
+     ALTERAR EQUIPES
   ============================================================ */
 
-  const formatarValor = (
-    estatistica:
-      Estatistica,
-  ) => {
+  function alterarEquipeA(
+    id: number,
+  ) {
     if (
-      estatistica.valor ===
-      null
+      id === equipeBId
     ) {
-      return '—';
+      return;
     }
 
 
+    setEquipeAId(id);
+  }
+
+
+  function alterarEquipeB(
+    id: number,
+  ) {
+    if (
+      id === equipeAId
+    ) {
+      return;
+    }
+
+
+    setEquipeBId(id);
+  }
+
+
+  function inverterEquipes() {
+    if (
+      equipeAId ===
+        null ||
+      equipeBId ===
+        null
+    ) {
+      return;
+    }
+
+
+    const antigaA =
+      equipeAId;
+
+
+    setEquipeAId(
+      equipeBId,
+    );
+
+
+    setEquipeBId(
+      antigaA,
+    );
+  }
+
+
+  /* ============================================================
+     FORMATAR
+  ============================================================ */
+
+  function formatarValor(
+    estatistica:
+      EstatisticaEquipe,
+  ) {
     if (
       estatistica.formato ===
       'porcentagem'
@@ -588,47 +925,36 @@ const Comparacoes = () => {
 
 
     return estatistica.valor;
-  };
+  }
 
 
   /* ============================================================
      BARRAS
   ============================================================ */
 
-  const calcularBarra = (
-    valorA:
-      number | null,
+  function calcularBarra(
+    valorA: number,
 
-    valorB:
-      number | null,
-  ) => {
-    if (
-      valorA === null &&
-      valorB === null
-    ) {
-      return {
-        barraA: 0,
-        barraB: 0,
-      };
-    }
-
-
+    valorB: number,
+  ) {
     const absolutoA =
       Math.abs(
-        valorA ?? 0,
+        valorA,
       );
 
 
     const absolutoB =
       Math.abs(
-        valorB ?? 0,
+        valorB,
       );
 
 
     const maiorValor =
       Math.max(
         absolutoA,
+
         absolutoB,
+
         1,
       );
 
@@ -646,71 +972,12 @@ const Comparacoes = () => {
           maiorValor
         ) * 100,
     };
-  };
-
-
-  /* ============================================================
-     INVERTER PARTIDAS
-  ============================================================ */
-
-  const inverterPartidas =
-    () => {
-      if (
-        partidaAId === null ||
-        partidaBId === null
-      ) {
-        return;
-      }
-
-
-      const antigaA =
-        partidaAId;
-
-
-      setPartidaAId(
-        partidaBId,
-      );
-
-
-      setPartidaBId(
-        antigaA,
-      );
-    };
-
-
-  /* ============================================================
-     ALTERAR PARTIDA A
-  ============================================================ */
-
-  function alterarPartidaA(
-    id: number,
-  ) {
-    if (
-      id === partidaBId
-    ) {
-      return;
-    }
-
-    setPartidaAId(id);
   }
 
 
   /* ============================================================
-     ALTERAR PARTIDA B
+     RENDER
   ============================================================ */
-
-  function alterarPartidaB(
-    id: number,
-  ) {
-    if (
-      id === partidaAId
-    ) {
-      return;
-    }
-
-    setPartidaBId(id);
-  }
-
 
   return (
     <main
@@ -719,705 +986,653 @@ const Comparacoes = () => {
       }
     >
 
-      {/* ======================================================
-          CABEÇALHO
-      ====================================================== */}
+      {/* CABEÇALHO */}
 
       <div
         className={
           styles.pageHeader
         }
       >
-        <div>
-          <h1>
-            Comparações
-          </h1>
+        <h1>
+          Comparações
+        </h1>
 
-          <p>
-            Compare o desempenho entre duas partidas.
-          </p>
-        </div>
+        <p>
+          Compare o desempenho entre duas equipes.
+        </p>
       </div>
 
 
-      {/* ======================================================
-          CARREGANDO
-      ====================================================== */}
+      {/* CARREGANDO */}
 
       {carregando && (
+
         <section
           className={
             styles.stateCard
           }
         >
           <h2>
-            Carregando partidas...
+            Carregando equipes...
           </h2>
 
           <p>
-            Buscando suas partidas no banco de dados.
+            Buscando os dados das suas equipes.
           </p>
         </section>
+
       )}
 
 
-      {/* ======================================================
-          ERRO
-      ====================================================== */}
+      {/* ERRO */}
 
       {!carregando &&
         erro && (
-          <section
-            className={
-              styles.stateCard
-            }
-          >
-            <h2>
-              Não foi possível carregar
-            </h2>
 
-            <p>
-              {erro}
-            </p>
-          </section>
-        )}
+        <section
+          className={
+            styles.stateCard
+          }
+        >
+          <h2>
+            Não foi possível carregar
+          </h2>
+
+          <p>
+            {erro}
+          </p>
+        </section>
+
+      )}
 
 
-      {/* ======================================================
-          NENHUMA PARTIDA
-      ====================================================== */}
+      {/* NENHUMA EQUIPE */}
 
       {!carregando &&
         !erro &&
-        partidas.length ===
+        equipes.length ===
           0 && (
-          <section
-            className={
-              styles.stateCard
-            }
-          >
-            <h2>
-              Nenhuma partida cadastrada
-            </h2>
 
-            <p>
-              Cadastre partidas para começar a comparar.
-            </p>
-          </section>
-        )}
+        <section
+          className={
+            styles.stateCard
+          }
+        >
+          <h2>
+            Nenhuma equipe cadastrada
+          </h2>
+
+          <p>
+            Cadastre equipes para começar a comparar.
+          </p>
+        </section>
+
+      )}
 
 
-      {/* ======================================================
-          APENAS UMA PARTIDA
-      ====================================================== */}
+      {/* SÓ UMA EQUIPE */}
 
       {!carregando &&
         !erro &&
-        partidas.length ===
+        equipes.length ===
           1 && (
-          <>
-            <section
+
+        <>
+          <section
+            className={
+              styles.selectionCard
+            }
+          >
+
+            <div
               className={
-                styles.selectionCard
+                styles.selectGroup
               }
             >
-              <div
-                className={
-                  styles.selectGroup
-                }
-              >
-                <label
-                  htmlFor="partida-a"
-                >
-                  Partida A
-                </label>
+              <label>
+                Equipe A
+              </label>
 
-                <select
-                  id="partida-a"
-                  value={
-                    partidaAId ??
-                    ''
-                  }
-                  onChange={(
-                    event,
-                  ) =>
-                    alterarPartidaA(
-                      Number(
-                        event.target
-                          .value,
-                      ),
-                    )
-                  }
-                >
-                  {partidas.map(
-                    (partida) => (
-                      <option
-                        key={
-                          partida.id
-                        }
-                        value={
-                          partida.id
-                        }
-                      >
-                        {
-                          partida
-                            .equipe
-                            .nome
-                        }{' '}
-                        vs{' '}
-                        {
-                          partida
-                            .adversario
-                        }
-                      </option>
-                    ),
-                  )}
-                </select>
-              </div>
-
-
-              <button
-                type="button"
-                className={
-                  styles.switchButton
+              <select
+                value={
+                  equipeAId ??
+                  ''
                 }
                 disabled
               >
-                <ArrowLeftRight
-                  size={18}
-                />
-              </button>
+                <option>
+                  {
+                    equipes[0]
+                      .nome
+                  }
+                </option>
+              </select>
+            </div>
 
 
-              <div
-                className={
-                  styles.selectGroup
-                }
-              >
-                <label>
-                  Partida B
-                </label>
-
-                <select
-                  disabled
-                  value=""
-                >
-                  <option>
-                    Cadastre outra partida
-                  </option>
-                </select>
-              </div>
-            </section>
-
-
-            <section
+            <button
+              type="button"
               className={
-                styles.stateCard
+                styles.switchButton
+              }
+              disabled
+            >
+              <ArrowLeftRight
+                size={18}
+              />
+            </button>
+
+
+            <div
+              className={
+                styles.selectGroup
               }
             >
-              <h2>
-                Falta mais uma partida
-              </h2>
+              <label>
+                Equipe B
+              </label>
 
-              <p>
-                É necessário ter pelo menos duas partidas cadastradas para realizar uma comparação.
-              </p>
-            </section>
-          </>
-        )}
+              <select
+                value=""
+                disabled
+              >
+                <option>
+                  Cadastre outra equipe
+                </option>
+              </select>
+            </div>
+
+          </section>
 
 
-      {/* ======================================================
-          COMPARAÇÃO
-      ====================================================== */}
+          <section
+            className={
+              styles.stateCard
+            }
+          >
+            <h2>
+              Falta mais uma equipe
+            </h2>
+
+            <p>
+              É necessário ter pelo menos duas equipes cadastradas para comparar.
+            </p>
+          </section>
+        </>
+
+      )}
+
+
+      {/* COMPARAÇÃO */}
 
       {!carregando &&
         !erro &&
-        partidas.length >=
+        equipes.length >=
           2 &&
-        partidaA &&
-        partidaB && (
-          <>
+        equipeA &&
+        equipeB &&
+        resumoA &&
+        resumoB && (
 
-            {/* ==================================================
-                SELEÇÃO
-            ================================================== */}
+        <>
 
-            <section
+          {/* SELEÇÃO */}
+
+          <section
+            className={
+              styles.selectionCard
+            }
+          >
+
+            <div
               className={
-                styles.selectionCard
+                styles.selectGroup
               }
             >
-
-              <div
-                className={
-                  styles.selectGroup
-                }
+              <label
+                htmlFor="equipe-a"
               >
-                <label
-                  htmlFor="partida-a"
-                >
-                  Partida A
-                </label>
+                Equipe A
+              </label>
 
-                <select
-                  id="partida-a"
-                  value={
-                    partidaAId ??
-                    ''
-                  }
-                  onChange={(
-                    event,
-                  ) =>
-                    alterarPartidaA(
-                      Number(
-                        event.target
-                          .value,
-                      ),
-                    )
-                  }
-                >
-                  {partidas.map(
-                    (partida) => (
-                      <option
-                        key={
-                          partida.id
-                        }
-                        value={
-                          partida.id
-                        }
-                        disabled={
-                          partida.id ===
-                          partidaBId
-                        }
-                      >
-                        {
-                          partida
-                            .equipe
-                            .nome
-                        }{' '}
-                        vs{' '}
-                        {
-                          partida
-                            .adversario
-                        }
-                      </option>
+
+              <select
+                id="equipe-a"
+                value={
+                  equipeAId ??
+                  ''
+                }
+                onChange={(
+                  event,
+                ) =>
+                  alterarEquipeA(
+                    Number(
+                      event.target
+                        .value,
                     ),
-                  )}
-                </select>
-              </div>
-
-
-              <button
-                type="button"
-                className={
-                  styles.switchButton
-                }
-                onClick={
-                  inverterPartidas
-                }
-                title="Inverter partidas"
-                aria-label="Inverter partidas"
-              >
-                <ArrowLeftRight
-                  size={18}
-                />
-              </button>
-
-
-              <div
-                className={
-                  styles.selectGroup
+                  )
                 }
               >
-                <label
-                  htmlFor="partida-b"
-                >
-                  Partida B
-                </label>
 
-                <select
-                  id="partida-b"
-                  value={
-                    partidaBId ??
-                    ''
-                  }
-                  onChange={(
-                    event,
-                  ) =>
-                    alterarPartidaB(
-                      Number(
-                        event.target
-                          .value,
-                      ),
-                    )
-                  }
-                >
-                  {partidas.map(
-                    (partida) => (
-                      <option
-                        key={
-                          partida.id
-                        }
-                        value={
-                          partida.id
-                        }
-                        disabled={
-                          partida.id ===
-                          partidaAId
-                        }
-                      >
-                        {
-                          partida
-                            .equipe
-                            .nome
-                        }{' '}
-                        vs{' '}
-                        {
-                          partida
-                            .adversario
-                        }
-                      </option>
-                    ),
-                  )}
-                </select>
-              </div>
+                {equipes.map(
+                  (equipe) => (
 
-            </section>
+                    <option
+                      key={
+                        equipe.id
+                      }
+                      value={
+                        equipe.id
+                      }
+                      disabled={
+                        equipe.id ===
+                        equipeBId
+                      }
+                    >
+                      {
+                        equipe.nome
+                      }
+                    </option>
+
+                  ),
+                )}
+
+              </select>
+            </div>
 
 
-            {/* ==================================================
-                CARD DA COMPARAÇÃO
-            ================================================== */}
-
-            <section
+            <button
+              type="button"
               className={
-                styles.comparison
+                styles.switchButton
               }
+              onClick={
+                inverterEquipes
+              }
+              title="Inverter equipes"
+              aria-label="Inverter equipes"
             >
-
-              <div
-                className={
-                  styles.matchHeader
-                }
-              >
-
-                {/* PARTIDA A */}
-
-                <div
-                  className={
-                    styles.matchLeft
-                  }
-                >
-                  <span
-                    className={
-                      styles.matchLabel
-                    }
-                  >
-                    Partida A
-                  </span>
-
-
-                  <h2>
-                    {
-                      partidaA.equipe
-                        .nome
-                    }
-
-                    <span>
-                      {' '}
-                      vs{' '}
-                    </span>
-
-                    {
-                      partidaA.adversario
-                    }
-                  </h2>
-
-
-                  <div
-                    className={
-                      styles.matchScore
-                    }
-                  >
-                    {partidaA.golsEquipe ??
-                      '—'}
-
-                    <span>
-                      ×
-                    </span>
-
-                    {partidaA.golsAdversario ??
-                      '—'}
-                  </div>
-
-
-                  <div
-                    className={
-                      styles.matchMeta
-                    }
-                  >
-                    <span>
-                      {
-                        partidaA
-                          .equipe
-                          .modalidade
-                      }
-                    </span>
-
-                    <span>
-                      {formatarData(
-                        partidaA.data,
-                      )}
-                    </span>
-
-                    <span>
-                      {formatarStatus(
-                        partidaA.status,
-                      )}
-                    </span>
-                  </div>
-                </div>
-
-
-                {/* PARTIDA B */}
-
-                <div
-                  className={
-                    styles.matchRight
-                  }
-                >
-                  <span
-                    className={
-                      styles.matchLabel
-                    }
-                  >
-                    Partida B
-                  </span>
-
-
-                  <h2>
-                    {
-                      partidaB.equipe
-                        .nome
-                    }
-
-                    <span>
-                      {' '}
-                      vs{' '}
-                    </span>
-
-                    {
-                      partidaB.adversario
-                    }
-                  </h2>
-
-
-                  <div
-                    className={
-                      styles.matchScore
-                    }
-                  >
-                    {partidaB.golsEquipe ??
-                      '—'}
-
-                    <span>
-                      ×
-                    </span>
-
-                    {partidaB.golsAdversario ??
-                      '—'}
-                  </div>
-
-
-                  <div
-                    className={
-                      styles.matchMeta
-                    }
-                  >
-                    <span>
-                      {
-                        partidaB
-                          .equipe
-                          .modalidade
-                      }
-                    </span>
-
-                    <span>
-                      {formatarData(
-                        partidaB.data,
-                      )}
-                    </span>
-
-                    <span>
-                      {formatarStatus(
-                        partidaB.status,
-                      )}
-                    </span>
-                  </div>
-                </div>
-
-              </div>
-
-
-              <div
-                className={
-                  styles.divider
-                }
+              <ArrowLeftRight
+                size={18}
               />
+            </button>
 
 
-              {/* ==================================================
-                  ESTATÍSTICAS
-              ================================================== */}
+            <div
+              className={
+                styles.selectGroup
+              }
+            >
+              <label
+                htmlFor="equipe-b"
+              >
+                Equipe B
+              </label>
+
+
+              <select
+                id="equipe-b"
+                value={
+                  equipeBId ??
+                  ''
+                }
+                onChange={(
+                  event,
+                ) =>
+                  alterarEquipeB(
+                    Number(
+                      event.target
+                        .value,
+                    ),
+                  )
+                }
+              >
+
+                {equipes.map(
+                  (equipe) => (
+
+                    <option
+                      key={
+                        equipe.id
+                      }
+                      value={
+                        equipe.id
+                      }
+                      disabled={
+                        equipe.id ===
+                        equipeAId
+                      }
+                    >
+                      {
+                        equipe.nome
+                      }
+                    </option>
+
+                  ),
+                )}
+
+              </select>
+            </div>
+
+          </section>
+
+
+          {/* CARD COMPARAÇÃO */}
+
+          <section
+            className={
+              styles.comparison
+            }
+          >
+
+            <div
+              className={
+                styles.matchHeader
+              }
+            >
+
+              {/* EQUIPE A */}
 
               <div
                 className={
-                  styles.stats
+                  styles.matchLeft
                 }
               >
-                {estatisticasA.map(
-                  (
-                    estatisticaA,
-                    index,
-                  ) => {
 
-                    const estatisticaB =
-                      estatisticasB[
-                        index
-                      ];
+                <span
+                  className={
+                    styles.matchLabel
+                  }
+                >
+                  Equipe A
+                </span>
 
 
-                    if (
-                      !estatisticaB
-                    ) {
-                      return null;
+                <h2>
+                  {
+                    equipeA.nome
+                  }
+                </h2>
+
+
+                <div
+                  className={
+                    styles.teamSummary
+                  }
+                >
+                  <strong>
+                    {
+                      resumoA.vitorias
                     }
+                  </strong>
+
+                  <span>
+                    vitórias em{' '}
+                    {
+                      resumoA.jogos
+                    }{' '}
+                    jogo(s)
+                  </span>
+                </div>
 
 
-                    const {
-                      barraA,
-                      barraB,
-                    } =
-                      calcularBarra(
-                        estatisticaA.valor,
-                        estatisticaB.valor,
-                      );
+                <div
+                  className={
+                    styles.matchMeta
+                  }
+                >
+                  <span>
+                    {
+                      equipeA.modalidade
+                    }
+                  </span>
+
+                  {equipeA.categoria && (
+                    <span>
+                      {
+                        equipeA.categoria
+                      }
+                    </span>
+                  )}
+                </div>
+
+              </div>
 
 
-                    return (
+              {/* EQUIPE B */}
+
+              <div
+                className={
+                  styles.matchRight
+                }
+              >
+
+                <span
+                  className={
+                    styles.matchLabel
+                  }
+                >
+                  Equipe B
+                </span>
+
+
+                <h2>
+                  {
+                    equipeB.nome
+                  }
+                </h2>
+
+
+                <div
+                  className={
+                    styles.teamSummary
+                  }
+                >
+                  <strong>
+                    {
+                      resumoB.vitorias
+                    }
+                  </strong>
+
+                  <span>
+                    vitórias em{' '}
+                    {
+                      resumoB.jogos
+                    }{' '}
+                    jogo(s)
+                  </span>
+                </div>
+
+
+                <div
+                  className={
+                    styles.matchMeta
+                  }
+                >
+                  <span>
+                    {
+                      equipeB.modalidade
+                    }
+                  </span>
+
+                  {equipeB.categoria && (
+                    <span>
+                      {
+                        equipeB.categoria
+                      }
+                    </span>
+                  )}
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div
+              className={
+                styles.divider
+              }
+            />
+
+
+            {/* ESTATÍSTICAS */}
+
+            <div
+              className={
+                styles.stats
+              }
+            >
+
+              {estatisticasA.map(
+                (
+                  estatisticaA,
+                  index,
+                ) => {
+
+                  const estatisticaB =
+                    estatisticasB[
+                      index
+                    ];
+
+
+                  if (
+                    !estatisticaB
+                  ) {
+                    return null;
+                  }
+
+
+                  const {
+                    barraA,
+                    barraB,
+                  } =
+                    calcularBarra(
+                      estatisticaA.valor,
+
+                      estatisticaB.valor,
+                    );
+
+
+                  return (
+
+                    <div
+                      className={
+                        styles.statRow
+                      }
+                      key={
+                        estatisticaA.nome
+                      }
+                    >
+
                       <div
                         className={
-                          styles.statRow
+                          styles.statValues
                         }
-                        key={
-                          estatisticaA.nome
+                      >
+
+                        <strong
+                          className={
+                            styles.valueA
+                          }
+                        >
+                          {
+                            formatarValor(
+                              estatisticaA,
+                            )
+                          }
+                        </strong>
+
+
+                        <span
+                          className={
+                            styles.statName
+                          }
+                        >
+                          {
+                            estatisticaA.nome
+                          }
+                        </span>
+
+
+                        <strong
+                          className={
+                            styles.valueB
+                          }
+                        >
+                          {
+                            formatarValor(
+                              estatisticaB,
+                            )
+                          }
+                        </strong>
+
+                      </div>
+
+
+                      <div
+                        className={
+                          styles.barArea
                         }
                       >
 
                         <div
                           className={
-                            styles.statValues
+                            styles.barSideLeft
                           }
                         >
-
-                          <strong
+                          <div
                             className={
-                              styles.valueA
+                              styles.barA
                             }
-                          >
-                            {formatarValor(
-                              estatisticaA,
-                            )}
-                          </strong>
-
-
-                          <span
-                            className={
-                              styles.statName
-                            }
-                          >
-                            {
-                              estatisticaA.nome
-                            }
-                          </span>
-
-
-                          <strong
-                            className={
-                              styles.valueB
-                            }
-                          >
-                            {formatarValor(
-                              estatisticaB,
-                            )}
-                          </strong>
-
+                            style={{
+                              width:
+                                `${barraA}%`,
+                            }}
+                          />
                         </div>
 
 
                         <div
                           className={
-                            styles.barArea
+                            styles.barCenter
+                          }
+                        />
+
+
+                        <div
+                          className={
+                            styles.barSideRight
                           }
                         >
-
                           <div
                             className={
-                              styles.barSideLeft
+                              styles.barB
                             }
-                          >
-                            <div
-                              className={
-                                styles.barA
-                              }
-                              style={{
-                                width:
-                                  `${barraA}%`,
-                              }}
-                            />
-                          </div>
-
-
-                          <div
-                            className={
-                              styles.barCenter
-                            }
+                            style={{
+                              width:
+                                `${barraB}%`,
+                            }}
                           />
-
-
-                          <div
-                            className={
-                              styles.barSideRight
-                            }
-                          >
-                            <div
-                              className={
-                                styles.barB
-                              }
-                              style={{
-                                width:
-                                  `${barraB}%`,
-                              }}
-                            />
-                          </div>
-
                         </div>
 
                       </div>
-                    );
-                  },
-                )}
-              </div>
 
-            </section>
+                    </div>
 
-          </>
-        )}
+                  );
+
+                },
+              )}
+
+            </div>
+
+          </section>
+
+        </>
+
+      )}
 
     </main>
   );
-};
-
-
-export default Comparacoes;
+}

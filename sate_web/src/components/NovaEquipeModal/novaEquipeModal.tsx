@@ -23,15 +23,22 @@ import type {
 
 import styles from './novaEquipeModal.module.css';
 
+
+/* =====================================
+   TIPOS
+===================================== */
+
 export interface AtletaDisponivel {
   id: number;
-  nome: string | null;
+  nome: string;
   categoria?: string | null;
+
   usuario?: {
     email?: string;
     avatarUrl?: string | null;
-  };
+  } | null;
 }
+
 
 export interface NovaEquipeData {
   nome: string;
@@ -43,8 +50,10 @@ export interface NovaEquipeData {
   imagemPreview: string | null;
 }
 
+
 interface NovaEquipeModalProps {
   open: boolean;
+
   onClose: () => void;
 
   onCreate: (
@@ -56,13 +65,10 @@ interface NovaEquipeModalProps {
   atletasDisponiveis?: AtletaDisponivel[];
 }
 
-const esportes = [
-  'Futebol',
-  'Basquete',
-  'Vôlei',
-  'Rugby',
-  'Tênis',
-];
+
+/* =====================================
+   CORES
+===================================== */
 
 const cores = [
   '#16A875',
@@ -73,6 +79,11 @@ const cores = [
   '#D652A2',
 ];
 
+
+/* =====================================
+   DIAS DA SEMANA
+===================================== */
+
 const diasSemana = [
   'Dom',
   'Seg',
@@ -82,6 +93,11 @@ const diasSemana = [
   'Sex',
   'Sáb',
 ];
+
+
+/* =====================================
+   FORMATAR PARTIDA
+===================================== */
 
 const formatarProximaPartida = (
   adversario: string,
@@ -99,12 +115,11 @@ const formatarProximaPartida = (
   const [ano, mes, dia] =
     data.split('-').map(Number);
 
-  const dataPartida =
-    new Date(
-      ano,
-      mes - 1,
-      dia,
-    );
+  const dataPartida = new Date(
+    ano,
+    mes - 1,
+    dia,
+  );
 
   const diaSemana =
     diasSemana[
@@ -122,32 +137,38 @@ const formatarProximaPartida = (
   return `vs ${adversario.trim()} (${diaSemana}, ${horarioFormatado})`;
 };
 
+
+/* =====================================
+   COMPONENTE
+===================================== */
+
 const NovaEquipeModal = ({
   open,
   onClose,
   onCreate,
+
   modalidadeInicial = 'Futebol',
+
   atletasDisponiveis = [],
 }: NovaEquipeModalProps) => {
+
+  /* =====================================
+     REFS
+  ===================================== */
+
   const fileInputRef =
     useRef<HTMLInputElement>(null);
 
   const colorInputRef =
     useRef<HTMLInputElement>(null);
 
+
+  /* =====================================
+     ESTADOS
+  ===================================== */
+
   const [nome, setNome] =
     useState('');
-
-  const [
-    modalidade,
-    setModalidade,
-  ] = useState(
-    esportes.includes(
-      modalidadeInicial,
-    )
-      ? modalidadeInicial
-      : 'Futebol',
-  );
 
   const [
     categoria,
@@ -192,7 +213,22 @@ const NovaEquipeModal = ({
     setImagemPreview,
   ] = useState<string | null>(null);
 
-  const proximaPartidaPreview =
+
+  /* =====================================
+     MODALIDADE
+  ===================================== */
+
+  const modalidade =
+    modalidadeInicial === 'Todos'
+      ? 'Futebol'
+      : modalidadeInicial;
+
+
+  /* =====================================
+     PRÓXIMA PARTIDA
+  ===================================== */
+
+  const proximaPartida =
     useMemo(() => {
       return formatarProximaPartida(
         adversario,
@@ -205,8 +241,18 @@ const NovaEquipeModal = ({
       horarioPartida,
     ]);
 
+
+  /* =====================================
+     COR PERSONALIZADA
+  ===================================== */
+
   const corEhPersonalizada =
     !cores.includes(cor);
+
+
+  /* =====================================
+     FILTRAR ATLETAS
+  ===================================== */
 
   const atletasFiltrados =
     useMemo(() => {
@@ -220,31 +266,51 @@ const NovaEquipeModal = ({
       }
 
       return atletasDisponiveis.filter(
-        (atleta) =>
-          atleta.nome
-            ?.toLowerCase()
-            .includes(termo) ||
-          atleta.usuario?.email
-            ?.toLowerCase()
-            .includes(termo),
+        (atleta) => {
+          const nomeAtleta =
+            atleta.nome
+              ?.toLowerCase() || '';
+
+          const categoriaAtleta =
+            atleta.categoria
+              ?.toLowerCase() || '';
+
+          const email =
+            atleta.usuario?.email
+              ?.toLowerCase() || '';
+
+          return (
+            nomeAtleta.includes(termo) ||
+            categoriaAtleta.includes(termo) ||
+            email.includes(termo)
+          );
+        },
       );
     }, [
       atletasDisponiveis,
       buscaAtleta,
     ]);
 
+
+  /* =====================================
+     VALIDAÇÃO
+  ===================================== */
+
   const formularioValido =
     useMemo(() => {
       return (
         nome.trim().length >= 2 &&
-        modalidade.trim() !== '' &&
         categoria.trim() !== ''
       );
     }, [
       nome,
-      modalidade,
       categoria,
     ]);
+
+
+  /* =====================================
+     ESC
+  ===================================== */
 
   useEffect(() => {
     if (!open) {
@@ -254,9 +320,7 @@ const NovaEquipeModal = ({
     const handleEscape = (
       event: KeyboardEvent,
     ) => {
-      if (
-        event.key === 'Escape'
-      ) {
+      if (event.key === 'Escape') {
         onClose();
       }
     };
@@ -278,11 +342,15 @@ const NovaEquipeModal = ({
       document.body.style.overflow =
         '';
     };
-  }, [open, onClose]);
+  }, [
+    open,
+    onClose,
+  ]);
 
-  if (!open) {
-    return null;
-  }
+
+  /* =====================================
+     IMAGEM
+  ===================================== */
 
   const handleImagem = (
     event: ChangeEvent<HTMLInputElement>,
@@ -294,11 +362,32 @@ const NovaEquipeModal = ({
       return;
     }
 
-    const url =
-      URL.createObjectURL(file);
+    /*
+      FileReader transforma a imagem
+      em Base64, garantindo que o
+      preview continue disponível.
+    */
 
-    setImagemPreview(url);
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (
+        typeof reader.result ===
+        'string'
+      ) {
+        setImagemPreview(
+          reader.result,
+        );
+      }
+    };
+
+    reader.readAsDataURL(file);
   };
+
+
+  /* =====================================
+     COR PERSONALIZADA
+  ===================================== */
 
   const handleCorPersonalizada = (
     event: ChangeEvent<HTMLInputElement>,
@@ -313,46 +402,48 @@ const NovaEquipeModal = ({
     setCor(novaCor);
   };
 
+
+  /* =====================================
+     SELECIONAR ATLETA
+  ===================================== */
+
   const alternarAtleta = (
     atletaId: number,
   ) => {
     setAtletasSelecionados(
-      (atletasAtuais) => {
+      (atuais) => {
         if (
-          atletasAtuais.includes(
-            atletaId,
-          )
+          atuais.includes(atletaId)
         ) {
-          return atletasAtuais.filter(
+          return atuais.filter(
             (id) =>
               id !== atletaId,
           );
         }
 
         return [
-          ...atletasAtuais,
+          ...atuais,
           atletaId,
         ];
       },
     );
   };
 
+
+  /* =====================================
+     RESET
+  ===================================== */
+
   const resetFormulario = () => {
     setNome('');
-
-    setModalidade(
-      esportes.includes(
-        modalidadeInicial,
-      )
-        ? modalidadeInicial
-        : 'Futebol',
-    );
 
     setCategoria(
       'Principal',
     );
 
-    setAtletasSelecionados([]);
+    setAtletasSelecionados(
+      [],
+    );
 
     setBuscaAtleta('');
 
@@ -363,33 +454,39 @@ const NovaEquipeModal = ({
     );
 
     setAdversario('');
+
     setDataPartida('');
+
     setHorarioPartida('');
 
     setImagemPreview(null);
   };
 
+
+  /* =====================================
+     FECHAR
+  ===================================== */
+
   const fecharModal = () => {
     resetFormulario();
+
     onClose();
   };
+
+
+  /* =====================================
+     CRIAR
+  ===================================== */
 
   const criarEquipe = () => {
     if (!formularioValido) {
       return;
     }
 
-    const proximaPartida =
-      dataPartida &&
-      horarioPartida
-        ? `${dataPartida}T${horarioPartida}:00`
-        : null;
-
     onCreate({
       nome: nome.trim(),
 
-      modalidade:
-        modalidade.trim(),
+      modalidade,
 
       categoria:
         categoria.trim(),
@@ -399,7 +496,13 @@ const NovaEquipeModal = ({
 
       cor,
 
-      proximaPartida,
+      proximaPartida:
+        adversario.trim()
+          ? dataPartida &&
+            horarioPartida
+            ? `${dataPartida}T${horarioPartida}:00`
+            : proximaPartida
+          : null,
 
       imagemPreview,
     });
@@ -408,6 +511,20 @@ const NovaEquipeModal = ({
 
     onClose();
   };
+
+
+  /* =====================================
+     NÃO ABRIR
+  ===================================== */
+
+  if (!open) {
+    return null;
+  }
+
+
+  /* =====================================
+     RENDER
+  ===================================== */
 
   return (
     <div
@@ -420,7 +537,10 @@ const NovaEquipeModal = ({
           event.stopPropagation()
         }
       >
-        {/* HEADER */}
+
+        {/* =================================
+            HEADER
+        ================================= */}
 
         <div
           className={
@@ -442,8 +562,7 @@ const NovaEquipeModal = ({
 
             <p>
               Cadastre as principais
-              informações do novo
-              time.
+              informações do novo time.
             </p>
           </div>
 
@@ -452,22 +571,26 @@ const NovaEquipeModal = ({
             className={
               styles.closeButton
             }
-            onClick={
-              fecharModal
-            }
+            onClick={fecharModal}
           >
-            <X size={20} />
+            <X size={19} />
           </button>
         </div>
 
-        {/* CONTEÚDO */}
+
+        {/* =================================
+            CONTEÚDO
+        ================================= */}
 
         <div
           className={
             styles.content
           }
         >
-          {/* IMAGEM */}
+
+          {/* ================================
+              IMAGEM
+          ================================= */}
 
           <div
             className={
@@ -485,9 +608,7 @@ const NovaEquipeModal = ({
             >
               {imagemPreview ? (
                 <img
-                  src={
-                    imagemPreview
-                  }
+                  src={imagemPreview}
                   alt="Preview da equipe"
                 />
               ) : (
@@ -497,9 +618,7 @@ const NovaEquipeModal = ({
                       styles.cameraCircle
                     }
                   >
-                    <Camera
-                      size={22}
-                    />
+                    <Camera size={20} />
                   </div>
 
                   <strong>
@@ -520,9 +639,7 @@ const NovaEquipeModal = ({
               className={
                 styles.hiddenInput
               }
-              onChange={
-                handleImagem
-              }
+              onChange={handleImagem}
             />
 
             {imagemPreview && (
@@ -535,22 +652,24 @@ const NovaEquipeModal = ({
                   fileInputRef.current?.click()
                 }
               >
-                <Camera
-                  size={15}
-                />
+                <Camera size={13} />
 
                 Alterar imagem
               </button>
             )}
           </div>
 
-          {/* FORM */}
+
+          {/* ================================
+              FORM
+          ================================= */}
 
           <div
             className={
               styles.form
             }
           >
+
             {/* NOME */}
 
             <div
@@ -578,90 +697,114 @@ const NovaEquipeModal = ({
               />
             </div>
 
-            {/* ESPORTE */}
+
+            {/* CATEGORIA + CONTADOR */}
 
             <div
               className={
-                styles.field
+                styles.twoColumns
               }
             >
-              <label
-                htmlFor="esporte-equipe"
-              >
-                Esporte
-              </label>
-
-              <select
-                id="esporte-equipe"
-                value={modalidade}
-                onChange={(event) =>
-                  setModalidade(
-                    event.target.value,
-                  )
+              <div
+                className={
+                  styles.field
                 }
               >
-                {esportes.map(
-                  (esporte) => (
-                    <option
-                      key={esporte}
-                      value={esporte}
-                    >
-                      {esporte}
-                    </option>
-                  ),
-                )}
-              </select>
-            </div>
+                <label
+                  htmlFor="categoria"
+                >
+                  Categoria
+                </label>
 
-            {/* CATEGORIA */}
+                <select
+                  id="categoria"
+                  value={categoria}
+                  onChange={(event) =>
+                    setCategoria(
+                      event.target.value,
+                    )
+                  }
+                >
+                  <option value="Principal">
+                    Principal
+                  </option>
 
-            <div
-              className={
-                styles.field
-              }
-            >
-              <label
-                htmlFor="categoria"
-              >
-                Categoria
-              </label>
+                  <option value="Sub-20">
+                    Sub-20
+                  </option>
 
-              <select
-                id="categoria"
-                value={categoria}
-                onChange={(event) =>
-                  setCategoria(
-                    event.target.value,
-                  )
+                  <option value="Sub-17">
+                    Sub-17
+                  </option>
+
+                  <option value="Sub-15">
+                    Sub-15
+                  </option>
+
+                  <option value="Feminino">
+                    Feminino
+                  </option>
+
+                  <option value="Masculino">
+                    Masculino
+                  </option>
+                </select>
+              </div>
+
+
+              <div
+                className={
+                  styles.field
                 }
               >
-                <option value="Principal">
-                  Principal
-                </option>
+                <label>
+                  Atletas
+                </label>
 
-                <option value="Sub-20">
-                  Sub-20
-                </option>
+                <div
+                  style={{
+                    height: '46px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '0 12px',
+                    border:
+                      '1px solid #c6d4cd',
+                    borderRadius: '9px',
+                    background:
+                      '#f8faf9',
+                    color: '#293a32',
+                    fontSize: '11px',
+                  }}
+                >
+                  <UserRound
+                    size={14}
+                    style={{
+                      marginRight: '7px',
+                      color: '#087b5b',
+                    }}
+                  />
 
-                <option value="Sub-17">
-                  Sub-17
-                </option>
+                  <strong>
+                    {
+                      atletasSelecionados.length
+                    }
+                  </strong>
 
-                <option value="Sub-15">
-                  Sub-15
-                </option>
-
-                <option value="Feminino">
-                  Feminino
-                </option>
-
-                <option value="Masculino">
-                  Masculino
-                </option>
-              </select>
+                  <span
+                    style={{
+                      marginLeft: '4px',
+                    }}
+                  >
+                    selecionados
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* ATLETAS */}
+
+            {/* ================================
+                SELEÇÃO DE ATLETAS
+            ================================= */}
 
             <div
               className={
@@ -669,74 +812,81 @@ const NovaEquipeModal = ({
               }
             >
               <label>
-                Atletas da equipe
+                Selecionar atletas
               </label>
 
               <div
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  border: '1px solid #D8E4DF',
-                  borderRadius: '10px',
-                  padding: '0 12px',
-                  minHeight: '42px',
+                  position: 'relative',
                 }}
               >
                 <Search
-                  size={17}
+                  size={15}
+                  style={{
+                    position: 'absolute',
+                    left: '11px',
+                    top: '50%',
+                    transform:
+                      'translateY(-50%)',
+                    color: '#7a8982',
+                    pointerEvents:
+                      'none',
+                  }}
                 />
 
                 <input
                   type="text"
                   placeholder="Buscar atleta..."
-                  value={
-                    buscaAtleta
-                  }
-                  onChange={(
-                    event,
-                  ) =>
+                  value={buscaAtleta}
+                  onChange={(event) =>
                     setBuscaAtleta(
                       event.target.value,
                     )
                   }
                   style={{
-                    border: 'none',
-                    outline: 'none',
-                    width: '100%',
-                    background:
-                      'transparent',
+                    paddingLeft:
+                      '34px',
                   }}
                 />
               </div>
 
+
+              {/* LISTA DE ATLETAS */}
+
               <div
                 style={{
-                  marginTop: '8px',
-                  maxHeight: '190px',
+                  maxHeight: '105px',
                   overflowY: 'auto',
+                  marginTop: '5px',
                   border:
-                    '1px solid #E1EAE6',
-                  borderRadius: '10px',
+                    '1px solid #cbd8d2',
+                  borderRadius: '8px',
+                  background:
+                    '#f8faf9',
                 }}
               >
                 {atletasFiltrados.length ===
                 0 ? (
                   <div
                     style={{
-                      padding: '20px',
-                      textAlign: 'center',
-                      color: '#71817B',
+                      minHeight: '55px',
+                      display: 'flex',
+                      alignItems:
+                        'center',
+                      justifyContent:
+                        'center',
+                      padding: '10px',
+                      color:
+                        '#7b8982',
+                      fontSize: '10px',
+                      textAlign:
+                        'center',
                     }}
                   >
-                    <UserRound
-                      size={22}
-                    />
-
-                    <p>
-                      Nenhum atleta
-                      disponível.
-                    </p>
+                    {atletasDisponiveis.length ===
+                    0
+                      ? 'Nenhum atleta disponível para adicionar.'
+                      : 'Nenhum atleta encontrado.'}
                   </div>
                 ) : (
                   atletasFiltrados.map(
@@ -748,9 +898,7 @@ const NovaEquipeModal = ({
 
                       return (
                         <button
-                          key={
-                            atleta.id
-                          }
+                          key={atleta.id}
                           type="button"
                           onClick={() =>
                             alternarAtleta(
@@ -759,48 +907,60 @@ const NovaEquipeModal = ({
                           }
                           style={{
                             width: '100%',
-                            display: 'flex',
+                            minHeight:
+                              '34px',
+                            display:
+                              'flex',
                             alignItems:
                               'center',
-                            gap: '10px',
+                            gap: '8px',
                             padding:
-                              '10px 12px',
-                            border: 'none',
+                              '5px 9px',
+                            border:
+                              'none',
                             borderBottom:
-                              '1px solid #EDF2EF',
+                              '1px solid #e5ece8',
                             background:
                               selecionado
-                                ? '#E8F5F0'
+                                ? '#e8f6f0'
                                 : 'transparent',
-                            cursor:
-                              'pointer',
+                            color:
+                              '#24362e',
                             textAlign:
                               'left',
+                            cursor:
+                              'pointer',
                           }}
                         >
+
+                          {/* AVATAR */}
+
                           <div
                             style={{
-                              width:
-                                '34px',
-                              height:
-                                '34px',
-                              borderRadius:
-                                '50%',
-                              overflow:
-                                'hidden',
-                              background:
-                                '#E8F5F0',
+                              width: '25px',
+                              height: '25px',
+                              flexShrink: 0,
                               display:
                                 'flex',
                               alignItems:
                                 'center',
                               justifyContent:
                                 'center',
-                              flexShrink: 0,
+                              overflow:
+                                'hidden',
+                              borderRadius:
+                                '50%',
+                              background:
+                                '#dce9e3',
+                              color:
+                                '#087b5b',
+                              fontSize:
+                                '9px',
+                              fontWeight:
+                                700,
                             }}
                           >
-                            {atleta
-                              .usuario
+                            {atleta.usuario
                               ?.avatarUrl ? (
                               <img
                                 src={
@@ -819,103 +979,100 @@ const NovaEquipeModal = ({
                                 }}
                               />
                             ) : (
-                              <UserRound
-                                size={
-                                  17
-                                }
-                              />
+                              atleta.nome
+                                .trim()
+                                .slice(0, 2)
+                                .toUpperCase()
                             )}
                           </div>
 
+
+                          {/* DADOS */}
+
                           <div
                             style={{
-                              flex: 1,
                               minWidth: 0,
-                            }}
-                          >
-                            <strong>
-                              {atleta.nome ||
-                                'Atleta sem nome'}
-                            </strong>
-
-                            {atleta.categoria && (
-                              <small
-                                style={{
-                                  display:
-                                    'block',
-                                  color:
-                                    '#71817B',
-                                }}
-                              >
-                                {
-                                  atleta.categoria
-                                }
-                              </small>
-                            )}
-                          </div>
-
-                          <div
-                            style={{
-                              width:
-                                '22px',
-                              height:
-                                '22px',
-                              borderRadius:
-                                '6px',
-                              border:
-                                selecionado
-                                  ? 'none'
-                                  : '1px solid #C9D8D2',
-                              background:
-                                selecionado
-                                  ? '#16A875'
-                                  : '#FFFFFF',
+                              flex: 1,
                               display:
                                 'flex',
-                              alignItems:
-                                'center',
-                              justifyContent:
-                                'center',
-                              flexShrink: 0,
+                              flexDirection:
+                                'column',
                             }}
                           >
-                            {selecionado && (
-                              <Check
-                                size={
-                                  15
-                                }
-                                color="#FFFFFF"
-                              />
-                            )}
+                            <span
+                              style={{
+                                overflow:
+                                  'hidden',
+                                fontSize:
+                                  '10px',
+                                fontWeight:
+                                  600,
+                                whiteSpace:
+                                  'nowrap',
+                                textOverflow:
+                                  'ellipsis',
+                              }}
+                            >
+                              {
+                                atleta.nome
+                              }
+                            </span>
+
+                            <span
+                              style={{
+                                marginTop:
+                                  '1px',
+                                color:
+                                  '#829088',
+                                fontSize:
+                                  '8px',
+                              }}
+                            >
+                              {atleta.categoria ||
+                                'Sem categoria'}
+                            </span>
                           </div>
+
+
+                          {/* CHECK */}
+
+                          {selecionado && (
+                            <div
+                              style={{
+                                width: '20px',
+                                height: '20px',
+                                flexShrink: 0,
+                                display:
+                                  'flex',
+                                alignItems:
+                                  'center',
+                                justifyContent:
+                                  'center',
+                                borderRadius:
+                                  '6px',
+                                background:
+                                  '#16A875',
+                                color:
+                                  '#ffffff',
+                              }}
+                            >
+                              <Check
+                                size={13}
+                              />
+                            </div>
+                          )}
                         </button>
                       );
                     },
                   )
                 )}
               </div>
-
-              <small
-                style={{
-                  color: '#71817B',
-                  marginTop: '6px',
-                }}
-              >
-                {atletasSelecionados.length}{' '}
-                atleta
-                {atletasSelecionados.length !==
-                1
-                  ? 's'
-                  : ''}{' '}
-                selecionado
-                {atletasSelecionados.length !==
-                1
-                  ? 's'
-                  : ''}
-              </small>
             </div>
 
-            {/* PRÓXIMA PARTIDA */}
+
+            {/* ================================
+                PRÓXIMA PARTIDA
+            ================================= */}
 
             <div
               className={
@@ -933,7 +1090,7 @@ const NovaEquipeModal = ({
                   }
                 >
                   <CalendarDays
-                    size={17}
+                    size={15}
                   />
                 </div>
 
@@ -943,12 +1100,14 @@ const NovaEquipeModal = ({
                   </strong>
 
                   <span>
-                    Informe o
-                    adversário,
+                    Informe o adversário,
                     dia e horário.
                   </span>
                 </div>
               </div>
+
+
+              {/* ADVERSÁRIO */}
 
               <div
                 className={
@@ -974,6 +1133,9 @@ const NovaEquipeModal = ({
                 />
               </div>
 
+
+              {/* DATA */}
+
               <div
                 className={
                   styles.dateTimeGrid
@@ -996,7 +1158,7 @@ const NovaEquipeModal = ({
                     }
                   >
                     <CalendarDays
-                      size={16}
+                      size={14}
                     />
 
                     <input
@@ -1005,9 +1167,7 @@ const NovaEquipeModal = ({
                       value={
                         dataPartida
                       }
-                      onChange={(
-                        event,
-                      ) =>
+                      onChange={(event) =>
                         setDataPartida(
                           event.target.value,
                         )
@@ -1015,6 +1175,9 @@ const NovaEquipeModal = ({
                     />
                   </div>
                 </div>
+
+
+                {/* HORÁRIO */}
 
                 <div
                   className={
@@ -1033,7 +1196,7 @@ const NovaEquipeModal = ({
                     }
                   >
                     <Clock3
-                      size={16}
+                      size={14}
                     />
 
                     <input
@@ -1042,9 +1205,7 @@ const NovaEquipeModal = ({
                       value={
                         horarioPartida
                       }
-                      onChange={(
-                        event,
-                      ) =>
+                      onChange={(event) =>
                         setHorarioPartida(
                           event.target.value,
                         )
@@ -1054,6 +1215,9 @@ const NovaEquipeModal = ({
                 </div>
               </div>
 
+
+              {/* PREVIEW DA PARTIDA */}
+
               {adversario.trim() && (
                 <div
                   className={
@@ -1061,18 +1225,17 @@ const NovaEquipeModal = ({
                   }
                 >
                   <CalendarDays
-                    size={15}
+                    size={14}
                   />
 
                   <div>
                     <span>
-                      Como aparecerá
-                      no card
+                      Como aparecerá no card
                     </span>
 
                     <strong>
                       {
-                        proximaPartidaPreview
+                        proximaPartida
                       }
                     </strong>
                   </div>
@@ -1080,7 +1243,10 @@ const NovaEquipeModal = ({
               )}
             </div>
 
-            {/* CORES */}
+
+            {/* ================================
+                CORES
+            ================================= */}
 
             <div
               className={
@@ -1116,20 +1282,21 @@ const NovaEquipeModal = ({
                             item,
                         }}
                         onClick={() =>
-                          setCor(
-                            item,
-                          )
+                          setCor(item)
                         }
                         title={item}
                       >
                         {cor === item && (
                           <Check
-                            size={16}
+                            size={13}
                           />
                         )}
                       </button>
                     ),
                   )}
+
+
+                  {/* COR PERSONALIZADA */}
 
                   <button
                     type="button"
@@ -1158,7 +1325,7 @@ const NovaEquipeModal = ({
                         }}
                       >
                         <Palette
-                          size={14}
+                          size={12}
                         />
                       </div>
                     </div>
@@ -1181,13 +1348,16 @@ const NovaEquipeModal = ({
                   />
                 </div>
 
+
+                {/* COR SELECIONADA */}
+
                 <div
                   className={
                     styles.selectedColorInfo
                   }
                 >
                   <span>
-                    Cor selecionada
+                    Cor
                   </span>
 
                   <strong>
@@ -1209,26 +1379,48 @@ const NovaEquipeModal = ({
           </div>
         </div>
 
-        {/* PREVIEW */}
+
+        {/* =================================
+            PREVIEW DA EQUIPE
+        ================================= */}
 
         <div
           className={
             styles.teamPreview
           }
         >
+
+          {/* FOTO DA EQUIPE */}
+
           <div
             className={
               styles.previewAvatar
             }
             style={{
-              background: cor,
+              background:
+                imagemPreview
+                  ? 'transparent'
+                  : cor,
+              overflow: 'hidden',
             }}
           >
-            {nome
-              .trim()
-              .slice(0, 2)
-              .toUpperCase() ||
-              'EQ'}
+            {imagemPreview ? (
+              <img
+                src={imagemPreview}
+                alt="Preview da equipe"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            ) : (
+              nome
+                .trim()
+                .slice(0, 2)
+                .toUpperCase() ||
+              'EQ'
+            )}
           </div>
 
           <div>
@@ -1242,19 +1434,22 @@ const NovaEquipeModal = ({
             </strong>
 
             <small>
-              {modalidade} •{' '}
               {categoria} •{' '}
-              {atletasSelecionados.length}{' '}
-              atleta
-              {atletasSelecionados.length !==
+              {
+                atletasSelecionados.length
+              }{' '}
+              {atletasSelecionados.length ===
               1
-                ? 's'
-                : ''}
+                ? 'atleta'
+                : 'atletas'}
             </small>
           </div>
         </div>
 
-        {/* FOOTER */}
+
+        {/* =================================
+            FOOTER
+        ================================= */}
 
         <div
           className={
@@ -1266,9 +1461,7 @@ const NovaEquipeModal = ({
             className={
               styles.cancelButton
             }
-            onClick={
-              fecharModal
-            }
+            onClick={fecharModal}
           >
             Cancelar
           </button>
@@ -1285,14 +1478,16 @@ const NovaEquipeModal = ({
               criarEquipe
             }
           >
-            <Plus size={17} />
+            <Plus size={15} />
 
             Criar equipe
           </button>
         </div>
+
       </div>
     </div>
   );
 };
+
 
 export default NovaEquipeModal;

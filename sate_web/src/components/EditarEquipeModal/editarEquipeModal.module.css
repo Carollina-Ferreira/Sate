@@ -1,3 +1,7 @@
+/* =====================================
+   OVERLAY
+===================================== */
+
 .overlay {
   position: fixed;
   inset: 0;
@@ -8,7 +12,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: 16px;
+  padding: 20px;
 
   box-sizing: border-box;
 
@@ -16,7 +20,7 @@
 
   background: rgba(0, 44, 33, 0.58);
 
-  backdrop-filter: blur(7px);
+  backdrop-filter: blur(8px);
 }
 
 
@@ -25,28 +29,30 @@
 ===================================== */
 
 .modal {
-  width: min(1080px, 100%);
+  width: min(980px, calc(100vw - 40px));
+
+  height: min(720px, calc(100vh - 40px));
 
   display: flex;
   flex-direction: column;
 
   overflow: hidden;
 
-  border-radius: 26px;
+  border-radius: 22px;
 
-  background: #dfe7e3;
+  background: #edf3f0;
 
   color: #273c33;
 
   font-family: 'Poppins', sans-serif;
 
   box-shadow:
-    0 28px 80px rgba(0, 0, 0, 0.28);
+    0 30px 90px rgba(0, 0, 0, 0.28);
 }
 
 
 /* =====================================
-   CABEÇALHO
+   HEADER
 ===================================== */
 
 .header {
@@ -56,9 +62,13 @@
 
   gap: 20px;
 
-  padding: 22px 30px 16px;
+  padding: 20px 26px 17px;
 
-  border-bottom: 1px solid #c8d4ce;
+  flex-shrink: 0;
+
+  border-bottom: 1px solid #d1ddd7;
+
+  background: #edf3f0;
 }
 
 .eyebrow {
@@ -66,12 +76,13 @@
 
   margin-bottom: 4px;
 
-  color: #10845f;
+  color: #16a875;
 
-  font-size: 11px;
+  font-size: 9px;
+
   font-weight: 700;
 
-  letter-spacing: 1.2px;
+  letter-spacing: 1.1px;
 
   text-transform: uppercase;
 }
@@ -79,25 +90,28 @@
 .header h2 {
   margin: 0;
 
-  color: #24372f;
+  color: #20382e;
 
-  font-size: 31px;
+  font-size: 25px;
+
   font-weight: 700;
 
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .header p {
-  margin: 5px 0 0;
+  margin: 6px 0 0;
 
-  color: #6b7b74;
+  color: #72827b;
 
-  font-size: 13px;
+  font-size: 11px;
+
+  line-height: 1.4;
 }
 
 .closeButton {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
 
   flex-shrink: 0;
 
@@ -105,25 +119,36 @@
   align-items: center;
   justify-content: center;
 
+  padding: 0;
+
   border: none;
 
-  border-radius: 11px;
+  border-radius: 10px;
 
   background: transparent;
 
-  color: #6f7f78;
+  color: #718079;
 
   cursor: pointer;
 
   transition:
     background 0.2s ease,
-    color 0.2s ease;
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.closeButton:hover {
-  background: rgba(0, 0, 0, 0.05);
+.closeButton:hover:not(:disabled) {
+  background: #dfe9e4;
 
-  color: #31483e;
+  color: #20382e;
+
+  transform: scale(1.04);
+}
+
+.closeButton:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
 }
 
 
@@ -132,26 +157,49 @@
 ===================================== */
 
 .content {
+  flex: 1;
+
+  min-height: 0;
+
   display: grid;
 
-  grid-template-columns:
-    235px 1fr;
+  grid-template-columns: 190px minmax(0, 1fr);
 
   gap: 26px;
 
-  padding: 20px 30px 16px;
+  padding: 20px 26px 16px;
 
   box-sizing: border-box;
 
-  overflow: visible;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+
+  scrollbar-color: #b8c9c1 transparent;
+}
+
+.content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background: #b8c9c1;
 }
 
 
 /* =====================================
-   IMAGEM
+   COLUNA DA IMAGEM
 ===================================== */
 
 .imageColumn {
+  width: 190px;
+
   display: flex;
   flex-direction: column;
 
@@ -159,30 +207,43 @@
 }
 
 .imagePreview {
-  width: 100%;
-  height: 220px;
+  width: 190px;
+  height: 190px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   overflow: hidden;
 
   padding: 0;
 
-  border: 1px dashed #9eb3aa;
+  border: 1px dashed #a9bbb3;
 
-  border-radius: 18px;
+  border-radius: 17px;
 
-  background: #dbe5e0;
+  background: #dce7e2;
 
   cursor: pointer;
 
   transition:
     border-color 0.2s ease,
-    background 0.2s ease;
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-.imagePreview:hover {
+.imagePreview:hover:not(:disabled) {
   border-color: #16a875;
 
-  background: #d5e2dc;
+  background: #d5e3dd;
+
+  transform: translateY(-1px);
+}
+
+.imagePreview:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.65;
 }
 
 .imagePreview img {
@@ -205,32 +266,38 @@
 
   gap: 7px;
 
-  color: #586a62;
+  color: #60736a;
 }
 
 .cameraCircle {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  margin-bottom: 3px;
+
   border-radius: 50%;
 
-  background: #c7ddd3;
+  background: #c9ded4;
 
-  color: #0b8a62;
+  color: #0b875f;
 }
 
 .imageEmpty strong {
-  font-size: 12px;
+  color: #566a61;
+
+  font-size: 10px;
+
+  font-weight: 600;
 }
 
 .imageEmpty span {
-  color: #85938c;
+  color: #899891;
 
-  font-size: 10px;
+  font-size: 8px;
 }
 
 .hiddenInput {
@@ -238,38 +305,51 @@
 }
 
 .changeImage {
-  height: 43px;
+  width: 100%;
+  height: 36px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 7px;
+  gap: 6px;
 
-  border: 1px solid #c5d3cc;
+  padding: 0;
 
-  border-radius: 12px;
+  border: 1px solid #c6d5ce;
 
-  background: #edf3f0;
+  border-radius: 9px;
 
-  color: #566961;
+  background: #f7faf8;
+
+  color: #566a61;
 
   font-family: inherit;
 
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 9px;
+
+  font-weight: 600;
 
   cursor: pointer;
 
   transition:
     background 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
-.changeImage:hover {
-  border-color: #9fbab0;
+.changeImage:hover:not(:disabled) {
+  border-color: #16a875;
 
-  background: #f5f8f6;
+  background: #ffffff;
+
+  color: #167e5e;
+}
+
+.changeImage:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
 }
 
 
@@ -278,57 +358,61 @@
 ===================================== */
 
 .form {
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
 
-  gap: 13px;
+  gap: 11px;
 }
 
 .field {
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
 
-  gap: 6px;
+  gap: 5px;
 }
 
 .field label {
-  color: #44574f;
+  color: #40554b;
 
-  font-size: 12px;
+  font-size: 10px;
+
   font-weight: 600;
 }
 
 .field input,
 .field select {
   width: 100%;
-  height: 50px;
+  height: 40px;
 
-  padding: 0 15px;
+  padding: 0 12px;
 
   box-sizing: border-box;
 
-  border: 1px solid #c6d4cd;
+  border: 1px solid #c7d5ce;
 
-  border-radius: 12px;
+  border-radius: 9px;
 
-  background: #f9fbfa;
+  background: #ffffff;
 
-  color: #2d3d36;
+  color: #2d4037;
 
   font-family: inherit;
 
-  font-size: 13px;
+  font-size: 11px;
 
   outline: none;
 
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+    box-shadow 0.2s ease;
 }
 
 .field input::placeholder {
-  color: #8c9892;
+  color: #9aa6a1;
 }
 
 .field input:focus,
@@ -337,17 +421,566 @@
 
   box-shadow:
     0 0 0 3px rgba(22, 168, 117, 0.1);
+}
 
-  background: #ffffff;
+.field input:disabled,
+.field select:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
 }
 
 .twoColumns {
   display: grid;
 
-  grid-template-columns:
-    1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 
-  gap: 14px;
+  gap: 12px;
+}
+
+
+/* =====================================
+   CONTADOR DE ATLETAS
+===================================== */
+
+.field > div[style] {
+  width: 100%;
+
+  min-height: 40px !important;
+  height: 40px !important;
+
+  padding: 0 12px !important;
+
+  box-sizing: border-box;
+
+  border-radius: 9px !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #c7d5ce;
+
+  font-size: 10px !important;
+}
+
+.field > div[style] strong {
+  color: #293c33;
+}
+
+.field > div[style] svg {
+  color: #087b5b !important;
+}
+
+
+/* =====================================
+   BUSCA DE ATLETAS
+===================================== */
+
+.searchAthlete {
+  width: 100%;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 11px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #c7d5ce;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #7c8b84;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.searchAthlete:focus-within {
+  border-color: #16a875;
+
+  box-shadow:
+    0 0 0 3px rgba(22, 168, 117, 0.08);
+}
+
+.searchAthlete input {
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #2d4037;
+
+  font-family: inherit;
+
+  font-size: 10px;
+}
+
+.searchAthlete input::placeholder {
+  color: #919e98;
+}
+
+
+/* =====================================
+   LISTA DE ATLETAS
+===================================== */
+
+.athletesList {
+  width: 100%;
+
+  max-height: 170px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  padding: 3px;
+
+  box-sizing: border-box;
+
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+
+  scrollbar-color: #afc2b9 transparent;
+}
+
+.athletesList::-webkit-scrollbar {
+  width: 5px;
+}
+
+.athletesList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.athletesList::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background: #afc2b9;
+}
+
+
+/* =====================================
+   ITEM ATLETA
+===================================== */
+
+.athleteItem {
+  width: 100%;
+  min-height: 44px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 5px 9px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #e0e8e4;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #33473e;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.athleteItem:hover:not(:disabled) {
+  border-color: #b8d3c8;
+
+  background: #fbfdfc;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 3px 10px rgba(20, 80, 60, 0.06);
+}
+
+.athleteItem:disabled {
+  cursor: not-allowed;
+}
+
+
+/* =====================================
+   ATLETA SELECIONADO
+===================================== */
+
+.athleteSelected {
+  border-color: #79c8ad;
+
+  background: #e4f5ee;
+
+  box-shadow:
+    inset 3px 0 0 #16a875;
+}
+
+.athleteSelected:hover:not(:disabled) {
+  border-color: #16a875;
+
+  background: #dff1ea;
+}
+
+
+/* =====================================
+   AVATAR
+===================================== */
+
+.athleteAvatar {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  background: #d7e5df;
+
+  color: #527066;
+
+  font-size: 8px;
+
+  font-weight: 700;
+}
+
+.athleteAvatar img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+
+/* =====================================
+   INFORMAÇÕES ATLETA
+===================================== */
+
+.athleteInfo {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.athleteInfo strong {
+  overflow: hidden;
+
+  color: #2c4037;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.athleteInfo span {
+  overflow: hidden;
+
+  color: #7c8b84;
+
+  font-size: 8px;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =====================================
+   CHECK
+===================================== */
+
+.athleteCheck {
+  width: 21px;
+  height: 21px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #c2d2ca;
+
+  border-radius: 6px;
+
+  background: #ffffff;
+
+  color: transparent;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.athleteSelected .athleteCheck {
+  border-color: #16a875;
+
+  background: #16a875;
+
+  color: #ffffff;
+
+  transform: scale(1.03);
+}
+
+
+/* =====================================
+   NENHUM ATLETA
+===================================== */
+
+.emptyAthletes {
+  min-height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px;
+
+  box-sizing: border-box;
+
+  border: 1px dashed #c6d5ce;
+
+  border-radius: 9px;
+
+  background: #f8faf9;
+
+  color: #829088;
+
+  font-size: 9px;
+
+  text-align: center;
+}
+
+
+/* =====================================
+   PRÓXIMA PARTIDA
+===================================== */
+
+.matchSection {
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+
+  margin-top: 2px;
+
+  padding: 12px;
+
+  border: 1px solid #cbd9d2;
+
+  border-radius: 12px;
+
+  background: #e1ebe6;
+}
+
+.matchSectionHeader {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.matchSectionIcon {
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #c8ded4;
+
+  color: #087b5b;
+}
+
+.matchSectionHeader > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.matchSectionHeader strong {
+  color: #33473e;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.matchSectionHeader span {
+  color: #7b8982;
+
+  font-size: 7px;
+}
+
+
+/* =====================================
+   DATA / HORÁRIO
+===================================== */
+
+.dateTimeGrid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+}
+
+.dateInputWrapper {
+  width: 100%;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 0 10px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #c6d4cd;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #728078;
+
+  overflow: hidden;
+}
+
+.dateInputWrapper svg {
+  flex-shrink: 0;
+}
+
+.dateInputWrapper input {
+  width: 100%;
+
+  height: 100%;
+
+  min-width: 0;
+
+  padding: 0;
+
+  border: none;
+
+  outline: none;
+
+  box-shadow: none;
+
+  background: transparent;
+}
+
+.dateInputWrapper input:focus {
+  border: none;
+
+  outline: none;
+
+  box-shadow: none;
+
+  background: transparent;
+}
+
+
+/* =====================================
+   PREVIEW PARTIDA
+===================================== */
+
+.matchPreview {
+  min-height: 34px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 7px 10px;
+
+  box-sizing: border-box;
+
+  border-radius: 8px;
+
+  background: #d1e0d9;
+
+  color: #087b5b;
+}
+
+.matchPreview > div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.matchPreview span {
+  color: #7b8982;
+
+  font-size: 6px;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+}
+
+.matchPreview strong {
+  overflow: hidden;
+
+  color: #33473e;
+
+  font-size: 9px;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
 }
 
 
@@ -360,7 +993,7 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 16px;
+  gap: 14px;
 
   flex-wrap: wrap;
 }
@@ -369,14 +1002,14 @@
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  gap: 8px;
 
   flex-wrap: wrap;
 }
 
 .colorButton {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
 
   flex-shrink: 0;
 
@@ -395,105 +1028,29 @@
   cursor: pointer;
 
   box-shadow:
-    0 3px 9px rgba(0, 0, 0, 0.13);
+    0 3px 8px rgba(0, 0, 0, 0.12);
 
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease;
 }
 
-.colorButton:hover {
-  transform: scale(1.06);
+.colorButton:hover:not(:disabled) {
+  transform: scale(1.07);
+}
+
+.colorButton:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
 }
 
 .colorSelected {
   outline: 3px solid #ffffff;
 
   box-shadow:
-    0 0 0 2px #1a5a46,
-    0 3px 9px rgba(0, 0, 0, 0.13);
-}
-
-
-/* =====================================
-   RGB PERSONALIZADO
-===================================== */
-
-.rgbButton {
-  position: relative;
-
-  width: 40px;
-  height: 40px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-}
-
-.rgbButton input {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  opacity: 0;
-
-  cursor: pointer;
-}
-
-.rgbIconOuter {
-  width: 40px;
-  height: 40px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background:
-    conic-gradient(
-      #ff5f57,
-      #ffad3d,
-      #ffe45d,
-      #55d874,
-      #34c7f4,
-      #5d77ff,
-      #b45aff,
-      #ff5f57
-    );
-
-  box-shadow:
-    0 3px 9px rgba(0, 0, 0, 0.16);
-
-  transition:
-    transform 0.18s ease;
-}
-
-.rgbButton:hover .rgbIconOuter {
-  transform: scale(1.07);
-}
-
-.rgbIconInner {
-  width: 29px;
-  height: 29px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 2px solid #ffffff;
-
-  border-radius: 50%;
-
-  background: #005b42;
-
-  color: #ffffff;
+    0 0 0 2px #16815f,
+    0 3px 8px rgba(0, 0, 0, 0.12);
 }
 
 
@@ -502,22 +1059,21 @@
 ===================================== */
 
 .selectedColorBox {
-  min-width: 185px;
-  height: 38px;
+  min-width: 175px;
+  height: 35px;
 
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 
   gap: 8px;
 
-  padding: 0 10px;
+  padding: 0 9px;
 
   box-sizing: border-box;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
-  background: #d1dbd6;
+  background: #d3dfda;
 }
 
 .selectedColorBox span {
@@ -525,19 +1081,20 @@
 
   color: #7b8883;
 
-  font-size: 10px;
+  font-size: 8px;
 }
 
 .selectedColorBox strong {
   color: #41524a;
 
-  font-size: 11px;
+  font-size: 9px;
+
   font-weight: 700;
 }
 
 .selectedColorPreview {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
 
   flex-shrink: 0;
 
@@ -551,29 +1108,33 @@
 
 
 /* =====================================
-   PRÉVIA
+   PREVIEW DA EQUIPE
 ===================================== */
 
 .preview {
+  min-height: 58px;
+
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: 11px;
 
-  margin: 0 30px 14px;
+  margin: 0 26px 12px;
 
-  padding: 12px 15px;
+  padding: 9px 13px;
 
   box-sizing: border-box;
 
-  border-radius: 14px;
+  flex-shrink: 0;
 
-  background: #d3ddd8;
+  border-radius: 12px;
+
+  background: #d5e0db;
 }
 
 .previewColor {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
 
   flex-shrink: 0;
 
@@ -581,12 +1142,24 @@
   align-items: center;
   justify-content: center;
 
+  overflow: hidden;
+
   border-radius: 50%;
 
   color: #ffffff;
 
-  font-size: 14px;
+  font-size: 11px;
+
   font-weight: 700;
+}
+
+.previewColor img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
 }
 
 .preview > div:last-child {
@@ -597,12 +1170,13 @@
 }
 
 .preview span {
-  color: #8a9891;
+  color: #829088;
 
-  font-size: 8px;
+  font-size: 6px;
+
   font-weight: 700;
 
-  letter-spacing: 0.7px;
+  letter-spacing: 0.6px;
 
   text-transform: uppercase;
 }
@@ -612,7 +1186,8 @@
 
   color: #2b3b34;
 
-  font-size: 14px;
+  font-size: 11px;
+
   font-weight: 700;
 
   white-space: nowrap;
@@ -625,43 +1200,120 @@
 
   color: #71817a;
 
-  font-size: 10px;
+  font-size: 8px;
 }
 
 
 /* =====================================
-   RODAPÉ
+   FOOTER
 ===================================== */
 
 .footer {
+  min-height: 64px;
+
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 
   gap: 10px;
 
-  padding: 15px 30px 18px;
+  padding: 12px 26px;
 
-  border-top: 1px solid #c8d4ce;
+  box-sizing: border-box;
+
+  flex-shrink: 0;
+
+  border-top: 1px solid #ccd9d3;
+
+  background: #e2eae6;
 }
 
-.cancelButton,
-.saveButton {
-  height: 45px;
+
+/* =====================================
+   EXCLUIR
+===================================== */
+
+.deleteButton {
+  height: 39px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 8px;
+  gap: 6px;
 
-  padding: 0 19px;
+  margin-right: auto;
 
-  border-radius: 12px;
+  padding: 0 14px;
+
+  border: 1px solid #e0a8ae;
+
+  border-radius: 9px;
+
+  background: #fff1f2;
+
+  color: #c53543;
 
   font-family: inherit;
 
-  font-size: 12px;
+  font-size: 10px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.deleteButton:hover:not(:disabled) {
+  border-color: #d52941;
+
+  background: #ffe1e4;
+
+  color: #b92335;
+
+  transform: translateY(-1px);
+}
+
+.deleteButton:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+
+/* =====================================
+   AÇÕES
+===================================== */
+
+.footerActions {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.cancelButton,
+.saveButton {
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 16px;
+
+  border-radius: 9px;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -675,29 +1327,35 @@
 .cancelButton {
   border: 1px solid #bccac4;
 
-  background: transparent;
+  background: #f3f7f5;
 
   color: #5d6e66;
 }
 
-.cancelButton:hover {
-  background: #d6dfda;
+.cancelButton:hover:not(:disabled) {
+  background: #ffffff;
+
+  border-color: #aabdb5;
 }
 
 .saveButton {
   border: none;
 
-  background: #0b875f;
+  background: #16a875;
 
   color: #ffffff;
+
+  box-shadow:
+    0 4px 10px rgba(22, 168, 117, 0.16);
 }
 
 .saveButton:hover:not(:disabled) {
-  background: #087251;
+  background: #0c8d63;
 
   transform: translateY(-1px);
 }
 
+.cancelButton:disabled,
 .saveButton:disabled {
   opacity: 0.5;
 
@@ -706,45 +1364,47 @@
 
 
 /* =====================================
-   TELAS MENORES
+   TABLET
 ===================================== */
 
 @media (max-width: 900px) {
+
   .modal {
-    width: min(820px, 100%);
+    width: min(900px, calc(100vw - 32px));
+
+    height: min(700px, calc(100vh - 32px));
   }
 
   .content {
-    grid-template-columns:
-      210px 1fr;
+    grid-template-columns: 165px minmax(0, 1fr);
 
     gap: 20px;
 
-    padding:
-      18px 24px 14px;
+    padding: 17px 20px 14px;
+  }
+
+  .imageColumn {
+    width: 165px;
   }
 
   .imagePreview {
-    height: 190px;
+    width: 165px;
+    height: 165px;
   }
 
   .header {
     padding:
-      18px 24px 14px;
-  }
-
-  .header h2 {
-    font-size: 27px;
+      17px 20px 14px;
   }
 
   .preview {
-    margin:
-      0 24px 12px;
+    margin-left: 20px;
+    margin-right: 20px;
   }
 
   .footer {
     padding:
-      13px 24px 16px;
+      11px 20px;
   }
 }
 
@@ -754,6 +1414,7 @@
 ===================================== */
 
 @media (max-width: 650px) {
+
   .overlay {
     align-items: flex-start;
 
@@ -763,25 +1424,58 @@
   }
 
   .modal {
+    width: 100%;
+
+    height: auto;
+
+    min-height: 0;
+
+    max-height: none;
+
     margin: 10px 0;
 
-    border-radius: 20px;
+    border-radius: 18px;
+  }
+
+  .header {
+    padding: 15px;
+  }
+
+  .header h2 {
+    font-size: 21px;
+  }
+
+  .header p {
+    font-size: 10px;
   }
 
   .content {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
+
+    padding: 15px;
 
     overflow: visible;
   }
 
+  .imageColumn {
+    width: 100%;
+  }
+
   .imagePreview {
-    height: 160px;
+    width: 100%;
+    height: 180px;
   }
 
   .twoColumns {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
+  }
+
+  .dateTimeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .athletesList {
+    max-height: 220px;
   }
 
   .colorsRow {
@@ -792,12 +1486,30 @@
     width: 100%;
   }
 
+  .preview {
+    margin:
+      0 15px 10px;
+  }
+
   .footer {
-    flex-direction: column-reverse;
+    flex-wrap: wrap;
+
+    padding:
+      11px 15px 13px;
+  }
+
+  .deleteButton {
+    width: 100%;
+
+    margin-right: 0;
+  }
+
+  .footerActions {
+    width: 100%;
   }
 
   .cancelButton,
   .saveButton {
-    width: 100%;
+    flex: 1;
   }
 }

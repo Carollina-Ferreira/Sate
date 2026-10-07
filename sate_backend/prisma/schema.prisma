@@ -8,19 +8,18 @@ datasource db {
 }
 
 model Usuario {
-  id             Int          @id @default(autoincrement())
-  email          String       @unique
-  senha          String
-  tipo           TipoUsuario?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  nome           String?
-  avatarUrl      String?      @db.LongText
-  primeiroAcesso Boolean      @default(true)
-
+  id                  Int                  @id @default(autoincrement())
+  email               String               @unique
+  senha               String
+  tipo                TipoUsuario?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  nome                String?
+  avatarUrl           String?              @db.LongText
+  primeiroAcesso      Boolean              @default(true)
   atleta              Atleta?
-  treinador           Treinador?
   passwordResetTokens PasswordResetToken[]
+  treinador           Treinador?
 }
 
 model Treinador {
@@ -29,38 +28,33 @@ model Treinador {
   usuarioId Int      @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  usuario Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-  equipes Equipe[]
-  atletas Atleta[]
+  atletas   Atleta[]
+  equipes   Equipe[]
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 }
 
 model Atleta {
-  id             Int       @id @default(autoincrement())
+  id             Int          @id @default(autoincrement())
   nome           String?
-  cpf            String?   @unique
+  cpf            String?      @unique
   rg             String?
   dataNascimento DateTime?
   sexo           Sexo?
   categoria      String?
   telefone       String?
-
-  usuarioId     Int  @unique
-  responsavelId Int? @unique
-  enderecoId    Int? @unique
-  equipeId      Int?
-  treinadorId   Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  endereco    Endereco?    @relation(fields: [enderecoId], references: [id])
-  responsavel Responsavel? @relation(fields: [responsavelId], references: [id])
-  usuario     Usuario      @relation(fields: [usuarioId], references: [id])
-  equipe      Equipe?      @relation(fields: [equipeId], references: [id], onDelete: SetNull)
-  treinador   Treinador?   @relation(fields: [treinadorId], references: [id], onDelete: SetNull)
-
-  documentos Documento[]
+  usuarioId      Int          @unique
+  responsavelId  Int?         @unique
+  enderecoId     Int?         @unique
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  equipeId       Int?
+  treinadorId    Int?
+  endereco       Endereco?    @relation(fields: [enderecoId], references: [id])
+  equipe         Equipe?      @relation(fields: [equipeId], references: [id])
+  responsavel    Responsavel? @relation(fields: [responsavelId], references: [id])
+  treinador      Treinador?   @relation(fields: [treinadorId], references: [id])
+  usuario        Usuario      @relation(fields: [usuarioId], references: [id])
+  documentos     Documento[]
 
   @@index([equipeId])
   @@index([treinadorId])
@@ -72,43 +66,37 @@ model Equipe {
   modalidade     String
   categoria      String?
   proximaPartida DateTime?
-  imagem         String?
+  imagem         String?   @db.LongText
   corEquipe      String?
-  treinadorId    Int
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-
-  treinador Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
-  atletas   Atleta[]
-   partidas  Partida[]
+  treinadorId    Int
+  atletas        Atleta[]
+  treinador      Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
+  partidas       Partida[]
 
   @@index([treinadorId], map: "Equipe_treinadorId_fkey")
 }
 
 model Partida {
-  id Int @id @default(autoincrement())
-  equipeId Int
-  adversario String
-  data DateTime
-  local String?
-  campeonato String?
-  rodada String?
-  observacoes String?
-
-  status StatusPartida @default(AGENDADA)
-
-  golsEquipe Int?
+  id             Int           @id @default(autoincrement())
+  equipeId       Int
+  adversario     String
+  data           DateTime
+  local          String?
+  campeonato     String?
+  rodada         String?
+  observacoes    String?
+  status         StatusPartida @default(AGENDADA)
+  golsEquipe     Int?
   golsAdversario Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  equipe Equipe @relation(fields: [equipeId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  equipe         Equipe        @relation(fields: [equipeId], references: [id], onDelete: Cascade)
 
   @@index([equipeId], map: "Partida_equipeId_fkey")
   @@index([data])
 }
-
 
 model Responsavel {
   id             Int      @id @default(autoincrement())
@@ -117,8 +105,7 @@ model Responsavel {
   telefone       String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-
-  atleta Atleta?
+  atleta         Atleta?
 }
 
 model Endereco {
@@ -132,8 +119,7 @@ model Endereco {
   estado      String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  atleta Atleta?
+  atleta      Atleta?
 }
 
 model Documento {
@@ -144,8 +130,7 @@ model Documento {
   atletaId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  atleta Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+  atleta    Atleta   @relation(fields: [atletaId], references: [id], onDelete: Cascade)
 
   @@index([atletaId], map: "Documento_atletaId_fkey")
 }
@@ -157,8 +142,7 @@ model PasswordResetToken {
   expiresAt DateTime
   usedAt    DateTime?
   createdAt DateTime  @default(now())
-
-  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  usuario   Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
   @@index([usuarioId], map: "PasswordResetToken_usuarioId_fkey")
 }

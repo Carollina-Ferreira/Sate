@@ -20,27 +20,33 @@ import styles from './atletas.module.css';
 import PerfilAtleta from './perfilAtletas.tsx';
 import EditarAtleta from './editarAtleta.tsx';
 import ClipesAtleta from './clipesAtleta.tsx';
+import InformacoesAtleta from './InformacoesAtleta.tsx';
 
 
 // ============================================================
-// ATLETA VINDO DO BACKEND
+// TIPOS
 // ============================================================
 
-interface AtletaBackend {
+export interface DocumentoAtleta {
+    id: number;
+    nome: string;
+    tipo: string;
+    url: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+
+export interface AtletaBackend {
     id: number;
 
     nome: string | null;
 
     cpf?: string | null;
-
     rg?: string | null;
-
     dataNascimento?: string | null;
-
     sexo?: string | null;
-
     categoria?: string | null;
-
     telefone?: string | null;
 
     equipe?: {
@@ -52,137 +58,72 @@ interface AtletaBackend {
 
     usuario?: {
         id: number;
-
         nome?: string | null;
-
         email: string;
-
         tipo?: string | null;
-
         avatarUrl?: string | null;
     };
 
     responsavel?: {
         id: number;
-
         nome: string;
-
         grauParentesco: string;
-
         telefone: string;
     } | null;
 
-    documentos?: unknown[];
+    endereco?: {
+        id: number;
+        cep: string;
+        logradouro: string;
+        numero: string;
+        bairro: string;
+        complemento?: string | null;
+        cidade?: string | null;
+        estado?: string | null;
+    } | null;
+
+    documentos?: DocumentoAtleta[];
 }
 
-
-// ============================================================
-// ATLETA FORMATADO PARA A TELA
-// ============================================================
 
 interface Atleta {
     id: number;
-
     nome: string;
-
     equipe: string;
-
     posicao: string;
-
     modalidade: string;
-
     frequencia: number;
-
-    cor:
-    | 'verde'
-    | 'rosa'
-    | 'azul'
-    | 'roxo'
-    | 'laranja';
-
+    cor: string;
     email?: string;
-
     categoria?: string;
+    avatarUrl?: string | null;
 }
 
-
-// ============================================================
-// FORMULÁRIO
-// ============================================================
 
 interface NovoAtletaForm {
     nome: string;
-
     dataNascimento: string;
-
     sexo: string;
-
     categoria: string;
-
     rg: string;
-
     cpf: string;
-
     email: string;
-
     telefone: string;
-
     responsavelNome: string;
-
-    responsavelParentesco: string;
-
+    responsavelGrau: string;
     responsavelTelefone: string;
 }
 
-
-// ============================================================
-// TELAS
-// ============================================================
 
 type TelaAtual =
     | 'lista'
     | 'perfil'
     | 'editar'
+    | 'informacoes'
     | 'clipes';
 
 
-// ============================================================
-// API
-// ============================================================
-
 const API_URL = 'http://localhost:3000';
-
-
-// ============================================================
-// CORES DOS AVATARES
-// ============================================================
-
-const cores: Atleta['cor'][] = [
-    'verde',
-    'rosa',
-    'azul',
-    'roxo',
-    'laranja',
-];
-
-
-// ============================================================
-// FORMULÁRIO INICIAL
-// ============================================================
-
-const formularioInicial: NovoAtletaForm = {
-    nome: '',
-    dataNascimento: '',
-    sexo: '',
-    categoria: '',
-    rg: '',
-    cpf: '',
-    email: '',
-    telefone: '',
-    responsavelNome: '',
-    responsavelParentesco: '',
-    responsavelTelefone: '',
-};
 
 
 // ============================================================
@@ -191,93 +132,85 @@ const formularioInicial: NovoAtletaForm = {
 
 const Atletas = () => {
 
-    const [
-        telaAtual,
-        setTelaAtual,
-    ] = useState<TelaAtual>('lista');
+    // ========================================================
+    // ESTADOS
+    // ========================================================
 
+    const [atletas, setAtletas] =
+        useState<Atleta[]>([]);
 
-    const [
-        atletas,
-        setAtletas,
-    ] = useState<Atleta[]>([]);
+    const [atletaSelecionado, setAtletaSelecionado] =
+        useState<AtletaBackend | null>(null);
 
+    const [telaAtual, setTelaAtual] =
+        useState<TelaAtual>('lista');
 
-    const [
-        carregando,
-        setCarregando,
-    ] = useState(true);
+    const [busca, setBusca] =
+        useState('');
 
+    const [filtroModalidade, setFiltroModalidade] =
+        useState('Todas');
 
-    const [
-        erro,
-        setErro,
-    ] = useState('');
+    const [filtroCategoria, setFiltroCategoria] =
+        useState('Todas');
 
+    const [filtroEquipe, setFiltroEquipe] =
+        useState('Todas');
 
-    const [
-        busca,
-        setBusca,
-    ] = useState('');
+    const [mostrarFiltros, setMostrarFiltros] =
+        useState(false);
 
+    const [mostrarCadastro, setMostrarCadastro] =
+        useState(false);
 
-    const [
-        equipeSelecionada,
-        setEquipeSelecionada,
-    ] = useState('Todas as equipes');
+    const [carregando, setCarregando] =
+        useState(true);
 
+    const [erro, setErro] =
+        useState('');
 
-    const [
-        modalidadeSelecionada,
-        setModalidadeSelecionada,
-    ] = useState('Todas as modalidades');
-
-
-    const [
-        atletaSelecionado,
-        setAtletaSelecionado,
-    ] = useState<AtletaBackend | null>(null);
-
-
-    const [
-        modalNovoAtleta,
-        setModalNovoAtleta,
-    ] = useState(false);
-
-
-    const [
-        novoAtleta,
-        setNovoAtleta,
-    ] = useState<NovoAtletaForm>(
-        formularioInicial,
-    );
-
-
-    const [
-        erroCadastro,
-        setErroCadastro,
-    ] = useState('');
-
-
-    const [
-        cadastrando,
-        setCadastrando,
-    ] = useState(false);
+    const [novoAtleta, setNovoAtleta] =
+        useState<NovoAtletaForm>({
+            nome: '',
+            dataNascimento: '',
+            sexo: '',
+            categoria: '',
+            rg: '',
+            cpf: '',
+            email: '',
+            telefone: '',
+            responsavelNome: '',
+            responsavelGrau: '',
+            responsavelTelefone: '',
+        });
 
 
     // ========================================================
     // TOKEN
     // ========================================================
 
-    const obterToken = (): string | null => {
+    const obterToken = () => {
+        return (
+            localStorage.getItem('token') ||
+            localStorage.getItem('accessToken') ||
+            ''
+        );
+    };
 
-        const local = localStorage.getItem('token');
 
-        if (local) {
-            return local;
-        }
+    // ========================================================
+    // HEADERS
+    // ========================================================
 
-        return sessionStorage.getItem('token');
+    const headersAutenticacao = () => {
+
+        const token =
+            obterToken();
+
+        return {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        };
     };
 
 
@@ -290,581 +223,165 @@ const Atletas = () => {
         try {
 
             setCarregando(true);
-
             setErro('');
-
-            const token = obterToken();
-
-
-            if (!token) {
-
-                setErro(
-                    'Usuário não autenticado. Faça login novamente.',
-                );
-
-                setAtletas([]);
-
-                return;
-            }
-
-
-            const resposta = await fetch(
-                `${API_URL}/api/atletas`,
-                {
-                    method: 'GET',
-
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`,
-
-                        'Content-Type':
-                            'application/json',
-                    },
-                },
-            );
-
-
-            let dados: unknown;
-
-            try {
-
-                dados = await resposta.json();
-
-            } catch {
-
-                dados = null;
-
-            }
-
-
-            if (!resposta.ok) {
-
-                if (resposta.status === 401) {
-
-                    setErro(
-                        'Sua sessão expirou. Faça login novamente.',
-                    );
-
-                    return;
-                }
-
-
-                if (resposta.status === 403) {
-
-                    setErro(
-                        'Você não possui permissão para acessar os atletas.',
-                    );
-
-                    return;
-                }
-
-
-                throw new Error(
-                    `Erro HTTP ${resposta.status}.`,
-                );
-            }
-
-
-            if (!Array.isArray(dados)) {
-
-                throw new Error(
-                    'O servidor não retornou uma lista de atletas.',
-                );
-            }
-
-
-            const atletasBanco =
-                dados as AtletaBackend[];
-
-
-            // ==================================================
-            // TRANSFORMAR DADOS DO BACKEND
-            // ==================================================
-
-            const atletasFormatados: Atleta[] =
-                atletasBanco.map(
-                    (
-                        atleta,
-                        index,
-                    ) => {
-
-                        const nome =
-                            atleta.nome ||
-                            atleta.usuario?.nome ||
-                            'Atleta sem nome';
-
-
-                        const equipe =
-                            atleta.equipe?.nome ||
-                            'Sem equipe';
-
-
-                        const modalidade =
-                            atleta.equipe?.modalidade ||
-                            'Não informada';
-
-
-                        return {
-
-                            id:
-                                atleta.id,
-
-                            nome,
-
-                            equipe,
-
-                            posicao:
-                                atleta.categoria ||
-                                'Sem categoria',
-
-                            modalidade,
-
-                            frequencia:
-                                0,
-
-                            cor:
-                                cores[
-                                    index %
-                                    cores.length
-                                ],
-
-                            email:
-                                atleta.usuario?.email,
-
-                            categoria:
-                                atleta.categoria ||
-                                undefined,
-
-                        };
-
-                    },
-                );
-
-
-            setAtletas(
-                atletasFormatados,
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                'Erro ao carregar atletas:',
-                error,
-            );
-
-
-            setErro(
-                error instanceof Error
-                    ? error.message
-                    : 'Erro ao carregar atletas.',
-            );
-
-
-            setAtletas([]);
-
-        } finally {
-
-            setCarregando(false);
-
-        }
-
-    };
-
-
-    // ========================================================
-    // CARREGAR AO ABRIR A PÁGINA
-    // ========================================================
-
-    useEffect(() => {
-
-        carregarAtletas();
-
-    }, []);
-
-
-    // ========================================================
-    // EQUIPES
-    // ========================================================
-
-    const equipes = useMemo(() => {
-
-        const existentes =
-            atletas
-                .map(
-                    (atleta) =>
-                        atleta.equipe,
-                )
-                .filter(
-                    Boolean,
-                );
-
-
-        return [
-            'Todas as equipes',
-
-            ...Array.from(
-                new Set(
-                    existentes,
-                ),
-            ),
-        ];
-
-    }, [atletas]);
-
-
-    // ========================================================
-    // MODALIDADES
-    // ========================================================
-
-    const modalidades = useMemo(() => {
-
-        const existentes =
-            atletas
-                .map(
-                    (atleta) =>
-                        atleta.modalidade,
-                )
-                .filter(
-                    (modalidade) =>
-                        modalidade &&
-                        modalidade !==
-                        'Não informada',
-                );
-
-
-        return [
-            'Todas as modalidades',
-
-            ...Array.from(
-                new Set(
-                    existentes,
-                ),
-            ),
-        ];
-
-    }, [atletas]);
-
-
-    // ========================================================
-    // FILTROS
-    // ========================================================
-
-    const atletasFiltrados = useMemo(() => {
-
-        const textoBusca =
-            busca
-                .toLowerCase()
-                .trim();
-
-
-        return atletas.filter(
-            (atleta) => {
-
-                const correspondeBusca =
-                    atleta.nome
-                        .toLowerCase()
-                        .includes(
-                            textoBusca,
-                        ) ||
-
-                    atleta.email
-                        ?.toLowerCase()
-                        .includes(
-                            textoBusca,
-                        ) ||
-
-                    atleta.categoria
-                        ?.toLowerCase()
-                        .includes(
-                            textoBusca,
-                        );
-
-
-                const correspondeEquipe =
-                    equipeSelecionada ===
-                    'Todas as equipes' ||
-
-                    atleta.equipe ===
-                    equipeSelecionada;
-
-
-                const correspondeModalidade =
-                    modalidadeSelecionada ===
-                    'Todas as modalidades' ||
-
-                    atleta.modalidade ===
-                    modalidadeSelecionada;
-
-
-                return (
-                    correspondeBusca &&
-                    correspondeEquipe &&
-                    correspondeModalidade
-                );
-
-            },
-        );
-
-    }, [
-        atletas,
-        busca,
-        equipeSelecionada,
-        modalidadeSelecionada,
-    ]);
-
-
-    // ========================================================
-    // NOVO ATLETA
-    // ========================================================
-
-    const abrirModalNovoAtleta = () => {
-
-        setNovoAtleta(
-            formularioInicial,
-        );
-
-        setErroCadastro('');
-
-        setModalNovoAtleta(true);
-
-    };
-
-
-    const fecharModalNovoAtleta = () => {
-
-        setModalNovoAtleta(false);
-
-        setNovoAtleta(
-            formularioInicial,
-        );
-
-        setErroCadastro('');
-
-        setCadastrando(false);
-
-    };
-
-
-    const alterarCampoNovoAtleta = (
-        campo: keyof NovoAtletaForm,
-        valor: string,
-    ) => {
-
-        setNovoAtleta(
-            (atual) => ({
-                ...atual,
-
-                [campo]:
-                    valor,
-            }),
-        );
-
-
-        if (erroCadastro) {
-
-            setErroCadastro('');
-
-        }
-
-    };
-
-
-    // ========================================================
-    // CADASTRAR ATLETA
-    // ========================================================
-
-    const cadastrarNovoAtleta = async () => {
-
-        if (!novoAtleta.nome.trim()) {
-
-            setErroCadastro(
-                'Informe o nome completo do atleta.',
-            );
-
-            return;
-        }
-
-
-        if (!novoAtleta.dataNascimento) {
-
-            setErroCadastro(
-                'Informe a data de nascimento.',
-            );
-
-            return;
-        }
-
-
-        if (!novoAtleta.sexo) {
-
-            setErroCadastro(
-                'Selecione o sexo.',
-            );
-
-            return;
-        }
-
-
-        const token = obterToken();
-
-
-        if (!token) {
-
-            setErroCadastro(
-                'Usuário não autenticado. Faça login novamente.',
-            );
-
-            return;
-        }
-
-
-        try {
-
-            setCadastrando(true);
-
-            setErroCadastro('');
-
 
             const resposta =
                 await fetch(
                     `${API_URL}/api/atletas`,
                     {
-                        method: 'POST',
-
-                        headers: {
-                            Authorization:
-                                `Bearer ${token}`,
-
-                            'Content-Type':
-                                'application/json',
-                        },
-
-                        body:
-                            JSON.stringify({
-
-                                nome:
-                                    novoAtleta.nome.trim(),
-
-                                dataNascimento:
-                                    novoAtleta.dataNascimento,
-
-                                sexo:
-                                    novoAtleta.sexo,
-
-                                categoria:
-                                    novoAtleta.categoria.trim() ||
-                                    null,
-
-                                rg:
-                                    novoAtleta.rg.trim() ||
-                                    null,
-
-                                cpf:
-                                    novoAtleta.cpf.trim() ||
-                                    null,
-
-                                email:
-                                    novoAtleta.email.trim() ||
-                                    null,
-
-                                telefone:
-                                    novoAtleta.telefone.trim() ||
-                                    null,
-
-                                responsavelNome:
-                                    novoAtleta.responsavelNome.trim() ||
-                                    null,
-
-                                responsavelParentesco:
-                                    novoAtleta.responsavelParentesco.trim() ||
-                                    null,
-
-                                responsavelTelefone:
-                                    novoAtleta.responsavelTelefone.trim() ||
-                                    null,
-
-                            }),
-                    },
+                        method: 'GET',
+                        headers:
+                            headersAutenticacao(),
+                    }
                 );
-
-
-            let dados: any = null;
-
-
-            try {
-
-                dados =
-                    await resposta.json();
-
-            } catch {
-
-                dados = null;
-
-            }
-
 
             if (!resposta.ok) {
 
-                if (resposta.status === 401) {
-
-                    throw new Error(
-                        'Sua sessão expirou. Faça login novamente.',
-                    );
-
-                }
-
-
-                if (resposta.status === 403) {
-
-                    throw new Error(
-                        'Você não possui permissão para cadastrar atletas.',
-                    );
-
-                }
-
+                const dadosErro =
+                    await resposta
+                        .json()
+                        .catch(() => null);
 
                 throw new Error(
-                    dados?.mensagem ||
-                    dados?.erro ||
-                    `Erro HTTP ${resposta.status} ao cadastrar atleta.`,
+                    dadosErro?.mensagem ||
+                    'Não foi possível carregar os atletas.'
                 );
-
             }
 
+            const dados:
+                AtletaBackend[] =
+                await resposta.json();
 
-            console.log(
-                'Atleta cadastrado com sucesso:',
-                dados,
+
+            const atletasFormatados:
+                Atleta[] =
+                dados.map((atleta) => ({
+
+                    id: atleta.id,
+
+                    nome:
+                        atleta.nome ||
+                        atleta.usuario?.nome ||
+                        'Atleta sem nome',
+
+                    equipe:
+                        atleta.equipe?.nome ||
+                        'Sem equipe',
+
+                    modalidade:
+                        atleta.equipe?.modalidade ||
+                        'Não informado',
+
+                    categoria:
+                        atleta.categoria ||
+                        atleta.equipe?.categoria ||
+                        undefined,
+
+                    posicao:
+                        atleta.categoria ||
+                        'Atleta',
+
+                    frequencia: 88,
+
+                    cor: '#16A875',
+
+                    email:
+                        atleta.usuario?.email ||
+                        undefined,
+
+                    avatarUrl:
+                        atleta.usuario?.avatarUrl ||
+                        null,
+                }));
+
+
+            setAtletas(
+                atletasFormatados
             );
-
-
-            fecharModalNovoAtleta();
-
-
-            await carregarAtletas();
-
 
         } catch (error) {
 
             console.error(
-                'Erro ao cadastrar atleta:',
-                error,
+                'Erro ao carregar atletas:',
+                error
             );
 
-
-            setErroCadastro(
+            setErro(
                 error instanceof Error
                     ? error.message
-                    : 'Erro ao cadastrar atleta.',
+                    : 'Erro ao carregar atletas.'
             );
 
         } finally {
 
-            setCadastrando(false);
-
+            setCarregando(false);
         }
+    };
 
+
+    // ========================================================
+    // CARREGAMENTO INICIAL
+    // ========================================================
+
+    useEffect(() => {
+        carregarAtletas();
+    }, []);
+
+
+    // ========================================================
+    // BUSCAR ATLETA
+    // ========================================================
+
+    const buscarAtletaPorId = async (
+        id: number
+    ): Promise<AtletaBackend | null> => {
+
+        try {
+
+            const resposta =
+                await fetch(
+                    `${API_URL}/api/atletas/${id}`,
+                    {
+                        method: 'GET',
+                        headers:
+                            headersAutenticacao(),
+                    }
+                );
+
+            if (!resposta.ok) {
+
+                const dadosErro =
+                    await resposta
+                        .json()
+                        .catch(() => null);
+
+                throw new Error(
+                    dadosErro?.mensagem ||
+                    'Não foi possível buscar o atleta.'
+                );
+            }
+
+            const dados:
+                AtletaBackend =
+                await resposta.json();
+
+            return dados;
+
+        } catch (error) {
+
+            console.error(
+                'Erro ao buscar atleta:',
+                error
+            );
+
+            setErro(
+                error instanceof Error
+                    ? error.message
+                    : 'Erro ao buscar atleta.'
+            );
+
+            return null;
+        }
     };
 
 
@@ -873,129 +390,52 @@ const Atletas = () => {
     // ========================================================
 
     const abrirPerfil = async (
-        id: number,
+        id: number
     ) => {
 
-        try {
+        setErro('');
 
-            const token =
-                obterToken();
+        const atleta =
+            await buscarAtletaPorId(id);
 
-
-            if (!token) {
-
-                setErro(
-                    'Usuário não autenticado.',
-                );
-
-                return;
-            }
-
-
-            const resposta =
-                await fetch(
-                    `${API_URL}/api/atletas/${id}`,
-                    {
-                        method: 'GET',
-
-                        headers: {
-                            Authorization:
-                                `Bearer ${token}`,
-
-                            'Content-Type':
-                                'application/json',
-                        },
-                    },
-                );
-
-
-            const dados =
-                await resposta.json();
-
-
-            if (!resposta.ok) {
-
-                throw new Error(
-                    dados.mensagem ||
-                    'Erro ao buscar atleta.',
-                );
-
-            }
-
-
-            setAtletaSelecionado(
-                dados,
-            );
-
-
-            setTelaAtual(
-                'perfil',
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                'Erro ao abrir perfil:',
-                error,
-            );
-
-
-            setErro(
-                error instanceof Error
-                    ? error.message
-                    : 'Erro ao abrir perfil.',
-            );
-
+        if (!atleta) {
+            return;
         }
 
+        setAtletaSelecionado(
+            atleta
+        );
+
+        setTelaAtual(
+            'perfil'
+        );
     };
 
 
     // ========================================================
-    // INFORMAÇÕES
+    // ABRIR INFORMAÇÕES
     // ========================================================
 
-    const abrirInformacoes = (
-        atleta: Atleta,
+    const abrirInformacoes = async (
+        id: number
     ) => {
 
-        setAtletaSelecionado({
+        setErro('');
 
-            id:
-                atleta.id,
+        const atleta =
+            await buscarAtletaPorId(id);
 
-            nome:
-                atleta.nome,
+        if (!atleta) {
+            return;
+        }
 
-            categoria:
-                atleta.categoria ||
-                '',
-
-            equipe:
-                undefined,
-
-            usuario: {
-
-                id:
-                    0,
-
-                email:
-                    atleta.email ||
-                    '',
-
-                tipo:
-                    'ATLETA',
-
-            },
-
-        });
-
-
-        setTelaAtual(
-            'editar',
+        setAtletaSelecionado(
+            atleta
         );
 
+        setTelaAtual(
+            'informacoes'
+        );
     };
 
 
@@ -1003,151 +443,563 @@ const Atletas = () => {
     // CLIPES
     // ========================================================
 
-    const abrirClipes = (
-        atleta: Atleta,
+    const abrirClipes = async (
+        id: number
     ) => {
 
-        setAtletaSelecionado({
+        setErro('');
 
-            id:
-                atleta.id,
+        const atleta =
+            await buscarAtletaPorId(id);
 
-            nome:
-                atleta.nome,
+        if (!atleta) {
+            return;
+        }
 
-            categoria:
-                atleta.categoria ||
-                '',
-
-            equipe:
-                undefined,
-
-            usuario: {
-
-                id:
-                    0,
-
-                email:
-                    atleta.email ||
-                    '',
-
-                tipo:
-                    'ATLETA',
-
-            },
-
-        });
-
-
-        setTelaAtual(
-            'clipes',
+        setAtletaSelecionado(
+            atleta
         );
 
+        setTelaAtual(
+            'clipes'
+        );
     };
 
 
     // ========================================================
-    // VOLTAR
+    // VOLTAR PARA LISTA
     // ========================================================
 
     const voltarParaLista = () => {
 
-        setTelaAtual(
-            'lista',
-        );
-
         setAtletaSelecionado(
-            null,
+            null
         );
 
+        setTelaAtual(
+            'lista'
+        );
+
+        setErro('');
     };
 
 
     // ========================================================
-    // TELA EDITAR
+    // VOLTAR PARA PERFIL
     // ========================================================
 
-    if (
-        telaAtual ===
-        'editar'
-    ) {
+    const voltarParaPerfil = () => {
+
+        if (!atletaSelecionado) {
+
+            setTelaAtual(
+                'lista'
+            );
+
+            return;
+        }
+
+        setTelaAtual(
+            'perfil'
+        );
+    };
+
+
+    // ========================================================
+    // ABRIR EDIÇÃO
+    // ========================================================
+
+    const abrirEdicao = () => {
+
+        if (!atletaSelecionado) {
+            return;
+        }
+
+        setTelaAtual(
+            'editar'
+        );
+    };
+
+
+    // ========================================================
+    // FILTROS
+    // ========================================================
+
+    const modalidades = useMemo(() => {
+
+        return [
+            'Todas',
+
+            ...Array.from(
+                new Set(
+                    atletas
+                        .map(
+                            (atleta) =>
+                                atleta.modalidade
+                        )
+                        .filter(Boolean)
+                )
+            ),
+        ];
+
+    }, [atletas]);
+
+
+    const categorias = useMemo(() => {
+
+        return [
+            'Todas',
+
+            ...Array.from(
+                new Set(
+                    atletas
+                        .map(
+                            (atleta) =>
+                                atleta.categoria
+                        )
+                        .filter(Boolean) as string[]
+                )
+            ),
+        ];
+
+    }, [atletas]);
+
+
+    const equipes = useMemo(() => {
+
+        return [
+            'Todas',
+
+            ...Array.from(
+                new Set(
+                    atletas
+                        .map(
+                            (atleta) =>
+                                atleta.equipe
+                        )
+                        .filter(Boolean)
+                )
+            ),
+        ];
+
+    }, [atletas]);
+
+
+    // ========================================================
+    // FILTRAGEM
+    // ========================================================
+
+    const atletasFiltrados = useMemo(() => {
+
+        const textoBusca =
+            busca
+                .trim()
+                .toLowerCase();
+
+        return atletas.filter(
+            (atleta) => {
+
+                const correspondeBusca =
+                    !textoBusca ||
+                    atleta.nome
+                        .toLowerCase()
+                        .includes(textoBusca) ||
+                    atleta.equipe
+                        .toLowerCase()
+                        .includes(textoBusca) ||
+                    atleta.modalidade
+                        .toLowerCase()
+                        .includes(textoBusca);
+
+                const correspondeModalidade =
+                    filtroModalidade === 'Todas' ||
+                    atleta.modalidade ===
+                    filtroModalidade;
+
+                const correspondeCategoria =
+                    filtroCategoria === 'Todas' ||
+                    atleta.categoria ===
+                    filtroCategoria;
+
+                const correspondeEquipe =
+                    filtroEquipe === 'Todas' ||
+                    atleta.equipe ===
+                    filtroEquipe;
+
+                return (
+                    correspondeBusca &&
+                    correspondeModalidade &&
+                    correspondeCategoria &&
+                    correspondeEquipe
+                );
+            }
+        );
+
+    }, [
+        atletas,
+        busca,
+        filtroModalidade,
+        filtroCategoria,
+        filtroEquipe,
+    ]);
+
+
+    // ========================================================
+    // LIMPAR FILTROS
+    // ========================================================
+
+    const limparFiltros = () => {
+
+        setFiltroModalidade(
+            'Todas'
+        );
+
+        setFiltroCategoria(
+            'Todas'
+        );
+
+        setFiltroEquipe(
+            'Todas'
+        );
+
+        setBusca('');
+    };
+
+
+    // ========================================================
+    // CADASTRO
+    // ========================================================
+
+    const alterarNovoAtleta = (
+        campo: keyof NovoAtletaForm,
+        valor: string
+    ) => {
+
+        setNovoAtleta(
+            (atual) => ({
+                ...atual,
+                [campo]: valor,
+            })
+        );
+    };
+
+
+    const cadastrarAtleta = async (
+        event: React.FormEvent<HTMLFormElement>
+    ) => {
+
+        event.preventDefault();
+
+        try {
+
+            setErro('');
+
+            const resposta =
+                await fetch(
+                    `${API_URL}/api/atletas`,
+                    {
+                        method: 'POST',
+                        headers:
+                            headersAutenticacao(),
+
+                        body: JSON.stringify({
+
+                            nome:
+                                novoAtleta.nome,
+
+                            dataNascimento:
+                                novoAtleta.dataNascimento ||
+                                null,
+
+                            sexo:
+                                novoAtleta.sexo ||
+                                null,
+
+                            categoria:
+                                novoAtleta.categoria ||
+                                null,
+
+                            rg:
+                                novoAtleta.rg ||
+                                null,
+
+                            cpf:
+                                novoAtleta.cpf ||
+                                null,
+
+                            email:
+                                novoAtleta.email,
+
+                            telefone:
+                                novoAtleta.telefone ||
+                                null,
+
+                            responsavel:
+                                novoAtleta
+                                    .responsavelNome
+                                    ? {
+
+                                        nome:
+                                            novoAtleta
+                                                .responsavelNome,
+
+                                        grauParentesco:
+                                            novoAtleta
+                                                .responsavelGrau,
+
+                                        telefone:
+                                            novoAtleta
+                                                .responsavelTelefone,
+
+                                    }
+                                    : null,
+                        }),
+                    }
+                );
+
+
+            const dados =
+                await resposta
+                    .json()
+                    .catch(() => null);
+
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    dados?.mensagem ||
+                    'Não foi possível cadastrar o atleta.'
+                );
+            }
+
+
+            setNovoAtleta({
+
+                nome: '',
+                dataNascimento: '',
+                sexo: '',
+                categoria: '',
+                rg: '',
+                cpf: '',
+                email: '',
+                telefone: '',
+                responsavelNome: '',
+                responsavelGrau: '',
+                responsavelTelefone: '',
+
+            });
+
+
+            setMostrarCadastro(
+                false
+            );
+
+            await carregarAtletas();
+
+        } catch (error) {
+
+            console.error(
+                'Erro ao cadastrar atleta:',
+                error
+            );
+
+            setErro(
+                error instanceof Error
+                    ? error.message
+                    : 'Erro ao cadastrar atleta.'
+            );
+        }
+    };
+
+
+    // ========================================================
+    // SALVAR EDIÇÃO
+    // ========================================================
+
+    const atualizarAtletaSelecionado = async (
+        dados: Record<string, unknown>
+    ) => {
+
+        if (!atletaSelecionado) {
+            return;
+        }
+
+        try {
+
+            setErro('');
+
+            const resposta =
+                await fetch(
+                    `${API_URL}/api/atletas/${atletaSelecionado.id}`,
+                    {
+                        method: 'PUT',
+                        headers:
+                            headersAutenticacao(),
+                        body: JSON.stringify(
+                            dados
+                        ),
+                    }
+                );
+
+
+            const resultado =
+                await resposta
+                    .json()
+                    .catch(() => null);
+
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    resultado?.mensagem ||
+                    'Não foi possível atualizar o atleta.'
+                );
+            }
+
+
+            const atletaAtualizado =
+                await buscarAtletaPorId(
+                    atletaSelecionado.id
+                );
+
+
+            if (atletaAtualizado) {
+
+                setAtletaSelecionado(
+                    atletaAtualizado
+                );
+            }
+
+
+            await carregarAtletas();
+
+
+            setTelaAtual(
+                'perfil'
+            );
+
+        } catch (error) {
+
+            console.error(
+                'Erro ao atualizar atleta:',
+                error
+            );
+
+            setErro(
+                error instanceof Error
+                    ? error.message
+                    : 'Erro ao atualizar atleta.'
+            );
+        }
+    };
+
+
+    // ========================================================
+    // TELA DE EDIÇÃO
+    // ========================================================
+
+    if (telaAtual === 'editar') {
+
+        if (!atletaSelecionado) {
+            return null;
+        }
 
         return (
-
             <EditarAtleta
-
-                onBack={() =>
-                    setTelaAtual(
-                        'perfil',
-                    )
+                atleta={
+                    atletaSelecionado
                 }
-
+                onBack={
+                    voltarParaPerfil
+                }
+                onSave={
+                    atualizarAtletaSelecionado
+                }
             />
-
         );
-
     }
 
 
     // ========================================================
-    // TELA CLIPES
+    // TELA DE INFORMAÇÕES
     // ========================================================
 
-    if (
-        telaAtual ===
-        'clipes'
-    ) {
+    if (telaAtual === 'informacoes') {
+
+        if (!atletaSelecionado) {
+            return null;
+        }
 
         return (
+            <InformacoesAtleta
+                atleta={
+                    atletaSelecionado
+                }
+                onBack={
+                    voltarParaPerfil
+                }
+            />
+        );
+    }
 
+
+    // ========================================================
+    // TELA DE CLIPES
+    // ========================================================
+
+    if (telaAtual === 'clipes') {
+
+        if (!atletaSelecionado) {
+            return null;
+        }
+
+        return (
             <ClipesAtleta
-
-                onBack={() =>
-                    setTelaAtual(
-                        'perfil',
-                    )
+                onBack={
+                    voltarParaPerfil
                 }
-
             />
-
         );
-
     }
 
 
     // ========================================================
-    // TELA PERFIL
+    // TELA DE PERFIL
     // ========================================================
 
-    if (
-        telaAtual ===
-        'perfil'
-    ) {
+    if (telaAtual === 'perfil') {
+
+        if (!atletaSelecionado) {
+            return null;
+        }
 
         return (
-
             <PerfilAtleta
+                atleta={
+                    atletaSelecionado
+                }
 
                 onBack={
                     voltarParaLista
                 }
 
-                onEdit={() =>
-                    setTelaAtual(
-                        'editar',
+                onEdit={
+                    abrirEdicao
+                }
+
+                onInformacoes={() =>
+                    abrirInformacoes(
+                        atletaSelecionado.id
                     )
                 }
 
                 onClipes={() =>
-                    setTelaAtual(
-                        'clipes',
+                    abrirClipes(
+                        atletaSelecionado.id
                     )
                 }
-
             />
-
         );
-
     }
 
 
@@ -1156,35 +1008,22 @@ const Atletas = () => {
     // ========================================================
 
     return (
-
-        <main
-            className={
-                styles.page
-            }
-        >
+        <div className={styles.page}>
 
             {/* ==================================================
-               CABEÇALHO
+                CABEÇALHO
             ================================================== */}
 
-            <div
-                className={
-                    styles.top
-                }
-            >
+            <div className={styles.top}>
 
-                <div
-                    className={
-                        styles.titleArea
-                    }
-                >
+                <div className={styles.titleArea}>
 
                     <h1>
-                        Veja seus atletas
+                        Atletas
                     </h1>
 
                     <p>
-                        Gerencie seus atletas e acesse rapidamente seus perfis e informações.
+                        Gerencie os atletas das suas equipes.
                     </p>
 
                 </div>
@@ -1195,27 +1034,58 @@ const Atletas = () => {
                     className={
                         styles.newAthleteButton
                     }
-                    onClick={
-                        abrirModalNovoAtleta
+                    onClick={() =>
+                        setMostrarCadastro(
+                            true
+                        )
                     }
                 >
-
-                    <Plus
-                        size={22}
-                    />
+                    <Plus size={18} />
 
                     Novo atleta
-
                 </button>
 
             </div>
 
 
             {/* ==================================================
-               FILTROS
+                ERRO
             ================================================== */}
 
-            <section
+            {erro && (
+
+                <div
+                    className={
+                        styles.message
+                    }
+                >
+
+                    <strong>
+                        Ocorreu um erro
+                    </strong>
+
+                    <span>
+                        {erro}
+                    </span>
+
+                    <button
+                        type="button"
+                        onClick={() =>
+                            setErro('')
+                        }
+                    >
+                        Fechar
+                    </button>
+
+                </div>
+            )}
+
+
+            {/* ==================================================
+                FILTROS / BUSCA
+            ================================================== */}
+
+            <div
                 className={
                     styles.filters
                 }
@@ -1227,24 +1097,41 @@ const Atletas = () => {
                     }
                 >
 
-                    <Search
-                        size={22}
-                    />
+                    <Search size={19} />
 
                     <input
                         type="text"
-                        placeholder="Buscar atleta..."
-                        value={
-                            busca
-                        }
-                        onChange={(
-                            event,
-                        ) =>
+                        value={busca}
+                        onChange={(event) =>
                             setBusca(
-                                event.target.value,
+                                event.target.value
                             )
                         }
+                        placeholder="Buscar atleta..."
                     />
+
+                    {busca && (
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setBusca('')
+                            }
+                            style={{
+                                border: 'none',
+                                background: 'transparent',
+                                color: '#738078',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                padding: 0,
+                            }}
+                        >
+                            <X size={16} />
+                        </button>
+
+                    )}
 
                 </div>
 
@@ -1257,61 +1144,11 @@ const Atletas = () => {
 
                     <select
                         value={
-                            equipeSelecionada
+                            filtroModalidade
                         }
-                        onChange={(
-                            event,
-                        ) =>
-                            setEquipeSelecionada(
-                                event.target.value,
-                            )
-                        }
-                    >
-
-                        {equipes.map(
-                            (equipe) => (
-
-                                <option
-                                    key={
-                                        equipe
-                                    }
-                                    value={
-                                        equipe
-                                    }
-                                >
-
-                                    {equipe}
-
-                                </option>
-
-                            ),
-                        )}
-
-                    </select>
-
-
-                    <ChevronDown
-                        size={19}
-                    />
-
-                </div>
-
-
-                <div
-                    className={
-                        styles.selectBox
-                    }
-                >
-
-                    <select
-                        value={
-                            modalidadeSelecionada
-                        }
-                        onChange={(
-                            event,
-                        ) =>
-                            setModalidadeSelecionada(
-                                event.target.value,
+                        onChange={(event) =>
+                            setFiltroModalidade(
+                                event.target.value
                             )
                         }
                     >
@@ -1327,20 +1164,56 @@ const Atletas = () => {
                                         modalidade
                                     }
                                 >
-
                                     {modalidade}
-
                                 </option>
 
-                            ),
+                            )
                         )}
 
                     </select>
 
+                    <ChevronDown size={17} />
 
-                    <ChevronDown
-                        size={19}
-                    />
+                </div>
+
+
+                <div
+                    className={
+                        styles.selectBox
+                    }
+                >
+
+                    <select
+                        value={
+                            filtroCategoria
+                        }
+                        onChange={(event) =>
+                            setFiltroCategoria(
+                                event.target.value
+                            )
+                        }
+                    >
+
+                        {categorias.map(
+                            (categoria) => (
+
+                                <option
+                                    key={
+                                        categoria
+                                    }
+                                    value={
+                                        categoria
+                                    }
+                                >
+                                    {categoria}
+                                </option>
+
+                            )
+                        )}
+
+                    </select>
+
+                    <ChevronDown size={17} />
 
                 </div>
 
@@ -1350,295 +1223,400 @@ const Atletas = () => {
                     className={
                         styles.filterButton
                     }
+                    onClick={() =>
+                        setMostrarFiltros(
+                            (atual) => !atual
+                        )
+                    }
                 >
 
-                    <ListFilter
-                        size={19}
-                    />
+                    <ListFilter size={17} />
 
-                    Filtros
+                    {mostrarFiltros
+                        ? 'Ocultar'
+                        : 'Filtros'}
 
                 </button>
 
-            </section>
+            </div>
 
 
             {/* ==================================================
-               CARREGANDO
+                FILTRO EXTRA DE EQUIPE
+            ================================================== */}
+
+            {mostrarFiltros && (
+
+                <div
+                    style={{
+                        width: '100%',
+                        display: 'grid',
+                        gridTemplateColumns:
+                            'minmax(220px, 300px)',
+                        marginTop: '-25px',
+                        marginBottom: '25px',
+                    }}
+                >
+
+                    <div
+                        className={
+                            styles.selectBox
+                        }
+                    >
+
+                        <select
+                            value={
+                                filtroEquipe
+                            }
+                            onChange={(event) =>
+                                setFiltroEquipe(
+                                    event.target.value
+                                )
+                            }
+                        >
+
+                            {equipes.map(
+                                (equipe) => (
+
+                                    <option
+                                        key={equipe}
+                                        value={equipe}
+                                    >
+                                        {equipe}
+                                    </option>
+
+                                )
+                            )}
+
+                        </select>
+
+                        <ChevronDown size={17} />
+
+                    </div>
+
+                </div>
+            )}
+
+
+            {/* ==================================================
+                RESULTADO
+            ================================================== */}
+
+            <div
+                style={{
+                    marginBottom: '16px',
+                    color:
+                        'rgba(255,255,255,0.72)',
+                    fontSize: '13px',
+                    fontWeight: 500,
+                }}
+            >
+
+                {carregando
+                    ? 'Carregando atletas...'
+                    : `${atletasFiltrados.length} ${
+                        atletasFiltrados.length === 1
+                            ? 'atleta'
+                            : 'atletas'
+                    }`
+                }
+
+            </div>
+
+
+            {/* ==================================================
+                LOADING
             ================================================== */}
 
             {carregando && (
 
                 <div
                     className={
-                        styles.message
+                        styles.empty
                     }
                 >
 
-                    Carregando atletas...
+                    <strong>
+                        Carregando atletas...
+                    </strong>
+
+                    <span>
+                        Aguarde enquanto buscamos os atletas.
+                    </span>
 
                 </div>
-
             )}
 
 
             {/* ==================================================
-               ERRO
+                VAZIO
             ================================================== */}
 
             {!carregando &&
-                erro && (
+                atletasFiltrados.length === 0 && (
 
                     <div
                         className={
-                            styles.message
+                            styles.empty
                         }
                     >
 
+                        <UserRound size={28} />
+
                         <strong>
-                            Não foi possível carregar os atletas.
+                            Nenhum atleta encontrado
                         </strong>
 
                         <span>
-                            {erro}
+
+                            {busca ||
+                            filtroModalidade !== 'Todas' ||
+                            filtroCategoria !== 'Todas' ||
+                            filtroEquipe !== 'Todas'
+
+                                ? 'Tente alterar os filtros ou a busca.'
+
+                                : 'Cadastre seu primeiro atleta para começar.'
+                            }
+
                         </span>
 
-                        <button
-                            type="button"
-                            onClick={
-                                carregarAtletas
-                            }
-                        >
 
-                            Tentar novamente
+                        {!busca &&
+                            filtroModalidade === 'Todas' &&
+                            filtroCategoria === 'Todas' &&
+                            filtroEquipe === 'Todas' && (
 
-                        </button>
+                                <button
+                                    type="button"
+                                    className={
+                                        styles.submitButton
+                                    }
+                                    onClick={() =>
+                                        setMostrarCadastro(
+                                            true
+                                        )
+                                    }
+                                >
+
+                                    <Plus size={16} />
+
+                                    Novo atleta
+
+                                </button>
+                            )}
 
                     </div>
-
                 )}
 
 
             {/* ==================================================
-               LISTA
+                CARDS
             ================================================== */}
 
             {!carregando &&
-                !erro && (
+                atletasFiltrados.length > 0 && (
 
-                    <section
+                    <div
                         className={
                             styles.athletesGrid
                         }
                     >
 
                         {atletasFiltrados.map(
-                            (atleta) => {
+                            (atleta) => (
 
-                                const iniciais =
-                                    atleta.nome
-                                        .split(' ')
-                                        .filter(Boolean)
-                                        .slice(0, 2)
-                                        .map(
-                                            (parte) =>
-                                                parte[0],
-                                        )
-                                        .join('')
-                                        .toUpperCase();
+                                <div
+                                    key={
+                                        atleta.id
+                                    }
+                                    className={
+                                        styles.athleteCard
+                                    }
+                                >
 
-
-                                return (
-
-                                    <article
-                                        key={
-                                            atleta.id
-                                        }
+                                    <div
                                         className={
-                                            styles.athleteCard
+                                            styles.cardContent
                                         }
                                     >
 
                                         <div
-                                            className={
-                                                styles.cardContent
-                                            }
+                                            className={`
+                                                ${styles.avatar}
+                                                ${styles.verde}
+                                            `}
                                         >
 
-                                            <div
-                                                className={`${styles.avatar} ${styles[atleta.cor]}`}
-                                            >
+                                            {atleta.avatarUrl ? (
 
-                                                {iniciais}
-
-                                            </div>
-
-
-                                            <div
-                                                className={
-                                                    styles.cardInfo
-                                                }
-                                            >
-
-                                                <h2>
-                                                    {atleta.nome}
-                                                </h2>
-
-
-                                                <span
-                                                    className={
-                                                        styles.team
+                                                <img
+                                                    src={
+                                                        atleta.avatarUrl
                                                     }
-                                                >
+                                                    alt={
+                                                        `Foto de ${atleta.nome}`
+                                                    }
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        objectFit: 'cover',
+                                                        borderRadius: '50%',
+                                                        display: 'block',
+                                                    }}
+                                                />
 
-                                                    {atleta.equipe}
+                                            ) : (
 
-                                                </span>
-
-
-                                                <p>
-
-                                                    {atleta.posicao}
-
-                                                    <span>
-                                                        •
-                                                    </span>
-
-                                                    {atleta.modalidade}
-
-                                                </p>
-
-                                            </div>
-
-
-                                            <span
-                                                className={
-                                                    styles.frequency
-                                                }
-                                            >
-
-                                                {atleta.frequencia}%
-
-                                            </span>
+                                                atleta.nome
+                                                    .charAt(0)
+                                                    .toUpperCase()
+                                            )}
 
                                         </div>
 
-
-                                        {/* ==================================================
-                                           HOVER
-                                        ================================================== */}
 
                                         <div
                                             className={
-                                                styles.cardHover
+                                                styles.cardInfo
                                             }
                                         >
 
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    abrirPerfil(
-                                                        atleta.id,
-                                                    )
+                                            <h2>
+                                                {atleta.nome}
+                                            </h2>
+
+                                            <span
+                                                className={
+                                                    styles.team
                                                 }
                                             >
+                                                {atleta.equipe}
+                                            </span>
 
-                                                <Eye
-                                                    size={20}
-                                                />
+                                            <p>
 
-                                                Perfil
+                                                <span>
+                                                    Modalidade:
+                                                </span>
 
-                                            </button>
+                                                {atleta.modalidade}
 
-
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    abrirInformacoes(
-                                                        atleta,
-                                                    )
-                                                }
-                                            >
-
-                                                <UserRound
-                                                    size={20}
-                                                />
-
-                                                Informações
-
-                                            </button>
+                                            </p>
 
 
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    abrirClipes(
-                                                        atleta,
-                                                    )
-                                                }
-                                            >
+                                            {atleta.categoria && (
 
-                                                <Scissors
-                                                    size={20}
-                                                />
+                                                <p>
 
-                                                Clipes
+                                                    <span>
+                                                        Categoria:
+                                                    </span>
 
-                                            </button>
+                                                    {
+                                                        atleta.categoria
+                                                    }
+
+                                                </p>
+                                            )}
 
                                         </div>
 
-                                    </article>
 
-                                );
+                                        <div
+                                            className={
+                                                styles.frequency
+                                            }
+                                        >
+                                            {
+                                                atleta.frequencia
+                                            }%
+                                        </div>
 
-                            },
-                        )}
+                                    </div>
 
 
-                        {atletasFiltrados.length ===
-                            0 && (
+                                    <div
+                                        className={
+                                            styles.cardHover
+                                        }
+                                    >
 
-                                <div
-                                    className={
-                                        styles.empty
-                                    }
-                                >
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                abrirPerfil(
+                                                    atleta.id
+                                                )
+                                            }
+                                        >
 
-                                    <UserRound
-                                        size={32}
-                                    />
+                                            <Eye size={17} />
 
-                                    <strong>
-                                        Nenhum atleta encontrado
-                                    </strong>
+                                            Perfil
 
-                                    <span>
-                                        Tente alterar sua busca ou os filtros.
-                                    </span>
+                                        </button>
+
+
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                abrirInformacoes(
+                                                    atleta.id
+                                                )
+                                            }
+                                        >
+
+                                            <UserRound
+                                                size={17}
+                                            />
+
+                                            Informações
+
+                                        </button>
+
+
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                abrirClipes(
+                                                    atleta.id
+                                                )
+                                            }
+                                        >
+
+                                            <Scissors
+                                                size={17}
+                                            />
+
+                                            Clipes
+
+                                        </button>
+
+                                    </div>
 
                                 </div>
+                            )
+                        )}
 
-                            )}
-
-                    </section>
-
+                    </div>
                 )}
 
 
-            {/* =====================================================
-               MODAL NOVO ATLETA
-            ===================================================== */}
+            {/* ==================================================
+                MODAL NOVO ATLETA
+            ================================================== */}
 
-            {modalNovoAtleta && (
+            {mostrarCadastro && (
 
                 <div
                     className={
                         styles.modalOverlay
                     }
-                    onMouseDown={
-                        fecharModalNovoAtleta
+                    onMouseDown={() =>
+                        setMostrarCadastro(
+                            false
+                        )
                     }
                 >
 
@@ -1646,9 +1624,7 @@ const Atletas = () => {
                         className={
                             styles.newAthleteModal
                         }
-                        onMouseDown={(
-                            event,
-                        ) =>
+                        onMouseDown={(event) =>
                             event.stopPropagation()
                         }
                     >
@@ -1663,12 +1639,17 @@ const Atletas = () => {
 
                             <div>
 
+                                <span>
+                                    CADASTRO
+                                </span>
+
                                 <h2>
-                                    Cadastrar atleta
+                                    Novo atleta
                                 </h2>
 
                                 <p>
-                                    Preencha os dados do atleta para adicioná-lo ao sistema.
+                                    Cadastre um novo atleta
+                                    na sua equipe.
                                 </p>
 
                             </div>
@@ -1679,537 +1660,478 @@ const Atletas = () => {
                                 className={
                                     styles.closeModalButton
                                 }
-                                onClick={
-                                    fecharModalNovoAtleta
+                                onClick={() =>
+                                    setMostrarCadastro(
+                                        false
+                                    )
                                 }
                             >
-
-                                <X
-                                    size={21}
-                                />
-
+                                <X size={18} />
                             </button>
 
                         </div>
 
 
-                        {/* CONTEÚDO */}
+                        {/* CORPO */}
 
-                        <div
-                            className={
-                                styles.modalBody
+                        <form
+                            onSubmit={
+                                cadastrarAtleta
                             }
                         >
 
-                            {/* DADOS PESSOAIS */}
-
-                            <section
+                            <div
                                 className={
-                                    styles.formSection
+                                    styles.modalBody
                                 }
                             >
 
-                                <div
+                                {/* ============================
+                                    DADOS PESSOAIS
+                                ============================ */}
+
+                                <section
                                     className={
-                                        styles.sectionHeader
-                                    }
-                                >
-
-                                    <h3>
-                                        Dados pessoais
-                                    </h3>
-
-                                </div>
-
-
-                                <div
-                                    className={
-                                        styles.formGrid
+                                        styles.formSection
                                     }
                                 >
 
                                     <div
-                                        className={`${styles.formField} ${styles.fullField}`}
+                                        className={
+                                            styles.sectionHeader
+                                        }
                                     >
 
-                                        <label>
-                                            Nome completo do atleta
-                                            <b>*</b>
-                                        </label>
+                                        <h3>
+                                            Dados pessoais
+                                        </h3>
 
-                                        <input
-                                            type="text"
-                                            placeholder="Digite o nome completo..."
-                                            value={
-                                                novoAtleta.nome
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'nome',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
+                                        <span>
+                                            Informações principais
+                                            do atleta
+                                        </span>
 
                                     </div>
 
 
                                     <div
                                         className={
-                                            styles.formField
+                                            styles.formGrid
                                         }
                                     >
 
-                                        <label>
-                                            Data de nascimento
-                                            <b>*</b>
-                                        </label>
+                                        <div
+                                            className={`
+                                                ${styles.formField}
+                                                ${styles.fullField}
+                                            `}
+                                        >
 
-                                        <input
-                                            type="date"
-                                            value={
-                                                novoAtleta.dataNascimento
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'dataNascimento',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
+                                            <label>
+                                                Nome completo
+                                                <b>*</b>
+                                            </label>
 
-                                    </div>
+                                            <input
+                                                type="text"
+                                                value={
+                                                    novoAtleta.nome
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'nome',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                required
+                                                placeholder="Nome do atleta"
+                                            />
+
+                                        </div>
 
 
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Sexo
-                                            <b>*</b>
-                                        </label>
-
-                                        <select
-                                            value={
-                                                novoAtleta.sexo
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'sexo',
-                                                    event.target.value,
-                                                )
+                                        <div
+                                            className={
+                                                styles.formField
                                             }
                                         >
 
-                                            <option value="">
-                                                Selecione
-                                            </option>
+                                            <label>
+                                                Data de nascimento
+                                            </label>
 
-                                            <option value="Masculino">
-                                                Masculino
-                                            </option>
+                                            <input
+                                                type="date"
+                                                value={
+                                                    novoAtleta.dataNascimento
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'dataNascimento',
+                                                        event.target.value
+                                                    )
+                                                }
+                                            />
 
-                                            <option value="Feminino">
-                                                Feminino
-                                            </option>
-
-                                            <option value="Outro">
-                                                Outro
-                                            </option>
-
-                                        </select>
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Categoria
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            placeholder="Ex.: M17 - Rugby"
-                                            value={
-                                                novoAtleta.categoria
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'categoria',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
+                                        </div>
 
 
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Registro Geral (RG)
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            placeholder="Digite o RG..."
-                                            value={
-                                                novoAtleta.rg
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'rg',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Cadastro de Pessoa Física (CPF)
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            placeholder="000.000.000-00"
-                                            value={
-                                                novoAtleta.cpf
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'cpf',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            E-mail
-                                        </label>
-
-                                        <input
-                                            type="email"
-                                            placeholder="Digite o e-mail..."
-                                            value={
-                                                novoAtleta.email
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'email',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Telefone
-                                        </label>
-
-                                        <input
-                                            type="tel"
-                                            placeholder="Digite o telefone..."
-                                            value={
-                                                novoAtleta.telefone
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'telefone',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-                                </div>
-
-                            </section>
-
-
-                            {/* RESPONSÁVEL */}
-
-                            <section
-                                className={
-                                    styles.formSection
-                                }
-                            >
-
-                                <div
-                                    className={
-                                        styles.sectionHeader
-                                    }
-                                >
-
-                                    <h3>
-                                        Dados do responsável
-                                    </h3>
-
-                                </div>
-
-
-                                <div
-                                    className={
-                                        styles.responsibleGrid
-                                    }
-                                >
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Nome do responsável
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            placeholder="Digite o nome..."
-                                            value={
-                                                novoAtleta.responsavelNome
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'responsavelNome',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Grau de parentesco
-                                        </label>
-
-                                        <select
-                                            value={
-                                                novoAtleta.responsavelParentesco
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'responsavelParentesco',
-                                                    event.target.value,
-                                                )
+                                        <div
+                                            className={
+                                                styles.formField
                                             }
                                         >
 
-                                            <option value="">
-                                                Selecione
-                                            </option>
+                                            <label>
+                                                Sexo
+                                            </label>
 
-                                            <option value="Mãe">
-                                                Mãe
-                                            </option>
+                                            <select
+                                                value={
+                                                    novoAtleta.sexo
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'sexo',
+                                                        event.target.value
+                                                    )
+                                                }
+                                            >
 
-                                            <option value="Pai">
-                                                Pai
-                                            </option>
+                                                <option value="">
+                                                    Selecione
+                                                </option>
 
-                                            <option value="Avó">
-                                                Avó
-                                            </option>
+                                                <option value="MASCULINO">
+                                                    Masculino
+                                                </option>
 
-                                            <option value="Avô">
-                                                Avô
-                                            </option>
+                                                <option value="FEMININO">
+                                                    Feminino
+                                                </option>
 
-                                            <option value="Tia">
-                                                Tia
-                                            </option>
+                                                <option value="OUTRO">
+                                                    Outro
+                                                </option>
 
-                                            <option value="Tio">
-                                                Tio
-                                            </option>
+                                                <option value="NAO_INFORMADO">
+                                                    Não informado
+                                                </option>
 
-                                            <option value="Outro">
-                                                Outro
-                                            </option>
+                                            </select>
 
-                                        </select>
+                                        </div>
+
+
+                                        <div
+                                            className={
+                                                styles.formField
+                                            }
+                                        >
+
+                                            <label>
+                                                Categoria
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                value={
+                                                    novoAtleta.categoria
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'categoria',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="Ex.: Sub-18"
+                                            />
+
+                                        </div>
+
+
+                                        <div
+                                            className={
+                                                styles.formField
+                                            }
+                                        >
+
+                                            <label>
+                                                CPF
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                value={
+                                                    novoAtleta.cpf
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'cpf',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="000.000.000-00"
+                                            />
+
+                                        </div>
+
+
+                                        <div
+                                            className={
+                                                styles.formField
+                                            }
+                                        >
+
+                                            <label>
+                                                RG
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                value={
+                                                    novoAtleta.rg
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'rg',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="00.000.000-0"
+                                            />
+
+                                        </div>
+
+
+                                        <div
+                                            className={
+                                                styles.formField
+                                            }
+                                        >
+
+                                            <label>
+                                                Telefone
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                value={
+                                                    novoAtleta.telefone
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'telefone',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="(11) 99999-9999"
+                                            />
+
+                                        </div>
+
+
+                                        <div
+                                            className={`
+                                                ${styles.formField}
+                                                ${styles.fullField}
+                                            `}
+                                        >
+
+                                            <label>
+                                                E-mail
+                                                <b>*</b>
+                                            </label>
+
+                                            <input
+                                                type="email"
+                                                value={
+                                                    novoAtleta.email
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'email',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                required
+                                                placeholder="atleta@email.com"
+                                            />
+
+                                        </div>
+
+                                    </div>
+
+                                </section>
+
+
+                                {/* ============================
+                                    RESPONSÁVEL
+                                ============================ */}
+
+                                <section
+                                    className={
+                                        styles.formSection
+                                    }
+                                >
+
+                                    <div
+                                        className={
+                                            styles.sectionHeader
+                                        }
+                                    >
+
+                                        <h3>
+                                            Responsável
+                                        </h3>
+
+                                        <span>
+                                            Dados do responsável
+                                            pelo atleta
+                                        </span>
 
                                     </div>
 
 
                                     <div
                                         className={
-                                            styles.formField
+                                            styles.responsibleGrid
                                         }
                                     >
 
-                                        <label>
-                                            Telefone
-                                        </label>
+                                        <div
+                                            className={
+                                                styles.formField
+                                            }
+                                        >
 
-                                        <input
-                                            type="tel"
-                                            placeholder="Digite o telefone..."
-                                            value={
-                                                novoAtleta.responsavelTelefone
+                                            <label>
+                                                Nome do responsável
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                value={
+                                                    novoAtleta
+                                                        .responsavelNome
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'responsavelNome',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="Nome completo"
+                                            />
+
+                                        </div>
+
+
+                                        <div
+                                            className={
+                                                styles.formField
                                             }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'responsavelTelefone',
-                                                    event.target.value,
-                                                )
+                                        >
+
+                                            <label>
+                                                Grau de parentesco
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                value={
+                                                    novoAtleta
+                                                        .responsavelGrau
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'responsavelGrau',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="Ex.: Mãe"
+                                            />
+
+                                        </div>
+
+
+                                        <div
+                                            className={
+                                                styles.formField
                                             }
-                                        />
+                                        >
+
+                                            <label>
+                                                Telefone
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                value={
+                                                    novoAtleta
+                                                        .responsavelTelefone
+                                                }
+                                                onChange={(event) =>
+                                                    alterarNovoAtleta(
+                                                        'responsavelTelefone',
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="(11) 99999-9999"
+                                            />
+
+                                        </div>
 
                                     </div>
 
-                                </div>
+                                </section>
 
-                            </section>
+                            </div>
 
 
-                            {/* ERRO */}
+                            {/* FOOTER */}
 
-                            {erroCadastro && (
+                            <div
+                                className={
+                                    styles.modalFooter
+                                }
+                            >
 
-                                <div
+                                <button
+                                    type="button"
                                     className={
-                                        styles.formError
+                                        styles.cancelButton
+                                    }
+                                    onClick={() =>
+                                        setMostrarCadastro(
+                                            false
+                                        )
                                     }
                                 >
-
-                                    {erroCadastro}
-
-                                </div>
-
-                            )}
-
-                        </div>
+                                    Cancelar
+                                </button>
 
 
-                        {/* FOOTER */}
+                                <button
+                                    type="submit"
+                                    className={
+                                        styles.submitButton
+                                    }
+                                >
+                                    Cadastrar atleta
+                                </button>
 
-                        <div
-                            className={
-                                styles.modalFooter
-                            }
-                        >
+                            </div>
 
-                            <button
-                                type="button"
-                                className={
-                                    styles.cancelButton
-                                }
-                                onClick={
-                                    fecharModalNovoAtleta
-                                }
-                                disabled={
-                                    cadastrando
-                                }
-                            >
-
-                                Cancelar
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                className={
-                                    styles.submitButton
-                                }
-                                onClick={
-                                    cadastrarNovoAtleta
-                                }
-                                disabled={
-                                    cadastrando
-                                }
-                            >
-
-                                <Plus
-                                    size={18}
-                                />
-
-                                {cadastrando
-                                    ? 'Cadastrando...'
-                                    : 'Cadastrar atleta'}
-
-                            </button>
-
-                        </div>
+                        </form>
 
                     </div>
 
                 </div>
-
             )}
 
-        </main>
-
+        </div>
     );
-
 };
 
 

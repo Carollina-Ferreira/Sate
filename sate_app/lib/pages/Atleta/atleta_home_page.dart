@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../assets/menu_inferior_atleta.dart';
 import 'atleta_treino_page.dart';
 import 'atleta_desempenho_page.dart';
-import 'atleta_feed_page.dart';
-import 'atleta_perfil_page.dart';
 import 'atleta_notificacao_page.dart';
 
 class AtletaHomePage extends StatefulWidget {
@@ -65,55 +62,6 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
         child: _visualizandoFeedbacks
             ? _buildFeedbacks()
             : _buildInicio(),
-      ),
-
-      bottomNavigationBar: MenuInferiorAtleta(
-        indiceSelecionado: 0,
-        onItemSelecionado: (index) {
-          if (index == 0) {
-            return;
-          }
-
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaTreinoPage(),
-              ),
-            );
-            return;
-          }
-
-          if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaDesempenhoPage(),
-              ),
-            );
-            return;
-          }
-
-          if (index == 3) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaFeedPage(),
-              ),
-            );
-            return;
-          }
-
-          if (index == 4) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaPerfilPage(),
-              ),
-            );
-            return;
-          }
-        },
       ),
     );
   }
@@ -231,7 +179,6 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
             ],
           ),
         ),
-
         Container(
           width: 42,
           height: 42,
@@ -281,13 +228,11 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
               cor: azul,
             ),
           ),
-
           Container(
             width: 1,
             height: 52,
             color: linha,
           ),
-
           Expanded(
             child: _buildIndicador(
               icon: Icons.calendar_month_rounded,
@@ -324,9 +269,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
               size: 20,
             ),
           ),
-
           const SizedBox(width: 10),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -341,9 +284,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 const SizedBox(height: 3),
-
                 Text(
                   valor,
                   style: const TextStyle(
@@ -389,9 +330,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   size: 23,
                 ),
               ),
-
               const SizedBox(width: 12),
-
               const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -404,9 +343,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-
                     SizedBox(height: 3),
-
                     Text(
                       'Fundamentos + preparação física',
                       maxLines: 1,
@@ -420,7 +357,6 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   ],
                 ),
               ),
-
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 9,
@@ -458,9 +394,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                 size: 16,
                 color: textoSecundario,
               ),
-
               const SizedBox(width: 7),
-
               const Text(
                 'Hoje',
                 style: TextStyle(
@@ -469,9 +403,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-
               const SizedBox(width: 18),
-
               Container(
                 width: 4,
                 height: 4,
@@ -480,17 +412,13 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   shape: BoxShape.circle,
                 ),
               ),
-
               const SizedBox(width: 18),
-
               const Icon(
                 Icons.access_time_rounded,
                 size: 17,
                 color: textoSecundario,
               ),
-
               const SizedBox(width: 7),
-
               const Text(
                 '18:00',
                 style: TextStyle(
@@ -499,9 +427,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-
               const Spacer(),
-
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -560,9 +486,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   size: 21,
                 ),
               ),
-
               const SizedBox(width: 12),
-
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -575,9 +499,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                         color: texto,
                       ),
                     ),
-
                     const SizedBox(height: 3),
-
                     Text(
                       descricao,
                       style: const TextStyle(
@@ -588,7 +510,6 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   ],
                 ),
               ),
-
               const Icon(
                 Icons.chevron_right_rounded,
                 color: textoSecundario,
@@ -633,9 +554,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   size: 25,
                 ),
               ),
-
               const SizedBox(width: 14),
-
               const Text(
                 'Feedbacks',
                 style: TextStyle(
@@ -647,7 +566,6 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
             ],
           ),
         ),
-
         Expanded(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -661,9 +579,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _tituloSecao('Feedbacks do treinador'),
-
                 const SizedBox(height: 5),
-
                 const Text(
                   'Veja os comentários sobre seus treinos.',
                   style: TextStyle(
@@ -671,27 +587,21 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                     color: textoSecundario,
                   ),
                 ),
-
                 const SizedBox(height: 18),
-
                 _buildFeedbackCard(
                   treino: 'Treino de velocidade',
                   comentario:
                       'Boa evolução na velocidade. Continue trabalhando a explosão nos primeiros metros.',
                   data: 'Hoje',
                 ),
-
                 const SizedBox(height: 10),
-
                 _buildFeedbackCard(
                   treino: 'Treino de finalização',
                   comentario:
                       'Boa execução. Procure manter mais precisão nas finalizações sob pressão.',
                   data: 'Ontem',
                 ),
-
                 const SizedBox(height: 10),
-
                 _buildFeedbackCard(
                   treino: 'Treino tático',
                   comentario:
@@ -739,9 +649,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   size: 21,
                 ),
               ),
-
               const SizedBox(width: 11),
-
               Expanded(
                 child: Text(
                   treino,
@@ -752,7 +660,6 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   ),
                 ),
               ),
-
               Text(
                 data,
                 style: const TextStyle(
@@ -762,9 +669,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
               ),
             ],
           ),
-
           const SizedBox(height: 13),
-
           Text(
             comentario,
             style: const TextStyle(

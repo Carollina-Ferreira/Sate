@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'atleta_notificacao_page.dart';
 
 class AtletaPerfilPage extends StatefulWidget {
-  const AtletaPerfilPage({super.key});
+  final String nomeUsuario;
+
+  const AtletaPerfilPage({super.key, required this.nomeUsuario});
 
   @override
   State<AtletaPerfilPage> createState() => _AtletaPerfilPageState();
@@ -76,20 +78,13 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
         ],
       ),
 
-      body: _visualizandoPerfil
-          ? _buildPerfilEsportivo()
-          : _buildConta(),
+      body: _visualizandoPerfil ? _buildPerfilEsportivo() : _buildConta(),
     );
   }
 
   Widget _buildConta() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        16,
-        8,
-        16,
-        30,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -113,9 +108,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             titulo: 'Conta',
             subtitulo: 'Dados pessoais e informações da conta',
             onTap: () {
-              _abrirPagina(
-                const ContaPage(),
-              );
+              _abrirPagina(const ContaPage());
             },
           ),
 
@@ -124,9 +117,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             titulo: 'Preferências',
             subtitulo: 'Personalize sua experiência',
             onTap: () {
-              _abrirPagina(
-                const PreferenciasPage(),
-              );
+              _abrirPagina(const PreferenciasPage());
             },
           ),
 
@@ -135,9 +126,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             titulo: 'Privacidade',
             subtitulo: 'Controle sua privacidade',
             onTap: () {
-              _abrirPagina(
-                const PrivacidadePage(),
-              );
+              _abrirPagina(const PrivacidadePage());
             },
           ),
 
@@ -146,9 +135,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             titulo: 'Segurança',
             subtitulo: 'Senha e segurança da conta',
             onTap: () {
-              _abrirPagina(
-                const SegurancaPage(),
-              );
+              _abrirPagina(const SegurancaPage());
             },
           ),
 
@@ -170,9 +157,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             titulo: 'Ajuda e suporte',
             subtitulo: 'Tire suas dúvidas',
             onTap: () {
-              _abrirPagina(
-                const AjudaSuportePage(),
-              );
+              _abrirPagina(const AjudaSuportePage());
             },
           ),
 
@@ -181,9 +166,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             titulo: 'Sobre o SATE',
             subtitulo: 'Informações sobre o aplicativo',
             onTap: () {
-              _abrirPagina(
-                const SobreSatePage(),
-              );
+              _abrirPagina(const SobreSatePage());
             },
           ),
 
@@ -202,9 +185,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.025),
@@ -222,36 +203,27 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
               shape: BoxShape.circle,
               color: verdeClaro,
             ),
-            child: const Icon(
-              Icons.person_rounded,
-              color: verde,
-              size: 29,
-            ),
+            child: const Icon(Icons.person_rounded, color: verde, size: 29),
           ),
 
           const SizedBox(width: 12),
 
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'João Silva',
-                  style: TextStyle(
-                    fontSize: 16,
+                  widget.nomeUsuario,
+                  style: const TextStyle(
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: verdeEscuro,
                   ),
                 ),
 
                 SizedBox(height: 3),
 
-                Text(
-                  'Atleta',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: cinza,
-                  ),
-                ),
+                Text('Atleta', style: TextStyle(fontSize: 12, color: cinza)),
               ],
             ),
           ),
@@ -273,11 +245,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
                   ),
                 ),
                 SizedBox(width: 5),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: verde,
-                  size: 13,
-                ),
+                Icon(Icons.arrow_forward_ios_rounded, color: verde, size: 13),
               ],
             ),
           ),
@@ -288,12 +256,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
 
   Widget _buildPerfilEsportivo() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        16,
-        8,
-        16,
-        30,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -317,9 +280,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             titulo: 'Minha equipe',
             subtitulo: 'Veja sua equipe e seus companheiros',
             onTap: () {
-              _abrirPagina(
-                const MinhaEquipePage(),
-              );
+              _abrirPagina(const MinhaEquipePage());
             },
           ),
 
@@ -328,9 +289,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             titulo: 'Minhas metas',
             subtitulo: 'Acompanhe seus objetivos',
             onTap: () {
-              _abrirPagina(
-                const MinhasMetasPage(),
-              );
+              _abrirPagina(const MinhasMetasPage());
             },
           ),
 
@@ -339,9 +298,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             titulo: 'Feedbacks',
             subtitulo: 'Veja os comentários do treinador',
             onTap: () {
-              _abrirPagina(
-                const FeedbacksPage(),
-              );
+              _abrirPagina(const FeedbacksPage());
             },
           ),
         ],
@@ -356,9 +313,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.025),
@@ -378,39 +333,29 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: verdeClaro,
-                  border: Border.all(
-                    color: verde,
-                    width: 2,
-                  ),
+                  border: Border.all(color: verde, width: 2),
                 ),
-                child: const Icon(
-                  Icons.person_rounded,
-                  color: verde,
-                  size: 34,
-                ),
+                child: const Icon(Icons.person_rounded, color: verde, size: 34),
               ),
 
               const SizedBox(width: 12),
 
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'João Silva',
-                      style: TextStyle(
-                        fontSize: 18,
+                      widget.nomeUsuario,
+                      style: const TextStyle(
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: verdeEscuro,
                       ),
                     ),
+
                     SizedBox(height: 4),
                     Text(
                       'Falcões FC • Futebol',
-                      style: TextStyle(
-                        color: cinza,
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(color: cinza, fontSize: 12),
                     ),
                   ],
                 ),
@@ -423,11 +368,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
           const Text(
             'Meio-campista, apaixonado por futebol desde os 8 anos.\n'
             'Foco em evoluir a cada treino.',
-            style: TextStyle(
-              fontSize: 12,
-              height: 1.4,
-              color: Colors.black87,
-            ),
+            style: TextStyle(fontSize: 12, height: 1.4, color: Colors.black87),
           ),
 
           const SizedBox(height: 16),
@@ -437,24 +378,18 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             height: 46,
             child: OutlinedButton(
               onPressed: () {
-                _abrirPagina(
-                  const EditarPerfilPage(),
-                );
+                _abrirPagina(const EditarPerfilPage());
               },
               style: OutlinedButton.styleFrom(
                 foregroundColor: verde,
-                side: const BorderSide(
-                  color: verde,
-                ),
+                side: const BorderSide(color: verde),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
               child: const Text(
                 'Editar perfil',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -497,10 +432,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
           Row(
             children: [
               Expanded(
-                child: _buildMiniInformacao(
-                  titulo: 'Frequência',
-                  valor: '92%',
-                ),
+                child: _buildMiniInformacao(titulo: 'Frequência', valor: '92%'),
               ),
 
               const SizedBox(width: 10),
@@ -529,9 +461,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
                   width: 42,
                   height: 42,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(
-                      alpha: 0.18,
-                    ),
+                    color: Colors.white.withValues(alpha: 0.18),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
@@ -586,17 +516,11 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
 
           Row(
             children: [
-              Expanded(
-                child: _buildPublicacao(),
-              ),
+              Expanded(child: _buildPublicacao()),
               const SizedBox(width: 8),
-              Expanded(
-                child: _buildPublicacao(),
-              ),
+              Expanded(child: _buildPublicacao()),
               const SizedBox(width: 8),
-              Expanded(
-                child: _buildPublicacao(),
-              ),
+              Expanded(child: _buildPublicacao()),
             ],
           ),
         ],
@@ -619,13 +543,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            titulo,
-            style: const TextStyle(
-              fontSize: 9,
-              color: cinza,
-            ),
-          ),
+          Text(titulo, style: const TextStyle(fontSize: 9, color: cinza)),
 
           const SizedBox(height: 5),
 
@@ -643,15 +561,9 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
     );
   }
 
-  Widget _buildMiniInformacao({
-    required String titulo,
-    required String valor,
-  }) {
+  Widget _buildMiniInformacao({required String titulo, required String valor}) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 11,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
       decoration: BoxDecoration(
         color: verdeClaro,
         borderRadius: BorderRadius.circular(13),
@@ -661,10 +573,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
           Expanded(
             child: Text(
               titulo,
-              style: const TextStyle(
-                fontSize: 10,
-                color: cinza,
-              ),
+              style: const TextStyle(fontSize: 10, color: cinza),
             ),
           ),
           Text(
@@ -687,11 +596,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
         color: const Color(0xFFF0F1F1),
         borderRadius: BorderRadius.circular(14),
       ),
-      child: Icon(
-        Icons.image_outlined,
-        color: Colors.grey.shade400,
-        size: 26,
-      ),
+      child: Icon(Icons.image_outlined, color: Colors.grey.shade400, size: 26),
     );
   }
 
@@ -706,16 +611,11 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
       ),
       child: ListTile(
         onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 4,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         leading: Container(
           width: 44,
           height: 44,
@@ -723,25 +623,15 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             color: verdeClaro,
             borderRadius: BorderRadius.circular(13),
           ),
-          child: Icon(
-            icone,
-            color: verde,
-            size: 22,
-          ),
+          child: Icon(icone, color: verde, size: 22),
         ),
         title: Text(
           titulo,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
         subtitle: Text(
           subtitulo,
-          style: TextStyle(
-            fontSize: 11,
-            color: Colors.grey.shade600,
-          ),
+          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,
@@ -763,16 +653,11 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
       ),
       child: ListTile(
         onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 4,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         leading: Container(
           width: 44,
           height: 44,
@@ -780,25 +665,15 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             color: verdeClaro,
             borderRadius: BorderRadius.circular(13),
           ),
-          child: Icon(
-            icone,
-            color: verde,
-            size: 22,
-          ),
+          child: Icon(icone, color: verde, size: 22),
         ),
         title: Text(
           titulo,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
         subtitle: Text(
           subtitulo,
-          style: TextStyle(
-            fontSize: 11,
-            color: Colors.grey.shade600,
-          ),
+          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,
@@ -817,10 +692,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
         onPressed: () {
           _confirmarSaida(context);
         },
-        icon: const Icon(
-          Icons.logout_rounded,
-          color: Colors.redAccent,
-        ),
+        icon: const Icon(Icons.logout_rounded, color: Colors.redAccent),
         label: const Text(
           'Sair da conta',
           style: TextStyle(
@@ -829,9 +701,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
           ),
         ),
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(
-            color: Color(0xFFFFD6DD),
-          ),
+          side: const BorderSide(color: Color(0xFFFFD6DD)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -841,12 +711,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
   }
 
   void _abrirPagina(Widget pagina) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => pagina,
-      ),
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (_) => pagina));
   }
 
   void _confirmarSaida(BuildContext context) {
@@ -854,9 +719,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          title: const Text(
-            'Sair da conta?',
-          ),
+          title: const Text('Sair da conta?'),
           content: const Text(
             'Você precisará entrar novamente para acessar sua conta.',
           ),
@@ -867,9 +730,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
               },
               child: const Text(
                 'CANCELAR',
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
+                style: TextStyle(color: Colors.grey),
               ),
             ),
             TextButton(
@@ -879,9 +740,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
               },
               child: const Text(
                 'SAIR',
-                style: TextStyle(
-                  color: Colors.redAccent,
-                ),
+                style: TextStyle(color: Colors.redAccent),
               ),
             ),
           ],
@@ -1044,11 +903,7 @@ class SegurancaPage extends StatelessWidget {
             subtitulo: 'Altere a senha da sua conta',
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'Alteração de senha em breve.',
-                  ),
-                ),
+                const SnackBar(content: Text('Alteração de senha em breve.')),
               );
             },
           ),
@@ -1058,11 +913,7 @@ class SegurancaPage extends StatelessWidget {
             subtitulo: 'Verifique as configurações de segurança',
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'Verificação em breve.',
-                  ),
-                ),
+                const SnackBar(content: Text('Verificação em breve.')),
               );
             },
           ),
@@ -1100,32 +951,15 @@ class MinhaEquipePage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 4),
-                Text(
-                  'Futebol',
-                  style: TextStyle(
-                    color: Colors.white70,
-                  ),
-                ),
+                Text('Futebol', style: TextStyle(color: Colors.white70)),
               ],
             ),
           ),
           const SizedBox(height: 16),
-          _MembroEquipe(
-            nome: 'João Silva',
-            funcao: 'Você',
-          ),
-          _MembroEquipe(
-            nome: 'Ana Costa',
-            funcao: 'Atleta',
-          ),
-          _MembroEquipe(
-            nome: 'Carlos Mendes',
-            funcao: 'Atleta',
-          ),
-          _MembroEquipe(
-            nome: 'Mariana Souza',
-            funcao: 'Atleta',
-          ),
+          _MembroEquipe(nome: 'João Silva', funcao: 'Você'),
+          _MembroEquipe(nome: 'Ana Costa', funcao: 'Atleta'),
+          _MembroEquipe(nome: 'Carlos Mendes', funcao: 'Atleta'),
+          _MembroEquipe(nome: 'Mariana Souza', funcao: 'Atleta'),
         ],
       ),
     );
@@ -1212,11 +1046,7 @@ class AjudaSuportePage extends StatelessWidget {
             ),
             child: const Row(
               children: [
-                Icon(
-                  Icons.help_outline_rounded,
-                  color: Colors.white,
-                  size: 32,
-                ),
+                Icon(Icons.help_outline_rounded, color: Colors.white, size: 32),
                 SizedBox(width: 14),
                 Expanded(
                   child: Text(
@@ -1232,18 +1062,10 @@ class AjudaSuportePage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          _Pergunta(
-            titulo: 'Como visualizar meus treinos?',
-          ),
-          _Pergunta(
-            titulo: 'Como acompanhar minha evolução?',
-          ),
-          _Pergunta(
-            titulo: 'Como alterar meus dados?',
-          ),
-          _Pergunta(
-            titulo: 'Como entrar em contato com o treinador?',
-          ),
+          _Pergunta(titulo: 'Como visualizar meus treinos?'),
+          _Pergunta(titulo: 'Como acompanhar minha evolução?'),
+          _Pergunta(titulo: 'Como alterar meus dados?'),
+          _Pergunta(titulo: 'Como entrar em contato com o treinador?'),
         ],
       ),
     );
@@ -1265,17 +1087,11 @@ class SobreSatePage extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: const Color(0xFFE0E7E4),
-              ),
+              border: Border.all(color: const Color(0xFFE0E7E4)),
             ),
             child: const Column(
               children: [
-                Icon(
-                  Icons.sports_soccer_rounded,
-                  color: verdeAtleta,
-                  size: 60,
-                ),
+                Icon(Icons.sports_soccer_rounded, color: verdeAtleta, size: 60),
                 SizedBox(height: 12),
                 Text(
                   'SATE',
@@ -1289,16 +1105,12 @@ class SobreSatePage extends StatelessWidget {
                 Text(
                   'Sistema de Acompanhamento e Treinamento Esportivo',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
+                  style: TextStyle(color: Colors.grey),
                 ),
                 SizedBox(height: 15),
                 Text(
                   'Versão 1.0.0',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -1318,22 +1130,10 @@ class EditarPerfilPage extends StatelessWidget {
       titulo: 'Editar perfil',
       child: Column(
         children: [
-          _CampoEditar(
-            titulo: 'Nome',
-            valor: 'João Silva',
-          ),
-          _CampoEditar(
-            titulo: 'Posição',
-            valor: 'Meio-campo',
-          ),
-          _CampoEditar(
-            titulo: 'Número',
-            valor: '10',
-          ),
-          _CampoEditar(
-            titulo: 'Equipe',
-            valor: 'Falcões FC',
-          ),
+          _CampoEditar(titulo: 'Nome', valor: 'João Silva'),
+          _CampoEditar(titulo: 'Posição', valor: 'Meio-campo'),
+          _CampoEditar(titulo: 'Número', valor: '10'),
+          _CampoEditar(titulo: 'Equipe', valor: 'Falcões FC'),
           _CampoEditar(
             titulo: 'Descrição',
             valor: 'Meio-campista, apaixonado por futebol.',
@@ -1348,9 +1148,7 @@ class EditarPerfilPage extends StatelessWidget {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text(
-                      'Perfil atualizado com sucesso!',
-                    ),
+                    content: Text('Perfil atualizado com sucesso!'),
                   ),
                 );
               },
@@ -1364,9 +1162,7 @@ class EditarPerfilPage extends StatelessWidget {
               ),
               child: const Text(
                 'Salvar alterações',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -1382,10 +1178,7 @@ class _TelaInterna extends StatelessWidget {
   final String titulo;
   final Widget child;
 
-  const _TelaInterna({
-    required this.titulo,
-    required this.child,
-  });
+  const _TelaInterna({required this.titulo, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -1415,12 +1208,7 @@ class _TelaInterna extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(
-          16,
-          8,
-          16,
-          30,
-        ),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
         child: child,
       ),
     );
@@ -1446,16 +1234,11 @@ class _CampoInformacao extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
       ),
       child: Row(
         children: [
-          Icon(
-            icone,
-            color: verdeAtleta,
-          ),
+          Icon(icone, color: verdeAtleta),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -1463,10 +1246,7 @@ class _CampoInformacao extends StatelessWidget {
               children: [
                 Text(
                   titulo,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
                 ),
                 const SizedBox(height: 3),
                 Text(
@@ -1506,9 +1286,7 @@ class _SwitchItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
       ),
       child: Row(
         children: [
@@ -1518,26 +1296,17 @@ class _SwitchItem extends StatelessWidget {
               children: [
                 Text(
                   titulo,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 3),
                 Text(
                   subtitulo,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
                 ),
               ],
             ),
           ),
-          Switch(
-            value: valor,
-            onChanged: onChanged,
-            activeColor: verdeAtleta,
-          ),
+          Switch(value: valor, onChanged: onChanged, activeColor: verdeAtleta),
         ],
       ),
     );
@@ -1564,9 +1333,7 @@ class _ItemInterno extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
       ),
       child: ListTile(
         onTap: onTap,
@@ -1577,27 +1344,14 @@ class _ItemInterno extends StatelessWidget {
             color: const Color(0xFFE8F5F0),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(
-            icone,
-            color: verdeAtleta,
-          ),
+          child: Icon(icone, color: verdeAtleta),
         ),
         title: Text(
           titulo,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        subtitle: Text(
-          subtitulo,
-          style: const TextStyle(
-            fontSize: 11,
-          ),
-        ),
-        trailing: const Icon(
-          Icons.arrow_forward_ios_rounded,
-          size: 15,
-        ),
+        subtitle: Text(subtitulo, style: const TextStyle(fontSize: 11)),
+        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 15),
       ),
     );
   }
@@ -1607,10 +1361,7 @@ class _MembroEquipe extends StatelessWidget {
   final String nome;
   final String funcao;
 
-  const _MembroEquipe({
-    required this.nome,
-    required this.funcao,
-  });
+  const _MembroEquipe({required this.nome, required this.funcao});
 
   @override
   Widget build(BuildContext context) {
@@ -1620,34 +1371,24 @@ class _MembroEquipe extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
       ),
       child: Row(
         children: [
           const CircleAvatar(
             backgroundColor: Color(0xFFE8F5F0),
-            child: Icon(
-              Icons.person_rounded,
-              color: verdeAtleta,
-            ),
+            child: Icon(Icons.person_rounded, color: verdeAtleta),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               nome,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
           Text(
             funcao,
-            style: const TextStyle(
-              fontSize: 11,
-              color: Colors.grey,
-            ),
+            style: const TextStyle(fontSize: 11, color: Colors.grey),
           ),
         ],
       ),
@@ -1675,9 +1416,7 @@ class _Meta extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
       ),
       child: Column(
         children: [
@@ -1686,9 +1425,7 @@ class _Meta extends StatelessWidget {
               Expanded(
                 child: Text(
                   titulo,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
               ),
               Text(
@@ -1706,9 +1443,7 @@ class _Meta extends StatelessWidget {
             minHeight: 7,
             borderRadius: BorderRadius.circular(10),
             backgroundColor: const Color(0xFFE8F5F0),
-            valueColor: const AlwaysStoppedAnimation<Color>(
-              verdeAtleta,
-            ),
+            valueColor: const AlwaysStoppedAnimation<Color>(verdeAtleta),
           ),
         ],
       ),
@@ -1720,10 +1455,7 @@ class _Feedback extends StatelessWidget {
   final String nome;
   final String texto;
 
-  const _Feedback({
-    required this.nome,
-    required this.texto,
-  });
+  const _Feedback({required this.nome, required this.texto});
 
   @override
   Widget build(BuildContext context) {
@@ -1734,9 +1466,7 @@ class _Feedback extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1749,12 +1479,7 @@ class _Feedback extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 7),
-          Text(
-            texto,
-            style: const TextStyle(
-              height: 1.4,
-            ),
-          ),
+          Text(texto, style: const TextStyle(height: 1.4)),
         ],
       ),
     );
@@ -1785,15 +1510,11 @@ class _CampoEditar extends StatelessWidget {
           fillColor: Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(
-              color: Color(0xFFE0E7E4),
-            ),
+            borderSide: const BorderSide(color: Color(0xFFE0E7E4)),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(
-              color: Color(0xFFE0E7E4),
-            ),
+            borderSide: const BorderSide(color: Color(0xFFE0E7E4)),
           ),
         ),
       ),
@@ -1804,9 +1525,7 @@ class _CampoEditar extends StatelessWidget {
 class _Pergunta extends StatelessWidget {
   final String titulo;
 
-  const _Pergunta({
-    required this.titulo,
-  });
+  const _Pergunta({required this.titulo});
 
   @override
   Widget build(BuildContext context) {
@@ -1815,27 +1534,19 @@ class _Pergunta extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFFE0E7E4),
-        ),
+        border: Border.all(color: const Color(0xFFE0E7E4)),
       ),
       child: ExpansionTile(
         title: Text(
           titulo,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
         ),
         children: const [
           Padding(
             padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Text(
               'Essa informação estará disponível em uma próxima atualização do aplicativo.',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
           ),
         ],

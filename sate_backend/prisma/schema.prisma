@@ -15,11 +15,12 @@ model Usuario {
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   nome                String?
-  avatarUrl           String?              @db.LongText
-  primeiroAcesso      Boolean              @default(true)
+  avatarUrl            String?              @db.LongText
+  primeiroAcesso       Boolean              @default(true)
+
   atleta              Atleta?
-  passwordResetTokens PasswordResetToken[]
-  treinador           Treinador?
+  passwordResetTokens  PasswordResetToken[]
+  treinador            Treinador?
 }
 
 model Treinador {
@@ -28,33 +29,53 @@ model Treinador {
   usuarioId Int      @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  atletas   Atleta[]
-  equipes   Equipe[]
-  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  atletas             Atleta[]
+  equipes             Equipe[]
+  configuracoesAnalise ConfiguracaoAnalise[]
+
+  usuario Usuario @relation(fields: [usuarioId],references: [id],onDelete: Cascade )
+}
+
+model ConfiguracaoAnalise {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  descricao   String?
+  tipo        TipoEventoAnalise @default(POSITIVA)
+  ordem       Int      @default(0)
+  treinadorId Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  treinador Treinador @relation(fields: [treinadorId],references: [id],onDelete: Cascade)
+
+  @@index([treinadorId])
+  @@index([treinadorId, ordem])
 }
 
 model Atleta {
-  id             Int          @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   nome           String?
-  cpf            String?      @unique
+  cpf            String?   @unique
   rg             String?
   dataNascimento DateTime?
   sexo           Sexo?
   categoria      String?
   telefone       String?
-  usuarioId      Int          @unique
-  responsavelId  Int?         @unique
-  enderecoId     Int?         @unique
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  usuarioId      Int       @unique
+  responsavelId  Int?      @unique
+  enderecoId     Int?      @unique
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   equipeId       Int?
   treinadorId    Int?
-  endereco       Endereco?    @relation(fields: [enderecoId], references: [id])
-  equipe         Equipe?      @relation(fields: [equipeId], references: [id])
-  responsavel    Responsavel? @relation(fields: [responsavelId], references: [id])
-  treinador      Treinador?   @relation(fields: [treinadorId], references: [id])
-  usuario        Usuario      @relation(fields: [usuarioId], references: [id])
-  documentos     Documento[]
+
+  endereco    Endereco?    @relation(fields: [enderecoId], references: [id])
+  equipe      Equipe?      @relation(fields: [equipeId], references: [id])
+  responsavel Responsavel? @relation(fields: [responsavelId], references: [id])
+  treinador   Treinador?   @relation(fields: [treinadorId], references: [id])
+  usuario     Usuario      @relation(fields: [usuarioId], references: [id])
+  documentos  Documento[]
 
   @@index([equipeId])
   @@index([treinadorId])
@@ -71,9 +92,10 @@ model Equipe {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   treinadorId    Int
-  atletas        Atleta[]
-  treinador      Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
-  partidas       Partida[]
+
+  atletas   Atleta[]
+  treinador Treinador @relation(fields: [treinadorId],references: [id],onDelete: Cascade )
+  partidas Partida[]
 
   @@index([treinadorId], map: "Equipe_treinadorId_fkey")
 }
@@ -92,10 +114,29 @@ model Partida {
   golsAdversario Int?
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
-  equipe         Equipe        @relation(fields: [equipeId], references: [id], onDelete: Cascade)
+
+  equipe Equipe @relation( fields: [equipeId],references: [id],onDelete: Cascade)
+
+  videos VideoPartida[]
 
   @@index([equipeId], map: "Partida_equipeId_fkey")
   @@index([data])
+}
+
+model VideoPartida {
+  id          Int      @id @default(autoincrement())
+  partidaId   Int
+  titulo      String
+  nomeArquivo String
+  url         String
+  tipo        String?
+  tamanho     Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  partida Partida @relation(fields: [partidaId],references: [id],onDelete: Cascade)
+
+  @@index([partidaId], map: "VideoPartida_partidaId_fkey")
 }
 
 model Responsavel {
@@ -105,7 +146,8 @@ model Responsavel {
   telefone       String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  atleta         Atleta?
+
+  atleta Atleta?
 }
 
 model Endereco {
@@ -119,7 +161,8 @@ model Endereco {
   estado      String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  atleta      Atleta?
+
+  atleta Atleta?
 }
 
 model Documento {
@@ -130,7 +173,8 @@ model Documento {
   atletaId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  atleta    Atleta   @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+
+  atleta Atleta @relation(fields: [atletaId],references: [id],onDelete: Cascade)
 
   @@index([atletaId], map: "Documento_atletaId_fkey")
 }
@@ -142,7 +186,8 @@ model PasswordResetToken {
   expiresAt DateTime
   usedAt    DateTime?
   createdAt DateTime  @default(now())
-  usuario   Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id],onDelete: Cascade)
 
   @@index([usuarioId], map: "PasswordResetToken_usuarioId_fkey")
 }
@@ -164,4 +209,10 @@ enum StatusPartida {
   EM_ANDAMENTO
   FINALIZADA
   CANCELADA
+}
+
+enum TipoEventoAnalise {
+  POSITIVA
+  NEGATIVA
+  NEUTRA
 }

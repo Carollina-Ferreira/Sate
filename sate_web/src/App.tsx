@@ -1,7 +1,14 @@
 import {
+  useEffect,
+  useState,
+} from 'react';
+
+import {
   BrowserRouter,
   Routes,
   Route,
+  Navigate,
+  useLocation,
 } from 'react-router-dom';
 
 
@@ -10,12 +17,8 @@ import {
 // ==========================================
 
 import Login from './pages/Login/login';
-
 import Cadastro from './pages/Cadastro/cadastro';
-
 import EsqueciSenha from './pages/EsqueciSenha/esqueciSenha';
-
-import Carregamento from './pages/Carregamento/carregamento';
 
 
 // ==========================================
@@ -50,6 +53,13 @@ import RotaInicial from './components/RotaInicial/RotaInicial';
 
 
 // ==========================================
+// LOADING
+// ==========================================
+
+import LoadingScreen from './components/LoadingScreen/loadingscreen';
+
+
+// ==========================================
 // PÁGINAS INTERNAS
 // ==========================================
 
@@ -74,9 +84,85 @@ import Partidas from './pages/Partidas/partidas';
 import DetalhesDaPartida from './pages/DetalhesDaPartida/partidas2';
 
 
-function App() {
+// ==========================================
+// STATE DA NAVEGAÇÃO
+// ==========================================
+
+interface NavigationState {
+  mostrarLoading?: boolean;
+}
+
+
+// ==========================================
+// LOADING SOBRE A PÁGINA
+// ==========================================
+
+function LoadingDeNavegacao() {
+  const [
+    visivel,
+    setVisivel,
+  ] = useState(true);
+
+
+  useEffect(() => {
+    const timer =
+      window.setTimeout(() => {
+        setVisivel(false);
+      }, 2500);
+
+
+    return () => {
+      window.clearTimeout(
+        timer,
+      );
+    };
+  }, []);
+
+
+  if (!visivel) {
+    return null;
+  }
+
+
   return (
-    <BrowserRouter>
+    <LoadingScreen
+      texto="Preparando seu ambiente..."
+    />
+  );
+}
+
+
+// ==========================================
+// ROTAS
+// ==========================================
+
+function AppRoutes() {
+  const location =
+    useLocation();
+
+
+  const navigationState =
+    location.state as
+      | NavigationState
+      | null;
+
+
+  const mostrarLoading =
+    navigationState?.mostrarLoading ===
+    true;
+
+
+  return (
+    <>
+
+      {/* LOADING POR CIMA DA PÁGINA */}
+
+      {mostrarLoading && (
+        <LoadingDeNavegacao
+          key={location.key}
+        />
+      )}
+
 
       <Routes>
 
@@ -86,61 +172,39 @@ function App() {
 
         <Route
           path="/"
-          element={
-            <Login />
-          }
+          element={<Login />}
         />
 
 
         <Route
           path="/cadastro"
-          element={
-            <Cadastro />
-          }
+          element={<Cadastro />}
         />
 
 
         <Route
           path="/esqueci-senha"
-          element={
-            <EsqueciSenha />
-          }
-        />
-
-
-        {/* TELA DE CARREGAMENTO */}
-
-        <Route
-          path="/carregamento"
-          element={
-            <Carregamento />
-          }
+          element={<EsqueciSenha />}
         />
 
 
         {/* ========================================
-            ONBOARDING / CONFIGURAÇÃO INICIAL
+            ONBOARDING
         ======================================== */}
 
         <Route
-          element={
-            <RotaInicial />
-          }
+          element={<RotaInicial />}
         >
 
           <Route
             path="/boas-vindas"
-            element={
-              <BoasVindas />
-            }
+            element={<BoasVindas />}
           />
 
 
           <Route
             path="/selecao-esporte"
-            element={
-              <SelecaoEsporte />
-            }
+            element={<SelecaoEsporte />}
           />
 
 
@@ -175,78 +239,48 @@ function App() {
         ======================================== */}
 
         <Route
-          element={
-            <RotaPrivada />
-          }
+          element={<RotaPrivada />}
         >
 
           <Route
-            element={
-              <Layout />
-            }
+            element={<Layout />}
           >
-
-            {/* DASHBOARD */}
 
             <Route
               path="/inicio"
-              element={
-                <Dashboard />
-              }
+              element={<Dashboard />}
             />
 
-
-            {/* EQUIPES */}
 
             <Route
               path="/equipes"
-              element={
-                <Equipes />
-              }
+              element={<Equipes />}
             />
 
-
-            {/* ATLETAS */}
 
             <Route
               path="/atletas"
-              element={
-                <Altetas />
-              }
+              element={<Altetas />}
             />
 
-
-            {/* CADASTRO DE ATLETA */}
 
             <Route
               path="/cadastro-atleta"
-              element={
-                <CadastroAtleta />
-              }
+              element={<CadastroAtleta />}
             />
 
-
-            {/* ANÁLISE DE VÍDEO */}
 
             <Route
               path="/videos"
-              element={
-                <AnaliseVideo />
-              }
+              element={<AnaliseVideo />}
             />
 
-
-            {/* PARTIDAS */}
 
             <Route
               path="/partidas"
-              element={
-                <Partidas />
-              }
+              element={<Partidas />}
             />
 
-
-            {/* DETALHES DA PARTIDA */}
 
             <Route
               path="/detalhes-partida"
@@ -256,40 +290,60 @@ function App() {
             />
 
 
-            {/* ESTATÍSTICAS */}
-
             <Route
               path="/estatisticas"
-              element={
-                <Estatisticas />
-              }
+              element={<Estatisticas />}
             />
 
-
-            {/* COMPARAÇÕES */}
 
             <Route
               path="/comparacoes"
-              element={
-                <Comparacoes />
-              }
+              element={<Comparacoes />}
             />
 
 
-            {/* CONFIGURAÇÕES */}
-
             <Route
               path="/configuracoes"
-              element={
-                <Configuracoes />
-              }
+              element={<Configuracoes />}
             />
 
           </Route>
 
         </Route>
 
+
+        {/* ========================================
+            ROTA NÃO EXISTENTE
+
+            Evita tela branca.
+        ======================================== */}
+
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to="/"
+              replace
+            />
+          }
+        />
+
       </Routes>
+
+    </>
+  );
+}
+
+
+// ==========================================
+// APP
+// ==========================================
+
+function App() {
+  return (
+    <BrowserRouter>
+
+      <AppRoutes />
 
     </BrowserRouter>
   );

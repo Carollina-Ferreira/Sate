@@ -4,10 +4,12 @@ import 'atleta_navigation.dart';
 
 class AtletaVinculoPage extends StatefulWidget {
   final String nomeUsuario;
+  final String emailUsuario;
 
   const AtletaVinculoPage({
     super.key,
     required this.nomeUsuario,
+    required this.emailUsuario,
   });
 
   @override
@@ -232,6 +234,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                         MaterialPageRoute(
                           builder: (context) => AtletaNavigation(
                             nomeUsuario: widget.nomeUsuario,
+                            emailUsuario: widget.emailUsuario,
                           ),
                         ),
                       );

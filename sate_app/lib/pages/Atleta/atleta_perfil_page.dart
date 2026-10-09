@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'atleta_notificacao_page.dart';
+import '../login_page.dart';
 
 class AtletaPerfilPage extends StatefulWidget {
   final String nomeUsuario;
+  final String emailUsuario;
 
-  const AtletaPerfilPage({super.key, required this.nomeUsuario});
+  const AtletaPerfilPage({
+    super.key,
+    required this.nomeUsuario,
+    required this.emailUsuario,
+  });
 
   @override
   State<AtletaPerfilPage> createState() => _AtletaPerfilPageState();
@@ -108,7 +114,12 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             titulo: 'Conta',
             subtitulo: 'Dados pessoais e informações da conta',
             onTap: () {
-              _abrirPagina(const ContaPage());
+              _abrirPagina(
+                ContaPage(
+                  nomeUsuario: widget.nomeUsuario,
+                  emailUsuario: widget.emailUsuario,
+                ),
+              );
             },
           ),
 
@@ -378,7 +389,12 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             height: 46,
             child: OutlinedButton(
               onPressed: () {
-                _abrirPagina(const EditarPerfilPage());
+                _abrirPagina(
+                  EditarPerfilPage(
+                    nomeUsuario: widget.nomeUsuario,
+                    emailUsuario: widget.emailUsuario,
+                  ),
+                );
               },
               style: OutlinedButton.styleFrom(
                 foregroundColor: verde,
@@ -736,7 +752,10 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             TextButton(
               onPressed: () {
                 Navigator.pop(dialogContext);
-                Navigator.pop(context);
+                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const LoginPage()),
+                  (route) => false,
+                );
               },
               child: const Text(
                 'SAIR',
@@ -751,25 +770,32 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
 }
 
 class ContaPage extends StatelessWidget {
-  const ContaPage({super.key});
+  final String nomeUsuario;
+  final String emailUsuario;
+
+  const ContaPage({
+    super.key,
+    required this.nomeUsuario,
+    required this.emailUsuario,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const _TelaInterna(
+    return _TelaInterna(
       titulo: 'Conta',
       child: Column(
         children: [
           _CampoInformacao(
             icone: Icons.person_outline_rounded,
             titulo: 'Nome',
-            valor: 'João Silva',
+            valor: nomeUsuario,
           ),
           _CampoInformacao(
             icone: Icons.email_outlined,
             titulo: 'Email',
-            valor: 'joao@email.com',
+            valor: emailUsuario,
           ),
-          _CampoInformacao(
+          const _CampoInformacao(
             icone: Icons.phone_outlined,
             titulo: 'Telefone',
             valor: '(11) 99999-9999',
@@ -1122,7 +1148,14 @@ class SobreSatePage extends StatelessWidget {
 }
 
 class EditarPerfilPage extends StatelessWidget {
-  const EditarPerfilPage({super.key});
+  final String nomeUsuario;
+  final String emailUsuario;
+
+  const EditarPerfilPage({
+    super.key,
+    required this.nomeUsuario,
+    required this.emailUsuario,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1130,11 +1163,12 @@ class EditarPerfilPage extends StatelessWidget {
       titulo: 'Editar perfil',
       child: Column(
         children: [
-          _CampoEditar(titulo: 'Nome', valor: 'João Silva'),
-          _CampoEditar(titulo: 'Posição', valor: 'Meio-campo'),
-          _CampoEditar(titulo: 'Número', valor: '10'),
-          _CampoEditar(titulo: 'Equipe', valor: 'Falcões FC'),
-          _CampoEditar(
+          _CampoEditar(titulo: 'Nome', valor: nomeUsuario),
+          _CampoEditar(titulo: 'Email', valor: emailUsuario),
+          const _CampoEditar(titulo: 'Posição', valor: 'Meio-campo'),
+          const _CampoEditar(titulo: 'Número', valor: '10'),
+          const _CampoEditar(titulo: 'Equipe', valor: 'Falcões FC'),
+          const _CampoEditar(
             titulo: 'Descrição',
             valor: 'Meio-campista, apaixonado por futebol.',
             linhas: 3,

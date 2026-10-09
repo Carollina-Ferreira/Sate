@@ -9,10 +9,19 @@ const passwordRoutes = require('./routes/passwordRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const equipeRoutes = require('./routes/equipeRoutes');
 const partidaRoutes = require('./routes/partidaRoutes');
-const videoRoutes = require('./routes/videoRoutes');
-const configuracaoAnaliseRoutes = require('./routes/configuracaoAnaliseRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+
+
+// ======================================================
+// APP
+// ======================================================
 
 const app = express();
+
+
+// ======================================================
+// CORS
+// ======================================================
 
 app.use(
     cors({
@@ -22,6 +31,7 @@ app.use(
             'GET',
             'POST',
             'PUT',
+            'PATCH',
             'DELETE',
             'OPTIONS'
         ],
@@ -32,18 +42,32 @@ app.use(
     })
 );
 
+
+// ======================================================
+// JSON
+// ======================================================
+
 app.use(
     express.json({
         limit: '10mb'
     })
 );
 
+
+// ======================================================
+// URL ENCODED
+// ======================================================
+
 app.use(
     express.urlencoded({
-        extended: true,
-        limit: '10mb'
+        extended: true
     })
 );
+
+
+// ======================================================
+// UPLOADS
+// ======================================================
 
 app.use(
     '/uploads',
@@ -55,103 +79,213 @@ app.use(
     )
 );
 
-/*
-|--------------------------------------------------------------------------
-| ROTAS
-|--------------------------------------------------------------------------
-*/
 
-app.use('/api/auth', authRoutes);
+// ======================================================
+// TESTE DA API
+// ======================================================
 
-app.use('/api/atletas', atletaRoutes);
+app.get(
+    '/',
+    (req, res) => {
 
-app.use('/api/treinadores', treinadorRoutes);
+        return res.status(200).json({
+            mensagem: 'API SATE funcionando!'
+        });
 
-app.use('/api/password', passwordRoutes);
-
-app.use('/api/usuarios', usuarioRoutes);
-
-app.use('/api/equipes', equipeRoutes);
-
-app.use('/api/partidas', partidaRoutes);
-
-app.use(
-    '/api/configuracao-analise',
-    configuracaoAnaliseRoutes
+    }
 );
 
-app.use('/api', videoRoutes);
 
-/*
-|--------------------------------------------------------------------------
-| TESTE DA API
-|--------------------------------------------------------------------------
-*/
+// ======================================================
+// HEALTH CHECK
+// ======================================================
 
-app.get('/', (req, res) => {
-    res.json({
-        mensagem: 'API SATE funcionando!'
-    });
-});
+app.get(
+    '/api/health',
+    (req, res) => {
 
-/*
-|--------------------------------------------------------------------------
-| TRATAMENTO DE ERROS
-|--------------------------------------------------------------------------
-*/
-
-app.use((err, req, res, next) => {
-    console.error(
-        'ERRO NO SERVIDOR:',
-        err
-    );
-
-    if (err.type === 'entity.too.large') {
-        return res.status(413).json({
-            mensagem:
-                'A imagem ou os dados enviados são muito grandes.',
-            erro: 'Limite máximo de 10 MB.'
+        return res.status(200).json({
+            status: 'ok',
+            mensagem: 'Backend SATE funcionando.'
         });
-    }
 
-    if (err.name === 'MulterError') {
-        return res.status(400).json({
-            mensagem:
-                'Erro ao enviar o arquivo.',
-            erro: err.message
+    }
+);
+
+
+// ======================================================
+// ROTAS DE AUTENTICAÇÃO
+// ======================================================
+
+app.use(
+    '/api/auth',
+    authRoutes
+);
+
+
+// ======================================================
+// ROTAS DE ATLETAS
+// ======================================================
+
+app.use(
+    '/api/atletas',
+    atletaRoutes
+);
+
+
+// ======================================================
+// ROTAS DE TREINADORES
+// ======================================================
+
+app.use(
+    '/api/treinadores',
+    treinadorRoutes
+);
+
+
+// ======================================================
+// ROTAS DE SENHA
+// ======================================================
+
+app.use(
+    '/api/password',
+    passwordRoutes
+);
+
+
+// ======================================================
+// ROTAS DE USUÁRIOS
+// ======================================================
+
+app.use(
+    '/api/usuarios',
+    usuarioRoutes
+);
+
+
+// ======================================================
+// ROTAS DE EQUIPES
+// ======================================================
+
+app.use(
+    '/api/equipes',
+    equipeRoutes
+);
+
+
+// ======================================================
+// ROTAS DE PARTIDAS
+// ======================================================
+
+app.use(
+    '/api/partidas',
+    partidaRoutes
+);
+
+
+// ======================================================
+// ROTAS DO DASHBOARD
+// ======================================================
+
+app.use(
+    '/api/dashboard',
+    dashboardRoutes
+);
+
+
+// ======================================================
+// ROTA NÃO ENCONTRADA
+//
+// IMPORTANTE:
+// evita o Express devolver HTML quando uma rota não existe.
+// Assim o frontend sempre recebe JSON.
+// ======================================================
+
+app.use(
+    (req, res) => {
+
+        return res.status(404).json({
+            mensagem: 'Rota não encontrada.',
+            metodo: req.method,
+            rota: req.originalUrl
         });
+
     }
+);
 
-    return res.status(500).json({
-        mensagem:
-            'Erro interno do servidor.',
-        erro: err.message
-    });
-});
 
-const PORT = process.env.PORT || 3000;
+// ======================================================
+// ERRO GLOBAL
+// ======================================================
+
+app.use(
+    (err, req, res, next) => {
+
+        console.error('');
+        console.error('=================================');
+        console.error('ERRO NO SERVIDOR');
+        console.error('=================================');
+        console.error(err);
+        console.error('=================================');
+        console.error('');
+
+
+        if (res.headersSent) {
+            return next(err);
+        }
+
+
+        return res.status(
+            err.status ||
+            err.statusCode ||
+            500
+        ).json({
+            mensagem:
+                err.message ||
+                'Erro interno do servidor.'
+        });
+
+    }
+);
+
+
+// ======================================================
+// SERVIDOR
+// ======================================================
+
+const PORT =
+    process.env.PORT ||
+    3000;
+
 
 app.listen(
     PORT,
     '0.0.0.0',
     () => {
+
         console.log('');
         console.log('=================================');
-        console.log('   SATE BACKEND');
+        console.log('          SATE BACKEND');
         console.log('=================================');
+
         console.log(
-            `Servidor rodando em: http://localhost:${PORT}`
+            `Servidor: http://localhost:${PORT}`
         );
+
         console.log(
-            `Servidor disponível em: http://0.0.0.0:${PORT}`
+            `API: http://localhost:${PORT}/api`
         );
+
         console.log(
-            'Limite JSON: 10 MB'
+            `Dashboard: http://localhost:${PORT}/api/dashboard`
         );
+
         console.log(
-            'Vídeos: até 500 MB'
+            `Health: http://localhost:${PORT}/api/health`
         );
+
         console.log('=================================');
         console.log('');
+
     }
 );

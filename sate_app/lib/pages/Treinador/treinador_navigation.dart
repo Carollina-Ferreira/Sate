@@ -10,7 +10,14 @@ import 'perfil_page.dart';
 import '../../assets/menu_inferior_treinador.dart';
 
 class TreinadorNavigation extends StatefulWidget {
-  const TreinadorNavigation({super.key});
+  final String nomeUsuario;
+  final String emailUsuario;
+
+  const TreinadorNavigation({
+    super.key,
+    required this.nomeUsuario,
+    required this.emailUsuario,
+  });
 
   @override
   State<TreinadorNavigation> createState() =>
@@ -33,7 +40,10 @@ class _TreinadorNavigationState
       const AtletasPage(),
       const FeedPage(),
       const AgendaPage(),
-      const PerfilPage(),
+      PerfilPage(
+        nomeUsuario: widget.nomeUsuario,
+        emailUsuario: widget.emailUsuario,
+      ),
     ];
   }
 

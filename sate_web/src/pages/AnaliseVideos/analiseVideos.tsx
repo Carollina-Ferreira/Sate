@@ -1,1270 +1,741 @@
 import {
-  ArrowLeft,
+  ArrowRightLeft,
   Check,
-  Clock3,
-  Edit3,
+  CircleDot,
+  FastForward,
   Flag,
-  Pause,
+  Handshake,
+  Palette,
+  Pencil,
   Play,
   Plus,
+  Save,
   Scissors,
-  Trophy,
+  Search,
+  Shield,
+  ShieldCheck,
+  Target,
+  Trash2,
   Video,
   X,
-  Volume2,
-  VolumeX,
-  Maximize,
-  Minimize,
-  RotateCcw,
-  RotateCw,
+  XCircle,
+  Zap,
+} from 'lucide-react';
+
+import type {
+  LucideIcon,
 } from 'lucide-react';
 
 import {
-  useEffect,
   useMemo,
-  useRef,
   useState,
-  type ChangeEvent,
 } from 'react';
 
 import styles from './analiseVideos.module.css';
 
-const API_URL = 'http://localhost:3000/api';
+type Avaliacao =
+  | 'boa'
+  | 'ruim'
+  | 'neutra'
+  | 'destaque';
 
-/* =========================================================
-   INTERFACES
-========================================================= */
-
-interface VideoPartida {
-  id: number;
-  titulo?: string;
-  nome?: string;
-  url: string;
-  nomeArquivo?: string;
-  tipo?: string | null;
-  tamanho?: number | string | null;
-  duracao?: string;
-  createdAt?: string;
-}
-
-interface Partida {
-  id: number;
-  equipe: string;
-  adversario: string;
-  data: string;
-  modalidade: string;
-  videos: VideoPartida[];
-}
-
-interface PartidaBackend {
-  id: number;
-  adversario?: string | null;
-  data?: string | null;
-  local?: string | null;
-  campeonato?: string | null;
-  rodada?: string | null;
-  status?: string | null;
-
-  equipe?: {
-    id: number;
-    nome: string;
-    modalidade?: string | null;
-  } | null;
-
-  videos?: VideoPartida[];
-}
-
-interface Evento {
+interface Atleta {
   id: number;
   nome: string;
-  descricao: string;
-  tipo: 'boa' | 'ruim' | 'neutra' | 'destaque';
+  posicao: string;
+  iniciais: string;
+}
+
+interface EventoAnalise {
+  id: number;
+  tipo: string;
+  atleta: string;
   segundo: number;
-  duracao: number;
+  avaliacao: Avaliacao;
+  clip?: boolean;
 }
 
-interface Categoria {
-  id: number;
+interface NovoClipe {
   nome: string;
-  tipo: 'boa' | 'ruim' | 'neutra' | 'destaque';
-}
-
-interface Clipe {
-  id: number;
-  nome: string;
+  atletaId: number | null;
+  acao: string;
+  avaliacao: Avaliacao | '';
+  observacao: string;
   inicio: number;
   fim: number;
 }
 
-/* =========================================================
-   EVENTOS INICIAIS
-========================================================= */
+interface CategoriaAcao {
+  id: number;
+  nome: string;
+  icon: LucideIcon;
+  cor: string;
+  mostrarTimeline: boolean;
+}
 
-const eventosIniciais: Evento[] = [
+interface CategoriaForm {
+  id: number | null;
+  nome: string;
+  iconId: string;
+  cor: string;
+  mostrarTimeline: boolean;
+}
+
+const DURACAO_VIDEO =
+  45 * 60;
+
+const opcoesIcones: {
+  id: string;
+  nome: string;
+  icon: LucideIcon;
+}[] = [
   {
-    id: 1,
-    nome: 'Boa jogada',
-    descricao: 'Construção ofensiva',
-    tipo: 'boa',
-    segundo: 12,
-    duracao: 8,
+    id: 'target',
+    nome: 'Alvo',
+    icon: Target,
   },
   {
-    id: 2,
+    id: 'passe',
+    nome: 'Passe',
+    icon: ArrowRightLeft,
+  },
+  {
+    id: 'assistencia',
+    nome: 'Assistência',
+    icon: Handshake,
+  },
+  {
+    id: 'raio',
+    nome: 'Raio',
+    icon: Zap,
+  },
+  {
+    id: 'escudo',
+    nome: 'Escudo',
+    icon: Shield,
+  },
+  {
+    id: 'defesa',
+    nome: 'Defesa',
+    icon: ShieldCheck,
+  },
+  {
+    id: 'contra',
+    nome: 'Avanço',
+    icon: FastForward,
+  },
+  {
+    id: 'bandeira',
+    nome: 'Bandeira',
+    icon: Flag,
+  },
+  {
+    id: 'erro',
     nome: 'Erro',
-    descricao: 'Perda de posse',
-    tipo: 'ruim',
-    segundo: 38,
-    duracao: 6,
+    icon: XCircle,
   },
   {
-    id: 3,
-    nome: 'Neutro',
-    descricao: 'Posse de bola',
-    tipo: 'neutra',
-    segundo: 65,
-    duracao: 10,
-  },
-  {
-    id: 4,
-    nome: 'Destaque',
-    descricao: 'Grande oportunidade',
-    tipo: 'destaque',
-    segundo: 90,
-    duracao: 7,
+    id: 'circulo',
+    nome: 'Ponto',
+    icon: CircleDot,
   },
 ];
 
-/* =========================================================
-   FUNÇÕES AUXILIARES
-========================================================= */
+const categoriasIniciais: CategoriaAcao[] = [
+  {
+    id: 1,
+    nome: 'Gol',
+    icon: Target,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 2,
+    nome: 'Passe',
+    icon: ArrowRightLeft,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 3,
+    nome: 'Assistência',
+    icon: Handshake,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 4,
+    nome: 'Finalização',
+    icon: Zap,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 5,
+    nome: 'Defesa',
+    icon: Shield,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 6,
+    nome: 'Roubo de bola',
+    icon: ShieldCheck,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 7,
+    nome: 'Contra-ataque',
+    icon: FastForward,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 8,
+    nome: 'Falta',
+    icon: Flag,
+    cor: '#4AA8D8',
+    mostrarTimeline: true,
+  },
+  {
+    id: 9,
+    nome: 'Erro',
+    icon: XCircle,
+    cor: '#E06C75',
+    mostrarTimeline: true,
+  },
+];
 
-function obterToken() {
-  return (
-    localStorage.getItem('token') ||
-    localStorage.getItem('accessToken') ||
-    sessionStorage.getItem('token')
-  );
-}
+const atletasMock: Atleta[] = [
+  {
+    id: 1,
+    nome: 'Marcelo Ferreira',
+    posicao: 'Atacante',
+    iniciais: 'MF',
+  },
+  {
+    id: 2,
+    nome: 'Matheus Almeida',
+    posicao: 'Meia',
+    iniciais: 'MA',
+  },
+  {
+    id: 3,
+    nome: 'Bruno Alves',
+    posicao: 'Atacante',
+    iniciais: 'BA',
+  },
+  {
+    id: 4,
+    nome: 'Rafael Silva',
+    posicao: 'Defensor',
+    iniciais: 'RS',
+  },
+];
 
-function normalizarUrlVideo(url: string) {
-  if (!url) {
-    return '';
-  }
+const eventosIniciais: EventoAnalise[] = [
+  {
+    id: 1,
+    tipo: 'Gol',
+    atleta: 'Bruno Alves',
+    segundo: 360,
+    avaliacao: 'boa',
+  },
+  {
+    id: 2,
+    tipo: 'Gol',
+    atleta: 'Matheus Almeida',
+    segundo: 820,
+    avaliacao: 'boa',
+    clip: true,
+  },
+  {
+    id: 3,
+    tipo: 'Erro',
+    atleta: 'Rafael Silva',
+    segundo: 1270,
+    avaliacao: 'ruim',
+  },
+  {
+    id: 4,
+    tipo: 'Finalização',
+    atleta: 'João Ferreira',
+    segundo: 2010,
+    avaliacao: 'destaque',
+    clip: true,
+  },
+];
 
-  if (
-    url.startsWith('http://') ||
-    url.startsWith('https://') ||
-    url.startsWith('blob:')
-  ) {
-    return url;
-  }
-
-  if (url.startsWith('/')) {
-    return `http://localhost:3000${url}`;
-  }
-
-  return `http://localhost:3000/${url}`;
-}
-
-function formatarData(data?: string | null) {
-  if (!data) {
-    return '--/--/----';
-  }
-
-  const valor = new Date(data);
-
-  if (Number.isNaN(valor.getTime())) {
-    return data;
-  }
-
-  return valor.toLocaleDateString('pt-BR');
-}
-
-function converterDuracao(valor: string) {
-  const partes = valor.split(':').map(Number);
-
-  if (partes.length === 3) {
-    return (
-      partes[0] * 3600 +
-      partes[1] * 60 +
-      partes[2]
+const formatarTempo = (
+  segundos: number,
+) => {
+  const minutos =
+    Math.floor(
+      segundos / 60,
     );
-  }
 
-  if (partes.length === 2) {
-    return partes[0] * 60 + partes[1];
-  }
+  const resto =
+    segundos % 60;
 
-  return 0;
-}
+  return `${minutos}:${resto
+    .toString()
+    .padStart(2, '0')}`;
+};
 
-function formatarTempo(segundos: number) {
-  if (!Number.isFinite(segundos)) {
-    return '00:00';
-  }
+const AnaliseVideos = () => {
+  const [
+    painelClipeAberto,
+    setPainelClipeAberto,
+  ] = useState(false);
 
-  const horas = Math.floor(segundos / 3600);
+  const [
+    videoRodando,
+    setVideoRodando,
+  ] = useState(false);
 
-  const minutos = Math.floor(
-    (segundos % 3600) / 60,
+  const [
+    tempoAtual,
+    setTempoAtual,
+  ] = useState(
+    22 * 60 + 54,
   );
 
-  const segundosRestantes = Math.floor(
-    segundos % 60,
-  );
-
-  if (horas > 0) {
-    return `${String(horas).padStart(
-      2,
-      '0',
-    )}:${String(minutos).padStart(
-      2,
-      '0',
-    )}:${String(segundosRestantes).padStart(
-      2,
-      '0',
-    )}`;
-  }
-
-  return `${String(minutos).padStart(
-    2,
-    '0',
-  )}:${String(segundosRestantes).padStart(
-    2,
-    '0',
-  )}`;
-}
-
-function obterNomeVideo(video: VideoPartida) {
-  return (
-    video.titulo ||
-    video.nome ||
-    video.nomeArquivo ||
-    'Vídeo da partida'
-  );
-}
-
-function estimarDuracaoVideo(
-  video: VideoPartida,
-) {
-  if (video.duracao) {
-    return converterDuracao(
-      video.duracao,
+  const [
+    eventos,
+    setEventos,
+  ] =
+    useState<EventoAnalise[]>(
+      eventosIniciais,
     );
-  }
-
-  return 0;
-}
-
-/* =========================================================
-   COMPONENTE
-========================================================= */
-
-export default function AnaliseVideos() {
-  const videoRef =
-    useRef<HTMLVideoElement | null>(null);
-
-  const videoAreaRef =
-    useRef<HTMLDivElement | null>(null);
-
-  /* =====================================================
-     PARTIDAS
-  ===================================================== */
-
-  const [partidas, setPartidas] =
-    useState<Partida[]>([]);
 
   const [
-    carregandoPartidas,
-    setCarregandoPartidas,
-  ] = useState(true);
+    categorias,
+    setCategorias,
+  ] =
+    useState<CategoriaAcao[]>(
+      categoriasIniciais,
+    );
 
   const [
-    carregandoVideos,
-    setCarregandoVideos,
+    modalCategoriasAberto,
+    setModalCategoriasAberto,
   ] = useState(false);
 
   const [
-    partidaSelecionadaId,
-    setPartidaSelecionadaId,
-  ] = useState(0);
-
-  const [
-    videoSelecionadoId,
-    setVideoSelecionadoId,
-  ] = useState(0);
-
-  /* =====================================================
-     VÍDEO
-  ===================================================== */
-
-  const [tempoAtual, setTempoAtual] =
-    useState(0);
-
-  const [
-    duracaoRealVideo,
-    setDuracaoRealVideo,
-  ] = useState(0);
-
-  const [
-    videoExecutando,
-    setVideoExecutando,
-  ] = useState(false);
-
-  const [velocidade, setVelocidade] =
-    useState(1);
-
-  const [mutado, setMutado] =
-    useState(false);
-
-  const [telaCheia, setTelaCheia] =
-    useState(false);
-
-  const [
-    mostrarVelocidades,
-    setMostrarVelocidades,
-  ] = useState(false);
-
-  /* =====================================================
-     CATEGORIAS DA CONFIGURAÇÃO
-
-     VÊM DE:
-     sate-campos-analise
-  ===================================================== */
-
-  const [categorias, setCategorias] =
-    useState<Categoria[]>([]);
-
-  /* =====================================================
-     EVENTOS
-  ===================================================== */
-
-  const [eventos, setEventos] =
-    useState<Evento[]>(eventosIniciais);
-
-  /* =====================================================
-     CLIPES
-  ===================================================== */
-
-  const [clipes, setClipes] =
-    useState<Clipe[]>([]);
-
-  /* =====================================================
-     MODAIS
-  ===================================================== */
-
-  const [
-    mostrarCategorias,
-    setMostrarCategorias,
+    formularioCategoriaAberto,
+    setFormularioCategoriaAberto,
   ] = useState(false);
 
   const [
-    mostrarNovoEvento,
-    setMostrarNovoEvento,
+    confirmarExclusao,
+    setConfirmarExclusao,
   ] = useState(false);
 
-  const [mostrarClipe, setMostrarClipe] =
-    useState(false);
-
-  /* =====================================================
-     NOVO EVENTO
-  ===================================================== */
-
-  const [novoEvento, setNovoEvento] =
-    useState({
+  const [
+    categoriaForm,
+    setCategoriaForm,
+  ] =
+    useState<CategoriaForm>({
+      id: null,
       nome: '',
-      descricao: '',
-      tipo: 'boa' as Evento['tipo'],
-      segundo: 0,
-      duracao: 5,
+      iconId: 'target',
+      cor: '#4AA8D8',
+      mostrarTimeline: true,
     });
 
-  /* =====================================================
-     NOVO CLIPE
-  ===================================================== */
+  const [
+    buscaAtleta,
+    setBuscaAtleta,
+  ] = useState('');
 
-  const [novoClipe, setNovoClipe] =
-    useState({
+  const [
+    novoClipe,
+    setNovoClipe,
+  ] =
+    useState<NovoClipe>({
       nome: '',
-      inicio: 0,
-      fim: 10,
+      atletaId: null,
+      acao: '',
+      avaliacao: '',
+      observacao: '',
+      inicio: 10,
+      fim: 14,
     });
 
-  /* =========================================================
-     CARREGAR CATEGORIAS DA CONFIGURAÇÃO DE ANÁLISE
+  const atletasFiltrados =
+    useMemo(() => {
+      const busca =
+        buscaAtleta
+          .trim()
+          .toLowerCase();
 
-     AGORA OS CAMPOS VÊM DO BANCO DE DADOS
-     PELO ENDPOINT /api/configuracao-analise
-  ========================================================= */
-
-  useEffect(() => {
-    async function carregarCategoriasConfiguradas() {
-      try {
-        const token = obterToken();
-
-        if (!token) {
-          console.error('Token não encontrado.');
-          setCategorias([]);
-          return;
-        }
-
-        const resposta = await fetch(
-          `${API_URL}/configuracao-analise`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          },
-        );
-
-        const dados = await resposta.json().catch(() => ({}));
-
-        if (resposta.status === 401) {
-          window.location.href = '/login';
-          return;
-        }
-
-        if (!resposta.ok) {
-          throw new Error(
-            dados?.mensagem ||
-              'Erro ao carregar a configuração da análise.',
-          );
-        }
-
-        const configuracoes =
-          Array.isArray(dados?.configuracoes)
-            ? dados.configuracoes
-            : [];
-
-        const categoriasFormatadas: Categoria[] =
-          configuracoes.map(
-            (configuracao: {
-              id: number;
-              nome: string;
-              tipo?: string | null;
-            }) => {
-              const tipoBackend = String(
-                configuracao.tipo || '',
-              ).toUpperCase();
-
-              let tipo: Categoria['tipo'] = 'neutra';
-
-              if (tipoBackend === 'POSITIVA') {
-                tipo = 'boa';
-              } else if (tipoBackend === 'NEGATIVA') {
-                tipo = 'ruim';
-              }
-
-              return {
-                id: configuracao.id,
-                nome: configuracao.nome,
-                tipo,
-              };
-            },
-          );
-
-        setCategorias(categoriasFormatadas);
-
-        console.log(
-          'Campos de análise carregados do banco:',
-          categoriasFormatadas,
-        );
-      } catch (erro) {
-        console.error(
-          'Erro ao carregar categorias da análise:',
-          erro,
-        );
-
-        setCategorias([]);
+      if (!busca) {
+        return atletasMock;
       }
-    }
 
-    carregarCategoriasConfiguradas();
-  }, []);
-
-  /* =========================================================
-     CARREGAR PARTIDAS
-  ========================================================= */
-
-  useEffect(() => {
-    async function carregarPartidas() {
-      try {
-        setCarregandoPartidas(true);
-
-        const token = obterToken();
-
-        if (!token) {
-          window.location.href = '/login';
-          return;
-        }
-
-        const resposta = await fetch(
-          `${API_URL}/partidas`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type':
-                'application/json',
-            },
-          },
-        );
-
-        const dados = await resposta
-          .json()
-          .catch(() => ({}));
-
-        if (resposta.status === 401) {
-          window.location.href = '/login';
-          return;
-        }
-
-        if (!resposta.ok) {
-          throw new Error(
-            dados?.mensagem ||
-              'Erro ao carregar as partidas.',
-          );
-        }
-
-        const lista: PartidaBackend[] =
-          Array.isArray(dados)
-            ? dados
-            : Array.isArray(
-                  dados?.partidas,
-                )
-              ? dados.partidas
-              : [];
-
-        const partidasFormatadas: Partida[] =
-          lista.map((partida) => ({
-            id: partida.id,
-
-            equipe:
-              partida.equipe?.nome ||
-              'Minha equipe',
-
-            adversario:
-              partida.adversario ||
-              'Adversário',
-
-            data: formatarData(
-              partida.data,
+      return atletasMock.filter(
+        (atleta) =>
+          atleta.nome
+            .toLowerCase()
+            .includes(
+              busca,
+            ) ||
+          atleta.posicao
+            .toLowerCase()
+            .includes(
+              busca,
             ),
-
-            modalidade:
-              partida.equipe?.modalidade ||
-              'Esporte',
-
-            videos: [],
-          }));
-
-        setPartidas(
-          partidasFormatadas,
-        );
-
-        if (
-          partidasFormatadas.length >
-          0
-        ) {
-          setPartidaSelecionadaId(
-            partidasFormatadas[0].id,
-          );
-        }
-      } catch (error) {
-        console.error(
-          'Erro ao carregar partidas:',
-          error,
-        );
-
-        /*
-         * Não usa partidas falsas aqui.
-         * Se o backend falhar, a tela deve
-         * mostrar que não existem partidas
-         * disponíveis.
-         */
-        setPartidas([]);
-        setPartidaSelecionadaId(0);
-      } finally {
-        setCarregandoPartidas(false);
-      }
-    }
-
-    carregarPartidas();
-  }, []);
-
-  /* =========================================================
-     CARREGAR VÍDEOS DA PARTIDA
-  ========================================================= */
-
-  useEffect(() => {
-    async function carregarVideos() {
-      if (!partidaSelecionadaId) {
-        return;
-      }
-
-      try {
-        setCarregandoVideos(true);
-
-        const token = obterToken();
-
-        if (!token) {
-          window.location.href = '/login';
-          return;
-        }
-
-        setVideoSelecionadoId(0);
-        setTempoAtual(0);
-        setDuracaoRealVideo(0);
-        setVideoExecutando(false);
-
-        if (videoRef.current) {
-          videoRef.current.pause();
-          videoRef.current.currentTime = 0;
-        }
-
-        const resposta = await fetch(
-          `${API_URL}/partidas/${partidaSelecionadaId}/videos`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type':
-                'application/json',
-            },
-          },
-        );
-
-        const dados = await resposta
-          .json()
-          .catch(() => ({}));
-
-        if (resposta.status === 401) {
-          window.location.href = '/login';
-          return;
-        }
-
-        if (!resposta.ok) {
-          throw new Error(
-            dados?.mensagem ||
-              'Erro ao carregar os vídeos.',
-          );
-        }
-
-        const lista = Array.isArray(dados)
-          ? dados
-          : Array.isArray(
-                dados?.videos,
-              )
-            ? dados.videos
-            : [];
-
-        const videosFormatados: VideoPartida[] =
-          lista.map(
-            (video: VideoPartida) => ({
-              ...video,
-
-              nome:
-                video.titulo ||
-                video.nome ||
-                video.nomeArquivo ||
-                'Vídeo da partida',
-
-              url: normalizarUrlVideo(
-                video.url,
-              ),
-            }),
-          );
-
-        setPartidas((atuais) =>
-          atuais.map((partida) =>
-            partida.id ===
-            partidaSelecionadaId
-              ? {
-                  ...partida,
-                  videos:
-                    videosFormatados,
-                }
-              : partida,
-          ),
-        );
-
-        if (
-          videosFormatados.length >
-          0
-        ) {
-          setVideoSelecionadoId(
-            videosFormatados[0].id,
-          );
-        } else {
-          setVideoSelecionadoId(0);
-        }
-      } catch (error) {
-        console.error(
-          'Erro ao carregar vídeos:',
-          error,
-        );
-
-        setPartidas((atuais) =>
-          atuais.map((partida) =>
-            partida.id ===
-            partidaSelecionadaId
-              ? {
-                  ...partida,
-                  videos: [],
-                }
-              : partida,
-          ),
-        );
-
-        setVideoSelecionadoId(0);
-      } finally {
-        setCarregandoVideos(false);
-      }
-    }
-
-    carregarVideos();
-  }, [partidaSelecionadaId]);
-
-  /* =========================================================
-     DADOS SELECIONADOS
-  ========================================================= */
-
-  const partidaSelecionada = useMemo(
-    () =>
-      partidas.find(
-        (partida) =>
-          partida.id ===
-          partidaSelecionadaId,
-      ) ?? null,
-    [
-      partidas,
-      partidaSelecionadaId,
-    ],
-  );
-
-  const videosDaPartida =
-    partidaSelecionada?.videos ?? [];
-
-  const videoSelecionado = useMemo(
-    () =>
-      videosDaPartida.find(
-        (video) =>
-          video.id ===
-          videoSelecionadoId,
-      ) ??
-      videosDaPartida[0] ??
-      null,
-    [
-      videosDaPartida,
-      videoSelecionadoId,
-    ],
-  );
-
-  const duracaoVideo =
-    duracaoRealVideo ||
-    (videoSelecionado
-      ? estimarDuracaoVideo(
-          videoSelecionado,
-        )
-      : 0);
-
-  /* =========================================================
-     TROCAR PARTIDA
-  ========================================================= */
-
-  function trocarPartida(id: number) {
-    setPartidaSelecionadaId(id);
-    setVideoSelecionadoId(0);
-    setTempoAtual(0);
-    setDuracaoRealVideo(0);
-    setVideoExecutando(false);
-
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  }
-
-  /* =========================================================
-     TROCAR VÍDEO
-  ========================================================= */
-
-  function trocarVideo(id: number) {
-    setVideoSelecionadoId(id);
-    setTempoAtual(0);
-    setDuracaoRealVideo(0);
-    setVideoExecutando(false);
-
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  }
-
-  /* =========================================================
-     PLAY / PAUSE
-  ========================================================= */
-
-  function alternarVideo() {
-    if (!videoRef.current) {
-      return;
-    }
-
-    if (videoRef.current.paused) {
-      videoRef.current
-        .play()
-        .catch((erro) => {
-          console.error(
-            'Erro ao reproduzir vídeo:',
-            erro,
-          );
-        });
-    } else {
-      videoRef.current.pause();
-    }
-  }
-
-  /* =========================================================
-     VOLTAR 10 SEGUNDOS
-  ========================================================= */
-
-  function voltarDezSegundos() {
-    if (!videoRef.current) {
-      return;
-    }
-
-    videoRef.current.currentTime =
-      Math.max(
-        0,
-        videoRef.current.currentTime - 10,
       );
-
-    setTempoAtual(
-      videoRef.current.currentTime,
-    );
-  }
-
-  /* =========================================================
-     AVANÇAR 10 SEGUNDOS
-  ========================================================= */
-
-  function avancarDezSegundos() {
-    if (!videoRef.current) {
-      return;
-    }
-
-    videoRef.current.currentTime =
-      Math.min(
-        videoRef.current.duration ||
-          duracaoVideo,
-        videoRef.current.currentTime + 10,
-      );
-
-    setTempoAtual(
-      videoRef.current.currentTime,
-    );
-  }
-
-  /* =========================================================
-     MUTE
-  ========================================================= */
-
-  function alternarMute() {
-    if (!videoRef.current) {
-      return;
-    }
-
-    videoRef.current.muted =
-      !videoRef.current.muted;
-
-    setMutado(
-      videoRef.current.muted,
-    );
-  }
-
-  /* =========================================================
-     VELOCIDADE
-  ========================================================= */
-
-  function alterarVelocidade(
-    novaVelocidade: number,
-  ) {
-    setVelocidade(novaVelocidade);
-
-    if (videoRef.current) {
-      videoRef.current.playbackRate =
-        novaVelocidade;
-    }
-
-    setMostrarVelocidades(false);
-  }
-
-  /* =========================================================
-     TELA CHEIA
-  ========================================================= */
-
-  async function alternarTelaCheia() {
-    const elemento =
-      videoAreaRef.current;
-
-    if (!elemento) {
-      return;
-    }
-
-    try {
-      if (!document.fullscreenElement) {
-        await elemento.requestFullscreen();
-        setTelaCheia(true);
-      } else {
-        await document.exitFullscreen();
-        setTelaCheia(false);
-      }
-    } catch (erro) {
-      console.error(
-        'Erro ao alternar tela cheia:',
-        erro,
-      );
-    }
-  }
-
-  /* =========================================================
-     ALTERAR TEMPO
-  ========================================================= */
-
-  function alterarTempo(
-    event: ChangeEvent<HTMLInputElement>,
-  ) {
-    const novoTempo = Number(
-      event.target.value,
-    );
-
-    setTempoAtual(novoTempo);
-
-    if (videoRef.current) {
-      videoRef.current.currentTime =
-        novoTempo;
-    }
-  }
-
-  /* =========================================================
-     IR PARA EVENTO
-  ========================================================= */
-
-  function irParaEvento(segundo: number) {
-    setTempoAtual(segundo);
-
-    if (videoRef.current) {
-      videoRef.current.currentTime =
-        segundo;
-
-      videoRef.current
-        .play()
-        .catch(() => {});
-
-      setVideoExecutando(true);
-    }
-  }
-
-  /* =========================================================
-     ADICIONAR EVENTO
-  ========================================================= */
-
-  function adicionarEvento() {
-    if (!novoEvento.nome.trim()) {
-      return;
-    }
-
-    const evento: Evento = {
-      id: Date.now(),
-
-      nome: novoEvento.nome,
-
-      descricao:
-        novoEvento.descricao ||
-        'Evento registrado na partida',
-
-      tipo: novoEvento.tipo,
-
-      segundo: novoEvento.segundo,
-
-      duracao: novoEvento.duracao,
-    };
-
-    setEventos((atual) => [
-      ...atual,
-      evento,
+    }, [
+      buscaAtleta,
     ]);
 
-    setNovoEvento({
-      nome: '',
-      descricao: '',
-      tipo: 'boa',
-      segundo: tempoAtual,
-      duracao: 5,
-    });
+  const atletaSelecionado =
+    useMemo(() => {
+      return atletasMock.find(
+        (atleta) =>
+          atleta.id ===
+          novoClipe.atletaId,
+      );
+    }, [
+      novoClipe.atletaId,
+    ]);
 
-    setMostrarNovoEvento(false);
-  }
+  const duracao =
+    Math.max(
+      0,
+      novoClipe.fim -
+        novoClipe.inicio,
+    );
 
-  /* =========================================================
-     ADICIONAR CLIPE
-  ========================================================= */
+  const formularioValido =
+    novoClipe.nome.trim() !== '' &&
+    novoClipe.atletaId !== null &&
+    novoClipe.acao !== '' &&
+    novoClipe.avaliacao !== '' &&
+    novoClipe.fim >
+      novoClipe.inicio;
 
-  function adicionarClipe() {
-    if (!novoClipe.nome.trim()) {
+  const selecionarAtleta = (
+    atleta: Atleta,
+  ) => {
+    setNovoClipe(
+      (atual) => ({
+        ...atual,
+        atletaId:
+          atleta.id,
+      }),
+    );
+
+    setBuscaAtleta(
+      atleta.nome,
+    );
+  };
+
+  const salvarClipe = () => {
+    if (
+      !formularioValido
+    ) {
       return;
     }
 
-    const novo: Clipe = {
-      id: Date.now(),
-      nome: novoClipe.nome,
-      inicio: novoClipe.inicio,
-      fim: novoClipe.fim,
-    };
+    const atleta =
+      atletasMock.find(
+        (item) =>
+          item.id ===
+          novoClipe.atletaId,
+      );
 
-    setClipes((atual) => [
-      ...atual,
-      novo,
-    ]);
+    if (!atleta) {
+      return;
+    }
+
+    const novoEvento:
+      EventoAnalise = {
+        id:
+          Date.now(),
+        tipo:
+          novoClipe.acao,
+        atleta:
+          atleta.nome,
+        segundo:
+          novoClipe.fim *
+          60,
+        avaliacao:
+          novoClipe.avaliacao as Avaliacao,
+        clip: true,
+      };
+
+    setEventos(
+      (atuais) => [
+        ...atuais,
+        novoEvento,
+      ],
+    );
 
     setNovoClipe({
       nome: '',
-      inicio: tempoAtual,
-      fim: tempoAtual + 10,
+      atletaId: null,
+      acao: '',
+      avaliacao: '',
+      observacao: '',
+      inicio: 10,
+      fim: 14,
     });
 
-    setMostrarClipe(false);
-  }
+    setBuscaAtleta('');
+    setPainelClipeAberto(
+      false,
+    );
+  };
 
-  /* =========================================================
-     SELECIONAR CATEGORIA
-  ========================================================= */
+  const abrirGerenciador =
+    () => {
+      setFormularioCategoriaAberto(
+        false,
+      );
 
-  function selecionarCategoria(
-    categoria: Categoria,
-  ) {
-    setNovoEvento({
-      ...novoEvento,
+      setConfirmarExclusao(
+        false,
+      );
 
-      nome: categoria.nome,
+      setModalCategoriasAberto(
+        true,
+      );
+    };
 
-      tipo: 'neutra',
+  const abrirNovaCategoria =
+    () => {
+      setCategoriaForm({
+        id: null,
+        nome: '',
+        iconId: 'target',
+        cor: '#4AA8D8',
+        mostrarTimeline: true,
+      });
 
-      segundo: tempoAtual,
+      setConfirmarExclusao(
+        false,
+      );
+
+      setFormularioCategoriaAberto(
+        true,
+      );
+    };
+
+  const editarCategoria = (
+    categoria:
+      CategoriaAcao,
+  ) => {
+    const opcaoIcone =
+      opcoesIcones.find(
+        (opcao) =>
+          opcao.icon ===
+          categoria.icon,
+      );
+
+    setCategoriaForm({
+      id:
+        categoria.id,
+      nome:
+        categoria.nome,
+      iconId:
+        opcaoIcone?.id ??
+        'target',
+      cor:
+        categoria.cor,
+      mostrarTimeline:
+        categoria.mostrarTimeline,
     });
 
-    setMostrarNovoEvento(true);
-  }
+    setConfirmarExclusao(
+      false,
+    );
 
-  /* =========================================================
-     RENDER
-  ========================================================= */
+    setFormularioCategoriaAberto(
+      true,
+    );
+  };
+
+  const voltarListaCategorias =
+    () => {
+      setFormularioCategoriaAberto(
+        false,
+      );
+
+      setConfirmarExclusao(
+        false,
+      );
+    };
+
+  const salvarCategoria =
+    () => {
+      const nome =
+        categoriaForm.nome.trim();
+
+      if (!nome) {
+        return;
+      }
+
+      const opcaoIcone =
+        opcoesIcones.find(
+          (opcao) =>
+            opcao.id ===
+            categoriaForm.iconId,
+        );
+
+      const Icone =
+        opcaoIcone?.icon ??
+        Target;
+
+      if (
+        categoriaForm.id ===
+        null
+      ) {
+        const novaCategoria:
+          CategoriaAcao = {
+            id:
+              Date.now(),
+            nome,
+            icon:
+              Icone,
+            cor:
+              categoriaForm.cor,
+            mostrarTimeline:
+              categoriaForm.mostrarTimeline,
+          };
+
+        setCategorias(
+          (atuais) => [
+            ...atuais,
+            novaCategoria,
+          ],
+        );
+      } else {
+        setCategorias(
+          (atuais) =>
+            atuais.map(
+              (
+                categoria,
+              ) =>
+                categoria.id ===
+                categoriaForm.id
+                  ? {
+                      ...categoria,
+                      nome,
+                      icon:
+                        Icone,
+                      cor:
+                        categoriaForm.cor,
+                      mostrarTimeline:
+                        categoriaForm.mostrarTimeline,
+                    }
+                  : categoria,
+            ),
+        );
+      }
+
+      voltarListaCategorias();
+    };
+
+  const excluirCategoria =
+    () => {
+      if (
+        categoriaForm.id ===
+        null
+      ) {
+        return;
+      }
+
+      if (
+        !confirmarExclusao
+      ) {
+        setConfirmarExclusao(
+          true,
+        );
+
+        return;
+      }
+
+      setCategorias(
+        (atuais) =>
+          atuais.filter(
+            (categoria) =>
+              categoria.id !==
+              categoriaForm.id,
+          ),
+      );
+
+      setEventos(
+        (atuais) =>
+          atuais.filter(
+            (evento) =>
+              evento.tipo !==
+              categoriaForm.nome,
+          ),
+      );
+
+      voltarListaCategorias();
+    };
 
   return (
-    <div className={styles.page}>
-
-      {/* =====================================
-          CABEÇALHO
-      ===================================== */}
-
-      <header className={styles.pageHeader}>
+    <main
+      className={
+        styles.page
+      }
+    >
+      <div
+        className={
+          styles.pageHeader
+        }
+      >
         <div>
-          <button
-            type="button"
-            onClick={() =>
-              window.history.back()
-            }
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 7,
-              marginBottom: 12,
-              border: 'none',
-              background: 'transparent',
-              color: '#ffffff',
-              fontFamily: 'inherit',
-              fontSize: 13,
-              cursor: 'pointer',
-              padding: 0,
-            }}
-          >
-            <ArrowLeft size={17} />
-            Voltar
-          </button>
-
-          <h1>Análise de vídeo</h1>
+          <h1>
+            Análise de Vídeos
+          </h1>
 
           <div
             className={
-              styles.videoSelectors
+              styles.matchInfo
             }
           >
-            <div
-              className={
-                styles.videoSelectorGroup
-              }
-            >
-              <label htmlFor="partida">
-                Partida
-              </label>
+            <span>
+              Falcões FC vs Tigres FC
+            </span>
 
-              <select
-                id="partida"
-                value={
-                  partidaSelecionadaId
-                }
-                onChange={(event) =>
-                  trocarPartida(
-                    Number(
-                      event.target.value,
-                    ),
-                  )
-                }
-                className={
-                  styles.matchSelector
-                }
-                disabled={
-                  carregandoPartidas ||
-                  partidas.length === 0
-                }
-              >
-                {partidas.length === 0 ? (
-                  <option value={0}>
-                    {carregandoPartidas
-                      ? 'Carregando partidas...'
-                      : 'Nenhuma partida'}
-                  </option>
-                ) : (
-                  partidas.map(
-                    (partida) => (
-                      <option
-                        key={
-                          partida.id
-                        }
-                        value={
-                          partida.id
-                        }
-                      >
-                        {partida.equipe} x{' '}
-                        {
-                          partida.adversario
-                        }
-                      </option>
-                    ),
-                  )
-                )}
-              </select>
-            </div>
+            <i />
 
-            <div
-              className={
-                styles.videoSelectorGroup
-              }
-            >
-              <label htmlFor="video">
-                Vídeo da partida
-              </label>
+            <span>
+              18/08/2026
+            </span>
 
-              <select
-                id="video"
-                value={
-                  videoSelecionadoId
-                }
-                onChange={(event) =>
-                  trocarVideo(
-                    Number(
-                      event.target.value,
-                    ),
-                  )
-                }
-                className={
-                  styles.matchSelector
-                }
-                disabled={
-                  carregandoVideos ||
-                  videosDaPartida.length ===
-                    0
-                }
-              >
-                {carregandoVideos ? (
-                  <option value={0}>
-                    Carregando vídeos...
-                  </option>
-                ) : videosDaPartida.length ===
-                  0 ? (
-                  <option value={0}>
-                    Nenhum vídeo
-                  </option>
-                ) : (
-                  videosDaPartida.map(
-                    (video) => (
-                      <option
-                        key={
-                          video.id
-                        }
-                        value={
-                          video.id
-                        }
-                      >
-                        {obterNomeVideo(
-                          video,
-                        )}
-                      </option>
-                    ),
-                  )
-                )}
-              </select>
-            </div>
+            <i />
 
-            {partidaSelecionada && (
-              <div
-                className={
-                  styles.matchDetails
-                }
-              >
-                <span>
-                  {partidaSelecionada.data}
-                </span>
-
-                <i />
-
-                <span>
-                  {
-                    partidaSelecionada.modalidade
-                  }
-                </span>
-
-                <i />
-
-                <span>
-                  {videosDaPartida.length}{' '}
-                  {videosDaPartida.length ===
-                  1
-                    ? 'vídeo'
-                    : 'vídeos'}
-                </span>
-              </div>
-            )}
+            <span>
+              Futebol
+            </span>
           </div>
         </div>
 
         <div
-          className={styles.headerActions}
+          className={
+            styles.headerActions
+          }
         >
           <button
             type="button"
             className={
               styles.manageCategoriesButton
             }
-            onClick={() =>
-              setMostrarCategorias(true)
+            onClick={
+              abrirGerenciador
             }
           >
-            <Edit3 size={16} />
-            Categorias
+            <Pencil
+              size={16}
+            />
+            Gerenciar categorias
           </button>
 
           <button
@@ -1273,10 +744,14 @@ export default function AnaliseVideos() {
               styles.actionButtonRed
             }
             onClick={() =>
-              setMostrarClipe(true)
+              setPainelClipeAberto(
+                true,
+              )
             }
           >
-            <Scissors size={16} />
+            <Scissors
+              size={16}
+            />
             Criar clipe
           </button>
 
@@ -1285,525 +760,74 @@ export default function AnaliseVideos() {
             className={
               styles.actionButtonGreen
             }
-            onClick={() =>
-              setMostrarNovoEvento(true)
-            }
           >
-            <Plus size={16} />
-            Marcar evento
+            <Save
+              size={16}
+            />
+            Salvar análise
           </button>
         </div>
-      </header>
+      </div>
 
-      {/* =====================================
-          GRID PRINCIPAL
-      ===================================== */}
-
-      <div className={styles.analysisGrid}>
-
-        <div className={styles.leftColumn}>
-
-          {/* =================================
-              VÍDEO
-          ================================= */}
-
-          <section
-            className={styles.videoCard}
+      <section
+        className={
+          styles.analysisGrid
+        }
+      >
+        <div
+          className={
+            styles.leftColumn
+          }
+        >
+          <article
+            className={
+              styles.videoCard
+            }
           >
             <div
-              ref={videoAreaRef}
-              className={styles.videoArea}
-              style={{
-                position: 'relative',
-              }}
+              className={
+                styles.videoArea
+              }
             >
-              {videoSelecionado?.url ? (
-                <video
-                  key={
-                    videoSelecionado.id
-                  }
-                  ref={videoRef}
-                  src={
-                    videoSelecionado.url
-                  }
-                  preload="metadata"
-                  playsInline
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'contain',
-                    display: 'block',
-                    background: '#071914',
-                  }}
-                  onTimeUpdate={(
-                    event,
-                  ) =>
-                    setTempoAtual(
-                      event.currentTarget
-                        .currentTime,
-                    )
-                  }
-                  onLoadedMetadata={(
-                    event,
-                  ) => {
-                    const video =
-                      event.currentTarget;
-
-                    setDuracaoRealVideo(
-                      Number.isFinite(
-                        video.duration,
-                      )
-                        ? video.duration
-                        : 0,
-                    );
-
-                    video.playbackRate =
-                      velocidade;
-
-                    video.muted =
-                      mutado;
-                  }}
-                  onPlay={() => {
-                    setVideoExecutando(
-                      true,
-                    );
-
-                    if (videoRef.current) {
-                      videoRef.current.playbackRate =
-                        velocidade;
-                    }
-                  }}
-                  onPause={() =>
-                    setVideoExecutando(
-                      false,
-                    )
-                  }
-                  onEnded={() =>
-                    setVideoExecutando(
-                      false,
-                    )
-                  }
-                  onVolumeChange={(event) =>
-                    setMutado(
-                      event.currentTarget
-                        .muted,
-                    )
-                  }
-                  onError={(event) => {
-                    console.error(
-                      'Erro ao carregar vídeo:',
-                      videoSelecionado.url,
-                      event,
-                    );
-                  }}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    color: '#ffffff',
-                    display: 'flex',
-                    flexDirection:
-                      'column',
-                    alignItems: 'center',
-                    justifyContent:
-                      'center',
-                    gap: 10,
-                    background:
-                      '#071914',
-                  }}
-                >
-                  <Video size={42} />
-
-                  <span>
-                    {carregandoVideos
-                      ? 'Carregando vídeo...'
-                      : 'Nenhum vídeo disponível para esta partida'}
-                  </span>
-                </div>
-              )}
-
-              {/* CONTROLES */}
-
-              {videoSelecionado && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    zIndex: 5,
-                    padding:
-                      '70px 14px 12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    background:
-                      'linear-gradient(transparent, rgba(0,0,0,0.82))',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <button
-                    type="button"
-                    title="Voltar 10 segundos"
-                    onClick={
-                      voltarDezSegundos
-                    }
-                    style={{
-                      width: 34,
-                      height: 34,
-                      display: 'flex',
-                      alignItems:
-                        'center',
-                      justifyContent:
-                        'center',
-                      border: 'none',
-                      borderRadius: 8,
-                      background:
-                        'transparent',
-                      color: '#ffffff',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <RotateCcw
-                      size={19}
-                    />
-                  </button>
-
-                  <button
-                    type="button"
-                    title={
-                      videoExecutando
-                        ? 'Pausar'
-                        : 'Reproduzir'
-                    }
-                    onClick={
-                      alternarVideo
-                    }
-                    style={{
-                      width: 38,
-                      height: 38,
-                      display: 'flex',
-                      alignItems:
-                        'center',
-                      justifyContent:
-                        'center',
-                      border: 'none',
-                      borderRadius: '50%',
-                      background:
-                        'rgba(255,255,255,0.14)',
-                      color: '#ffffff',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {videoExecutando ? (
-                      <Pause
-                        size={21}
-                        fill="currentColor"
-                      />
-                    ) : (
-                      <Play
-                        size={21}
-                        fill="currentColor"
-                      />
-                    )}
-                  </button>
-
-                  <button
-                    type="button"
-                    title="Avançar 10 segundos"
-                    onClick={
-                      avancarDezSegundos
-                    }
-                    style={{
-                      width: 34,
-                      height: 34,
-                      display: 'flex',
-                      alignItems:
-                        'center',
-                      justifyContent:
-                        'center',
-                      border: 'none',
-                      borderRadius: 8,
-                      background:
-                        'transparent',
-                      color: '#ffffff',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <RotateCw
-                      size={19}
-                    />
-                  </button>
-
-                  <button
-                    type="button"
-                    title={
-                      mutado
-                        ? 'Ativar som'
-                        : 'Silenciar'
-                    }
-                    onClick={
-                      alternarMute
-                    }
-                    style={{
-                      width: 34,
-                      height: 34,
-                      display: 'flex',
-                      alignItems:
-                        'center',
-                      justifyContent:
-                        'center',
-                      border: 'none',
-                      borderRadius: 8,
-                      background:
-                        'transparent',
-                      color: '#ffffff',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {mutado ? (
-                      <VolumeX
-                        size={20}
-                      />
-                    ) : (
-                      <Volume2
-                        size={20}
-                      />
-                    )}
-                  </button>
-
+              <button
+                type="button"
+                className={
+                  styles.playButton
+                }
+                onClick={() =>
+                  setVideoRodando(
+                    (atual) =>
+                      !atual,
+                  )
+                }
+              >
+                {videoRodando ? (
                   <span
-                    style={{
-                      color: '#ffffff',
-                      fontSize: 12,
-                      fontWeight: 600,
-                      whiteSpace:
-                        'nowrap',
-                      marginLeft: 3,
-                    }}
-                  >
-                    {formatarTempo(
-                      tempoAtual,
-                    )}{' '}
-                    /{' '}
-                    {formatarTempo(
-                      duracaoVideo,
-                    )}
-                  </span>
-
-                  <div
-                    style={{
-                      flex: 1,
-                    }}
-                  />
-
-                  {/* VELOCIDADE */}
-
-                  <div
-                    style={{
-                      position:
-                        'relative',
-                    }}
-                  >
-                    <button
-                      type="button"
-                      title="Velocidade"
-                      onClick={() =>
-                        setMostrarVelocidades(
-                          (atual) =>
-                            !atual,
-                        )
-                      }
-                      style={{
-                        minWidth: 48,
-                        height: 34,
-                        padding:
-                          '0 8px',
-                        border:
-                          'none',
-                        borderRadius: 7,
-                        background:
-                          'transparent',
-                        color:
-                          '#ffffff',
-                        fontFamily:
-                          'inherit',
-                        fontSize: 12,
-                        fontWeight: 700,
-                        cursor:
-                          'pointer',
-                      }}
-                    >
-                      {velocidade}x
-                    </button>
-
-                    {mostrarVelocidades && (
-                      <div
-                        style={{
-                          position:
-                            'absolute',
-                          bottom:
-                            '44px',
-                          right: 0,
-                          minWidth:
-                            120,
-                          padding:
-                            '7px',
-                          borderRadius:
-                            10,
-                          background:
-                            '#ffffff',
-                          boxShadow:
-                            '0 8px 25px rgba(0,0,0,0.28)',
-                          display:
-                            'flex',
-                          flexDirection:
-                            'column',
-                          gap: 2,
-                        }}
-                      >
-                        <span
-                          style={{
-                            padding:
-                              '5px 8px',
-                            color:
-                              '#718078',
-                            fontSize:
-                              10,
-                            fontWeight:
-                              700,
-                          }}
-                        >
-                          VELOCIDADE
-                        </span>
-
-                        {[
-                          0.5,
-                          0.75,
-                          1,
-                          1.25,
-                          1.5,
-                          1.75,
-                          2,
-                        ].map(
-                          (
-                            valor,
-                          ) => (
-                            <button
-                              key={
-                                valor
-                              }
-                              type="button"
-                              onClick={() =>
-                                alterarVelocidade(
-                                  valor,
-                                )
-                              }
-                              style={{
-                                border:
-                                  'none',
-                                borderRadius:
-                                  7,
-                                padding:
-                                  '7px 9px',
-                                textAlign:
-                                  'left',
-                                background:
-                                  velocidade ===
-                                  valor
-                                    ? '#e5f5ef'
-                                    : 'transparent',
-                                color:
-                                  velocidade ===
-                                  valor
-                                    ? '#16a875'
-                                    : '#33453d',
-                                fontFamily:
-                                  'inherit',
-                                fontSize:
-                                  12,
-                                fontWeight:
-                                  600,
-                                cursor:
-                                  'pointer',
-                              }}
-                            >
-                              {valor}x
-                            </button>
-                          ),
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* TELA CHEIA */}
-
-                  <button
-                    type="button"
-                    title={
-                      telaCheia
-                        ? 'Sair da tela cheia'
-                        : 'Tela cheia'
-                    }
-                    onClick={
-                      alternarTelaCheia
-                    }
-                    style={{
-                      width: 38,
-                      height: 34,
-                      display: 'flex',
-                      alignItems:
-                        'center',
-                      justifyContent:
-                        'center',
-                      border: 'none',
-                      borderRadius: 8,
-                      background:
-                        'transparent',
-                      color: '#ffffff',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {telaCheia ? (
-                      <Minimize
-                        size={19}
-                      />
-                    ) : (
-                      <Maximize
-                        size={19}
-                      />
-                    )}
-                  </button>
-                </div>
-              )}
-
-              {/* BOTÃO CENTRAL */}
-
-              {videoSelecionado &&
-                !videoExecutando && (
-                  <button
-                    type="button"
                     className={
-                      styles.playButton
+                      styles.pauseIcon
                     }
-                    onClick={
-                      alternarVideo
-                    }
-                    style={{
-                      zIndex: 4,
-                    }}
                   >
-                    <Play
-                      size={29}
-                      fill="currentColor"
-                    />
-                  </button>
+                    ||
+                  </span>
+                ) : (
+                  <Play
+                    size={38}
+                    fill="currentColor"
+                  />
                 )}
-            </div>
+              </button>
 
-            {/* TIMELINE */}
+              <span
+                className={
+                  styles.videoTime
+                }
+              >
+                {formatarTempo(
+                  tempoAtual,
+                )}{' '}
+                / 45:00
+              </span>
+            </div>
 
             <div
               className={
@@ -1819,15 +843,21 @@ export default function AnaliseVideos() {
                   type="range"
                   min="0"
                   max={
-                    duracaoVideo || 1
+                    DURACAO_VIDEO
                   }
-                  value={Math.min(
-                    tempoAtual,
-                    duracaoVideo ||
-                      1,
-                  )}
-                  onChange={
-                    alterarTempo
+                  value={
+                    tempoAtual
+                  }
+                  onChange={(
+                    event,
+                  ) =>
+                    setTempoAtual(
+                      Number(
+                        event
+                          .target
+                          .value,
+                      ),
+                    )
                   }
                   className={
                     styles.videoRange
@@ -1840,37 +870,56 @@ export default function AnaliseVideos() {
                   }
                 >
                   {eventos.map(
-                    (evento) => (
-                      <button
-                        key={
-                          evento.id
-                        }
-                        type="button"
-                        className={`${styles.analysisMarker} ${
-                          styles[
-                            `marker_${evento.tipo}`
-                          ]
-                        }`}
-                        style={{
-                          left: `${
-                            duracaoVideo >
-                            0
-                              ? (evento.segundo /
-                                  duracaoVideo) *
-                                100
-                              : 0
-                          }%`,
-                        }}
-                        onClick={() =>
-                          irParaEvento(
-                            evento.segundo,
-                          )
-                        }
-                        title={
-                          evento.nome
-                        }
-                      />
-                    ),
+                    (
+                      evento,
+                    ) => {
+                      const categoria =
+                        categorias.find(
+                          (
+                            item,
+                          ) =>
+                            item.nome ===
+                            evento.tipo,
+                        );
+
+                      if (
+                        categoria &&
+                        !categoria.mostrarTimeline
+                      ) {
+                        return null;
+                      }
+
+                      const posicao =
+                        (
+                          evento.segundo /
+                          DURACAO_VIDEO
+                        ) *
+                        100;
+
+                      return (
+                        <button
+                          key={
+                            evento.id
+                          }
+                          type="button"
+                          className={`${styles.analysisMarker} ${
+                            styles[
+                              `marker_${evento.avaliacao}`
+                            ]
+                          }`}
+                          style={{
+                            left:
+                              `${posicao}%`,
+                          }}
+                          title={`${evento.tipo} - ${evento.atleta}`}
+                          onClick={() =>
+                            setTempoAtual(
+                              evento.segundo,
+                            )
+                          }
+                        />
+                      );
+                    },
                   )}
                 </div>
               </div>
@@ -1880,72 +929,36 @@ export default function AnaliseVideos() {
                   styles.timelineLegend
                 }
               >
-                <div
+                <TimelineLegend
+                  label="Boa"
                   className={
-                    styles.timelineLegendItem
+                    styles.goodMarker
                   }
-                >
-                  <span
-                    className={
-                      styles.goodMarker
-                    }
-                  />
-                  <small>
-                    Boa
-                  </small>
-                </div>
+                />
 
-                <div
+                <TimelineLegend
+                  label="Ruim"
                   className={
-                    styles.timelineLegendItem
+                    styles.badMarker
                   }
-                >
-                  <span
-                    className={
-                      styles.badMarker
-                    }
-                  />
-                  <small>
-                    Ruim
-                  </small>
-                </div>
+                />
 
-                <div
+                <TimelineLegend
+                  label="Neutra"
                   className={
-                    styles.timelineLegendItem
+                    styles.neutralMarker
                   }
-                >
-                  <span
-                    className={
-                      styles.neutralMarker
-                    }
-                  />
-                  <small>
-                    Neutra
-                  </small>
-                </div>
+                />
 
-                <div
+                <TimelineLegend
+                  label="Destaque"
                   className={
-                    styles.timelineLegendItem
+                    styles.highlightMarker
                   }
-                >
-                  <span
-                    className={
-                      styles.highlightMarker
-                    }
-                  />
-                  <small>
-                    Destaque
-                  </small>
-                </div>
+                />
               </div>
             </div>
-          </section>
-
-          {/* =================================
-              CATEGORIAS
-          ================================= */}
+          </article>
 
           <section
             className={
@@ -1959,12 +972,11 @@ export default function AnaliseVideos() {
             >
               <div>
                 <h2>
-                  Categorias de análise
+                  Categorias da análise
                 </h2>
 
                 <p>
-                  Campos selecionados na
-                  configuração da análise.
+                  Categorias disponíveis para esta análise de Futebol.
                 </p>
               </div>
 
@@ -1973,14 +985,14 @@ export default function AnaliseVideos() {
                 className={
                   styles.editCategoriesSmall
                 }
-                onClick={() =>
-                  setMostrarCategorias(
-                    true,
-                  )
+                onClick={
+                  abrirGerenciador
                 }
               >
-                <Edit3 size={14} />
-                Visualizar
+                <Pencil
+                  size={14}
+                />
+                Editar
               </button>
             </div>
 
@@ -1989,89 +1001,37 @@ export default function AnaliseVideos() {
                 styles.actionTypesGrid
               }
             >
-              {categorias.length === 0 ? (
-                <div
-                  style={{
-                    gridColumn:
-                      '1 / -1',
-                    padding:
-                      '28px 20px',
-                    textAlign:
-                      'center',
-                    border:
-                      '1px dashed #cbd8d2',
-                    borderRadius:
-                      14,
-                    color:
-                      '#718078',
-                    background:
-                      '#f7faf8',
-                  }}
-                >
-                  <Video
-                    size={28}
-                    style={{
-                      marginBottom:
-                        8,
-                    }}
-                  />
+              {categorias.map(
+                (
+                  categoria,
+                ) => {
+                  const Icon =
+                    categoria.icon;
 
-                  <strong
-                    style={{
-                      display:
-                        'block',
-                      marginBottom:
-                        5,
-                      color:
-                        '#31433a',
-                    }}
-                  >
-                    Nenhum campo configurado
-                  </strong>
-
-                  <span
-                    style={{
-                      fontSize:
-                        13,
-                    }}
-                  >
-                    Volte para a
-                    configuração da
-                    análise e selecione
-                    os campos que deseja
-                    acompanhar.
-                  </span>
-                </div>
-              ) : (
-                categorias.map(
-                  (categoria) => (
-                    <button
+                  return (
+                    <div
                       key={
                         categoria.id
                       }
-                      type="button"
                       className={
                         styles.categoryPreview
                       }
-                      onClick={() =>
-                        selecionarCategoria(
-                          categoria,
-                        )
-                      }
                     >
-                      <div
+                      <span
                         className={
                           styles.actionTypeIcon
                         }
                         style={{
-                          background:
-                            '#e5f5ef',
                           color:
-                            '#16a875',
+                            categoria.cor,
+                          backgroundColor:
+                            `${categoria.cor}18`,
                         }}
                       >
-                        <TargetIcon />
-                      </div>
+                        <Icon
+                          size={19}
+                        />
+                      </span>
 
                       <strong>
                         {
@@ -2079,18 +1039,20 @@ export default function AnaliseVideos() {
                         }
                       </strong>
 
-                      <span
-                        className={
-                          styles.timelineStatus
-                        }
-                      >
-                        <Plus
-                          size={12}
-                        />
-                      </span>
-                    </button>
-                  ),
-                )
+                      {categoria.mostrarTimeline && (
+                        <span
+                          className={
+                            styles.timelineStatus
+                          }
+                        >
+                          <CircleDot
+                            size={11}
+                          />
+                        </span>
+                      )}
+                    </div>
+                  );
+                },
               )}
 
               <button
@@ -2098,25 +1060,27 @@ export default function AnaliseVideos() {
                 className={
                   styles.addCategoryCard
                 }
-                onClick={() =>
-                  setMostrarCategorias(
+                onClick={() => {
+                  setModalCategoriasAberto(
                     true,
-                  )
-                }
+                  );
+
+                  abrirNovaCategoria();
+                }}
               >
-                <Edit3 size={17} />
-                Ver campos configurados
+                <Plus
+                  size={19}
+                />
+                Adicionar categoria
               </button>
             </div>
           </section>
         </div>
 
-        {/* =====================================
-            EVENTOS
-        ===================================== */}
-
-        <section
-          className={styles.eventsCard}
+        <aside
+          className={
+            styles.eventsCard
+          }
         >
           <div
             className={
@@ -2124,800 +1088,1247 @@ export default function AnaliseVideos() {
             }
           >
             <div>
-              <h2>Eventos</h2>
+              <h2>
+                Eventos da análise
+              </h2>
 
               <span>
-                Momentos marcados no vídeo
+                {eventos.length}{' '}
+                eventos registrados
               </span>
             </div>
 
-            <Flag size={21} />
+            <Video
+              size={20}
+            />
           </div>
 
           <div
-            className={styles.eventsList}
+            className={
+              styles.eventsList
+            }
           >
-            {eventos.map((evento) => (
-              <button
-                key={evento.id}
-                type="button"
-                className={
-                  styles.eventItem
-                }
-                onClick={() =>
-                  irParaEvento(
-                    evento.segundo,
-                  )
-                }
-              >
-                <div
-                  className={`${styles.eventIcon} ${
-                    evento.tipo ===
-                    'boa'
-                      ? styles.eventIconGood
-                      : evento.tipo ===
-                          'ruim'
-                        ? styles.eventIconBad
-                        : evento.tipo ===
-                            'destaque'
-                          ? styles.eventIconHighlight
-                          : styles.eventIconNeutral
-                  }`}
-                >
-                  {evento.tipo ===
-                  'boa' ? (
-                    <Trophy
-                      size={17}
-                    />
-                  ) : evento.tipo ===
-                    'ruim' ? (
-                    <Flag
-                      size={17}
-                    />
-                  ) : evento.tipo ===
-                    'destaque' ? (
-                    <Play
-                      size={17}
-                    />
-                  ) : (
-                    <Clock3
-                      size={17}
-                    />
-                  )}
-                </div>
-
-                <div
-                  className={
-                    styles.eventContent
-                  }
-                >
-                  <strong>
-                    {evento.nome}
-                  </strong>
-
-                  <span>
-                    {evento.descricao}
-                  </span>
-                </div>
-
-                <div
-                  className={
-                    styles.eventRight
-                  }
-                >
-                  <span>
-                    {formatarTempo(
-                      evento.segundo,
-                    )}
-                  </span>
-
-                  <small>
-                    {evento.duracao}s
-                  </small>
-                </div>
-              </button>
-            ))}
+            {eventos
+              .slice()
+              .sort(
+                (a, b) =>
+                  a.segundo -
+                  b.segundo,
+              )
+              .map(
+                (
+                  evento,
+                ) => (
+                  <EventCard
+                    key={
+                      evento.id
+                    }
+                    evento={
+                      evento
+                    }
+                    onClick={() =>
+                      setTempoAtual(
+                        evento.segundo,
+                      )
+                    }
+                  />
+                ),
+              )}
           </div>
-        </section>
-      </div>
+        </aside>
+      </section>
 
-      {/* =====================================
-          MODAL CATEGORIAS
-      ===================================== */}
-
-      {mostrarCategorias && (
+      {modalCategoriasAberto && (
         <div
           className={
             styles.categoryOverlay
+          }
+          onMouseDown={() =>
+            setModalCategoriasAberto(
+              false,
+            )
           }
         >
           <div
             className={
               styles.categoryModal
             }
+            onMouseDown={(
+              event,
+            ) =>
+              event.stopPropagation()
+            }
           >
-            <div
+            <header
               className={
                 styles.categoryModalHeader
               }
             >
               <div>
                 <span>
-                  CONFIGURAÇÃO DA ANÁLISE
+                  CONFIGURAÇÃO
                 </span>
 
                 <h2>
-                  Campos selecionados
+                  Categorias da análise
                 </h2>
 
                 <p>
-                  Estes são os campos
-                  definidos no onboarding
-                  da equipe.
+                  Personalize as ações que podem ser utilizadas durante a análise.
                 </p>
               </div>
 
               <button
                 type="button"
                 onClick={() =>
-                  setMostrarCategorias(
+                  setModalCategoriasAberto(
                     false,
                   )
                 }
               >
-                <X size={19} />
+                <X
+                  size={21}
+                />
               </button>
-            </div>
+            </header>
 
             <div
               className={
                 styles.categoryModalContent
               }
             >
-              <div
-                className={
-                  styles.categoryListToolbar
-                }
-              >
-                <div>
-                  <strong>
-                    Campos disponíveis
-                  </strong>
-
-                  <span>
-                    {categorias.length}{' '}
-                    {categorias.length ===
-                    1
-                      ? 'campo'
-                      : 'campos'}
-                  </span>
-                </div>
-              </div>
-
-              <div
-                className={
-                  styles.categoriesList
-                }
-              >
-                {categorias.length ===
-                0 ? (
+              {!formularioCategoriaAberto ? (
+                <>
                   <div
-                    style={{
-                      padding:
-                        '30px 20px',
-                      textAlign:
-                        'center',
-                      color:
-                        '#718078',
-                    }}
+                    className={
+                      styles.categoryListToolbar
+                    }
                   >
-                    Nenhum campo foi
-                    selecionado na
-                    configuração da
-                    análise.
+                    <div>
+                      <strong>
+                        Suas categorias
+                      </strong>
+
+                      <span>
+                        Clique em editar para alterar uma categoria.
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      className={
+                        styles.newCategoryButton
+                      }
+                      onClick={
+                        abrirNovaCategoria
+                      }
+                    >
+                      <Plus
+                        size={17}
+                      />
+                      Nova categoria
+                    </button>
                   </div>
-                ) : (
-                  categorias.map(
-                    (categoria) => (
+
+                  <div
+                    className={
+                      styles.categoriesList
+                    }
+                  >
+                    {categorias.map(
+                      (
+                        categoria,
+                      ) => {
+                        const Icon =
+                          categoria.icon;
+
+                        return (
+                          <div
+                            key={
+                              categoria.id
+                            }
+                            className={
+                              styles.categoryRow
+                            }
+                          >
+                            <div
+                              className={
+                                styles.categoryRowIcon
+                              }
+                              style={{
+                                color:
+                                  categoria.cor,
+                                backgroundColor:
+                                  `${categoria.cor}18`,
+                              }}
+                            >
+                              <Icon
+                                size={19}
+                              />
+                            </div>
+
+                            <div
+                              className={
+                                styles.categoryRowInfo
+                              }
+                            >
+                              <strong>
+                                {
+                                  categoria.nome
+                                }
+                              </strong>
+
+                              <span>
+                                {categoria.mostrarTimeline
+                                  ? 'Visível na timeline'
+                                  : 'Oculta na timeline'}
+                              </span>
+                            </div>
+
+                            <button
+                              type="button"
+                              className={
+                                styles.editCategoryButton
+                              }
+                              onClick={() =>
+                                editarCategoria(
+                                  categoria,
+                                )
+                              }
+                            >
+                              <Pencil
+                                size={15}
+                              />
+                              Editar
+                            </button>
+                          </div>
+                        );
+                      },
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div
+                  className={
+                    styles.categoryForm
+                  }
+                >
+                  <div
+                    className={
+                      styles.categoryFormGrid
+                    }
+                  >
+                    <div
+                      className={
+                        styles.categoryFormLeft
+                      }
+                    >
                       <div
-                        key={
-                          categoria.id
-                        }
                         className={
-                          styles.categoryRow
+                          styles.categoryField
                         }
                       >
-                        <div
-                          className={
-                            styles.categoryRowIcon
+                        <label>
+                          Nome da categoria
+                        </label>
+
+                        <input
+                          type="text"
+                          placeholder="Ex.: Passe longo"
+                          value={
+                            categoriaForm.nome
                           }
-                          style={{
-                            background:
-                              '#e5f5ef',
-                            color:
-                              '#16a875',
-                          }}
-                        >
-                          <Video
-                            size={18}
-                          />
-                        </div>
+                          onChange={(
+                            event,
+                          ) =>
+                            setCategoriaForm(
+                              (
+                                atual,
+                              ) => ({
+                                ...atual,
+                                nome:
+                                  event
+                                    .target
+                                    .value,
+                              }),
+                            )
+                          }
+                        />
+                      </div>
+
+                      <div
+                        className={
+                          styles.categoryField
+                        }
+                      >
+                        <label>
+                          Cor da categoria
+                        </label>
 
                         <div
                           className={
-                            styles.categoryRowInfo
+                            styles.categoryColorArea
                           }
                         >
-                          <strong>
-                            {
-                              categoria.nome
+                          {[
+                            '#4AA8D8',
+                            '#16A875',
+                            '#E58A2C',
+                            '#D15A8B',
+                            '#7862E8',
+                            '#D94B4B',
+                          ].map(
+                            (
+                              cor,
+                            ) => (
+                              <button
+                                key={
+                                  cor
+                                }
+                                type="button"
+                                className={`${styles.categoryColorButton} ${
+                                  categoriaForm.cor ===
+                                  cor
+                                    ? styles.categoryColorButtonActive
+                                    : ''
+                                }`}
+                                style={{
+                                  backgroundColor:
+                                    cor,
+                                }}
+                                onClick={() =>
+                                  setCategoriaForm(
+                                    (
+                                      atual,
+                                    ) => ({
+                                      ...atual,
+                                      cor,
+                                    }),
+                                  )
+                                }
+                              >
+                                {categoriaForm.cor ===
+                                  cor && (
+                                  <Check
+                                    size={14}
+                                  />
+                                )}
+                              </button>
+                            ),
+                          )}
+
+                          <label
+                            className={
+                              styles.paletteColorButton
                             }
+                          >
+                            <div
+                              className={
+                                styles.paletteOuter
+                              }
+                            >
+                              <div
+                                className={
+                                  styles.paletteInner
+                                }
+                              >
+                                <Palette
+                                  size={15}
+                                />
+                              </div>
+                            </div>
+
+                            <input
+                              type="color"
+                              value={
+                                categoriaForm.cor
+                              }
+                              onChange={(
+                                event,
+                              ) =>
+                                setCategoriaForm(
+                                  (
+                                    atual,
+                                  ) => ({
+                                    ...atual,
+                                    cor:
+                                      event
+                                        .target
+                                        .value,
+                                  }),
+                                )
+                              }
+                            />
+                          </label>
+                        </div>
+                      </div>
+
+                      <div
+                        className={
+                          styles.timelineOption
+                        }
+                      >
+                        <div>
+                          <strong>
+                            Mostrar na timeline
                           </strong>
 
                           <span>
-                            Campo da
-                            análise
+                            Mostra uma marcação no vídeo quando essa categoria aparecer.
                           </span>
                         </div>
 
                         <button
                           type="button"
-                          className={
-                            styles.editCategoryButton
+                          className={`${styles.toggleButton} ${
+                            categoriaForm.mostrarTimeline
+                              ? styles.toggleButtonActive
+                              : ''
+                          }`}
+                          onClick={() =>
+                            setCategoriaForm(
+                              (
+                                atual,
+                              ) => ({
+                                ...atual,
+                                mostrarTimeline:
+                                  !atual.mostrarTimeline,
+                              }),
+                            )
                           }
-                          onClick={() => {
-                            selecionarCategoria(
-                              categoria,
-                            );
-
-                            setMostrarCategorias(
-                              false,
-                            );
-                          }}
                         >
-                          <Plus
-                            size={13}
-                          />
-                          Usar
+                          <span />
                         </button>
                       </div>
-                    ),
-                  )
-                )}
-              </div>
+
+                      <div
+                        className={
+                          styles.categoryPreviewForm
+                        }
+                      >
+                        {(() => {
+                          const opcao =
+                            opcoesIcones.find(
+                              (
+                                item,
+                              ) =>
+                                item.id ===
+                                categoriaForm.iconId,
+                            );
+
+                          const Icon =
+                            opcao?.icon ??
+                            Target;
+
+                          return (
+                            <>
+                              <div
+                                className={
+                                  styles.categoryPreviewFormIcon
+                                }
+                                style={{
+                                  color:
+                                    categoriaForm.cor,
+                                  backgroundColor:
+                                    `${categoriaForm.cor}18`,
+                                }}
+                              >
+                                <Icon
+                                  size={21}
+                                />
+                              </div>
+
+                              <div>
+                                <span>
+                                  PRÉVIA
+                                </span>
+
+                                <strong>
+                                  {categoriaForm.nome.trim() ||
+                                    'Nova categoria'}
+                                </strong>
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </div>
+
+                    <div
+                      className={
+                        styles.categoryIconsSide
+                      }
+                    >
+                      <span
+                        className={
+                          styles.iconsLabel
+                        }
+                      >
+                        Escolha um ícone
+                      </span>
+
+                      <div
+                        className={
+                          styles.categoryIconsGrid
+                        }
+                      >
+                        {opcoesIcones.map(
+                          (
+                            opcao,
+                          ) => {
+                            const Icon =
+                              opcao.icon;
+
+                            const ativo =
+                              categoriaForm.iconId ===
+                              opcao.id;
+
+                            return (
+                              <button
+                                key={
+                                  opcao.id
+                                }
+                                type="button"
+                                className={`${styles.categoryIconOption} ${
+                                  ativo
+                                    ? styles.categoryIconOptionActive
+                                    : ''
+                                }`}
+                                onClick={() =>
+                                  setCategoriaForm(
+                                    (
+                                      atual,
+                                    ) => ({
+                                      ...atual,
+                                      iconId:
+                                        opcao.id,
+                                    }),
+                                  )
+                                }
+                              >
+                                {ativo && (
+                                  <span
+                                    className={
+                                      styles.categoryIconCheck
+                                    }
+                                  >
+                                    <Check
+                                      size={11}
+                                      strokeWidth={
+                                        3
+                                      }
+                                    />
+                                  </span>
+                                )}
+
+                                <Icon
+                                  size={20}
+                                />
+
+                                <span>
+                                  {
+                                    opcao.nome
+                                  }
+                                </span>
+                              </button>
+                            );
+                          },
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    className={
+                      styles.categoryFormFooter
+                    }
+                  >
+                    <div
+                      className={
+                        styles.deleteArea
+                      }
+                    >
+                      {categoriaForm.id !==
+                        null && (
+                        <>
+                          <button
+                            type="button"
+                            className={`${styles.deleteCategoryButton} ${
+                              confirmarExclusao
+                                ? styles.deleteCategoryConfirm
+                                : ''
+                            }`}
+                            onClick={
+                              excluirCategoria
+                            }
+                          >
+                            <Trash2
+                              size={16}
+                            />
+
+                            {confirmarExclusao
+                              ? 'Confirmar exclusão'
+                              : 'Excluir categoria'}
+                          </button>
+
+                          {confirmarExclusao && (
+                            <span
+                              className={
+                                styles.deleteWarning
+                              }
+                            >
+                              Isso também remove os eventos dessa categoria.
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+
+                    <div
+                      className={
+                        styles.categoryFormActions
+                      }
+                    >
+                      <button
+                        type="button"
+                        className={
+                          styles.cancelCategoryButton
+                        }
+                        onClick={
+                          voltarListaCategorias
+                        }
+                      >
+                        Cancelar
+                      </button>
+
+                      <button
+                        type="button"
+                        className={
+                          styles.saveCategoryButton
+                        }
+                        disabled={
+                          !categoriaForm.nome.trim()
+                        }
+                        onClick={
+                          salvarCategoria
+                        }
+                      >
+                        <Check
+                          size={16}
+                        />
+                        Salvar categoria
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
       )}
 
-      {/* =====================================
-          PAINEL DE CLIPE
-      ===================================== */}
-
-      {mostrarClipe && (
-        <>
-          <div
-            className={styles.overlay}
-            onClick={() =>
-              setMostrarClipe(false)
-            }
-          />
-
-          <aside
-            className={`${styles.clipPanel} ${styles.clipPanelOpen}`}
-          >
-            <div
-              className={
-                styles.clipPanelHeader
-              }
-            >
-              <div>
-                <div
-                  className={
-                    styles.clipIcon
-                  }
-                >
-                  <Scissors
-                    size={16}
-                  />
-                </div>
-
-                <h2>
-                  Criar clipe
-                </h2>
-              </div>
-
-              <button
-                type="button"
-                className={
-                  styles.closeButton
-                }
-                onClick={() =>
-                  setMostrarClipe(
-                    false,
-                  )
-                }
-              >
-                <X size={17} />
-              </button>
-            </div>
-
-            <div
-              className={
-                styles.clipPanelContent
-              }
-            >
-              <div
-                className={
-                  styles.formGroup
-                }
-              >
-                <label>
-                  Nome do clipe
-                </label>
-
-                <input
-                  type="text"
-                  value={
-                    novoClipe.nome
-                  }
-                  placeholder="Ex.: Melhor jogada"
-                  onChange={(event) =>
-                    setNovoClipe({
-                      ...novoClipe,
-                      nome: event
-                        .target
-                        .value,
-                    })
-                  }
-                />
-              </div>
-
-              <div
-                className={
-                  styles.formGroup
-                }
-              >
-                <label>
-                  Descrição
-                </label>
-
-                <textarea
-                  placeholder="Descreva este momento..."
-                />
-              </div>
-
-              <div
-                className={
-                  styles.durationSection
-                }
-              >
-                <h3>
-                  Duração do clipe
-                </h3>
-
-                <div
-                  className={
-                    styles.durationInfo
-                  }
-                >
-                  <span>
-                    Início:{' '}
-                    {formatarTempo(
-                      novoClipe.inicio,
-                    )}
-                  </span>
-
-                  <span
-                    className={
-                      styles.durationValue
-                    }
-                  >
-                    Fim:{' '}
-                    {formatarTempo(
-                      novoClipe.fim,
-                    )}
-                  </span>
-                </div>
-
-                <div
-                  className={
-                    styles.rangeGroup
-                  }
-                >
-                  <input
-                    type="range"
-                    min="0"
-                    max={
-                      duracaoVideo ||
-                      100
-                    }
-                    value={
-                      novoClipe.inicio
-                    }
-                    onChange={(
-                      event,
-                    ) => {
-                      const inicio =
-                        Number(
-                          event.target
-                            .value,
-                        );
-
-                      setNovoClipe(
-                        (atual) => ({
-                          ...atual,
-                          inicio,
-                          fim: Math.max(
-                            atual.fim,
-                            inicio +
-                              1,
-                          ),
-                        }),
-                      );
-                    }}
-                  />
-
-                  <input
-                    type="range"
-                    min="0"
-                    max={
-                      duracaoVideo ||
-                      100
-                    }
-                    value={
-                      novoClipe.fim
-                    }
-                    onChange={(
-                      event,
-                    ) =>
-                      setNovoClipe(
-                        (atual) => ({
-                          ...atual,
-                          fim: Math.max(
-                            Number(
-                              event.target
-                                .value,
-                            ),
-                            atual.inicio +
-                              1,
-                          ),
-                        }),
-                      )
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div
-              className={
-                styles.clipPanelFooter
-              }
-            >
-              <button
-                type="button"
-                className={
-                  styles.saveClipButton
-                }
-                disabled={
-                  !novoClipe.nome.trim()
-                }
-                onClick={
-                  adicionarClipe
-                }
-              >
-                <Scissors
-                  size={15}
-                />
-                Salvar clipe
-              </button>
-            </div>
-          </aside>
-        </>
-      )}
-
-      {/* =====================================
-          NOVO EVENTO
-      ===================================== */}
-
-      {mostrarNovoEvento && (
+      {painelClipeAberto && (
         <div
           className={
-            styles.categoryOverlay
+            styles.overlay
+          }
+          onClick={() =>
+            setPainelClipeAberto(
+              false,
+            )
+          }
+        />
+      )}
+
+      <aside
+        className={`${styles.clipPanel} ${
+          painelClipeAberto
+            ? styles.clipPanelOpen
+            : ''
+        }`}
+      >
+        <div
+          className={
+            styles.clipPanelHeader
+          }
+        >
+          <div>
+            <div
+              className={
+                styles.clipIcon
+              }
+            >
+              <Scissors
+                size={18}
+              />
+            </div>
+
+            <h2>
+              Criar clipe
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            className={
+              styles.closeButton
+            }
+            onClick={() =>
+              setPainelClipeAberto(
+                false,
+              )
+            }
+          >
+            <X
+              size={19}
+            />
+          </button>
+        </div>
+
+        <div
+          className={
+            styles.clipPanelContent
           }
         >
           <div
             className={
-              styles.categoryModal
+              styles.formGroup
             }
-            style={{
-              width: 'min(560px, 100%)',
-            }}
           >
+            <label>
+              Nome do clipe
+            </label>
+
+            <input
+              type="text"
+              value={
+                novoClipe.nome
+              }
+              onChange={(
+                event,
+              ) =>
+                setNovoClipe(
+                  (
+                    atual,
+                  ) => ({
+                    ...atual,
+                    nome:
+                      event
+                        .target
+                        .value,
+                  }),
+                )
+              }
+            />
+          </div>
+
+          <div
+            className={
+              styles.formGroup
+            }
+          >
+            <label>
+              Atleta responsável
+            </label>
+
             <div
               className={
-                styles.categoryModalHeader
+                styles.searchAthlete
               }
             >
-              <div>
-                <span>
-                  ANÁLISE
-                </span>
+              <Search
+                size={17}
+              />
 
-                <h2>
-                  Marcar evento
-                </h2>
-
-                <p>
-                  Registre um momento
-                  importante da partida.
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() =>
-                  setMostrarNovoEvento(
-                    false,
-                  )
+              <input
+                type="text"
+                value={
+                  buscaAtleta
                 }
-              >
-                <X size={19} />
-              </button>
+                onChange={(
+                  event,
+                ) => {
+                  setBuscaAtleta(
+                    event
+                      .target
+                      .value,
+                  );
+
+                  setNovoClipe(
+                    (
+                      atual,
+                    ) => ({
+                      ...atual,
+                      atletaId:
+                        null,
+                    }),
+                  );
+                }}
+              />
             </div>
 
             <div
               className={
-                styles.categoryModalContent
+                styles.athletesList
               }
             >
-              <div
-                className={
-                  styles.categoryForm
-                }
-              >
-                <div
-                  className={
-                    styles.categoryField
-                  }
-                >
-                  <label>
-                    Campo de análise
-                  </label>
-
-                  <select
-                    value={
-                      novoEvento.nome
+              {atletasFiltrados.map(
+                (
+                  atleta,
+                ) => (
+                  <button
+                    key={
+                      atleta.id
                     }
-                    onChange={(event) =>
-                      setNovoEvento({
-                        ...novoEvento,
-                        nome: event
-                          .target
-                          .value,
-                      })
+                    type="button"
+                    className={`${styles.athleteItem} ${
+                      atletaSelecionado?.id ===
+                      atleta.id
+                        ? styles.athleteSelected
+                        : ''
+                    }`}
+                    onClick={() =>
+                      selecionarAtleta(
+                        atleta,
+                      )
                     }
-                    style={{
-                      width: '100%',
-                      height: 48,
-                      padding:
-                        '0 14px',
-                      border:
-                        '1px solid #c8d5cf',
-                      borderRadius: 10,
-                      background:
-                        '#ffffff',
-                      color:
-                        '#2c3c34',
-                      fontFamily:
-                        'inherit',
-                      fontSize: 15,
-                    }}
                   >
-                    <option value="">
-                      Selecione um campo
-                    </option>
+                    <div
+                      className={
+                        styles.athleteAvatar
+                      }
+                    >
+                      {
+                        atleta.iniciais
+                      }
+                    </div>
 
-                    {categorias.map(
-                      (categoria) => (
-                        <option
-                          key={
-                            categoria.id
-                          }
-                          value={
-                            categoria.nome
-                          }
-                        >
-                          {
-                            categoria.nome
-                          }
-                        </option>
-                      ),
-                    )}
-                  </select>
-                </div>
+                    <div>
+                      <strong>
+                        {
+                          atleta.nome
+                        }
+                      </strong>
 
-                <div
-                  className={
-                    styles.categoryField
-                  }
-                >
-                  <label>
-                    Descrição
-                  </label>
+                      <span>
+                        {
+                          atleta.posicao
+                        }
+                      </span>
+                    </div>
+                  </button>
+                ),
+              )}
+            </div>
+          </div>
 
-                  <input
-                    value={
-                      novoEvento.descricao
+          <div
+            className={
+              styles.formGroup
+            }
+          >
+            <label>
+              Categoria
+            </label>
+
+            <select
+              value={
+                novoClipe.acao
+              }
+              onChange={(
+                event,
+              ) =>
+                setNovoClipe(
+                  (
+                    atual,
+                  ) => ({
+                    ...atual,
+                    acao:
+                      event
+                        .target
+                        .value,
+                  }),
+                )
+              }
+            >
+              <option value="">
+                Selecionar categoria
+              </option>
+
+              {categorias.map(
+                (
+                  categoria,
+                ) => (
+                  <option
+                    key={
+                      categoria.id
                     }
-                    placeholder="Descreva o momento"
-                    onChange={(event) =>
-                      setNovoEvento({
-                        ...novoEvento,
-                        descricao:
-                          event
-                            .target
-                            .value,
-                      })
+                    value={
+                      categoria.nome
+                    }
+                  >
+                    {
+                      categoria.nome
+                    }
+                  </option>
+                ),
+              )}
+            </select>
+          </div>
+
+          <div
+            className={
+              styles.formGroup
+            }
+          >
+            <label>
+              Avaliação
+            </label>
+
+            <div
+              className={
+                styles.ratingGrid
+              }
+            >
+              {(
+                [
+                  'boa',
+                  'ruim',
+                  'neutra',
+                  'destaque',
+                ] as Avaliacao[]
+              ).map(
+                (
+                  avaliacao,
+                ) => (
+                  <RatingButton
+                    key={
+                      avaliacao
+                    }
+                    label={
+                      avaliacao
+                    }
+                    type={
+                      avaliacao
+                    }
+                    active={
+                      novoClipe.avaliacao ===
+                      avaliacao
+                    }
+                    onClick={() =>
+                      setNovoClipe(
+                        (
+                          atual,
+                        ) => ({
+                          ...atual,
+                          avaliacao,
+                        }),
+                      )
                     }
                   />
-                </div>
+                ),
+              )}
+            </div>
+          </div>
 
-                <div
-                  className={
-                    styles.categoryField
-                  }
-                >
-                  <label>
-                    Tipo do evento
-                  </label>
+          <div
+            className={
+              styles.formGroup
+            }
+          >
+            <label>
+              Observação
+            </label>
 
-                  <select
-                    value={
-                      novoEvento.tipo
-                    }
-                    onChange={(event) =>
-                      setNovoEvento({
-                        ...novoEvento,
-                        tipo: event
-                          .target
-                          .value as Evento['tipo'],
-                      })
-                    }
-                    style={{
-                      width: '100%',
-                      height: 48,
-                      padding:
-                        '0 14px',
-                      border:
-                        '1px solid #c8d5cf',
-                      borderRadius: 10,
-                      background:
-                        '#ffffff',
-                      color:
-                        '#2c3c34',
-                      fontFamily:
-                        'inherit',
-                      fontSize: 15,
-                    }}
-                  >
-                    <option value="boa">
-                      Boa
-                    </option>
+            <textarea
+              value={
+                novoClipe.observacao
+              }
+              onChange={(
+                event,
+              ) =>
+                setNovoClipe(
+                  (
+                    atual,
+                  ) => ({
+                    ...atual,
+                    observacao:
+                      event
+                        .target
+                        .value,
+                  }),
+                )
+              }
+            />
+          </div>
 
-                    <option value="ruim">
-                      Ruim
-                    </option>
+          <div
+            className={
+              styles.durationSection
+            }
+          >
+            <h3>
+              Duração do clipe
+            </h3>
 
-                    <option value="neutra">
-                      Neutra
-                    </option>
+            <div
+              className={
+                styles.durationInfo
+              }
+            >
+              <span>
+                Início: {
+                  novoClipe.inicio
+                } min
+              </span>
 
-                    <option value="destaque">
-                      Destaque
-                    </option>
-                  </select>
-                </div>
+              <span>
+                Fim: {
+                  novoClipe.fim
+                } min
+              </span>
 
-                <div
-                  className={
-                    styles.categoryFormFooter
-                  }
-                >
-                  <span
-                    style={{
-                      color:
-                        '#78867f',
-                      fontSize: 12,
-                    }}
-                  >
-                    Momento atual:{' '}
-                    {formatarTempo(
-                      tempoAtual,
-                    )}
-                  </span>
+              <span>
+                Duração: {
+                  duracao
+                } min
+              </span>
+            </div>
 
-                  <div
-                    className={
-                      styles.categoryFormActions
-                    }
-                  >
-                    <button
-                      type="button"
-                      className={
-                        styles.cancelCategoryButton
-                      }
-                      onClick={() =>
-                        setMostrarNovoEvento(
-                          false,
-                        )
-                      }
-                    >
-                      Cancelar
-                    </button>
+            <div
+              className={
+                styles.rangeGroup
+              }
+            >
+              <input
+                type="range"
+                min="0"
+                max="45"
+                value={
+                  novoClipe.inicio
+                }
+                onChange={(
+                  event,
+                ) => {
+                  const value =
+                    Number(
+                      event
+                        .target
+                        .value,
+                    );
 
-                    <button
-                      type="button"
-                      className={
-                        styles.saveCategoryButton
-                      }
-                      disabled={
-                        !novoEvento.nome.trim()
-                      }
-                      onClick={
-                        adicionarEvento
-                      }
-                    >
-                      <Check
-                        size={15}
-                      />
-                      Marcar evento
-                    </button>
-                  </div>
-                </div>
-              </div>
+                  setNovoClipe(
+                    (
+                      atual,
+                    ) => ({
+                      ...atual,
+                      inicio:
+                        Math.min(
+                          value,
+                          atual.fim -
+                            1,
+                        ),
+                    }),
+                  );
+                }}
+              />
+
+              <input
+                type="range"
+                min="0"
+                max="45"
+                value={
+                  novoClipe.fim
+                }
+                onChange={(
+                  event,
+                ) => {
+                  const value =
+                    Number(
+                      event
+                        .target
+                        .value,
+                    );
+
+                  setNovoClipe(
+                    (
+                      atual,
+                    ) => ({
+                      ...atual,
+                      fim:
+                        Math.max(
+                          value,
+                          atual.inicio +
+                            1,
+                        ),
+                    }),
+                  );
+                }}
+              />
             </div>
           </div>
         </div>
-      )}
-    </div>
+
+        <div
+          className={
+            styles.clipPanelFooter
+          }
+        >
+          <button
+            type="button"
+            disabled={
+              !formularioValido
+            }
+            className={
+              styles.saveClipButton
+            }
+            onClick={
+              salvarClipe
+            }
+          >
+            <Scissors
+              size={17}
+            />
+            Salvar clipe
+          </button>
+        </div>
+      </aside>
+    </main>
   );
+};
+
+interface EventCardProps {
+  evento:
+    EventoAnalise;
+  onClick:
+    () => void;
 }
 
-/* =========================================================
-   ÍCONE SIMPLES PARA OS CAMPOS DE ANÁLISE
-========================================================= */
-
-function TargetIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+const EventCard = ({
+  evento,
+  onClick,
+}: EventCardProps) => (
+  <button
+    type="button"
+    className={
+      styles.eventItem
+    }
+    onClick={
+      onClick
+    }
+  >
+    <div
+      className={`${styles.eventIcon} ${
+        evento.avaliacao ===
+        'boa'
+          ? styles.eventIconGood
+          : evento.avaliacao ===
+              'ruim'
+            ? styles.eventIconBad
+            : evento.avaliacao ===
+                'destaque'
+              ? styles.eventIconHighlight
+              : styles.eventIconNeutral
+      }`}
     >
-      <circle
-        cx="12"
-        cy="12"
-        r="9"
+      <CircleDot
+        size={17}
       />
+    </div>
 
-      <circle
-        cx="12"
-        cy="12"
-        r="5"
-      />
+    <div
+      className={
+        styles.eventContent
+      }
+    >
+      <strong>
+        {evento.tipo}
+      </strong>
 
-      <circle
-        cx="12"
-        cy="12"
-        r="1"
-      />
-    </svg>
-  );
+      <span>
+        {evento.atleta}
+      </span>
+    </div>
+
+    <div
+      className={
+        styles.eventRight
+      }
+    >
+      <span>
+        {formatarTempo(
+          evento.segundo,
+        )}
+      </span>
+    </div>
+  </button>
+);
+
+interface RatingButtonProps {
+  label: string;
+  type: Avaliacao;
+  active: boolean;
+  onClick: () => void;
 }
+
+const RatingButton = ({
+  label,
+  type,
+  active,
+  onClick,
+}: RatingButtonProps) => (
+  <button
+    type="button"
+    className={`${styles.ratingButton} ${
+      active
+        ? styles.ratingButtonActive
+        : ''
+    }`}
+    onClick={
+      onClick
+    }
+  >
+    <span
+      className={`${styles.ratingDot} ${
+        type === 'boa'
+          ? styles.dotGood
+          : type === 'ruim'
+            ? styles.dotBad
+            : type ===
+                'destaque'
+              ? styles.dotHighlight
+              : styles.dotNeutral
+      }`}
+    />
+
+    {label}
+  </button>
+);
+
+interface TimelineLegendProps {
+  label: string;
+  className: string;
+}
+
+const TimelineLegend = ({
+  label,
+  className,
+}: TimelineLegendProps) => (
+  <div
+    className={
+      styles.timelineLegendItem
+    }
+  >
+    <span
+      className={
+        className
+      }
+    />
+
+    <small>
+      {label}
+    </small>
+  </div>
+);
+
+export default AnaliseVideos;

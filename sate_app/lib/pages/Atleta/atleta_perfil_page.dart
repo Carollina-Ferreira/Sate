@@ -1,6 +1,18 @@
+
 import 'package:flutter/material.dart';
 
+import '../../assets/menu_inferior_atleta.dart';
+import 'atleta_home_page.dart';
+import 'atleta_treino_page.dart';
+import 'atleta_desempenho_page.dart';
+import 'atleta_feed_page.dart';
 import 'atleta_notificacao_page.dart';
+
+const Color _verdeAtleta = Color(0xFF00845F);
+const Color _verdeEscuroAtleta = Color(0xFF006B4F);
+const Color _fundoAtleta = Color(0xFFF7F7F7);
+const Color _verdeClaroAtleta = Color(0xFFEAF5F1);
+const Color _cinzaAtleta = Color(0xFF777777);
 
 class AtletaPerfilPage extends StatefulWidget {
   final String nomeUsuario;
@@ -12,240 +24,190 @@ class AtletaPerfilPage extends StatefulWidget {
 }
 
 class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
-  static const Color verde = Color(0xFF00845F);
-  static const Color verdeEscuro = Color(0xFF006B4F);
-  static const Color verdeClaro = Color(0xFFE8F5F0);
-  static const Color fundo = Color(0xFFF7F7F7);
-  static const Color cinza = Color(0xFF777777);
-
   bool _visualizandoPerfil = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: fundo,
-
-      appBar: AppBar(
-        backgroundColor: fundo,
-        elevation: 0,
-        centerTitle: false,
-
-        leading: IconButton(
-          onPressed: () {
-            if (_visualizandoPerfil) {
-              setState(() {
-                _visualizandoPerfil = false;
-              });
+      backgroundColor: _fundoAtleta,
+      body: SafeArea(
+        child: _visualizandoPerfil ? _buildPerfilEsportivo() : _buildConta(),
+      ),
+      bottomNavigationBar: MenuInferiorAtleta(
+        indiceSelecionado: 4,
+        onItemSelecionado: (index) {
+          Widget? pagina;
+          switch (index) {
+            case 0:
+              pagina = const AtletaHomePage();
+              break;
+            case 1:
+              pagina = const AtletaTreinoPage();
+              break;
+            case 2:
+              pagina = const AtletaDesempenhoPage();
+              break;
+            case 3:
+              pagina = const AtletaFeedPage();
+              break;
+            case 4:
               return;
-            }
+          }
+          if (pagina != null) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => pagina!),
+            );
+          }
+        },
+      ),
+    );
+  }
 
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black87,
-            size: 28,
-          ),
+  Widget _buildCabecalho({required String titulo, required VoidCallback voltarAcao}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 6, 12, 10),
+      decoration: const BoxDecoration(
+        color: _verdeEscuroAtleta,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(22),
+          bottomRight: Radius.circular(22),
         ),
-
-        title: const Text(
-          'Perfil',
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-
-        actions: [
+      ),
+      child: Row(
+        children: [
           IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const AtletaNotificacaoPage(),
-                ),
-              );
-            },
-            icon: const Icon(
-              Icons.notifications_none_rounded,
-              color: Colors.black87,
-              size: 27,
+            onPressed: voltarAcao,
+            icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+          ),
+          Expanded(
+            child: Text(
+              titulo,
+              style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-
-          const SizedBox(width: 4),
+          IconButton(
+            tooltip: 'Notificações',
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AtletaNotificacaoPage()),
+            ),
+            icon: const Icon(Icons.notifications_none_rounded, color: Colors.white, size: 25),
+          ),
         ],
       ),
-
-      body: _visualizandoPerfil ? _buildPerfilEsportivo() : _buildConta(),
     );
   }
 
   Widget _buildConta() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildResumoUsuario(),
-
-          const SizedBox(height: 22),
-
-          const Text(
-            'Configurações da conta',
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
+    return Column(
+      children: [
+        _buildCabecalho(titulo: 'Perfil', voltarAcao: () => Navigator.maybePop(context)),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _cardUsuario(),
+                const SizedBox(height: 22),
+                _tituloSecao('Configurações da conta'),
+                const SizedBox(height: 10),
+                _opcaoConta(
+                  icone: Icons.person_outline_rounded,
+                  titulo: 'Conta',
+                  subtitulo: 'Informações pessoais',
+                  onTap: () => _abrirPagina(ContaPage(nomeUsuario: widget.nomeUsuario)),
+                ),
+                _opcaoConta(
+                  icone: Icons.settings_outlined,
+                  titulo: 'Preferências',
+                  subtitulo: 'Personalize sua experiência',
+                  onTap: () => _abrirPagina(const PreferenciasPage()),
+                ),
+                _opcaoConta(
+                  icone: Icons.lock_outline_rounded,
+                  titulo: 'Privacidade',
+                  subtitulo: 'Controle seus dados',
+                  onTap: () => _abrirPagina(const PrivacidadePage()),
+                ),
+                _opcaoConta(
+                  icone: Icons.shield_outlined,
+                  titulo: 'Segurança',
+                  subtitulo: 'Proteja sua conta',
+                  onTap: () => _abrirPagina(const SegurancaPage()),
+                ),
+                const SizedBox(height: 18),
+                _tituloSecao('Ajuda'),
+                const SizedBox(height: 10),
+                _opcaoConta(
+                  icone: Icons.help_outline_rounded,
+                  titulo: 'Ajuda e suporte',
+                  subtitulo: 'Tire suas dúvidas',
+                  onTap: () => _abrirPagina(const AjudaSuportePage()),
+                ),
+                _opcaoConta(
+                  icone: Icons.info_outline_rounded,
+                  titulo: 'Sobre o SATE',
+                  subtitulo: 'Informações sobre o aplicativo',
+                  onTap: () => _abrirPagina(const SobreSatePage()),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: OutlinedButton.icon(
+                    onPressed: _confirmarSaida,
+                    icon: const Icon(Icons.logout_rounded, size: 18),
+                    label: const Text('Sair da conta', style: TextStyle(fontWeight: FontWeight.w600)),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.red.shade600,
+                      side: BorderSide(color: Colors.red.shade200),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-
-          const SizedBox(height: 12),
-
-          _buildOpcaoConta(
-            icone: Icons.person_outline_rounded,
-            titulo: 'Conta',
-            subtitulo: 'Dados pessoais e informações da conta',
-            onTap: () {
-              _abrirPagina(const ContaPage());
-            },
-          ),
-
-          _buildOpcaoConta(
-            icone: Icons.settings_outlined,
-            titulo: 'Preferências',
-            subtitulo: 'Personalize sua experiência',
-            onTap: () {
-              _abrirPagina(const PreferenciasPage());
-            },
-          ),
-
-          _buildOpcaoConta(
-            icone: Icons.lock_outline_rounded,
-            titulo: 'Privacidade',
-            subtitulo: 'Controle sua privacidade',
-            onTap: () {
-              _abrirPagina(const PrivacidadePage());
-            },
-          ),
-
-          _buildOpcaoConta(
-            icone: Icons.shield_outlined,
-            titulo: 'Segurança',
-            subtitulo: 'Senha e segurança da conta',
-            onTap: () {
-              _abrirPagina(const SegurancaPage());
-            },
-          ),
-
-          const SizedBox(height: 20),
-
-          const Text(
-            'Ajuda',
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          _buildOpcaoConta(
-            icone: Icons.help_outline_rounded,
-            titulo: 'Ajuda e suporte',
-            subtitulo: 'Tire suas dúvidas',
-            onTap: () {
-              _abrirPagina(const AjudaSuportePage());
-            },
-          ),
-
-          _buildOpcaoConta(
-            icone: Icons.info_outline_rounded,
-            titulo: 'Sobre o SATE',
-            subtitulo: 'Informações sobre o aplicativo',
-            onTap: () {
-              _abrirPagina(const SobreSatePage());
-            },
-          ),
-
-          const SizedBox(height: 22),
-
-          _buildBotaoSair(),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget _buildResumoUsuario() {
+  Widget _cardUsuario() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
+      padding: const EdgeInsets.all(18),
+      decoration: _decoracaoCard(),
       child: Row(
         children: [
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: verdeClaro,
-            ),
-            child: const Icon(Icons.person_rounded, color: verde, size: 29),
+          const CircleAvatar(
+            radius: 32,
+            backgroundColor: Color(0xFFE5F1E9),
+            child: Icon(Icons.person_rounded, color: _verdeAtleta, size: 35),
           ),
-
-          const SizedBox(width: 12),
-
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.nomeUsuario,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: verdeEscuro,
+                Text(widget.nomeUsuario, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87)),
+                const SizedBox(height: 4),
+                const Text('Atleta', style: TextStyle(fontSize: 11, color: _cinzaAtleta)),
+                const SizedBox(height: 9),
+                InkWell(
+                  onTap: () => setState(() => _visualizandoPerfil = true),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Visualizar perfil esportivo', style: TextStyle(fontSize: 11, color: _verdeAtleta, fontWeight: FontWeight.w600)),
+                      SizedBox(width: 4),
+                      Icon(Icons.arrow_forward_rounded, color: _verdeAtleta, size: 14),
+                    ],
                   ),
                 ),
-
-                SizedBox(height: 3),
-
-                Text('Atleta', style: TextStyle(fontSize: 12, color: cinza)),
-              ],
-            ),
-          ),
-
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _visualizandoPerfil = true;
-              });
-            },
-            child: const Row(
-              children: [
-                Text(
-                  'Ver perfil',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: verde,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(width: 5),
-                Icon(Icons.arrow_forward_ios_rounded, color: verde, size: 13),
               ],
             ),
           ),
@@ -255,578 +217,224 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
   }
 
   Widget _buildPerfilEsportivo() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCardPerfil(),
-
-          const SizedBox(height: 20),
-
-          const Text(
-            'Meu perfil',
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          _buildOpcaoPerfil(
-            icone: Icons.groups_rounded,
-            titulo: 'Minha equipe',
-            subtitulo: 'Veja sua equipe e seus companheiros',
-            onTap: () {
-              _abrirPagina(const MinhaEquipePage());
-            },
-          ),
-
-          _buildOpcaoPerfil(
-            icone: Icons.track_changes_rounded,
-            titulo: 'Minhas metas',
-            subtitulo: 'Acompanhe seus objetivos',
-            onTap: () {
-              _abrirPagina(const MinhasMetasPage());
-            },
-          ),
-
-          _buildOpcaoPerfil(
-            icone: Icons.star_rounded,
-            titulo: 'Feedbacks',
-            subtitulo: 'Veja os comentários do treinador',
-            onTap: () {
-              _abrirPagina(const FeedbacksPage());
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCardPerfil() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 62,
-                height: 62,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: verdeClaro,
-                  border: Border.all(color: verde, width: 2),
-                ),
-                child: const Icon(Icons.person_rounded, color: verde, size: 34),
-              ),
-
-              const SizedBox(width: 12),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.nomeUsuario,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    SizedBox(height: 4),
-                    Text(
-                      'Falcões FC • Futebol',
-                      style: TextStyle(color: cinza, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 14),
-
-          const Text(
-            'Meio-campista, apaixonado por futebol desde os 8 anos.\n'
-            'Foco em evoluir a cada treino.',
-            style: TextStyle(fontSize: 12, height: 1.4, color: Colors.black87),
-          ),
-
-          const SizedBox(height: 16),
-
-          SizedBox(
-            width: double.infinity,
-            height: 46,
-            child: OutlinedButton(
-              onPressed: () {
-                _abrirPagina(const EditarPerfilPage());
-              },
-              style: OutlinedButton.styleFrom(
-                foregroundColor: verde,
-                side: const BorderSide(color: verde),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              child: const Text(
-                'Editar perfil',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          Row(
-            children: [
-              Expanded(
-                child: _buildEstatistica(
-                  titulo: 'Posição',
-                  valor: 'Meio-campo',
-                ),
-              ),
-
-              const SizedBox(width: 8),
-
-              Expanded(
-                child: _buildEstatistica(
-                  titulo: 'Número',
-                  valor: '#10',
-                  cor: Colors.blue,
-                ),
-              ),
-
-              const SizedBox(width: 8),
-
-              Expanded(
-                child: _buildEstatistica(
-                  titulo: 'Publicações',
-                  valor: '3',
-                  cor: Colors.pinkAccent,
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 10),
-
-          Row(
-            children: [
-              Expanded(
-                child: _buildMiniInformacao(titulo: 'Frequência', valor: '92%'),
-              ),
-
-              const SizedBox(width: 10),
-
-              Expanded(
-                child: _buildMiniInformacao(
-                  titulo: 'Treinos concluídos',
-                  valor: '18',
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: verde,
-              borderRadius: BorderRadius.circular(17),
-            ),
-            child: Row(
+    return Column(
+      children: [
+        _buildCabecalho(
+          titulo: 'Perfil esportivo',
+          voltarAcao: () => setState(() => _visualizandoPerfil = false),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.18),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.trending_up_rounded,
-                    color: Colors.white,
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: _decoracaoCard(),
+                  child: Column(
+                    children: [
+                      const CircleAvatar(
+                        radius: 41,
+                        backgroundColor: Color(0xFFE5F1E9),
+                        child: Icon(Icons.person_rounded, color: _verdeAtleta, size: 46),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(widget.nomeUsuario, style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      const Text('Falcões FC • Futebol', style: TextStyle(fontSize: 11, color: _cinzaAtleta)),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Meio-campista, apaixonado por futebol desde os 8 anos.\nFoco em evoluir a cada treino.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 11, height: 1.4, color: Colors.grey.shade700),
+                      ),
+                    ],
                   ),
                 ),
-
-                const SizedBox(width: 12),
-
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 46,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _abrirPagina(EditarPerfilPage(nomeUsuario: widget.nomeUsuario)),
+                    icon: const Icon(Icons.edit_outlined, size: 18),
+                    label: const Text('Editar perfil', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: _verdeAtleta,
+                      side: const BorderSide(color: _verdeAtleta),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Row(
+                  children: [
+                    Expanded(child: _estatistica('Posição', 'Meio-campo')),
+                    const SizedBox(width: 8),
+                    Expanded(child: _estatistica('Número', '#10', cor: _verdeAtleta)),
+                    const SizedBox(width: 8),
+                    Expanded(child: _estatistica('Publicações', '3', cor: const Color(0xFFE86BA5))),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(child: _miniInformacao(Icons.trending_up_rounded, 'Frequência', '92%')),
+                    const SizedBox(width: 8),
+                    Expanded(child: _miniInformacao(Icons.check_circle_outline_rounded, 'Treinos concluídos', '18')),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(color: _verdeAtleta, borderRadius: BorderRadius.circular(16)),
+                  child: const Row(
                     children: [
-                      Text(
-                        'Perfil esportivo',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 3),
-                      Text(
-                        'Desempenho, evolução, metas,\n'
-                        'feedbacks e histórico.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          height: 1.3,
+                      Icon(Icons.trending_up_rounded, color: Colors.white, size: 30),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Seu perfil esportivo', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                            SizedBox(height: 4),
+                            Text('Acompanhe seu desempenho, evolução, metas e feedbacks.', style: TextStyle(color: Colors.white, fontSize: 10, height: 1.3)),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(height: 22),
+                _tituloSecao('Publicações'),
+                const SizedBox(height: 10),
+                Row(children: [Expanded(child: _publicacao()), const SizedBox(width: 8), Expanded(child: _publicacao()), const SizedBox(width: 8), Expanded(child: _publicacao())]),
+                const SizedBox(height: 22),
+                _tituloSecao('Meu perfil'),
+                const SizedBox(height: 10),
+                _opcaoPerfil(Icons.groups_outlined, 'Minha equipe', () => _abrirPagina(const MinhaEquipePage())),
+                _opcaoPerfil(Icons.track_changes_outlined, 'Minhas metas', () => _abrirPagina(const MinhasMetasPage())),
+                _opcaoPerfil(Icons.star_outline_rounded, 'Feedbacks', () => _abrirPagina(const FeedbacksPage())),
               ],
             ),
           ),
-
-          const SizedBox(height: 18),
-
-          Text(
-            'Publicações',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey.shade800,
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          Row(
-            children: [
-              Expanded(child: _buildPublicacao()),
-              const SizedBox(width: 8),
-              Expanded(child: _buildPublicacao()),
-              const SizedBox(width: 8),
-              Expanded(child: _buildPublicacao()),
-            ],
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget _buildEstatistica({
-    required String titulo,
-    required String valor,
-    Color cor = Colors.black87,
-  }) {
+  Widget _tituloSecao(String texto) => Align(
+        alignment: Alignment.centerLeft,
+        child: Text(texto, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87)),
+      );
+
+  Widget _opcaoConta({required IconData icone, required String titulo, required String subtitulo, required VoidCallback onTap}) {
     return Container(
-      height: 65,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF3F5F4),
-        borderRadius: BorderRadius.circular(13),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(titulo, style: const TextStyle(fontSize: 9, color: cinza)),
-
-          const SizedBox(height: 5),
-
-          Text(
-            valor,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.bold,
-              color: cor,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMiniInformacao({required String titulo, required String valor}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
-      decoration: BoxDecoration(
-        color: verdeClaro,
-        borderRadius: BorderRadius.circular(13),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              titulo,
-              style: const TextStyle(fontSize: 10, color: cinza),
-            ),
-          ),
-          Text(
-            valor,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: verdeEscuro,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPublicacao() {
-    return Container(
-      height: 82,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0F1F1),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Icon(Icons.image_outlined, color: Colors.grey.shade400, size: 26),
-    );
-  }
-
-  Widget _buildOpcaoConta({
-    required IconData icone,
-    required String titulo,
-    required String subtitulo,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: _decoracaoCard(),
       child: ListTile(
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         leading: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: verdeClaro,
-            borderRadius: BorderRadius.circular(13),
-          ),
-          child: Icon(icone, color: verde, size: 22),
+          width: 46,
+          height: 46,
+          decoration: BoxDecoration(color: _verdeClaroAtleta, borderRadius: BorderRadius.circular(13)),
+          child: Icon(icone, color: _verdeAtleta, size: 23),
         ),
-        title: Text(
-          titulo,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(
-          subtitulo,
-          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios_rounded,
-          size: 15,
-          color: Colors.grey.shade500,
-        ),
+        title: Text(titulo, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+        subtitle: Text(subtitulo, style: const TextStyle(fontSize: 11, color: _cinzaAtleta)),
+        trailing: const Icon(Icons.chevron_right_rounded, color: _cinzaAtleta),
       ),
     );
   }
 
-  Widget _buildOpcaoPerfil({
-    required IconData icone,
-    required String titulo,
-    required String subtitulo,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
+  Widget _opcaoPerfil(IconData icone, String texto, VoidCallback onTap) => Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: _decoracaoCard(),
+        child: ListTile(
+          onTap: onTap,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+          leading: Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(color: _verdeClaroAtleta, borderRadius: BorderRadius.circular(13)),
+            child: Icon(icone, color: _verdeAtleta, size: 23),
+          ),
+          title: Text(texto, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+          trailing: const Icon(Icons.chevron_right_rounded, color: _cinzaAtleta),
+        ),
+      );
+
+  Widget _estatistica(String titulo, String valor, {Color cor = Colors.black87}) => Container(
+        height: 72,
+        padding: const EdgeInsets.all(11),
+        decoration: _decoracaoCard(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(titulo, style: const TextStyle(fontSize: 9, color: _cinzaAtleta)),
+            const SizedBox(height: 5),
+            Text(valor, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: cor)),
+          ],
+        ),
+      );
+
+  Widget _miniInformacao(IconData icone, String titulo, String valor) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: _decoracaoCard(),
+        child: Row(
+          children: [
+            Icon(icone, size: 18, color: _verdeAtleta),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(titulo, style: const TextStyle(fontSize: 9, color: _cinzaAtleta)),
+                  const SizedBox(height: 2),
+                  Text(valor, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _publicacao() => Container(
+        height: 90,
+        decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(12)),
+        child: Icon(Icons.image_outlined, color: Colors.grey.shade400, size: 28),
+      );
+
+  BoxDecoration _decoracaoCard() => BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
         border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: ListTile(
-        onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-        leading: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: verdeClaro,
-            borderRadius: BorderRadius.circular(13),
-          ),
-          child: Icon(icone, color: verde, size: 22),
-        ),
-        title: Text(
-          titulo,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(
-          subtitulo,
-          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios_rounded,
-          size: 15,
-          color: Colors.grey.shade500,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBotaoSair() {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: OutlinedButton.icon(
-        onPressed: () {
-          _confirmarSaida(context);
-        },
-        icon: const Icon(Icons.logout_rounded, color: Colors.redAccent),
-        label: const Text(
-          'Sair da conta',
-          style: TextStyle(
-            color: Colors.redAccent,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Color(0xFFFFD6DD)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-        ),
-      ),
-    );
-  }
+      );
 
   void _abrirPagina(Widget pagina) {
     Navigator.push(context, MaterialPageRoute(builder: (_) => pagina));
   }
 
-  void _confirmarSaida(BuildContext context) {
-    showDialog(
+  void _confirmarSaida() {
+    showDialog<void>(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: const Text('Sair da conta?'),
-          content: const Text(
-            'Você precisará entrar novamente para acessar sua conta.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(dialogContext);
-              },
-              child: const Text(
-                'CANCELAR',
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(dialogContext);
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'SAIR',
-                style: TextStyle(color: Colors.redAccent),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class ContaPage extends StatelessWidget {
-  const ContaPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const _TelaInterna(
-      titulo: 'Conta',
-      child: Column(
-        children: [
-          _CampoInformacao(
-            icone: Icons.person_outline_rounded,
-            titulo: 'Nome',
-            valor: 'João Silva',
-          ),
-          _CampoInformacao(
-            icone: Icons.email_outlined,
-            titulo: 'Email',
-            valor: 'joao@email.com',
-          ),
-          _CampoInformacao(
-            icone: Icons.phone_outlined,
-            titulo: 'Telefone',
-            valor: '(11) 99999-9999',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PreferenciasPage extends StatefulWidget {
-  const PreferenciasPage({super.key});
-
-  @override
-  State<PreferenciasPage> createState() => _PreferenciasPageState();
-}
-
-class _PreferenciasPageState extends State<PreferenciasPage> {
-  bool notificacoes = true;
-  bool lembretes = true;
-  bool atualizacoes = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Preferências',
-      child: Column(
-        children: [
-          _SwitchItem(
-            titulo: 'Notificações',
-            subtitulo: 'Receber notificações do aplicativo',
-            valor: notificacoes,
-            onChanged: (valor) {
-              setState(() {
-                notificacoes = valor;
-              });
+      builder: (dialogContext) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        title: const Text('Sair da conta?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        content: const Text('Você precisará entrar novamente para acessar sua conta.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('CANCELAR')),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Implemente aqui a saída da conta.')));
             },
-          ),
-          _SwitchItem(
-            titulo: 'Lembretes',
-            subtitulo: 'Receber lembretes de treinos',
-            valor: lembretes,
-            onChanged: (valor) {
-              setState(() {
-                lembretes = valor;
-              });
-            },
-          ),
-          _SwitchItem(
-            titulo: 'Atualizações',
-            subtitulo: 'Receber novidades do SATE',
-            valor: atualizacoes,
-            onChanged: (valor) {
-              setState(() {
-                atualizacoes = valor;
-              });
-            },
+            child: const Text('SAIR', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -834,723 +442,242 @@ class _PreferenciasPageState extends State<PreferenciasPage> {
   }
 }
 
-class PrivacidadePage extends StatefulWidget {
-  const PrivacidadePage({super.key});
-
-  @override
-  State<PrivacidadePage> createState() => _PrivacidadePageState();
-}
-
-class _PrivacidadePageState extends State<PrivacidadePage> {
-  bool perfilPublico = true;
-  bool mostrarEstatisticas = true;
-  bool permitirMensagens = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Privacidade',
-      child: Column(
-        children: [
-          _SwitchItem(
-            titulo: 'Perfil público',
-            subtitulo: 'Permitir que outros atletas vejam seu perfil',
-            valor: perfilPublico,
-            onChanged: (valor) {
-              setState(() {
-                perfilPublico = valor;
-              });
-            },
-          ),
-          _SwitchItem(
-            titulo: 'Mostrar estatísticas',
-            subtitulo: 'Exibir suas estatísticas esportivas',
-            valor: mostrarEstatisticas,
-            onChanged: (valor) {
-              setState(() {
-                mostrarEstatisticas = valor;
-              });
-            },
-          ),
-          _SwitchItem(
-            titulo: 'Permitir mensagens',
-            subtitulo: 'Permitir mensagens de outros usuários',
-            valor: permitirMensagens,
-            onChanged: (valor) {
-              setState(() {
-                permitirMensagens = valor;
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SegurancaPage extends StatelessWidget {
-  const SegurancaPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Segurança',
-      child: Column(
-        children: [
-          _ItemInterno(
-            icone: Icons.lock_outline_rounded,
-            titulo: 'Alterar senha',
-            subtitulo: 'Altere a senha da sua conta',
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Alteração de senha em breve.')),
-              );
-            },
-          ),
-          _ItemInterno(
-            icone: Icons.security_rounded,
-            titulo: 'Verificação de segurança',
-            subtitulo: 'Verifique as configurações de segurança',
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Verificação em breve.')),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MinhaEquipePage extends StatelessWidget {
-  const MinhaEquipePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Minha equipe',
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: verdeAtleta,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Falcões FC',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text('Futebol', style: TextStyle(color: Colors.white70)),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          _MembroEquipe(nome: 'João Silva', funcao: 'Você'),
-          _MembroEquipe(nome: 'Ana Costa', funcao: 'Atleta'),
-          _MembroEquipe(nome: 'Carlos Mendes', funcao: 'Atleta'),
-          _MembroEquipe(nome: 'Mariana Souza', funcao: 'Atleta'),
-        ],
-      ),
-    );
-  }
-}
-
-class MinhasMetasPage extends StatelessWidget {
-  const MinhasMetasPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Minhas metas',
-      child: Column(
-        children: [
-          _Meta(
-            titulo: 'Melhorar frequência',
-            progresso: 0.92,
-            porcentagem: '92%',
-          ),
-          _Meta(
-            titulo: 'Concluir treinos',
-            progresso: 0.80,
-            porcentagem: '80%',
-          ),
-          _Meta(
-            titulo: 'Melhorar desempenho',
-            progresso: 0.68,
-            porcentagem: '68%',
-          ),
-          _Meta(
-            titulo: 'Evoluir resistência',
-            progresso: 0.55,
-            porcentagem: '55%',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class FeedbacksPage extends StatelessWidget {
-  const FeedbacksPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Feedbacks',
-      child: Column(
-        children: [
-          _Feedback(
-            nome: 'Professor Marcos',
-            texto: 'Ótima evolução nos últimos treinos.',
-          ),
-          _Feedback(
-            nome: 'Professor Marcos',
-            texto: 'Continue trabalhando sua resistência.',
-          ),
-          _Feedback(
-            nome: 'Professor Marcos',
-            texto: 'Boa participação nos treinos coletivos.',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class AjudaSuportePage extends StatelessWidget {
-  const AjudaSuportePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Ajuda e suporte',
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: verdeAtleta,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.help_outline_rounded, color: Colors.white, size: 32),
-                SizedBox(width: 14),
-                Expanded(
-                  child: Text(
-                    'Como podemos ajudar?',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-          _Pergunta(titulo: 'Como visualizar meus treinos?'),
-          _Pergunta(titulo: 'Como acompanhar minha evolução?'),
-          _Pergunta(titulo: 'Como alterar meus dados?'),
-          _Pergunta(titulo: 'Como entrar em contato com o treinador?'),
-        ],
-      ),
-    );
-  }
-}
-
-class SobreSatePage extends StatelessWidget {
-  const SobreSatePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Sobre o SATE',
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFE0E7E4)),
-            ),
-            child: const Column(
-              children: [
-                Icon(Icons.sports_soccer_rounded, color: verdeAtleta, size: 60),
-                SizedBox(height: 12),
-                Text(
-                  'SATE',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: verdeAtleta,
-                  ),
-                ),
-                SizedBox(height: 6),
-                Text(
-                  'Sistema de Acompanhamento e Treinamento Esportivo',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
-                ),
-                SizedBox(height: 15),
-                Text(
-                  'Versão 1.0.0',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class EditarPerfilPage extends StatelessWidget {
-  const EditarPerfilPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Editar perfil',
-      child: Column(
-        children: [
-          _CampoEditar(titulo: 'Nome', valor: 'João Silva'),
-          _CampoEditar(titulo: 'Posição', valor: 'Meio-campo'),
-          _CampoEditar(titulo: 'Número', valor: '10'),
-          _CampoEditar(titulo: 'Equipe', valor: 'Falcões FC'),
-          _CampoEditar(
-            titulo: 'Descrição',
-            valor: 'Meio-campista, apaixonado por futebol.',
-            linhas: 3,
-          ),
-          const SizedBox(height: 15),
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Perfil atualizado com sucesso!'),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: verdeAtleta,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              child: const Text(
-                'Salvar alterações',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-const Color verdeAtleta = Color(0xFF00845F);
-
-class _TelaInterna extends StatelessWidget {
+class _TelaPerfilInterna extends StatelessWidget {
   final String titulo;
   final Widget child;
 
-  const _TelaInterna({required this.titulo, required this.child});
+  const _TelaPerfilInterna({required this.titulo, required this.child});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFF7F7F7),
-        elevation: 0,
-        centerTitle: false,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black87,
-            size: 28,
-          ),
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: _fundoAtleta,
+        appBar: AppBar(
+          backgroundColor: _fundoAtleta,
+          elevation: 0,
+          centerTitle: false,
+          iconTheme: const IconThemeData(color: Colors.black87),
+          title: Text(titulo, style: const TextStyle(color: Colors.black87, fontSize: 19, fontWeight: FontWeight.bold)),
         ),
-        title: Text(
-          titulo,
-          style: const TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+        body: SafeArea(
+          child: SingleChildScrollView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 30), child: child),
         ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
-        child: child,
-      ),
-    );
-  }
+      );
 }
 
-class _CampoInformacao extends StatelessWidget {
-  final IconData icone;
-  final String titulo;
-  final String valor;
-
-  const _CampoInformacao({
-    required this.icone,
-    required this.titulo,
-    required this.valor,
-  });
+class EditarPerfilPage extends StatefulWidget {
+  final String nomeUsuario;
+  const EditarPerfilPage({super.key, this.nomeUsuario = 'Atleta'});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: Row(
-        children: [
-          Icon(icone, color: verdeAtleta),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  titulo,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  valor,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  State<EditarPerfilPage> createState() => _EditarPerfilPageState();
 }
 
-class _SwitchItem extends StatelessWidget {
-  final String titulo;
-  final String subtitulo;
-  final bool valor;
-  final ValueChanged<bool> onChanged;
-
-  const _SwitchItem({
-    required this.titulo,
-    required this.subtitulo,
-    required this.valor,
-    required this.onChanged,
-  });
+class _EditarPerfilPageState extends State<EditarPerfilPage> {
+  late final TextEditingController nomeController;
+  final posicaoController = TextEditingController(text: 'Meio-campista');
+  final numeroController = TextEditingController(text: '10');
+  final equipeController = TextEditingController(text: 'Falcões FC');
+  final descricaoController = TextEditingController(text: 'Meio-campista, apaixonado por futebol desde os 8 anos.');
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.fromLTRB(15, 10, 8, 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  titulo,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  subtitulo,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Switch(value: valor, onChanged: onChanged, activeColor: verdeAtleta),
-        ],
-      ),
-    );
+  void initState() {
+    super.initState();
+    nomeController = TextEditingController(text: widget.nomeUsuario);
   }
-}
-
-class _ItemInterno extends StatelessWidget {
-  final IconData icone;
-  final String titulo;
-  final String subtitulo;
-  final VoidCallback onTap;
-
-  const _ItemInterno({
-    required this.icone,
-    required this.titulo,
-    required this.subtitulo,
-    required this.onTap,
-  });
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: ListTile(
-        onTap: onTap,
-        leading: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: const Color(0xFFE8F5F0),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icone, color: verdeAtleta),
-        ),
-        title: Text(
-          titulo,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(subtitulo, style: const TextStyle(fontSize: 11)),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 15),
-      ),
-    );
+  void dispose() {
+    nomeController.dispose();
+    posicaoController.dispose();
+    numeroController.dispose();
+    equipeController.dispose();
+    descricaoController.dispose();
+    super.dispose();
   }
-}
-
-class _MembroEquipe extends StatelessWidget {
-  final String nome;
-  final String funcao;
-
-  const _MembroEquipe({required this.nome, required this.funcao});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: Row(
-        children: [
-          const CircleAvatar(
-            backgroundColor: Color(0xFFE8F5F0),
-            child: Icon(Icons.person_rounded, color: verdeAtleta),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              nome,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-          ),
-          Text(
-            funcao,
-            style: const TextStyle(fontSize: 11, color: Colors.grey),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Meta extends StatelessWidget {
-  final String titulo;
-  final double progresso;
-  final String porcentagem;
-
-  const _Meta({
-    required this.titulo,
-    required this.progresso,
-    required this.porcentagem,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  titulo,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
+  Widget build(BuildContext context) => _TelaPerfilInterna(
+        titulo: 'Editar perfil',
+        child: Column(
+          children: [
+            const CircleAvatar(radius: 45, backgroundColor: _verdeClaroAtleta, child: Icon(Icons.person_rounded, color: _verdeAtleta, size: 48)),
+            TextButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('A alteração de foto será implementada.'))), child: const Text('Alterar foto', style: TextStyle(color: _verdeAtleta))),
+            _campo('Nome', nomeController),
+            _campo('Posição', posicaoController),
+            Row(children: [Expanded(child: _campo('Número', numeroController)), const SizedBox(width: 10), Expanded(child: _campo('Equipe', equipeController))]),
+            _campo('Descrição', descricaoController, maxLines: 4),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Perfil atualizado!')));
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: _verdeAtleta, foregroundColor: Colors.white, elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+                child: const Text('SALVAR ALTERAÇÕES', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
               ),
-              Text(
-                porcentagem,
-                style: const TextStyle(
-                  color: verdeAtleta,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          LinearProgressIndicator(
-            value: progresso,
-            minHeight: 7,
-            borderRadius: BorderRadius.circular(10),
-            backgroundColor: const Color(0xFFE8F5F0),
-            valueColor: const AlwaysStoppedAnimation<Color>(verdeAtleta),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Feedback extends StatelessWidget {
-  final String nome;
-  final String texto;
-
-  const _Feedback({required this.nome, required this.texto});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            nome,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: verdeAtleta,
             ),
-          ),
-          const SizedBox(height: 7),
-          Text(texto, style: const TextStyle(height: 1.4)),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
-class _CampoEditar extends StatelessWidget {
-  final String titulo;
-  final String valor;
-  final int linhas;
-
-  const _CampoEditar({
-    required this.titulo,
-    required this.valor,
-    this.linhas = 1,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: TextFormField(
-        initialValue: valor,
-        maxLines: linhas,
+Widget _campo(String titulo, TextEditingController controller, {int maxLines = 1}) => Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: TextField(
+        controller: controller,
+        maxLines: maxLines,
         decoration: InputDecoration(
           labelText: titulo,
           filled: true,
           fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xFFE0E7E4)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xFFE0E7E4)),
-          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFE0E7E4))),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFE0E7E4))),
+          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: _verdeAtleta, width: 1.5)),
         ),
       ),
     );
-  }
-}
 
-class _Pergunta extends StatelessWidget {
-  final String titulo;
-
-  const _Pergunta({required this.titulo});
-
+class MinhaEquipePage extends StatelessWidget {
+  const MinhaEquipePage({super.key});
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: ExpansionTile(
-        title: Text(
-          titulo,
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-        ),
-        children: const [
-          Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: Text(
-              'Essa informação estará disponível em uma próxima atualização do aplicativo.',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
-            ),
+  Widget build(BuildContext context) => _TelaPerfilInterna(
+        titulo: 'Minha equipe',
+        child: Column(children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(color: _verdeAtleta, borderRadius: BorderRadius.circular(18)),
+            child: const Row(children: [Icon(Icons.groups_rounded, color: Colors.white, size: 35), SizedBox(width: 14), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('Falcões FC', style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold)), SizedBox(height: 4), Text('4 atletas na equipe', style: TextStyle(color: Colors.white, fontSize: 11))]))]),
           ),
-        ],
-      ),
-    );
-  }
+          const SizedBox(height: 14),
+          _membro('João Silva', 'Meio-campista', voce: true),
+          _membro('Carlos Mendes', 'Atacante'),
+          _membro('Ana Costa', 'Defensora'),
+          _membro('Mariana Souza', 'Goleira'),
+        ]),
+      );
 }
+
+Widget _membro(String nome, String funcao, {bool voce = false}) => Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE0E7E4))),
+      child: Row(children: [const CircleAvatar(backgroundColor: _verdeClaroAtleta, child: Icon(Icons.person_rounded, color: _verdeAtleta)), const SizedBox(width: 12), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(nome, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)), const SizedBox(height: 3), Text(funcao, style: const TextStyle(fontSize: 10, color: _cinzaAtleta))])), if (voce) const Text('Você', style: TextStyle(color: _verdeAtleta, fontSize: 10, fontWeight: FontWeight.bold))]),
+    );
+
+class MinhasMetasPage extends StatelessWidget {
+  const MinhasMetasPage({super.key});
+  @override
+  Widget build(BuildContext context) => _TelaPerfilInterna(
+        titulo: 'Minhas metas',
+        child: Column(children: [
+          Container(width: double.infinity, padding: const EdgeInsets.all(18), decoration: BoxDecoration(color: _verdeAtleta, borderRadius: BorderRadius.circular(18)), child: const Row(children: [Icon(Icons.track_changes_rounded, color: Colors.white, size: 36), SizedBox(width: 14), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('Suas metas', style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold)), SizedBox(height: 4), Text('Continue acompanhando sua evolução.', style: TextStyle(color: Colors.white, fontSize: 11))]))])),
+          const SizedBox(height: 16),
+          _meta('Aumentar frequência nos treinos', '92%', .92),
+          _meta('Concluir 20 treinos', '18/20', .90),
+          _meta('Melhorar desempenho', '75%', .75),
+          _meta('Participar de competições', '2/3', .66),
+        ]),
+      );
+}
+
+Widget _meta(String titulo, String progresso, double percentual) => Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE0E7E4))),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Row(children: [const Icon(Icons.track_changes_outlined, color: _verdeAtleta, size: 20), const SizedBox(width: 9), Expanded(child: Text(titulo, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600))), Text(progresso, style: const TextStyle(color: _verdeAtleta, fontSize: 12, fontWeight: FontWeight.bold))]), const SizedBox(height: 12), ClipRRect(borderRadius: BorderRadius.circular(10), child: LinearProgressIndicator(value: percentual, minHeight: 7, backgroundColor: _verdeClaroAtleta, valueColor: const AlwaysStoppedAnimation<Color>(_verdeAtleta)))]),
+    );
+
+class FeedbacksPage extends StatelessWidget {
+  const FeedbacksPage({super.key});
+  @override
+  Widget build(BuildContext context) => _TelaPerfilInterna(
+        titulo: 'Feedbacks',
+        child: Column(children: [
+          Container(width: double.infinity, padding: const EdgeInsets.all(18), decoration: BoxDecoration(color: _verdeAtleta, borderRadius: BorderRadius.circular(18)), child: const Row(children: [Icon(Icons.star_rounded, color: Colors.white, size: 35), SizedBox(width: 14), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('Seus feedbacks', style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold)), SizedBox(height: 4), Text('Acompanhe as avaliações da equipe.', style: TextStyle(color: Colors.white, fontSize: 11))]))])),
+          const SizedBox(height: 16),
+          _feedback('Treinador', 'Hoje', 'Ótimo desempenho nos últimos treinos. Continue mantendo o foco e a disciplina.'),
+          _feedback('Preparador físico', 'Há 3 dias', 'Sua evolução física está sendo muito positiva. Continue seguindo o planejamento.'),
+          _feedback('Treinador', 'Há 1 semana', 'Boa participação nos treinos coletivos e excelente evolução técnica.'),
+        ]),
+      );
+}
+
+Widget _feedback(String autor, String data, String texto) => Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE0E7E4))),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Row(children: [const CircleAvatar(radius: 19, backgroundColor: _verdeClaroAtleta, child: Icon(Icons.person_rounded, color: _verdeAtleta, size: 21)), const SizedBox(width: 10), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(autor, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)), const SizedBox(height: 2), Text(data, style: const TextStyle(fontSize: 9, color: Color(0xFF888888)))])), const Icon(Icons.star_rounded, color: Color(0xFFE86BA5), size: 21)]), const SizedBox(height: 12), Text(texto, style: const TextStyle(fontSize: 11, color: Color(0xFF666666), height: 1.45))]),
+    );
+
+class ContaPage extends StatefulWidget {
+  final String nomeUsuario;
+  const ContaPage({super.key, this.nomeUsuario = 'João Silva'});
+  @override
+  State<ContaPage> createState() => _ContaPageState();
+}
+
+class _ContaPageState extends State<ContaPage> {
+  late final TextEditingController nomeController;
+  final emailController = TextEditingController(text: 'atleta@email.com');
+  final telefoneController = TextEditingController(text: '(11) 99999-9999');
+  @override
+  void initState() { super.initState(); nomeController = TextEditingController(text: widget.nomeUsuario); }
+  @override
+  void dispose() { nomeController.dispose(); emailController.dispose(); telefoneController.dispose(); super.dispose(); }
+  @override
+  Widget build(BuildContext context) => _TelaPerfilInterna(titulo: 'Conta', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [const Text('Informações pessoais', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)), const SizedBox(height: 12), _campo('Nome', nomeController), _campo('E-mail', emailController), _campo('Telefone', telefoneController), const SizedBox(height: 8), SizedBox(width: double.infinity, height: 48, child: ElevatedButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Informações atualizadas!'))), style: ElevatedButton.styleFrom(backgroundColor: _verdeAtleta, foregroundColor: Colors.white, elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))), child: const Text('SALVAR ALTERAÇÕES', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))))]));
+}
+
+class PreferenciasPage extends StatefulWidget {
+  const PreferenciasPage({super.key});
+  @override
+  State<PreferenciasPage> createState() => _PreferenciasPageState();
+}
+class _PreferenciasPageState extends State<PreferenciasPage> {
+  bool notificacoes = true, lembretes = true, atualizacoes = true;
+  @override
+  Widget build(BuildContext context) => _TelaPerfilInterna(titulo: 'Preferências', child: Column(children: [_switchItem('Notificações', 'Receber notificações do aplicativo', notificacoes, (v) => setState(() => notificacoes = v)), _switchItem('Lembretes de treino', 'Receber lembretes dos próximos treinos', lembretes, (v) => setState(() => lembretes = v)), _switchItem('Atualizações', 'Receber novidades sobre o SATE', atualizacoes, (v) => setState(() => atualizacoes = v))]));
+}
+
+Widget _switchItem(String titulo, String subtitulo, bool valor, ValueChanged<bool> onChanged) => Container(margin: const EdgeInsets.only(bottom: 10), padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE0E7E4))), child: Row(children: [Container(width: 44, height: 44, decoration: BoxDecoration(color: _verdeClaroAtleta, borderRadius: BorderRadius.circular(12)), child: const Icon(Icons.settings_outlined, color: _verdeAtleta)), const SizedBox(width: 12), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(titulo, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)), const SizedBox(height: 3), Text(subtitulo, style: const TextStyle(fontSize: 10, color: _cinzaAtleta))])), Switch(value: valor, onChanged: onChanged, activeThumbColor: _verdeAtleta)]));
+
+class PrivacidadePage extends StatefulWidget {
+  const PrivacidadePage({super.key});
+  @override
+  State<PrivacidadePage> createState() => _PrivacidadePageState();
+}
+class _PrivacidadePageState extends State<PrivacidadePage> {
+  bool perfilPublico = true, mostrarEquipe = true, mostrarDesempenho = false;
+  @override
+  Widget build(BuildContext context) => _TelaPerfilInterna(titulo: 'Privacidade', child: Column(children: [_privacidadeItem('Perfil público', 'Permitir que outros atletas visualizem seu perfil', perfilPublico, (v) => setState(() => perfilPublico = v)), _privacidadeItem('Mostrar equipe', 'Exibir sua equipe no perfil', mostrarEquipe, (v) => setState(() => mostrarEquipe = v)), _privacidadeItem('Mostrar desempenho', 'Permitir que seu desempenho seja visualizado', mostrarDesempenho, (v) => setState(() => mostrarDesempenho = v))]));
+}
+
+Widget _privacidadeItem(String titulo, String subtitulo, bool valor, ValueChanged<bool> onChanged) => Container(margin: const EdgeInsets.only(bottom: 10), padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE0E7E4))), child: Row(children: [const Icon(Icons.lock_outline_rounded, color: _verdeAtleta, size: 25), const SizedBox(width: 12), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(titulo, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)), const SizedBox(height: 3), Text(subtitulo, style: const TextStyle(fontSize: 10, color: _cinzaAtleta))])), Switch(value: valor, onChanged: onChanged, activeThumbColor: _verdeAtleta)]));
+
+class SegurancaPage extends StatelessWidget {
+  const SegurancaPage({super.key});
+  @override
+  Widget build(BuildContext context) => _TelaPerfilInterna(titulo: 'Segurança', child: Column(children: [_itemSeguranca(context, Icons.lock_reset_rounded, 'Alterar senha', 'Atualize sua senha de acesso'), _itemSeguranca(context, Icons.devices_rounded, 'Dispositivos conectados', 'Veja onde sua conta está conectada'), _itemSeguranca(context, Icons.verified_user_outlined, 'Verificação de segurança', 'Confira a segurança da sua conta')]));
+}
+Widget _itemSeguranca(BuildContext context, IconData icone, String titulo, String subtitulo) => Container(margin: const EdgeInsets.only(bottom: 10), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE0E7E4))), child: ListTile(onTap: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$titulo selecionado.'))), leading: Container(width: 46, height: 46, decoration: BoxDecoration(color: _verdeClaroAtleta, borderRadius: BorderRadius.circular(12)), child: Icon(icone, color: _verdeAtleta)), title: Text(titulo, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)), subtitle: Text(subtitulo, style: const TextStyle(fontSize: 10, color: _cinzaAtleta)), trailing: const Icon(Icons.chevron_right_rounded, color: _cinzaAtleta)));
+
+class AjudaSuportePage extends StatelessWidget {
+  const AjudaSuportePage({super.key});
+  @override
+  Widget build(BuildContext context) => _TelaPerfilInterna(titulo: 'Ajuda e suporte', child: Column(children: [Container(width: double.infinity, padding: const EdgeInsets.all(18), decoration: BoxDecoration(color: _verdeAtleta, borderRadius: BorderRadius.circular(18)), child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Icon(Icons.help_outline_rounded, color: Colors.white, size: 34), SizedBox(height: 10), Text('Como podemos ajudar?', style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold)), SizedBox(height: 4), Text('Encontre respostas para suas dúvidas sobre o SATE.', style: TextStyle(color: Colors.white, fontSize: 11))])), const SizedBox(height: 16), _pergunta('Como visualizar meus treinos?'), _pergunta('Como acompanhar meu desempenho?'), _pergunta('Como editar meu perfil?'), _pergunta('Como alterar minhas preferências?'), _pergunta('Como entrar em contato com o suporte?')]));
+}
+Widget _pergunta(String texto) => Container(margin: const EdgeInsets.only(bottom: 10), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE0E7E4))), child: ExpansionTile(leading: const Icon(Icons.help_outline_rounded, color: _verdeAtleta), title: Text(texto, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)), children: const [Padding(padding: EdgeInsets.fromLTRB(14, 0, 14, 14), child: Text('Aqui você encontrará informações e orientações sobre essa funcionalidade do aplicativo.', style: TextStyle(fontSize: 11, color: _cinzaAtleta, height: 1.4)))]));
+
+class SobreSatePage extends StatelessWidget {
+  const SobreSatePage({super.key});
+  @override
+  Widget build(BuildContext context) => _TelaPerfilInterna(titulo: 'Sobre o SATE', child: Column(children: [Container(width: double.infinity, padding: const EdgeInsets.all(24), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), border: Border.all(color: const Color(0xFFE0E7E4))), child: Column(children: [Container(width: 80, height: 80, decoration: BoxDecoration(color: _verdeClaroAtleta, borderRadius: BorderRadius.circular(20)), child: const Icon(Icons.sports_soccer_rounded, color: _verdeAtleta, size: 45)), const SizedBox(height: 16), const Text('SATE', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: _verdeEscuroAtleta)), const SizedBox(height: 5), const Text('Sistema de Acompanhamento e Treinamento Esportivo', textAlign: TextAlign.center, style: TextStyle(fontSize: 11, color: _cinzaAtleta, height: 1.4)), const SizedBox(height: 18), const Text('O SATE foi desenvolvido para auxiliar atletas e equipes no acompanhamento de treinos, desempenho, evolução e interação entre os membros.', textAlign: TextAlign.center, style: TextStyle(fontSize: 11, color: _cinzaAtleta, height: 1.5))])), const SizedBox(height: 16), _informacao('Versão', '1.0.0'), _informacao('Desenvolvido para', 'Atletas e equipes esportivas'), _informacao('Aplicativo', 'SATE')]));
+}
+Widget _informacao(String titulo, String valor) => Container(width: double.infinity, margin: const EdgeInsets.only(bottom: 10), padding: const EdgeInsets.all(15), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: const Color(0xFFE0E7E4))), child: Row(children: [Expanded(child: Text(titulo, style: const TextStyle(fontSize: 12, color: _cinzaAtleta))), Text(valor, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87))]));

@@ -67,8 +67,7 @@
   text-align: center;
 
   box-shadow:
-    0 6px 18px
-    rgba(0, 0, 0, 0.11);
+    0 6px 18px rgba(0, 0, 0, 0.11);
 }
 
 .stateCard h2 {
@@ -125,7 +124,7 @@
 
 
 /* =====================================
-   SELECT
+   GRUPO DOS SELECTS
 ===================================== */
 
 .selectGroup {
@@ -143,6 +142,11 @@
 
   font-weight: 600;
 }
+
+
+/* =====================================
+   SELECTS
+===================================== */
 
 .selectGroup select {
   width: 100%;
@@ -204,7 +208,7 @@
 
 
 /* =====================================
-   TROCAR EQUIPES
+   BOTÃO INVERTER
 ===================================== */
 
 .switchButton {
@@ -275,7 +279,7 @@
 
 
 /* =====================================
-   CABEÇALHO DAS EQUIPES
+   CABEÇALHO DAS PARTIDAS
 ===================================== */
 
 .matchHeader {
@@ -321,17 +325,25 @@
 
 
 /* =====================================
-   NOMES
+   NOMES DOS TIMES
 ===================================== */
 
 .matchHeader h2 {
   margin: 0;
 
-  font-size: 20px;
+  font-size: 17px;
 
   font-weight: 700;
 
   line-height: 1.3;
+}
+
+.matchHeader h2 span {
+  color: #82918a;
+
+  font-size: 12px;
+
+  font-weight: 500;
 }
 
 .matchLeft h2 {
@@ -344,40 +356,40 @@
 
 
 /* =====================================
-   RESUMO
+   PLACAR
 ===================================== */
 
-.teamSummary {
+.matchScore {
   display: flex;
 
-  align-items: baseline;
+  align-items: center;
 
-  gap: 7px;
+  gap: 8px;
 
-  margin-top: 8px;
+  margin-top: 7px;
 
   color: #24332d;
-}
 
-.matchRight .teamSummary {
-  justify-content: flex-end;
-}
-
-.teamSummary strong {
-  font-size: 22px;
+  font-size: 20px;
 
   font-weight: 700;
 }
 
-.teamSummary span {
-  color: #788880;
+.matchRight .matchScore {
+  justify-content: flex-end;
+}
 
-  font-size: 11px;
+.matchScore span {
+  color: #8b9993;
+
+  font-size: 12px;
+
+  font-weight: 500;
 }
 
 
 /* =====================================
-   META
+   INFORMAÇÕES
 ===================================== */
 
 .matchMeta {
@@ -476,7 +488,7 @@
 }
 
 .statName {
-  min-width: 175px;
+  min-width: 160px;
 
   color: #56665f;
 
@@ -531,6 +543,11 @@
   justify-content: flex-start;
 }
 
+
+/* =====================================
+   BARRA A
+===================================== */
+
 .barA {
   height: 100%;
 
@@ -541,6 +558,11 @@
   transition:
     width 0.3s ease;
 }
+
+
+/* =====================================
+   BARRA B
+===================================== */
 
 .barB {
   height: 100%;
@@ -553,6 +575,11 @@
     width 0.3s ease;
 }
 
+
+/* =====================================
+   CENTRO
+===================================== */
+
 .barCenter {
   width: 2px;
   height: 14px;
@@ -564,7 +591,7 @@
 
 
 /* =====================================
-   RESPONSIVO
+   RESPONSIVIDADE
 ===================================== */
 
 @media (max-width: 900px) {
@@ -579,7 +606,7 @@
   }
 
   .matchHeader h2 {
-    font-size: 17px;
+    font-size: 15px;
   }
 }
 
@@ -630,13 +657,13 @@
   }
 
   .matchRight .matchMeta,
-  .matchRight .teamSummary {
+  .matchRight .matchScore {
     justify-content:
       flex-start;
   }
 
   .statName {
-    min-width: 120px;
+    min-width: 110px;
 
     font-size: 10px;
   }

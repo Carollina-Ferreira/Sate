@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../assets/cabecalho_treinador.dart';
 import 'perfil_atleta_page.dart';
 
 class AtletasPage extends StatefulWidget {
@@ -10,51 +11,47 @@ class AtletasPage extends StatefulWidget {
 }
 
 class _AtletasPageState extends State<AtletasPage> {
-  static const Color verde = Color(0xFF00845F);
-  static const Color verdeEscuro = Color(0xFF006B4F);
+  static const Color verde = Color(0xFF006B4F);
   static const Color verdeClaro = Color(0xFFE8F5F0);
-  static const Color fundo = Color(0xFFF7F7F7);
+  static const Color fundo = Color(0xFFFCFCFC);
 
   final TextEditingController pesquisaController =
       TextEditingController();
 
-  final List<Map<String, dynamic>> atletas = [
+  final List<Map<String, String>> atletas = [
     {
-      'nome': 'Mariana Souza',
+      'nome': 'Ana Souza',
       'modalidade': 'Futebol',
-      'frequencia': '92%',
-      'inicial': 'M',
-      'status': 'Atleta ativo',
-    },
-    {
-      'nome': 'João Silva',
-      'modalidade': 'Futebol',
-      'frequencia': '95%',
-      'inicial': 'J',
-      'status': 'Atleta ativo',
-    },
-    {
-      'nome': 'Ana Costa',
-      'modalidade': 'Futebol',
-      'frequencia': '88%',
       'inicial': 'A',
-      'status': 'Atleta ativo',
+      'frequencia': '94%',
     },
     {
-      'nome': 'Carlos Mendes',
-      'modalidade': 'Futebol',
-      'frequencia': '84%',
+      'nome': 'Carlos Oliveira',
+      'modalidade': 'Basquete',
       'inicial': 'C',
-      'status': 'Atleta ativo',
+      'frequencia': '89%',
     },
     {
-      'nome': 'Lucas Oliveira',
+      'nome': 'Mariana Santos',
+      'modalidade': 'Vôlei',
+      'inicial': 'M',
+      'frequencia': '92%',
+    },
+    {
+      'nome': 'Pedro Henrique',
       'modalidade': 'Futebol',
-      'frequencia': '76%',
+      'inicial': 'P',
+      'frequencia': '84%',
+    },
+    {
+      'nome': 'Lucas Almeida',
+      'modalidade': 'Futebol',
       'inicial': 'L',
-      'status': 'Atleta ativo',
+      'frequencia': '87%',
     },
   ];
+
+  String pesquisa = '';
 
   @override
   void dispose() {
@@ -62,261 +59,232 @@ class _AtletasPageState extends State<AtletasPage> {
     super.dispose();
   }
 
-  List<Map<String, dynamic>> get atletasFiltrados {
-    final pesquisa = pesquisaController.text.trim().toLowerCase();
-
-    if (pesquisa.isEmpty) {
+  List<Map<String, String>> get atletasFiltrados {
+    if (pesquisa.trim().isEmpty) {
       return atletas;
     }
 
     return atletas.where((atleta) {
-      final nome =
-          (atleta['nome'] as String).toLowerCase();
+      final nome = atleta['nome']!.toLowerCase();
+      final modalidade = atleta['modalidade']!.toLowerCase();
+      final busca = pesquisa.toLowerCase();
 
-      final modalidade =
-          (atleta['modalidade'] as String).toLowerCase();
-
-      return nome.contains(pesquisa) ||
-          modalidade.contains(pesquisa);
+      return nome.contains(busca) ||
+          modalidade.contains(busca);
     }).toList();
   }
 
-  void _abrirPerfil(Map<String, dynamic> atleta) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => PerfilAtletaPage(
-          nome: atleta['nome'],
-          modalidade: atleta['modalidade'],
-          frequencia: atleta['frequencia'],
-          inicial: atleta['inicial'],
-        ),
-      ),
-    );
-  }
-
   void _abrirAdicionarAtleta() {
-    final nomeController = TextEditingController();
-    final modalidadeController = TextEditingController();
-    final frequenciaController = TextEditingController();
-
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (modalContext) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(modalContext)
-                .viewInsets
-                .bottom,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.fromLTRB(
+            24,
+            12,
+            24,
+            30,
           ),
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(
-              20,
-              12,
-              20,
-              30,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(28),
             ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(26),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 45,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
               ),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 44,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius:
-                            BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 22),
-
-                  const Text(
-                    'Adicionar atleta',
-                    style: TextStyle(
-                      color: Color(0xFF12261F),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  Text(
-                    'Cadastre um novo atleta na sua equipe.',
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 13,
-                    ),
-                  ),
-
-                  const SizedBox(height: 22),
-
-                  _campo(
-                    controller: nomeController,
-                    label: 'Nome',
-                    hint: 'Ex: Pedro Santos',
-                    icone: Icons.person_outline_rounded,
-                  ),
-
-                  const SizedBox(height: 14),
-
-                  _campo(
-                    controller: modalidadeController,
-                    label: 'Modalidade',
-                    hint: 'Ex: Futebol',
-                    icone:
-                        Icons.sports_soccer_outlined,
-                  ),
-
-                  const SizedBox(height: 14),
-
-                  _campo(
-                    controller: frequenciaController,
-                    label: 'Frequência',
-                    hint: 'Ex: 90%',
-                    icone:
-                        Icons.calendar_month_outlined,
-                  ),
-
-                  const SizedBox(height: 22),
-
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        final nome =
-                            nomeController.text.trim();
-
-                        final modalidade =
-                            modalidadeController.text
-                                .trim();
-
-                        final frequencia =
-                            frequenciaController.text
-                                .trim();
-
-                        if (nome.isEmpty) {
-                          ScaffoldMessenger.of(
-                            modalContext,
-                          ).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Digite o nome do atleta.',
-                              ),
-                            ),
-                          );
-                          return;
-                        }
-
-                        if (modalidade.isEmpty) {
-                          ScaffoldMessenger.of(
-                            modalContext,
-                          ).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Digite a modalidade.',
-                              ),
-                            ),
-                          );
-                          return;
-                        }
-
-                        setState(() {
-                          atletas.insert(
-                            0,
-                            {
-                              'nome': nome,
-                              'modalidade':
-                                  modalidade,
-                              'frequencia':
-                                  frequencia.isEmpty
-                                      ? '0%'
-                                      : frequencia,
-                              'inicial':
-                                  nome[0].toUpperCase(),
-                              'status':
-                                  'Atleta ativo',
-                            },
-                          );
-                        });
-
-                        Navigator.pop(modalContext);
-
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Atleta adicionado com sucesso!',
-                            ),
-                            behavior:
-                                SnackBarBehavior.floating,
-                          ),
-                        );
-                      },
-                      style:
-                          ElevatedButton.styleFrom(
-                        backgroundColor: verde,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape:
-                            RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: const Text(
-                        'Adicionar atleta',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 24),
+              const Text(
+                'Adicionar atleta',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF12261F),
+                ),
               ),
-            ),
+              const SizedBox(height: 6),
+              const Text(
+                'Escolha como deseja cadastrar o atleta.',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 22),
+              _opcaoAdicionar(
+                icone: Icons.table_chart_rounded,
+                titulo: 'Importar planilha',
+                descricao:
+                    'Adicione vários atletas através de um arquivo Excel.',
+                onTap: () {
+                  Navigator.pop(context);
+                  _importarPlanilha();
+                },
+              ),
+              const SizedBox(height: 12),
+              _opcaoAdicionar(
+                icone: Icons.person_add_alt_1_rounded,
+                titulo: 'Cadastro manual',
+                descricao:
+                    'Preencha os dados do atleta manualmente.',
+                onTap: () {
+                  Navigator.pop(context);
+                  _cadastroManual();
+                },
+              ),
+              const SizedBox(height: 18),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Cancelar',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
     );
   }
 
-  Widget _campo({
-    required TextEditingController controller,
-    required String label,
-    required String hint,
+  Widget _opcaoAdicionar({
     required IconData icone,
+    required String titulo,
+    required String descricao,
+    required VoidCallback onTap,
   }) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        prefixIcon: Icon(
-          icone,
-          color: verde,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(18),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: verdeClaro,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: verde.withOpacity(0.15),
+          ),
         ),
-        filled: true,
-        fillColor: fundo,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
+        child: Row(
+          children: [
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                color: verde,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Icon(
+                icone,
+                color: Colors.white,
+                size: 25,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    titulo,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    descricao,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      color: Colors.grey,
+                      height: 1.3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: verde,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _importarPlanilha() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Selecione uma planilha Excel para importar os atletas.',
+        ),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _cadastroManual() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return _FormularioAtleta(
+          onSalvar: (novoAtleta) {
+            setState(() {
+              atletas.add(novoAtleta);
+            });
+
+            Navigator.pop(context);
+
+            ScaffoldMessenger.of(this.context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Atleta cadastrado com sucesso!',
+                ),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _abrirPerfil(Map<String, String> atleta) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PerfilAtletaPage(
+          nome: atleta['nome']!,
+          modalidade: atleta['modalidade']!,
+          frequencia: atleta['frequencia']!,
+          inicial: atleta['inicial']!,
         ),
       ),
     );
@@ -328,197 +296,133 @@ class _AtletasPageState extends State<AtletasPage> {
 
     return Scaffold(
       backgroundColor: fundo,
-
-      appBar: AppBar(
-        backgroundColor: fundo,
-        elevation: 0,
-        centerTitle: false,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black87,
-          ),
-        ),
-        title: const Text(
-          'Atletas',
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-
-      body: SafeArea(
-        top: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(
-                  16,
-                  10,
-                  16,
-                  100,
-                ),
-                children: [
-                  _resumo(),
-
-                  const SizedBox(height: 18),
-
-                  _campoPesquisa(),
-
-                  const SizedBox(height: 20),
-
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: Text(
-                          'Meus atletas',
-                          style: TextStyle(
-                            color: Color(0xFF12261F),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-
-                      Text(
-                        '${lista.length} atletas',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  if (lista.isEmpty)
-                    _estadoVazio()
-                  else
-                    ...List.generate(
-                      lista.length,
-                      (index) {
-                        return Padding(
-                          padding:
-                              const EdgeInsets.only(
-                            bottom: 12,
-                          ),
-                          child: _atletaCard(
-                            lista[index],
-                          ),
-                        );
-                      },
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-
-      floatingActionButton:
-          FloatingActionButton(
-        onPressed: _abrirAdicionarAtleta,
-        backgroundColor: verde,
-        elevation: 3,
-        child: const Icon(
-          Icons.add_rounded,
-          color: Colors.white,
-          size: 28,
-        ),
-      ),
-    );
-  }
-
-  Widget _resumo() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.grey.shade200,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(
-              alpha: 0.025,
-            ),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
+      body: Column(
         children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: verdeClaro,
-              borderRadius:
-                  BorderRadius.circular(14),
-            ),
-            child: const Icon(
-              Icons.groups_rounded,
-              color: verde,
-              size: 25,
-            ),
+          CabecalhoTreinador(
+            titulo: 'Atletas',
           ),
-
-          const SizedBox(width: 13),
 
           Expanded(
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Atletas da equipe',
-                  style: TextStyle(
-                    color: Color(0xFF12261F),
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 4),
-
-                Text(
-                  '${atletas.length} atletas cadastrados',
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 11,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 8,
-            ),
-            decoration: BoxDecoration(
-              color: verdeClaro,
-              borderRadius:
-                  BorderRadius.circular(20),
-            ),
-            child: Text(
-              '${atletas.length}',
-              style: const TextStyle(
-                color: verde,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(
+                20,
+                24,
+                20,
+                30,
               ),
+              children: [
+                Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Meus atletas',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '${atletas.length} atletas',
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+
+                // CAMPO DE PESQUISA
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                      color: const Color(0xFFE1E1E1),
+                    ),
+                  ),
+                  child: TextField(
+                    controller: pesquisaController,
+                    onChanged: (valor) {
+                      setState(() {
+                        pesquisa = valor;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Pesquisar atleta...',
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: verde,
+                      ),
+                      suffixIcon: pesquisa.isNotEmpty
+                          ? IconButton(
+                              onPressed: () {
+                                pesquisaController.clear();
+
+                                setState(() {
+                                  pesquisa = '';
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.grey,
+                              ),
+                            )
+                          : null,
+                      border: InputBorder.none,
+                      contentPadding:
+                          const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 10,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+
+                // BOTÃO ADICIONAR
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton.icon(
+                    onPressed: _abrirAdicionarAtleta,
+                    icon: const Icon(
+                      Icons.person_add_alt_1_rounded,
+                    ),
+                    label: const Text(
+                      'Adicionar atleta',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: verde,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                if (lista.isEmpty)
+                  _nenhumAtletaEncontrado()
+                else
+                  ...lista.map(
+                    (atleta) => _atleta(
+                      atleta: atleta,
+                    ),
+                  ),
+              ],
             ),
           ),
         ],
@@ -526,264 +430,298 @@ class _AtletasPageState extends State<AtletasPage> {
     );
   }
 
-  Widget _campoPesquisa() {
+  Widget _nenhumAtletaEncontrado() {
     return Container(
-      height: 48,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: Colors.grey.shade200,
-        ),
-      ),
-      child: TextField(
-        controller: pesquisaController,
-        onChanged: (_) {
-          setState(() {});
-        },
-        decoration: InputDecoration(
-          hintText: 'Pesquisar atleta...',
-          hintStyle: TextStyle(
-            color: Colors.grey.shade500,
-            fontSize: 12,
-          ),
-          prefixIcon: Icon(
-            Icons.search_rounded,
-            color: Colors.grey.shade600,
-            size: 21,
-          ),
-          suffixIcon:
-              pesquisaController.text.isNotEmpty
-                  ? IconButton(
-                      onPressed: () {
-                        pesquisaController.clear();
-                        setState(() {});
-                      },
-                      icon: Icon(
-                        Icons.close_rounded,
-                        color: Colors.grey.shade600,
-                        size: 19,
-                      ),
-                    )
-                  : null,
-          border: InputBorder.none,
-          contentPadding:
-              const EdgeInsets.symmetric(
-            vertical: 14,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _atletaCard(
-    Map<String, dynamic> atleta,
-  ) {
-    return GestureDetector(
-      onTap: () {
-        _abrirPerfil(atleta);
-      },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: Colors.grey.shade200,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(
-                alpha: 0.025,
-              ),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 58,
-              height: 58,
-              decoration: BoxDecoration(
-                color: verdeEscuro,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: verde.withValues(
-                      alpha: 0.12,
-                    ),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  atleta['inicial'],
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(width: 13),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    atleta['nome'],
-                    maxLines: 1,
-                    overflow:
-                        TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF12261F),
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 4),
-
-                  Text(
-                    atleta['modalidade'],
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 12,
-                    ),
-                  ),
-
-                  const SizedBox(height: 7),
-
-                  Row(
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration:
-                            const BoxDecoration(
-                          color: verde,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-
-                      const SizedBox(width: 6),
-
-                      const Text(
-                        'Atleta ativo',
-                        style: TextStyle(
-                          color: verde,
-                          fontSize: 11,
-                          fontWeight:
-                              FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(width: 8),
-
-            Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.end,
-              children: [
-                Text(
-                  atleta['frequencia'],
-                  style: const TextStyle(
-                    color: verde,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 3),
-
-                Text(
-                  'frequência',
-                  style: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontSize: 9,
-                  ),
-                ),
-
-                const SizedBox(height: 6),
-
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  color: Colors.grey,
-                  size: 21,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _estadoVazio() {
-    return Container(
-      width: double.infinity,
       padding: const EdgeInsets.symmetric(
-        vertical: 40,
+        vertical: 60,
         horizontal: 20,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: Colors.grey.shade200,
-        ),
       ),
       child: Column(
         children: [
-          Container(
-            width: 55,
-            height: 55,
-            decoration: BoxDecoration(
-              color: verdeClaro,
-              borderRadius:
-                  BorderRadius.circular(16),
-            ),
-            child: const Icon(
-              Icons.search_off_rounded,
-              color: verde,
-              size: 28,
-            ),
+          Icon(
+            Icons.person_search_outlined,
+            size: 60,
+            color: Colors.grey.shade400,
           ),
-
-          const SizedBox(height: 14),
-
+          const SizedBox(height: 16),
           const Text(
             'Nenhum atleta encontrado',
             style: TextStyle(
-              color: Color(0xFF12261F),
-              fontSize: 15,
+              fontSize: 17,
               fontWeight: FontWeight.bold,
             ),
           ),
-
-          const SizedBox(height: 5),
-
-          Text(
-            'Tente pesquisar por outro nome.',
+          const SizedBox(height: 6),
+          const Text(
+            'Tente pesquisar por outro nome ou modalidade.',
+            textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 11,
+              color: Colors.grey,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _atleta({
+    required Map<String, String> atleta,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFFE1E1E1),
+        ),
+      ),
+      child: ListTile(
+        onTap: () {
+          _abrirPerfil(atleta);
+        },
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 8,
+        ),
+        leading: CircleAvatar(
+          radius: 23,
+          backgroundColor: verde,
+          child: Text(
+            atleta['inicial']!,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        title: Text(
+          atleta['nome']!,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Text(
+            '${atleta['modalidade']} • Frequência ${atleta['frequencia']}',
+          ),
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================
+// FORMULÁRIO DE CADASTRO MANUAL
+// ============================================================
+
+class _FormularioAtleta extends StatefulWidget {
+  final Function(Map<String, String>) onSalvar;
+
+  const _FormularioAtleta({
+    required this.onSalvar,
+  });
+
+  @override
+  State<_FormularioAtleta> createState() =>
+      _FormularioAtletaState();
+}
+
+class _FormularioAtletaState
+    extends State<_FormularioAtleta> {
+  final nomeController = TextEditingController();
+  final emailController = TextEditingController();
+
+  String modalidade = 'Futebol';
+
+  @override
+  void dispose() {
+    nomeController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
+
+  void _salvar() {
+    final nome = nomeController.text.trim();
+
+    if (nome.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Digite o nome do atleta.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    widget.onSalvar({
+      'nome': nome,
+      'modalidade': modalidade,
+      'inicial': nome[0].toUpperCase(),
+      'frequencia': '100%',
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(
+          24,
+          12,
+          24,
+          30,
+        ),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(28),
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 45,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius:
+                        BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 22),
+
+              const Text(
+                'Novo atleta',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              TextField(
+                controller: nomeController,
+                decoration: InputDecoration(
+                  labelText: 'Nome completo',
+                  prefixIcon: const Icon(
+                    Icons.person_outline,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius:
+                        BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 14),
+
+              TextField(
+                controller: emailController,
+                keyboardType:
+                    TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  labelText: 'E-mail',
+                  prefixIcon: const Icon(
+                    Icons.email_outlined,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius:
+                        BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 14),
+
+              DropdownButtonFormField<String>(
+                initialValue: modalidade,
+                decoration: InputDecoration(
+                  labelText: 'Modalidade',
+                  prefixIcon: const Icon(
+                    Icons.sports_soccer,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius:
+                        BorderRadius.circular(14),
+                  ),
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    value: 'Futebol',
+                    child: Text('Futebol'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'Basquete',
+                    child: Text('Basquete'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'Vôlei',
+                    child: Text('Vôlei'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'Rugby',
+                    child: Text('Rugby'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'Tênis',
+                    child: Text('Tênis'),
+                  ),
+                ],
+                onChanged: (valor) {
+                  if (valor != null) {
+                    setState(() {
+                      modalidade = valor;
+                    });
+                  }
+                },
+              ),
+
+              const SizedBox(height: 22),
+
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton(
+                  onPressed: _salvar,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        const Color(0xFF006B4F),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: const Text(
+                    'Cadastrar atleta',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

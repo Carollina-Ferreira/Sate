@@ -45,7 +45,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* ========================================
             PÁGINAS PÚBLICAS
         ======================================== */}
@@ -62,7 +61,6 @@ function App() {
           element={<EsqueciSenha />}
         />
 
-
         {/* ========================================
             ONBOARDING / CONFIGURAÇÃO INICIAL
 
@@ -78,7 +76,6 @@ function App() {
         ======================================== */}
 
         <Route element={<RotaInicial />}>
-
           <Route
             path="/boas-vindas"
             element={<BoasVindas />}
@@ -103,9 +100,7 @@ function App() {
             path="/configuracao-concluida"
             element={<ConfiguracaoConcluida />}
           />
-
         </Route>
-
 
         {/* ========================================
             ÁREA PRIVADA
@@ -125,12 +120,18 @@ function App() {
         ======================================== */}
 
         <Route element={<RotaPrivada />}>
-
           <Route element={<Layout />}>
+            {/* ====================================
+                DASHBOARD
+            ==================================== */}
 
-            {/* DASHBOARD */}
             <Route
               path="/inicio"
+              element={<Dashboard />}
+            />
+
+            <Route
+              path="/dashboard"
               element={<Dashboard />}
             />
 
@@ -187,11 +188,8 @@ function App() {
               path="/configuracoes"
               element={<Configuracoes />}
             />
-
           </Route>
-
         </Route>
-
       </Routes>
     </BrowserRouter>
   );

@@ -9,6 +9,12 @@ const passwordRoutes = require('./routes/passwordRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const equipeRoutes = require('./routes/equipeRoutes');
 const partidaRoutes = require('./routes/partidaRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+
+
+// ======================================================
+// APP
+// ======================================================
 
 const app = express();
 
@@ -21,7 +27,14 @@ app.use(
     cors({
         origin: true,
         credentials: true,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        methods: [
+            'GET',
+            'POST',
+            'PUT',
+            'PATCH',
+            'DELETE',
+            'OPTIONS'
+        ],
         allowedHeaders: [
             'Content-Type',
             'Authorization'
@@ -34,7 +47,22 @@ app.use(
 // JSON
 // ======================================================
 
-app.use(express.json());
+app.use(
+    express.json({
+        limit: '10mb'
+    })
+);
+
+
+// ======================================================
+// URL ENCODED
+// ======================================================
+
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+);
 
 
 // ======================================================
@@ -44,13 +72,49 @@ app.use(express.json());
 app.use(
     '/uploads',
     express.static(
-        path.join(__dirname, '../uploads')
+        path.join(
+            __dirname,
+            '../uploads'
+        )
     )
 );
 
 
 // ======================================================
-// ROTAS
+// TESTE DA API
+// ======================================================
+
+app.get(
+    '/',
+    (req, res) => {
+
+        return res.status(200).json({
+            mensagem: 'API SATE funcionando!'
+        });
+
+    }
+);
+
+
+// ======================================================
+// HEALTH CHECK
+// ======================================================
+
+app.get(
+    '/api/health',
+    (req, res) => {
+
+        return res.status(200).json({
+            status: 'ok',
+            mensagem: 'Backend SATE funcionando.'
+        });
+
+    }
+);
+
+
+// ======================================================
+// ROTAS DE AUTENTICAÇÃO
 // ======================================================
 
 app.use(
@@ -58,31 +122,60 @@ app.use(
     authRoutes
 );
 
+
+// ======================================================
+// ROTAS DE ATLETAS
+// ======================================================
+
 app.use(
     '/api/atletas',
     atletaRoutes
 );
+
+
+// ======================================================
+// ROTAS DE TREINADORES
+// ======================================================
 
 app.use(
     '/api/treinadores',
     treinadorRoutes
 );
 
+
+// ======================================================
+// ROTAS DE SENHA
+// ======================================================
+
 app.use(
     '/api/password',
     passwordRoutes
 );
+
+
+// ======================================================
+// ROTAS DE USUÁRIOS
+// ======================================================
 
 app.use(
     '/api/usuarios',
     usuarioRoutes
 );
 
+
+// ======================================================
+// ROTAS DE EQUIPES
+// ======================================================
+
 app.use(
     '/api/equipes',
     equipeRoutes
 );
 
+
+// ======================================================
+// ROTAS DE PARTIDAS
+// ======================================================
 
 app.use(
     '/api/partidas',
@@ -91,42 +184,79 @@ app.use(
 
 
 // ======================================================
-// TESTE DO SERVIDOR
+// ROTAS DO DASHBOARD
 // ======================================================
 
-app.get('/', (req, res) => {
+app.use(
+    '/api/dashboard',
+    dashboardRoutes
+);
 
-    res.json({
-        mensagem: 'API SATE funcionando!'
-    });
 
-});
+// ======================================================
+// ROTA NÃO ENCONTRADA
+//
+// IMPORTANTE:
+// evita o Express devolver HTML quando uma rota não existe.
+// Assim o frontend sempre recebe JSON.
+// ======================================================
+
+app.use(
+    (req, res) => {
+
+        return res.status(404).json({
+            mensagem: 'Rota não encontrada.',
+            metodo: req.method,
+            rota: req.originalUrl
+        });
+
+    }
+);
 
 
 // ======================================================
 // ERRO GLOBAL
 // ======================================================
 
-app.use((err, req, res, next) => {
+app.use(
+    (err, req, res, next) => {
 
-    console.error(
-        'ERRO NO SERVIDOR:',
-        err
-    );
+        console.error('');
+        console.error('=================================');
+        console.error('ERRO NO SERVIDOR');
+        console.error('=================================');
+        console.error(err);
+        console.error('=================================');
+        console.error('');
 
-    res.status(500).json({
-        mensagem: 'Erro interno do servidor.',
-        erro: err.message
-    });
 
-});
+        if (res.headersSent) {
+            return next(err);
+        }
+
+
+        return res.status(
+            err.status ||
+            err.statusCode ||
+            500
+        ).json({
+            mensagem:
+                err.message ||
+                'Erro interno do servidor.'
+        });
+
+    }
+);
 
 
 // ======================================================
 // SERVIDOR
 // ======================================================
 
-const PORT = process.env.PORT || 3000;
+const PORT =
+    process.env.PORT ||
+    3000;
+
 
 app.listen(
     PORT,
@@ -135,14 +265,25 @@ app.listen(
 
         console.log('');
         console.log('=================================');
-        console.log('   SATE BACKEND');
+        console.log('          SATE BACKEND');
         console.log('=================================');
+
         console.log(
-            `Servidor rodando em: http://localhost:${PORT}`
+            `Servidor: http://localhost:${PORT}`
         );
+
         console.log(
-            `Servidor disponível em: http://0.0.0.0:${PORT}`
+            `API: http://localhost:${PORT}/api`
         );
+
+        console.log(
+            `Dashboard: http://localhost:${PORT}/api/dashboard`
+        );
+
+        console.log(
+            `Health: http://localhost:${PORT}/api/health`
+        );
+
         console.log('=================================');
         console.log('');
 

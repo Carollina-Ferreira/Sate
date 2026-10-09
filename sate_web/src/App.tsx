@@ -246,8 +246,18 @@ function AppRoutes() {
             element={<Layout />}
           >
 
+            {/* ====================================
+                DASHBOARD
+            ==================================== */}
+
             <Route
               path="/inicio"
+              element={<Dashboard />}
+            />
+
+
+            <Route
+              path="/dashboard"
               element={<Dashboard />}
             />
 

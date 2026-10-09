@@ -15,10 +15,15 @@ class AtletaHomePage extends StatefulWidget {
 }
 
 class _AtletaHomePageState extends State<AtletaHomePage> {
-  static const Color verde = Color(0xFF00845F);
+  static const Color verde = Color(0xFF006B4F);
+  static const Color verdeClaro = Color(0xFFE8F5F0);
   static const Color rosa = Color(0xFFE98BA8);
   static const Color azul = Color(0xFF001E98);
-  static const Color fundo = Color(0xFFFCFCFC);
+
+  static const Color fundo = Color(0xFFF4F8F6);
+  static const Color texto = Color(0xFF12261F);
+  static const Color textoSecundario = Color(0xFF68736F);
+  static const Color linha = Color(0xFFDCE7E2);
 
   bool _visualizandoFeedbacks = false;
 
@@ -27,22 +32,16 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
     return Scaffold(
       backgroundColor: fundo,
 
-      // ============================================================
-      // APP BAR
-      // ============================================================
-
       appBar: _visualizandoFeedbacks
           ? null
           : AppBar(
               backgroundColor: fundo,
               elevation: 0,
               centerTitle: true,
-
               title: Image.asset(
                 'images/logoVerde_img.png',
                 width: 110,
               ),
-
               actions: [
                 IconButton(
                   onPressed: () {
@@ -55,26 +54,18 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   },
                   icon: const Icon(
                     Icons.notifications_none_rounded,
-                    color: Colors.black87,
+                    color: texto,
                     size: 26,
                   ),
                 ),
               ],
             ),
 
-      // ============================================================
-      // CONTEÚDO
-      // ============================================================
-
       body: SafeArea(
         child: _visualizandoFeedbacks
             ? _buildFeedbacks()
             : _buildInicio(),
       ),
-
-      // ============================================================
-      // MENU INFERIOR
-      // ============================================================
 
       bottomNavigationBar: MenuInferiorAtleta(
         indiceSelecionado: 0,
@@ -127,333 +118,47 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
     );
   }
 
-  // ============================================================
-  // INÍCIO
-  // ============================================================
-
   Widget _buildInicio() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
-
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(
+        20,
+        10,
+        20,
+        40,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
-          // ======================================================
-          // SAUDAÇÃO
-          // ======================================================
+          _buildSaudacao(),
 
-          const Text(
-            'Olá, atleta! 👋',
-            style: TextStyle(
-              fontSize: 27,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
+          const SizedBox(height: 28),
 
-          const SizedBox(height: 6),
-
-          Text(
-            'Confira seus treinos e acompanhe sua evolução.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade600,
-              height: 1.4,
-            ),
-          ),
-
-          const SizedBox(height: 25),
-
-          // ======================================================
-          // MINHA EQUIPE
-          // ======================================================
-
-          const Text(
-            'Minha equipe',
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
+          _tituloSecao('Visão geral'),
 
           const SizedBox(height: 12),
 
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(18),
+          _buildVisaoGeral(),
 
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.grey.shade200,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
+          const SizedBox(height: 28),
 
-            child: Row(
-              children: [
-                Container(
-                  width: 52,
-                  height: 52,
-
-                  decoration: BoxDecoration(
-                    color: verde.withValues(alpha: 0.10),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-
-                  child: const Icon(
-                    Icons.groups_rounded,
-                    color: verde,
-                    size: 28,
-                  ),
-                ),
-
-                const SizedBox(width: 14),
-
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
-                    children: [
-                      Text(
-                        'Equipe Performance',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-
-                      SizedBox(height: 5),
-
-                      Text(
-                        'Treinador: Carlos Oliveira',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  color: Colors.grey,
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 25),
-
-          // ======================================================
-          // MEU RESUMO
-          // ======================================================
-
-          const Text(
-            'Meu resumo',
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
+          _tituloSecao('Próximo treino'),
 
           const SizedBox(height: 12),
 
-          Row(
-            children: [
-              Expanded(
-                child: _buildResumoCard(
-                  icon: Icons.fitness_center_rounded,
-                  titulo: 'Treinos',
-                  valor: '08',
-                  cor: azul,
-                ),
-              ),
+          _buildProximoTreino(),
 
-              const SizedBox(width: 12),
+          const SizedBox(height: 28),
 
-              Expanded(
-                child: _buildResumoCard(
-                  icon: Icons.calendar_month_rounded,
-                  titulo: 'Frequência',
-                  valor: '92%',
-                  cor: verde,
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 25),
-
-          // ======================================================
-          // PRÓXIMO TREINO
-          // ======================================================
-
-          const Text(
-            'Próximo treino',
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
+          _tituloSecao('Acesso rápido'),
 
           const SizedBox(height: 12),
 
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-
-            decoration: BoxDecoration(
-              color: verde,
-              borderRadius: BorderRadius.circular(22),
-            ),
-
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-
-                      child: const Icon(
-                        Icons.sports_rugby_rounded,
-                        color: Colors.white,
-                        size: 25,
-                      ),
-                    ),
-
-                    const SizedBox(width: 12),
-
-                    const Expanded(
-                      child: Text(
-                        'Treino de hoje',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 18),
-
-                const Text(
-                  'Fundamentos + preparação física',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-
-                const SizedBox(height: 7),
-
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.access_time_rounded,
-                      color: Colors.white70,
-                      size: 17,
-                    ),
-
-                    const SizedBox(width: 6),
-
-                    Text(
-                      '18:00 • Hoje',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.85),
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 18),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 46,
-
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const AtletaTreinoPage(),
-                        ),
-                      );
-                    },
-
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: verde,
-                      elevation: 0,
-
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                    ),
-
-                    child: const Text(
-                      'Ver treino',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 25),
-
-          // ======================================================
-          // ACESSO RÁPIDO
-          // ======================================================
-
-          const Text(
-            'Acesso rápido',
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          // MEUS TREINAMENTOS
-
-          _buildActionButton(
+          _buildAcao(
             icon: Icons.fitness_center_rounded,
-            title: 'Meus treinamentos',
-            subtitle: 'Veja seus exercícios e atividades',
+            titulo: 'Meus treinamentos',
+            descricao: 'Veja seus exercícios e atividades',
             cor: azul,
-
             onTap: () {
               Navigator.push(
                 context,
@@ -466,14 +171,11 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
 
           const SizedBox(height: 10),
 
-          // MINHA EVOLUÇÃO
-
-          _buildActionButton(
+          _buildAcao(
             icon: Icons.trending_up_rounded,
-            title: 'Minha evolução',
-            subtitle: 'Acompanhe seu desempenho',
+            titulo: 'Minha evolução',
+            descricao: 'Acompanhe seu desempenho',
             cor: rosa,
-
             onTap: () {
               Navigator.push(
                 context,
@@ -486,57 +188,437 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
 
           const SizedBox(height: 10),
 
-          // FEEDBACKS
-
-          _buildActionButton(
+          _buildAcao(
             icon: Icons.chat_bubble_outline_rounded,
-            title: 'Feedbacks',
-            subtitle: 'Veja os comentários do treinador',
+            titulo: 'Feedbacks',
+            descricao: 'Veja os comentários do treinador',
             cor: verde,
-
             onTap: () {
               setState(() {
                 _visualizandoFeedbacks = true;
               });
             },
           ),
-
-          const SizedBox(height: 15),
         ],
       ),
     );
   }
 
-  // ============================================================
-  // FEEDBACKS — PARTE INTERNA DA HOME
-  // ============================================================
+  Widget _buildSaudacao() {
+    return Row(
+      children: [
+        const Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Olá, atleta! 👋',
+                style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.w700,
+                  color: texto,
+                ),
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Confira seus treinos e acompanhe sua evolução.',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: textoSecundario,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: verdeClaro,
+            borderRadius: BorderRadius.circular(13),
+          ),
+          child: const Icon(
+            Icons.insights_rounded,
+            color: verde,
+            size: 22,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _tituloSecao(String titulo) {
+    return Text(
+      titulo,
+      style: const TextStyle(
+        fontSize: 17,
+        fontWeight: FontWeight.w700,
+        color: texto,
+      ),
+    );
+  }
+
+  Widget _buildVisaoGeral() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: linha,
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: _buildIndicador(
+              icon: Icons.fitness_center_rounded,
+              titulo: 'Treinos',
+              valor: '08',
+              cor: azul,
+            ),
+          ),
+
+          Container(
+            width: 1,
+            height: 52,
+            color: linha,
+          ),
+
+          Expanded(
+            child: _buildIndicador(
+              icon: Icons.calendar_month_rounded,
+              titulo: 'Frequência',
+              valor: '92%',
+              cor: verde,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIndicador({
+    required IconData icon,
+    required String titulo,
+    required String valor,
+    required Color cor,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: cor.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              icon,
+              color: cor,
+              size: 20,
+            ),
+          ),
+
+          const SizedBox(width: 10),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  titulo,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: textoSecundario,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+
+                const SizedBox(height: 3),
+
+                Text(
+                  valor,
+                  style: const TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w700,
+                    color: texto,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProximoTreino() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: linha,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 45,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: verdeClaro,
+                  borderRadius: BorderRadius.circular(13),
+                ),
+                child: const Icon(
+                  Icons.sports_rugby_rounded,
+                  color: verde,
+                  size: 23,
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Próximo treino',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: textoSecundario,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+
+                    SizedBox(height: 3),
+
+                    Text(
+                      'Fundamentos + preparação física',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: texto,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 9,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: verdeClaro,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text(
+                  'Hoje',
+                  style: TextStyle(
+                    color: verde,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          Container(
+            height: 1,
+            color: linha,
+          ),
+
+          const SizedBox(height: 14),
+
+          Row(
+            children: [
+              const Icon(
+                Icons.calendar_today_outlined,
+                size: 16,
+                color: textoSecundario,
+              ),
+
+              const SizedBox(width: 7),
+
+              const Text(
+                'Hoje',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: textoSecundario,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              const SizedBox(width: 18),
+
+              Container(
+                width: 4,
+                height: 4,
+                decoration: const BoxDecoration(
+                  color: linha,
+                  shape: BoxShape.circle,
+                ),
+              ),
+
+              const SizedBox(width: 18),
+
+              const Icon(
+                Icons.access_time_rounded,
+                size: 17,
+                color: textoSecundario,
+              ),
+
+              const SizedBox(width: 7),
+
+              const Text(
+                '18:00',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: textoSecundario,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              const Spacer(),
+
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AtletaTreinoPage(),
+                    ),
+                  );
+                },
+                child: const Icon(
+                  Icons.chevron_right_rounded,
+                  color: textoSecundario,
+                  size: 22,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAcao({
+    required IconData icon,
+    required String titulo,
+    required String descricao,
+    required Color cor,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(18),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: linha,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: cor.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  icon,
+                  color: cor,
+                  size: 21,
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      titulo,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: texto,
+                      ),
+                    ),
+
+                    const SizedBox(height: 3),
+
+                    Text(
+                      descricao,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: textoSecundario,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: textoSecundario,
+                size: 22,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildFeedbacks() {
     return Column(
       children: [
-        // ======================================================
-        // CABEÇALHO DOS FEEDBACKS
-        // ======================================================
-
         Container(
           width: double.infinity,
-
           padding: const EdgeInsets.fromLTRB(
             20,
             18,
             20,
             18,
           ),
-
           decoration: const BoxDecoration(
             color: verde,
-
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(22),
-              bottomRight: Radius.circular(22),
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
             ),
           ),
-
           child: Row(
             children: [
               GestureDetector(
@@ -545,7 +627,6 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                     _visualizandoFeedbacks = false;
                   });
                 },
-
                 child: const Icon(
                   Icons.arrow_back_rounded,
                   color: Colors.white,
@@ -560,46 +641,34 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ],
           ),
         ),
 
-        // ======================================================
-        // CONTEÚDO DOS FEEDBACKS
-        // ======================================================
-
         Expanded(
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(
               20,
               20,
               20,
               30,
             ),
-
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
+                _tituloSecao('Feedbacks do treinador'),
+
+                const SizedBox(height: 5),
+
                 const Text(
-                  'Feedbacks do treinador',
-                  style: TextStyle(
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-
-                const SizedBox(height: 6),
-
-                Text(
                   'Veja os comentários sobre seus treinos.',
                   style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey.shade600,
+                    fontSize: 12,
+                    color: textoSecundario,
                   ),
                 ),
 
@@ -637,10 +706,6 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
     );
   }
 
-  // ============================================================
-  // CARD DE FEEDBACK
-  // ============================================================
-
   Widget _buildFeedbackCard({
     required String treino,
     required String comentario,
@@ -648,42 +713,26 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
   }) {
     return Container(
       width: double.infinity,
-
-      padding: const EdgeInsets.all(17),
-
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-
         borderRadius: BorderRadius.circular(18),
-
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: linha,
         ),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.035),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
           Row(
             children: [
               Container(
                 width: 40,
                 height: 40,
-
                 decoration: BoxDecoration(
-                  color: verde.withValues(alpha: 0.10),
+                  color: verdeClaro,
                   borderRadius: BorderRadius.circular(12),
                 ),
-
                 child: const Icon(
                   Icons.chat_bubble_outline_rounded,
                   color: verde,
@@ -698,17 +747,17 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   treino,
                   style: const TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    fontWeight: FontWeight.w700,
+                    color: texto,
                   ),
                 ),
               ),
 
               Text(
                 data,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 10,
-                  color: Colors.grey.shade500,
+                  color: textoSecundario,
                 ),
               ),
             ],
@@ -718,169 +767,13 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
 
           Text(
             comentario,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
-              color: Colors.grey.shade600,
+              color: textoSecundario,
               height: 1.4,
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  // ============================================================
-  // CARD DO RESUMO
-  // ============================================================
-
-  Widget _buildResumoCard({
-    required IconData icon,
-    required String titulo,
-    required String valor,
-    required Color cor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(17),
-
-      decoration: BoxDecoration(
-        color: Colors.white,
-
-        borderRadius: BorderRadius.circular(18),
-
-        border: Border.all(
-          color: Colors.grey.shade200,
-        ),
-      ),
-
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: [
-          Container(
-            width: 42,
-            height: 42,
-
-            decoration: BoxDecoration(
-              color: cor.withValues(alpha: 0.10),
-              borderRadius: BorderRadius.circular(13),
-            ),
-
-            child: Icon(
-              icon,
-              color: cor,
-              size: 22,
-            ),
-          ),
-
-          const SizedBox(height: 13),
-
-          Text(
-            valor,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-
-          const SizedBox(height: 3),
-
-          Text(
-            titulo,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.grey.shade600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ============================================================
-  // BOTÃO DE ACESSO RÁPIDO
-  // ============================================================
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Color cor,
-    required VoidCallback onTap,
-  }) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(17),
-
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(17),
-
-        child: Container(
-          padding: const EdgeInsets.all(15),
-
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(17),
-
-            border: Border.all(
-              color: Colors.grey.shade200,
-            ),
-          ),
-
-          child: Row(
-            children: [
-              Container(
-                width: 45,
-                height: 45,
-
-                decoration: BoxDecoration(
-                  color: cor.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-
-                child: Icon(
-                  icon,
-                  color: cor,
-                  size: 23,
-                ),
-              ),
-
-              const SizedBox(width: 13),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-
-                    const SizedBox(height: 4),
-
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const Icon(
-                Icons.chevron_right_rounded,
-                color: Colors.grey,
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

@@ -1,13 +1,16 @@
 import {
-  Activity,
   BarChart3,
+  CalendarDays,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Play,
   Trophy,
   Users,
 } from 'lucide-react';
 
 import {
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -19,11 +22,9 @@ import {
 import styles from './dashboard.module.css';
 
 
-type StatusPartida =
-  | 'Analisada'
-  | 'Em análise'
-  | 'Pendente';
-
+/* ============================================================
+   TIPOS
+============================================================ */
 
 interface Resumo {
   id: number;
@@ -35,16 +36,19 @@ interface Resumo {
 }
 
 
+type TipoAtividade =
+  | 'partida'
+  | 'atleta'
+  | 'equipe'
+  | 'estatistica'
+  | 'video';
+
+
 interface AtividadeRecente {
-  id: number;
+  id: string;
   titulo: string;
   horario: string;
-
-  tipo:
-    | 'video'
-    | 'partida'
-    | 'atleta'
-    | 'estatistica';
+  tipo: TipoAtividade;
 }
 
 
@@ -54,8 +58,14 @@ interface Partida {
   adversario: string;
   modalidade: string;
   data: string;
+  dataFormatada: string;
   resultado: string;
-  status: StatusPartida;
+
+  status:
+    | 'Finalizada'
+    | 'Em andamento'
+    | 'Pendente'
+    | 'Cancelada';
 }
 
 
@@ -63,239 +73,605 @@ interface Equipe {
   id: number;
   nome: string;
   modalidade: string;
+
+  categoria?:
+    | string
+    | null;
+
   sigla: string;
   desempenho: number;
+  atletas: number;
+
+  corEquipe?:
+    | string
+    | null;
+
+  imagem?:
+    | string
+    | null;
 }
 
 
-const resumos: Resumo[] = [
-  {
-    id: 1,
-    titulo: 'Atletas',
-    valor: 66,
-    detalhe: 'cadastrados',
-    variacao: 8,
-    rota: '/atletas',
-  },
-
-  {
-    id: 2,
-    titulo: 'Equipes',
-    valor: 4,
-    detalhe: 'equipes ativas',
-    variacao: 0,
-    rota: '/equipes',
-  },
-
-  {
-    id: 3,
-    titulo: 'Partidas',
-    valor: 46,
-    detalhe: 'analisadas',
-    variacao: 12,
-    rota: '/partidas',
-  },
-
-  {
-    id: 4,
-    titulo: 'Alertas',
-    valor: 5,
-    detalhe: 'precisam de atenção',
-    variacao: -3,
-    rota: '/estatisticas',
-  },
-];
+interface SerieGrafico {
+  equipe: number[];
+  adversario: number[];
+}
 
 
-const atividades: AtividadeRecente[] = [
-  {
-    id: 1,
-    titulo:
-      'Falcões FC x Tigres FC analisado',
-    horario:
-      'Há 2 horas',
-    tipo:
-      'video',
-  },
-
-  {
-    id: 2,
-    titulo:
-      'Nova partida adicionada',
-    horario:
-      'Há 5 horas',
-    tipo:
-      'partida',
-  },
-
-  {
-    id: 3,
-    titulo:
-      'Perfil de Carla Mendes atualizado',
-    horario:
-      'Ontem',
-    tipo:
-      'atleta',
-  },
-
-  {
-    id: 4,
-    titulo:
-      'Estatística de aproveitamento criada',
-    horario:
-      'Ontem',
-    tipo:
-      'estatistica',
-  },
-];
+interface DadosGrafico {
+  'Últimas 7 partidas': SerieGrafico;
+  'Últimas 5 partidas': SerieGrafico;
+  'Últimas 3 partidas': SerieGrafico;
+}
 
 
-const partidas: Partida[] = [
-  {
-    id: 1,
-    equipe: 'Falcões FC',
-    adversario: 'Tigres FC',
-    modalidade: 'Futebol',
-    data: '18/09/2026',
-    resultado: '3 - 1',
-    status: 'Analisada',
-  },
+interface DashboardResponse {
+  treinador: {
+    id: number;
+    nome: string;
 
-  {
-    id: 2,
-    equipe: 'Águias Basquete',
-    adversario: 'Panteras',
-    modalidade: 'Basquete',
-    data: '15/09/2026',
-    resultado: '88 - 76',
-    status: 'Analisada',
-  },
+    email?:
+      | string
+      | null;
+  };
 
-  {
-    id: 3,
-    equipe: 'Fúria Vôlei',
-    adversario: 'Ventania',
-    modalidade: 'Vôlei',
-    data: '12/09/2026',
-    resultado: '3 - 2',
-    status: 'Em análise',
-  },
+  resumos: Resumo[];
 
-  {
-    id: 4,
-    equipe: 'Poli Rugby',
-    adversario: 'Spartans',
-    modalidade: 'Rugby',
-    data: '09/09/2026',
-    resultado: '21 - 24',
-    status: 'Pendente',
-  },
-];
+  atividades: AtividadeRecente[];
+
+  desempenho: DadosGrafico;
+
+  partidas: Partida[];
+
+  partidasCalendario: Partida[];
+
+  equipes: Equipe[];
+}
 
 
-const equipes: Equipe[] = [
-  {
-    id: 1,
-    nome: 'Falcões FC',
-    modalidade: 'Futebol',
-    sigla: 'FC',
-    desempenho: 78,
-  },
-
-  {
-    id: 2,
-    nome: 'Águias Basquete',
-    modalidade: 'Basquete',
-    sigla: 'AB',
-    desempenho: 65,
-  },
-
-  {
-    id: 3,
-    nome: 'Poli Rugby',
-    modalidade: 'Rugby',
-    sigla: 'PR',
-    desempenho: 76,
-  },
-];
+interface RespostaErro {
+  mensagem?: string;
+  erro?: string;
+}
 
 
-const grafico = {
+/* ============================================================
+   CONFIG
+============================================================ */
+
+const API_URL =
+  'http://localhost:3000/api';
+
+
+const graficoVazio: DadosGrafico = {
   'Últimas 7 partidas': {
-    equipe: [
-      58,
-      65,
-      63,
-      71,
-      69,
-      77,
-      82,
-    ],
-
-    adversario: [
-      54,
-      58,
-      61,
-      64,
-      62,
-      68,
-      70,
-    ],
+    equipe: [],
+    adversario: [],
   },
 
   'Últimas 5 partidas': {
-    equipe: [
-      63,
-      69,
-      68,
-      76,
-      82,
-    ],
-
-    adversario: [
-      59,
-      63,
-      62,
-      67,
-      70,
-    ],
+    equipe: [],
+    adversario: [],
   },
 
   'Últimas 3 partidas': {
-    equipe: [
-      69,
-      77,
-      82,
-    ],
-
-    adversario: [
-      62,
-      68,
-      71,
-    ],
+    equipe: [],
+    adversario: [],
   },
 };
 
 
-const Dashboard = () => {
+const diasSemana = [
+  'SEG',
+  'TER',
+  'QUA',
+  'QUI',
+  'SEX',
+  'SÁB',
+  'DOM',
+];
+
+
+/* ============================================================
+   TOKEN
+============================================================ */
+
+function obterToken():
+  string | null {
+
+  return (
+    localStorage.getItem(
+      'token',
+    ) ||
+    sessionStorage.getItem(
+      'token',
+    )
+  );
+}
+
+
+/* ============================================================
+   CALENDÁRIO
+============================================================ */
+
+function criarDiasCalendario(
+  ano: number,
+  mes: number,
+) {
+  const primeiroDia =
+    new Date(
+      ano,
+      mes,
+      1,
+    );
+
+
+  const quantidadeDias =
+    new Date(
+      ano,
+      mes + 1,
+      0,
+    ).getDate();
+
+
+  const espacosAntes =
+    (
+      primeiroDia.getDay() +
+      6
+    ) %
+    7;
+
+
+  const dias:
+    Array<number | null> =
+    [];
+
+
+  for (
+    let i = 0;
+    i < espacosAntes;
+    i += 1
+  ) {
+    dias.push(
+      null,
+    );
+  }
+
+
+  for (
+    let dia = 1;
+    dia <= quantidadeDias;
+    dia += 1
+  ) {
+    dias.push(
+      dia,
+    );
+  }
+
+
+  while (
+    dias.length %
+      7 !==
+    0
+  ) {
+    dias.push(
+      null,
+    );
+  }
+
+
+  return dias;
+}
+
+
+function capitalizar(
+  texto: string,
+) {
+  if (
+    texto.length === 0
+  ) {
+    return texto;
+  }
+
+
+  return (
+    texto
+      .charAt(0)
+      .toUpperCase() +
+    texto.slice(1)
+  );
+}
+
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+
+export default function Dashboard() {
   const navigate =
     useNavigate();
+
+
+  const [
+    dadosDashboard,
+    setDadosDashboard,
+  ] =
+    useState<
+      DashboardResponse | null
+    >(
+      null,
+    );
+
+
+  const [
+    carregando,
+    setCarregando,
+  ] =
+    useState(
+      true,
+    );
+
+
+  const [
+    erro,
+    setErro,
+  ] =
+    useState(
+      '',
+    );
 
 
   const [
     periodo,
     setPeriodo,
   ] =
-    useState(
+    useState<
+      keyof DadosGrafico
+    >(
       'Últimas 7 partidas',
     );
 
 
+  const [
+    mesCalendario,
+    setMesCalendario,
+  ] =
+    useState(
+      new Date(),
+    );
+
+
+  const [
+    diaSelecionado,
+    setDiaSelecionado,
+  ] =
+    useState<
+      number | null
+    >(
+      null,
+    );
+
+
+  /* ==========================================================
+     CARREGAR DASHBOARD
+  ========================================================== */
+
+  useEffect(
+    () => {
+      async function carregarDashboard() {
+        try {
+          setCarregando(
+            true,
+          );
+
+          setErro(
+            '',
+          );
+
+
+          const token =
+            obterToken();
+
+
+          if (
+            !token
+          ) {
+            navigate(
+              '/',
+              {
+                replace:
+                  true,
+              },
+            );
+
+            return;
+          }
+
+
+          const resposta =
+            await fetch(
+              `${API_URL}/dashboard`,
+              {
+                method:
+                  'GET',
+
+                headers: {
+                  Authorization:
+                    `Bearer ${token}`,
+                },
+              },
+            );
+
+
+          /*
+           * Pegamos primeiro como texto.
+           *
+           * Se o backend devolver HTML,
+           * não vai acontecer aquele erro:
+           *
+           * Unexpected token '<'
+           */
+
+          const texto =
+            await resposta.text();
+
+
+          let dados:
+            DashboardResponse &
+            RespostaErro;
+
+
+          try {
+            dados =
+              JSON.parse(
+                texto,
+              );
+          } catch {
+            console.error(
+              '=====================================',
+            );
+
+            console.error(
+              'BACKEND NÃO RETORNOU JSON',
+            );
+
+            console.error(
+              'URL:',
+              `${API_URL}/dashboard`,
+            );
+
+            console.error(
+              'STATUS:',
+              resposta.status,
+            );
+
+            console.error(
+              'RESPOSTA:',
+              texto,
+            );
+
+            console.error(
+              '=====================================',
+            );
+
+
+            throw new Error(
+              'A rota /api/dashboard não está retornando JSON. Verifique se o backend está rodando na porta 3000 e se a rota foi adicionada.',
+            );
+          }
+
+
+          /* ================================================
+             NÃO AUTORIZADO
+          ================================================= */
+
+          if (
+            resposta.status ===
+            401
+          ) {
+            localStorage.removeItem(
+              'token',
+            );
+
+            localStorage.removeItem(
+              'usuario',
+            );
+
+            sessionStorage.removeItem(
+              'token',
+            );
+
+            sessionStorage.removeItem(
+              'usuario',
+            );
+
+
+            navigate(
+              '/',
+              {
+                replace:
+                  true,
+              },
+            );
+
+
+            return;
+          }
+
+
+          /* ================================================
+             ERRO DA API
+          ================================================= */
+
+          if (
+            !resposta.ok
+          ) {
+            throw new Error(
+              dados.mensagem ||
+              dados.erro ||
+              `Erro HTTP ${resposta.status}.`,
+            );
+          }
+
+
+          /* ================================================
+             SALVAR DASHBOARD
+          ================================================= */
+
+          setDadosDashboard(
+            dados,
+          );
+
+
+          /* ================================================
+             ABRIR CALENDÁRIO EM UMA PARTIDA
+          ================================================= */
+
+          if (
+            Array.isArray(
+              dados.partidasCalendario,
+            ) &&
+            dados
+              .partidasCalendario
+              .length >
+              0
+          ) {
+            const hoje =
+              new Date();
+
+
+            const hojeInicio =
+              new Date(
+                hoje.getFullYear(),
+                hoje.getMonth(),
+                hoje.getDate(),
+              );
+
+
+            const proximaPartida =
+              dados
+                .partidasCalendario
+                .find(
+                  (
+                    partida,
+                  ) =>
+                    new Date(
+                      partida.data,
+                    ) >=
+                    hojeInicio,
+                ) ||
+              dados
+                .partidasCalendario[
+                  dados
+                    .partidasCalendario
+                    .length -
+                    1
+                ];
+
+
+            if (
+              proximaPartida
+            ) {
+              const data =
+                new Date(
+                  proximaPartida.data,
+                );
+
+
+              setMesCalendario(
+                new Date(
+                  data.getFullYear(),
+                  data.getMonth(),
+                  1,
+                ),
+              );
+
+
+              setDiaSelecionado(
+                data.getDate(),
+              );
+            }
+          }
+        } catch (
+          error
+        ) {
+          console.error(
+            'Erro ao carregar dashboard:',
+            error,
+          );
+
+
+          setErro(
+            error instanceof
+              Error
+              ? error.message
+              : 'Erro ao carregar dashboard.',
+          );
+        } finally {
+          setCarregando(
+            false,
+          );
+        }
+      }
+
+
+      carregarDashboard();
+    },
+    [
+      navigate,
+    ],
+  );
+
+
+  /* ==========================================================
+     DADOS
+  ========================================================== */
+
+  const resumos =
+    dadosDashboard
+      ?.resumos ||
+    [];
+
+
+  const atividades =
+    dadosDashboard
+      ?.atividades ||
+    [];
+
+
+  const partidas =
+    dadosDashboard
+      ?.partidas ||
+    [];
+
+
+  const partidasCalendario =
+    dadosDashboard
+      ?.partidasCalendario ||
+    [];
+
+
+  const equipes =
+    dadosDashboard
+      ?.equipes ||
+    [];
+
+
+  const grafico =
+    dadosDashboard
+      ?.desempenho ||
+    graficoVazio;
+
+
   const dados =
     grafico[
-      periodo as keyof typeof grafico
+      periodo
     ];
 
+
+  /* ==========================================================
+     GRÁFICO
+  ========================================================== */
 
   const linhaEquipe =
     useMemo(
@@ -303,7 +679,9 @@ const Dashboard = () => {
         criarLinha(
           dados.equipe,
         ),
-      [dados],
+      [
+        dados.equipe,
+      ],
     );
 
 
@@ -313,38 +691,252 @@ const Dashboard = () => {
         criarLinha(
           dados.adversario,
         ),
-      [dados],
+      [
+        dados.adversario,
+      ],
     );
 
 
-  const abrirAtividade = (
-    atividade: AtividadeRecente,
-  ) => {
-    if (
-      atividade.tipo ===
-      'atleta'
-    ) {
-      navigate('/atletas');
+  /* ==========================================================
+     CALENDÁRIO
+  ========================================================== */
 
-      return;
-    }
+  const anoAtual =
+    mesCalendario
+      .getFullYear();
 
 
-    if (
-      atividade.tipo ===
-      'estatistica'
-    ) {
-      navigate(
-        '/estatisticas',
-      );
-
-      return;
-    }
+  const mesAtual =
+    mesCalendario
+      .getMonth();
 
 
-    navigate('/partidas');
-  };
+  const diasCalendario =
+    useMemo(
+      () =>
+        criarDiasCalendario(
+          anoAtual,
+          mesAtual,
+        ),
+      [
+        anoAtual,
+        mesAtual,
+      ],
+    );
 
+
+  const partidasDoMes =
+    useMemo(
+      () =>
+        partidasCalendario.filter(
+          (
+            partida,
+          ) => {
+            const data =
+              new Date(
+                partida.data,
+              );
+
+
+            return (
+              data.getFullYear() ===
+                anoAtual &&
+              data.getMonth() ===
+                mesAtual
+            );
+          },
+        ),
+      [
+        partidasCalendario,
+        anoAtual,
+        mesAtual,
+      ],
+    );
+
+
+  const diasComPartida =
+    useMemo(
+      () =>
+        new Set(
+          partidasDoMes.map(
+            (
+              partida,
+            ) =>
+              new Date(
+                partida.data,
+              ).getDate(),
+          ),
+        ),
+      [
+        partidasDoMes,
+      ],
+    );
+
+
+  const partidasSelecionadas =
+    useMemo(
+      () => {
+        if (
+          diaSelecionado ===
+          null
+        ) {
+          return [];
+        }
+
+
+        return partidasDoMes.filter(
+          (
+            partida,
+          ) =>
+            new Date(
+              partida.data,
+            ).getDate() ===
+            diaSelecionado,
+        );
+      },
+      [
+        partidasDoMes,
+        diaSelecionado,
+      ],
+    );
+
+
+  const nomeMes =
+    capitalizar(
+      mesCalendario
+        .toLocaleDateString(
+          'pt-BR',
+          {
+            month:
+              'long',
+
+            year:
+              'numeric',
+          },
+        ),
+    );
+
+
+  function alterarMes(
+    quantidade: number,
+  ) {
+    setMesCalendario(
+      (
+        anterior,
+      ) =>
+        new Date(
+          anterior
+            .getFullYear(),
+
+          anterior
+            .getMonth() +
+            quantidade,
+
+          1,
+        ),
+    );
+
+
+    setDiaSelecionado(
+      null,
+    );
+  }
+
+
+  /* ==========================================================
+     DATA DO CABEÇALHO
+  ========================================================== */
+
+  const agora =
+    new Date();
+
+
+  const mesCabecalho =
+    capitalizar(
+      agora.toLocaleDateString(
+        'pt-BR',
+        {
+          month:
+            'long',
+        },
+      ),
+    );
+
+
+  const anoCabecalho =
+    agora.getFullYear();
+
+
+  /* ==========================================================
+     CARREGANDO
+  ========================================================== */
+
+  if (
+    carregando
+  ) {
+    return (
+      <main
+        className={
+          styles.page
+        }
+      >
+        <div
+          className={
+            styles.dashboard
+          }
+        >
+          <p
+            style={{
+              color:
+                '#ffffff',
+            }}
+          >
+            Carregando dashboard...
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+
+  /* ==========================================================
+     ERRO
+  ========================================================== */
+
+  if (
+    erro
+  ) {
+    return (
+      <main
+        className={
+          styles.page
+        }
+      >
+        <div
+          className={
+            styles.dashboard
+          }
+        >
+          <p
+            style={{
+              color:
+                '#ffffff',
+
+              fontSize:
+                '14px',
+            }}
+          >
+            {erro}
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+
+  /* ==========================================================
+     TELA
+  ========================================================== */
 
   return (
     <main
@@ -357,9 +949,10 @@ const Dashboard = () => {
           styles.dashboard
         }
       >
-        {/* =========================
-            TOPO
-        ========================= */}
+
+        {/* =====================================================
+            CABEÇALHO
+        ===================================================== */}
 
         <header
           className={
@@ -368,7 +961,13 @@ const Dashboard = () => {
         >
           <div>
             <h1>
-              Olá, Marcelo
+              Olá,{' '}
+              {
+                dadosDashboard
+                  ?.treinador
+                  .nome ||
+                'Treinador'
+              }
             </h1>
 
             <p>
@@ -376,22 +975,24 @@ const Dashboard = () => {
             </p>
           </div>
 
+
           <span
             className={
               styles.date
             }
           >
-            Setembro
+            {mesCabecalho}
+
             <strong>
-              2026
+              {anoCabecalho}
             </strong>
           </span>
         </header>
 
 
-        {/* =========================
-            FAIXA DE RESUMO
-        ========================= */}
+        {/* =====================================================
+            RESUMOS
+        ===================================================== */}
 
         <section
           className={
@@ -403,10 +1004,10 @@ const Dashboard = () => {
               item,
             ) => (
               <button
-                type="button"
                 key={
                   item.id
                 }
+                type="button"
                 className={
                   styles.scoreItem
                 }
@@ -434,6 +1035,7 @@ const Dashboard = () => {
                   </span>
                 </div>
 
+
                 <div
                   className={
                     styles.scoreFooter
@@ -444,6 +1046,7 @@ const Dashboard = () => {
                       item.detalhe
                     }
                   </span>
+
 
                   {item.variacao !==
                     0 && (
@@ -472,322 +1075,794 @@ const Dashboard = () => {
         </section>
 
 
-        {/* =========================
+        {/* =====================================================
             ÁREA PRINCIPAL
-        ========================= */}
+        ===================================================== */}
 
         <section
           className={
             styles.mainArea
           }
         >
-          {/* GRÁFICO */}
 
-          <article
+          {/* ===================================================
+              COLUNA ESQUERDA
+          =================================================== */}
+
+          <div
             className={
-              styles.performance
+              styles.leftColumn
             }
           >
-            <div
+
+            {/* =================================================
+                EVOLUÇÃO
+            ================================================= */}
+
+            <article
               className={
-                styles.sectionHeader
-              }
-            >
-              <div>
-                <h2>
-                  Evolução de desempenho
-                </h2>
-
-                <p>
-                  Sua equipe comparada aos adversários
-                </p>
-              </div>
-
-              <div
-                className={
-                  styles.period
-                }
-              >
-                <select
-                  value={
-                    periodo
-                  }
-                  onChange={(
-                    event,
-                  ) =>
-                    setPeriodo(
-                      event
-                        .target
-                        .value,
-                    )
-                  }
-                >
-                  <option>
-                    Últimas 7 partidas
-                  </option>
-
-                  <option>
-                    Últimas 5 partidas
-                  </option>
-
-                  <option>
-                    Últimas 3 partidas
-                  </option>
-                </select>
-
-                <ChevronDown
-                  size={15}
-                />
-              </div>
-            </div>
-
-
-            <div
-              className={
-                styles.chartBody
+                styles.performance
               }
             >
               <div
                 className={
-                  styles.axis
+                  styles.sectionHeader
                 }
               >
-                <span>
-                  100
-                </span>
+                <div>
+                  <h2>
+                    Evolução de desempenho
+                  </h2>
 
-                <span>
-                  75
-                </span>
+                  <p>
+                    Sua equipe comparada aos adversários
+                  </p>
+                </div>
 
-                <span>
-                  50
-                </span>
-
-                <span>
-                  25
-                </span>
-              </div>
-
-              <div
-                className={
-                  styles.chartArea
-                }
-              >
-                <span
-                  className={
-                    styles.horizontal1
-                  }
-                />
-
-                <span
-                  className={
-                    styles.horizontal2
-                  }
-                />
-
-                <span
-                  className={
-                    styles.horizontal3
-                  }
-                />
-
-                <span
-                  className={
-                    styles.horizontal4
-                  }
-                />
-
-                <svg
-                  viewBox="0 0 700 185"
-                  preserveAspectRatio="none"
-                >
-                  <polyline
-                    points={
-                      linhaAdversario
-                    }
-                    className={
-                      styles.adversaryLine
-                    }
-                  />
-
-                  <polyline
-                    points={
-                      linhaEquipe
-                    }
-                    className={
-                      styles.teamLine
-                    }
-                  />
-
-                  {renderPoints(
-                    dados.adversario,
-                    'adversario',
-                  )}
-
-                  {renderPoints(
-                    dados.equipe,
-                    'equipe',
-                  )}
-                </svg>
 
                 <div
                   className={
-                    styles.labels
+                    styles.period
                   }
                 >
-                  {dados.equipe.map(
-                    (
-                      _,
-                      index,
-                    ) => (
-                      <span
-                        key={
-                          index
-                        }
-                      >
-                        J
-                        {
-                          index +
-                          1
-                        }
-                      </span>
-                    ),
-                  )}
-                </div>
-              </div>
-            </div>
-
-
-            <footer
-              className={
-                styles.chartFooter
-              }
-            >
-              <span>
-                <i
-                  className={
-                    styles.teamLegend
-                  }
-                />
-
-                Sua equipe
-              </span>
-
-              <span>
-                <i
-                  className={
-                    styles.adversaryLegend
-                  }
-                />
-
-                Adversário
-              </span>
-            </footer>
-          </article>
-
-
-          {/* ATIVIDADES */}
-
-          <aside
-            className={
-              styles.activities
-            }
-          >
-            <div
-              className={
-                styles.sectionHeader
-              }
-            >
-              <div>
-                <h2>
-                  Atividades recentes
-                </h2>
-
-                <p>
-                  Últimas movimentações
-                </p>
-              </div>
-            </div>
-
-            <div
-              className={
-                styles.activityList
-              }
-            >
-              {atividades.map(
-                (
-                  atividade,
-                  index,
-                ) => (
-                  <button
-                    type="button"
-                    key={
-                      atividade.id
+                  <select
+                    value={
+                      periodo
                     }
-                    className={
-                      styles.activity
-                    }
-                    onClick={() =>
-                      abrirAtividade(
-                        atividade,
+                    onChange={(
+                      event,
+                    ) =>
+                      setPeriodo(
+                        event
+                          .target
+                          .value as keyof DadosGrafico,
                       )
                     }
                   >
-                    <span
+                    <option>
+                      Últimas 7 partidas
+                    </option>
+
+                    <option>
+                      Últimas 5 partidas
+                    </option>
+
+                    <option>
+                      Últimas 3 partidas
+                    </option>
+                  </select>
+
+
+                  <ChevronDown
+                    size={15}
+                  />
+                </div>
+              </div>
+
+
+              <div
+                className={
+                  styles.chartBody
+                }
+              >
+                <div
+                  className={
+                    styles.axis
+                  }
+                >
+                  <span>
+                    100
+                  </span>
+
+                  <span>
+                    75
+                  </span>
+
+                  <span>
+                    50
+                  </span>
+
+                  <span>
+                    25
+                  </span>
+                </div>
+
+
+                <div
+                  className={
+                    styles.chartArea
+                  }
+                >
+                  <span
+                    className={
+                      styles.horizontal1
+                    }
+                  />
+
+                  <span
+                    className={
+                      styles.horizontal2
+                    }
+                  />
+
+                  <span
+                    className={
+                      styles.horizontal3
+                    }
+                  />
+
+                  <span
+                    className={
+                      styles.horizontal4
+                    }
+                  />
+
+
+                  <svg
+                    viewBox="0 0 700 185"
+                    preserveAspectRatio="none"
+                  >
+                    <polyline
+                      points={
+                        linhaAdversario
+                      }
                       className={
-                        styles.activityNumber
-                      }
-                    >
-                      0
-                      {
-                        index +
-                        1
-                      }
-                    </span>
-
-                    <div
-                      className={
-                        styles.activityContent
-                      }
-                    >
-                      <strong>
-                        {
-                          atividade.titulo
-                        }
-                      </strong>
-
-                      <span>
-                        {
-                          atividade.horario
-                        }
-                      </span>
-                    </div>
-
-                    <ActivityIcon
-                      tipo={
-                        atividade.tipo
+                        styles.adversaryLine
                       }
                     />
-                  </button>
-                ),
-              )}
-            </div>
-          </aside>
+
+
+                    <polyline
+                      points={
+                        linhaEquipe
+                      }
+                      className={
+                        styles.teamLine
+                      }
+                    />
+
+
+                    {renderPoints(
+                      dados.adversario,
+                      'adversario',
+                    )}
+
+
+                    {renderPoints(
+                      dados.equipe,
+                      'equipe',
+                    )}
+                  </svg>
+
+
+                  <div
+                    className={
+                      styles.labels
+                    }
+                  >
+                    {dados.equipe.map(
+                      (
+                        _,
+                        index,
+                      ) => (
+                        <span
+                          key={
+                            index
+                          }
+                        >
+                          J
+                          {
+                            index +
+                            1
+                          }
+                        </span>
+                      ),
+                    )}
+                  </div>
+                </div>
+              </div>
+
+
+              <footer
+                className={
+                  styles.chartFooter
+                }
+              >
+                <span>
+                  <i
+                    className={
+                      styles.teamLegend
+                    }
+                  />
+
+                  Sua equipe
+                </span>
+
+
+                <span>
+                  <i
+                    className={
+                      styles.adversaryLegend
+                    }
+                  />
+
+                  Adversário
+                </span>
+              </footer>
+            </article>
+
+
+            {/* =================================================
+                CALENDÁRIO
+            ================================================= */}
+
+            <article
+              className={
+                styles.calendar
+              }
+            >
+              <div
+                className={
+                  styles.calendarHeader
+                }
+              >
+                <div>
+                  <h2>
+                    Calendário
+                  </h2>
+
+                  <p>
+                    Acompanhe as datas das partidas
+                  </p>
+                </div>
+
+
+                <CalendarDays
+                  size={20}
+                />
+              </div>
+
+
+              <div
+                className={
+                  styles.calendarContent
+                }
+              >
+                <div
+                  className={
+                    styles.calendarMain
+                  }
+                >
+                  <div
+                    className={
+                      styles.calendarNavigation
+                    }
+                  >
+                    <button
+                      type="button"
+                      aria-label="Mês anterior"
+                      onClick={() =>
+                        alterarMes(
+                          -1,
+                        )
+                      }
+                    >
+                      <ChevronLeft
+                        size={17}
+                      />
+                    </button>
+
+
+                    <strong>
+                      {nomeMes}
+                    </strong>
+
+
+                    <button
+                      type="button"
+                      aria-label="Próximo mês"
+                      onClick={() =>
+                        alterarMes(
+                          1,
+                        )
+                      }
+                    >
+                      <ChevronRight
+                        size={17}
+                      />
+                    </button>
+                  </div>
+
+
+                  <div
+                    className={
+                      styles.calendarWeek
+                    }
+                  >
+                    {diasSemana.map(
+                      (
+                        dia,
+                      ) => (
+                        <span
+                          key={
+                            dia
+                          }
+                        >
+                          {dia}
+                        </span>
+                      ),
+                    )}
+                  </div>
+
+
+                  <div
+                    className={
+                      styles.calendarGrid
+                    }
+                  >
+                    {diasCalendario.map(
+                      (
+                        dia,
+                        index,
+                      ) => {
+                        if (
+                          dia ===
+                          null
+                        ) {
+                          return (
+                            <span
+                              key={
+                                `empty-${index}`
+                              }
+                              className={
+                                styles.calendarEmpty
+                              }
+                            />
+                          );
+                        }
+
+
+                        const temPartida =
+                          diasComPartida.has(
+                            dia,
+                          );
+
+
+                        const selecionado =
+                          diaSelecionado ===
+                          dia;
+
+
+                        return (
+                          <button
+                            key={
+                              dia
+                            }
+                            type="button"
+                            className={`${styles.calendarDay} ${
+                              temPartida
+                                ? styles.calendarDayMatch
+                                : ''
+                            } ${
+                              selecionado
+                                ? styles.calendarDaySelected
+                                : ''
+                            }`}
+                            onClick={() =>
+                              setDiaSelecionado(
+                                dia,
+                              )
+                            }
+                          >
+                            {dia}
+
+                            {temPartida && (
+                              <i />
+                            )}
+                          </button>
+                        );
+                      },
+                    )}
+                  </div>
+                </div>
+
+
+                {/* =============================================
+                    PARTIDAS DO DIA
+                ============================================= */}
+
+                <div
+                  className={
+                    styles.calendarDetails
+                  }
+                >
+                  <span
+                    className={
+                      styles.calendarDetailsLabel
+                    }
+                  >
+                    Partidas do dia
+                  </span>
+
+
+                  {partidasSelecionadas
+                    .length >
+                  0 ? (
+                    partidasSelecionadas.map(
+                      (
+                        partida,
+                      ) => (
+                        <button
+                          key={
+                            partida.id
+                          }
+                          type="button"
+                          className={
+                            styles.calendarMatch
+                          }
+                          onClick={() =>
+                            navigate(
+                              '/partidas',
+                            )
+                          }
+                        >
+                          <div>
+                            <span>
+                              {
+                                partida.modalidade
+                              }
+                            </span>
+
+                            <strong>
+                              {
+                                partida.equipe
+                              }
+                            </strong>
+
+                            <small>
+                              vs.{' '}
+                              {
+                                partida.adversario
+                              }
+                            </small>
+                          </div>
+
+
+                          <ChevronRight
+                            size={17}
+                          />
+                        </button>
+                      ),
+                    )
+                  ) : (
+                    <div
+                      className={
+                        styles.calendarNoMatch
+                      }
+                    >
+                      <CalendarDays
+                        size={20}
+                      />
+
+                      <span>
+                        {diaSelecionado
+                          ? 'Nenhuma partida nesta data.'
+                          : 'Selecione uma data no calendário.'}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </article>
+          </div>
+
+
+          {/* ===================================================
+              COLUNA DIREITA
+          =================================================== */}
+
+          <div
+            className={
+              styles.rightColumn
+            }
+          >
+
+            {/* =================================================
+                ATIVIDADES
+            ================================================= */}
+
+            <aside
+              className={
+                styles.activities
+              }
+            >
+              <div
+                className={
+                  styles.sectionHeader
+                }
+              >
+                <div>
+                  <h2>
+                    Atividades recentes
+                  </h2>
+
+                  <p>
+                    Últimas movimentações
+                  </p>
+                </div>
+              </div>
+
+
+              <div
+                className={
+                  styles.activityList
+                }
+              >
+                {atividades.map(
+                  (
+                    atividade,
+                    index,
+                  ) => (
+                    <button
+                      key={
+                        atividade.id
+                      }
+                      type="button"
+                      className={
+                        styles.activity
+                      }
+                      onClick={() =>
+                        abrirAtividade(
+                          atividade,
+                          navigate,
+                        )
+                      }
+                    >
+                      <span
+                        className={
+                          styles.activityNumber
+                        }
+                      >
+                        {String(
+                          index +
+                          1,
+                        ).padStart(
+                          2,
+                          '0',
+                        )}
+                      </span>
+
+
+                      <div
+                        className={
+                          styles.activityContent
+                        }
+                      >
+                        <strong>
+                          {
+                            atividade.titulo
+                          }
+                        </strong>
+
+                        <span>
+                          {
+                            atividade.horario
+                          }
+                        </span>
+                      </div>
+
+
+                      <ActivityIcon
+                        tipo={
+                          atividade.tipo
+                        }
+                      />
+                    </button>
+                  ),
+                )}
+
+
+                {atividades.length ===
+                  0 && (
+                  <p
+                    style={{
+                      color:
+                        '#8d918f',
+                      fontSize:
+                        '9px',
+                    }}
+                  >
+                    Nenhuma atividade recente.
+                  </p>
+                )}
+              </div>
+            </aside>
+
+
+            {/* =================================================
+                EQUIPES EM DESTAQUE
+            ================================================= */}
+
+            <aside
+              className={
+                styles.teams
+              }
+            >
+              <div
+                className={
+                  styles.sectionHeader
+                }
+              >
+                <div>
+                  <h2>
+                    Equipes em destaque
+                  </h2>
+
+                  <p>
+                    Desempenho recente
+                  </p>
+                </div>
+
+
+                <button
+                  type="button"
+                  className={
+                    styles.link
+                  }
+                  onClick={() =>
+                    navigate(
+                      '/equipes',
+                    )
+                  }
+                >
+                  Ver equipes
+                </button>
+              </div>
+
+
+              <div
+                className={
+                  styles.teamList
+                }
+              >
+                {equipes.map(
+                  (
+                    equipe,
+                    index,
+                  ) => (
+                    <button
+                      key={
+                        equipe.id
+                      }
+                      type="button"
+                      className={
+                        styles.team
+                      }
+                      onClick={() =>
+                        navigate(
+                          '/equipes',
+                        )
+                      }
+                    >
+                      <div
+                        className={
+                          styles.teamPosition
+                        }
+                      >
+                        {String(
+                          index +
+                          1,
+                        ).padStart(
+                          2,
+                          '0',
+                        )}
+                      </div>
+
+
+                      <div
+                        className={
+                          styles.teamBadge
+                        }
+                        style={
+                          equipe.corEquipe
+                            ? {
+                                backgroundColor:
+                                  equipe.corEquipe,
+                              }
+                            : undefined
+                        }
+                      >
+                        {
+                          equipe.sigla
+                        }
+                      </div>
+
+
+                      <div
+                        className={
+                          styles.teamText
+                        }
+                      >
+                        <strong>
+                          {
+                            equipe.nome
+                          }
+                        </strong>
+
+                        <span>
+                          {
+                            equipe.modalidade
+                          }
+                        </span>
+                      </div>
+
+
+                      <strong
+                        className={
+                          styles.teamValue
+                        }
+                      >
+                        {
+                          equipe.desempenho
+                        }
+
+                        <small>
+                          %
+                        </small>
+                      </strong>
+                    </button>
+                  ),
+                )}
+
+
+                {equipes.length ===
+                  0 && (
+                  <p
+                    style={{
+                      color:
+                        '#8d918f',
+                      fontSize:
+                        '9px',
+                    }}
+                  >
+                    Nenhuma equipe cadastrada.
+                  </p>
+                )}
+              </div>
+            </aside>
+          </div>
         </section>
 
 
-        {/* =========================
-            PARTE INFERIOR
-        ========================= */}
+        {/* =====================================================
+            ÚLTIMAS PARTIDAS
+        ===================================================== */}
 
         <section
           className={
             styles.bottomArea
           }
         >
-          {/* PARTIDAS */}
-
           <article
             className={
               styles.matches
@@ -808,6 +1883,7 @@ const Dashboard = () => {
                 </p>
               </div>
 
+
               <button
                 type="button"
                 className={
@@ -822,6 +1898,7 @@ const Dashboard = () => {
                 Ver todas
               </button>
             </div>
+
 
             <div
               className={
@@ -853,6 +1930,7 @@ const Dashboard = () => {
                   </tr>
                 </thead>
 
+
                 <tbody>
                   {partidas.map(
                     (
@@ -882,17 +1960,20 @@ const Dashboard = () => {
                           </span>
                         </td>
 
+
                         <td>
                           {
                             partida.modalidade
                           }
                         </td>
 
+
                         <td>
                           {
-                            partida.data
+                            partida.dataFormatada
                           }
                         </td>
+
 
                         <td
                           className={
@@ -903,6 +1984,7 @@ const Dashboard = () => {
                             partida.resultado
                           }
                         </td>
+
 
                         <td>
                           <span
@@ -922,143 +2004,112 @@ const Dashboard = () => {
                       </tr>
                     ),
                   )}
+
+
+                  {partidas.length ===
+                    0 && (
+                    <tr>
+                      <td
+                        colSpan={
+                          5
+                        }
+                        style={{
+                          textAlign:
+                            'center',
+                        }}
+                      >
+                        Nenhuma partida cadastrada.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
           </article>
-
-
-          {/* EQUIPES */}
-
-          <aside
-            className={
-              styles.teams
-            }
-          >
-            <div
-              className={
-                styles.sectionHeader
-              }
-            >
-              <div>
-                <h2>
-                  Equipes em destaque
-                </h2>
-
-                <p>
-                  Desempenho recente
-                </p>
-              </div>
-
-              <button
-                type="button"
-                className={
-                  styles.link
-                }
-                onClick={() =>
-                  navigate(
-                    '/equipes',
-                  )
-                }
-              >
-                Ver equipes
-              </button>
-            </div>
-
-            <div
-              className={
-                styles.teamList
-              }
-            >
-              {equipes.map(
-                (
-                  equipe,
-                  index,
-                ) => (
-                  <button
-                    type="button"
-                    key={
-                      equipe.id
-                    }
-                    className={
-                      styles.team
-                    }
-                    onClick={() =>
-                      navigate(
-                        '/equipes',
-                      )
-                    }
-                  >
-                    <div
-                      className={
-                        styles.teamPosition
-                      }
-                    >
-                      0
-                      {
-                        index +
-                        1
-                      }
-                    </div>
-
-                    <div
-                      className={
-                        styles.teamBadge
-                      }
-                    >
-                      {
-                        equipe.sigla
-                      }
-                    </div>
-
-                    <div
-                      className={
-                        styles.teamText
-                      }
-                    >
-                      <strong>
-                        {
-                          equipe.nome
-                        }
-                      </strong>
-
-                      <span>
-                        {
-                          equipe.modalidade
-                        }
-                      </span>
-                    </div>
-
-                    <strong
-                      className={
-                        styles.teamValue
-                      }
-                    >
-                      {
-                        equipe.desempenho
-                      }
-                      <small>
-                        %
-                      </small>
-                    </strong>
-                  </button>
-                ),
-              )}
-            </div>
-          </aside>
         </section>
       </div>
     </main>
   );
-};
+}
 
 
-const ActivityIcon = ({
+/* ============================================================
+   ABRIR ATIVIDADE
+============================================================ */
+
+function abrirAtividade(
+  atividade:
+    AtividadeRecente,
+
+  navigate:
+    ReturnType<
+      typeof useNavigate
+    >,
+) {
+  if (
+    atividade.tipo ===
+    'atleta'
+  ) {
+    navigate(
+      '/atletas',
+    );
+
+    return;
+  }
+
+
+  if (
+    atividade.tipo ===
+    'equipe'
+  ) {
+    navigate(
+      '/equipes',
+    );
+
+    return;
+  }
+
+
+  if (
+    atividade.tipo ===
+    'estatistica'
+  ) {
+    navigate(
+      '/estatisticas',
+    );
+
+    return;
+  }
+
+
+  if (
+    atividade.tipo ===
+    'video'
+  ) {
+    navigate(
+      '/videos',
+    );
+
+    return;
+  }
+
+
+  navigate(
+    '/partidas',
+  );
+}
+
+
+/* ============================================================
+   ÍCONES DAS ATIVIDADES
+============================================================ */
+
+function ActivityIcon({
   tipo,
 }: {
   tipo:
-    AtividadeRecente['tipo'];
-}) => {
+    TipoAtividade;
+}) {
   if (
     tipo ===
     'video'
@@ -1091,7 +2142,9 @@ const ActivityIcon = ({
 
   if (
     tipo ===
-    'atleta'
+      'atleta' ||
+    tipo ===
+      'equipe'
   ) {
     return (
       <Users
@@ -1112,14 +2165,28 @@ const ActivityIcon = ({
       size={15}
     />
   );
-};
+}
 
+
+/* ============================================================
+   GRÁFICO
+============================================================ */
 
 function criarLinha(
-  valores: number[],
+  valores:
+    number[],
 ) {
+  if (
+    valores.length ===
+    0
+  ) {
+    return '';
+  }
+
+
   const largura =
     700;
+
 
   const altura =
     160;
@@ -1136,29 +2203,38 @@ function criarLinha(
           1
             ? largura /
               2
-            : (index *
-                largura) /
-              (valores.length -
-                1);
+            : (
+                index *
+                largura
+              ) /
+              (
+                valores.length -
+                1
+              );
 
 
         const y =
           altura -
-          (valor /
-            100) *
-            altura +
+          (
+            valor /
+            100
+          ) *
+          altura +
           10;
 
 
         return `${x},${y}`;
       },
     )
-    .join(' ');
+    .join(
+      ' ',
+    );
 }
 
 
 function renderPoints(
-  valores: number[],
+  valores:
+    number[],
 
   tipo:
     | 'equipe'
@@ -1166,6 +2242,7 @@ function renderPoints(
 ) {
   const largura =
     700;
+
 
   const altura =
     160;
@@ -1181,17 +2258,23 @@ function renderPoints(
         1
           ? largura /
             2
-          : (index *
-              largura) /
-            (valores.length -
-              1);
+          : (
+              index *
+              largura
+            ) /
+            (
+              valores.length -
+              1
+            );
 
 
       const y =
         altura -
-        (valor /
-          100) *
-          altura +
+        (
+          valor /
+          100
+        ) *
+        altura +
         10;
 
 
@@ -1214,13 +2297,17 @@ function renderPoints(
 }
 
 
+/* ============================================================
+   STATUS
+============================================================ */
+
 function statusClass(
   status:
-    StatusPartida,
+    Partida['status'],
 ) {
   if (
     status ===
-    'Analisada'
+    'Finalizada'
   ) {
     return 'statusDone';
   }
@@ -1228,7 +2315,7 @@ function statusClass(
 
   if (
     status ===
-    'Em análise'
+    'Em andamento'
   ) {
     return 'statusAnalysis';
   }
@@ -1236,6 +2323,3 @@ function statusClass(
 
   return 'statusPending';
 }
-
-
-export default Dashboard;

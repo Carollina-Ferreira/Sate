@@ -7,6 +7,7 @@
   color: #222222;
 }
 
+
 /* =========================
    VOLTAR
 ========================= */
@@ -15,13 +16,19 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
+
   margin-bottom: 20px;
+
   padding: 0;
+
   border: none;
   background: transparent;
+
   color: #005c3e;
+
   font-size: 14px;
   font-weight: 600;
+
   cursor: pointer;
 }
 
@@ -34,93 +41,160 @@
   line-height: 12px;
 }
 
+
 /* =========================
-   CARD DO PLACAR
+   PLACAR
 ========================= */
 
 .scoreCard {
   width: 100%;
   min-height: 190px;
+
   padding: 30px 55px;
+
   box-sizing: border-box;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   gap: 40px;
+
   background: #ffffff;
+
   border-radius: 14px;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.05);
+
+  box-shadow:
+    0 3px 14px
+    rgba(0, 0, 0, 0.05);
 }
+
 
 .team {
   flex: 1;
+
   display: flex;
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   gap: 12px;
+
   text-align: center;
 }
 
+
 .team strong {
   font-size: 17px;
+
   color: #222222;
 }
+
 
 .teamIcon {
   width: 58px;
   height: 58px;
+
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   background: #005c3e;
+
   color: #ffffff;
+
   font-size: 17px;
   font-weight: 700;
 }
 
+
 .scoreCenter {
   min-width: 190px;
+
   display: flex;
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
 }
 
+
 .score {
   font-size: 42px;
+
   line-height: 1;
+
   font-weight: 800;
+
   color: #202020;
+
   letter-spacing: 1px;
 }
+
 
 .matchInfo {
   display: flex;
   align-items: center;
+
   gap: 7px;
+
   margin-top: 12px;
+
   color: #777777;
+
   font-size: 13px;
 }
+
 
 .separator {
   color: #b0b0b0;
 }
 
+
+/* =========================
+   STATUS
+========================= */
+
 .status {
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
+
   margin-top: 12px;
+
   padding: 6px 15px;
+
   border-radius: 20px;
-  background: #d9f3e8;
-  color: #087653;
+
   font-size: 12px;
   font-weight: 700;
 }
+
+
+.statusFinished {
+  background: #d9f3e8;
+
+  color: #087653;
+}
+
+
+.statusPending {
+  background: #eeeeee;
+
+  color: #656565;
+}
+
+
+.statusCancelled {
+  background: #fde5e5;
+
+  color: #ad3a3a;
+}
+
 
 /* =========================
    GRID
@@ -128,11 +202,17 @@
 
 .contentGrid {
   width: 100%;
+
   display: grid;
-  grid-template-columns: 1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr;
+
   gap: 20px;
+
   margin-top: 20px;
 }
+
 
 /* =========================
    CARDS
@@ -140,22 +220,35 @@
 
 .card {
   background: #ffffff;
+
   border-radius: 14px;
+
   overflow: hidden;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.05);
+
+  box-shadow:
+    0 3px 14px
+    rgba(0, 0, 0, 0.05);
 }
+
 
 .cardHeader {
   padding: 20px 22px;
-  border-bottom: 1px solid #eeeeee;
+
+  border-bottom:
+    1px solid
+    #eeeeee;
 }
+
 
 .cardHeader h3 {
   margin: 0;
+
   color: #222222;
+
   font-size: 17px;
   font-weight: 700;
 }
+
 
 /* =========================
    EVENTOS
@@ -165,170 +258,249 @@
   width: 100%;
 }
 
+
 .eventRow {
   min-height: 55px;
+
   padding: 0 22px;
+
   box-sizing: border-box;
+
   display: grid;
-  grid-template-columns: 55px 18px 115px 1fr;
+
+  grid-template-columns:
+    55px 18px 115px 1fr;
+
   align-items: center;
+
   gap: 8px;
-  border-bottom: 1px solid #eeeeee;
+
+  border-bottom:
+    1px solid
+    #eeeeee;
 }
+
 
 .eventRow:last-child {
   border-bottom: none;
 }
 
+
 .eventTime {
   color: #777777;
+
   font-size: 13px;
   font-weight: 500;
 }
 
+
 .eventDot {
   width: 9px;
   height: 9px;
+
   border-radius: 50%;
+
   display: block;
 }
+
 
 .verde {
   background: #20a56f;
 }
 
+
 .vermelho {
   background: #e35c70;
 }
+
 
 .azul {
   background: #4e91d9;
 }
 
+
 .laranja {
   background: #c98a43;
 }
+
 
 .amarelo {
   background: #b4c63c;
 }
 
+
 .eventType {
   color: #252525;
+
   font-size: 14px;
+
   font-weight: 650;
 }
 
+
 .eventAthlete {
   color: #666666;
+
   font-size: 14px;
 }
 
+
 /* =========================
-   MOMENTOS
+   VÍDEOS
 ========================= */
 
 .videosList {
   padding: 4px 22px;
 }
 
+
 .videoItem {
   display: flex;
+
   align-items: center;
+
   gap: 15px;
+
   padding: 16px 0;
-  border-bottom: 1px solid #eeeeee;
+
+  border-bottom:
+    1px solid
+    #eeeeee;
 }
+
 
 .videoItem:last-child {
   border-bottom: none;
 }
 
+
 .videoPreview {
   width: 115px;
   height: 65px;
+
   flex-shrink: 0;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   border: none;
+
   border-radius: 9px;
+
   background: #111111;
+
   cursor: pointer;
+
   transition:
     transform 0.2s ease,
     background 0.2s ease;
 }
 
+
 .videoPreview:hover {
   transform: scale(1.02);
+
   background: #202020;
 }
 
+
 .playIcon {
   color: #ffffff;
+
   font-size: 18px;
+
   margin-left: 3px;
 }
 
+
 .videoInfo {
   min-width: 0;
+
   flex: 1;
 }
 
+
 .videoTitleRow {
   display: flex;
+
   align-items: center;
-  justify-content: space-between;
+
+  justify-content:
+    space-between;
+
   gap: 10px;
+
   margin-bottom: 10px;
 }
 
+
 .videoTitleRow strong {
   color: #252525;
+
   font-size: 13px;
   font-weight: 650;
 }
 
+
 .videoTitleRow span {
   flex-shrink: 0;
+
   color: #777777;
+
   font-size: 12px;
 }
 
+
 .videoTag {
   display: inline-flex;
+
   align-items: center;
+
   gap: 6px;
+
   padding: 5px 10px;
+
   border-radius: 15px;
+
   font-size: 11px;
+
   font-weight: 650;
 }
+
 
 .tagDot {
   width: 6px;
   height: 6px;
+
   border-radius: 50%;
 }
 
+
 .gol {
   background: #d9f3e8;
+
   color: #087653;
 }
+
 
 .gol .tagDot {
   background: #20a56f;
 }
 
+
 .destaque {
   background: #fde0e6;
+
   color: #c43f58;
 }
+
 
 .destaque .tagDot {
   background: #e35c70;
 }
+
 
 /* =========================
    ATLETAS
@@ -338,172 +510,663 @@
   margin-top: 20px;
 }
 
+
 .athletesList {
   min-height: 100px;
+
   padding: 20px 24px;
+
+  box-sizing: border-box;
+
   display: flex;
+
   align-items: center;
-  gap: 55px;
+
+  flex-wrap: wrap;
+
+  gap: 24px;
 }
+
 
 .athlete {
   display: flex;
+
   align-items: center;
-  gap: 12px;
+
+  gap: 11px;
 }
 
+
 .athleteAvatar {
-  width: 43px;
-  height: 43px;
+  width: 45px;
+  height: 45px;
+
   flex-shrink: 0;
+
+  overflow: hidden;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   border-radius: 50%;
+
   background: #005c3e;
+
   color: #ffffff;
+
   font-size: 12px;
+
   font-weight: 700;
 }
 
-.athlete strong {
+
+.athleteAvatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+.athleteInfo {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+
+.athleteInfo strong {
   color: #303030;
+
+  font-size: 14px;
+
+  font-weight: 650;
+}
+
+
+.athleteInfo span {
+  color: #888888;
+
+  font-size: 11px;
+}
+
+
+.athletesMessage {
+  margin: 0;
+
+  color: #777777;
+
+  font-size: 13px;
+}
+
+
+/* =========================
+   EXCLUIR
+========================= */
+
+.dangerZone {
+  width: 100%;
+
+  margin-top: 20px;
+
+  padding: 20px 22px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 20px;
+
+  border:
+    1px solid
+    #ecd2d2;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 14px
+    rgba(0, 0, 0, 0.04);
+}
+
+
+.dangerText strong {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #663333;
+
   font-size: 14px;
 }
 
+
+.dangerText p {
+  margin: 0;
+
+  color: #888888;
+
+  font-size: 12px;
+}
+
+
+.deleteButton {
+  min-width: 145px;
+
+  height: 40px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 15px;
+
+  border:
+    1px solid
+    #e1baba;
+
+  border-radius: 8px;
+
+  background: #fff7f7;
+
+  color: #b33f3f;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+
+.deleteButton:hover {
+  background: #ffecec;
+
+  border-color: #d99494;
+}
+
+
 /* =========================
-   MODAL DO VÍDEO
+   MODAL EXCLUIR
+========================= */
+
+.deleteOverlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 2000;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  background:
+    rgba(0, 28, 21, 0.68);
+
+  backdrop-filter:
+    blur(4px);
+}
+
+
+.deleteModal {
+  width:
+    min(
+      430px,
+      100%
+    );
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    #d9e2de;
+
+  border-radius: 18px;
+
+  background: #f8fbf9;
+
+  box-shadow:
+    0 24px 60px
+    rgba(0, 0, 0, 0.2);
+}
+
+
+.deleteModalHeader {
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  padding:
+    20px 22px 0;
+}
+
+
+.deleteIcon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #fde8e8;
+
+  color: #b84242;
+}
+
+
+.deleteClose {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: #64756e;
+
+  cursor: pointer;
+}
+
+
+.deleteClose:hover:not(:disabled) {
+  background: #e8efec;
+}
+
+
+.deleteModalContent {
+  padding:
+    16px 22px 22px;
+}
+
+
+.deleteModalContent h3 {
+  margin:
+    0 0 8px;
+
+  color: #293b34;
+
+  font-size: 19px;
+
+  font-weight: 700;
+}
+
+
+.deleteModalContent p {
+  margin: 0;
+
+  color: #718078;
+
+  font-size: 12px;
+
+  line-height: 1.7;
+}
+
+
+.deleteModalContent strong {
+  color: #4c5d55;
+
+  font-weight: 650;
+}
+
+
+.deleteActions {
+  display: flex;
+
+  justify-content:
+    flex-end;
+
+  gap: 9px;
+
+  padding:
+    15px 22px 20px;
+
+  border-top:
+    1px solid
+    #dee7e3;
+
+  background: #f2f7f4;
+}
+
+
+.deleteCancel,
+.deleteConfirm {
+  height: 40px;
+
+  padding: 0 16px;
+
+  border-radius: 9px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+
+.deleteCancel {
+  border:
+    1px solid
+    #ccd9d3;
+
+  background: #ffffff;
+
+  color: #586960;
+}
+
+
+.deleteConfirm {
+  min-width: 140px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  border: none;
+
+  background: #b94444;
+
+  color: #ffffff;
+}
+
+
+.deleteConfirm:hover:not(:disabled) {
+  background: #a13737;
+}
+
+
+.deleteConfirm:disabled,
+.deleteCancel:disabled,
+.deleteClose:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================
+   MODAL VÍDEO
 ========================= */
 
 .videoModalOverlay {
   position: fixed;
+
   inset: 0;
+
   z-index: 1000;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   padding: 20px;
+
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.55);
+
+  background:
+    rgba(0, 0, 0, 0.55);
 }
+
 
 .videoModal {
   position: relative;
-  width: min(600px, 100%);
+
+  width:
+    min(
+      600px,
+      100%
+    );
+
   padding: 22px;
+
   box-sizing: border-box;
+
   border-radius: 14px;
+
   background: #ffffff;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+
+  box-shadow:
+    0 15px 40px
+    rgba(0, 0, 0, 0.2);
 }
+
 
 .closeModal {
   position: absolute;
+
   top: 10px;
+
   right: 13px;
+
   width: 34px;
+
   height: 34px;
+
   border: none;
+
   border-radius: 50%;
+
   background: #eeeeee;
+
   color: #333333;
+
   font-size: 24px;
+
   line-height: 1;
+
   cursor: pointer;
 }
 
-.closeModal:hover {
-  background: #dddddd;
-}
 
 .fakeVideo {
   width: 100%;
+
   height: 300px;
+
   margin-top: 5px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   border-radius: 10px;
+
   background: #111111;
 }
 
+
 .bigPlay {
   color: #ffffff;
+
   font-size: 45px;
+
   margin-left: 7px;
 }
 
+
 .videoModal h3 {
-  margin: 18px 0 5px;
+  margin:
+    18px 0 5px;
+
   color: #222222;
+
   font-size: 18px;
 }
 
+
 .videoModal p {
   margin: 0;
+
   color: #777777;
+
   font-size: 13px;
 }
+
 
 /* =========================
    RESPONSIVO
 ========================= */
 
-@media (max-width: 900px) {
+@media (
+  max-width: 900px
+) {
   .scoreCard {
     padding: 25px;
   }
 
+
   .contentGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      1fr;
   }
 
+
   .athletesList {
-    gap: 25px;
-    flex-wrap: wrap;
+    gap: 20px;
   }
 }
 
-@media (max-width: 650px) {
+
+@media (
+  max-width: 650px
+) {
   .page {
     padding: 20px;
   }
 
+
   .scoreCard {
     flex-direction: column;
+
     gap: 25px;
   }
+
 
   .team {
     flex: none;
   }
 
+
   .scoreCenter {
     order: -1;
   }
 
+
   .eventRow {
-    grid-template-columns: 45px 14px 95px 1fr;
+    grid-template-columns:
+      45px 14px 95px 1fr;
+
     padding: 0 15px;
   }
 
+
   .videoItem {
-    align-items: flex-start;
+    align-items:
+      flex-start;
   }
+
 
   .videoPreview {
     width: 95px;
+
     height: 58px;
   }
 
+
   .videoTitleRow {
-    align-items: flex-start;
-    flex-direction: column;
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
     gap: 4px;
   }
 
+
   .athletesList {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction:
+      column;
+
+    align-items:
+      flex-start;
+  }
+
+
+  .dangerZone {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+  }
+
+
+  .deleteButton {
+    width: 100%;
+  }
+
+
+  .deleteActions {
+    flex-direction:
+      column-reverse;
+  }
+
+
+  .deleteCancel,
+  .deleteConfirm {
+    width: 100%;
   }
 }

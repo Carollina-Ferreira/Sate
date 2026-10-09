@@ -32,51 +32,30 @@ type StatusBackend =
 
 type Equipe = {
   id: number;
-
   nome: string;
-
   modalidade: string;
-
-  categoria?:
-    | string
-    | null;
-
-  imagem?:
-    | string
-    | null;
-
-  corEquipe?:
-    | string
-    | null;
+  categoria?: string | null;
+  imagem?: string | null;
+  corEquipe?: string | null;
 };
 
 
 type AtletaAPI = {
   id: number;
 
-  nome?:
-    | string
-    | null;
+  nome?: string | null;
 
-  categoria?:
-    | string
-    | null;
+  categoria?: string | null;
 
-  equipeId?:
-    | number
-    | null;
+  equipeId?: number | null;
 
   usuario?: {
-    avatarUrl?:
-      | string
-      | null;
-
+    avatarUrl?: string | null;
     email?: string;
   } | null;
 
   equipe?: {
     id: number;
-
     nome?: string;
   } | null;
 };
@@ -91,32 +70,19 @@ type PartidaAPI = {
 
   data: string;
 
-  local?:
-    | string
-    | null;
+  local?: string | null;
 
-  campeonato?:
-    | string
-    | null;
+  campeonato?: string | null;
 
-  rodada?:
-    | string
-    | null;
+  rodada?: string | null;
 
-  observacoes?:
-    | string
-    | null;
+  observacoes?: string | null;
 
-  status:
-    StatusBackend;
+  status: StatusBackend;
 
-  golsEquipe?:
-    | number
-    | null;
+  golsEquipe?: number | null;
 
-  golsAdversario?:
-    | number
-    | null;
+  golsAdversario?: number | null;
 
   createdAt?: string;
 
@@ -143,20 +109,15 @@ type Partida = {
 
   status: string;
 
-  tipo:
-    TipoStatus;
+  tipo: TipoStatus;
 
   temporada: string;
 
   adversario: string;
 
-  golsEquipe:
-    | number
-    | null;
+  golsEquipe: number | null;
 
-  golsAdversario:
-    | number
-    | null;
+  golsAdversario: number | null;
 
   equipe: Equipe;
 };
@@ -165,19 +126,11 @@ type Partida = {
 type NovaPartida = {
   equipeId: string;
 
-  equipeVisitante:
-    string;
+  equipeVisitante: string;
 
   data: string;
 
-  resultadoCasa:
-    string;
-
-  resultadoVisitante:
-    string;
-
-  atletasIds:
-    number[];
+  atletasIds: number[];
 };
 
 
@@ -194,6 +147,13 @@ function obterToken() {
       'token',
     )
   );
+}
+
+
+function chaveEscalacao(
+  partidaId: number,
+) {
+  return `sate_escalacao_partida_${partidaId}`;
 }
 
 
@@ -255,20 +215,16 @@ function pegarTemporada(
 
 
 function traduzirStatus(
-  status:
-    StatusBackend,
+  status: StatusBackend,
 ): {
   texto: string;
-
-  tipo:
-    TipoStatus;
+  tipo: TipoStatus;
 } {
   switch (status) {
-
     case 'FINALIZADA':
       return {
         texto:
-          'Analisada',
+          'Finalizada',
 
         tipo:
           'analisada',
@@ -278,7 +234,7 @@ function traduzirStatus(
     case 'EM_ANDAMENTO':
       return {
         texto:
-          'Em Análise',
+          'Em andamento',
 
         tipo:
           'analise',
@@ -309,10 +265,8 @@ function traduzirStatus(
 
 
 function converterPartida(
-  partida:
-    PartidaAPI,
+  partida: PartidaAPI,
 ): Partida {
-
   const status =
     traduzirStatus(
       partida.status,
@@ -388,8 +342,7 @@ function converterPartida(
 function pegarMensagemErro(
   dados: unknown,
 
-  mensagemPadrao:
-    string,
+  mensagemPadrao: string,
 ) {
   if (
     typeof dados ===
@@ -427,7 +380,6 @@ function pegarMensagemErro(
 function extrairEquipes(
   dados: unknown,
 ): Equipe[] {
-
   if (
     Array.isArray(
       dados,
@@ -442,7 +394,6 @@ function extrairEquipes(
       'object' &&
     dados !== null
   ) {
-
     const objeto =
       dados as Record<
         string,
@@ -466,7 +417,6 @@ function extrairEquipes(
     ) {
       return objeto.data as Equipe[];
     }
-
   }
 
 
@@ -477,7 +427,6 @@ function extrairEquipes(
 function extrairPartidas(
   dados: unknown,
 ): PartidaAPI[] {
-
   if (
     Array.isArray(
       dados,
@@ -492,7 +441,6 @@ function extrairPartidas(
       'object' &&
     dados !== null
   ) {
-
     const objeto =
       dados as Record<
         string,
@@ -516,7 +464,6 @@ function extrairPartidas(
     ) {
       return objeto.data as PartidaAPI[];
     }
-
   }
 
 
@@ -527,7 +474,6 @@ function extrairPartidas(
 function extrairAtletas(
   dados: unknown,
 ): AtletaAPI[] {
-
   if (
     Array.isArray(
       dados,
@@ -542,7 +488,6 @@ function extrairAtletas(
       'object' &&
     dados !== null
   ) {
-
     const objeto =
       dados as Record<
         string,
@@ -566,7 +511,6 @@ function extrairAtletas(
     ) {
       return objeto.data as AtletaAPI[];
     }
-
   }
 
 
@@ -607,7 +551,6 @@ function obterIniciais(
 
 
 export default function Partidas() {
-
   const navigate =
     useNavigate();
 
@@ -715,14 +658,38 @@ export default function Partidas() {
 
       data: '',
 
-      resultadoCasa:
-        '',
-
-      resultadoVisitante:
-        '',
-
       atletasIds: [],
     });
+
+
+  const [
+    partidaPlacar,
+    setPartidaPlacar,
+  ] =
+    useState<
+      Partida | null
+    >(null);
+
+
+  const [
+    placarEquipe,
+    setPlacarEquipe,
+  ] =
+    useState('');
+
+
+  const [
+    placarAdversario,
+    setPlacarAdversario,
+  ] =
+    useState('');
+
+
+  const [
+    salvandoPlacar,
+    setSalvandoPlacar,
+  ] =
+    useState(false);
 
 
   /* ============================================================
@@ -730,11 +697,8 @@ export default function Partidas() {
   ============================================================ */
 
   useEffect(() => {
-
     async function carregarDados() {
-
       try {
-
         setCarregando(
           true,
         );
@@ -747,7 +711,6 @@ export default function Partidas() {
 
 
         if (!token) {
-
           navigate(
             '/login',
           );
@@ -783,31 +746,6 @@ export default function Partidas() {
           ]);
 
 
-        if (
-          respostaEquipes
-            .status === 401 ||
-          respostaPartidas
-            .status === 401
-        ) {
-
-          localStorage
-            .removeItem(
-              'token',
-            );
-
-          sessionStorage
-            .removeItem(
-              'token',
-            );
-
-          navigate(
-            '/login',
-          );
-
-          return;
-        }
-
-
         const dadosEquipes:
           unknown =
           await respostaEquipes
@@ -829,28 +767,24 @@ export default function Partidas() {
         if (
           !respostaEquipes.ok
         ) {
-
           throw new Error(
             pegarMensagemErro(
               dadosEquipes,
               'Erro ao carregar equipes.',
             ),
           );
-
         }
 
 
         if (
           !respostaPartidas.ok
         ) {
-
           throw new Error(
             pegarMensagemErro(
               dadosPartidas,
               'Erro ao carregar partidas.',
             ),
           );
-
         }
 
 
@@ -882,7 +816,6 @@ export default function Partidas() {
           listaEquipes.length >
           0
         ) {
-
           setNovaPartida(
             (anterior) => ({
               ...anterior,
@@ -896,7 +829,6 @@ export default function Partidas() {
                 ),
             }),
           );
-
         }
 
 
@@ -905,7 +837,6 @@ export default function Partidas() {
         ============================== */
 
         try {
-
           const respostaAtletas =
             await fetch(
               `${API_URL}/atletas`,
@@ -930,7 +861,6 @@ export default function Partidas() {
           if (
             respostaAtletas.ok
           ) {
-
             setAtletas(
               extrairAtletas(
                 dadosAtletas,
@@ -938,23 +868,20 @@ export default function Partidas() {
             );
 
           } else {
-
             console.warn(
-              'Não foi possível carregar atletas:',
+              'Erro ao buscar atletas:',
               dadosAtletas,
             );
 
             setAtletas(
               [],
             );
-
           }
 
         } catch (
           erroAtletas
         ) {
-
-          console.warn(
+          console.error(
             'Erro ao carregar atletas:',
             erroAtletas,
           );
@@ -962,11 +889,9 @@ export default function Partidas() {
           setAtletas(
             [],
           );
-
         }
 
       } catch (error) {
-
         console.error(
           'Erro ao carregar dados:',
           error,
@@ -980,13 +905,10 @@ export default function Partidas() {
         );
 
       } finally {
-
         setCarregando(
           false,
         );
-
       }
-
     }
 
 
@@ -1001,13 +923,11 @@ export default function Partidas() {
 
   const equipeSelecionada =
     useMemo(() => {
-
       return equipes.find(
         (equipe) =>
           equipe.id ===
           Number(
-            novaPartida
-              .equipeId,
+            novaPartida.equipeId,
           ),
       );
 
@@ -1023,7 +943,6 @@ export default function Partidas() {
 
   const modalidades =
     useMemo(() => {
-
       return Array.from(
         new Set(
           equipes
@@ -1044,18 +963,15 @@ export default function Partidas() {
 
   const temporadas =
     useMemo(() => {
-
       const lista =
         new Set<string>();
 
 
       partidas.forEach(
         (partida) => {
-
           lista.add(
             partida.temporada,
           );
-
         },
       );
 
@@ -1078,7 +994,6 @@ export default function Partidas() {
   const partidasFiltradas =
     partidas.filter(
       (partida) => {
-
         const equipeOk =
           equipeFiltro ===
             'todas' ||
@@ -1119,7 +1034,6 @@ export default function Partidas() {
           dataOk &&
           temporadaOk
         );
-
       },
     );
 
@@ -1130,7 +1044,6 @@ export default function Partidas() {
 
   const atletasDaEquipe =
     useMemo(() => {
-
       if (
         !novaPartida.equipeId
       ) {
@@ -1147,7 +1060,6 @@ export default function Partidas() {
 
       return atletas.filter(
         (atleta) => {
-
           const idEquipeAtleta =
             atleta.equipeId ??
             atleta.equipe?.id ??
@@ -1160,7 +1072,6 @@ export default function Partidas() {
             ) ===
             equipeId
           );
-
         },
       );
 
@@ -1177,13 +1088,10 @@ export default function Partidas() {
   function atualizarNovaPartida(
     campo:
       | 'equipeVisitante'
-      | 'data'
-      | 'resultadoCasa'
-      | 'resultadoVisitante',
+      | 'data',
 
     valor: string,
   ) {
-
     setNovaPartida(
       (anterior) => ({
         ...anterior,
@@ -1192,14 +1100,12 @@ export default function Partidas() {
           valor,
       }),
     );
-
   }
 
 
   function alterarEquipePartida(
     equipeId: string,
   ) {
-
     setNovaPartida(
       (anterior) => ({
         ...anterior,
@@ -1209,7 +1115,6 @@ export default function Partidas() {
         atletasIds: [],
       }),
     );
-
   }
 
 
@@ -1220,10 +1125,8 @@ export default function Partidas() {
   function alternarAtleta(
     atletaId: number,
   ) {
-
     setNovaPartida(
       (anterior) => {
-
         const selecionado =
           anterior
             .atletasIds
@@ -1251,29 +1154,24 @@ export default function Partidas() {
                   atletaId,
                 ],
         };
-
       },
     );
-
   }
 
 
   /* ============================================================
-     ABRIR MODAL
+     MODAL NOVA PARTIDA
   ============================================================ */
 
   function abrirModal() {
-
     if (
       equipes.length === 0
     ) {
-
       alert(
-        'Nenhuma equipe foi encontrada para este treinador.',
+        'Nenhuma equipe foi encontrada.',
       );
 
       return;
-
     }
 
 
@@ -1295,16 +1193,10 @@ export default function Partidas() {
     setMostrarModal(
       true,
     );
-
   }
 
 
-  /* ============================================================
-     FECHAR MODAL
-  ============================================================ */
-
   function fecharModal() {
-
     if (salvando) {
       return;
     }
@@ -1313,7 +1205,6 @@ export default function Partidas() {
     setMostrarModal(
       false,
     );
-
   }
 
 
@@ -1322,7 +1213,6 @@ export default function Partidas() {
   ============================================================ */
 
   async function criarPartida() {
-
     if (salvando) {
       return;
     }
@@ -1335,18 +1225,15 @@ export default function Partidas() {
         .trim() ||
       !novaPartida.data
     ) {
-
       alert(
         'Selecione sua equipe, informe o adversário e a data.',
       );
 
       return;
-
     }
 
 
     try {
-
       setSalvando(
         true,
       );
@@ -1357,36 +1244,12 @@ export default function Partidas() {
 
 
       if (!token) {
-
         navigate(
           '/login',
         );
 
         return;
-
       }
-
-
-      const golsEquipe =
-        novaPartida
-          .resultadoCasa
-          .trim() === ''
-          ? null
-          : Number(
-              novaPartida
-                .resultadoCasa,
-            );
-
-
-      const golsAdversario =
-        novaPartida
-          .resultadoVisitante
-          .trim() === ''
-          ? null
-          : Number(
-              novaPartida
-                .resultadoVisitante,
-            );
 
 
       const resposta =
@@ -1408,8 +1271,7 @@ export default function Partidas() {
               JSON.stringify({
                 equipeId:
                   Number(
-                    novaPartida
-                      .equipeId,
+                    novaPartida.equipeId,
                   ),
 
                 adversario:
@@ -1419,17 +1281,6 @@ export default function Partidas() {
 
                 data:
                   `${novaPartida.data}T12:00:00.000Z`,
-
-                golsEquipe,
-
-                golsAdversario,
-
-                status:
-                  'AGENDADA',
-
-                atletasIds:
-                  novaPartida
-                    .atletasIds,
               }),
           },
         );
@@ -1448,37 +1299,31 @@ export default function Partidas() {
         resposta.status ===
         401
       ) {
+        localStorage.removeItem(
+          'token',
+        );
 
-        localStorage
-          .removeItem(
-            'token',
-          );
-
-        sessionStorage
-          .removeItem(
-            'token',
-          );
+        sessionStorage.removeItem(
+          'token',
+        );
 
         navigate(
           '/login',
         );
 
         return;
-
       }
 
 
       if (
         !resposta.ok
       ) {
-
         throw new Error(
           pegarMensagemErro(
             dados,
             'Não foi possível criar a partida.',
           ),
         );
-
       }
 
 
@@ -1492,7 +1337,6 @@ export default function Partidas() {
           'object' &&
         dados !== null
       ) {
-
         const objeto =
           dados as Record<
             string,
@@ -1505,31 +1349,63 @@ export default function Partidas() {
           typeof objeto.partida ===
             'object'
         ) {
-
           partidaCriada =
             objeto.partida as PartidaAPI;
 
         } else if (
           'id' in objeto
         ) {
-
           partidaCriada =
             dados as PartidaAPI;
-
         }
-
       }
 
 
       if (
         !partidaCriada
       ) {
-
         throw new Error(
           'A partida foi criada, mas o servidor não retornou os dados corretamente.',
         );
-
       }
+
+
+      /* ======================================================
+         SALVAR DADOS COMPLETOS DOS ATLETAS SELECIONADOS
+      ====================================================== */
+
+      const atletasSelecionados =
+        atletasDaEquipe.filter(
+          (atleta) =>
+            novaPartida
+              .atletasIds
+              .includes(
+                atleta.id,
+              ),
+        );
+
+
+      localStorage.setItem(
+        chaveEscalacao(
+          partidaCriada.id,
+        ),
+
+        JSON.stringify(
+          atletasSelecionados,
+        ),
+      );
+
+
+      console.log(
+        'PARTIDA:',
+        partidaCriada.id,
+      );
+
+
+      console.log(
+        'ESCALAÇÃO:',
+        atletasSelecionados,
+      );
 
 
       setPartidas(
@@ -1557,12 +1433,6 @@ export default function Partidas() {
         data:
           '',
 
-        resultadoCasa:
-          '',
-
-        resultadoVisitante:
-          '',
-
         atletasIds:
           [],
       });
@@ -1573,7 +1443,6 @@ export default function Partidas() {
       );
 
     } catch (error) {
-
       console.error(
         'Erro ao criar partida:',
         error,
@@ -1587,13 +1456,259 @@ export default function Partidas() {
       );
 
     } finally {
-
       setSalvando(
         false,
       );
+    }
+  }
 
+
+  /* ============================================================
+     PLACAR
+  ============================================================ */
+
+  function partidaPodeReceberPlacar(
+    partida: Partida,
+  ) {
+    const dataPartida =
+      new Date(
+        partida.dataOriginal,
+      );
+
+
+    const agora =
+      new Date();
+
+
+    const semPlacar =
+      partida.golsEquipe ===
+        null ||
+      partida.golsAdversario ===
+        null;
+
+
+    return (
+      dataPartida <=
+        agora &&
+      semPlacar &&
+      partida.status !==
+        'Cancelada'
+    );
+  }
+
+
+  function abrirModalPlacar(
+    partida: Partida,
+  ) {
+    setPartidaPlacar(
+      partida,
+    );
+
+
+    setPlacarEquipe(
+      '',
+    );
+
+
+    setPlacarAdversario(
+      '',
+    );
+  }
+
+
+  function fecharModalPlacar() {
+    if (
+      salvandoPlacar
+    ) {
+      return;
     }
 
+
+    setPartidaPlacar(
+      null,
+    );
+  }
+
+
+  async function salvarPlacar() {
+    if (
+      !partidaPlacar ||
+      salvandoPlacar
+    ) {
+      return;
+    }
+
+
+    if (
+      placarEquipe === '' ||
+      placarAdversario ===
+        ''
+    ) {
+      alert(
+        'Informe os dois placares.',
+      );
+
+      return;
+    }
+
+
+    const golsEquipe =
+      Number(
+        placarEquipe,
+      );
+
+
+    const golsAdversario =
+      Number(
+        placarAdversario,
+      );
+
+
+    if (
+      Number.isNaN(
+        golsEquipe,
+      ) ||
+      Number.isNaN(
+        golsAdversario,
+      ) ||
+      golsEquipe < 0 ||
+      golsAdversario < 0
+    ) {
+      alert(
+        'Informe placares válidos.',
+      );
+
+      return;
+    }
+
+
+    try {
+      setSalvandoPlacar(
+        true,
+      );
+
+
+      const token =
+        obterToken();
+
+
+      if (!token) {
+        navigate(
+          '/login',
+        );
+
+        return;
+      }
+
+
+      const resposta =
+        await fetch(
+          `${API_URL}/partidas/${partidaPlacar.id}`,
+          {
+            method:
+              'PUT',
+
+            headers: {
+              'Content-Type':
+                'application/json',
+
+              Authorization:
+                `Bearer ${token}`,
+            },
+
+            body:
+              JSON.stringify({
+                golsEquipe,
+
+                golsAdversario,
+
+                status:
+                  'FINALIZADA',
+              }),
+          },
+        );
+
+
+      const dados:
+        unknown =
+        await resposta
+          .json()
+          .catch(
+            () => ({}),
+          );
+
+
+      if (
+        !resposta.ok
+      ) {
+        throw new Error(
+          pegarMensagemErro(
+            dados,
+            'Erro ao salvar placar.',
+          ),
+        );
+      }
+
+
+      setPartidas(
+        (anteriores) =>
+          anteriores.map(
+            (partida) =>
+              partida.id ===
+              partidaPlacar.id
+                ? {
+                    ...partida,
+
+                    golsEquipe,
+
+                    golsAdversario,
+
+                    resultado:
+                      `${golsEquipe} - ${golsAdversario}`,
+
+                    status:
+                      'Finalizada',
+
+                    tipo:
+                      'analisada',
+                  }
+                : partida,
+          ),
+      );
+
+
+      setPartidaPlacar(
+        null,
+      );
+
+
+      setPlacarEquipe(
+        '',
+      );
+
+
+      setPlacarAdversario(
+        '',
+      );
+
+    } catch (error) {
+      console.error(
+        'Erro ao salvar placar:',
+        error,
+      );
+
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Erro ao salvar placar.',
+      );
+
+    } finally {
+      setSalvandoPlacar(
+        false,
+      );
+    }
   }
 
 
@@ -1602,10 +1717,8 @@ export default function Partidas() {
   ============================================================ */
 
   function abrirDetalhes(
-    partida:
-      Partida,
+    partida: Partida,
   ) {
-
     navigate(
       '/detalhes-partida',
       {
@@ -1614,7 +1727,6 @@ export default function Partidas() {
         },
       },
     );
-
   }
 
 
@@ -1625,9 +1737,7 @@ export default function Partidas() {
       }
     >
 
-      {/* =====================================================
-          TÍTULO
-      ===================================================== */}
+      {/* TÍTULO */}
 
       <div
         className={
@@ -1636,17 +1746,14 @@ export default function Partidas() {
       >
 
         <div>
-
           <h2>
             Partidas
           </h2>
-
 
           <p>
             Gerencie e acompanhe
             as partidas das suas equipes.
           </p>
-
         </div>
 
 
@@ -1665,9 +1772,7 @@ export default function Partidas() {
       </div>
 
 
-      {/* =====================================================
-          FILTROS
-      ===================================================== */}
+      {/* FILTROS */}
 
       <div
         className={
@@ -1679,24 +1784,18 @@ export default function Partidas() {
           value={
             equipeFiltro
           }
-          onChange={(
-            event,
-          ) =>
+          onChange={(event) =>
             setEquipeFiltro(
-              event.target
-                .value,
+              event.target.value,
             )
           }
         >
-
           <option value="todas">
             Todas as equipes
           </option>
 
-
           {equipes.map(
             (equipe) => (
-
               <option
                 key={
                   equipe.id
@@ -1711,10 +1810,8 @@ export default function Partidas() {
                   equipe.nome
                 }
               </option>
-
             ),
           )}
-
         </select>
 
 
@@ -1722,26 +1819,18 @@ export default function Partidas() {
           value={
             modalidadeFiltro
           }
-          onChange={(
-            event,
-          ) =>
+          onChange={(event) =>
             setModalidadeFiltro(
-              event.target
-                .value,
+              event.target.value,
             )
           }
         >
-
           <option value="modalidades">
             Todas as modalidades
           </option>
 
-
           {modalidades.map(
-            (
-              modalidade,
-            ) => (
-
+            (modalidade) => (
               <option
                 key={
                   modalidade
@@ -1754,10 +1843,8 @@ export default function Partidas() {
                   modalidade
                 }
               </option>
-
             ),
           )}
-
         </select>
 
 
@@ -1766,12 +1853,9 @@ export default function Partidas() {
           value={
             dataFiltro
           }
-          onChange={(
-            event,
-          ) =>
+          onChange={(event) =>
             setDataFiltro(
-              event.target
-                .value,
+              event.target.value,
             )
           }
         />
@@ -1781,26 +1865,18 @@ export default function Partidas() {
           value={
             temporadaFiltro
           }
-          onChange={(
-            event,
-          ) =>
+          onChange={(event) =>
             setTemporadaFiltro(
-              event.target
-                .value,
+              event.target.value,
             )
           }
         >
-
           <option value="todas">
             Todas as temporadas
           </option>
 
-
           {temporadas.map(
-            (
-              temporada,
-            ) => (
-
+            (temporada) => (
               <option
                 key={
                   temporada
@@ -1813,18 +1889,14 @@ export default function Partidas() {
                   temporada
                 }
               </option>
-
             ),
           )}
-
         </select>
 
       </div>
 
 
-      {/* =====================================================
-          TABELA
-      ===================================================== */}
+      {/* TABELA */}
 
       <div
         className={
@@ -1835,9 +1907,7 @@ export default function Partidas() {
         <table>
 
           <thead>
-
             <tr>
-
               <th>
                 Confronto
               </th>
@@ -1859,18 +1929,14 @@ export default function Partidas() {
               </th>
 
               <th />
-
             </tr>
-
           </thead>
 
 
           <tbody>
 
             {partidasFiltradas.map(
-              (
-                partida,
-              ) => (
+              (partida) => (
 
                 <tr
                   key={
@@ -1908,9 +1974,62 @@ export default function Partidas() {
                       styles.resultado
                     }
                   >
-                    {
+
+                    {partida.resultado !==
+                    '-' ? (
+
                       partida.resultado
-                    }
+
+                    ) : partidaPodeReceberPlacar(
+                        partida,
+                      ) ? (
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          abrirModalPlacar(
+                            partida,
+                          )
+                        }
+                        style={{
+                          height:
+                            '32px',
+
+                          padding:
+                            '0 12px',
+
+                          border:
+                            '1px solid #15966c',
+
+                          borderRadius:
+                            '7px',
+
+                          background:
+                            '#e3f4ed',
+
+                          color:
+                            '#087653',
+
+                          fontFamily:
+                            'inherit',
+
+                          fontSize:
+                            '11px',
+
+                          fontWeight:
+                            600,
+
+                          cursor:
+                            'pointer',
+                        }}
+                      >
+                        Adicionar placar
+                      </button>
+
+                    ) : (
+                      '-'
+                    )}
+
                   </td>
 
 
@@ -1960,7 +2079,6 @@ export default function Partidas() {
 
 
         {carregando && (
-
           <div
             className={
               styles.empty
@@ -1970,19 +2088,16 @@ export default function Partidas() {
               Carregando partidas...
             </h3>
           </div>
-
         )}
 
 
         {!carregando &&
           erro && (
-
             <div
               className={
                 styles.empty
               }
             >
-
               <h3>
                 Erro ao carregar
               </h3>
@@ -1990,40 +2105,31 @@ export default function Partidas() {
               <p>
                 {erro}
               </p>
-
             </div>
-
           )}
 
 
         {!carregando &&
           !erro &&
           partidasFiltradas
-            .length === 0 && (
-
+            .length ===
+            0 && (
             <div
               className={
                 styles.empty
               }
             >
-
               <h3>
                 Nenhuma partida encontrada
               </h3>
-
-              <p>
-                Cadastre uma nova partida.
-              </p>
-
             </div>
-
           )}
 
       </div>
 
 
       {/* =====================================================
-          MODAL
+          MODAL NOVA PARTIDA
       ===================================================== */}
 
       {mostrarModal && (
@@ -2041,15 +2147,10 @@ export default function Partidas() {
             className={
               styles.modal
             }
-            onClick={(
-              event,
-            ) =>
-              event
-                .stopPropagation()
+            onClick={(event) =>
+              event.stopPropagation()
             }
           >
-
-            {/* HEADER */}
 
             <div
               className={
@@ -2088,29 +2189,20 @@ export default function Partidas() {
                 onClick={
                   fecharModal
                 }
-                disabled={
-                  salvando
-                }
               >
-
                 <X
                   size={18}
                 />
-
               </button>
 
             </div>
 
-
-            {/* BODY */}
 
             <div
               className={
                 styles.modalBody
               }
             >
-
-              {/* FORM */}
 
               <div
                 className={
@@ -2134,26 +2226,15 @@ export default function Partidas() {
                       novaPartida
                         .equipeId
                     }
-                    onChange={(
-                      event,
-                    ) =>
+                    onChange={(event) =>
                       alterarEquipePartida(
-                        event.target
-                          .value,
+                        event.target.value,
                       )
                     }
                   >
 
-                    <option value="">
-                      Selecione
-                    </option>
-
-
                     {equipes.map(
-                      (
-                        equipe,
-                      ) => (
-
+                      (equipe) => (
                         <option
                           key={
                             equipe.id
@@ -2168,7 +2249,6 @@ export default function Partidas() {
                             equipe.nome
                           }
                         </option>
-
                       ),
                     )}
 
@@ -2195,11 +2275,10 @@ export default function Partidas() {
                       novaPartida
                         .equipeVisitante
                     }
-                    onChange={(
-                      event,
-                    ) =>
+                    onChange={(event) =>
                       atualizarNovaPartida(
                         'equipeVisitante',
+
                         event.target
                           .value,
                       )
@@ -2256,85 +2335,10 @@ export default function Partidas() {
                         novaPartida
                           .data
                       }
-                      onChange={(
-                        event,
-                      ) =>
+                      onChange={(event) =>
                         atualizarNovaPartida(
                           'data',
-                          event.target
-                            .value,
-                        )
-                      }
-                    />
 
-                  </div>
-
-                </div>
-
-
-                <div
-                  className={
-                    styles.formRow
-                  }
-                >
-
-                  <div
-                    className={
-                      styles.formGroup
-                    }
-                  >
-
-                    <label>
-                      Placar da sua equipe
-                    </label>
-
-
-                    <input
-                      type="number"
-                      min="0"
-                      placeholder="0"
-                      value={
-                        novaPartida
-                          .resultadoCasa
-                      }
-                      onChange={(
-                        event,
-                      ) =>
-                        atualizarNovaPartida(
-                          'resultadoCasa',
-                          event.target
-                            .value,
-                        )
-                      }
-                    />
-
-                  </div>
-
-
-                  <div
-                    className={
-                      styles.formGroup
-                    }
-                  >
-
-                    <label>
-                      Placar adversário
-                    </label>
-
-
-                    <input
-                      type="number"
-                      min="0"
-                      placeholder="0"
-                      value={
-                        novaPartida
-                          .resultadoVisitante
-                      }
-                      onChange={(
-                        event,
-                      ) =>
-                        atualizarNovaPartida(
-                          'resultadoVisitante',
                           event.target
                             .value,
                         )
@@ -2348,9 +2352,7 @@ export default function Partidas() {
               </div>
 
 
-              {/* ==============================
-                  ESCALAÇÃO SIMPLES
-              ============================== */}
+              {/* ESCALAÇÃO */}
 
               <section
                 className={
@@ -2375,11 +2377,9 @@ export default function Partidas() {
                         styles.lineupIcon
                       }
                     >
-
                       <Users
                         size={16}
                       />
-
                     </span>
 
 
@@ -2430,9 +2430,7 @@ export default function Partidas() {
                         styles.lineupEmpty
                       }
                     >
-
-                      Nenhum atleta encontrado nesta equipe.
-
+                      Nenhum atleta nesta equipe.
                     </div>
 
                   )}
@@ -2490,8 +2488,7 @@ export default function Partidas() {
 
                               <img
                                 src={
-                                  atleta
-                                    .usuario
+                                  atleta.usuario
                                     .avatarUrl
                                 }
                                 alt={
@@ -2521,11 +2518,9 @@ export default function Partidas() {
                                 styles.athleteMiniCheck
                               }
                             >
-
                               <Check
                                 size={10}
                               />
-
                             </span>
 
                           )}
@@ -2544,8 +2539,6 @@ export default function Partidas() {
             </div>
 
 
-            {/* FOOTER */}
-
             <div
               className={
                 styles.modalActions
@@ -2559,9 +2552,6 @@ export default function Partidas() {
                 }
                 onClick={
                   fecharModal
-                }
-                disabled={
-                  salvando
                 }
               >
                 Cancelar
@@ -2580,11 +2570,212 @@ export default function Partidas() {
                   salvando
                 }
               >
-
                 {salvando
                   ? 'Criando...'
                   : 'Criar partida'}
+              </button>
 
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
+
+
+      {/* =====================================================
+          MODAL PLACAR
+      ===================================================== */}
+
+      {partidaPlacar && (
+
+        <div
+          className={
+            styles.modalOverlay
+          }
+          onClick={
+            fecharModalPlacar
+          }
+        >
+
+          <div
+            className={
+              styles.modal
+            }
+            style={{
+              maxWidth:
+                '450px',
+            }}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+
+            <div
+              className={
+                styles.modalHeader
+              }
+            >
+
+              <div>
+
+                <span
+                  className={
+                    styles.modalEyebrow
+                  }
+                >
+                  Resultado
+                </span>
+
+
+                <h3>
+                  Adicionar placar
+                </h3>
+
+
+                <p>
+                  {
+                    partidaPlacar
+                      .confronto
+                  }
+                </p>
+
+              </div>
+
+
+              <button
+                type="button"
+                className={
+                  styles.closeButton
+                }
+                onClick={
+                  fecharModalPlacar
+                }
+              >
+                <X
+                  size={18}
+                />
+              </button>
+
+            </div>
+
+
+            <div
+              className={
+                styles.modalBody
+              }
+              style={{
+                display:
+                  'block',
+              }}
+            >
+
+              <div
+                className={
+                  styles.formRow
+                }
+              >
+
+                <div
+                  className={
+                    styles.formGroup
+                  }
+                >
+
+                  <label>
+                    {
+                      partidaPlacar
+                        .equipe
+                        .nome
+                    }
+                  </label>
+
+
+                  <input
+                    type="number"
+                    min="0"
+                    value={
+                      placarEquipe
+                    }
+                    onChange={(event) =>
+                      setPlacarEquipe(
+                        event.target.value,
+                      )
+                    }
+                  />
+
+                </div>
+
+
+                <div
+                  className={
+                    styles.formGroup
+                  }
+                >
+
+                  <label>
+                    {
+                      partidaPlacar
+                        .adversario
+                    }
+                  </label>
+
+
+                  <input
+                    type="number"
+                    min="0"
+                    value={
+                      placarAdversario
+                    }
+                    onChange={(event) =>
+                      setPlacarAdversario(
+                        event.target.value,
+                      )
+                    }
+                  />
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div
+              className={
+                styles.modalActions
+              }
+            >
+
+              <button
+                type="button"
+                className={
+                  styles.cancelButton
+                }
+                onClick={
+                  fecharModalPlacar
+                }
+              >
+                Cancelar
+              </button>
+
+
+              <button
+                type="button"
+                className={
+                  styles.saveButton
+                }
+                onClick={
+                  salvarPlacar
+                }
+                disabled={
+                  salvandoPlacar
+                }
+              >
+                {salvandoPlacar
+                  ? 'Salvando...'
+                  : 'Salvar placar'}
               </button>
 
             </div>

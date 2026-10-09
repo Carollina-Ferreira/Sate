@@ -1,46 +1,50 @@
 import {
+    ArrowLeft,
+    CheckCircle2,
     ChevronDown,
     Eye,
+    FileSpreadsheet,
     ListFilter,
     Plus,
     Search,
     Scissors,
+    Upload,
     UserRound,
     X,
 } from 'lucide-react';
 
-import {
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import type { FormEvent } from 'react';
+import * as XLSX from 'xlsx';
 
 import styles from './atletas.module.css';
 
-import PerfilAtleta from './perfilAtletas.tsx';
-import EditarAtleta from './editarAtleta.tsx';
-import ClipesAtleta from './clipesAtleta.tsx';
-
+import PerfilAtleta from './perfilAtletas';
+import EditarAtleta from './editarAtleta';
+import ClipesAtleta from './clipesAtleta';
+import InformacoesAtleta from './InformacoesAtleta';
 
 // ============================================================
 // ATLETA VINDO DO BACKEND
 // ============================================================
 
-interface AtletaBackend {
+export interface DocumentoAtleta {
     id: number;
+    nome: string;
+    tipo: string;
+    url: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
 
+export interface AtletaBackend {
+    id: number;
     nome: string | null;
-
     cpf?: string | null;
-
     rg?: string | null;
-
     dataNascimento?: string | null;
-
     sexo?: string | null;
-
     categoria?: string | null;
-
     telefone?: string | null;
 
     equipe?: {
@@ -52,125 +56,77 @@ interface AtletaBackend {
 
     usuario?: {
         id: number;
-
         nome?: string | null;
-
         email: string;
-
         tipo?: string | null;
-
         avatarUrl?: string | null;
     };
 
     responsavel?: {
         id: number;
-
         nome: string;
-
         grauParentesco: string;
-
         telefone: string;
     } | null;
 
     documentos?: unknown[];
 }
 
-
-// ============================================================
-// ATLETA FORMATADO PARA A TELA
-// ============================================================
-
 interface Atleta {
     id: number;
-
     nome: string;
-
     equipe: string;
-
     posicao: string;
-
     modalidade: string;
-
     frequencia: number;
-
-    cor:
-    | 'verde'
-    | 'rosa'
-    | 'azul'
-    | 'roxo'
-    | 'laranja';
-
+    cor: string;
     email?: string;
-
     categoria?: string;
+    avatarUrl?: string | null;
 }
-
-
-// ============================================================
-// FORMULÁRIO
-// ============================================================
 
 interface NovoAtletaForm {
     nome: string;
-
     dataNascimento: string;
-
     sexo: string;
-
     categoria: string;
-
     rg: string;
-
     cpf: string;
-
     email: string;
-
     telefone: string;
-
     responsavelNome: string;
-
     responsavelParentesco: string;
-
     responsavelTelefone: string;
 }
 
+interface AtletaPlanilha {
+    nome: string;
+    email: string;
+    dataNascimento: string;
+    sexo: string;
+    categoria: string;
+    rg: string;
+    cpf: string;
+    telefone: string;
+    responsavelNome: string;
+    responsavelGrau: string;
+    responsavelTelefone: string;
+}
 
 // ============================================================
-// TELAS
+// TELAS E TIPOS
 // ============================================================
 
-type TelaAtual =
-    | 'lista'
-    | 'perfil'
-    | 'editar'
-    | 'clipes';
-
+type TelaAtual = 'lista' | 'perfil' | 'editar' | 'clipes' | 'informacoes';
+type ModoCadastro = 'escolha' | 'manual' | 'planilha';
 
 // ============================================================
-// API
+// API E CONSTANTES
 // ============================================================
 
 const API_URL = 'http://localhost:3000';
 
-
-// ============================================================
-// CORES DOS AVATARES
-// ============================================================
-
-const cores: Atleta['cor'][] = [
-    'verde',
-    'rosa',
-    'azul',
-    'roxo',
-    'laranja',
-];
-
-
-// ============================================================
-// FORMULÁRIO INICIAL
-// ============================================================
-
-const formularioInicial: NovoAtletaForm = {
+const FORMULARIO_VAZIO: NovoAtletaForm = {
     nome: '',
     dataNascimento: '',
     sexo: '',
@@ -184,2033 +140,526 @@ const formularioInicial: NovoAtletaForm = {
     responsavelTelefone: '',
 };
 
-
 // ============================================================
-// COMPONENTE
+// COMPONENTE PRINCIPAL
 // ============================================================
 
 const Atletas = () => {
+    const [atletas, setAtletas] = useState<Atleta[]>([]);
+    const [atletaSelecionado, setAtletaSelecionado] = useState<AtletaBackend | null>(null);
+    const [telaAtual, setTelaAtual] = useState<TelaAtual>('lista');
 
-    const [
-        telaAtual,
-        setTelaAtual,
-    ] = useState<TelaAtual>('lista');
+    const [busca, setBusca] = useState('');
+    const [filtroModalidade, setFiltroModalidade] = useState('Todas');
+    const [filtroCategoria, setFiltroCategoria] = useState('Todas');
+    const [filtroEquipe, setFiltroEquipe] = useState('Todas');
 
+    const [mostrarCadastro, setMostrarCadastro] = useState(false);
+    const [modoCadastro, setModoCadastro] = useState<ModoCadastro>('escolha');
 
-    const [
-        atletas,
-        setAtletas,
-    ] = useState<Atleta[]>([]);
+    const [carregando, setCarregando] = useState(true);
+    const [exportando, setExportando] = useState(false);
+    const [erro, setErro] = useState('');
 
+    const [novoAtleta, setNovoAtleta] = useState<NovoAtletaForm>({ ...FORMULARIO_VAZIO });
 
-    const [
-        carregando,
-        setCarregando,
-    ] = useState(true);
-
-
-    const [
-        erro,
-        setErro,
-    ] = useState('');
-
-
-    const [
-        busca,
-        setBusca,
-    ] = useState('');
-
-
-    const [
-        equipeSelecionada,
-        setEquipeSelecionada,
-    ] = useState('Todas as equipes');
-
-
-    const [
-        modalidadeSelecionada,
-        setModalidadeSelecionada,
-    ] = useState('Todas as modalidades');
-
-
-    const [
-        atletaSelecionado,
-        setAtletaSelecionado,
-    ] = useState<AtletaBackend | null>(null);
-
-
-    const [
-        modalNovoAtleta,
-        setModalNovoAtleta,
-    ] = useState(false);
-
-
-    const [
-        novoAtleta,
-        setNovoAtleta,
-    ] = useState<NovoAtletaForm>(
-        formularioInicial,
-    );
-
-
-    const [
-        erroCadastro,
-        setErroCadastro,
-    ] = useState('');
-
-
-    const [
-        cadastrando,
-        setCadastrando,
-    ] = useState(false);
-
+    const [atletasPlanilha, setAtletasPlanilha] = useState<AtletaPlanilha[]>([]);
+    const [nomeArquivo, setNomeArquivo] = useState('');
+    const [importandoPlanilha, setImportandoPlanilha] = useState(false);
+    const [resultadoImportacao, setResultadoImportacao] = useState('');
 
     // ========================================================
-    // TOKEN
+    // AUTENTICAÇÃO
     // ========================================================
 
-    const obterToken = (): string | null => {
+    const obterToken = () =>
+        localStorage.getItem('token') ||
+        sessionStorage.getItem('token') ||
+        localStorage.getItem('accessToken') ||
+        '';
 
-        const local = localStorage.getItem('token');
-
-        if (local) {
-            return local;
-        }
-
-        return sessionStorage.getItem('token');
-    };
-
+    const headersAutenticacao = () => ({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${obterToken()}`,
+    });
 
     // ========================================================
     // CARREGAR ATLETAS
     // ========================================================
 
     const carregarAtletas = async () => {
-
         try {
-
             setCarregando(true);
-
             setErro('');
 
             const token = obterToken();
-
-
             if (!token) {
-
-                setErro(
-                    'Usuário não autenticado. Faça login novamente.',
-                );
-
+                setErro('Usuário não autenticado. Faça login novamente.');
                 setAtletas([]);
-
                 return;
             }
 
-
-            const resposta = await fetch(
-                `${API_URL}/api/atletas`,
-                {
-                    method: 'GET',
-
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`,
-
-                        'Content-Type':
-                            'application/json',
-                    },
-                },
-            );
-
-
-            let dados: unknown;
-
-            try {
-
-                dados = await resposta.json();
-
-            } catch {
-
-                dados = null;
-
-            }
-
+            const resposta = await fetch(`${API_URL}/api/atletas`, {
+                method: 'GET',
+                headers: headersAutenticacao(),
+            });
 
             if (!resposta.ok) {
-
                 if (resposta.status === 401) {
-
-                    setErro(
-                        'Sua sessão expirou. Faça login novamente.',
-                    );
-
+                    setErro('Sua sessão expirou. Faça login novamente.');
                     return;
                 }
-
-
                 if (resposta.status === 403) {
-
-                    setErro(
-                        'Você não possui permissão para acessar os atletas.',
-                    );
-
+                    setErro('Você não possui permissão para acessar os atletas.');
                     return;
                 }
-
-
-                throw new Error(
-                    `Erro HTTP ${resposta.status}.`,
-                );
+                throw new Error(`Erro HTTP ${resposta.status}.`);
             }
 
+            const dados: AtletaBackend[] = await resposta.json();
 
             if (!Array.isArray(dados)) {
-
-                throw new Error(
-                    'O servidor não retornou uma lista de atletas.',
-                );
+                throw new Error('O servidor não retornou uma lista de atletas.');
             }
 
+            const atletasFormatados: Atleta[] = dados.map((atleta) => ({
+                id: atleta.id,
+                nome: atleta.nome || atleta.usuario?.nome || 'Atleta sem nome',
+                equipe: atleta.equipe?.nome || 'Sem equipe',
+                modalidade: atleta.equipe?.modalidade || 'Não informada',
+                categoria: atleta.categoria || atleta.equipe?.categoria || undefined,
+                posicao: atleta.categoria || 'Sem categoria',
+                frequencia: 88,
+                cor: '#16A875',
+                email: atleta.usuario?.email || undefined,
+                avatarUrl: atleta.usuario?.avatarUrl || null,
+            }));
 
-            const atletasBanco =
-                dados as AtletaBackend[];
-
-
-            // ==================================================
-            // TRANSFORMAR DADOS DO BACKEND
-            // ==================================================
-
-            const atletasFormatados: Atleta[] =
-                atletasBanco.map(
-                    (
-                        atleta,
-                        index,
-                    ) => {
-
-                        const nome =
-                            atleta.nome ||
-                            atleta.usuario?.nome ||
-                            'Atleta sem nome';
-
-
-                        const equipe =
-                            atleta.equipe?.nome ||
-                            'Sem equipe';
-
-
-                        const modalidade =
-                            atleta.equipe?.modalidade ||
-                            'Não informada';
-
-
-                        return {
-
-                            id:
-                                atleta.id,
-
-                            nome,
-
-                            equipe,
-
-                            posicao:
-                                atleta.categoria ||
-                                'Sem categoria',
-
-                            modalidade,
-
-                            frequencia:
-                                0,
-
-                            cor:
-                                cores[
-                                    index %
-                                    cores.length
-                                ],
-
-                            email:
-                                atleta.usuario?.email,
-
-                            categoria:
-                                atleta.categoria ||
-                                undefined,
-
-                        };
-
-                    },
-                );
-
-
-            setAtletas(
-                atletasFormatados,
-            );
-
-
+            setAtletas(atletasFormatados);
         } catch (error) {
-
-            console.error(
-                'Erro ao carregar atletas:',
-                error,
-            );
-
-
+            console.error('Erro ao carregar atletas:', error);
             setErro(
                 error instanceof Error
                     ? error.message
-                    : 'Erro ao carregar atletas.',
+                    : 'Erro ao carregar atletas.'
             );
-
-
-            setAtletas([]);
-
         } finally {
-
             setCarregando(false);
-
         }
-
     };
 
-
-    // ========================================================
-    // CARREGAR AO ABRIR A PÁGINA
-    // ========================================================
-
     useEffect(() => {
-
-        carregarAtletas();
-
+        void carregarAtletas();
     }, []);
 
-
     // ========================================================
-    // EQUIPES
-    // ========================================================
-
-    const equipes = useMemo(() => {
-
-        const existentes =
-            atletas
-                .map(
-                    (atleta) =>
-                        atleta.equipe,
-                )
-                .filter(
-                    Boolean,
-                );
-
-
-        return [
-            'Todas as equipes',
-
-            ...Array.from(
-                new Set(
-                    existentes,
-                ),
-            ),
-        ];
-
-    }, [atletas]);
-
-
-    // ========================================================
-    // MODALIDADES
+    // EXPORTAR PARA EXCEL
     // ========================================================
 
-    const modalidades = useMemo(() => {
+    const exportarAtletasExcel = () => {
+        try {
+            setErro('');
 
-        const existentes =
-            atletas
-                .map(
-                    (atleta) =>
-                        atleta.modalidade,
-                )
-                .filter(
-                    (modalidade) =>
-                        modalidade &&
-                        modalidade !==
-                        'Não informada',
-                );
+            if (atletasFiltrados.length === 0) {
+                setErro('Não há atletas para exportar.');
+                return;
+            }
 
+            setExportando(true);
 
-        return [
-            'Todas as modalidades',
+            const dadosExcel = atletasFiltrados.map((atleta) => ({
+                ID: atleta.id,
+                'Nome completo': atleta.nome,
+                'E-mail': atleta.email || '',
+                Equipe: atleta.equipe,
+                Modalidade: atleta.modalidade,
+                Categoria: atleta.categoria || '',
+                'Frequência (%)': atleta.frequencia,
+            }));
 
-            ...Array.from(
-                new Set(
-                    existentes,
-                ),
-            ),
-        ];
+            const planilha = XLSX.utils.json_to_sheet(dadosExcel);
 
-    }, [atletas]);
+            planilha['!cols'] = [
+                { wch: 10 },
+                { wch: 30 },
+                { wch: 32 },
+                { wch: 25 },
+                { wch: 20 },
+                { wch: 18 },
+                { wch: 18 },
+            ];
 
+            const pastaTrabalho = XLSX.utils.book_new();
+
+            XLSX.utils.book_append_sheet(pastaTrabalho, planilha, 'Atletas');
+
+            const dataAtual = new Date()
+                .toLocaleDateString('pt-BR')
+                .replace(/\//g, '-');
+
+            XLSX.writeFile(pastaTrabalho, `atletas_sate_${dataAtual}.xlsx`);
+        } catch (error) {
+            console.error('Erro ao exportar atletas:', error);
+            setErro('Não foi possível gerar a planilha Excel.');
+        } finally {
+            setExportando(false);
+        }
+    };
+
+    // ========================================================
+    // BUSCAR ATLETA POR ID
+    // ========================================================
+
+    const buscarAtletaPorId = async (id: number): Promise<AtletaBackend | null> => {
+        try {
+            const resposta = await fetch(`${API_URL}/api/atletas/${id}`, {
+                method: 'GET',
+                headers: headersAutenticacao(),
+            });
+
+            if (!resposta.ok) {
+                throw new Error('Erro ao buscar dados do atleta.');
+            }
+
+            const dados: AtletaBackend = await resposta.json();
+            return dados;
+        } catch (error) {
+            console.error('Erro ao buscar atleta:', error);
+            setErro('Não foi possível carregar os detalhes do atleta.');
+            return null;
+        }
+    };
+
+    // ========================================================
+    // NAVEGAÇÃO E MODAL
+    // ========================================================
+
+    const abrirOpcoesCadastro = () => {
+        setErro('');
+        setResultadoImportacao('');
+        setAtletasPlanilha([]);
+        setNomeArquivo('');
+        setModoCadastro('escolha');
+        setMostrarCadastro(true);
+    };
+
+    const fecharCadastro = () => {
+        if (importandoPlanilha) return;
+
+        setMostrarCadastro(false);
+        setModoCadastro('escolha');
+        setErro('');
+        setResultadoImportacao('');
+        setAtletasPlanilha([]);
+        setNomeArquivo('');
+    };
+
+    const abrirPerfil = async (id: number) => {
+        setErro('');
+        const atleta = await buscarAtletaPorId(id);
+        if (!atleta) return;
+        setAtletaSelecionado(atleta);
+        setTelaAtual('perfil');
+    };
+
+    const abrirInformacoes = async (id: number) => {
+        setErro('');
+        const atleta = await buscarAtletaPorId(id);
+        if (!atleta) return;
+        setAtletaSelecionado(atleta);
+        setTelaAtual('informacoes');
+    };
+
+    const abrirClipes = async (id: number) => {
+        setErro('');
+        const atleta = await buscarAtletaPorId(id);
+        if (!atleta) return;
+        setAtletaSelecionado(atleta);
+        setTelaAtual('clipes');
+    };
+
+    const voltarParaLista = () => {
+        setAtletaSelecionado(null);
+        setTelaAtual('lista');
+        setErro('');
+    };
 
     // ========================================================
     // FILTROS
     // ========================================================
 
+    const modalidades = useMemo(
+        () => [
+            'Todas',
+            ...Array.from(
+                new Set(
+                    atletas
+                        .map((atleta) => atleta.modalidade)
+                        .filter(Boolean)
+                )
+            ),
+        ],
+        [atletas]
+    );
+
+    const categorias = useMemo(
+        () => [
+            'Todas',
+            ...Array.from(
+                new Set(
+                    atletas
+                        .map((atleta) => atleta.categoria)
+                        .filter(Boolean) as string[]
+                )
+            ),
+        ],
+        [atletas]
+    );
+
+    const equipes = useMemo(
+        () => [
+            'Todas',
+            ...Array.from(
+                new Set(
+                    atletas
+                        .map((atleta) => atleta.equipe)
+                        .filter(Boolean)
+                )
+            ),
+        ],
+        [atletas]
+    );
+
     const atletasFiltrados = useMemo(() => {
+        const textoBusca = busca.trim().toLowerCase();
 
-        const textoBusca =
-            busca
-                .toLowerCase()
-                .trim();
+        return atletas.filter((atleta) => {
+            const correspondeBusca =
+                !textoBusca ||
+                atleta.nome.toLowerCase().includes(textoBusca) ||
+                atleta.equipe.toLowerCase().includes(textoBusca) ||
+                atleta.modalidade.toLowerCase().includes(textoBusca);
 
+            const correspondeModalidade =
+                filtroModalidade === 'Todas' ||
+                atleta.modalidade === filtroModalidade;
 
-        return atletas.filter(
-            (atleta) => {
+            const correspondeCategoria =
+                filtroCategoria === 'Todas' ||
+                atleta.categoria === filtroCategoria;
 
-                const correspondeBusca =
-                    atleta.nome
-                        .toLowerCase()
-                        .includes(
-                            textoBusca,
-                        ) ||
+            const correspondeEquipe =
+                filtroEquipe === 'Todas' ||
+                atleta.equipe === filtroEquipe;
 
-                    atleta.email
-                        ?.toLowerCase()
-                        .includes(
-                            textoBusca,
-                        ) ||
+            return (
+                correspondeBusca &&
+                correspondeModalidade &&
+                correspondeCategoria &&
+                correspondeEquipe
+            );
+        });
+    }, [atletas, busca, filtroModalidade, filtroCategoria, filtroEquipe]);
 
-                    atleta.categoria
-                        ?.toLowerCase()
-                        .includes(
-                            textoBusca,
-                        );
-
-
-                const correspondeEquipe =
-                    equipeSelecionada ===
-                    'Todas as equipes' ||
-
-                    atleta.equipe ===
-                    equipeSelecionada;
-
-
-                const correspondeModalidade =
-                    modalidadeSelecionada ===
-                    'Todas as modalidades' ||
-
-                    atleta.modalidade ===
-                    modalidadeSelecionada;
-
-
-                return (
-                    correspondeBusca &&
-                    correspondeEquipe &&
-                    correspondeModalidade
-                );
-
-            },
-        );
-
-    }, [
-        atletas,
-        busca,
-        equipeSelecionada,
-        modalidadeSelecionada,
-    ]);
-
-
-    // ========================================================
-    // NOVO ATLETA
-    // ========================================================
-
-    const abrirModalNovoAtleta = () => {
-
-        setNovoAtleta(
-            formularioInicial,
-        );
-
-        setErroCadastro('');
-
-        setModalNovoAtleta(true);
-
+    const limparFiltros = () => {
+        setFiltroModalidade('Todas');
+        setFiltroCategoria('Todas');
+        setFiltroEquipe('Todas');
+        setBusca('');
     };
 
-
-    const fecharModalNovoAtleta = () => {
-
-        setModalNovoAtleta(false);
-
-        setNovoAtleta(
-            formularioInicial,
-        );
-
-        setErroCadastro('');
-
-        setCadastrando(false);
-
-    };
-
+    // ========================================================
+    // CADASTRO MANUAL
+    // ========================================================
 
     const alterarCampoNovoAtleta = (
         campo: keyof NovoAtletaForm,
-        valor: string,
+        valor: string
     ) => {
-
-        setNovoAtleta(
-            (atual) => ({
-                ...atual,
-
-                [campo]:
-                    valor,
-            }),
-        );
-
-
-        if (erroCadastro) {
-
-            setErroCadastro('');
-
-        }
-
+        setNovoAtleta((atual) => ({
+            ...atual,
+            [campo]: valor,
+        }));
     };
 
-
-    // ========================================================
-    // CADASTRAR ATLETA
-    // ========================================================
-
-    const cadastrarNovoAtleta = async () => {
-
-        if (!novoAtleta.nome.trim()) {
-
-            setErroCadastro(
-                'Informe o nome completo do atleta.',
-            );
-
-            return;
-        }
-
-
-        if (!novoAtleta.dataNascimento) {
-
-            setErroCadastro(
-                'Informe a data de nascimento.',
-            );
-
-            return;
-        }
-
-
-        if (!novoAtleta.sexo) {
-
-            setErroCadastro(
-                'Selecione o sexo.',
-            );
-
-            return;
-        }
-
-
-        const token = obterToken();
-
-
-        if (!token) {
-
-            setErroCadastro(
-                'Usuário não autenticado. Faça login novamente.',
-            );
-
-            return;
-        }
-
+    const cadastrarAtleta = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         try {
+            setErro('');
 
-            setCadastrando(true);
+            const resposta = await fetch(`${API_URL}/api/atletas`, {
+                method: 'POST',
+                headers: headersAutenticacao(),
+                body: JSON.stringify({
+                    nome: novoAtleta.nome.trim(),
+                    dataNascimento: novoAtleta.dataNascimento || null,
+                    sexo: novoAtleta.sexo || null,
+                    categoria: novoAtleta.categoria.trim() || null,
+                    rg: novoAtleta.rg.trim() || null,
+                    cpf: novoAtleta.cpf.trim() || null,
+                    email: novoAtleta.email.trim() || null,
+                    telefone: novoAtleta.telefone.trim() || null,
+                    responsavel: novoAtleta.responsavelNome.trim()
+                        ? {
+                              nome: novoAtleta.responsavelNome.trim(),
+                              grauParentesco: novoAtleta.responsavelParentesco.trim(),
+                              telefone: novoAtleta.responsavelTelefone.trim(),
+                          }
+                        : null,
+                }),
+            });
 
-            setErroCadastro('');
-
-
-            const resposta =
-                await fetch(
-                    `${API_URL}/api/atletas`,
-                    {
-                        method: 'POST',
-
-                        headers: {
-                            Authorization:
-                                `Bearer ${token}`,
-
-                            'Content-Type':
-                                'application/json',
-                        },
-
-                        body:
-                            JSON.stringify({
-
-                                nome:
-                                    novoAtleta.nome.trim(),
-
-                                dataNascimento:
-                                    novoAtleta.dataNascimento,
-
-                                sexo:
-                                    novoAtleta.sexo,
-
-                                categoria:
-                                    novoAtleta.categoria.trim() ||
-                                    null,
-
-                                rg:
-                                    novoAtleta.rg.trim() ||
-                                    null,
-
-                                cpf:
-                                    novoAtleta.cpf.trim() ||
-                                    null,
-
-                                email:
-                                    novoAtleta.email.trim() ||
-                                    null,
-
-                                telefone:
-                                    novoAtleta.telefone.trim() ||
-                                    null,
-
-                                responsavelNome:
-                                    novoAtleta.responsavelNome.trim() ||
-                                    null,
-
-                                responsavelParentesco:
-                                    novoAtleta.responsavelParentesco.trim() ||
-                                    null,
-
-                                responsavelTelefone:
-                                    novoAtleta.responsavelTelefone.trim() ||
-                                    null,
-
-                            }),
-                    },
-                );
-
-
-            let dados: any = null;
-
-
-            try {
-
-                dados =
-                    await resposta.json();
-
-            } catch {
-
-                dados = null;
-
-            }
-
+            const dados = await resposta.json().catch(() => null);
 
             if (!resposta.ok) {
-
-                if (resposta.status === 401) {
-
-                    throw new Error(
-                        'Sua sessão expirou. Faça login novamente.',
-                    );
-
-                }
-
-
-                if (resposta.status === 403) {
-
-                    throw new Error(
-                        'Você não possui permissão para cadastrar atletas.',
-                    );
-
-                }
-
-
                 throw new Error(
-                    dados?.mensagem ||
-                    dados?.erro ||
-                    `Erro HTTP ${resposta.status} ao cadastrar atleta.`,
+                    dados?.mensagem || 'Não foi possível cadastrar o atleta.'
                 );
-
             }
 
-
-            console.log(
-                'Atleta cadastrado com sucesso:',
-                dados,
-            );
-
-
-            fecharModalNovoAtleta();
-
+            setNovoAtleta({ ...FORMULARIO_VAZIO });
+            setMostrarCadastro(false);
+            setModoCadastro('escolha');
 
             await carregarAtletas();
-
-
         } catch (error) {
-
-            console.error(
-                'Erro ao cadastrar atleta:',
-                error,
-            );
-
-
-            setErroCadastro(
-                error instanceof Error
-                    ? error.message
-                    : 'Erro ao cadastrar atleta.',
-            );
-
-        } finally {
-
-            setCadastrando(false);
-
-        }
-
-    };
-
-
-    // ========================================================
-    // ABRIR PERFIL
-    // ========================================================
-
-    const abrirPerfil = async (
-        id: number,
-    ) => {
-
-        try {
-
-            const token =
-                obterToken();
-
-
-            if (!token) {
-
-                setErro(
-                    'Usuário não autenticado.',
-                );
-
-                return;
-            }
-
-
-            const resposta =
-                await fetch(
-                    `${API_URL}/api/atletas/${id}`,
-                    {
-                        method: 'GET',
-
-                        headers: {
-                            Authorization:
-                                `Bearer ${token}`,
-
-                            'Content-Type':
-                                'application/json',
-                        },
-                    },
-                );
-
-
-            const dados =
-                await resposta.json();
-
-
-            if (!resposta.ok) {
-
-                throw new Error(
-                    dados.mensagem ||
-                    'Erro ao buscar atleta.',
-                );
-
-            }
-
-
-            setAtletaSelecionado(
-                dados,
-            );
-
-
-            setTelaAtual(
-                'perfil',
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                'Erro ao abrir perfil:',
-                error,
-            );
-
-
+            console.error('Erro ao cadastrar atleta:', error);
             setErro(
                 error instanceof Error
                     ? error.message
-                    : 'Erro ao abrir perfil.',
+                    : 'Erro ao cadastrar atleta.'
+            );
+        }
+    };
+
+    // ========================================================
+    // IMPORTAÇÃO DE PLANILHA
+    // ========================================================
+
+    const normalizarColuna = (valor: string) =>
+        valor
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '');
+
+    const lerValor = (
+        linha: Record<string, unknown>,
+        alternativas: string[]
+    ): string => {
+        const chaves = Object.keys(linha);
+
+        for (const alternativa of alternativas) {
+            const chaveEncontrada = chaves.find(
+                (chave) =>
+                    normalizarColuna(chave) === normalizarColuna(alternativa)
             );
 
+            if (chaveEncontrada !== undefined) {
+                const valor = linha[chaveEncontrada];
+                if (valor !== null && valor !== undefined) {
+                    return String(valor).trim();
+                }
+            }
         }
 
+        return '';
     };
 
+    const converterData = (valor: string): string => {
+        if (!valor) return '';
 
-    // ========================================================
-    // INFORMAÇÕES
-    // ========================================================
+        const brasileira = valor.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+        if (brasileira) {
+            return `${brasileira[3]}-${brasileira[2]}-${brasileira[1]}`;
+        }
 
-    const abrirInformacoes = (
-        atleta: Atleta,
-    ) => {
+        if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
+            return valor;
+        }
 
-        setAtletaSelecionado({
-
-            id:
-                atleta.id,
-
-            nome:
-                atleta.nome,
-
-            categoria:
-                atleta.categoria ||
-                '',
-
-            equipe:
-                undefined,
-
-            usuario: {
-
-                id:
-                    0,
-
-                email:
-                    atleta.email ||
-                    '',
-
-                tipo:
-                    'ATLETA',
-
-            },
-
-        });
-
-
-        setTelaAtual(
-            'editar',
-        );
-
+        return '';
     };
 
+    const selecionarPlanilha = async (arquivo: File) => {
+        try {
+            setErro('');
+            setResultadoImportacao('');
+            setAtletasPlanilha([]);
+            setNomeArquivo('');
 
-    // ========================================================
-    // CLIPES
-    // ========================================================
+            const extensao = arquivo.name.split('.').pop()?.toLowerCase();
 
-    const abrirClipes = (
-        atleta: Atleta,
-    ) => {
-
-        setAtletaSelecionado({
-
-            id:
-                atleta.id,
-
-            nome:
-                atleta.nome,
-
-            categoria:
-                atleta.categoria ||
-                '',
-
-            equipe:
-                undefined,
-
-            usuario: {
-
-                id:
-                    0,
-
-                email:
-                    atleta.email ||
-                    '',
-
-                tipo:
-                    'ATLETA',
-
-            },
-
-        });
-
-
-        setTelaAtual(
-            'clipes',
-        );
-
-    };
-
-
-    // ========================================================
-    // VOLTAR
-    // ========================================================
-
-    const voltarParaLista = () => {
-
-        setTelaAtual(
-            'lista',
-        );
-
-        setAtletaSelecionado(
-            null,
-        );
-
-    };
-
-
-    // ========================================================
-    // TELA EDITAR
-    // ========================================================
-
-    if (
-        telaAtual ===
-        'editar'
-    ) {
-
-        return (
-
-            <EditarAtleta
-
-                onBack={() =>
-                    setTelaAtual(
-                        'perfil',
-                    )
-                }
-
-            />
-
-        );
-
-    }
-
-
-    // ========================================================
-    // TELA CLIPES
-    // ========================================================
-
-    if (
-        telaAtual ===
-        'clipes'
-    ) {
-
-        return (
-
-            <ClipesAtleta
-
-                onBack={() =>
-                    setTelaAtual(
-                        'perfil',
-                    )
-                }
-
-            />
-
-        );
-
-    }
-
-
-    // ========================================================
-    // TELA PERFIL
-    // ========================================================
-
-    if (
-        telaAtual ===
-        'perfil'
-    ) {
-
-        return (
-
-            <PerfilAtleta
-
-                onBack={
-                    voltarParaLista
-                }
-
-                onEdit={() =>
-                    setTelaAtual(
-                        'editar',
-                    )
-                }
-
-                onClipes={() =>
-                    setTelaAtual(
-                        'clipes',
-                    )
-                }
-
-            />
-
-        );
-
-    }
-
-
-    // ========================================================
-    // LISTA
-    // ========================================================
-
-    return (
-
-        <main
-            className={
-                styles.page
+            if (!['xlsx', 'xls', 'csv'].includes(extensao || '')) {
+                throw new Error('Selecione uma planilha Excel (.xlsx ou .xls) ou CSV.');
             }
-        >
 
-            {/* ==================================================
-               CABEÇALHO
-            ================================================== */}
+            setNomeArquivo(arquivo.name);
 
-            <div
-                className={
-                    styles.top
+            const leitor = new FileReader();
+            leitor.onload = (e) => {
+                try {
+                    const buffer = e.target?.result;
+                    const pasta = XLSX.read(buffer, { type: 'binary' });
+                    const primeiraAba = pasta.SheetNames[0];
+                    const dadosBrutos: Record<string, unknown>[] = XLSX.utils.sheet_to_json(
+                        pasta.Sheets[primeiraAba]
+                    );
+
+                    const atletasLidos: AtletaPlanilha[] = dadosBrutos.map((linha) => ({
+                        nome: lerValor(linha, ['nome', 'nome completo', 'atleta']),
+                        email: lerValor(linha, ['email', 'e-mail']),
+                        dataNascimento: converterData(
+                            lerValor(linha, ['data nascimento', 'nascimento', 'data_nascimento'])
+                        ),
+                        sexo: lerValor(linha, ['sexo', 'genero']),
+                        categoria: lerValor(linha, ['categoria']),
+                        rg: lerValor(linha, ['rg']),
+                        cpf: lerValor(linha, ['cpf']),
+                        telefone: lerValor(linha, ['telefone', 'celular']),
+                        responsavelNome: lerValor(linha, ['nome responsavel', 'responsavel']),
+                        responsavelGrau: lerValor(linha, ['grau parentesco', 'parentesco']),
+                        responsavelTelefone: lerValor(linha, ['telefone responsavel']),
+                    }));
+
+                    setAtletasPlanilha(atletasLidos);
+                } catch (err) {
+                    setErro('Erro ao processar o arquivo.');
                 }
-            >
+            };
 
-                <div
-                    className={
-                        styles.titleArea
-                    }
-                >
+            leitor.readAsBinaryString(arquivo);
+        } catch (error) {
+            setErro(error instanceof Error ? error.message : 'Erro ao carregar o arquivo.');
+        }
+    };
 
-                    <h1>
-                        Veja seus atletas
-                    </h1>
+    // Renderização básica da tela conforme o estado
+    return (
+        <div className={styles.container}>
+            {erro && <div className={styles.erroAlert}>{erro}</div>}
 
-                    <p>
-                        Gerencie seus atletas e acesse rapidamente seus perfis e informações.
-                    </p>
-
+            {telaAtual === 'lista' && (
+                <div>
+                    <h2>Lista de Atletas</h2>
+                    {/* Visualização de lista de atletas */}
                 </div>
-
-
-                <button
-                    type="button"
-                    className={
-                        styles.newAthleteButton
-                    }
-                    onClick={
-                        abrirModalNovoAtleta
-                    }
-                >
-
-                    <Plus
-                        size={22}
-                    />
-
-                    Novo atleta
-
-                </button>
-
-            </div>
-
-
-            {/* ==================================================
-               FILTROS
-            ================================================== */}
-
-            <section
-                className={
-                    styles.filters
-                }
-            >
-
-                <div
-                    className={
-                        styles.searchBox
-                    }
-                >
-
-                    <Search
-                        size={22}
-                    />
-
-                    <input
-                        type="text"
-                        placeholder="Buscar atleta..."
-                        value={
-                            busca
-                        }
-                        onChange={(
-                            event,
-                        ) =>
-                            setBusca(
-                                event.target.value,
-                            )
-                        }
-                    />
-
-                </div>
-
-
-                <div
-                    className={
-                        styles.selectBox
-                    }
-                >
-
-                    <select
-                        value={
-                            equipeSelecionada
-                        }
-                        onChange={(
-                            event,
-                        ) =>
-                            setEquipeSelecionada(
-                                event.target.value,
-                            )
-                        }
-                    >
-
-                        {equipes.map(
-                            (equipe) => (
-
-                                <option
-                                    key={
-                                        equipe
-                                    }
-                                    value={
-                                        equipe
-                                    }
-                                >
-
-                                    {equipe}
-
-                                </option>
-
-                            ),
-                        )}
-
-                    </select>
-
-
-                    <ChevronDown
-                        size={19}
-                    />
-
-                </div>
-
-
-                <div
-                    className={
-                        styles.selectBox
-                    }
-                >
-
-                    <select
-                        value={
-                            modalidadeSelecionada
-                        }
-                        onChange={(
-                            event,
-                        ) =>
-                            setModalidadeSelecionada(
-                                event.target.value,
-                            )
-                        }
-                    >
-
-                        {modalidades.map(
-                            (modalidade) => (
-
-                                <option
-                                    key={
-                                        modalidade
-                                    }
-                                    value={
-                                        modalidade
-                                    }
-                                >
-
-                                    {modalidade}
-
-                                </option>
-
-                            ),
-                        )}
-
-                    </select>
-
-
-                    <ChevronDown
-                        size={19}
-                    />
-
-                </div>
-
-
-                <button
-                    type="button"
-                    className={
-                        styles.filterButton
-                    }
-                >
-
-                    <ListFilter
-                        size={19}
-                    />
-
-                    Filtros
-
-                </button>
-
-            </section>
-
-
-            {/* ==================================================
-               CARREGANDO
-            ================================================== */}
-
-            {carregando && (
-
-                <div
-                    className={
-                        styles.message
-                    }
-                >
-
-                    Carregando atletas...
-
-                </div>
-
             )}
 
-
-            {/* ==================================================
-               ERRO
-            ================================================== */}
-
-            {!carregando &&
-                erro && (
-
-                    <div
-                        className={
-                            styles.message
-                        }
-                    >
-
-                        <strong>
-                            Não foi possível carregar os atletas.
-                        </strong>
-
-                        <span>
-                            {erro}
-                        </span>
-
-                        <button
-                            type="button"
-                            onClick={
-                                carregarAtletas
-                            }
-                        >
-
-                            Tentar novamente
-
-                        </button>
-
-                    </div>
-
-                )}
-
-
-            {/* ==================================================
-               LISTA
-            ================================================== */}
-
-            {!carregando &&
-                !erro && (
-
-                    <section
-                        className={
-                            styles.athletesGrid
-                        }
-                    >
-
-                        {atletasFiltrados.map(
-                            (atleta) => {
-
-                                const iniciais =
-                                    atleta.nome
-                                        .split(' ')
-                                        .filter(Boolean)
-                                        .slice(0, 2)
-                                        .map(
-                                            (parte) =>
-                                                parte[0],
-                                        )
-                                        .join('')
-                                        .toUpperCase();
-
-
-                                return (
-
-                                    <article
-                                        key={
-                                            atleta.id
-                                        }
-                                        className={
-                                            styles.athleteCard
-                                        }
-                                    >
-
-                                        <div
-                                            className={
-                                                styles.cardContent
-                                            }
-                                        >
-
-                                            <div
-                                                className={`${styles.avatar} ${styles[atleta.cor]}`}
-                                            >
-
-                                                {iniciais}
-
-                                            </div>
-
-
-                                            <div
-                                                className={
-                                                    styles.cardInfo
-                                                }
-                                            >
-
-                                                <h2>
-                                                    {atleta.nome}
-                                                </h2>
-
-
-                                                <span
-                                                    className={
-                                                        styles.team
-                                                    }
-                                                >
-
-                                                    {atleta.equipe}
-
-                                                </span>
-
-
-                                                <p>
-
-                                                    {atleta.posicao}
-
-                                                    <span>
-                                                        •
-                                                    </span>
-
-                                                    {atleta.modalidade}
-
-                                                </p>
-
-                                            </div>
-
-
-                                            <span
-                                                className={
-                                                    styles.frequency
-                                                }
-                                            >
-
-                                                {atleta.frequencia}%
-
-                                            </span>
-
-                                        </div>
-
-
-                                        {/* ==================================================
-                                           HOVER
-                                        ================================================== */}
-
-                                        <div
-                                            className={
-                                                styles.cardHover
-                                            }
-                                        >
-
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    abrirPerfil(
-                                                        atleta.id,
-                                                    )
-                                                }
-                                            >
-
-                                                <Eye
-                                                    size={20}
-                                                />
-
-                                                Perfil
-
-                                            </button>
-
-
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    abrirInformacoes(
-                                                        atleta,
-                                                    )
-                                                }
-                                            >
-
-                                                <UserRound
-                                                    size={20}
-                                                />
-
-                                                Informações
-
-                                            </button>
-
-
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    abrirClipes(
-                                                        atleta,
-                                                    )
-                                                }
-                                            >
-
-                                                <Scissors
-                                                    size={20}
-                                                />
-
-                                                Clipes
-
-                                            </button>
-
-                                        </div>
-
-                                    </article>
-
-                                );
-
-                            },
-                        )}
-
-
-                        {atletasFiltrados.length ===
-                            0 && (
-
-                                <div
-                                    className={
-                                        styles.empty
-                                    }
-                                >
-
-                                    <UserRound
-                                        size={32}
-                                    />
-
-                                    <strong>
-                                        Nenhum atleta encontrado
-                                    </strong>
-
-                                    <span>
-                                        Tente alterar sua busca ou os filtros.
-                                    </span>
-
-                                </div>
-
-                            )}
-
-                    </section>
-
-                )}
-
-
-            {/* =====================================================
-               MODAL NOVO ATLETA
-            ===================================================== */}
-
-            {modalNovoAtleta && (
-
-                <div
-                    className={
-                        styles.modalOverlay
-                    }
-                    onMouseDown={
-                        fecharModalNovoAtleta
-                    }
-                >
-
-                    <div
-                        className={
-                            styles.newAthleteModal
-                        }
-                        onMouseDown={(
-                            event,
-                        ) =>
-                            event.stopPropagation()
-                        }
-                    >
-
-                        {/* HEADER */}
-
-                        <div
-                            className={
-                                styles.modalHeader
-                            }
-                        >
-
-                            <div>
-
-                                <h2>
-                                    Cadastrar atleta
-                                </h2>
-
-                                <p>
-                                    Preencha os dados do atleta para adicioná-lo ao sistema.
-                                </p>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                className={
-                                    styles.closeModalButton
-                                }
-                                onClick={
-                                    fecharModalNovoAtleta
-                                }
-                            >
-
-                                <X
-                                    size={21}
-                                />
-
-                            </button>
-
-                        </div>
-
-
-                        {/* CONTEÚDO */}
-
-                        <div
-                            className={
-                                styles.modalBody
-                            }
-                        >
-
-                            {/* DADOS PESSOAIS */}
-
-                            <section
-                                className={
-                                    styles.formSection
-                                }
-                            >
-
-                                <div
-                                    className={
-                                        styles.sectionHeader
-                                    }
-                                >
-
-                                    <h3>
-                                        Dados pessoais
-                                    </h3>
-
-                                </div>
-
-
-                                <div
-                                    className={
-                                        styles.formGrid
-                                    }
-                                >
-
-                                    <div
-                                        className={`${styles.formField} ${styles.fullField}`}
-                                    >
-
-                                        <label>
-                                            Nome completo do atleta
-                                            <b>*</b>
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            placeholder="Digite o nome completo..."
-                                            value={
-                                                novoAtleta.nome
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'nome',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Data de nascimento
-                                            <b>*</b>
-                                        </label>
-
-                                        <input
-                                            type="date"
-                                            value={
-                                                novoAtleta.dataNascimento
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'dataNascimento',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Sexo
-                                            <b>*</b>
-                                        </label>
-
-                                        <select
-                                            value={
-                                                novoAtleta.sexo
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'sexo',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        >
-
-                                            <option value="">
-                                                Selecione
-                                            </option>
-
-                                            <option value="Masculino">
-                                                Masculino
-                                            </option>
-
-                                            <option value="Feminino">
-                                                Feminino
-                                            </option>
-
-                                            <option value="Outro">
-                                                Outro
-                                            </option>
-
-                                        </select>
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Categoria
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            placeholder="Ex.: M17 - Rugby"
-                                            value={
-                                                novoAtleta.categoria
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'categoria',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Registro Geral (RG)
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            placeholder="Digite o RG..."
-                                            value={
-                                                novoAtleta.rg
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'rg',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Cadastro de Pessoa Física (CPF)
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            placeholder="000.000.000-00"
-                                            value={
-                                                novoAtleta.cpf
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'cpf',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            E-mail
-                                        </label>
-
-                                        <input
-                                            type="email"
-                                            placeholder="Digite o e-mail..."
-                                            value={
-                                                novoAtleta.email
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'email',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Telefone
-                                        </label>
-
-                                        <input
-                                            type="tel"
-                                            placeholder="Digite o telefone..."
-                                            value={
-                                                novoAtleta.telefone
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'telefone',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-                                </div>
-
-                            </section>
-
-
-                            {/* RESPONSÁVEL */}
-
-                            <section
-                                className={
-                                    styles.formSection
-                                }
-                            >
-
-                                <div
-                                    className={
-                                        styles.sectionHeader
-                                    }
-                                >
-
-                                    <h3>
-                                        Dados do responsável
-                                    </h3>
-
-                                </div>
-
-
-                                <div
-                                    className={
-                                        styles.responsibleGrid
-                                    }
-                                >
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Nome do responsável
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            placeholder="Digite o nome..."
-                                            value={
-                                                novoAtleta.responsavelNome
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'responsavelNome',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Grau de parentesco
-                                        </label>
-
-                                        <select
-                                            value={
-                                                novoAtleta.responsavelParentesco
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'responsavelParentesco',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        >
-
-                                            <option value="">
-                                                Selecione
-                                            </option>
-
-                                            <option value="Mãe">
-                                                Mãe
-                                            </option>
-
-                                            <option value="Pai">
-                                                Pai
-                                            </option>
-
-                                            <option value="Avó">
-                                                Avó
-                                            </option>
-
-                                            <option value="Avô">
-                                                Avô
-                                            </option>
-
-                                            <option value="Tia">
-                                                Tia
-                                            </option>
-
-                                            <option value="Tio">
-                                                Tio
-                                            </option>
-
-                                            <option value="Outro">
-                                                Outro
-                                            </option>
-
-                                        </select>
-
-                                    </div>
-
-
-                                    <div
-                                        className={
-                                            styles.formField
-                                        }
-                                    >
-
-                                        <label>
-                                            Telefone
-                                        </label>
-
-                                        <input
-                                            type="tel"
-                                            placeholder="Digite o telefone..."
-                                            value={
-                                                novoAtleta.responsavelTelefone
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                alterarCampoNovoAtleta(
-                                                    'responsavelTelefone',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
-
-                                    </div>
-
-                                </div>
-
-                            </section>
-
-
-                            {/* ERRO */}
-
-                            {erroCadastro && (
-
-                                <div
-                                    className={
-                                        styles.formError
-                                    }
-                                >
-
-                                    {erroCadastro}
-
-                                </div>
-
-                            )}
-
-                        </div>
-
-
-                        {/* FOOTER */}
-
-                        <div
-                            className={
-                                styles.modalFooter
-                            }
-                        >
-
-                            <button
-                                type="button"
-                                className={
-                                    styles.cancelButton
-                                }
-                                onClick={
-                                    fecharModalNovoAtleta
-                                }
-                                disabled={
-                                    cadastrando
-                                }
-                            >
-
-                                Cancelar
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                className={
-                                    styles.submitButton
-                                }
-                                onClick={
-                                    cadastrarNovoAtleta
-                                }
-                                disabled={
-                                    cadastrando
-                                }
-                            >
-
-                                <Plus
-                                    size={18}
-                                />
-
-                                {cadastrando
-                                    ? 'Cadastrando...'
-                                    : 'Cadastrar atleta'}
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
+            {telaAtual === 'perfil' && atletaSelecionado && (
+                <PerfilAtleta atleta={atletaSelecionado} aoVoltar={voltarParaLista} />
             )}
 
-        </main>
+            {telaAtual === 'informacoes' && atletaSelecionado && (
+                <InformacoesAtleta atleta={atletaSelecionado} aoVoltar={voltarParaLista} />
+            )}
 
+            {telaAtual === 'clipes' && atletaSelecionado && (
+                <ClipesAtleta atleta={atletaSelecionado} aoVoltar={voltarParaLista} />
+            )}
+        </div>
     );
-
 };
-
 
 export default Atletas;

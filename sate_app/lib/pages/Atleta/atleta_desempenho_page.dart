@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../assets/menu_inferior_atleta.dart';
-import 'atleta_home_page.dart';
-import 'atleta_treino_page.dart';
-import 'atleta_feed_page.dart';
-import 'atleta_perfil_page.dart';
 import 'atleta_notificacao_page.dart';
 
 class AtletaDesempenhoPage extends StatefulWidget {
@@ -31,15 +26,10 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
     return Scaffold(
       backgroundColor: fundo,
 
-      // ========================================================
-      // APP BAR
-      // ========================================================
-
       appBar: AppBar(
         backgroundColor: fundo,
         elevation: 0,
         centerTitle: false,
-
         title: const Text(
           'Minha evolução',
           style: TextStyle(
@@ -48,7 +38,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         actions: [
           IconButton(
             onPressed: () {
@@ -67,10 +56,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
           ),
         ],
       ),
-
-      // ========================================================
-      // CONTEÚDO
-      // ========================================================
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -382,10 +367,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
     );
   }
 
-  // ============================================================
-  // GRÁFICO DE DESEMPENHO
-  // ============================================================
-
   Widget _buildGraficoDesempenho() {
     return Container(
       height: 185,
@@ -414,7 +395,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
               child: Container(),
             ),
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
 
@@ -432,10 +412,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
       ),
     );
   }
-
-  // ============================================================
-  // GRÁFICO DE FREQUÊNCIA
-  // ============================================================
 
   Widget _buildGraficoFrequencia() {
     final valores = [
@@ -490,9 +466,7 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-
                 const SizedBox(height: 8),
-
                 Text(
                   meses[index],
                   style: TextStyle(
@@ -507,10 +481,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
       ),
     );
   }
-
-  // ============================================================
-  // CARD RESUMO
-  // ============================================================
 
   Widget _buildResumoCard({
     required String titulo,
@@ -584,10 +554,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
     );
   }
 
-  // ============================================================
-  // AVALIAÇÃO FÍSICA
-  // ============================================================
-
   Widget _buildAvaliacaoFisica() {
     return Container(
       padding: const EdgeInsets.all(14),
@@ -647,9 +613,7 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
                   'ml/kg/min',
                 ),
               ),
-
               _buildDivisor(),
-
               Expanded(
                 child: _buildIndicador(
                   'IMC',
@@ -657,9 +621,7 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
                   'Normal',
                 ),
               ),
-
               _buildDivisor(),
-
               Expanded(
                 child: _buildIndicador(
                   'Gordura Corporal',
@@ -690,9 +652,7 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
             color: Colors.grey.shade600,
           ),
         ),
-
         const SizedBox(height: 7),
-
         Text(
           valor,
 
@@ -701,9 +661,7 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         const SizedBox(height: 3),
-
         Text(
           legenda,
           textAlign: TextAlign.center,
@@ -726,10 +684,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
       color: Colors.grey.shade200,
     );
   }
-
-  // ============================================================
-  // ÚLTIMAS AVALIAÇÕES
-  // ============================================================
 
   Widget _buildUltimasAvaliacoes() {
     final avaliacoes = [
@@ -808,10 +762,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
     );
   }
 
-  // ============================================================
-  // HISTÓRICO
-  // ============================================================
-
   Widget _buildHistorico() {
     return Column(
       children: [
@@ -872,39 +822,33 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
 
           const SizedBox(width: 11),
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-
-            children: [
-              Text(
-                titulo,
-
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  titulo,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
                 ),
-              ),
-
-              const SizedBox(height: 2),
-
-              Text(
-                data,
-
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey.shade600,
+                const SizedBox(height: 3),
+                Text(
+                  data,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.grey.shade600,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
     );
   }
-
-  // ============================================================
-  // RELATÓRIOS
-  // ============================================================
 
   Widget _buildRelatorios() {
     return Container(
@@ -966,10 +910,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
       ),
     );
   }
-
-  // ============================================================
-  // GRÁFICO DO RELATÓRIO
-  // ============================================================
 
   Widget _buildGraficoRelatorio() {
     return Container(
@@ -1057,10 +997,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
     );
   }
 
-  // ============================================================
-  // BOTÃO EXPORTAR
-  // ============================================================
-
   Widget _buildBotaoExportar() {
     return SizedBox(
       width: double.infinity,
@@ -1104,10 +1040,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
     );
   }
 }
-
-// ================================================================
-// LEGENDA DO GRÁFICO
-// ================================================================
 
 class _LegendaGrafico extends StatelessWidget {
   final String texto;

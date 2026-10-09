@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: 14px;
+  padding: 16px;
 
   box-sizing: border-box;
 
@@ -29,8 +29,9 @@
 ===================================== */
 
 .modal {
-  width: min(1080px, calc(100vw - 28px));
-  max-height: calc(100vh - 28px);
+  width: min(860px, calc(100vw - 32px));
+
+  max-height: calc(100vh - 32px);
 
   display: flex;
   flex-direction: column;
@@ -41,10 +42,10 @@
 
   border: 1px solid rgba(255, 255, 255, 0.16);
 
-  border-radius: 18px;
+  border-radius: 16px;
 
   box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.28);
+    0 20px 50px rgba(0, 0, 0, 0.26);
 }
 
 
@@ -54,12 +55,14 @@
 
 .modalHeader {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
 
-  gap: 24px;
+  gap: 14px;
 
-  padding: 18px 26px 15px;
+  padding: 11px 18px 9px;
+
+  flex-shrink: 0;
 
   border-bottom: 1px solid #cbd8d2;
 }
@@ -67,15 +70,15 @@
 .eyebrow {
   display: block;
 
-  margin-bottom: 3px;
+  margin-bottom: 1px;
 
   color: #11845f;
 
-  font-size: 11px;
+  font-size: 8px;
 
   font-weight: 700;
 
-  letter-spacing: 0.8px;
+  letter-spacing: 0.7px;
 }
 
 .modalHeader h2 {
@@ -83,22 +86,24 @@
 
   color: #20332b;
 
-  font-size: 27px;
+  font-size: 19px;
+
+  line-height: 1.1;
 
   font-weight: 700;
 }
 
 .modalHeader p {
-  margin: 5px 0 0;
+  margin: 3px 0 0;
 
   color: #6d7b74;
 
-  font-size: 12px;
+  font-size: 9px;
 }
 
 .closeButton {
-  width: 40px;
-  height: 40px;
+  width: 31px;
+  height: 31px;
 
   flex-shrink: 0;
 
@@ -110,7 +115,7 @@
 
   border: none;
 
-  border-radius: 10px;
+  border-radius: 8px;
 
   background: transparent;
 
@@ -137,13 +142,15 @@
 .content {
   display: grid;
 
-  grid-template-columns: 210px minmax(0, 1fr);
+  grid-template-columns: 125px minmax(0, 1fr);
 
-  gap: 24px;
+  gap: 15px;
 
-  padding: 18px 26px 14px;
+  padding: 11px 18px 8px;
 
   box-sizing: border-box;
+
+  min-height: 0;
 }
 
 
@@ -155,19 +162,19 @@
   display: flex;
   flex-direction: column;
 
-  gap: 10px;
+  gap: 6px;
 }
 
 .imagePreview {
-  width: 100%;
-  height: 185px;
+  width: 125px;
+  height: 125px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  gap: 8px;
+  gap: 5px;
 
   overflow: hidden;
 
@@ -175,7 +182,7 @@
 
   border: 1px dashed #9eb4aa;
 
-  border-radius: 13px;
+  border-radius: 11px;
 
   background: #dce7e2;
 
@@ -201,11 +208,13 @@
   height: 100%;
 
   object-fit: cover;
+
+  display: block;
 }
 
 .cameraCircle {
-  width: 48px;
-  height: 48px;
+  width: 34px;
+  height: 34px;
 
   display: flex;
   align-items: center;
@@ -219,13 +228,13 @@
 }
 
 .imagePreview strong {
-  font-size: 12px;
+  font-size: 9px;
 }
 
 .imagePreview span {
   color: #829088;
 
-  font-size: 9px;
+  font-size: 7px;
 }
 
 .hiddenInput {
@@ -233,17 +242,17 @@
 }
 
 .changeImageButton {
-  height: 38px;
+  height: 27px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 7px;
+  gap: 4px;
 
   border: 1px solid #c4d2cb;
 
-  border-radius: 8px;
+  border-radius: 7px;
 
   background: #f6f9f7;
 
@@ -251,7 +260,7 @@
 
   font-family: inherit;
 
-  font-size: 10px;
+  font-size: 8px;
 
   cursor: pointer;
 }
@@ -262,23 +271,26 @@
 ===================================== */
 
 .form {
+  min-width: 0;
+  min-height: 0;
+
   display: flex;
   flex-direction: column;
 
-  gap: 13px;
+  gap: 7px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
 
-  gap: 6px;
+  gap: 3px;
 }
 
 .field label {
   color: #42554c;
 
-  font-size: 12px;
+  font-size: 9px;
 
   font-weight: 600;
 }
@@ -286,9 +298,9 @@
 .field input,
 .field select {
   width: 100%;
-  height: 46px;
+  height: 32px;
 
-  padding: 0 14px;
+  padding: 0 9px;
 
   box-sizing: border-box;
 
@@ -296,7 +308,7 @@
 
   border: 1px solid #c6d4cd;
 
-  border-radius: 9px;
+  border-radius: 7px;
 
   background: #f8faf9;
 
@@ -304,7 +316,7 @@
 
   font-family: inherit;
 
-  font-size: 13px;
+  font-size: 10px;
 
   transition:
     border-color 0.2s ease,
@@ -319,7 +331,7 @@
   background: #ffffff;
 
   box-shadow:
-    0 0 0 3px rgba(22, 168, 117, 0.1);
+    0 0 0 2px rgba(22, 168, 117, 0.1);
 }
 
 .twoColumns {
@@ -327,7 +339,7 @@
 
   grid-template-columns: 1fr 1fr;
 
-  gap: 14px;
+  gap: 8px;
 }
 
 
@@ -339,22 +351,22 @@
   display: flex;
   flex-wrap: wrap;
 
-  gap: 8px;
+  gap: 5px;
 }
 
 .sportButton {
-  height: 38px;
+  height: 28px;
 
   display: flex;
   align-items: center;
 
-  gap: 6px;
+  gap: 4px;
 
-  padding: 0 13px;
+  padding: 0 9px;
 
   border: 1px solid #c8d5cf;
 
-  border-radius: 20px;
+  border-radius: 16px;
 
   background: #f5f8f6;
 
@@ -362,7 +374,7 @@
 
   font-family: inherit;
 
-  font-size: 11px;
+  font-size: 8px;
 
   cursor: pointer;
 
@@ -382,6 +394,39 @@
 
 
 /* =====================================
+   SELEÇÃO DE ATLETAS
+===================================== */
+
+/*
+   Esses estilos também pegam os
+   elementos que estavam inline no TSX.
+*/
+
+.form > .field:nth-child(3) {
+  gap: 3px;
+}
+
+.form > .field:nth-child(3) > div:last-child {
+  max-height: 82px !important;
+
+  margin-top: 3px !important;
+
+  border-radius: 7px !important;
+}
+
+.form > .field:nth-child(3) > div:last-child button {
+  min-height: 30px !important;
+
+  padding: 4px 8px !important;
+}
+
+.form > .field:nth-child(3) > div:last-child button > div:first-child {
+  width: 23px !important;
+  height: 23px !important;
+}
+
+
+/* =====================================
    PRÓXIMA PARTIDA
 ===================================== */
 
@@ -389,21 +434,21 @@
   display: grid;
 
   grid-template-columns:
-    minmax(220px, 1.2fr)
-    minmax(150px, 0.8fr)
-    minmax(150px, 0.8fr);
+    minmax(170px, 1.2fr)
+    minmax(110px, 0.8fr)
+    minmax(110px, 0.8fr);
 
-  gap: 12px;
+  gap: 6px;
 
   align-items: end;
 
-  padding: 14px;
+  padding: 8px;
 
   box-sizing: border-box;
 
   border: 1px solid #cbd8d2;
 
-  border-radius: 12px;
+  border-radius: 9px;
 
   background: #dde8e3;
 }
@@ -414,14 +459,14 @@
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  gap: 6px;
 
-  margin-bottom: 2px;
+  margin-bottom: 0;
 }
 
 .matchSectionIcon {
-  width: 38px;
-  height: 38px;
+  width: 26px;
+  height: 26px;
 
   flex-shrink: 0;
 
@@ -429,7 +474,7 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 10px;
+  border-radius: 7px;
 
   background: #c5dbd0;
 
@@ -444,13 +489,13 @@
 .matchSectionHeader strong {
   color: #2a3b33;
 
-  font-size: 12px;
+  font-size: 9px;
 }
 
 .matchSectionHeader span {
   color: #708078;
 
-  font-size: 9px;
+  font-size: 7px;
 }
 
 
@@ -463,20 +508,20 @@
 }
 
 .dateInputWrapper {
-  height: 46px;
+  height: 32px;
 
   display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: 5px;
 
-  padding: 0 11px;
+  padding: 0 7px;
 
   box-sizing: border-box;
 
   border: 1px solid #c6d4cd;
 
-  border-radius: 9px;
+  border-radius: 7px;
 
   background: #f8faf9;
 }
@@ -485,10 +530,13 @@
   border-color: #16a875;
 
   box-shadow:
-    0 0 0 3px rgba(22, 168, 117, 0.1);
+    0 0 0 2px rgba(22, 168, 117, 0.1);
 }
 
 .dateInputWrapper svg {
+  width: 13px;
+  height: 13px;
+
   flex-shrink: 0;
 
   color: #087b5b;
@@ -512,7 +560,7 @@
 
   font-family: inherit;
 
-  font-size: 12px;
+  font-size: 9px;
 }
 
 .dateInputWrapper input:focus {
@@ -530,11 +578,11 @@
   display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: 6px;
 
-  padding: 9px 11px;
+  padding: 5px 7px;
 
-  border-radius: 8px;
+  border-radius: 6px;
 
   background: #cfdfd7;
 
@@ -551,11 +599,11 @@
 .matchPreview span {
   color: #718079;
 
-  font-size: 7px;
+  font-size: 6px;
 
   text-transform: uppercase;
 
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .matchPreview strong {
@@ -563,7 +611,7 @@
 
   color: #29463c;
 
-  font-size: 10px;
+  font-size: 8px;
 
   white-space: nowrap;
 
@@ -580,7 +628,7 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 16px;
+  gap: 10px;
 }
 
 .colors {
@@ -588,12 +636,12 @@
   align-items: center;
   flex-wrap: wrap;
 
-  gap: 7px;
+  gap: 4px;
 }
 
 .colorButton {
-  width: 30px;
-  height: 30px;
+  width: 23px;
+  height: 23px;
 
   display: flex;
   align-items: center;
@@ -612,7 +660,7 @@
   cursor: pointer;
 
   box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.1);
+    0 1px 3px rgba(0, 0, 0, 0.1);
 
   transition:
     transform 0.2s ease,
@@ -632,12 +680,12 @@
 
 
 /* =====================================
-   COR PERSONALIZADA / RGB
+   COR PERSONALIZADA
 ===================================== */
 
 .customColorButton {
-  width: 34px;
-  height: 34px;
+  width: 25px;
+  height: 25px;
 
   display: flex;
   align-items: center;
@@ -664,8 +712,8 @@
 }
 
 .rgbCircle {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
 
   display: flex;
   align-items: center;
@@ -692,7 +740,7 @@
     );
 
   box-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.18);
+    0 1px 4px rgba(0, 0, 0, 0.16);
 }
 
 .rgbCircleCenter {
@@ -715,7 +763,7 @@
 .customColorSelected .rgbCircle {
   box-shadow:
     0 0 0 2px #244c3e,
-    0 3px 7px rgba(0, 0, 0, 0.2);
+    0 2px 5px rgba(0, 0, 0, 0.18);
 }
 
 .hiddenColorInput {
@@ -738,11 +786,11 @@
   display: flex;
   align-items: center;
 
-  gap: 7px;
+  gap: 4px;
 
-  padding: 5px 8px;
+  padding: 3px 6px;
 
-  border-radius: 8px;
+  border-radius: 6px;
 
   background: #d8e4de;
 }
@@ -750,20 +798,20 @@
 .selectedColorInfo span {
   color: #718078;
 
-  font-size: 8px;
+  font-size: 6px;
 }
 
 .selectedColorInfo strong {
   color: #35483f;
 
-  font-size: 9px;
+  font-size: 7px;
 
   font-weight: 600;
 }
 
 .selectedColorPreview {
-  width: 19px;
-  height: 19px;
+  width: 15px;
+  height: 15px;
 
   flex-shrink: 0;
 
@@ -772,7 +820,7 @@
   border-radius: 50%;
 
   box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.15);
+    0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 
@@ -784,20 +832,22 @@
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: 8px;
 
-  margin: 0 26px 12px;
+  margin: 0 18px 7px;
 
-  padding: 11px 14px;
+  padding: 7px 9px;
 
-  border-radius: 10px;
+  flex-shrink: 0;
+
+  border-radius: 8px;
 
   background: #d7e4de;
 }
 
 .previewAvatar {
-  width: 42px;
-  height: 42px;
+  width: 31px;
+  height: 31px;
 
   flex-shrink: 0;
 
@@ -805,13 +855,24 @@
   align-items: center;
   justify-content: center;
 
+  overflow: hidden;
+
   border-radius: 50%;
 
   color: #ffffff;
 
-  font-size: 10px;
+  font-size: 8px;
 
   font-weight: 700;
+}
+
+.previewAvatar img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
 }
 
 .teamPreview > div:last-child {
@@ -822,7 +883,7 @@
 .teamPreview span {
   color: #7b8982;
 
-  font-size: 7px;
+  font-size: 6px;
 
   font-weight: 700;
 }
@@ -830,13 +891,13 @@
 .teamPreview strong {
   color: #263930;
 
-  font-size: 12px;
+  font-size: 9px;
 }
 
 .teamPreview small {
   color: #66766e;
 
-  font-size: 9px;
+  font-size: 7px;
 }
 
 
@@ -849,9 +910,11 @@
   align-items: center;
   justify-content: flex-end;
 
-  gap: 10px;
+  gap: 7px;
 
-  padding: 12px 26px;
+  padding: 8px 18px;
+
+  flex-shrink: 0;
 
   border-top: 1px solid #cbd8d2;
 
@@ -860,21 +923,21 @@
 
 .cancelButton,
 .createButton {
-  height: 40px;
+  height: 31px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 7px;
+  gap: 5px;
 
-  padding: 0 18px;
+  padding: 0 13px;
 
-  border-radius: 8px;
+  border-radius: 7px;
 
   font-family: inherit;
 
-  font-size: 11px;
+  font-size: 9px;
 
   font-weight: 600;
 
@@ -911,23 +974,28 @@
 @media (max-width: 900px) {
 
   .modal {
-    width: calc(100vw - 20px);
+    width: calc(100vw - 28px);
   }
 
   .content {
-    grid-template-columns: 180px 1fr;
+    grid-template-columns: 120px 1fr;
 
-    gap: 18px;
+    gap: 13px;
+  }
+
+  .imagePreview {
+    width: 120px;
+    height: 120px;
   }
 
   .matchSection {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+      1fr 1fr;
   }
 
   .matchSection > .field:first-of-type {
     grid-column: 1 / -1;
   }
-
 }
 
 
@@ -935,16 +1003,33 @@
 
   .overlay {
     align-items: flex-start;
+
+    padding: 10px;
+
+    overflow-y: auto;
+  }
+
+  .modal {
+    width: 100%;
+
+    max-height: calc(100vh - 20px);
+
+    overflow-y: auto;
   }
 
   .content {
     grid-template-columns: 1fr;
+
+    padding: 12px;
   }
 
   .imageArea {
-    display: grid;
+    display: flex;
+  }
 
-    grid-template-columns: 160px 1fr;
+  .imagePreview {
+    width: 100%;
+    height: 130px;
   }
 
   .twoColumns {
@@ -961,4 +1046,13 @@
     grid-template-columns: 1fr;
   }
 
+  .teamPreview {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  .footer {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }

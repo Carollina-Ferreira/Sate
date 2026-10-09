@@ -1518,3 +1518,263 @@
     padding-bottom: 10px;
   }
 }
+
+/* ============================================================
+   COMPLEMENTOS DO TSX ATUAL
+   Mantém o visual do CSS anterior e adiciona apenas o que faltava.
+============================================================ */
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.exportButton {
+  min-width: 145px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 18px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease, border-color .2s ease;
+}
+.exportButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+.exportButton:disabled,
+.newAthleteButton:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+.clearSearchButton {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #7c8a83;
+  cursor: pointer;
+}
+.clearSearchButton:hover { background: #eef3f0; color: #263930; }
+
+.clearFiltersButton {
+  height: 54px;
+  padding: 0 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,.78);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.clearFiltersButton:hover { color: #fff; text-decoration: underline; }
+
+.teamFilter {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin: -22px 0 28px;
+}
+.teamFilter .selectBox { width: min(280px, 100%); }
+
+.athleteCount {
+  margin: -18px 0 16px;
+  color: rgba(255,255,255,.72);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.modalForm {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalError {
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 22px 0;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  border: 1px solid #efc1c1;
+  border-radius: 8px;
+  background: #fff1f1;
+  color: #ba4646;
+}
+.modalError strong { font-size: 10px; }
+.modalError span { font-size: 10px; white-space: pre-line; }
+.modalError button {
+  border: none;
+  background: transparent;
+  color: #a63e3e;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cadastroOpcoes {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 16px;
+}
+.cadastroOpcao {
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 21px;
+  box-sizing: border-box;
+  border: 1px solid #c8d6d0;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.cadastroOpcao:hover {
+  transform: translateY(-3px);
+  border-color: #8eb8a8;
+  box-shadow: 0 10px 24px rgba(0,49,35,.10);
+}
+.cadastroOpcaoPlanilha:hover { border-color: #d6a2b0; }
+.cadastroOpcaoIcone {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 17px;
+  border-radius: 12px;
+}
+.cadastroOpcaoIconeVerde { background: #dceee6; color: #0b8c64; }
+.cadastroOpcaoIconeRosa { background: #f7e5ea; color: #b04d68; }
+.cadastroOpcao > strong { margin-bottom: 7px; color: #263a31; font-size: 14px; font-weight: 700; }
+.cadastroOpcaoDescricao { color: #728078; font-size: 11px; line-height: 1.6; }
+.cadastroOpcaoLink { margin-top: auto; padding-top: 17px; color: #0b8c64; font-size: 10px; font-weight: 700; }
+.cadastroOpcaoPlanilha .cadastroOpcaoLink { color: #b04d68; }
+
+.uploadArea {
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 26px;
+  box-sizing: border-box;
+  border: 1.5px dashed #9fb5ab;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease;
+}
+.uploadArea:hover { border-color: #16a875; background: #f8fcfa; }
+.uploadArea .cadastroOpcaoIcone { margin-bottom: 5px; }
+.uploadArea > strong { color: #263a31; font-size: 13px; font-weight: 700; }
+.hiddenFileInput { display: none; }
+.helpText { margin: 10px 0 0; color: #77867f; font-size: 10px; line-height: 1.6; }
+
+.previewTitle { display: flex; align-items: center; gap: 7px; }
+.previewTitle svg { color: #0b8c64; }
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #cbd8d2;
+  border-radius: 10px;
+  background: #fff;
+}
+.previewTable { width: 100%; border-collapse: collapse; }
+.previewTable th {
+  padding: 10px 12px;
+  border-bottom: 1px solid #d7e0dc;
+  background: #dce7e2;
+  color: #53665d;
+  font-size: 9px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+}
+.previewTable td { padding: 10px 12px; border-bottom: 1px solid #e7ece9; color: #485b52; font-size: 10px; }
+.previewTable tr:last-child td { border-bottom: none; }
+
+.importResult {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid #b6d8ca;
+  border-radius: 10px;
+  background: #e9f6f0;
+  color: #087b5b;
+}
+.importResult svg { flex-shrink: 0; }
+.importResult span { font-size: 10px; line-height: 1.5; }
+
+.backToOptionsButton {
+  width: fit-content !important;
+  min-width: 0 !important;
+  height: 38px !important;
+  margin-bottom: 14px;
+  padding: 0 12px !important;
+  gap: 6px;
+  background: transparent !important;
+  border: 1px solid #becdc6 !important;
+  color: #54675e !important;
+  box-shadow: none !important;
+}
+.backToOptionsButton:hover { background: #dce7e2 !important; transform: none !important; }
+
+@media (max-width: 1200px) {
+  .headerActions { gap: 9px; }
+  .exportButton { min-width: 130px; }
+}
+@media (max-width: 1000px) {
+  .headerActions { width: 100%; }
+  .exportButton, .newAthleteButton { flex: 1; }
+  .clearFiltersButton { height: 40px; justify-self: start; }
+}
+@media (max-width: 760px) {
+  .headerActions { width: 100%; }
+  .exportButton, .newAthleteButton { width: 100%; }
+  .cadastroOpcoes { grid-template-columns: 1fr; }
+  .teamFilter { margin-top: -18px; }
+}
+@media (max-width: 560px) {
+  .headerActions { flex-direction: column; }
+  .exportButton, .newAthleteButton { width: 100%; min-width: 0; flex: none; }
+  .modalError { grid-template-columns: 1fr; margin-left: 15px; margin-right: 15px; }
+  .cadastroOpcao { min-height: 165px; }
+}
+

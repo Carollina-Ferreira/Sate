@@ -1,103 +1,128 @@
 import 'package:flutter/material.dart';
 
-import '../../assets/cabecalho_treinador.dart';
+import 'treinador_notificacao_page.dart';
 
 class TreinadorHomePage extends StatelessWidget {
   const TreinadorHomePage({super.key});
 
   static const Color verde = Color(0xFF006B4F);
-  static const Color verdeEscuro = Color(0xFF004D3A);
   static const Color verdeClaro = Color(0xFFE8F5F0);
+  static const Color rosa = Color(0xFFE98BA8);
+
   static const Color fundo = Color(0xFFF4F8F6);
   static const Color texto = Color(0xFF12261F);
   static const Color textoSecundario = Color(0xFF68736F);
   static const Color linha = Color(0xFFDCE7E2);
-  static const Color rosa = Color(0xFFE98BA8);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: fundo,
-      body: Column(
-        children: [
-          const CabecalhoTreinador(
-            titulo: 'Professor Marcos!',
-            subtitulo: 'Olá,',
-          ),
 
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: fundo,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(32),
-                  topRight: Radius.circular(32),
+      appBar: AppBar(
+        backgroundColor: fundo,
+        elevation: 0,
+        centerTitle: true,
+
+        title: Image.asset(
+          'images/logoVerde_img.png',
+          width: 110,
+        ),
+
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const TreinadorNotificacaoPage(),
                 ),
-              ),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(
-                  20,
-                  24,
-                  20,
-                  40,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _saudacao(),
-
-                    const SizedBox(height: 24),
-
-                    _tituloSecao('Visão geral'),
-
-                    const SizedBox(height: 12),
-
-                    _resumoEquipe(),
-
-                    const SizedBox(height: 28),
-
-                    _tituloSecao('Próximo treino'),
-
-                    const SizedBox(height: 12),
-
-                    _proximoTreino(),
-
-                    const SizedBox(height: 28),
-
-                    _tituloSecao('Desempenho da equipe'),
-
-                    const SizedBox(height: 12),
-
-                    _graficoDesempenho(),
-
-                    const SizedBox(height: 28),
-
-                    _atividadeRecente(),
-                  ],
-                ),
-              ),
+              );
+            },
+            icon: const Icon(
+              Icons.notifications_none_rounded,
+              color: texto,
+              size: 27,
             ),
           ),
         ],
       ),
-    );
-  }
 
-  // =========================================================
-  // SAUDAÇÃO
-  // =========================================================
-
-  Widget _saudacao() {
-    return Row(
-      children: [
-        Expanded(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(
+            20,
+            10,
+            20,
+            40,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Bom dia, Professor! 👋',
+              _buildSaudacao(),
+
+              const SizedBox(height: 28),
+
+              _tituloSecao('Visão geral'),
+
+              const SizedBox(height: 12),
+
+              _buildVisaoGeral(),
+
+              const SizedBox(height: 28),
+
+              _tituloSecao('Próximo treino'),
+
+              const SizedBox(height: 12),
+
+              _buildProximoTreino(),
+
+              const SizedBox(height: 28),
+
+              _tituloSecao('Desempenho da equipe'),
+
+              const SizedBox(height: 12),
+
+              _buildGrafico(),
+
+              const SizedBox(height: 28),
+
+              _tituloSecao('Atividade recente'),
+
+              const SizedBox(height: 12),
+
+              _buildAtividade(
+                icon: Icons.person_add_alt_1_rounded,
+                titulo: 'Novo atleta adicionado',
+                descricao: 'Mariana Souza entrou na equipe.',
+                tempo: 'Hoje',
+              ),
+
+              const SizedBox(height: 10),
+
+              _buildAtividade(
+                icon: Icons.check_circle_outline_rounded,
+                titulo: 'Treino concluído',
+                descricao: 'Treino de resistência finalizado.',
+                tempo: 'Ontem',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSaudacao() {
+    return Row(
+      children: [
+        const Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Olá, Professor! 👋',
                 style: TextStyle(
                   fontSize: 21,
                   fontWeight: FontWeight.w700,
@@ -105,9 +130,9 @@ class TreinadorHomePage extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 5),
+              SizedBox(height: 5),
 
-              const Text(
+              Text(
                 'Acompanhe o desempenho da sua equipe.',
                 style: TextStyle(
                   fontSize: 13,
@@ -124,7 +149,7 @@ class TreinadorHomePage extends StatelessWidget {
           height: 42,
           decoration: BoxDecoration(
             color: verdeClaro,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(13),
           ),
           child: const Icon(
             Icons.insights_rounded,
@@ -135,10 +160,6 @@ class TreinadorHomePage extends StatelessWidget {
       ],
     );
   }
-
-  // =========================================================
-  // TÍTULO
-  // =========================================================
 
   Widget _tituloSecao(String titulo) {
     return Text(
@@ -151,20 +172,15 @@ class TreinadorHomePage extends StatelessWidget {
     );
   }
 
-  // =========================================================
-  // RESUMO DA EQUIPE
-  // =========================================================
-
-  Widget _resumoEquipe() {
+  Widget _buildVisaoGeral() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: linha,
-          width: 1,
         ),
       ),
       child: Column(
@@ -172,8 +188,8 @@ class TreinadorHomePage extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _indicador(
-                  icone: Icons.groups_rounded,
+                child: _buildIndicador(
+                  icon: Icons.groups_rounded,
                   titulo: 'Atletas',
                   valor: '24',
                 ),
@@ -186,8 +202,8 @@ class TreinadorHomePage extends StatelessWidget {
               ),
 
               Expanded(
-                child: _indicador(
-                  icone: Icons.event_available_rounded,
+                child: _buildIndicador(
+                  icon: Icons.event_available_rounded,
                   titulo: 'Frequência',
                   valor: '88%',
                 ),
@@ -195,20 +211,20 @@ class TreinadorHomePage extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
 
           Container(
             height: 1,
             color: linha,
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
 
           Row(
             children: [
               Expanded(
-                child: _indicador(
-                  icone: Icons.fitness_center_rounded,
+                child: _buildIndicador(
+                  icon: Icons.fitness_center_rounded,
                   titulo: 'Treinos/semana',
                   valor: '6',
                 ),
@@ -221,8 +237,8 @@ class TreinadorHomePage extends StatelessWidget {
               ),
 
               Expanded(
-                child: _indicador(
-                  icone: Icons.trending_up_rounded,
+                child: _buildIndicador(
+                  icon: Icons.trending_up_rounded,
                   titulo: 'Desempenho',
                   valor: '+9%',
                 ),
@@ -234,24 +250,24 @@ class TreinadorHomePage extends StatelessWidget {
     );
   }
 
-  Widget _indicador({
-    required IconData icone,
+  Widget _buildIndicador({
+    required IconData icon,
     required String titulo,
     required String valor,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
           Container(
-            width: 38,
-            height: 38,
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: verdeClaro,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
-              icone,
+              icon,
               color: verde,
               size: 20,
             ),
@@ -292,17 +308,13 @@ class TreinadorHomePage extends StatelessWidget {
     );
   }
 
-  // =========================================================
-  // PRÓXIMO TREINO
-  // =========================================================
-
-  Widget _proximoTreino() {
+  Widget _buildProximoTreino() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: linha,
         ),
@@ -317,7 +329,7 @@ class TreinadorHomePage extends StatelessWidget {
                 height: 45,
                 decoration: BoxDecoration(
                   color: verdeClaro,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(13),
                 ),
                 child: const Icon(
                   Icons.sports_rounded,
@@ -348,7 +360,7 @@ class TreinadorHomePage extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         color: texto,
                         fontWeight: FontWeight.w700,
                       ),
@@ -359,7 +371,7 @@ class TreinadorHomePage extends StatelessWidget {
 
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
+                  horizontal: 9,
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
@@ -378,14 +390,14 @@ class TreinadorHomePage extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
 
           Container(
             height: 1,
             color: linha,
           ),
 
-          const SizedBox(height: 15),
+          const SizedBox(height: 14),
 
           Row(
             children: [
@@ -406,7 +418,7 @@ class TreinadorHomePage extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(width: 20),
+              const SizedBox(width: 18),
 
               Container(
                 width: 4,
@@ -417,7 +429,7 @@ class TreinadorHomePage extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(width: 20),
+              const SizedBox(width: 18),
 
               const Icon(
                 Icons.access_time_rounded,
@@ -442,11 +454,7 @@ class TreinadorHomePage extends StatelessWidget {
     );
   }
 
-  // =========================================================
-  // GRÁFICO
-  // =========================================================
-
-  Widget _graficoDesempenho() {
+  Widget _buildGrafico() {
     final valores = [
       80.0,
       75.0,
@@ -458,13 +466,13 @@ class TreinadorHomePage extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(
         14,
-        18,
-        14,
         16,
+        14,
+        14,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: linha,
         ),
@@ -474,8 +482,8 @@ class TreinadorHomePage extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 38,
-                height: 38,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   color: verdeClaro,
                   borderRadius: BorderRadius.circular(12),
@@ -592,10 +600,10 @@ class TreinadorHomePage extends StatelessWidget {
 
           const SizedBox(height: 9),
 
-          Row(
+          const Row(
             mainAxisAlignment:
                 MainAxisAlignment.spaceAround,
-            children: const [
+            children: [
               Text('Mês 1', style: _eixoStyle),
               Text('Mês 2', style: _eixoStyle),
               Text('Mês 3', style: _eixoStyle),
@@ -643,39 +651,8 @@ class TreinadorHomePage extends StatelessWidget {
     );
   }
 
-  // =========================================================
-  // ATIVIDADE RECENTE
-  // =========================================================
-
-  Widget _atividadeRecente() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _tituloSecao('Atividade recente'),
-
-        const SizedBox(height: 12),
-
-        _itemAtividade(
-          icone: Icons.person_add_alt_1_rounded,
-          titulo: 'Novo atleta adicionado',
-          descricao: 'Mariana Souza entrou na equipe.',
-          tempo: 'Hoje',
-        ),
-
-        const SizedBox(height: 10),
-
-        _itemAtividade(
-          icone: Icons.check_circle_outline_rounded,
-          titulo: 'Treino concluído',
-          descricao: 'Treino de resistência finalizado.',
-          tempo: 'Ontem',
-        ),
-      ],
-    );
-  }
-
-  Widget _itemAtividade({
-    required IconData icone,
+  Widget _buildAtividade({
+    required IconData icon,
     required String titulo,
     required String descricao,
     required String tempo,
@@ -693,16 +670,16 @@ class TreinadorHomePage extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 40,
-            height: 40,
+            width: 42,
+            height: 42,
             decoration: BoxDecoration(
               color: verdeClaro,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
-              icone,
+              icon,
               color: verde,
-              size: 20,
+              size: 21,
             ),
           ),
 
@@ -710,12 +687,13 @@ class TreinadorHomePage extends StatelessWidget {
 
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
               children: [
                 Text(
                   titulo,
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 14,
                     color: texto,
                     fontWeight: FontWeight.w700,
                   ),

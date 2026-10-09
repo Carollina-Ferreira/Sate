@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 import './treinador_vinculo_page.dart';
 
 class TreinadorEquipesPage extends StatefulWidget {
-  const TreinadorEquipesPage({super.key});
+  final String nomeUsuario;
+  final String emailUsuario;
+
+  const TreinadorEquipesPage({
+    super.key,
+    required this.nomeUsuario,
+    required this.emailUsuario,
+  });
 
   @override
   State<TreinadorEquipesPage> createState() =>
@@ -36,6 +43,8 @@ class _TreinadorEquipesPageState
       context,
       MaterialPageRoute(
         builder: (context) => TreinadorVinculoPage(
+          nomeUsuario: widget.nomeUsuario,
+          emailUsuario: widget.emailUsuario,
           nomeEquipe: equipe['nome'] ?? '',
           modalidade: equipe['modalidade'] ?? '',
           atletas: equipe['atletas'] ?? '',

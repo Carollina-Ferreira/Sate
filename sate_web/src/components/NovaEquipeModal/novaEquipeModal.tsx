@@ -23,22 +23,15 @@ import type {
 
 import styles from './novaEquipeModal.module.css';
 
-
-/* =====================================
-   TIPOS
-===================================== */
-
 export interface AtletaDisponivel {
   id: number;
-  nome: string;
+  nome: string | null;
   categoria?: string | null;
-
   usuario?: {
     email?: string;
     avatarUrl?: string | null;
-  } | null;
+  };
 }
-
 
 export interface NovaEquipeData {
   nome: string;
@@ -50,10 +43,8 @@ export interface NovaEquipeData {
   imagemPreview: string | null;
 }
 
-
 interface NovaEquipeModalProps {
   open: boolean;
-
   onClose: () => void;
 
   onCreate: (
@@ -65,10 +56,13 @@ interface NovaEquipeModalProps {
   atletasDisponiveis?: AtletaDisponivel[];
 }
 
-
-/* =====================================
-   CORES
-===================================== */
+const esportes = [
+  'Futebol',
+  'Basquete',
+  'Vôlei',
+  'Rugby',
+  'Tênis',
+];
 
 const cores = [
   '#16A875',
@@ -79,11 +73,6 @@ const cores = [
   '#D652A2',
 ];
 
-
-/* =====================================
-   DIAS DA SEMANA
-===================================== */
-
 const diasSemana = [
   'Dom',
   'Seg',
@@ -93,11 +82,6 @@ const diasSemana = [
   'Sex',
   'Sáb',
 ];
-
-
-/* =====================================
-   FORMATAR PARTIDA
-===================================== */
 
 const formatarProximaPartida = (
   adversario: string,
@@ -115,11 +99,12 @@ const formatarProximaPartida = (
   const [ano, mes, dia] =
     data.split('-').map(Number);
 
-  const dataPartida = new Date(
-    ano,
-    mes - 1,
-    dia,
-  );
+  const dataPartida =
+    new Date(
+      ano,
+      mes - 1,
+      dia,
+    );
 
   const diaSemana =
     diasSemana[
@@ -137,38 +122,32 @@ const formatarProximaPartida = (
   return `vs ${adversario.trim()} (${diaSemana}, ${horarioFormatado})`;
 };
 
-
-/* =====================================
-   COMPONENTE
-===================================== */
-
 const NovaEquipeModal = ({
   open,
   onClose,
   onCreate,
-
   modalidadeInicial = 'Futebol',
-
   atletasDisponiveis = [],
 }: NovaEquipeModalProps) => {
-
-  /* =====================================
-     REFS
-  ===================================== */
-
   const fileInputRef =
     useRef<HTMLInputElement>(null);
 
   const colorInputRef =
     useRef<HTMLInputElement>(null);
 
-
-  /* =====================================
-     ESTADOS
-  ===================================== */
-
   const [nome, setNome] =
     useState('');
+
+  const [
+    modalidade,
+    setModalidade,
+  ] = useState(
+    esportes.includes(
+      modalidadeInicial,
+    )
+      ? modalidadeInicial
+      : 'Futebol',
+  );
 
   const [
     categoria,
@@ -213,22 +192,7 @@ const NovaEquipeModal = ({
     setImagemPreview,
   ] = useState<string | null>(null);
 
-
-  /* =====================================
-     MODALIDADE
-  ===================================== */
-
-  const modalidade =
-    modalidadeInicial === 'Todos'
-      ? 'Futebol'
-      : modalidadeInicial;
-
-
-  /* =====================================
-     PRÓXIMA PARTIDA
-  ===================================== */
-
-  const proximaPartida =
+  const proximaPartidaPreview =
     useMemo(() => {
       return formatarProximaPartida(
         adversario,
@@ -241,18 +205,8 @@ const NovaEquipeModal = ({
       horarioPartida,
     ]);
 
-
-  /* =====================================
-     COR PERSONALIZADA
-  ===================================== */
-
   const corEhPersonalizada =
     !cores.includes(cor);
-
-
-  /* =====================================
-     FILTRAR ATLETAS
-  ===================================== */
 
   const atletasFiltrados =
     useMemo(() => {
@@ -266,51 +220,31 @@ const NovaEquipeModal = ({
       }
 
       return atletasDisponiveis.filter(
-        (atleta) => {
-          const nomeAtleta =
-            atleta.nome
-              ?.toLowerCase() || '';
-
-          const categoriaAtleta =
-            atleta.categoria
-              ?.toLowerCase() || '';
-
-          const email =
-            atleta.usuario?.email
-              ?.toLowerCase() || '';
-
-          return (
-            nomeAtleta.includes(termo) ||
-            categoriaAtleta.includes(termo) ||
-            email.includes(termo)
-          );
-        },
+        (atleta) =>
+          atleta.nome
+            ?.toLowerCase()
+            .includes(termo) ||
+          atleta.usuario?.email
+            ?.toLowerCase()
+            .includes(termo),
       );
     }, [
       atletasDisponiveis,
       buscaAtleta,
     ]);
 
-
-  /* =====================================
-     VALIDAÇÃO
-  ===================================== */
-
   const formularioValido =
     useMemo(() => {
       return (
         nome.trim().length >= 2 &&
+        modalidade.trim() !== '' &&
         categoria.trim() !== ''
       );
     }, [
       nome,
+      modalidade,
       categoria,
     ]);
-
-
-  /* =====================================
-     ESC
-  ===================================== */
 
   useEffect(() => {
     if (!open) {
@@ -320,7 +254,9 @@ const NovaEquipeModal = ({
     const handleEscape = (
       event: KeyboardEvent,
     ) => {
-      if (event.key === 'Escape') {
+      if (
+        event.key === 'Escape'
+      ) {
         onClose();
       }
     };
@@ -342,15 +278,11 @@ const NovaEquipeModal = ({
       document.body.style.overflow =
         '';
     };
-  }, [
-    open,
-    onClose,
-  ]);
+  }, [open, onClose]);
 
-
-  /* =====================================
-     IMAGEM
-  ===================================== */
+  if (!open) {
+    return null;
+  }
 
   const handleImagem = (
     event: ChangeEvent<HTMLInputElement>,
@@ -362,32 +294,11 @@ const NovaEquipeModal = ({
       return;
     }
 
-    /*
-      FileReader transforma a imagem
-      em Base64, garantindo que o
-      preview continue disponível.
-    */
+    const url =
+      URL.createObjectURL(file);
 
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (
-        typeof reader.result ===
-        'string'
-      ) {
-        setImagemPreview(
-          reader.result,
-        );
-      }
-    };
-
-    reader.readAsDataURL(file);
+    setImagemPreview(url);
   };
-
-
-  /* =====================================
-     COR PERSONALIZADA
-  ===================================== */
 
   const handleCorPersonalizada = (
     event: ChangeEvent<HTMLInputElement>,
@@ -402,48 +313,46 @@ const NovaEquipeModal = ({
     setCor(novaCor);
   };
 
-
-  /* =====================================
-     SELECIONAR ATLETA
-  ===================================== */
-
   const alternarAtleta = (
     atletaId: number,
   ) => {
     setAtletasSelecionados(
-      (atuais) => {
+      (atletasAtuais) => {
         if (
-          atuais.includes(atletaId)
+          atletasAtuais.includes(
+            atletaId,
+          )
         ) {
-          return atuais.filter(
+          return atletasAtuais.filter(
             (id) =>
               id !== atletaId,
           );
         }
 
         return [
-          ...atuais,
+          ...atletasAtuais,
           atletaId,
         ];
       },
     );
   };
 
-
-  /* =====================================
-     RESET
-  ===================================== */
-
   const resetFormulario = () => {
     setNome('');
+
+    setModalidade(
+      esportes.includes(
+        modalidadeInicial,
+      )
+        ? modalidadeInicial
+        : 'Futebol',
+    );
 
     setCategoria(
       'Principal',
     );
 
-    setAtletasSelecionados(
-      [],
-    );
+    setAtletasSelecionados([]);
 
     setBuscaAtleta('');
 
@@ -454,39 +363,33 @@ const NovaEquipeModal = ({
     );
 
     setAdversario('');
-
     setDataPartida('');
-
     setHorarioPartida('');
 
     setImagemPreview(null);
   };
 
-
-  /* =====================================
-     FECHAR
-  ===================================== */
-
   const fecharModal = () => {
     resetFormulario();
-
     onClose();
   };
-
-
-  /* =====================================
-     CRIAR
-  ===================================== */
 
   const criarEquipe = () => {
     if (!formularioValido) {
       return;
     }
 
+    const proximaPartida =
+      dataPartida &&
+      horarioPartida
+        ? `${dataPartida}T${horarioPartida}:00`
+        : null;
+
     onCreate({
       nome: nome.trim(),
 
-      modalidade,
+      modalidade:
+        modalidade.trim(),
 
       categoria:
         categoria.trim(),
@@ -496,13 +399,7 @@ const NovaEquipeModal = ({
 
       cor,
 
-      proximaPartida:
-        adversario.trim()
-          ? dataPartida &&
-            horarioPartida
-            ? `${dataPartida}T${horarioPartida}:00`
-            : proximaPartida
-          : null,
+      proximaPartida,
 
       imagemPreview,
     });
@@ -511,20 +408,6 @@ const NovaEquipeModal = ({
 
     onClose();
   };
-
-
-  /* =====================================
-     NÃO ABRIR
-  ===================================== */
-
-  if (!open) {
-    return null;
-  }
-
-
-  /* =====================================
-     RENDER
-  ===================================== */
 
   return (
     <div
@@ -537,10 +420,7 @@ const NovaEquipeModal = ({
           event.stopPropagation()
         }
       >
-
-        {/* =================================
-            HEADER
-        ================================= */}
+        {/* HEADER */}
 
         <div
           className={
@@ -562,7 +442,8 @@ const NovaEquipeModal = ({
 
             <p>
               Cadastre as principais
-              informações do novo time.
+              informações do novo
+              time.
             </p>
           </div>
 
@@ -571,26 +452,22 @@ const NovaEquipeModal = ({
             className={
               styles.closeButton
             }
-            onClick={fecharModal}
+            onClick={
+              fecharModal
+            }
           >
-            <X size={19} />
+            <X size={20} />
           </button>
         </div>
 
-
-        {/* =================================
-            CONTEÚDO
-        ================================= */}
+        {/* CONTEÚDO */}
 
         <div
           className={
             styles.content
           }
         >
-
-          {/* ================================
-              IMAGEM
-          ================================= */}
+          {/* IMAGEM */}
 
           <div
             className={
@@ -608,7 +485,9 @@ const NovaEquipeModal = ({
             >
               {imagemPreview ? (
                 <img
-                  src={imagemPreview}
+                  src={
+                    imagemPreview
+                  }
                   alt="Preview da equipe"
                 />
               ) : (
@@ -618,7 +497,9 @@ const NovaEquipeModal = ({
                       styles.cameraCircle
                     }
                   >
-                    <Camera size={20} />
+                    <Camera
+                      size={22}
+                    />
                   </div>
 
                   <strong>
@@ -639,7 +520,9 @@ const NovaEquipeModal = ({
               className={
                 styles.hiddenInput
               }
-              onChange={handleImagem}
+              onChange={
+                handleImagem
+              }
             />
 
             {imagemPreview && (
@@ -652,24 +535,22 @@ const NovaEquipeModal = ({
                   fileInputRef.current?.click()
                 }
               >
-                <Camera size={13} />
+                <Camera
+                  size={15}
+                />
 
                 Alterar imagem
               </button>
             )}
           </div>
 
-
-          {/* ================================
-              FORM
-          ================================= */}
+          {/* FORM */}
 
           <div
             className={
               styles.form
             }
           >
-
             {/* NOME */}
 
             <div
@@ -697,114 +578,90 @@ const NovaEquipeModal = ({
               />
             </div>
 
-
-            {/* CATEGORIA + CONTADOR */}
+            {/* ESPORTE */}
 
             <div
               className={
-                styles.twoColumns
+                styles.field
               }
             >
-              <div
-                className={
-                  styles.field
+              <label
+                htmlFor="esporte-equipe"
+              >
+                Esporte
+              </label>
+
+              <select
+                id="esporte-equipe"
+                value={modalidade}
+                onChange={(event) =>
+                  setModalidade(
+                    event.target.value,
+                  )
                 }
               >
-                <label
-                  htmlFor="categoria"
-                >
-                  Categoria
-                </label>
-
-                <select
-                  id="categoria"
-                  value={categoria}
-                  onChange={(event) =>
-                    setCategoria(
-                      event.target.value,
-                    )
-                  }
-                >
-                  <option value="Principal">
-                    Principal
-                  </option>
-
-                  <option value="Sub-20">
-                    Sub-20
-                  </option>
-
-                  <option value="Sub-17">
-                    Sub-17
-                  </option>
-
-                  <option value="Sub-15">
-                    Sub-15
-                  </option>
-
-                  <option value="Feminino">
-                    Feminino
-                  </option>
-
-                  <option value="Masculino">
-                    Masculino
-                  </option>
-                </select>
-              </div>
-
-
-              <div
-                className={
-                  styles.field
-                }
-              >
-                <label>
-                  Atletas
-                </label>
-
-                <div
-                  style={{
-                    height: '46px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '0 12px',
-                    border:
-                      '1px solid #c6d4cd',
-                    borderRadius: '9px',
-                    background:
-                      '#f8faf9',
-                    color: '#293a32',
-                    fontSize: '11px',
-                  }}
-                >
-                  <UserRound
-                    size={14}
-                    style={{
-                      marginRight: '7px',
-                      color: '#087b5b',
-                    }}
-                  />
-
-                  <strong>
-                    {
-                      atletasSelecionados.length
-                    }
-                  </strong>
-
-                  <span
-                    style={{
-                      marginLeft: '4px',
-                    }}
-                  >
-                    selecionados
-                  </span>
-                </div>
-              </div>
+                {esportes.map(
+                  (esporte) => (
+                    <option
+                      key={esporte}
+                      value={esporte}
+                    >
+                      {esporte}
+                    </option>
+                  ),
+                )}
+              </select>
             </div>
 
+            {/* CATEGORIA */}
 
-            {/* ================================
-                SELEÇÃO DE ATLETAS
-            ================================= */}
+            <div
+              className={
+                styles.field
+              }
+            >
+              <label
+                htmlFor="categoria"
+              >
+                Categoria
+              </label>
+
+              <select
+                id="categoria"
+                value={categoria}
+                onChange={(event) =>
+                  setCategoria(
+                    event.target.value,
+                  )
+                }
+              >
+                <option value="Principal">
+                  Principal
+                </option>
+
+                <option value="Sub-20">
+                  Sub-20
+                </option>
+
+                <option value="Sub-17">
+                  Sub-17
+                </option>
+
+                <option value="Sub-15">
+                  Sub-15
+                </option>
+
+                <option value="Feminino">
+                  Feminino
+                </option>
+
+                <option value="Masculino">
+                  Masculino
+                </option>
+              </select>
+            </div>
+
+            {/* ATLETAS */}
 
             <div
               className={
@@ -812,81 +669,74 @@ const NovaEquipeModal = ({
               }
             >
               <label>
-                Selecionar atletas
+                Atletas da equipe
               </label>
 
               <div
                 style={{
-                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  border: '1px solid #D8E4DF',
+                  borderRadius: '10px',
+                  padding: '0 12px',
+                  minHeight: '42px',
                 }}
               >
                 <Search
-                  size={15}
-                  style={{
-                    position: 'absolute',
-                    left: '11px',
-                    top: '50%',
-                    transform:
-                      'translateY(-50%)',
-                    color: '#7a8982',
-                    pointerEvents:
-                      'none',
-                  }}
+                  size={17}
                 />
 
                 <input
                   type="text"
                   placeholder="Buscar atleta..."
-                  value={buscaAtleta}
-                  onChange={(event) =>
+                  value={
+                    buscaAtleta
+                  }
+                  onChange={(
+                    event,
+                  ) =>
                     setBuscaAtleta(
                       event.target.value,
                     )
                   }
                   style={{
-                    paddingLeft:
-                      '34px',
+                    border: 'none',
+                    outline: 'none',
+                    width: '100%',
+                    background:
+                      'transparent',
                   }}
                 />
               </div>
 
-
-              {/* LISTA DE ATLETAS */}
-
               <div
                 style={{
-                  maxHeight: '105px',
+                  marginTop: '8px',
+                  maxHeight: '190px',
                   overflowY: 'auto',
-                  marginTop: '5px',
                   border:
-                    '1px solid #cbd8d2',
-                  borderRadius: '8px',
-                  background:
-                    '#f8faf9',
+                    '1px solid #E1EAE6',
+                  borderRadius: '10px',
                 }}
               >
                 {atletasFiltrados.length ===
                 0 ? (
                   <div
                     style={{
-                      minHeight: '55px',
-                      display: 'flex',
-                      alignItems:
-                        'center',
-                      justifyContent:
-                        'center',
-                      padding: '10px',
-                      color:
-                        '#7b8982',
-                      fontSize: '10px',
-                      textAlign:
-                        'center',
+                      padding: '20px',
+                      textAlign: 'center',
+                      color: '#71817B',
                     }}
                   >
-                    {atletasDisponiveis.length ===
-                    0
-                      ? 'Nenhum atleta disponível para adicionar.'
-                      : 'Nenhum atleta encontrado.'}
+                    <UserRound
+                      size={22}
+                    />
+
+                    <p>
+                      Nenhum atleta
+                      disponível.
+                    </p>
                   </div>
                 ) : (
                   atletasFiltrados.map(
@@ -898,7 +748,9 @@ const NovaEquipeModal = ({
 
                       return (
                         <button
-                          key={atleta.id}
+                          key={
+                            atleta.id
+                          }
                           type="button"
                           onClick={() =>
                             alternarAtleta(
@@ -907,60 +759,48 @@ const NovaEquipeModal = ({
                           }
                           style={{
                             width: '100%',
-                            minHeight:
-                              '34px',
-                            display:
-                              'flex',
+                            display: 'flex',
                             alignItems:
                               'center',
-                            gap: '8px',
+                            gap: '10px',
                             padding:
-                              '5px 9px',
-                            border:
-                              'none',
+                              '10px 12px',
+                            border: 'none',
                             borderBottom:
-                              '1px solid #e5ece8',
+                              '1px solid #EDF2EF',
                             background:
                               selecionado
-                                ? '#e8f6f0'
+                                ? '#E8F5F0'
                                 : 'transparent',
-                            color:
-                              '#24362e',
-                            textAlign:
-                              'left',
                             cursor:
                               'pointer',
+                            textAlign:
+                              'left',
                           }}
                         >
-
-                          {/* AVATAR */}
-
                           <div
                             style={{
-                              width: '25px',
-                              height: '25px',
-                              flexShrink: 0,
+                              width:
+                                '34px',
+                              height:
+                                '34px',
+                              borderRadius:
+                                '50%',
+                              overflow:
+                                'hidden',
+                              background:
+                                '#E8F5F0',
                               display:
                                 'flex',
                               alignItems:
                                 'center',
                               justifyContent:
                                 'center',
-                              overflow:
-                                'hidden',
-                              borderRadius:
-                                '50%',
-                              background:
-                                '#dce9e3',
-                              color:
-                                '#087b5b',
-                              fontSize:
-                                '9px',
-                              fontWeight:
-                                700,
+                              flexShrink: 0,
                             }}
                           >
-                            {atleta.usuario
+                            {atleta
+                              .usuario
                               ?.avatarUrl ? (
                               <img
                                 src={
@@ -979,100 +819,103 @@ const NovaEquipeModal = ({
                                 }}
                               />
                             ) : (
-                              atleta.nome
-                                .trim()
-                                .slice(0, 2)
-                                .toUpperCase()
+                              <UserRound
+                                size={
+                                  17
+                                }
+                              />
                             )}
                           </div>
 
+                          <div
+                            style={{
+                              flex: 1,
+                              minWidth: 0,
+                            }}
+                          >
+                            <strong>
+                              {atleta.nome ||
+                                'Atleta sem nome'}
+                            </strong>
 
-                          {/* DADOS */}
+                            {atleta.categoria && (
+                              <small
+                                style={{
+                                  display:
+                                    'block',
+                                  color:
+                                    '#71817B',
+                                }}
+                              >
+                                {
+                                  atleta.categoria
+                                }
+                              </small>
+                            )}
+                          </div>
 
                           <div
                             style={{
-                              minWidth: 0,
-                              flex: 1,
+                              width:
+                                '22px',
+                              height:
+                                '22px',
+                              borderRadius:
+                                '6px',
+                              border:
+                                selecionado
+                                  ? 'none'
+                                  : '1px solid #C9D8D2',
+                              background:
+                                selecionado
+                                  ? '#16A875'
+                                  : '#FFFFFF',
                               display:
                                 'flex',
-                              flexDirection:
-                                'column',
+                              alignItems:
+                                'center',
+                              justifyContent:
+                                'center',
+                              flexShrink: 0,
                             }}
                           >
-                            <span
-                              style={{
-                                overflow:
-                                  'hidden',
-                                fontSize:
-                                  '10px',
-                                fontWeight:
-                                  600,
-                                whiteSpace:
-                                  'nowrap',
-                                textOverflow:
-                                  'ellipsis',
-                              }}
-                            >
-                              {
-                                atleta.nome
-                              }
-                            </span>
-
-                            <span
-                              style={{
-                                marginTop:
-                                  '1px',
-                                color:
-                                  '#829088',
-                                fontSize:
-                                  '8px',
-                              }}
-                            >
-                              {atleta.categoria ||
-                                'Sem categoria'}
-                            </span>
-                          </div>
-
-
-                          {/* CHECK */}
-
-                          {selecionado && (
-                            <div
-                              style={{
-                                width: '20px',
-                                height: '20px',
-                                flexShrink: 0,
-                                display:
-                                  'flex',
-                                alignItems:
-                                  'center',
-                                justifyContent:
-                                  'center',
-                                borderRadius:
-                                  '6px',
-                                background:
-                                  '#16A875',
-                                color:
-                                  '#ffffff',
-                              }}
-                            >
+                            {selecionado && (
                               <Check
-                                size={13}
+                                size={
+                                  15
+                                }
+                                color="#FFFFFF"
                               />
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </button>
                       );
                     },
                   )
                 )}
               </div>
+
+              <small
+                style={{
+                  color: '#71817B',
+                  marginTop: '6px',
+                }}
+              >
+                {atletasSelecionados.length}{' '}
+                atleta
+                {atletasSelecionados.length !==
+                1
+                  ? 's'
+                  : ''}{' '}
+                selecionado
+                {atletasSelecionados.length !==
+                1
+                  ? 's'
+                  : ''}
+              </small>
             </div>
 
-
-            {/* ================================
-                PRÓXIMA PARTIDA
-            ================================= */}
+            {/* PRÓXIMA PARTIDA */}
 
             <div
               className={
@@ -1090,7 +933,7 @@ const NovaEquipeModal = ({
                   }
                 >
                   <CalendarDays
-                    size={15}
+                    size={17}
                   />
                 </div>
 
@@ -1100,14 +943,12 @@ const NovaEquipeModal = ({
                   </strong>
 
                   <span>
-                    Informe o adversário,
+                    Informe o
+                    adversário,
                     dia e horário.
                   </span>
                 </div>
               </div>
-
-
-              {/* ADVERSÁRIO */}
 
               <div
                 className={
@@ -1133,9 +974,6 @@ const NovaEquipeModal = ({
                 />
               </div>
 
-
-              {/* DATA */}
-
               <div
                 className={
                   styles.dateTimeGrid
@@ -1158,7 +996,7 @@ const NovaEquipeModal = ({
                     }
                   >
                     <CalendarDays
-                      size={14}
+                      size={16}
                     />
 
                     <input
@@ -1167,7 +1005,9 @@ const NovaEquipeModal = ({
                       value={
                         dataPartida
                       }
-                      onChange={(event) =>
+                      onChange={(
+                        event,
+                      ) =>
                         setDataPartida(
                           event.target.value,
                         )
@@ -1175,9 +1015,6 @@ const NovaEquipeModal = ({
                     />
                   </div>
                 </div>
-
-
-                {/* HORÁRIO */}
 
                 <div
                   className={
@@ -1196,7 +1033,7 @@ const NovaEquipeModal = ({
                     }
                   >
                     <Clock3
-                      size={14}
+                      size={16}
                     />
 
                     <input
@@ -1205,7 +1042,9 @@ const NovaEquipeModal = ({
                       value={
                         horarioPartida
                       }
-                      onChange={(event) =>
+                      onChange={(
+                        event,
+                      ) =>
                         setHorarioPartida(
                           event.target.value,
                         )
@@ -1215,9 +1054,6 @@ const NovaEquipeModal = ({
                 </div>
               </div>
 
-
-              {/* PREVIEW DA PARTIDA */}
-
               {adversario.trim() && (
                 <div
                   className={
@@ -1225,17 +1061,18 @@ const NovaEquipeModal = ({
                   }
                 >
                   <CalendarDays
-                    size={14}
+                    size={15}
                   />
 
                   <div>
                     <span>
-                      Como aparecerá no card
+                      Como aparecerá
+                      no card
                     </span>
 
                     <strong>
                       {
-                        proximaPartida
+                        proximaPartidaPreview
                       }
                     </strong>
                   </div>
@@ -1243,10 +1080,7 @@ const NovaEquipeModal = ({
               )}
             </div>
 
-
-            {/* ================================
-                CORES
-            ================================= */}
+            {/* CORES */}
 
             <div
               className={
@@ -1282,21 +1116,20 @@ const NovaEquipeModal = ({
                             item,
                         }}
                         onClick={() =>
-                          setCor(item)
+                          setCor(
+                            item,
+                          )
                         }
                         title={item}
                       >
                         {cor === item && (
                           <Check
-                            size={13}
+                            size={16}
                           />
                         )}
                       </button>
                     ),
                   )}
-
-
-                  {/* COR PERSONALIZADA */}
 
                   <button
                     type="button"
@@ -1325,7 +1158,7 @@ const NovaEquipeModal = ({
                         }}
                       >
                         <Palette
-                          size={12}
+                          size={14}
                         />
                       </div>
                     </div>
@@ -1348,16 +1181,13 @@ const NovaEquipeModal = ({
                   />
                 </div>
 
-
-                {/* COR SELECIONADA */}
-
                 <div
                   className={
                     styles.selectedColorInfo
                   }
                 >
                   <span>
-                    Cor
+                    Cor selecionada
                   </span>
 
                   <strong>
@@ -1379,48 +1209,26 @@ const NovaEquipeModal = ({
           </div>
         </div>
 
-
-        {/* =================================
-            PREVIEW DA EQUIPE
-        ================================= */}
+        {/* PREVIEW */}
 
         <div
           className={
             styles.teamPreview
           }
         >
-
-          {/* FOTO DA EQUIPE */}
-
           <div
             className={
               styles.previewAvatar
             }
             style={{
-              background:
-                imagemPreview
-                  ? 'transparent'
-                  : cor,
-              overflow: 'hidden',
+              background: cor,
             }}
           >
-            {imagemPreview ? (
-              <img
-                src={imagemPreview}
-                alt="Preview da equipe"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-            ) : (
-              nome
-                .trim()
-                .slice(0, 2)
-                .toUpperCase() ||
-              'EQ'
-            )}
+            {nome
+              .trim()
+              .slice(0, 2)
+              .toUpperCase() ||
+              'EQ'}
           </div>
 
           <div>
@@ -1434,22 +1242,19 @@ const NovaEquipeModal = ({
             </strong>
 
             <small>
+              {modalidade} •{' '}
               {categoria} •{' '}
-              {
-                atletasSelecionados.length
-              }{' '}
-              {atletasSelecionados.length ===
+              {atletasSelecionados.length}{' '}
+              atleta
+              {atletasSelecionados.length !==
               1
-                ? 'atleta'
-                : 'atletas'}
+                ? 's'
+                : ''}
             </small>
           </div>
         </div>
 
-
-        {/* =================================
-            FOOTER
-        ================================= */}
+        {/* FOOTER */}
 
         <div
           className={
@@ -1461,7 +1266,9 @@ const NovaEquipeModal = ({
             className={
               styles.cancelButton
             }
-            onClick={fecharModal}
+            onClick={
+              fecharModal
+            }
           >
             Cancelar
           </button>
@@ -1478,16 +1285,14 @@ const NovaEquipeModal = ({
               criarEquipe
             }
           >
-            <Plus size={15} />
+            <Plus size={17} />
 
             Criar equipe
           </button>
         </div>
-
       </div>
     </div>
   );
 };
-
 
 export default NovaEquipeModal;

@@ -6,20 +6,30 @@ class AtletaDesempenhoPage extends StatefulWidget {
   const AtletaDesempenhoPage({super.key});
 
   @override
-  State<AtletaDesempenhoPage> createState() => _AtletaDesempenhoPageState();
+  State<AtletaDesempenhoPage> createState() =>
+      _AtletaDesempenhoPageState();
 }
 
-class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
+class _AtletaDesempenhoPageState
+    extends State<AtletaDesempenhoPage> {
   static const Color verde = Color(0xFF00845F);
   static const Color verdeClaro = Color(0xFFE7F5F0);
-  static const Color fundo = Color(0xFFF8F8F8);
+  static const Color fundo = Color(0xFFFCFCFC);
 
   int periodoSelecionado = 0;
   int relatorioSelecionado = 1;
 
-  final List<String> periodos = ['Todos', 'Mês', 'Ano'];
+  final List<String> periodos = [
+    'Todos',
+    'Mês',
+    'Ano',
+  ];
 
-  final List<String> relatorios = ['Semanal', 'Mensal', 'Anual'];
+  final List<String> relatorios = [
+    'Semanal',
+    'Mensal',
+    'Anual',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +44,7 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
           'Minha evolução',
           style: TextStyle(
             color: Colors.black87,
-            fontSize: 20,
+            fontSize: 19,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -44,7 +54,8 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const AtletaNotificacaoPage(),
+                  builder: (_) =>
+                      const AtletaNotificacaoPage(),
                 ),
               );
             },
@@ -59,23 +70,23 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
 
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 30),
-
+          padding: const EdgeInsets.fromLTRB(
+            16,
+            4,
+            16,
+            30,
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
             children: [
-              // ==================================================
-              // FILTRO PRINCIPAL
-              // ==================================================
-
-              _buildPeriodo(),
+              _buildHeader(),
 
               const SizedBox(height: 22),
 
-              // ==================================================
-              // SEÇÃO DESEMPENHO
-              // ==================================================
+              _buildPeriodo(),
+
+              const SizedBox(height: 24),
 
               const Text(
                 'Seu desempenho',
@@ -90,11 +101,7 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
 
               _buildGraficoDesempenho(),
 
-              const SizedBox(height: 22),
-
-              // ==================================================
-              // FREQUÊNCIA
-              // ==================================================
+              const SizedBox(height: 24),
 
               const Text(
                 'Frequência mensal',
@@ -109,11 +116,7 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
 
               _buildGraficoFrequencia(),
 
-              const SizedBox(height: 10),
-
-              // ==================================================
-              // CARDS RESUMO
-              // ==================================================
+              const SizedBox(height: 12),
 
               Row(
                 children: [
@@ -121,12 +124,11 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
                     child: _buildResumoCard(
                       titulo: 'Treinos realizados',
                       valor: '47',
-                      icone: Icons.fitness_center_rounded,
+                      icone:
+                          Icons.fitness_center_rounded,
                     ),
                   ),
-
                   const SizedBox(width: 10),
-
                   Expanded(
                     child: _buildResumoCard(
                       titulo: 'Metas atingidas',
@@ -138,10 +140,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
               ),
 
               const SizedBox(height: 24),
-
-              // ==================================================
-              // AVALIAÇÃO FÍSICA
-              // ==================================================
 
               Row(
                 children: [
@@ -155,7 +153,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
                       ),
                     ),
                   ),
-
                   TextButton(
                     onPressed: () {},
                     child: const Text(
@@ -176,10 +173,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
 
               const SizedBox(height: 24),
 
-              // ==================================================
-              // ÚLTIMAS AVALIAÇÕES
-              // ==================================================
-
               const Text(
                 'Últimas avaliações',
                 style: TextStyle(
@@ -195,10 +188,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
 
               const SizedBox(height: 24),
 
-              // ==================================================
-              // HISTÓRICO RECENTE
-              // ==================================================
-
               const Text(
                 'Histórico recente',
                 style: TextStyle(
@@ -213,10 +202,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
               _buildHistorico(),
 
               const SizedBox(height: 24),
-
-              // ==================================================
-              // RELATÓRIOS
-              // ==================================================
 
               const Text(
                 'Relatórios',
@@ -242,151 +227,149 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
           ),
         ),
       ),
+    );
+  }
 
-      // ========================================================
-      // MENU INFERIOR
-      // ========================================================
-
-      bottomNavigationBar: MenuInferiorAtleta(
-        indiceSelecionado: 2,
-
-        onItemSelecionado: (index) {
-          // INÍCIO
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaHomePage(),
+  Widget _buildHeader() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: verde,
+        borderRadius: BorderRadius.circular(22),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(
+                alpha: 0.15,
               ),
-            );
-            return;
-          }
-
-          // TREINO
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaTreinoPage(),
-              ),
-            );
-            return;
-          }
-
-          // DESEMPENHO
-          if (index == 2) {
-            return;
-          }
-
-          // FEED
-          if (index == 3) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaFeedPage(),
-              ),
-            );
-            return;
-          }
-
-          // PERFIL
-          if (index == 4) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaPerfilPage(),
-              ),
-            );
-            return;
-          }
-        },
+              borderRadius:
+                  BorderRadius.circular(16),
+            ),
+            child: const Icon(
+              Icons.bar_chart_rounded,
+              color: Colors.white,
+              size: 28,
+            ),
+          ),
+          const SizedBox(width: 14),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Acompanhe sua evolução',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Veja seu desempenho e acompanhe seus resultados.',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 13,
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  // ============================================================
-  // PERÍODO
-  // ============================================================
-
   Widget _buildPeriodo() {
-    return Container(
+    return SizedBox(
       height: 38,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: periodos.length,
+        separatorBuilder: (_, _) {
+          return const SizedBox(width: 8);
+        },
+        itemBuilder: (context, index) {
+          final selecionado =
+              periodoSelecionado == index;
 
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.grey.shade200,
-        ),
-      ),
-
-      child: Row(
-        children: List.generate(
-          periodos.length,
-          (index) {
-            final selecionado = periodoSelecionado == index;
-
-            return Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    periodoSelecionado = index;
-                  });
-                },
-
-                child: Container(
-                  margin: const EdgeInsets.all(3),
-
-                  decoration: BoxDecoration(
-                    color: selecionado
-                        ? verde
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-
-                  alignment: Alignment.center,
-
-                  child: Text(
-                    periodos[index],
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: selecionado
-                          ? FontWeight.w600
-                          : FontWeight.w400,
-                      color: selecionado
-                          ? Colors.white
-                          : Colors.grey.shade700,
-                    ),
-                  ),
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                periodoSelecionado = index;
+              });
+            },
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(
+                horizontal: 17,
+              ),
+              decoration: BoxDecoration(
+                color: selecionado
+                    ? verde
+                    : Colors.white,
+                borderRadius:
+                    BorderRadius.circular(20),
+                border: Border.all(
+                  color: selecionado
+                      ? verde
+                      : Colors.grey.shade200,
                 ),
               ),
-            );
-          },
-        ),
+              alignment: Alignment.center,
+              child: Text(
+                periodos[index],
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: selecionado
+                      ? FontWeight.w600
+                      : FontWeight.w400,
+                  color: selecionado
+                      ? Colors.white
+                      : Colors.grey.shade700,
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
   Widget _buildGraficoDesempenho() {
     return Container(
-      height: 185,
+      height: 190,
       width: double.infinity,
-
       padding: const EdgeInsets.fromLTRB(
-        10,
+        12,
+        14,
         12,
         10,
-        8,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius:
+            BorderRadius.circular(20),
         border: Border.all(
           color: Colors.grey.shade200,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(
+              alpha: 0.035,
+            ),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-
       child: Column(
         children: [
           Expanded(
@@ -396,8 +379,8 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
             ),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-
+            mainAxisAlignment:
+                MainAxisAlignment.spaceAround,
             children: const [
               _LegendaGrafico(texto: 'Seg'),
               _LegendaGrafico(texto: 'Ter'),
@@ -429,41 +412,59 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
     ];
 
     return Container(
-      height: 165,
-
+      height: 170,
       padding: const EdgeInsets.fromLTRB(
         18,
         15,
         18,
         10,
       ),
-
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius:
+            BorderRadius.circular(20),
         border: Border.all(
           color: Colors.grey.shade200,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(
+              alpha: 0.035,
+            ),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-
+        crossAxisAlignment:
+            CrossAxisAlignment.end,
+        mainAxisAlignment:
+            MainAxisAlignment.spaceAround,
         children: List.generate(
           valores.length,
           (index) {
             return Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-
+              mainAxisAlignment:
+                  MainAxisAlignment.end,
               children: [
+                Text(
+                  '${(valores[index] * 100).round()}%',
+                  style: const TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w600,
+                    color: verde,
+                  ),
+                ),
+                const SizedBox(height: 5),
                 Container(
-                  width: 22,
-                  height: 105 * valores[index],
-
+                  width: 25,
+                  height:
+                      105 * valores[index],
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade400,
-                    borderRadius: BorderRadius.circular(12),
+                    color: verde,
+                    borderRadius:
+                        BorderRadius.circular(12),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -471,7 +472,8 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
                   meses[index],
                   style: TextStyle(
                     fontSize: 10,
-                    color: Colors.grey.shade600,
+                    color:
+                        Colors.grey.shade600,
                   ),
                 ),
               ],
@@ -488,65 +490,58 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
     required IconData icone,
   }) {
     return Container(
-      padding: const EdgeInsets.all(14),
-
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius:
+            BorderRadius.circular(20),
         border: Border.all(
           color: Colors.grey.shade200,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(
+              alpha: 0.035,
+            ),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-
-      child: Row(
+      child: Column(
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
         children: [
           Container(
-            width: 35,
-            height: 35,
-
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: verdeClaro,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius:
+                  BorderRadius.circular(12),
             ),
-
             child: Icon(
               icone,
-              size: 18,
+              size: 20,
               color: verde,
             ),
           ),
-
-          const SizedBox(width: 9),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
-              children: [
-                Text(
-                  titulo,
-                  maxLines: 2,
-
-                  style: TextStyle(
-                    fontSize: 9,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-
-                const SizedBox(height: 2),
-
-                Text(
-                  valor,
-
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: titulo == 'Metas atingidas'
-                        ? Colors.red.shade400
-                        : verde,
-                  ),
-                ),
-              ],
+          const SizedBox(height: 12),
+          Text(
+            titulo,
+            maxLines: 2,
+            style: TextStyle(
+              fontSize: 10,
+              color: Colors.grey.shade600,
+            ),
+          ),
+          const SizedBox(height: 3),
+          Text(
+            valor,
+            style: const TextStyle(
+              fontSize: 21,
+              fontWeight: FontWeight.bold,
+              color: verde,
             ),
           ),
         ],
@@ -556,16 +551,24 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
 
   Widget _buildAvaliacaoFisica() {
     return Container(
-      padding: const EdgeInsets.all(14),
-
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius:
+            BorderRadius.circular(20),
         border: Border.all(
           color: Colors.grey.shade200,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(
+              alpha: 0.035,
+            ),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-
       child: Column(
         children: [
           Row(
@@ -574,16 +577,16 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
                 child: Text(
                   'Condição geral',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
+                    color: Colors.black87,
                   ),
                 ),
               ),
-
               Text(
                 '+12%',
                 style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: verde,
                 ),
@@ -591,18 +594,21 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
             ],
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
 
           SizedBox(
             height: 120,
-
             child: CustomPaint(
-              painter: _GraficoAvaliacaoPainter(),
+              painter:
+                  _GraficoAvaliacaoPainter(),
               child: Container(),
             ),
           ),
 
-          const Divider(height: 25),
+          Divider(
+            height: 25,
+            color: Colors.grey.shade200,
+          ),
 
           Row(
             children: [
@@ -646,7 +652,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
         Text(
           titulo,
           textAlign: TextAlign.center,
-
           style: TextStyle(
             fontSize: 9,
             color: Colors.grey.shade600,
@@ -655,20 +660,20 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
         const SizedBox(height: 7),
         Text(
           valor,
-
           style: const TextStyle(
             fontSize: 19,
             fontWeight: FontWeight.bold,
+            color: Colors.black87,
           ),
         ),
         const SizedBox(height: 3),
         Text(
           legenda,
           textAlign: TextAlign.center,
-
           style: TextStyle(
             fontSize: 9,
-            color: legenda == 'Ideal' || legenda == 'Normal'
+            color: legenda == 'Ideal' ||
+                    legenda == 'Normal'
                 ? verde
                 : Colors.grey.shade500,
           ),
@@ -695,62 +700,96 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius:
+            BorderRadius.circular(20),
         border: Border.all(
           color: Colors.grey.shade200,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(
+              alpha: 0.035,
+            ),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-
       child: Column(
         children: List.generate(
           avaliacoes.length,
           (index) {
-            final avaliacao = avaliacoes[index];
+            final avaliacao =
+                avaliacoes[index];
 
             return Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 13,
-                vertical: 12,
+              padding:
+                  const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 13,
               ),
-
               decoration: BoxDecoration(
-                border: index != avaliacoes.length - 1
+                border: index !=
+                        avaliacoes.length - 1
                     ? Border(
                         bottom: BorderSide(
-                          color: Colors.grey.shade200,
+                          color:
+                              Colors.grey.shade200,
                         ),
                       )
                     : null,
               ),
-
               child: Row(
                 children: [
-                  Icon(
-                    Icons.assignment_turned_in_outlined,
-                    size: 19,
-                    color: Colors.grey.shade600,
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: verdeClaro,
+                      borderRadius:
+                          BorderRadius.circular(11),
+                    ),
+                    child: const Icon(
+                      Icons
+                          .assignment_turned_in_outlined,
+                      size: 19,
+                      color: verde,
+                    ),
                   ),
 
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 11),
 
                   Expanded(
                     child: Text(
                       avaliacao[0],
-
                       style: const TextStyle(
                         fontSize: 11,
-                        fontWeight: FontWeight.w500,
+                        fontWeight:
+                            FontWeight.w500,
+                        color: Colors.black87,
                       ),
                     ),
                   ),
 
-                  Text(
-                    avaliacao[1],
-
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                      color: verde,
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(
+                      horizontal: 9,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: verdeClaro,
+                      borderRadius:
+                          BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      avaliacao[1],
+                      style: const TextStyle(
+                        fontSize: 9,
+                        fontWeight:
+                            FontWeight.w600,
+                        color: verde,
+                      ),
                     ),
                   ),
                 ],
@@ -769,16 +808,12 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
           'Treino tático',
           'Ontem',
         ),
-
         const SizedBox(height: 10),
-
         _buildHistoricoItem(
           'Fortalecimento',
           'Seg, 18/08',
         ),
-
         const SizedBox(height: 10),
-
         _buildHistoricoItem(
           'Treino de velocidade',
           'Sex, 15/08',
@@ -792,30 +827,37 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
     String data,
   ) {
     return Container(
-      padding: const EdgeInsets.all(12),
-
+      padding: const EdgeInsets.all(13),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius:
+            BorderRadius.circular(20),
         border: Border.all(
           color: Colors.grey.shade200,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(
+              alpha: 0.035,
+            ),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-
       child: Row(
         children: [
           Container(
-            width: 32,
-            height: 32,
-
+            width: 38,
+            height: 38,
             decoration: BoxDecoration(
-              color: Colors.green.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(9),
+              color: verdeClaro,
+              borderRadius:
+                  BorderRadius.circular(11),
             ),
-
-            child: Icon(
+            child: const Icon(
               Icons.check_rounded,
-              color: Colors.green.shade600,
+              color: verde,
               size: 20,
             ),
           ),
@@ -824,7 +866,8 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
 
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
               children: [
                 Text(
                   titulo,
@@ -845,89 +888,97 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
               ],
             ),
           ),
+
+          const Icon(
+            Icons.chevron_right_rounded,
+            size: 20,
+            color: Colors.grey,
+          ),
         ],
       ),
     );
   }
 
   Widget _buildRelatorios() {
-    return Container(
+    return SizedBox(
       height: 40,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: relatorios.length,
+        separatorBuilder: (_, _) {
+          return const SizedBox(width: 8);
+        },
+        itemBuilder: (context, index) {
+          final selecionado =
+              relatorioSelecionado == index;
 
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.grey.shade200,
-        ),
-      ),
-
-      child: Row(
-        children: List.generate(
-          relatorios.length,
-          (index) {
-            final selecionado =
-                relatorioSelecionado == index;
-
-            return Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    relatorioSelecionado = index;
-                  });
-                },
-
-                child: Container(
-                  margin: const EdgeInsets.all(3),
-
-                  decoration: BoxDecoration(
-                    color: selecionado
-                        ? verde
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-
-                  alignment: Alignment.center,
-
-                  child: Text(
-                    relatorios[index],
-
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: selecionado
-                          ? FontWeight.w600
-                          : FontWeight.w400,
-                      color: selecionado
-                          ? Colors.white
-                          : Colors.grey.shade700,
-                    ),
-                  ),
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                relatorioSelecionado = index;
+              });
+            },
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(
+                horizontal: 18,
+              ),
+              decoration: BoxDecoration(
+                color: selecionado
+                    ? verde
+                    : Colors.white,
+                borderRadius:
+                    BorderRadius.circular(20),
+                border: Border.all(
+                  color: selecionado
+                      ? verde
+                      : Colors.grey.shade200,
                 ),
               ),
-            );
-          },
-        ),
+              alignment: Alignment.center,
+              child: Text(
+                relatorios[index],
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: selecionado
+                      ? FontWeight.w600
+                      : FontWeight.w400,
+                  color: selecionado
+                      ? Colors.white
+                      : Colors.grey.shade700,
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
   Widget _buildGraficoRelatorio() {
     return Container(
-      height: 205,
-
-      padding: const EdgeInsets.all(15),
-
+      height: 210,
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius:
+            BorderRadius.circular(20),
         border: Border.all(
           color: Colors.grey.shade200,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(
+              alpha: 0.035,
+            ),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
         children: [
           Text(
             relatorioSelecionado == 0
@@ -935,18 +986,19 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
                 : relatorioSelecionado == 1
                     ? 'Desempenho mensal'
                     : 'Desempenho anual',
-
             style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
             ),
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
 
           Expanded(
             child: CustomPaint(
-              painter: _GraficoBarrasPainter(),
+              painter:
+                  _GraficoBarrasPainter(),
               child: Container(),
             ),
           ),
@@ -954,7 +1006,6 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
           Row(
             mainAxisAlignment:
                 MainAxisAlignment.spaceAround,
-
             children: [
               Text(
                 relatorioSelecionado == 2
@@ -962,21 +1013,18 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
                     : 'Semana 1',
                 style: _labelStyle(),
               ),
-
               Text(
                 relatorioSelecionado == 2
                     ? 'Mês 2'
                     : 'Semana 2',
                 style: _labelStyle(),
               ),
-
               Text(
                 relatorioSelecionado == 2
                     ? 'Mês 3'
                     : 'Semana 3',
                 style: _labelStyle(),
               ),
-
               Text(
                 relatorioSelecionado == 2
                     ? 'Mês 4'
@@ -1000,11 +1048,11 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
   Widget _buildBotaoExportar() {
     return SizedBox(
       width: double.infinity,
-      height: 47,
-
+      height: 48,
       child: ElevatedButton.icon(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
+          ScaffoldMessenger.of(context)
+              .showSnackBar(
             const SnackBar(
               content: Text(
                 'Relatório preparado para exportação.',
@@ -1012,28 +1060,24 @@ class _AtletaDesempenhoPageState extends State<AtletaDesempenhoPage> {
             ),
           );
         },
-
         icon: const Icon(
           Icons.download_rounded,
           size: 18,
         ),
-
         label: const Text(
           'EXPORTAR RELATÓRIO',
-
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
-
         style: ElevatedButton.styleFrom(
           backgroundColor: verde,
           foregroundColor: Colors.white,
           elevation: 0,
-
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius:
+                BorderRadius.circular(14),
           ),
         ),
       ),
@@ -1052,7 +1096,6 @@ class _LegendaGrafico extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       texto,
-
       style: TextStyle(
         fontSize: 8,
         color: Colors.grey.shade600,
@@ -1061,11 +1104,8 @@ class _LegendaGrafico extends StatelessWidget {
   }
 }
 
-// ================================================================
-// PAINTER - GRÁFICO DE LINHA
-// ================================================================
-
-class _GraficoLinhaPainter extends CustomPainter {
+class _GraficoLinhaPainter
+    extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paintLinha = Paint()
@@ -1116,7 +1156,9 @@ class _GraficoLinhaPainter extends CustomPainter {
       pontos.first.dy,
     );
 
-    for (int i = 1; i < pontos.length; i++) {
+    for (int i = 1;
+        i < pontos.length;
+        i++) {
       caminho.lineTo(
         pontos[i].dx,
         pontos[i].dy,
@@ -1179,11 +1221,8 @@ class _GraficoLinhaPainter extends CustomPainter {
   }
 }
 
-// ================================================================
-// PAINTER - GRÁFICO DE AVALIAÇÃO
-// ================================================================
-
-class _GraficoAvaliacaoPainter extends CustomPainter {
+class _GraficoAvaliacaoPainter
+    extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final pontos = [
@@ -1233,7 +1272,9 @@ class _GraficoAvaliacaoPainter extends CustomPainter {
       pontos.first.dy,
     );
 
-    for (int i = 1; i < pontos.length; i++) {
+    for (int i = 1;
+        i < pontos.length;
+        i++) {
       caminho.lineTo(
         pontos[i].dx,
         pontos[i].dy,
@@ -1250,7 +1291,9 @@ class _GraficoAvaliacaoPainter extends CustomPainter {
           .withValues(alpha: 0.28)
       ..style = PaintingStyle.fill;
 
-    for (int i = 0; i < pontos.length; i++) {
+    for (int i = 0;
+        i < pontos.length;
+        i++) {
       canvas.drawRect(
         Rect.fromLTWH(
           pontos[i].dx - 3,
@@ -1283,11 +1326,8 @@ class _GraficoAvaliacaoPainter extends CustomPainter {
   }
 }
 
-// ================================================================
-// PAINTER - GRÁFICO DE BARRAS
-// ================================================================
-
-class _GraficoBarrasPainter extends CustomPainter {
+class _GraficoBarrasPainter
+    extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final valores = [
@@ -1301,36 +1341,45 @@ class _GraficoBarrasPainter extends CustomPainter {
       ..color = const Color(0xFF00845F)
       ..style = PaintingStyle.fill;
 
-    final largura = 28.0;
+    const largura = 28.0;
 
-    for (int i = 0; i < valores.length; i++) {
+    for (int i = 0;
+        i < valores.length;
+        i++) {
       final x = (size.width / 4) * i +
           (size.width / 8);
 
-      final altura = size.height * valores[i];
+      final altura =
+          size.height * valores[i];
 
-      final y = size.height - altura;
+      final y =
+          size.height - altura;
 
-      canvas.drawRect(
-        Rect.fromLTWH(
-          x - largura / 2,
-          y,
-          largura,
-          altura,
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(
+            x - largura / 2,
+            y,
+            largura,
+            altura,
+          ),
+          const Radius.circular(8),
         ),
         paint,
       );
 
       final textoPainter = TextPainter(
         text: TextSpan(
-          text: '${(valores[i] * 100).round()}%',
+          text:
+              '${(valores[i] * 100).round()}%',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 9,
             fontWeight: FontWeight.bold,
           ),
         ),
-        textDirection: TextDirection.ltr,
+        textDirection:
+            TextDirection.ltr,
       );
 
       textoPainter.layout();

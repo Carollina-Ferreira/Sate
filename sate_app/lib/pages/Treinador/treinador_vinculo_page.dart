@@ -5,6 +5,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 import './treinador_navigation.dart';
 
 class TreinadorVinculoPage extends StatefulWidget {
+  final String nomeUsuario;
+  final String emailUsuario;
   final String nomeEquipe;
   final String modalidade;
   final String atletas;
@@ -12,6 +14,8 @@ class TreinadorVinculoPage extends StatefulWidget {
 
   const TreinadorVinculoPage({
     super.key,
+    required this.nomeUsuario,
+    required this.emailUsuario,
     required this.nomeEquipe,
     required this.modalidade,
     required this.atletas,
@@ -45,7 +49,12 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
   void entrar() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const TreinadorNavigation()),
+      MaterialPageRoute(
+        builder: (context) => TreinadorNavigation(
+          nomeUsuario: widget.nomeUsuario,
+          emailUsuario: widget.emailUsuario,
+        ),
+      ),
     );
   }
 
@@ -355,11 +364,9 @@ class _FundoPainter extends CustomPainter {
     final paint = Paint()..style = PaintingStyle.fill;
 
     paint.color = rosa.withOpacity(0.12);
-
     canvas.drawCircle(Offset(size.width * 0.10, size.height * 0.12), 85, paint);
 
     paint.color = azul.withOpacity(0.13);
-
     canvas.drawCircle(
       Offset(size.width * 0.92, size.height * 0.22),
       100,
@@ -367,7 +374,6 @@ class _FundoPainter extends CustomPainter {
     );
 
     paint.color = verde.withOpacity(0.08);
-
     canvas.drawCircle(
       Offset(size.width * 0.88, size.height * 0.84),
       130,
@@ -391,16 +397,13 @@ class _FundoPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final path = Path();
-
     path.moveTo(0, size.height * 0.72);
-
     path.quadraticBezierTo(
       size.width * 0.30,
       size.height * 0.62,
       size.width * 0.52,
       size.height * 0.73,
     );
-
     path.quadraticBezierTo(
       size.width * 0.74,
       size.height * 0.84,

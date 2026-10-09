@@ -1,855 +1,953 @@
+import { useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import type { LucideIcon } from 'lucide-react';
+
 import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  Plus,
-  Target,
-  Activity,
-  Zap,
-  Shield,
-  CircleDot,
-  Goal,
-  Handshake,
-  Flag,
+    Activity,
+    ArrowLeft,
+    ArrowRight,
+    Check,
+    CircleDot,
+    Clock3,
+    Goal,
+    Hand,
+    Plus,
+    Shield,
+    Target,
+    Timer,
+    Trophy,
+    Zap,
 } from 'lucide-react';
 
-import {
-  useEffect,
-  useState,
-  type ReactNode,
-} from 'react';
-
-import { useNavigate } from 'react-router-dom';
+import ModalCampoPersonalizado from '../../components/ModalCampoPersonalizado/modalCampoPersonalizado';
 
 import styles from './configuracaoAnalise.module.css';
 
-const API_URL = 'http://localhost:3000/api';
-
 interface CampoAnalise {
-  id: number;
-  nome: string;
-  descricao?: string | null;
-  tipo: 'positiva' | 'negativa' | 'neutra';
-  ordem?: number;
+    id: string;
+    nome: string;
+    icon: LucideIcon;
 }
 
-interface ConfiguracaoAnaliseProps {
-  onVoltar?: () => void;
-  onContinuar?: () => void;
+interface EstadoSelecaoEsporte {
+    modalidade?: string;
+    imagem?: string;
 }
 
-interface CampoVisual {
-  nome: string;
-  descricao: string;
-  tipo: 'positiva' | 'negativa' | 'neutra';
-  icone: ReactNode;
-}
+/* =========================================================
+   CAMPOS DISPONÍVEIS POR ESPORTE
+========================================================= */
 
-const camposDisponiveis: CampoVisual[] = [
-  {
-    nome: 'Gol',
-    descricao: 'Gol marcado pela equipe',
-    tipo: 'positiva',
-    icone: <Goal size={20} />,
-  },
-  {
-    nome: 'Assistência',
-    descricao: 'Passe que resulta em gol',
-    tipo: 'positiva',
-    icone: <Handshake size={20} />,
-  },
-  {
-    nome: 'Ataque',
-    descricao: 'Ação ofensiva da equipe',
-    tipo: 'positiva',
-    icone: <Zap size={20} />,
-  },
-  {
-    nome: 'Contra-ataque',
-    descricao: 'Transição rápida para o ataque',
-    tipo: 'positiva',
-    icone: <ArrowRight size={20} />,
-  },
-  {
-    nome: 'Finalização',
-    descricao: 'Finalização realizada pela equipe',
-    tipo: 'positiva',
-    icone: <Target size={20} />,
-  },
-  {
-    nome: 'Defesa',
-    descricao: 'Ação defensiva da equipe',
-    tipo: 'positiva',
-    icone: <Shield size={20} />,
-  },
-  {
-    nome: 'Erro de passe',
-    descricao: 'Passe errado ou interceptado',
-    tipo: 'negativa',
-    icone: <CircleDot size={20} />,
-  },
-  {
-    nome: 'Falta',
-    descricao: 'Falta cometida pela equipe',
-    tipo: 'negativa',
-    icone: <Flag size={20} />,
-  },
-];
-
-function obterToken(): string | null {
-  return (
-    localStorage.getItem('token') ||
-    localStorage.getItem('accessToken') ||
-    sessionStorage.getItem('token')
-  );
-}
-
-function converterTipo(
-  tipo: string
-): CampoAnalise['tipo'] {
-  switch (tipo?.toUpperCase()) {
-    case 'NEGATIVA':
-      return 'negativa';
-
-    case 'NEUTRA':
-      return 'neutra';
-
-    default:
-      return 'positiva';
-  }
-}
-
-function normalizarCampo(
-  campo: CampoAnalise
-): CampoAnalise {
-  return {
-    ...campo,
-    tipo: converterTipo(campo.tipo),
-  };
-}
-
-export default function ConfiguracaoAnalise({
-  onVoltar,
-  onContinuar,
-}: ConfiguracaoAnaliseProps) {
-  const navigate = useNavigate();
-
-  const [campos, setCampos] = useState<CampoAnalise[]>([]);
-
-  const [carregando, setCarregando] =
-    useState(true);
-
-  const [salvando, setSalvando] =
-    useState(false);
-
-  const [erro, setErro] =
-    useState('');
-
-  const [adicionando, setAdicionando] =
-    useState(false);
-
-  /*
-  |--------------------------------------------------------------------------
-  | BUSCAR CONFIGURAÇÕES DO BANCO
-  |--------------------------------------------------------------------------
-  */
-
-  useEffect(() => {
-    buscarConfiguracoes();
-  }, []);
-
-  async function buscarConfiguracoes() {
-    try {
-      setCarregando(true);
-      setErro('');
-
-      const token = obterToken();
-
-      if (!token) {
-        setErro(
-          'Sua sessão expirou. Faça login novamente.'
-        );
-
-        return;
-      }
-
-      const resposta = await fetch(
-        `${API_URL}/configuracao-analise`,
+const camposPorEsporte: Record<string, CampoAnalise[]> = {
+    Futebol: [
         {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.mensagem ||
-            'Erro ao carregar as configurações.'
-        );
-      }
-
-      const configuracoes =
-        Array.isArray(dados.configuracoes)
-          ? dados.configuracoes
-          : [];
-
-      setCampos(
-        configuracoes.map(normalizarCampo)
-      );
-    } catch (error) {
-      console.error(
-        'Erro ao buscar configurações de análise:',
-        error
-      );
-
-      setErro(
-        error instanceof Error
-          ? error.message
-          : 'Erro ao carregar configurações.'
-      );
-    } finally {
-      setCarregando(false);
-    }
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | ADICIONAR CAMPO
-  |--------------------------------------------------------------------------
-  */
-
-  async function adicionarCampo(
-    campo: CampoVisual
-  ) {
-    try {
-      setAdicionando(true);
-      setErro('');
-
-      const token = obterToken();
-
-      if (!token) {
-        setErro(
-          'Sua sessão expirou. Faça login novamente.'
-        );
-
-        return;
-      }
-
-      const jaExiste = campos.some(
-        (item) =>
-          item.nome.toLowerCase() ===
-          campo.nome.toLowerCase()
-      );
-
-      if (jaExiste) {
-        return;
-      }
-
-      const resposta = await fetch(
-        `${API_URL}/configuracao-analise`,
+            id: 'gol',
+            nome: 'Gol',
+            icon: Goal,
+        },
         {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            nome: campo.nome,
-            descricao: campo.descricao,
-            tipo: campo.tipo.toUpperCase(),
-            ordem: campos.length,
-          }),
-        }
-      );
-
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.mensagem ||
-            'Erro ao adicionar evento.'
-        );
-      }
-
-      const novoCampo =
-        normalizarCampo(
-          dados.configuracao
-        );
-
-      setCampos((anterior) => [
-        ...anterior,
-        novoCampo,
-      ]);
-    } catch (error) {
-      console.error(
-        'Erro ao adicionar configuração:',
-        error
-      );
-
-      setErro(
-        error instanceof Error
-          ? error.message
-          : 'Erro ao adicionar evento.'
-      );
-    } finally {
-      setAdicionando(false);
-    }
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | REMOVER CAMPO
-  |--------------------------------------------------------------------------
-  */
-
-  async function removerCampo(
-    campo: CampoAnalise
-  ) {
-    try {
-      setErro('');
-
-      const token = obterToken();
-
-      if (!token) {
-        setErro(
-          'Sua sessão expirou. Faça login novamente.'
-        );
-
-        return;
-      }
-
-      const resposta = await fetch(
-        `${API_URL}/configuracao-analise/${campo.id}`,
+            id: 'finalizacao',
+            nome: 'Finalização',
+            icon: Target,
+        },
         {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.mensagem ||
-            'Erro ao remover evento.'
-        );
-      }
-
-      setCampos((anterior) =>
-        anterior.filter(
-          (item) => item.id !== campo.id
-        )
-      );
-    } catch (error) {
-      console.error(
-        'Erro ao remover configuração:',
-        error
-      );
-
-      setErro(
-        error instanceof Error
-          ? error.message
-          : 'Erro ao remover evento.'
-      );
-    }
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | ALTERAR TIPO
-  |--------------------------------------------------------------------------
-  */
-
-  async function alterarTipo(
-    campo: CampoAnalise,
-    novoTipo: CampoAnalise['tipo']
-  ) {
-    try {
-      setErro('');
-
-      const token = obterToken();
-
-      if (!token) {
-        setErro(
-          'Sua sessão expirou. Faça login novamente.'
-        );
-
-        return;
-      }
-
-      const resposta = await fetch(
-        `${API_URL}/configuracao-analise/${campo.id}`,
+            id: 'passe',
+            nome: 'Passe',
+            icon: CircleDot,
+        },
         {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            tipo: novoTipo.toUpperCase(),
-          }),
-        }
-      );
+            id: 'assistencia',
+            nome: 'Assistência',
+            icon: Zap,
+        },
+        {
+            id: 'desarme',
+            nome: 'Desarme',
+            icon: Shield,
+        },
+        {
+            id: 'interceptacao',
+            nome: 'Interceptação',
+            icon: Activity,
+        },
+        {
+            id: 'falta',
+            nome: 'Falta',
+            icon: Hand,
+        },
+        {
+            id: 'cartao',
+            nome: 'Cartão',
+            icon: Shield,
+        },
+        {
+            id: 'escanteio',
+            nome: 'Escanteio',
+            icon: Target,
+        },
+        {
+            id: 'defesa-goleiro',
+            nome: 'Defesa do goleiro',
+            icon: Shield,
+        },
+    ],
 
-      const dados = await resposta.json();
+    Basquete: [
+        {
+            id: 'cesta-2',
+            nome: 'Cesta de 2 pontos',
+            icon: Target,
+        },
+        {
+            id: 'cesta-3',
+            nome: 'Cesta de 3 pontos',
+            icon: Target,
+        },
+        {
+            id: 'lance-livre',
+            nome: 'Lance livre',
+            icon: CircleDot,
+        },
+        {
+            id: 'assistencia',
+            nome: 'Assistência',
+            icon: Zap,
+        },
+        {
+            id: 'rebote-ofensivo',
+            nome: 'Rebote ofensivo',
+            icon: Activity,
+        },
+        {
+            id: 'rebote-defensivo',
+            nome: 'Rebote defensivo',
+            icon: Shield,
+        },
+        {
+            id: 'roubo-bola',
+            nome: 'Roubo de bola',
+            icon: Hand,
+        },
+        {
+            id: 'toco',
+            nome: 'Bloqueio / Toco',
+            icon: Shield,
+        },
+        {
+            id: 'falta',
+            nome: 'Falta',
+            icon: Hand,
+        },
+        {
+            id: 'turnover',
+            nome: 'Perda de bola',
+            icon: Activity,
+        },
+    ],
 
-      if (!resposta.ok) {
-        throw new Error(
-          dados.mensagem ||
-            'Erro ao atualizar evento.'
+    Vôlei: [
+        {
+            id: 'saque',
+            nome: 'Saque',
+            icon: Target,
+        },
+        {
+            id: 'ace',
+            nome: 'Ace',
+            icon: Trophy,
+        },
+        {
+            id: 'recepcao',
+            nome: 'Recepção',
+            icon: Hand,
+        },
+        {
+            id: 'levantamento',
+            nome: 'Levantamento',
+            icon: Activity,
+        },
+        {
+            id: 'ataque',
+            nome: 'Ataque',
+            icon: Zap,
+        },
+        {
+            id: 'ponto-ataque',
+            nome: 'Ponto de ataque',
+            icon: Trophy,
+        },
+        {
+            id: 'bloqueio',
+            nome: 'Bloqueio',
+            icon: Shield,
+        },
+        {
+            id: 'defesa',
+            nome: 'Defesa',
+            icon: Shield,
+        },
+        {
+            id: 'erro-saque',
+            nome: 'Erro de saque',
+            icon: Target,
+        },
+        {
+            id: 'erro-ataque',
+            nome: 'Erro de ataque',
+            icon: Activity,
+        },
+    ],
+
+    Handebol: [
+        {
+            id: 'gol',
+            nome: 'Gol',
+            icon: Goal,
+        },
+        {
+            id: 'finalizacao',
+            nome: 'Finalização',
+            icon: Target,
+        },
+        {
+            id: 'assistencia',
+            nome: 'Assistência',
+            icon: Zap,
+        },
+        {
+            id: 'defesa-goleiro',
+            nome: 'Defesa do goleiro',
+            icon: Shield,
+        },
+        {
+            id: 'passe',
+            nome: 'Passe',
+            icon: CircleDot,
+        },
+        {
+            id: 'roubo',
+            nome: 'Roubo de bola',
+            icon: Hand,
+        },
+        {
+            id: 'bloqueio',
+            nome: 'Bloqueio',
+            icon: Shield,
+        },
+        {
+            id: 'falta',
+            nome: 'Falta',
+            icon: Hand,
+        },
+        {
+            id: 'exclusao',
+            nome: 'Exclusão de 2 minutos',
+            icon: Clock3,
+        },
+        {
+            id: 'sete-metros',
+            nome: 'Tiro de 7 metros',
+            icon: Target,
+        },
+    ],
+
+    Rugby: [
+        {
+            id: 'try',
+            nome: 'Try',
+            icon: Trophy,
+        },
+        {
+            id: 'conversao',
+            nome: 'Conversão',
+            icon: Target,
+        },
+        {
+            id: 'passe',
+            nome: 'Passe',
+            icon: CircleDot,
+        },
+        {
+            id: 'tackle',
+            nome: 'Tackle',
+            icon: Shield,
+        },
+        {
+            id: 'quebra-tackle',
+            nome: 'Quebra de tackle',
+            icon: Zap,
+        },
+        {
+            id: 'penalidade',
+            nome: 'Penalidade',
+            icon: Hand,
+        },
+        {
+            id: 'scrum',
+            nome: 'Scrum',
+            icon: Activity,
+        },
+        {
+            id: 'line-out',
+            nome: 'Line-out',
+            icon: Activity,
+        },
+        {
+            id: 'turnover',
+            nome: 'Turnover',
+            icon: CircleDot,
+        },
+        {
+            id: 'drop-goal',
+            nome: 'Drop goal',
+            icon: Goal,
+        },
+    ],
+
+    Natação: [
+        {
+            id: 'tempo-total',
+            nome: 'Tempo total',
+            icon: Timer,
+        },
+        {
+            id: 'tempo-volta',
+            nome: 'Tempo por volta',
+            icon: Clock3,
+        },
+        {
+            id: 'parcial',
+            nome: 'Tempo parcial',
+            icon: Timer,
+        },
+        {
+            id: 'velocidade-media',
+            nome: 'Velocidade média',
+            icon: Zap,
+        },
+        {
+            id: 'bracadas',
+            nome: 'Número de braçadas',
+            icon: Activity,
+        },
+        {
+            id: 'frequencia',
+            nome: 'Frequência de braçadas',
+            icon: Activity,
+        },
+        {
+            id: 'distancia-bracada',
+            nome: 'Distância por braçada',
+            icon: Target,
+        },
+        {
+            id: 'reacao',
+            nome: 'Tempo de reação',
+            icon: Clock3,
+        },
+        {
+            id: 'virada',
+            nome: 'Virada',
+            icon: Activity,
+        },
+        {
+            id: 'chegada',
+            nome: 'Chegada',
+            icon: Trophy,
+        },
+    ],
+
+    Atletismo: [
+        {
+            id: 'tempo',
+            nome: 'Tempo',
+            icon: Timer,
+        },
+        {
+            id: 'distancia',
+            nome: 'Distância',
+            icon: Target,
+        },
+        {
+            id: 'velocidade',
+            nome: 'Velocidade',
+            icon: Zap,
+        },
+        {
+            id: 'valida',
+            nome: 'Tentativa válida',
+            icon: Trophy,
+        },
+        {
+            id: 'invalida',
+            nome: 'Tentativa inválida',
+            icon: Activity,
+        },
+        {
+            id: 'melhor-marca',
+            nome: 'Melhor marca',
+            icon: Trophy,
+        },
+        {
+            id: 'tempo-parcial',
+            nome: 'Tempo parcial',
+            icon: Clock3,
+        },
+        {
+            id: 'largada',
+            nome: 'Largada',
+            icon: Zap,
+        },
+        {
+            id: 'salto',
+            nome: 'Salto',
+            icon: Activity,
+        },
+        {
+            id: 'lancamento',
+            nome: 'Arremesso / Lançamento',
+            icon: Target,
+        },
+    ],
+
+    Tênis: [
+        {
+            id: 'ace',
+            nome: 'Ace',
+            icon: Trophy,
+        },
+        {
+            id: 'dupla-falta',
+            nome: 'Dupla falta',
+            icon: Activity,
+        },
+        {
+            id: 'primeiro-saque',
+            nome: 'Primeiro saque',
+            icon: Target,
+        },
+        {
+            id: 'segundo-saque',
+            nome: 'Segundo saque',
+            icon: Target,
+        },
+        {
+            id: 'winner',
+            nome: 'Winner',
+            icon: Trophy,
+        },
+        {
+            id: 'erro-nao-forcado',
+            nome: 'Erro não forçado',
+            icon: Activity,
+        },
+        {
+            id: 'break-point',
+            nome: 'Break point',
+            icon: Zap,
+        },
+        {
+            id: 'ponto-saque',
+            nome: 'Ponto de saque',
+            icon: Target,
+        },
+        {
+            id: 'devolucao',
+            nome: 'Ponto de devolução',
+            icon: CircleDot,
+        },
+        {
+            id: 'volley',
+            nome: 'Volley',
+            icon: Hand,
+        },
+    ],
+};
+
+/* =========================================================
+   FUNÇÕES AUXILIARES
+========================================================= */
+
+const normalizarTexto = (texto: string) =>
+    texto
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .toLowerCase();
+
+const criarId = (nome: string) =>
+    normalizarTexto(nome)
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+
+/* =========================================================
+   COMPONENTE
+========================================================= */
+
+export default function ConfiguracaoAnalise() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    /*
+     * Recebe os dados enviados pela tela de seleção
+     * do esporte.
+     */
+    const state =
+        location.state as EstadoSelecaoEsporte | null;
+
+    /*
+     * Primeiro tenta pegar pelo React Router.
+     * Se a página for recarregada, usa o sessionStorage.
+     */
+    const modalidade =
+        state?.modalidade ||
+        sessionStorage.getItem('sate-modalidade') ||
+        'Futebol';
+
+    const imagemEsporte =
+        state?.imagem ||
+        sessionStorage.getItem('sate-imagem-esporte') ||
+        '';
+
+    /*
+     * Campos padrão da modalidade selecionada.
+     */
+    const camposIniciais = useMemo(() => {
+        return (
+            camposPorEsporte[modalidade] ??
+            camposPorEsporte.Futebol
         );
-      }
+    }, [modalidade]);
 
-      const atualizado =
-        normalizarCampo(
-          dados.configuracao
-        );
+    /*
+     * Campos criados pelo treinador.
+     */
+    const [
+        camposPersonalizados,
+        setCamposPersonalizados,
+    ] = useState<CampoAnalise[]>([]);
 
-      setCampos((anterior) =>
-        anterior.map((item) =>
-          item.id === atualizado.id
-            ? atualizado
-            : item
-        )
-      );
-    } catch (error) {
-      console.error(
-        'Erro ao atualizar tipo:',
-        error
-      );
+    /*
+     * IDs dos campos selecionados.
+     */
+    const [
+        selecionados,
+        setSelecionados,
+    ] = useState<string[]>([]);
 
-      setErro(
-        error instanceof Error
-          ? error.message
-          : 'Erro ao atualizar evento.'
-      );
-    }
-  }
+    /*
+     * Controle do modal de campo personalizado.
+     */
+    const [
+        modalAberto,
+        setModalAberto,
+    ] = useState(false);
 
-  /*
-  |--------------------------------------------------------------------------
-  | VERIFICAR SE CAMPO ESTÁ SELECIONADO
-  |--------------------------------------------------------------------------
-  */
-
-  function campoSelecionado(
-    nome: string
-  ) {
-    return campos.some(
-      (campo) =>
-        campo.nome.toLowerCase() ===
-        nome.toLowerCase()
+    /*
+     * Junta os campos padrão com os personalizados.
+     */
+    const todosCampos = useMemo(
+        () => [
+            ...camposIniciais,
+            ...camposPersonalizados,
+        ],
+        [
+            camposIniciais,
+            camposPersonalizados,
+        ],
     );
-  }
 
-  /*
-  |--------------------------------------------------------------------------
-  | ADICIONAR CAMPO PERSONALIZADO
-  |--------------------------------------------------------------------------
-  */
+    /* =====================================================
+       SELECIONAR / DESSELECIONAR CAMPO
+    ===================================================== */
 
-  async function adicionarCampoPersonalizado() {
-    const nome =
-      window.prompt(
-        'Digite o nome do novo evento:'
-      );
-
-    if (!nome || !nome.trim()) {
-      return;
-    }
-
-    const descricao =
-      window.prompt(
-        'Digite uma descrição para esse evento:'
-      );
-
-    await adicionarCampo({
-      nome: nome.trim(),
-      descricao:
-        descricao?.trim() ||
-        'Evento configurado pelo treinador',
-      tipo: 'positiva',
-      icone: <Activity size={20} />,
-    });
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | CONTINUAR → CONFIGURAÇÃO DA EQUIPE
-  |--------------------------------------------------------------------------
-  */
-
-  async function continuar() {
-    if (campos.length === 0) {
-      setErro(
-        'Selecione pelo menos um evento para continuar.'
-      );
-
-      return;
-    }
-
-    try {
-      setSalvando(true);
-      setErro('');
-
-      const token = obterToken();
-
-      if (!token) {
-        setErro(
-          'Sua sessão expirou. Faça login novamente.'
+    const alternarCampo = (id: string) => {
+        setSelecionados((atual) =>
+            atual.includes(id)
+                ? atual.filter(
+                      (campoId) => campoId !== id,
+                  )
+                : [
+                      ...atual,
+                      id,
+                  ],
         );
+    };
 
-        return;
-      }
+    /* =====================================================
+       ADICIONAR CAMPO PERSONALIZADO
+    ===================================================== */
 
-      /*
-       * Salva a ordem atual dos eventos
-       * no banco de dados.
-       */
+    const adicionarCampoPersonalizado = (
+        nome: string,
+        icone: LucideIcon,
+    ) => {
+        const nomeLimpo = nome.trim();
 
-      const listaOrdem = campos.map(
-        (campo, index) => ({
-          id: campo.id,
-          ordem: index,
-        })
-      );
-
-      const resposta = await fetch(
-        `${API_URL}/configuracao-analise/ordem`,
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            configuracoes: listaOrdem,
-          }),
+        if (!nomeLimpo) {
+            return;
         }
-      );
 
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.mensagem ||
-            'Erro ao salvar a ordem dos eventos.'
+        /*
+         * Evita criar campos personalizados
+         * com nomes repetidos.
+         */
+        const campoJaExiste = todosCampos.some(
+            (campo) =>
+                normalizarTexto(campo.nome) ===
+                normalizarTexto(nomeLimpo),
         );
-      }
 
-      /*
-       * Se o componente pai tiver uma função
-       * onContinuar, ela será executada.
-       */
+        if (campoJaExiste) {
+            return;
+        }
 
-      if (onContinuar) {
-        onContinuar();
-      }
+        const id =
+            `personalizado-${criarId(nomeLimpo)}-${Date.now()}`;
 
-      /*
-       * Vai para a próxima etapa:
-       * CONFIGURAÇÃO DA EQUIPE
-       */
-      navigate('/configuracao-equipe');
+        const novoCampo: CampoAnalise = {
+            id,
+            nome: nomeLimpo,
+            icon: icone,
+        };
 
-    } catch (error) {
-      console.error(
-        'Erro ao continuar configuração:',
-        error
-      );
+        setCamposPersonalizados((atual) => [
+            ...atual,
+            novoCampo,
+        ]);
 
-      setErro(
-        error instanceof Error
-          ? error.message
-          : 'Erro ao salvar configuração.'
-      );
-    } finally {
-      setSalvando(false);
-    }
-  }
+        /*
+         * O campo personalizado já entra
+         * selecionado automaticamente.
+         */
+        setSelecionados((atual) => [
+            ...atual,
+            id,
+        ]);
 
-  /*
-  |--------------------------------------------------------------------------
-  | RENDER
-  |--------------------------------------------------------------------------
-  */
+        setModalAberto(false);
+    };
 
-  return (
-    <div className={styles.page}>
-      <main className={styles.container}>
+    /* =====================================================
+       VOLTAR
+    ===================================================== */
 
-        {/* =====================================
-            PROGRESSO
-        ===================================== */}
+    const voltar = () => {
+        navigate('/selecao-esporte');
+    };
 
-        <section className={styles.progressArea}>
-          <span className={styles.stepBadge}>
-            Etapa 3 de 4
-          </span>
+    /* =====================================================
+       PRÓXIMO
+    ===================================================== */
 
-          <div className={styles.progressSteps}>
-            <span
-              className={
-                styles.progressComplete
-              }
-            />
+    const proximo = () => {
+        /*
+         * O treinador precisa selecionar pelo menos
+         * um campo para continuar.
+         */
+        if (selecionados.length === 0) {
+            return;
+        }
 
-            <span
-              className={
-                styles.progressComplete
-              }
-            />
+        /*
+         * Converte os IDs selecionados para os nomes
+         * que serão mostrados na tela de resumo.
+         */
+        const camposSelecionados = todosCampos
+            .filter((campo) =>
+                selecionados.includes(campo.id),
+            )
+            .map((campo) => campo.nome);
 
-            <span
-              className={
-                styles.progressActive
-              }
-            />
+        /*
+         * Guarda temporariamente os campos escolhidos.
+         *
+         * Eles serão usados posteriormente na última
+         * etapa para enviar toda a configuração ao backend.
+         */
+        sessionStorage.setItem(
+            'sate-campos-analise',
+            JSON.stringify(camposSelecionados),
+        );
 
-            <span
-              className={
-                styles.progressInactive
-              }
-            />
-          </div>
-        </section>
+        /*
+         * Mantém também a modalidade e a imagem
+         * disponíveis durante todo o onboarding.
+         */
+        sessionStorage.setItem(
+            'sate-modalidade',
+            modalidade,
+        );
 
-        {/* =====================================
-            CABEÇALHO
-        ===================================== */}
+        if (imagemEsporte) {
+            sessionStorage.setItem(
+                'sate-imagem-esporte',
+                imagemEsporte,
+            );
+        }
 
-        <header className={styles.header}>
-          <span className={styles.sportBadge}>
-            ANÁLISE DE DESEMPENHO
-          </span>
+        /*
+         * Vai para a 4ª tela.
+         */
+        navigate('/configuracao-equipe', {
+            state: {
+                modalidade,
+                imagem: imagemEsporte,
+            },
+        });
+    };
 
-          <h1>
-            Defina o que você quer{' '}
-            <strong>
-              analisar nos vídeos
-            </strong>
-          </h1>
+    /* =====================================================
+       RENDER
+    ===================================================== */
 
-          <p>
-            Selecione os principais eventos
-            que serão utilizados durante a
-            análise das partidas da sua equipe.
-          </p>
-        </header>
+    return (
+        <main
+            className={styles.page}
+            style={
+                imagemEsporte
+                    ? {
+                          backgroundImage: `
+                            linear-gradient(
+                                rgba(0, 55, 42, 0.84),
+                                rgba(0, 55, 42, 0.91)
+                            ),
+                            url(${imagemEsporte})
+                          `,
+                      }
+                    : undefined
+            }
+        >
+            <div className={styles.container}>
 
-        {/* =====================================
-            ERRO
-        ===================================== */}
+                {/* ================= PROGRESSO ================= */}
 
-        {erro && (
-          <div
-            style={{
-              width: '100%',
-              marginBottom: '16px',
-              padding: '12px 16px',
-              boxSizing: 'border-box',
-              borderRadius: '10px',
-              background:
-                'rgba(213, 41, 65, 0.16)',
-              border:
-                '1px solid rgba(255, 150, 160, 0.4)',
-              color: '#ffffff',
-              fontSize: '12px',
-              textAlign: 'center',
-            }}
-          >
-            {erro}
-          </div>
-        )}
+                <div className={styles.progressArea}>
+                    <div className={styles.stepBadge}>
+                        Etapa 2 de 4 · Configuração da análise
+                    </div>
 
-        {/* =====================================
-            CAMPOS
-        ===================================== */}
+                    <div className={styles.progressSteps}>
+                        <div
+                            className={
+                                styles.progressComplete
+                            }
+                        />
 
-        {carregando ? (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minHeight: '180px',
-              color: '#d3e4de',
-              fontSize: '13px',
-            }}
-          >
-            Carregando configurações...
-          </div>
-        ) : (
-          <section className={styles.fieldsGrid}>
+                        <div
+                            className={
+                                styles.progressActive
+                            }
+                        />
 
-            {camposDisponiveis.map(
-              (campo) => {
-                const selecionado =
-                  campoSelecionado(
-                    campo.nome
-                  );
+                        <div
+                            className={
+                                styles.progressInactive
+                            }
+                        />
 
-                const configuracao =
-                  campos.find(
-                    (item) =>
-                      item.nome.toLowerCase() ===
-                      campo.nome.toLowerCase()
-                  );
+                        <div
+                            className={
+                                styles.progressInactive
+                            }
+                        />
+                    </div>
+                </div>
 
-                return (
-                  <button
-                    key={campo.nome}
-                    type="button"
-                    className={
-                      selecionado
-                        ? `${styles.fieldCard} ${styles.fieldCardSelected}`
-                        : styles.fieldCard
-                    }
-                    onClick={() => {
-                      if (selecionado) {
-                        if (configuracao) {
-                          removerCampo(
-                            configuracao
-                          );
-                        }
-                      } else {
-                        adicionarCampo(
-                          campo
+                {/* ================= CABEÇALHO ================= */}
+
+                <section className={styles.header}>
+                    <span className={styles.sportBadge}>
+                        {modalidade}
+                    </span>
+
+                    <h1>
+                        Quais campos você quer acompanhar?
+                    </h1>
+
+                    <p>
+                        Selecione os principais campos que deseja
+                        acompanhar nas análises de{' '}
+                        <strong>
+                            {modalidade}
+                        </strong>
+                        . Você pode escolher somente as informações
+                        que fazem sentido para sua equipe.
+                    </p>
+                </section>
+
+                {/* ================= CAMPOS ================= */}
+
+                <section className={styles.fieldsGrid}>
+                    {todosCampos.map((campo) => {
+                        const Icon = campo.icon;
+
+                        const selecionado =
+                            selecionados.includes(
+                                campo.id,
+                            );
+
+                        return (
+                            <button
+                                key={campo.id}
+                                type="button"
+                                className={`${styles.fieldCard} ${
+                                    selecionado
+                                        ? styles.fieldCardSelected
+                                        : ''
+                                }`}
+                                onClick={() =>
+                                    alternarCampo(
+                                        campo.id,
+                                    )
+                                }
+                                aria-pressed={
+                                    selecionado
+                                }
+                            >
+                                {/* BOLINHA DE SELEÇÃO */}
+
+                                <span
+                                    className={`${styles.checkbox} ${
+                                        selecionado
+                                            ? styles.checkboxSelected
+                                            : ''
+                                    }`}
+                                >
+                                    {selecionado && (
+                                        <Check
+                                            size={18}
+                                            strokeWidth={3}
+                                        />
+                                    )}
+                                </span>
+
+                                {/* NOME */}
+
+                                <span
+                                    className={
+                                        styles.fieldName
+                                    }
+                                >
+                                    {campo.nome}
+                                </span>
+
+                                {/* ÍCONE */}
+
+                                <span
+                                    className={
+                                        styles.fieldIcon
+                                    }
+                                >
+                                    <Icon
+                                        size={24}
+                                        strokeWidth={2}
+                                    />
+                                </span>
+                            </button>
                         );
-                      }
-                    }}
-                    disabled={
-                      adicionando ||
-                      salvando
-                    }
-                  >
-                    <span
-                      className={
-                        selecionado
-                          ? `${styles.checkbox} ${styles.checkboxSelected}`
-                          : styles.checkbox
-                      }
+                    })}
+
+                    {/* ADICIONAR CAMPO */}
+
+                    <button
+                        type="button"
+                        className={styles.addField}
+                        onClick={() =>
+                            setModalAberto(true)
+                        }
                     >
-                      {selecionado && (
-                        <Check size={18} />
-                      )}
-                    </span>
+                        <div
+                            className={
+                                styles.addIcon
+                            }
+                        >
+                            <Plus size={21} />
+                        </div>
 
-                    <span
-                      className={
-                        styles.fieldName
-                      }
+                        <div
+                            className={
+                                styles.addText
+                            }
+                        >
+                            <strong>
+                                Adicionar campo
+                            </strong>
+
+                            <span>
+                                Criar opção personalizada
+                            </span>
+                        </div>
+                    </button>
+                </section>
+
+                {/* ================= RODAPÉ ================= */}
+
+                <footer className={styles.footer}>
+                    <button
+                        type="button"
+                        className={styles.backButton}
+                        onClick={voltar}
                     >
-                      {campo.nome}
-                    </span>
+                        <ArrowLeft size={22} />
+                        Voltar
+                    </button>
 
-                    <span
-                      className={
-                        styles.fieldIcon
-                      }
+                    <div
+                        className={
+                            styles.footerRight
+                        }
                     >
-                      {campo.icone}
-                    </span>
-                  </button>
-                );
-              }
-            )}
+                        {selecionados.length > 0 && (
+                            <span
+                                className={
+                                    styles.selectedCounter
+                                }
+                            >
+                                {selecionados.length}{' '}
+                                {selecionados.length === 1
+                                    ? 'campo selecionado'
+                                    : 'campos selecionados'}
+                            </span>
+                        )}
 
-            {/* =====================================
-                ADICIONAR PERSONALIZADO
-            ===================================== */}
+                        <button
+                            type="button"
+                            className={
+                                styles.nextButton
+                            }
+                            disabled={
+                                selecionados.length ===
+                                0
+                            }
+                            onClick={proximo}
+                        >
+                            Próximo
 
-            <button
-              type="button"
-              className={styles.addField}
-              onClick={
-                adicionarCampoPersonalizado
-              }
-              disabled={
-                adicionando ||
-                salvando
-              }
-            >
-              <span
-                className={styles.addIcon}
-              >
-                <Plus size={21} />
-              </span>
+                            <ArrowRight
+                                size={21}
+                            />
+                        </button>
+                    </div>
+                </footer>
+            </div>
 
-              <span
-                className={styles.addText}
-              >
-                <strong>
-                  Adicionar campo
-                </strong>
+            {/* ================= MODAL ================= */}
 
-                <span>
-                  Crie um evento personalizado
-                </span>
-              </span>
-            </button>
-
-          </section>
-        )}
-
-        {/* =====================================
-            FOOTER
-        ===================================== */}
-
-        <footer className={styles.footer}>
-
-          <button
-            type="button"
-            className={styles.backButton}
-            onClick={onVoltar}
-            disabled={salvando}
-          >
-            <ArrowLeft size={18} />
-            Voltar
-          </button>
-
-          <div
-            className={styles.footerRight}
-          >
-            <span
-              className={
-                styles.selectedCounter
-              }
-            >
-              {campos.length}{' '}
-              {campos.length === 1
-                ? 'campo selecionado'
-                : 'campos selecionados'}
-            </span>
-
-            <button
-              type="button"
-              className={styles.nextButton}
-              onClick={continuar}
-              disabled={
-                campos.length === 0 ||
-                salvando
-              }
-            >
-              {salvando
-                ? 'Salvando...'
-                : 'Continuar'}
-
-              {!salvando && (
-                <ArrowRight size={18} />
-              )}
-            </button>
-          </div>
-
-        </footer>
-      </main>
-    </div>
-  );
+            <ModalCampoPersonalizado
+                open={modalAberto}
+                camposExistentes={todosCampos.map(
+                    (campo) => campo.nome,
+                )}
+                onClose={() =>
+                    setModalAberto(false)
+                }
+                onAdicionar={
+                    adicionarCampoPersonalizado
+                }
+            />
+        </main>
+    );
 }
+

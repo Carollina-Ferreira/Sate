@@ -10,10 +10,12 @@ import '../../assets/menu_inferior_atleta.dart';
 
 class AtletaNavigation extends StatefulWidget {
   final String nomeUsuario;
+  final String emailUsuario;
 
   const AtletaNavigation({
     super.key,
     required this.nomeUsuario,
+    required this.emailUsuario,
   });
 
   @override
@@ -36,6 +38,7 @@ class _AtletaNavigationState extends State<AtletaNavigation> {
       const AtletaFeedPage(),
       AtletaPerfilPage(
         nomeUsuario: widget.nomeUsuario,
+        emailUsuario: widget.emailUsuario,
       ),
     ];
   }
@@ -49,6 +52,8 @@ class _AtletaNavigationState extends State<AtletaNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFFCFCFC),
+
       body: IndexedStack(
         index: indiceSelecionado,
         children: paginas,
@@ -56,7 +61,6 @@ class _AtletaNavigationState extends State<AtletaNavigation> {
 
       bottomNavigationBar: MenuInferiorAtleta(
         indiceSelecionado: indiceSelecionado,
-
         onItemSelecionado: (indice) {
           mudarPagina(indice);
         },

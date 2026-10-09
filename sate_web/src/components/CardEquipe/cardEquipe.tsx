@@ -27,11 +27,10 @@ const CardEquipe = ({
   derrotas,
   proximaPartida,
 }: CardEquipeProps) => {
-  const corEquipe = cor || '#16A875';
-
   return (
     <div className={styles.card}>
-      {/* IMAGEM DA EQUIPE */}
+
+      {/* Imagem */}
       <div className={styles.imageContainer}>
         <img
           src={imagem}
@@ -39,12 +38,10 @@ const CardEquipe = ({
           className={styles.image}
         />
 
-        {/* MODALIDADE */}
+        {/* Modalidade */}
         <div
           className={styles.modality}
-          style={{
-            backgroundColor: corEquipe,
-          }}
+          style={{ backgroundColor: cor }}
         >
           <span className="material-icons">
             sports
@@ -53,33 +50,24 @@ const CardEquipe = ({
           {modalidade}
         </div>
 
-        {/* ÍCONE DE DESEMPENHO */}
+        {/* Ícone superior direito */}
         <div className={styles.topIcon}>
           <span className="material-icons">
             trending_up
           </span>
         </div>
 
-        {/* ÍCONE DA MODALIDADE */}
-        <div
-          className={styles.sportIcon}
-          style={{
-            backgroundColor: '#FFFFFF',
-          }}
-        >
-          <span
-            className="material-icons"
-            style={{
-              color: corEquipe,
-            }}
-          >
+        {/* Ícone da modalidade */}
+        <div className={styles.sportIcon}>
+          <span className="material-icons">
             {icone}
           </span>
         </div>
       </div>
 
-      {/* INFORMAÇÕES DA EQUIPE */}
+      {/* Informações da equipe */}
       <div className={styles.content}>
+
         <div className={styles.teamInfo}>
           <h2>{nome}</h2>
 
@@ -89,10 +77,12 @@ const CardEquipe = ({
           </div>
         </div>
 
-        {/* ESTATÍSTICAS */}
+        {/* Estatísticas */}
         <div className={styles.stats}>
+
           <div className={styles.stat}>
             <span>VITÓRIAS</span>
+
             <strong className={styles.victory}>
               {vitorias}
             </strong>
@@ -100,6 +90,7 @@ const CardEquipe = ({
 
           <div className={styles.stat}>
             <span>EMPATES</span>
+
             <strong>
               {empates}
             </strong>
@@ -107,27 +98,20 @@ const CardEquipe = ({
 
           <div className={styles.stat}>
             <span>DERROTAS</span>
+
             <strong className={styles.defeat}>
               {derrotas}
             </strong>
           </div>
+
         </div>
       </div>
 
-      {/* PRÓXIMA PARTIDA */}
+      {/* Próxima partida */}
       <div className={styles.nextGame}>
-        <div
-          className={styles.calendar}
-          style={{
-            backgroundColor: '#FFFFFF',
-          }}
-        >
-          <span
-            className="material-icons"
-            style={{
-              color: corEquipe,
-            }}
-          >
+
+        <div className={styles.calendar}>
+          <span className="material-icons">
             calendar_month
           </span>
         </div>
@@ -141,7 +125,9 @@ const CardEquipe = ({
             {proximaPartida}
           </strong>
         </div>
+
       </div>
+
     </div>
   );
 };

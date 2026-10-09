@@ -1,761 +1,285 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
-
-import {
-  Trash2,
-  TriangleAlert,
-  X,
-} from 'lucide-react';
-
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
-
-import styles from './partidas2.module.css';
-
-
-type AtletaPartida = {
-  id: number;
-
-  nome?: string | null;
-
-  categoria?: string | null;
-
-  equipeId?: number | null;
-
-  usuario?: {
-    avatarUrl?: string | null;
-    email?: string | null;
-  } | null;
-};
-
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import styles from "./partidas2.module.css";
 
 type PartidaRecebida = {
-  id: number;
-
   confronto: string;
-
   modalidade: string;
-
   data: string;
-
   resultado: string;
-
   status: string;
-
   tipo: string;
-
   temporada: string;
 };
 
-
-const API_URL =
-  'http://localhost:3000/api';
-
-
 const eventos = [
   {
-    horario: '22:54',
-    tipo: 'Gol',
-    atleta: 'Rafael Souza',
-    cor: 'verde',
+    horario: "22:54",
+    tipo: "Gol",
+    atleta: "Rafael Souza",
+    cor: "verde",
   },
-
   {
-    horario: '22:54',
-    tipo: 'Erro',
-    atleta: 'Bruno Alves',
-    cor: 'vermelho',
+    horario: "22:54",
+    tipo: "Erro",
+    atleta: "Bruno Alves",
+    cor: "vermelho",
   },
-
   {
-    horario: '22:54',
-    tipo: 'Finalização',
-    atleta: 'Rafael Souza',
-    cor: 'azul',
+    horario: "22:54",
+    tipo: "Finalização",
+    atleta: "Rafael Souza",
+    cor: "azul",
+  },
+  {
+    horario: "22:54",
+    tipo: "Falta",
+    atleta: "Igor Tavares",
+    cor: "laranja",
+  },
+  {
+    horario: "22:54",
+    tipo: "Gol",
+    atleta: "Bruno Alves",
+    cor: "verde",
+  },
+  {
+    horario: "22:54",
+    tipo: "Assistência",
+    atleta: "Rafael Souza",
+    cor: "verde",
+  },
+  {
+    horario: "22:54",
+    tipo: "Contra-Ataque",
+    atleta: "Rafael Souza",
+    cor: "amarelo",
   },
 ];
-
 
 const videos = [
   {
-    titulo:
-      'Gol de Rafael Souza',
-
-    horario:
-      '22:54',
-
-    tipo:
-      'Gol',
-
-    classe:
-      'gol',
+    titulo: "Gol de Rafael Souza",
+    horario: "22:54",
+    tipo: "Gol",
+    classe: "gol",
   },
-
   {
-    titulo:
-      'Gol de Rafael Souza',
-
-    horario:
-      '22:54',
-
-    tipo:
-      'Destaque',
-
-    classe:
-      'destaque',
+    titulo: "Gol de Rafael Souza",
+    horario: "22:54",
+    tipo: "Gol",
+    classe: "gol",
+  },
+  {
+    titulo: "Gol de Rafael Souza",
+    horario: "22:54",
+    tipo: "Destaque",
+    classe: "destaque",
   },
 ];
 
-
-function obterToken() {
-  return (
-    localStorage.getItem(
-      'token',
-    ) ||
-    sessionStorage.getItem(
-      'token',
-    )
-  );
-}
-
-
-function chaveEscalacao(
-  partidaId: number,
-) {
-  return `sate_escalacao_partida_${partidaId}`;
-}
-
-
-function obterIniciais(
-  nome: string,
-) {
-  const partes =
-    nome
-      .trim()
-      .split(' ')
-      .filter(Boolean);
-
-
-  if (
-    partes.length === 0
-  ) {
-    return 'AT';
-  }
-
-
-  if (
-    partes.length === 1
-  ) {
-    return partes[0]
-      .slice(0, 2)
-      .toUpperCase();
-  }
-
-
-  return `${partes[0][0]}${partes[
-    partes.length - 1
-  ][0]}`.toUpperCase();
-}
-
+const atletas = [
+  {
+    iniciais: "RS",
+    nome: "Rafael Souza",
+  },
+  {
+    iniciais: "BA",
+    nome: "Bruno Alves",
+  },
+  {
+    iniciais: "IT",
+    nome: "Igor Tavares",
+  },
+];
 
 export default function DetalhesDaPartida() {
-  const navigate =
-    useNavigate();
-
-
-  const location =
-    useLocation();
-
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const partida =
     location.state?.partida as
       | PartidaRecebida
       | undefined;
 
+  const [videoSelecionado, setVideoSelecionado] =
+    useState<number | null>(null);
 
-  const [
-    atletasPartida,
-    setAtletasPartida,
-  ] =
-    useState<
-      AtletaPartida[]
-    >([]);
+  const voltarParaPartidas = () => {
+    navigate("/partidas");
+  };
 
-
-  const [
-    carregandoAtletas,
-    setCarregandoAtletas,
-  ] =
-    useState(true);
-
-
-  const [
-    videoSelecionado,
-    setVideoSelecionado,
-  ] =
-    useState<
-      number | null
-    >(null);
-
-
-  const [
-    mostrarExcluir,
-    setMostrarExcluir,
-  ] =
-    useState(false);
-
-
-  const [
-    excluindo,
-    setExcluindo,
-  ] =
-    useState(false);
-
-
-  /* ============================================================
-     CARREGAR ATLETAS SELECIONADOS NA PARTIDA
-  ============================================================ */
-
-  useEffect(() => {
-    if (
-      !partida?.id
-    ) {
-      setCarregandoAtletas(
-        false,
-      );
-
-      return;
-    }
-
-
-    try {
-      const chave =
-        chaveEscalacao(
-          partida.id,
-        );
-
-
-      const dadosSalvos =
-        localStorage.getItem(
-          chave,
-        );
-
-
-      console.log(
-        'ID PARTIDA:',
-        partida.id,
-      );
-
-
-      console.log(
-        'ESCALAÇÃO ENCONTRADA:',
-        dadosSalvos,
-      );
-
-
-      if (
-        !dadosSalvos
-      ) {
-        setAtletasPartida(
-          [],
-        );
-
-        return;
-      }
-
-
-      const atletasSalvos =
-        JSON.parse(
-          dadosSalvos,
-        );
-
-
-      if (
-        Array.isArray(
-          atletasSalvos,
-        )
-      ) {
-        setAtletasPartida(
-          atletasSalvos,
-        );
-
-      } else {
-        setAtletasPartida(
-          [],
-        );
-      }
-
-    } catch (error) {
-      console.error(
-        'Erro ao carregar escalação:',
-        error,
-      );
-
-
-      setAtletasPartida(
-        [],
-      );
-
-    } finally {
-      setCarregandoAtletas(
-        false,
-      );
-    }
-
-  }, [
-    partida?.id,
-  ]);
-
-
-  /* ============================================================
-     DADOS DA PARTIDA
-  ============================================================ */
-
+  /*
+    Caso a página seja aberta diretamente pela URL,
+    usamos estes dados como padrão.
+  */
   const confronto =
     partida?.confronto ||
-    'Partida';
-
+    "Falcões FC vs Tigres FC";
 
   const modalidade =
-    partida?.modalidade ||
-    'Modalidade';
-
+    partida?.modalidade || "Futebol";
 
   const data =
-    partida?.data ||
-    '-';
-
+    partida?.data || "18/06/2026";
 
   const resultado =
-    partida?.resultado ||
-    '-';
-
+    partida?.resultado || "3 - 1";
 
   const status =
-    partida?.status ||
-    'Pendente';
+    partida?.status || "Analisada";
 
-
-  const equipes =
-    confronto.split(
-      ' vs ',
-    );
-
+  const equipes = confronto.split(" vs ");
 
   const equipeCasa =
-    equipes[0] ||
-    'Equipe';
-
+    equipes[0] || "Falcões FC";
 
   const equipeVisitante =
-    equipes[1] ||
-    'Adversário';
-
-
-  function voltarParaPartidas() {
-    navigate(
-      '/partidas',
-    );
-  }
-
-
-  /* ============================================================
-     EXCLUIR
-  ============================================================ */
-
-  function abrirConfirmacaoExclusao() {
-    setMostrarExcluir(
-      true,
-    );
-  }
-
-
-  function fecharConfirmacaoExclusao() {
-    if (!excluindo) {
-      setMostrarExcluir(
-        false,
-      );
-    }
-  }
-
-
-  async function excluirPartida() {
-    if (
-      !partida?.id
-    ) {
-      return;
-    }
-
-
-    try {
-      setExcluindo(true);
-
-
-      const token =
-        obterToken();
-
-
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
-
-      const resposta =
-        await fetch(
-          `${API_URL}/partidas/${partida.id}`,
-          {
-            method:
-              'DELETE',
-
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-            },
-          },
-        );
-
-
-      const dados =
-        await resposta
-          .json()
-          .catch(
-            () => ({}),
-          );
-
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados?.mensagem ||
-          'Erro ao excluir partida.',
-        );
-      }
-
-
-      /*
-        REMOVE TAMBÉM A ESCALAÇÃO
-        LOCAL DA PARTIDA
-      */
-
-      localStorage.removeItem(
-        chaveEscalacao(
-          partida.id,
-        ),
-      );
-
-
-      navigate(
-        '/partidas',
-      );
-
-    } catch (error) {
-      console.error(
-        error,
-      );
-
-
-      alert(
-        error instanceof Error
-          ? error.message
-          : 'Erro ao excluir partida.',
-      );
-
-    } finally {
-      setExcluindo(false);
-    }
-  }
-
+    equipes[1] || "Tigres FC";
 
   return (
-    <div
-      className={
-        styles.page
-      }
-    >
+    <div className={styles.page}>
 
       {/* VOLTAR */}
-
       <button
-        type="button"
-        className={
-          styles.backButton
-        }
-        onClick={
-          voltarParaPartidas
-        }
+        className={styles.backButton}
+        onClick={voltarParaPartidas}
       >
-        <span>
-          ‹
-        </span>
-
+        <span>‹</span>
         Voltar para partidas
       </button>
 
-
       {/* PLACAR */}
+      <section className={styles.scoreCard}>
 
-      <section
-        className={
-          styles.scoreCard
-        }
-      >
-
-        <div
-          className={
-            styles.team
-          }
-        >
-
-          <div
-            className={
-              styles.teamIcon
-            }
-          >
-            {obterIniciais(
-              equipeCasa,
-            )}
+        <div className={styles.team}>
+          <div className={styles.teamIcon}>
+            {equipeCasa
+              .split(" ")
+              .map((item) => item[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase()}
           </div>
 
-
-          <strong>
-            {equipeCasa}
-          </strong>
-
+          <strong>{equipeCasa}</strong>
         </div>
 
+        <div className={styles.scoreCenter}>
 
-        <div
-          className={
-            styles.scoreCenter
-          }
-        >
-
-          <div
-            className={
-              styles.score
-            }
-          >
+          <div className={styles.score}>
             {resultado}
           </div>
 
-
-          <div
-            className={
-              styles.matchInfo
-            }
-          >
-
-            <span>
-              {data}
-            </span>
-
-
-            <span
-              className={
-                styles.separator
-              }
-            >
+          <div className={styles.matchInfo}>
+            <span>{data}</span>
+            <span className={styles.separator}>
               •
             </span>
-
-
-            <span>
-              {modalidade}
-            </span>
-
+            <span>{modalidade}</span>
           </div>
 
-
-          <span
-            className={`${styles.status} ${
-              status ===
-              'Pendente'
-                ? styles.statusPending
-                : status ===
-                    'Cancelada'
-                  ? styles.statusCancelled
-                  : styles.statusFinished
-            }`}
-          >
+          <span className={styles.status}>
             {status}
           </span>
 
         </div>
 
-
-        <div
-          className={
-            styles.team
-          }
-        >
-
-          <div
-            className={
-              styles.teamIcon
-            }
-          >
-            {obterIniciais(
-              equipeVisitante,
-            )}
+        <div className={styles.team}>
+          <div className={styles.teamIcon}>
+            {equipeVisitante
+              .split(" ")
+              .map((item) => item[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase()}
           </div>
 
-
-          <strong>
-            {equipeVisitante}
-          </strong>
-
+          <strong>{equipeVisitante}</strong>
         </div>
 
       </section>
 
-
       {/* EVENTOS + MOMENTOS */}
+      <div className={styles.contentGrid}>
 
-      <div
-        className={
-          styles.contentGrid
-        }
-      >
+        {/* EVENTOS */}
+        <section className={styles.card}>
 
-        <section
-          className={
-            styles.card
-          }
-        >
-
-          <div
-            className={
-              styles.cardHeader
-            }
-          >
+          <div className={styles.cardHeader}>
             <h3>
-              Eventos Registrados
+              Eventos Registrando
             </h3>
           </div>
 
-
-          <div
-            className={
-              styles.eventsList
-            }
-          >
+          <div className={styles.eventsList}>
 
             {eventos.map(
-              (
-                evento,
-                index,
-              ) => (
-
+              (evento, index) => (
                 <div
-                  className={
-                    styles.eventRow
-                  }
-                  key={
-                    index
-                  }
+                  className={styles.eventRow}
+                  key={index}
                 >
 
                   <span
-                    className={
-                      styles.eventTime
-                    }
+                    className={styles.eventTime}
                   >
-                    {
-                      evento.horario
-                    }
+                    {evento.horario}
                   </span>
-
 
                   <span
                     className={`${styles.eventDot} ${
-                      styles[
-                        evento.cor
-                      ]
+                      styles[evento.cor]
                     }`}
                   />
 
-
                   <span
-                    className={
-                      styles.eventType
-                    }
+                    className={styles.eventType}
                   >
-                    {
-                      evento.tipo
-                    }
+                    {evento.tipo}
                   </span>
-
 
                   <span
                     className={
                       styles.eventAthlete
                     }
                   >
-                    {
-                      evento.atleta
-                    }
+                    {evento.atleta}
                   </span>
 
                 </div>
-
-              ),
+              )
             )}
 
           </div>
 
         </section>
 
+        {/* MOMENTOS */}
+        <section className={styles.card}>
 
-        <section
-          className={
-            styles.card
-          }
-        >
-
-          <div
-            className={
-              styles.cardHeader
-            }
-          >
+          <div className={styles.cardHeader}>
             <h3>
               Momentos Registrados
             </h3>
           </div>
 
-
-          <div
-            className={
-              styles.videosList
-            }
-          >
+          <div className={styles.videosList}>
 
             {videos.map(
-              (
-                video,
-                index,
-              ) => (
-
+              (video, index) => (
                 <div
-                  className={
-                    styles.videoItem
-                  }
-                  key={
-                    index
-                  }
+                  className={styles.videoItem}
+                  key={index}
                 >
 
                   <button
-                    type="button"
                     className={
                       styles.videoPreview
                     }
                     onClick={() =>
                       setVideoSelecionado(
-                        index,
+                        index
                       )
                     }
                   >
@@ -768,7 +292,6 @@ export default function DetalhesDaPartida() {
                     </span>
                   </button>
 
-
                   <div
                     className={
                       styles.videoInfo
@@ -780,28 +303,18 @@ export default function DetalhesDaPartida() {
                         styles.videoTitleRow
                       }
                     >
-
                       <strong>
-                        {
-                          video.titulo
-                        }
+                        {video.titulo}
                       </strong>
 
-
                       <span>
-                        {
-                          video.horario
-                        }
+                        {video.horario}
                       </span>
-
                     </div>
-
 
                     <span
                       className={`${styles.videoTag} ${
-                        styles[
-                          video.classe
-                        ]
+                        styles[video.classe]
                       }`}
                     >
                       <span
@@ -810,16 +323,13 @@ export default function DetalhesDaPartida() {
                         }
                       />
 
-                      {
-                        video.tipo
-                      }
+                      {video.tipo}
                     </span>
 
                   </div>
 
                 </div>
-
-              ),
+              )
             )}
 
           </div>
@@ -828,240 +338,82 @@ export default function DetalhesDaPartida() {
 
       </div>
 
-
-      {/* =====================================================
-          ATLETAS PARTICIPANTES
-      ===================================================== */}
-
+      {/* ATLETAS */}
       <section
         className={`${styles.card} ${styles.athletesCard}`}
       >
 
-        <div
-          className={
-            styles.cardHeader
-          }
-        >
+        <div className={styles.cardHeader}>
           <h3>
             Atletas participantes
           </h3>
         </div>
 
+        <div className={styles.athletesList}>
 
-        <div
-          className={
-            styles.athletesList
-          }
-        >
+          {atletas.map(
+            (atleta, index) => (
+              <div
+                className={styles.athlete}
+                key={index}
+              >
 
-          {carregandoAtletas ? (
+                <div
+                  className={
+                    styles.athleteAvatar
+                  }
+                >
+                  {atleta.iniciais}
+                </div>
 
-            <p
-              className={
-                styles.athletesMessage
-              }
-            >
-              Carregando escalação...
-            </p>
+                <strong>
+                  {atleta.nome}
+                </strong>
 
-          ) : atletasPartida.length ===
-            0 ? (
-
-            <p
-              className={
-                styles.athletesMessage
-              }
-            >
-              Nenhum atleta foi escalado para esta partida.
-            </p>
-
-          ) : (
-
-            atletasPartida.map(
-              (atleta) => {
-
-                const nome =
-                  atleta.nome ||
-                  'Atleta';
-
-
-                return (
-
-                  <div
-                    className={
-                      styles.athlete
-                    }
-                    key={
-                      atleta.id
-                    }
-                  >
-
-                    <div
-                      className={
-                        styles.athleteAvatar
-                      }
-                    >
-
-                      {atleta.usuario
-                        ?.avatarUrl ? (
-
-                        <img
-                          src={
-                            atleta.usuario
-                              .avatarUrl
-                          }
-                          alt={
-                            nome
-                          }
-                        />
-
-                      ) : (
-
-                        obterIniciais(
-                          nome,
-                        )
-
-                      )}
-
-                    </div>
-
-
-                    <div
-                      className={
-                        styles.athleteInfo
-                      }
-                    >
-
-                      <strong>
-                        {nome}
-                      </strong>
-
-
-                      {atleta.categoria && (
-                        <span>
-                          {
-                            atleta.categoria
-                          }
-                        </span>
-                      )}
-
-                    </div>
-
-                  </div>
-
-                );
-
-              },
+              </div>
             )
-
           )}
 
         </div>
 
       </section>
 
-
-      {/* EXCLUIR */}
-
-      <section
-        className={
-          styles.dangerZone
-        }
-      >
-
-        <div
-          className={
-            styles.dangerText
-          }
-        >
-
-          <strong>
-            Excluir partida
-          </strong>
-
-
-          <p>
-            Remova esta partida permanentemente do sistema.
-          </p>
-
-        </div>
-
-
-        <button
-          type="button"
-          className={
-            styles.deleteButton
-          }
-          onClick={
-            abrirConfirmacaoExclusao
-          }
-        >
-
-          <Trash2
-            size={16}
-          />
-
-          Excluir partida
-
-        </button>
-
-      </section>
-
-
-      {/* MODAL VÍDEO */}
-
-      {videoSelecionado !==
-        null && (
-
+      {/* MODAL DO VÍDEO */}
+      {videoSelecionado !== null && (
         <div
           className={
             styles.videoModalOverlay
           }
           onClick={() =>
-            setVideoSelecionado(
-              null,
-            )
+            setVideoSelecionado(null)
           }
         >
 
           <div
-            className={
-              styles.videoModal
-            }
+            className={styles.videoModal}
             onClick={(event) =>
               event.stopPropagation()
             }
           >
 
             <button
-              type="button"
-              className={
-                styles.closeModal
-              }
+              className={styles.closeModal}
               onClick={() =>
-                setVideoSelecionado(
-                  null,
-                )
+                setVideoSelecionado(null)
               }
             >
               ×
             </button>
 
-
             <div
-              className={
-                styles.fakeVideo
-              }
+              className={styles.fakeVideo}
             >
               <span
-                className={
-                  styles.bigPlay
-                }
+                className={styles.bigPlay}
               >
                 ▶
               </span>
             </div>
-
 
             <h3>
               {
@@ -1071,141 +423,18 @@ export default function DetalhesDaPartida() {
               }
             </h3>
 
-          </div>
-
-        </div>
-
-      )}
-
-
-      {/* MODAL EXCLUIR */}
-
-      {mostrarExcluir && (
-
-        <div
-          className={
-            styles.deleteOverlay
-          }
-          onClick={
-            fecharConfirmacaoExclusao
-          }
-        >
-
-          <div
-            className={
-              styles.deleteModal
-            }
-            onClick={(event) =>
-              event.stopPropagation()
-            }
-          >
-
-            <div
-              className={
-                styles.deleteModalHeader
+            <p>
+              Momento registrado às{" "}
+              {
+                videos[
+                  videoSelecionado
+                ].horario
               }
-            >
-
-              <div
-                className={
-                  styles.deleteIcon
-                }
-              >
-                <TriangleAlert
-                  size={21}
-                />
-              </div>
-
-
-              <button
-                type="button"
-                className={
-                  styles.deleteClose
-                }
-                onClick={
-                  fecharConfirmacaoExclusao
-                }
-              >
-                <X
-                  size={18}
-                />
-              </button>
-
-            </div>
-
-
-            <div
-              className={
-                styles.deleteModalContent
-              }
-            >
-
-              <h3>
-                Excluir partida?
-              </h3>
-
-
-              <p>
-                Você está prestes a excluir
-                <strong>
-                  {' '}
-                  {confronto}
-                </strong>
-                . Essa ação não poderá ser desfeita.
-              </p>
-
-            </div>
-
-
-            <div
-              className={
-                styles.deleteActions
-              }
-            >
-
-              <button
-                type="button"
-                className={
-                  styles.deleteCancel
-                }
-                onClick={
-                  fecharConfirmacaoExclusao
-                }
-              >
-                Cancelar
-              </button>
-
-
-              <button
-                type="button"
-                className={
-                  styles.deleteConfirm
-                }
-                onClick={
-                  excluirPartida
-                }
-                disabled={
-                  excluindo
-                }
-              >
-
-                <Trash2
-                  size={15}
-                />
-
-
-                {excluindo
-                  ? 'Excluindo...'
-                  : 'Excluir partida'}
-
-              </button>
-
-            </div>
+            </p>
 
           </div>
 
         </div>
-
       )}
 
     </div>

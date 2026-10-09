@@ -1,81 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import './treinador_navigation.dart';
 
 class TreinadorVinculoPage extends StatefulWidget {
-  const TreinadorVinculoPage({super.key});
+  final String nomeUsuario;
+  final String emailUsuario;
+  final String nomeEquipe;
+  final String modalidade;
+  final String atletas;
+  final String codigoEquipe;
+
+  const TreinadorVinculoPage({
+    super.key,
+    required this.nomeUsuario,
+    required this.emailUsuario,
+    required this.nomeEquipe,
+    required this.modalidade,
+    required this.atletas,
+    required this.codigoEquipe,
+  });
 
   @override
   State<TreinadorVinculoPage> createState() => _TreinadorVinculoPageState();
 }
 
 class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
-  final String codigo = 'TRN-4829';
+  static const Color verde = Color(0xFF006B4F);
+  static const Color rosa = Color(0xFFE98BA8);
+  static const Color azul = Color(0xFF8FB9E8);
 
-  static const verde = Color(0xFF00845F);
-  static const rosa = Color(0xFFE98BA8);
-  static const azul = Color(0xFF001E98);
-
-  // ================================================================
-  // COPIAR CÓDIGO
-  // ================================================================
+  String get codigo => widget.codigoEquipe;
 
   void copiarCodigo() {
-    Clipboard.setData(
-      ClipboardData(text: codigo),
-    );
+    Clipboard.setData(ClipboardData(text: codigo));
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text(
-          'Código copiado!',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: verde,
-        margin: const EdgeInsets.all(20),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Código copiado!')));
   }
-
-  // ================================================================
-  // GERAR NOVO CÓDIGO
-  // ================================================================
 
   void gerarNovoCodigo() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text(
-          'Novo código gerado!',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: verde,
-        margin: const EdgeInsets.all(20),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('O código foi atualizado.')));
   }
-
-  // ================================================================
-  // ENTRAR NA PLATAFORMA
-  // ================================================================
 
   void entrar() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const TreinadorNavigation(),
+        builder: (context) => TreinadorNavigation(
+          nomeUsuario: widget.nomeUsuario,
+          emailUsuario: widget.emailUsuario,
+        ),
       ),
     );
   }
@@ -83,475 +61,288 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFCFCFC),
-
+      backgroundColor: const Color(0xFFF7F9F8),
       body: Stack(
         children: [
-          // ============================================================
-          // FUNDO
-          // ============================================================
-
           Positioned.fill(
             child: CustomPaint(
-              painter: TreinadorBackgroundPainter(
-                verde: verde,
-                rosa: rosa,
-                azul: azul,
-              ),
+              painter: _FundoPainter(rosa: rosa, azul: azul, verde: verde),
             ),
           ),
-
-          // ============================================================
-          // CONTEÚDO
-          // ============================================================
-
           SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 35,
-                ),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 620,
-                  ),
-                  child: Column(
-                    children: [
-                      // ==================================================
-                      // LOGO
-                      // ==================================================
-
-                      Image.asset(
-                        'assets/images/logoVerde_img.png',
-                        width: 125,
-                        fit: BoxFit.contain,
-                      ),
-
-                      const SizedBox(height: 38),
-
-                      // ==================================================
-                      // IDENTIFICAÇÃO
-                      // ==================================================
-
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 13,
-                          vertical: 7,
-                        ),
-                        decoration: BoxDecoration(
-                          color: verde.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                            color: verde.withValues(alpha: 0.15),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 7,
-                              height: 7,
-                              decoration: const BoxDecoration(
-                                color: verde,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-
-                            const SizedBox(width: 8),
-
-                            const Text(
-                              'ÁREA DO TREINADOR',
-                              style: TextStyle(
-                                color: verde,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 1.2,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // ==================================================
-                      // TÍTULO
-                      // ==================================================
-
-                      const Text(
-                        'Sua equipe está pronta.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 31,
-                          height: 1.15,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF161616),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      Text(
-                        'Compartilhe o código da equipe com seus atletas '
-                        'para que eles possam se conectar à sua equipe.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          height: 1.55,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-
-                      const SizedBox(height: 32),
-
-                      // ==================================================
-                      // CARD DO CÓDIGO
-                      // ==================================================
-
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(28),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(
-                                alpha: 0.055,
-                              ),
-                              blurRadius: 35,
-                              offset: const Offset(0, 16),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            // ÍCONE
-
-                            Container(
-                              width: 54,
-                              height: 54,
-                              decoration: BoxDecoration(
-                                color: azul.withValues(alpha: 0.07),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: const Icon(
-                                Icons.groups_rounded,
-                                color: azul,
-                                size: 27,
-                              ),
-                            ),
-
-                            const SizedBox(height: 18),
-
-                            const Text(
-                              'CÓDIGO DA SUA EQUIPE',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 1.4,
-                                color: Color(0xFF888888),
-                              ),
-                            ),
-
-                            const SizedBox(height: 12),
-
-                            // CÓDIGO
-
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 20,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF8F9FC),
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: const Color(0xFFE8EAF0),
-                                ),
-                              ),
-                              child: Text(
-                                codigo,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 4,
-                                  color: azul,
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(height: 16),
-
-                            // =================================================
-                            // COPIAR
-                            // =================================================
-
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: OutlinedButton.icon(
-                                onPressed: copiarCodigo,
-                                icon: const Icon(
-                                  Icons.copy_rounded,
-                                  size: 18,
-                                ),
-                                label: const Text(
-                                  'Copiar código',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: azul,
-                                  backgroundColor: Colors.white,
-                                  side: BorderSide(
-                                    color: azul.withValues(alpha: 0.25),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(height: 6),
-
-                            // =================================================
-                            // GERAR NOVO
-                            // =================================================
-
-                            TextButton(
-                              onPressed: gerarNovoCodigo,
-                              style: TextButton.styleFrom(
-                                foregroundColor: azul,
-                              ),
-                              child: const Text(
-                                'Gerar novo código',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(height: 8),
-
-                            // =================================================
-                            // ENTRAR
-                            // =================================================
-
-                            SizedBox(
-                              width: double.infinity,
-                              height: 52,
-                              child: ElevatedButton(
-                                onPressed: entrar,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: verde,
-                                  foregroundColor: Colors.white,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                                child: const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Entrar',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-
-                                    SizedBox(width: 8),
-
-                                    Icon(
-                                      Icons.arrow_forward_rounded,
-                                      size: 18,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 28),
-
-                      // ==================================================
-                      // ATLETAS VINCULADOS
-                      // ==================================================
-
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(22),
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 42,
-                                  height: 42,
-                                  decoration: BoxDecoration(
-                                    color: rosa.withValues(alpha: 0.13),
-                                    borderRadius: BorderRadius.circular(13),
-                                  ),
-                                  child: const Icon(
-                                    Icons.people_alt_outlined,
-                                    color: Color(0xFFD56F91),
-                                    size: 21,
-                                  ),
-                                ),
-
-                                const SizedBox(width: 12),
-
-                                const Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Atletas vinculados',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          color: Color(0xFF181818),
-                                        ),
-                                      ),
-
-                                      SizedBox(height: 3),
-
-                                      Text(
-                                        'Atletas que fazem parte da sua equipe',
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          color: Color(0xFF888888),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFF4F5F7),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: const Text(
-                                    '0 atletas',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF777777),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            const SizedBox(height: 20),
-
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 25,
-                                horizontal: 20,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFAFAFA),
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: const Color(0xFFEEEEEE),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    Icons.person_add_alt_1_rounded,
-                                    size: 28,
-                                    color: Colors.grey.shade400,
-                                  ),
-
-                                  const SizedBox(height: 10),
-
-                                  const Text(
-                                    'Nenhum atleta vinculado ainda',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF555555),
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 5),
-
-                                  Text(
-                                    'Compartilhe o código acima para começar.',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.grey.shade500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 28),
-
-                      // ==================================================
-                      // RODAPÉ
-                      // ==================================================
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.lock_outline_rounded,
-                            size: 13,
-                            color: Colors.grey.shade400,
-                          ),
-
-                          const SizedBox(width: 6),
-
-                          Text(
-                            'Código exclusivo da sua equipe',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey.shade500,
-                            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 68,
+                      height: 68,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(22),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.06),
+                            blurRadius: 15,
+                            offset: const Offset(0, 6),
                           ),
                         ],
                       ),
-                    ],
+                      child: const Icon(
+                        Icons.sports_rounded,
+                        color: verde,
+                        size: 36,
+                      ),
+                    ),
                   ),
-                ),
+
+                  const SizedBox(height: 22),
+
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 7,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: const Text(
+                        'ÁREA DO TREINADOR',
+                        style: TextStyle(
+                          color: verde,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 26),
+
+                  const Text(
+                    'Sua equipe está pronta.',
+                    style: TextStyle(
+                      color: Color(0xFF12261F),
+                      fontSize: 29,
+                      fontWeight: FontWeight.bold,
+                      height: 1.15,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Text(
+                    'Você está acessando a equipe ${widget.nomeEquipe}. '
+                    'Use o código abaixo para vincular atletas à equipe.',
+                    style: const TextStyle(
+                      color: Color(0xFF68736F),
+                      fontSize: 15,
+                      height: 1.5,
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(22),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          blurRadius: 18,
+                          offset: const Offset(0, 7),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Código da equipe',
+                            style: TextStyle(
+                              color: Color(0xFF68736F),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 17,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE8F5F0),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Center(
+                            child: Text(
+                              codigo,
+                              style: const TextStyle(
+                                color: verde,
+                                fontSize: 27,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 14),
+
+                        SizedBox(
+                          width: double.infinity,
+                          height: 48,
+                          child: OutlinedButton.icon(
+                            onPressed: copiarCodigo,
+                            icon: const Icon(Icons.copy_rounded, size: 18),
+                            label: const Text('Copiar código'),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: verde,
+                              side: const BorderSide(color: verde),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 22),
+
+                        const Text(
+                          'Ou escaneie o QR Code',
+                          style: TextStyle(
+                            color: Color(0xFF68736F),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+
+                        const SizedBox(height: 14),
+
+                        Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(color: const Color(0xFFDCE7E2)),
+                          ),
+                          child: QrImageView(
+                            data: codigo,
+                            version: QrVersions.auto,
+                            size: 180,
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: entrar,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: verde,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                            child: const Text(
+                              'Entrar na equipe',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 18),
+
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(22),
+                      border: Border.all(color: const Color(0xFFDCE7E2)),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE8F5F0),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Icon(Icons.groups_rounded, color: verde),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Equipe',
+                                style: TextStyle(
+                                  color: Color(0xFF68736F),
+                                  fontSize: 12,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                widget.nomeEquipe,
+                                style: const TextStyle(
+                                  color: Color(0xFF12261F),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                '${widget.modalidade} • ${widget.atletas}',
+                                style: const TextStyle(
+                                  color: Color(0xFF68736F),
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  const Center(
+                    child: Text(
+                      'Compartilhe o código com seus atletas.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Color(0xFF68736F), fontSize: 13),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -561,134 +352,70 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
   }
 }
 
-// ============================================================================
-// BACKGROUND
-// ============================================================================
-
-class TreinadorBackgroundPainter extends CustomPainter {
-  final Color verde;
+class _FundoPainter extends CustomPainter {
   final Color rosa;
   final Color azul;
+  final Color verde;
 
-  TreinadorBackgroundPainter({
-    required this.verde,
-    required this.rosa,
-    required this.azul,
-  });
+  _FundoPainter({required this.rosa, required this.azul, required this.verde});
 
   @override
   void paint(Canvas canvas, Size size) {
-    // ================================================================
-    // BLOB ROSA
-    // ================================================================
+    final paint = Paint()..style = PaintingStyle.fill;
 
-    final pinkPaint = Paint()
-      ..color = rosa.withValues(alpha: 0.12);
+    paint.color = rosa.withOpacity(0.12);
+    canvas.drawCircle(Offset(size.width * 0.10, size.height * 0.12), 85, paint);
 
+    paint.color = azul.withOpacity(0.13);
     canvas.drawCircle(
-      Offset(size.width - 20, -20),
-      170,
-      pinkPaint,
-    );
-
-    // ================================================================
-    // BLOB AZUL
-    // ================================================================
-
-    final bluePaint = Paint()
-      ..color = azul.withValues(alpha: 0.055);
-
-    canvas.drawCircle(
-      Offset(size.width - 80, 180),
+      Offset(size.width * 0.92, size.height * 0.22),
       100,
-      bluePaint,
+      paint,
     );
 
-    // ================================================================
-    // BLOB VERDE
-    // ================================================================
-
-    final greenPaint = Paint()
-      ..color = verde.withValues(alpha: 0.07);
-
+    paint.color = verde.withOpacity(0.08);
     canvas.drawCircle(
-      Offset(-50, size.height - 70),
-      170,
-      greenPaint,
+      Offset(size.width * 0.88, size.height * 0.84),
+      130,
+      paint,
     );
 
-    // ================================================================
-    // PONTOS
-    // ================================================================
+    final pontos = Paint()
+      ..color = verde.withOpacity(0.10)
+      ..style = PaintingStyle.fill;
 
-    final dotPaint = Paint()
-      ..color = azul.withValues(alpha: 0.12);
+    for (int i = 0; i < 18; i++) {
+      final x = (i * 53.0) % size.width;
+      final y = 80 + ((i * 91.0) % size.height);
 
-    const spacing = 14.0;
-
-    for (
-      double x = size.width - 150;
-      x < size.width - 35;
-      x += spacing
-    ) {
-      for (
-        double y = 50;
-        y < 150;
-        y += spacing
-      ) {
-        canvas.drawCircle(
-          Offset(x, y),
-          1.5,
-          dotPaint,
-        );
-      }
+      canvas.drawCircle(Offset(x, y), 2.5, pontos);
     }
 
-    // ================================================================
-    // LINHA DECORATIVA
-    // ================================================================
-
-    final linePaint = Paint()
-      ..color = verde.withValues(alpha: 0.25)
-      ..style = PaintingStyle.stroke
+    final linha = Paint()
+      ..color = rosa.withOpacity(0.16)
       ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
+      ..style = PaintingStyle.stroke;
 
     final path = Path();
-
-    path.moveTo(
-      35,
-      size.height - 160,
+    path.moveTo(0, size.height * 0.72);
+    path.quadraticBezierTo(
+      size.width * 0.30,
+      size.height * 0.62,
+      size.width * 0.52,
+      size.height * 0.73,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.74,
+      size.height * 0.84,
+      size.width,
+      size.height * 0.70,
     );
 
-    path.cubicTo(
-      100,
-      size.height - 200,
-      130,
-      size.height - 100,
-      205,
-      size.height - 140,
-    );
-
-    path.cubicTo(
-      260,
-      size.height - 170,
-      300,
-      size.height - 90,
-      360,
-      size.height - 125,
-    );
-
-    canvas.drawPath(
-      path,
-      linePaint,
-    );
+    canvas.drawPath(path, linha);
   }
 
   @override
-  bool shouldRepaint(
-    CustomPainter oldDelegate,
-  ) {
+  bool shouldRepaint(covariant _FundoPainter oldDelegate) {
     return false;
   }
 }

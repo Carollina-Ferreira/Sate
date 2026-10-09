@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../assets/menu_inferior_atleta.dart';
-import 'atleta_perfil_page.dart';
-import 'atleta_desempenho_page.dart';
-import 'atleta_treino_page.dart';
-import 'atleta_home_page.dart';
 import 'atleta_notificacao_page.dart';
 
 class AtletaFeedPage extends StatefulWidget {
@@ -22,17 +17,28 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
 
   int filtroSelecionado = 0;
 
-  final List<String> filtros = ['Todos', 'Equipe', 'Seguindo'];
+  final List<String> filtros = [
+    'Todos',
+    'Equipe',
+    'Seguindo',
+  ];
 
   final List<Map<String, dynamic>> publicacoes = [
     {
       'nome': 'João Silva',
       'tempo': 'há 2 horas',
-      'texto': 'Treino concluído com sucesso!\nFoco e disciplina sempre!!',
+      'texto':
+          'Treino concluído com sucesso!\nFoco e disciplina sempre!!',
       'curtidas': 45,
       'comentarios': [
-        {'nome': 'Ana Costa', 'texto': 'Muito bom! Parabéns pelo treino!'},
-        {'nome': 'Carlos Mendes', 'texto': 'É isso aí! Foco sempre.'},
+        {
+          'nome': 'Ana Costa',
+          'texto': 'Muito bom! Parabéns pelo treino!'
+        },
+        {
+          'nome': 'Carlos Mendes',
+          'texto': 'É isso aí! Foco sempre.'
+        },
       ],
       'curtido': true,
       'treino': null,
@@ -40,10 +46,14 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
     {
       'nome': 'Ana Costa',
       'tempo': 'há 4 horas',
-      'texto': 'Treino coletivo foi demais hoje!!\nSeguimos evoluindo.',
+      'texto':
+          'Treino coletivo foi demais hoje!!\nSeguimos evoluindo.',
       'curtidas': 65,
       'comentarios': [
-        {'nome': 'João Silva', 'texto': 'Treino muito bom hoje!'},
+        {
+          'nome': 'João Silva',
+          'texto': 'Treino muito bom hoje!'
+        },
       ],
       'curtido': false,
       'treino': null,
@@ -61,7 +71,8 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
     {
       'nome': 'Mariana Souza',
       'tempo': 'ontem',
-      'texto': 'Muito bom poder acompanhar a evolução da equipe.',
+      'texto':
+          'Muito bom poder acompanhar a evolução da equipe.',
       'curtidas': 51,
       'comentarios': [],
       'curtido': false,
@@ -74,14 +85,10 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
     return Scaffold(
       backgroundColor: fundo,
 
-      // ========================================================
-      // APP BAR
-      // ========================================================
       appBar: AppBar(
         backgroundColor: fundo,
         elevation: 0,
         centerTitle: false,
-
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -91,7 +98,6 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
             color: Colors.black87,
           ),
         ),
-
         title: const Text(
           'Feed',
           style: TextStyle(
@@ -100,14 +106,14 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         actions: [
           IconButton(
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const AtletaNotificacaoPage(),
+                  builder: (_) =>
+                      const AtletaNotificacaoPage(),
                 ),
               );
             },
@@ -120,9 +126,6 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
         ],
       ),
 
-      // ========================================================
-      // CONTEÚDO
-      // ========================================================
       body: SafeArea(
         child: Column(
           children: [
@@ -141,7 +144,8 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                 itemCount: publicacoes.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
+                    padding:
+                        const EdgeInsets.only(bottom: 16),
                     child: _buildPublicacao(
                       publicacoes[index],
                       index,
@@ -154,9 +158,6 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
         ),
       ),
 
-      // ========================================================
-      // BOTÃO NOVA PUBLICAÇÃO
-      // ========================================================
       floatingActionButton: FloatingActionButton(
         onPressed: _abrirNovaPublicacao,
         backgroundColor: rosa,
@@ -167,69 +168,8 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
           size: 29,
         ),
       ),
-
-      // ========================================================
-      // MENU INFERIOR
-      // ========================================================
-      bottomNavigationBar: MenuInferiorAtleta(
-        indiceSelecionado: 3,
-        onItemSelecionado: (index) {
-          // INÍCIO
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaHomePage(),
-              ),
-            );
-            return;
-          }
-
-          // TREINO
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaTreinoPage(),
-              ),
-            );
-            return;
-          }
-
-          // DESEMPENHO
-          if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaDesempenhoPage(),
-              ),
-            );
-            return;
-          }
-
-          // FEED
-          if (index == 3) {
-            return;
-          }
-
-          // PERFIL
-          if (index == 4) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AtletaPerfilPage(),
-              ),
-            );
-            return;
-          }
-        },
-      ),
     );
   }
-
-  // ============================================================
-  // FILTROS
-  // ============================================================
 
   Widget _buildFiltros() {
     return Container(
@@ -246,7 +186,8 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
         children: List.generate(
           filtros.length,
           (index) {
-            final selecionado = filtroSelecionado == index;
+            final selecionado =
+                filtroSelecionado == index;
 
             return Expanded(
               child: GestureDetector(
@@ -261,7 +202,8 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                     color: selecionado
                         ? verde
                         : Colors.transparent,
-                    borderRadius: BorderRadius.circular(19),
+                    borderRadius:
+                        BorderRadius.circular(19),
                   ),
                   alignment: Alignment.center,
                   child: Text(
@@ -285,15 +227,12 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
     );
   }
 
-  // ============================================================
-  // PUBLICAÇÃO
-  // ============================================================
-
   Widget _buildPublicacao(
     Map<String, dynamic> publicacao,
     int index,
   ) {
-    final bool curtido = publicacao['curtido'] as bool;
+    final bool curtido =
+        publicacao['curtido'] as bool;
 
     final List comentarios =
         publicacao['comentarios'] as List;
@@ -322,12 +261,9 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
           10,
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
           children: [
-            // ==================================================
-            // USUÁRIO
-            // ==================================================
-
             Row(
               children: [
                 _buildAvatar(
@@ -350,9 +286,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                           color: Colors.black87,
                         ),
                       ),
-
                       const SizedBox(height: 2),
-
                       Text(
                         publicacao['tempo'],
                         style: TextStyle(
@@ -368,7 +302,8 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                   onPressed: () {
                     _mostrarOpcoesPublicacao(index);
                   },
-                  constraints: const BoxConstraints(),
+                  constraints:
+                      const BoxConstraints(),
                   padding: const EdgeInsets.all(5),
                   icon: Icon(
                     Icons.more_horiz_rounded,
@@ -381,10 +316,6 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
 
             const SizedBox(height: 10),
 
-            // ==================================================
-            // TEXTO
-            // ==================================================
-
             Text(
               publicacao['texto'],
               style: const TextStyle(
@@ -394,21 +325,18 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
               ),
             ),
 
-            // ==================================================
-            // TREINO RELACIONADO
-            // ==================================================
-
             if (publicacao['treino'] != null) ...[
               const SizedBox(height: 10),
-
               Container(
-                padding: const EdgeInsets.symmetric(
+                padding:
+                    const EdgeInsets.symmetric(
                   horizontal: 10,
                   vertical: 7,
                 ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFEAF5F1),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius:
+                      BorderRadius.circular(10),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -418,9 +346,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                       size: 16,
                       color: verdeEscuro,
                     ),
-
                     const SizedBox(width: 6),
-
                     Text(
                       publicacao['treino'],
                       style: const TextStyle(
@@ -436,17 +362,9 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
 
             const SizedBox(height: 12),
 
-            // ==================================================
-            // IMAGEM
-            // ==================================================
-
             _buildImagemPublicacao(index),
 
             const SizedBox(height: 9),
-
-            // ==================================================
-            // AÇÕES
-            // ==================================================
 
             Row(
               children: [
@@ -474,9 +392,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                             ? Colors.red.shade600
                             : Colors.grey.shade600,
                       ),
-
                       const SizedBox(width: 5),
-
                       Text(
                         '${publicacao['curtidas']}',
                         style: TextStyle(
@@ -497,13 +413,12 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                   child: Row(
                     children: [
                       Icon(
-                        Icons.chat_bubble_outline_rounded,
+                        Icons
+                            .chat_bubble_outline_rounded,
                         size: 17,
                         color: Colors.grey.shade600,
                       ),
-
                       const SizedBox(width: 5),
-
                       Text(
                         '${comentarios.length} comentários',
                         style: TextStyle(
@@ -521,10 +436,6 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
       ),
     );
   }
-
-  // ============================================================
-  // AVATAR
-  // ============================================================
 
   Widget _buildAvatar(
     int index,
@@ -557,17 +468,14 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
     );
   }
 
-  // ============================================================
-  // IMAGEM DA PUBLICAÇÃO
-  // ============================================================
-
   Widget _buildImagemPublicacao(int index) {
     return Container(
       width: double.infinity,
       height: 175,
       decoration: BoxDecoration(
         color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius:
+            BorderRadius.circular(12),
       ),
       child: Center(
         child: Column(
@@ -578,9 +486,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
               size: 35,
               color: Colors.grey.shade400,
             ),
-
             const SizedBox(height: 5),
-
             Text(
               'Imagem da publicação',
               style: TextStyle(
@@ -594,35 +500,31 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
     );
   }
 
-  // ============================================================
-  // NOVA PUBLICAÇÃO
-  // ============================================================
-
   void _abrirNovaPublicacao() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => const AtletaNovaPublicacaoPage(),
+        builder: (_) =>
+            const AtletaNovaPublicacaoPage(),
       ),
     );
   }
 
-  // ============================================================
-  // COMENTÁRIOS
-  // ============================================================
-
   void _abrirComentarios(
     Map<String, dynamic> publicacao,
   ) {
-    final TextEditingController comentarioController =
+    final TextEditingController
+        comentarioController =
         TextEditingController();
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
+      shape:
+          const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(
           top: Radius.circular(22),
         ),
       ),
@@ -643,7 +545,9 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
               ),
               child: SizedBox(
                 height:
-                    MediaQuery.of(context).size.height *
+                    MediaQuery.of(context)
+                            .size
+                            .height *
                         0.65,
                 child: Column(
                   children: [
@@ -665,7 +569,8 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                       'Comentários',
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                            FontWeight.bold,
                       ),
                     ),
 
@@ -687,7 +592,9 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                             )
                           : ListView.builder(
                               padding:
-                                  const EdgeInsets.all(16),
+                                  const EdgeInsets.all(
+                                16,
+                              ),
                               itemCount:
                                   comentarios.length,
                               itemBuilder:
@@ -725,8 +632,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                                       ),
 
                                       const SizedBox(
-                                        width: 9,
-                                      ),
+                                          width: 9),
 
                                       Expanded(
                                         child: Container(
@@ -759,11 +665,8 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                                                           .bold,
                                                 ),
                                               ),
-
                                               const SizedBox(
-                                                height: 4,
-                                              ),
-
+                                                  height: 4),
                                               Text(
                                                 comentario[
                                                     'texto'],
@@ -798,7 +701,8 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                         color: Colors.white,
                         border: Border(
                           top: BorderSide(
-                            color: Colors.grey.shade200,
+                            color:
+                                Colors.grey.shade200,
                           ),
                         ),
                       ),
@@ -889,10 +793,6 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
     });
   }
 
-  // ============================================================
-  // ADICIONAR COMENTÁRIO
-  // ============================================================
-
   void _adicionarComentario(
     Map<String, dynamic> publicacao,
     TextEditingController controller,
@@ -919,16 +819,14 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
     setState(() {});
   }
 
-  // ============================================================
-  // OPÇÕES DA PUBLICAÇÃO
-  // ============================================================
-
   void _mostrarOpcoesPublicacao(int index) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
+      shape:
+          const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(
           top: Radius.circular(22),
         ),
       ),
@@ -948,7 +846,6 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                   Navigator.pop(context);
                 },
               ),
-
               ListTile(
                 leading: const Icon(
                   Icons.flag_outlined,
@@ -960,7 +857,6 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                   Navigator.pop(context);
                 },
               ),
-
               const SizedBox(height: 8),
             ],
           ),
@@ -969,10 +865,6 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
     );
   }
 }
-
-// ==================================================================
-// NOVA PUBLICAÇÃO
-// ==================================================================
 
 class AtletaNovaPublicacaoPage
     extends StatefulWidget {
@@ -990,12 +882,9 @@ class _AtletaNovaPublicacaoPageState
   static const Color verde =
       Color(0xFF00845F);
 
-  final TextEditingController legendaController =
+  final TextEditingController
+      legendaController =
       TextEditingController();
-
-  // ============================================================
-  // TREINOS
-  // ============================================================
 
   String? treinoSelecionado;
 
@@ -1023,7 +912,6 @@ class _AtletaNovaPublicacaoPageState
         backgroundColor:
             const Color(0xFFF4F4F4),
         elevation: 0,
-
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -1033,7 +921,6 @@ class _AtletaNovaPublicacaoPageState
             color: Colors.black87,
           ),
         ),
-
         title: const Text(
           'Nova publicação',
           style: TextStyle(
@@ -1046,15 +933,10 @@ class _AtletaNovaPublicacaoPageState
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(18),
-
         child: Column(
           crossAxisAlignment:
               CrossAxisAlignment.start,
           children: [
-            // ====================================================
-            // ÁREA DA IMAGEM
-            // ====================================================
-
             Container(
               width: double.infinity,
               height: 210,
@@ -1075,9 +957,7 @@ class _AtletaNovaPublicacaoPageState
                     color: verde,
                     size: 38,
                   ),
-
                   const SizedBox(height: 8),
-
                   const Text(
                     'Adicionar imagem',
                     style: TextStyle(
@@ -1086,9 +966,7 @@ class _AtletaNovaPublicacaoPageState
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-
                   const SizedBox(height: 5),
-
                   Text(
                     'Adicione uma imagem à publicação',
                     style: TextStyle(
@@ -1096,9 +974,7 @@ class _AtletaNovaPublicacaoPageState
                       fontSize: 10,
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
                   OutlinedButton(
                     onPressed: () {},
                     style:
@@ -1110,9 +986,7 @@ class _AtletaNovaPublicacaoPageState
                       shape:
                           RoundedRectangleBorder(
                         borderRadius:
-                            BorderRadius.circular(
-                          10,
-                        ),
+                            BorderRadius.circular(10),
                       ),
                     ),
                     child: const Text(
@@ -1127,10 +1001,6 @@ class _AtletaNovaPublicacaoPageState
             ),
 
             const SizedBox(height: 20),
-
-            // ====================================================
-            // LEGENDA
-            // ====================================================
 
             const Text(
               'Legenda',
@@ -1166,10 +1036,6 @@ class _AtletaNovaPublicacaoPageState
 
             const SizedBox(height: 22),
 
-            // ====================================================
-            // TREINO RELACIONADO
-            // ====================================================
-
             const Text(
               'Treino relacionado',
               style: TextStyle(
@@ -1191,10 +1057,6 @@ class _AtletaNovaPublicacaoPageState
             ),
 
             const SizedBox(height: 30),
-
-            // ====================================================
-            // PUBLICAR
-            // ====================================================
 
             SizedBox(
               width: double.infinity,
@@ -1254,10 +1116,6 @@ class _AtletaNovaPublicacaoPageState
       ),
     );
   }
-
-  // ============================================================
-  // BOTÃO DE TREINO
-  // ============================================================
 
   Widget _buildTag(String texto) {
     final bool selecionado =

@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'cadastro_page.dart';
 import 'esqueci_senha_page.dart';
 import 'Atleta/atleta_vinculo_page.dart';
-import 'Treinador/treinador_vinculo_page.dart';
+import 'Treinador/treinador_equipes_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -45,14 +45,9 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Positioned.fill(
             child: CustomPaint(
-              painter: BackgroundPainter(
-                verde: verde,
-                rosa: rosa,
-                azul: azul,
-              ),
+              painter: BackgroundPainter(verde: verde, rosa: rosa, azul: azul),
             ),
           ),
-
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -61,9 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                   vertical: 40,
                 ),
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 430,
-                  ),
+                  constraints: const BoxConstraints(maxWidth: 430),
                   child: _loginCard(),
                 ),
               ),
@@ -99,9 +92,7 @@ class _LoginPageState extends State<LoginPage> {
               fit: BoxFit.contain,
             ),
           ),
-
           const SizedBox(height: 28),
-
           const Text(
             'Bem-vindo de volta!',
             style: TextStyle(
@@ -110,9 +101,7 @@ class _LoginPageState extends State<LoginPage> {
               color: Color(0xFF161616),
             ),
           ),
-
           const SizedBox(height: 10),
-
           Text(
             'Entre na sua conta para continuar '
             'acompanhando seu desempenho.',
@@ -122,28 +111,19 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.grey.shade600,
             ),
           ),
-
           const SizedBox(height: 28),
-
-          // TIPO DE USUÁRIO
           _label('Entrar como'),
-
           const SizedBox(height: 8),
-
           InkWell(
             borderRadius: BorderRadius.circular(12),
             onTap: carregando ? null : _selecionarPerfil,
             child: Container(
               height: 52,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.grey.shade300,
-                ),
+                border: Border.all(color: Colors.grey.shade300),
               ),
               child: Row(
                 children: [
@@ -154,9 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: verde,
                     size: 20,
                   ),
-
                   const SizedBox(width: 12),
-
                   Expanded(
                     child: Text(
                       tipoUsuario,
@@ -166,23 +144,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-
-                  Icon(
-                    Icons.keyboard_arrow_down,
-                    color: Colors.grey.shade500,
-                  ),
+                  Icon(Icons.keyboard_arrow_down, color: Colors.grey.shade500),
                 ],
               ),
             ),
           ),
-
           const SizedBox(height: 18),
-
-          // EMAIL
           _label('Email'),
-
           const SizedBox(height: 8),
-
           TextField(
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
@@ -193,45 +162,35 @@ class _LoginPageState extends State<LoginPage> {
               Icons.email_outlined,
             ),
           ),
-
           const SizedBox(height: 18),
-
-          // SENHA
           _label('Senha'),
-
           const SizedBox(height: 8),
-
           TextField(
             controller: senhaController,
             obscureText: !mostrarSenha,
             textInputAction: TextInputAction.done,
             enabled: !carregando,
             onSubmitted: (_) => _entrar(),
-            decoration: _inputDecoration(
-              'Digite sua senha',
-              Icons.lock_outline,
-            ).copyWith(
-              suffixIcon: IconButton(
-                onPressed: carregando
-                    ? null
-                    : () {
-                        setState(() {
-                          mostrarSenha = !mostrarSenha;
-                        });
-                      },
-                icon: Icon(
-                  mostrarSenha
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  color: Colors.grey.shade500,
+            decoration: _inputDecoration('Digite sua senha', Icons.lock_outline)
+                .copyWith(
+                  suffixIcon: IconButton(
+                    onPressed: carregando
+                        ? null
+                        : () {
+                            setState(() {
+                              mostrarSenha = !mostrarSenha;
+                            });
+                          },
+                    icon: Icon(
+                      mostrarSenha
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
                 ),
-              ),
-            ),
           ),
-
           const SizedBox(height: 10),
-
-          // ESQUECI SENHA
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
@@ -241,8 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              const EsqueciSenhaPage(),
+                          builder: (_) => const EsqueciSenhaPage(),
                         ),
                       );
                     },
@@ -256,51 +214,26 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-
           const SizedBox(height: 10),
-
-          // ENTRAR
           _mainButton(
-            text: carregando
-                ? 'Entrando...'
-                : 'Entrar',
-            onTap: carregando
-                ? () {}
-                : _entrar,
+            text: carregando ? 'Entrando...' : 'Entrar',
+            onTap: carregando ? () {} : _entrar,
           ),
-
           const SizedBox(height: 22),
-
           _divider(),
-
           const SizedBox(height: 22),
-
-          // GOOGLE
           _socialButton(
             icon: _googleIcon(),
             text: 'Continuar com Google',
-            onTap: carregando
-                ? () {}
-                : _entrarComGoogle,
+            onTap: carregando ? () {} : _entrarComGoogle,
           ),
-
           const SizedBox(height: 12),
-
-          // APPLE
           _socialButton(
-            icon: const Icon(
-              Icons.apple,
-              color: Colors.black,
-              size: 22,
-            ),
+            icon: const Icon(Icons.apple, color: Colors.black, size: 22),
             text: 'Continuar com Apple',
-            onTap: carregando
-                ? () {}
-                : _entrarComApple,
+            onTap: carregando ? () {} : _entrarComApple,
           ),
-
           const SizedBox(height: 25),
-
           Center(
             child: _HoverLink(
               verde: verde,
@@ -311,10 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                   : () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              const CadastroPage(),
-                        ),
+                        MaterialPageRoute(builder: (_) => const CadastroPage()),
                       );
                     },
             ),
@@ -324,18 +254,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ============================================================
-  // SELECIONAR PERFIL
-  // ============================================================
-
   void _selecionarPerfil() {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(24),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
         return Padding(
@@ -346,38 +270,25 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const Text(
                 'Como você vai entrar?',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
-
               const SizedBox(height: 8),
-
               Text(
                 'Selecione o tipo de perfil que deseja acessar.',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 13,
-                ),
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
               ),
-
               const SizedBox(height: 20),
-
               _perfilOption(
                 'Atleta',
                 'Acesse seus treinos e acompanhe sua evolução.',
                 Icons.directions_run,
               ),
-
               const SizedBox(height: 10),
-
               _perfilOption(
                 'Treinador',
                 'Gerencie atletas, treinos e equipes.',
                 Icons.sports,
               ),
-
               const SizedBox(height: 10),
             ],
           ),
@@ -386,11 +297,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _perfilOption(
-    String titulo,
-    String descricao,
-    IconData icon,
-  ) {
+  Widget _perfilOption(String titulo, String descricao, IconData icon) {
     final selecionado = tipoUsuario == titulo;
 
     return InkWell(
@@ -399,21 +306,14 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           tipoUsuario = titulo;
         });
-
         Navigator.pop(context);
       },
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: selecionado
-              ? verde.withValues(alpha: 0.06)
-              : Colors.white,
+          color: selecionado ? verde.withValues(alpha: 0.06) : Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: selecionado
-                ? verde
-                : Colors.grey.shade300,
-          ),
+          border: Border.all(color: selecionado ? verde : Colors.grey.shade300),
         ),
         child: Row(
           children: [
@@ -421,25 +321,18 @@ class _LoginPageState extends State<LoginPage> {
               width: 45,
               height: 45,
               decoration: BoxDecoration(
-                color: selecionado
-                    ? verde
-                    : Colors.grey.shade100,
+                color: selecionado ? verde : Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 icon,
-                color: selecionado
-                    ? Colors.white
-                    : Colors.grey.shade700,
+                color: selecionado ? Colors.white : Colors.grey.shade700,
               ),
             ),
-
             const SizedBox(width: 14),
-
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     titulo,
@@ -448,25 +341,15 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: 14,
                     ),
                   ),
-
                   const SizedBox(height: 4),
-
                   Text(
                     descricao,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                   ),
                 ],
               ),
             ),
-
-            if (selecionado)
-              const Icon(
-                Icons.check_circle,
-                color: verde,
-              ),
+            if (selecionado) const Icon(Icons.check_circle, color: verde),
           ],
         ),
       ),
@@ -482,16 +365,12 @@ class _LoginPageState extends State<LoginPage> {
     final senha = senhaController.text;
 
     if (email.isEmpty || senha.isEmpty) {
-      _mostrarMensagem(
-        'Preencha seu email e sua senha.',
-      );
+      _mostrarMensagem('Preencha seu email e sua senha.');
       return;
     }
 
     if (email.contains(' ') || !email.contains('@')) {
-      _mostrarMensagem(
-        'Digite um email válido.',
-      );
+      _mostrarMensagem('Digite um email válido.');
       return;
     }
 
@@ -500,9 +379,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      final tipo = tipoUsuario == 'Atleta'
-          ? 'ATLETA'
-          : 'TREINADOR';
+      final tipo = tipoUsuario == 'Atleta' ? 'ATLETA' : 'TREINADOR';
 
       debugPrint('================================');
       debugPrint('LOGIN');
@@ -511,26 +388,13 @@ class _LoginPageState extends State<LoginPage> {
       debugPrint('================================');
 
       final resposta = await http.post(
-        Uri.parse(
-          '$apiUrl/api/auth/login',
-        ),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'email': email,
-          'senha': senha,
-          'tipo': tipo,
-        }),
+        Uri.parse('$apiUrl/api/auth/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'senha': senha, 'tipo': tipo}),
       );
 
-      debugPrint(
-        'Status do login: ${resposta.statusCode}',
-      );
-
-      debugPrint(
-        'Resposta do servidor: ${resposta.body}',
-      );
+      debugPrint('Status do login: ${resposta.statusCode}');
+      debugPrint('Resposta do servidor: ${resposta.body}');
 
       if (!mounted) return;
 
@@ -538,8 +402,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if (resposta.statusCode != 200) {
         _mostrarMensagem(
-          data['mensagem'] ??
-              'Não foi possível realizar o login.',
+          data['mensagem'] ?? 'Não foi possível realizar o login.',
           erro: true,
         );
         return;
@@ -548,48 +411,48 @@ class _LoginPageState extends State<LoginPage> {
       final usuario = data['usuario'];
 
       if (usuario == null) {
-        _mostrarMensagem(
-          'Resposta inválida do servidor.',
-          erro: true,
-        );
+        _mostrarMensagem('Dados do usuário não foram retornados.');
         return;
       }
 
+      final nomeUsuario = usuario['nome'] ?? '';
+      final emailUsuario = usuario['email'] ?? email;
       final tipoRetornado = usuario['tipo'];
-
-      // ========================================================
-      // VERIFICA O TIPO RETORNADO PELO BACKEND
-      // ========================================================
 
       if (tipoRetornado == 'ATLETA') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) =>
-                const AtletaVinculoPage(),
+            builder: (_) => AtletaVinculoPage(
+              nomeUsuario: nomeUsuario,
+              emailUsuario: emailUsuario,
+            ),
           ),
         );
       } else if (tipoRetornado == 'TREINADOR') {
+        final usuarioId = usuario['id'];
+
+        if (usuarioId == null) {
+          _mostrarMensagem('ID do usuário não foi retornado.', erro: true);
+          return;
+        }
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) =>
-                const TreinadorVinculoPage(),
+            builder: (_) => TreinadorEquipesPage(
+              nomeUsuario: nomeUsuario,
+              emailUsuario: emailUsuario,
+            ),
           ),
         );
       } else {
-        _mostrarMensagem(
-          'Tipo de usuário inválido.',
-          erro: true,
-        );
+        _mostrarMensagem('Tipo de usuário inválido.', erro: true);
       }
-
     } catch (error) {
       if (!mounted) return;
 
-      debugPrint(
-        'Erro no login: $error',
-      );
+      debugPrint('Erro no login: $error');
 
       _mostrarMensagem(
         'Não foi possível conectar ao servidor.\n$error',
@@ -619,55 +482,30 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  InputDecoration _inputDecoration(
-    String hint,
-    IconData icon,
-  ) {
+  InputDecoration _inputDecoration(String hint, IconData icon) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(
-        color: Colors.grey.shade400,
-        fontSize: 13,
-      ),
-      prefixIcon: Icon(
-        icon,
-        size: 19,
-        color: Colors.grey.shade500,
-      ),
+      hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
+      prefixIcon: Icon(icon, size: 19, color: Colors.grey.shade500),
       filled: true,
       fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 15,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Colors.grey.shade300,
-        ),
+        borderSide: BorderSide(color: Colors.grey.shade300),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Colors.grey.shade300,
-        ),
+        borderSide: BorderSide(color: Colors.grey.shade300),
       ),
       focusedBorder: const OutlineInputBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(12),
-        ),
-        borderSide: BorderSide(
-          color: verde,
-          width: 1.5,
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderSide: BorderSide(color: verde, width: 1.5),
       ),
     );
   }
 
-  Widget _mainButton({
-    required String text,
-    required VoidCallback onTap,
-  }) {
+  Widget _mainButton({required String text, required VoidCallback onTap}) {
     return SizedBox(
       width: double.infinity,
       height: 52,
@@ -683,10 +521,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: Text(
           text,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -695,30 +530,15 @@ class _LoginPageState extends State<LoginPage> {
   Widget _divider() {
     return Row(
       children: [
-        Expanded(
-          child: Divider(
-            color: Colors.grey.shade300,
-          ),
-        ),
-
+        Expanded(child: Divider(color: Colors.grey.shade300)),
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
             'ou continue com',
-            style: TextStyle(
-              color: Colors.grey.shade500,
-              fontSize: 11,
-            ),
+            style: TextStyle(color: Colors.grey.shade500, fontSize: 11),
           ),
         ),
-
-        Expanded(
-          child: Divider(
-            color: Colors.grey.shade300,
-          ),
-        ),
+        Expanded(child: Divider(color: Colors.grey.shade300)),
       ],
     );
   }
@@ -736,25 +556,19 @@ class _LoginPageState extends State<LoginPage> {
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.white,
           foregroundColor: const Color(0xFF222222),
-          side: BorderSide(
-            color: Colors.grey.shade300,
-          ),
+          side: BorderSide(color: Colors.grey.shade300),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
         ),
         child: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             icon,
             const SizedBox(width: 10),
             Text(
               text,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -774,21 +588,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _entrarComGoogle() {
-    _mostrarMensagem(
-      'Login com Google será configurado em breve.',
-    );
+    _mostrarMensagem('Login com Google será configurado em breve.');
   }
 
   void _entrarComApple() {
-    _mostrarMensagem(
-      'Login com Apple será configurado em breve.',
-    );
+    _mostrarMensagem('Login com Apple será configurado em breve.');
   }
 
-  void _mostrarMensagem(
-    String mensagem, {
-    bool erro = false,
-  }) {
+  void _mostrarMensagem(String mensagem, {bool erro = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(mensagem),
@@ -797,10 +604,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-// ============================================================
-// LINK COM HOVER
-// ============================================================
 
 class _HoverLink extends StatefulWidget {
   final Color verde;
@@ -840,20 +643,13 @@ class _HoverLinkState extends State<_HoverLink> {
         onTap: widget.onTap,
         child: RichText(
           text: TextSpan(
-            style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 13,
-            ),
+            style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
             children: [
-              TextSpan(
-                text: widget.normalText,
-              ),
+              TextSpan(text: widget.normalText),
               TextSpan(
                 text: widget.linkText,
                 style: TextStyle(
-                  color: hover
-                      ? const Color(0xFF006B4D)
-                      : widget.verde,
+                  color: hover ? const Color(0xFF006B4D) : widget.verde,
                   fontWeight: FontWeight.w700,
                   decoration: hover
                       ? TextDecoration.underline
@@ -868,10 +664,6 @@ class _HoverLinkState extends State<_HoverLink> {
   }
 }
 
-// ============================================================
-// FUNDO
-// ============================================================
-
 class BackgroundPainter extends CustomPainter {
   final Color verde;
   final Color rosa;
@@ -884,57 +676,22 @@ class BackgroundPainter extends CustomPainter {
   });
 
   @override
-  void paint(
-    Canvas canvas,
-    Size size,
-  ) {
-    final pinkPaint = Paint()
-      ..color = rosa.withValues(alpha: 0.13);
+  void paint(Canvas canvas, Size size) {
+    final pinkPaint = Paint()..color = rosa.withValues(alpha: 0.13);
+    canvas.drawCircle(Offset(size.width - 30, -20), 150, pinkPaint);
 
-    canvas.drawCircle(
-      Offset(size.width - 30, -20),
-      150,
-      pinkPaint,
-    );
+    final bluePaint = Paint()..color = azul.withValues(alpha: 0.06);
+    canvas.drawCircle(Offset(size.width - 90, 150), 80, bluePaint);
 
-    final bluePaint = Paint()
-      ..color = azul.withValues(alpha: 0.06);
+    final greenPaint = Paint()..color = verde.withValues(alpha: 0.08);
+    canvas.drawCircle(Offset(-30, size.height - 50), 150, greenPaint);
 
-    canvas.drawCircle(
-      Offset(size.width - 90, 150),
-      80,
-      bluePaint,
-    );
-
-    final greenPaint = Paint()
-      ..color = verde.withValues(alpha: 0.08);
-
-    canvas.drawCircle(
-      Offset(-30, size.height - 50),
-      150,
-      greenPaint,
-    );
-
-    final dotPaint = Paint()
-      ..color = azul.withValues(alpha: 0.13);
+    final dotPaint = Paint()..color = azul.withValues(alpha: 0.13);
 
     const spacing = 13.0;
-
-    for (
-      double x = size.width - 140;
-      x < size.width - 30;
-      x += spacing
-    ) {
-      for (
-        double y = 45;
-        y < 135;
-        y += spacing
-      ) {
-        canvas.drawCircle(
-          Offset(x, y),
-          1.6,
-          dotPaint,
-        );
+    for (double x = size.width - 140; x < size.width - 30; x += spacing) {
+      for (double y = 45; y < 135; y += spacing) {
+        canvas.drawCircle(Offset(x, y), 1.6, dotPaint);
       }
     }
 
@@ -956,46 +713,20 @@ class BackgroundPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round;
 
     final path = Path();
-
-    path.moveTo(
-      points[0].dx,
-      points[0].dy,
-    );
+    path.moveTo(points[0].dx, points[0].dy);
 
     for (int i = 1; i < points.length; i++) {
-      path.lineTo(
-        points[i].dx,
-        points[i].dy,
-      );
+      path.lineTo(points[i].dx, points[i].dy);
     }
 
-    canvas.drawPath(
-      path,
-      linePaint,
-    );
+    canvas.drawPath(path, linePaint);
 
-    for (
-      int i = 0;
-      i < points.length;
-      i += 2
-    ) {
-      final paint = Paint()
-        ..color = i % 4 == 0
-            ? rosa
-            : verde;
-
-      canvas.drawCircle(
-        points[i],
-        4,
-        paint,
-      );
+    for (int i = 0; i < points.length; i += 2) {
+      final paint = Paint()..color = i % 4 == 0 ? rosa : verde;
+      canvas.drawCircle(points[i], 4, paint);
     }
   }
 
   @override
-  bool shouldRepaint(
-    CustomPainter oldDelegate,
-  ) {
-    return false;
-  }
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

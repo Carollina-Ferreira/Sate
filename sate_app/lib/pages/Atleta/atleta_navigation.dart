@@ -9,7 +9,14 @@ import 'atleta_perfil_page.dart';
 import '../../assets/menu_inferior_atleta.dart';
 
 class AtletaNavigation extends StatefulWidget {
-  const AtletaNavigation({super.key});
+  final String nomeUsuario;
+  final String emailUsuario;
+
+  const AtletaNavigation({
+    super.key,
+    required this.nomeUsuario,
+    required this.emailUsuario,
+  });
 
   @override
   State<AtletaNavigation> createState() => _AtletaNavigationState();
@@ -29,7 +36,10 @@ class _AtletaNavigationState extends State<AtletaNavigation> {
       const AtletaTreinoPage(),
       const AtletaDesempenhoPage(),
       const AtletaFeedPage(),
-      const AtletaPerfilPage(),
+      AtletaPerfilPage(
+        nomeUsuario: widget.nomeUsuario,
+        emailUsuario: widget.emailUsuario,
+      ),
     ];
   }
 

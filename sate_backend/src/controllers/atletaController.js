@@ -1,355 +1,264 @@
 const prisma = require('../lib/prisma');
 const bcrypt = require('bcrypt');
 
-
 // ============================================================
 // BUSCAR TREINADOR LOGADO
 // ============================================================
 
 async function obterTreinadorLogado(req) {
-
     if (!req.usuario || !req.usuario.id) {
         return null;
     }
 
-    const treinador =
-        await prisma.treinador.findUnique({
-            where: {
-                usuarioId:
-                    Number(req.usuario.id),
-            },
-        });
+    const treinador = await prisma.treinador.findUnique({
+        where: {
+            usuarioId: Number(req.usuario.id),
+        },
+    });
 
     return treinador;
 }
-
 
 // ============================================================
 // NORMALIZAR SEXO
 // ============================================================
 
 function normalizarSexo(sexo) {
-
     if (!sexo) {
         return null;
     }
 
-    const valor =
-        String(sexo)
-            .trim()
-            .toUpperCase();
+    const valor = String(sexo)
+        .trim()
+        .toUpperCase();
 
     const mapa = {
+        MASCULINO: 'MASCULINO',
+        FEMININO: 'FEMININO',
+        OUTRO: 'OUTRO',
+        NAO_INFORMADO: 'NAO_INFORMADO',
 
-        MASCULINO:
-            'MASCULINO',
+        'NÃO INFORMADO': 'NAO_INFORMADO',
+        'NAO INFORMADO': 'NAO_INFORMADO',
 
-        FEMININO:
-            'FEMININO',
-
-        OUTRO:
-            'OUTRO',
-
-        NAO_INFORMADO:
-            'NAO_INFORMADO',
-
-        'NÃO INFORMADO':
-            'NAO_INFORMADO',
-
-        'NAO INFORMADO':
-            'NAO_INFORMADO',
+        Masculino: 'MASCULINO',
+        Feminino: 'FEMININO',
     };
 
-    return mapa[valor] || null;
+    return mapa[sexo] || mapa[valor] || null;
 }
-
 
 // ============================================================
 // LISTAR TODOS OS ATLETAS DO TREINADOR
 // ============================================================
 
 async function listarAtletas(req, res) {
-
     try {
-
-        const treinador =
-            await obterTreinadorLogado(req);
+        const treinador = await obterTreinadorLogado(req);
 
         if (!treinador) {
-
             return res.status(401).json({
-                mensagem:
-                    'Treinador não identificado.',
+                mensagem: 'Treinador não identificado.',
             });
         }
 
+        const atletas = await prisma.atleta.findMany({
+            where: {
+                treinadorId: treinador.id,
+            },
 
-        const atletas =
-            await prisma.atleta.findMany({
-
-                where: {
-                    treinadorId:
-                        treinador.id,
-                },
-
-                include: {
-
-                    usuario: {
-                        select: {
-                            id: true,
-                            nome: true,
-                            email: true,
-                            tipo: true,
-                            avatarUrl: true,
-                        },
-                    },
-
-                    responsavel: true,
-
-                    endereco: true,
-
-                    equipe: {
-                        select: {
-                            id: true,
-                            nome: true,
-                            modalidade: true,
-                            categoria: true,
-                        },
+            include: {
+                usuario: {
+                    select: {
+                        email: true,
+                        avatarUrl: true,
                     },
                 },
 
-                orderBy: {
-                    createdAt: 'desc',
+                responsavel: true,
+                endereco: true,
+
+                equipe: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        modalidade: true,
+                        categoria: true,
+                    },
                 },
-            });
+            },
 
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
 
-        return res.status(200).json(
-            atletas
-        );
+        return res.status(200).json(atletas);
 
     } catch (error) {
-
         console.error(
             'Erro ao listar atletas:',
-            error
+            error,
         );
 
         return res.status(500).json({
-            mensagem:
-                'Erro ao listar atletas.',
-            erro:
-                error.message,
+            mensagem: 'Erro ao listar atletas.',
+            erro: error.message,
         });
     }
 }
 
-
 // ============================================================
 // LISTAR ATLETAS DISPONÍVEIS PARA EQUIPE
 // ============================================================
+//
+// Retorna somente atletas:
+// - do treinador logado
+// - que ainda não possuem equipe
+//
+// GET /api/atletas/disponiveis
+// ============================================================
 
-async function listarAtletasDisponiveis(
-    req,
-    res
-) {
-
+async function listarAtletasDisponiveis(req, res) {
     try {
-
-        const treinador =
-            await obterTreinadorLogado(req);
+        const treinador = await obterTreinadorLogado(req);
 
         if (!treinador) {
-
             return res.status(401).json({
-                mensagem:
-                    'Treinador não identificado.',
+                mensagem: 'Treinador não identificado.',
             });
         }
 
+        const atletas = await prisma.atleta.findMany({
+            where: {
+                treinadorId: treinador.id,
 
-        const atletas =
-            await prisma.atleta.findMany({
+                // SOMENTE ATLETAS SEM EQUIPE
+                equipeId: null,
+            },
 
-                where: {
+            select: {
+                id: true,
+                nome: true,
+                categoria: true,
+                telefone: true,
 
-                    treinadorId:
-                        treinador.id,
-
-                    equipeId:
-                        null,
-                },
-
-                select: {
-
-                    id: true,
-
-                    nome: true,
-
-                    categoria: true,
-
-                    telefone: true,
-
-                    usuario: {
-                        select: {
-                            id: true,
-                            nome: true,
-                            email: true,
-                            avatarUrl: true,
-                        },
+                usuario: {
+                    select: {
+                        email: true,
+                        avatarUrl: true,
                     },
                 },
+            },
 
-                orderBy: {
-                    nome: 'asc',
-                },
-            });
+            orderBy: {
+                nome: 'asc',
+            },
+        });
 
-
-        return res.status(200).json(
-            atletas
-        );
+        return res.status(200).json(atletas);
 
     } catch (error) {
-
         console.error(
             'Erro ao listar atletas disponíveis:',
-            error
+            error,
         );
 
         return res.status(500).json({
             mensagem:
                 'Erro ao listar atletas disponíveis.',
-            erro:
-                error.message,
+            erro: error.message,
         });
     }
 }
-
 
 // ============================================================
 // BUSCAR ATLETA POR ID
 // ============================================================
 
 async function buscarAtleta(req, res) {
-
     try {
-
-        const treinador =
-            await obterTreinadorLogado(req);
+        const treinador = await obterTreinadorLogado(req);
 
         if (!treinador) {
-
             return res.status(401).json({
-                mensagem:
-                    'Treinador não identificado.',
+                mensagem: 'Treinador não identificado.',
             });
         }
 
-
-        const id =
-            Number(req.params.id);
-
+        const id = Number(req.params.id);
 
         if (!Number.isInteger(id)) {
-
             return res.status(400).json({
-                mensagem:
-                    'ID do atleta inválido.',
+                mensagem: 'ID do atleta inválido.',
             });
         }
 
+        const atleta = await prisma.atleta.findFirst({
+            where: {
+                id,
+                treinadorId: treinador.id,
+            },
 
-        const atleta =
-            await prisma.atleta.findFirst({
-
-                where: {
-
-                    id,
-
-                    treinadorId:
-                        treinador.id,
+            include: {
+                usuario: {
+                    select: {
+                        id: true,
+                        email: true,
+                        avatarUrl: true,
+                    },
                 },
 
-                include: {
+                responsavel: true,
+                endereco: true,
 
-                    usuario: {
-                        select: {
-                            id: true,
-                            nome: true,
-                            email: true,
-                            tipo: true,
-                            avatarUrl: true,
-                        },
+                equipe: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        modalidade: true,
+                        categoria: true,
                     },
-
-                    responsavel: true,
-
-                    endereco: true,
-
-                    equipe: {
-                        select: {
-                            id: true,
-                            nome: true,
-                            modalidade: true,
-                            categoria: true,
-                        },
-                    },
-
-                    documentos: true,
                 },
-            });
 
+                documentos: true,
+            },
+        });
 
         if (!atleta) {
-
             return res.status(404).json({
-                mensagem:
-                    'Atleta não encontrado.',
+                mensagem: 'Atleta não encontrado.',
             });
         }
 
-
-        return res.status(200).json(
-            atleta
-        );
+        return res.status(200).json(atleta);
 
     } catch (error) {
-
         console.error(
             'Erro ao buscar atleta:',
-            error
+            error,
         );
 
         return res.status(500).json({
-            mensagem:
-                'Erro ao buscar atleta.',
-            erro:
-                error.message,
+            mensagem: 'Erro ao buscar atleta.',
+            erro: error.message,
         });
     }
 }
-
 
 // ============================================================
 // CRIAR ATLETA
 // ============================================================
 
 async function criarAtleta(req, res) {
-
     try {
-
-        const treinador =
-            await obterTreinadorLogado(req);
+        const treinador = await obterTreinadorLogado(req);
 
         if (!treinador) {
-
             return res.status(401).json({
-                mensagem:
-                    'Treinador não identificado.',
+                mensagem: 'Treinador não identificado.',
             });
         }
-
 
         const {
             nome,
@@ -360,10 +269,10 @@ async function criarAtleta(req, res) {
             sexo,
             categoria,
             telefone,
+
             responsavel,
             endereco,
         } = req.body;
-
 
         // ====================================================
         // NORMALIZAÇÃO
@@ -376,87 +285,63 @@ async function criarAtleta(req, res) {
                     .toLowerCase()
                 : null;
 
-
         const cpfNormalizado =
             cpf
                 ? String(cpf).trim()
                 : null;
-
 
         const rgNormalizado =
             rg
                 ? String(rg).trim()
                 : null;
 
-
         const categoriaNormalizada =
             categoria
                 ? String(categoria).trim()
                 : null;
-
 
         const telefoneNormalizado =
             telefone
                 ? String(telefone).trim()
                 : null;
 
-
         const sexoNormalizado =
             normalizarSexo(sexo);
-
 
         // ====================================================
         // VALIDAÇÕES
         // ====================================================
 
-        if (
-            !nome ||
-            !String(nome).trim()
-        ) {
-
+        if (!nome || !String(nome).trim()) {
             return res.status(400).json({
-                mensagem:
-                    'Nome do atleta é obrigatório.',
+                mensagem: 'Nome do atleta é obrigatório.',
             });
         }
-
 
         if (!emailNormalizado) {
-
             return res.status(400).json({
-                mensagem:
-                    'E-mail do atleta é obrigatório.',
+                mensagem: 'E-mail do atleta é obrigatório.',
             });
         }
-
 
         // ====================================================
         // VALIDAR DATA
         // ====================================================
 
-        let dataNascimentoNormalizada =
-            null;
-
+        let dataNascimentoNormalizada = null;
 
         if (dataNascimento) {
-
-            const data =
-                new Date(dataNascimento);
-
+            const data = new Date(dataNascimento);
 
             if (isNaN(data.getTime())) {
-
                 return res.status(400).json({
                     mensagem:
                         'Data de nascimento inválida.',
                 });
             }
 
-
-            dataNascimentoNormalizada =
-                data;
+            dataNascimentoNormalizada = data;
         }
-
 
         // ====================================================
         // VERIFICAR E-MAIL DUPLICADO
@@ -464,41 +349,31 @@ async function criarAtleta(req, res) {
 
         const usuarioExistente =
             await prisma.usuario.findUnique({
-
                 where: {
-                    email:
-                        emailNormalizado,
+                    email: emailNormalizado,
                 },
             });
 
-
         if (usuarioExistente) {
-
             return res.status(409).json({
                 mensagem:
                     'Já existe um usuário cadastrado com este e-mail.',
             });
         }
 
-
         // ====================================================
         // VERIFICAR CPF DUPLICADO
         // ====================================================
 
         if (cpfNormalizado) {
-
             const atletaCpfExistente =
                 await prisma.atleta.findUnique({
-
                     where: {
-                        cpf:
-                            cpfNormalizado,
+                        cpf: cpfNormalizado,
                     },
                 });
 
-
             if (atletaCpfExistente) {
-
                 return res.status(409).json({
                     mensagem:
                         'Já existe um atleta cadastrado com este CPF.',
@@ -506,21 +381,17 @@ async function criarAtleta(req, res) {
             }
         }
 
-
         // ====================================================
         // SENHA TEMPORÁRIA
         // ====================================================
 
-        const senhaTemporaria =
-            'SATE@123';
-
+        const senhaTemporaria = 'SATE@123';
 
         const senhaHash =
             await bcrypt.hash(
                 senhaTemporaria,
-                10
+                10,
             );
-
 
         // ====================================================
         // TRANSACTION
@@ -531,14 +402,12 @@ async function criarAtleta(req, res) {
                 async (tx) => {
 
                     // ----------------------------------------
-                    // USUÁRIO
+                    // CRIAR USUÁRIO
                     // ----------------------------------------
 
                     const usuario =
                         await tx.usuario.create({
-
                             data: {
-
                                 email:
                                     emailNormalizado,
 
@@ -549,68 +418,53 @@ async function criarAtleta(req, res) {
                                     'ATLETA',
 
                                 nome:
-                                    String(
-                                        nome
-                                    ).trim(),
+                                    String(nome).trim(),
 
                                 primeiroAcesso:
                                     true,
                             },
                         });
 
-
                     // ----------------------------------------
-                    // RESPONSÁVEL
+                    // CRIAR RESPONSÁVEL
                     // ----------------------------------------
 
-                    let responsavelCriado =
-                        null;
-
+                    let responsavelCriado = null;
 
                     if (
                         responsavel &&
                         responsavel.nome
                     ) {
-
                         responsavelCriado =
                             await tx.responsavel.create({
-
                                 data: {
-
                                     nome:
                                         String(
-                                            responsavel.nome
+                                            responsavel.nome,
                                         ).trim(),
 
                                     grauParentesco:
-                                        responsavel
-                                            .grauParentesco
+                                        responsavel.grauParentesco
                                             ? String(
-                                                responsavel
-                                                    .grauParentesco
+                                                responsavel.grauParentesco,
                                             ).trim()
                                             : '',
 
                                     telefone:
-                                        responsavel
-                                            .telefone
+                                        responsavel.telefone
                                             ? String(
-                                                responsavel
-                                                    .telefone
+                                                responsavel.telefone,
                                             ).trim()
                                             : '',
                                 },
                             });
                     }
 
-
                     // ----------------------------------------
-                    // ENDEREÇO
+                    // CRIAR ENDEREÇO
                     // ----------------------------------------
 
-                    let enderecoCriado =
-                        null;
-
+                    let enderecoCriado = null;
 
                     if (
                         endereco &&
@@ -619,70 +473,63 @@ async function criarAtleta(req, res) {
                         endereco.numero &&
                         endereco.bairro
                     ) {
-
                         enderecoCriado =
                             await tx.endereco.create({
-
                                 data: {
-
                                     cep:
                                         String(
-                                            endereco.cep
+                                            endereco.cep,
                                         ).trim(),
 
                                     logradouro:
                                         String(
-                                            endereco.logradouro
+                                            endereco.logradouro,
                                         ).trim(),
 
                                     numero:
                                         String(
-                                            endereco.numero
+                                            endereco.numero,
                                         ).trim(),
 
                                     bairro:
                                         String(
-                                            endereco.bairro
+                                            endereco.bairro,
                                         ).trim(),
 
                                     complemento:
                                         endereco.complemento
                                             ? String(
-                                                endereco.complemento
+                                                endereco.complemento,
                                             ).trim()
                                             : null,
 
                                     cidade:
                                         endereco.cidade
                                             ? String(
-                                                endereco.cidade
+                                                endereco.cidade,
                                             ).trim()
                                             : null,
 
                                     estado:
                                         endereco.estado
                                             ? String(
-                                                endereco.estado
+                                                endereco.estado,
                                             ).trim()
                                             : null,
                                 },
                             });
                     }
 
-
                     // ----------------------------------------
-                    // ATLETA
+                    // CRIAR ATLETA
                     // ----------------------------------------
 
                     const atleta =
                         await tx.atleta.create({
-
                             data: {
 
                                 nome:
-                                    String(
-                                        nome
-                                    ).trim(),
+                                    String(nome).trim(),
 
                                 cpf:
                                     cpfNormalizado,
@@ -736,38 +583,31 @@ async function criarAtleta(req, res) {
                             },
 
                             include: {
-
                                 usuario: {
                                     select: {
                                         id: true,
-                                        nome: true,
                                         email: true,
-                                        tipo: true,
                                         avatarUrl: true,
                                     },
                                 },
 
                                 responsavel: true,
-
                                 endereco: true,
                             },
                         });
-
 
                     return {
                         atleta,
                         senhaTemporaria,
                     };
-                }
+                },
             );
-
 
         // ====================================================
         // RESPOSTA
         // ====================================================
 
         return res.status(201).json({
-
             mensagem:
                 'Atleta cadastrado com sucesso.',
 
@@ -779,10 +619,9 @@ async function criarAtleta(req, res) {
         });
 
     } catch (error) {
-
         console.error(
             'Erro ao criar atleta:',
-            error
+            error,
         );
 
         return res.status(500).json({
@@ -794,54 +633,33 @@ async function criarAtleta(req, res) {
     }
 }
 
-
 // ============================================================
 // ATUALIZAR ATLETA
 // ============================================================
 
 async function atualizarAtleta(req, res) {
-
     try {
-
-        const treinador =
-            await obterTreinadorLogado(req);
-
+        const treinador = await obterTreinadorLogado(req);
 
         if (!treinador) {
-
             return res.status(401).json({
-                mensagem:
-                    'Treinador não identificado.',
+                mensagem: 'Treinador não identificado.',
             });
         }
 
-
-        const id =
-            Number(req.params.id);
-
+        const id = Number(req.params.id);
 
         if (!Number.isInteger(id)) {
-
             return res.status(400).json({
-                mensagem:
-                    'ID do atleta inválido.',
+                mensagem: 'ID do atleta inválido.',
             });
         }
-
-
-        // ====================================================
-        // VERIFICAR SE O ATLETA PERTENCE AO TREINADOR
-        // ====================================================
 
         const atletaExistente =
             await prisma.atleta.findFirst({
-
                 where: {
-
                     id,
-
-                    treinadorId:
-                        treinador.id,
+                    treinadorId: treinador.id,
                 },
 
                 include: {
@@ -849,15 +667,11 @@ async function atualizarAtleta(req, res) {
                 },
             });
 
-
         if (!atletaExistente) {
-
             return res.status(404).json({
-                mensagem:
-                    'Atleta não encontrado.',
+                mensagem: 'Atleta não encontrado.',
             });
         }
-
 
         const {
             nome,
@@ -868,9 +682,7 @@ async function atualizarAtleta(req, res) {
             sexo,
             categoria,
             telefone,
-            avatarUrl,
         } = req.body;
-
 
         // ====================================================
         // NORMALIZAÇÃO
@@ -878,68 +690,49 @@ async function atualizarAtleta(req, res) {
 
         const dadosAtleta = {};
 
-
         if (nome !== undefined) {
-
             dadosAtleta.nome =
-                nome &&
-                String(nome).trim()
+                nome
                     ? String(nome).trim()
                     : null;
         }
 
-
         if (cpf !== undefined) {
-
             dadosAtleta.cpf =
-                cpf &&
-                String(cpf).trim()
+                cpf
                     ? String(cpf).trim()
                     : null;
         }
 
-
         if (rg !== undefined) {
-
             dadosAtleta.rg =
-                rg &&
-                String(rg).trim()
+                rg
                     ? String(rg).trim()
                     : null;
         }
 
-
         if (categoria !== undefined) {
-
             dadosAtleta.categoria =
-                categoria &&
-                String(categoria).trim()
+                categoria
                     ? String(categoria).trim()
                     : null;
         }
 
-
         if (telefone !== undefined) {
-
             dadosAtleta.telefone =
-                telefone &&
-                String(telefone).trim()
+                telefone
                     ? String(telefone).trim()
                     : null;
         }
 
-
         if (sexo !== undefined) {
-
             dadosAtleta.sexo =
                 normalizarSexo(sexo);
         }
 
-
         if (dataNascimento !== undefined) {
 
             if (!dataNascimento) {
-
                 dadosAtleta.dataNascimento =
                     null;
 
@@ -947,90 +740,33 @@ async function atualizarAtleta(req, res) {
 
                 const data =
                     new Date(
-                        dataNascimento
+                        dataNascimento,
                     );
 
-
-                if (
-                    isNaN(
-                        data.getTime()
-                    )
-                ) {
-
+                if (isNaN(data.getTime())) {
                     return res.status(400).json({
                         mensagem:
                             'Data de nascimento inválida.',
                     });
                 }
 
-
                 dadosAtleta.dataNascimento =
                     data;
             }
         }
 
-
         // ====================================================
-        // NORMALIZAR E-MAIL
-        // ====================================================
-
-        let emailNormalizado =
-            null;
-
-
-        if (email !== undefined) {
-
-            emailNormalizado =
-                email &&
-                String(email).trim()
-                    ? String(email)
-                        .trim()
-                        .toLowerCase()
-                    : null;
-
-
-            if (!emailNormalizado) {
-
-                return res.status(400).json({
-                    mensagem:
-                        'O e-mail do atleta é obrigatório.',
-                });
-            }
-        }
-
-
-        // ====================================================
-        // NORMALIZAR FOTO
-        // ====================================================
-
-        let avatarUrlNormalizado;
-
-
-        if (avatarUrl !== undefined) {
-
-            avatarUrlNormalizado =
-                avatarUrl &&
-                String(avatarUrl).trim()
-                    ? String(avatarUrl).trim()
-                    : null;
-        }
-
-
-        // ====================================================
-        // VERIFICAR CPF DUPLICADO
+        // VERIFICAR CPF
         // ====================================================
 
         if (
             cpf !== undefined &&
-            cpf &&
-            String(cpf).trim()
+            cpf
         ) {
 
             const cpfExistente =
                 await prisma.atleta.findFirst({
-
                     where: {
-
                         cpf:
                             String(cpf).trim(),
 
@@ -1040,9 +776,7 @@ async function atualizarAtleta(req, res) {
                     },
                 });
 
-
             if (cpfExistente) {
-
                 return res.status(409).json({
                     mensagem:
                         'Este CPF já está cadastrado.',
@@ -1050,18 +784,59 @@ async function atualizarAtleta(req, res) {
             }
         }
 
+        // ====================================================
+        // ATUALIZAR
+        // ====================================================
+
+        const atleta =
+            await prisma.atleta.update({
+                where: {
+                    id,
+                },
+
+                data:
+                    dadosAtleta,
+
+                include: {
+                    usuario: {
+                        select: {
+                            id: true,
+                            email: true,
+                            avatarUrl: true,
+                        },
+                    },
+
+                    responsavel: true,
+                    endereco: true,
+
+                    equipe: {
+                        select: {
+                            id: true,
+                            nome: true,
+                            modalidade: true,
+                            categoria: true,
+                        },
+                    },
+                },
+            });
 
         // ====================================================
-        // VERIFICAR E-MAIL DUPLICADO
+        // ATUALIZAR E-MAIL
         // ====================================================
 
-        if (emailNormalizado) {
+        if (
+            email !== undefined &&
+            email
+        ) {
+
+            const emailNormalizado =
+                String(email)
+                    .trim()
+                    .toLowerCase();
 
             const usuarioComEmail =
                 await prisma.usuario.findFirst({
-
                     where: {
-
                         email:
                             emailNormalizado,
 
@@ -1072,169 +847,37 @@ async function atualizarAtleta(req, res) {
                     },
                 });
 
-
             if (usuarioComEmail) {
-
                 return res.status(409).json({
                     mensagem:
                         'Este e-mail já está cadastrado.',
                 });
             }
+
+            await prisma.usuario.update({
+                where: {
+                    id:
+                        atletaExistente.usuarioId,
+                },
+
+                data: {
+                    email:
+                        emailNormalizado,
+                },
+            });
         }
 
-
-        // ====================================================
-        // ATUALIZAR ATLETA + USUÁRIO
-        // ====================================================
-
-        const resultado =
-            await prisma.$transaction(
-                async (tx) => {
-
-                    // ----------------------------------------
-                    // ATUALIZAR ATLETA
-                    // ----------------------------------------
-
-                    const atleta =
-                        await tx.atleta.update({
-
-                            where: {
-                                id,
-                            },
-
-                            data:
-                                dadosAtleta,
-
-                            include: {
-
-                                usuario: {
-                                    select: {
-                                        id: true,
-                                        nome: true,
-                                        email: true,
-                                        tipo: true,
-                                        avatarUrl: true,
-                                    },
-                                },
-
-                                responsavel: true,
-
-                                endereco: true,
-
-                                equipe: {
-                                    select: {
-                                        id: true,
-                                        nome: true,
-                                        modalidade: true,
-                                        categoria: true,
-                                    },
-                                },
-
-                                documentos: true,
-                            },
-                        });
-
-
-                    // ----------------------------------------
-                    // ATUALIZAR USUÁRIO / E-MAIL / FOTO
-                    // ----------------------------------------
-
-                    if (
-                        emailNormalizado ||
-                        avatarUrl !== undefined
-                    ) {
-
-                        const dadosUsuario = {};
-
-
-                        if (emailNormalizado) {
-
-                            dadosUsuario.email =
-                                emailNormalizado;
-                        }
-
-
-                        if (avatarUrl !== undefined) {
-
-                            dadosUsuario.avatarUrl =
-                                avatarUrlNormalizado;
-                        }
-
-
-                        await tx.usuario.update({
-
-                            where: {
-                                id:
-                                    atletaExistente
-                                        .usuarioId,
-                            },
-
-                            data:
-                                dadosUsuario,
-                        });
-                    }
-
-
-                    // ----------------------------------------
-                    // BUSCAR RESULTADO FINAL
-                    // ----------------------------------------
-
-                    const atletaFinal =
-                        await tx.atleta.findUnique({
-
-                            where: {
-                                id,
-                            },
-
-                            include: {
-
-                                usuario: {
-                                    select: {
-                                        id: true,
-                                        nome: true,
-                                        email: true,
-                                        tipo: true,
-                                        avatarUrl: true,
-                                    },
-                                },
-
-                                responsavel: true,
-
-                                endereco: true,
-
-                                equipe: {
-                                    select: {
-                                        id: true,
-                                        nome: true,
-                                        modalidade: true,
-                                        categoria: true,
-                                    },
-                                },
-
-                                documentos: true,
-                            },
-                        });
-
-
-                    return atletaFinal;
-                }
-            );
-
-
         return res.status(200).json({
-
             mensagem:
                 'Atleta atualizado com sucesso.',
 
-            atleta:
-                resultado,
+            atleta,
         });
 
     } catch (error) {
-
         console.error(
             'Erro ao atualizar atleta:',
-            error
+            error,
         );
 
         return res.status(500).json({
@@ -1246,90 +889,59 @@ async function atualizarAtleta(req, res) {
     }
 }
 
-
 // ============================================================
 // EXCLUIR ATLETA
 // ============================================================
 
 async function excluirAtleta(req, res) {
-
     try {
-
-        const treinador =
-            await obterTreinadorLogado(req);
-
+        const treinador = await obterTreinadorLogado(req);
 
         if (!treinador) {
-
             return res.status(401).json({
-                mensagem:
-                    'Treinador não identificado.',
+                mensagem: 'Treinador não identificado.',
             });
         }
 
-
-        const id =
-            Number(req.params.id);
-
+        const id = Number(req.params.id);
 
         if (!Number.isInteger(id)) {
-
             return res.status(400).json({
-                mensagem:
-                    'ID do atleta inválido.',
+                mensagem: 'ID do atleta inválido.',
             });
         }
-
-
-        // ====================================================
-        // VERIFICAR SE PERTENCE AO TREINADOR
-        // ====================================================
 
         const atleta =
             await prisma.atleta.findFirst({
-
                 where: {
-
                     id,
-
                     treinadorId:
                         treinador.id,
                 },
             });
 
-
         if (!atleta) {
-
             return res.status(404).json({
                 mensagem:
                     'Atleta não encontrado.',
             });
         }
 
-
-        // ====================================================
-        // EXCLUIR
-        // ====================================================
-
         await prisma.atleta.delete({
-
             where: {
                 id,
             },
         });
 
-
         return res.status(200).json({
-
             mensagem:
                 'Atleta excluído com sucesso.',
         });
 
     } catch (error) {
-
         console.error(
             'Erro ao excluir atleta:',
-            error
+            error,
         );
 
         return res.status(500).json({
@@ -1341,13 +953,11 @@ async function excluirAtleta(req, res) {
     }
 }
 
-
 // ============================================================
 // EXPORTAÇÕES
 // ============================================================
 
 module.exports = {
-
     listarAtletas,
     listarAtletasDisponiveis,
     buscarAtleta,

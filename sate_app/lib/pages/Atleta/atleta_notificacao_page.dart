@@ -4,6 +4,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
   const AtletaNotificacaoPage({super.key});
 
   static const Color verde = Color(0xFF00845F);
+  static const Color verdeEscuro = Color(0xFF006B4F);
   static const Color fundo = Color(0xFFF7F7F7);
   static const Color cinza = Color(0xFF777777);
 
@@ -11,112 +12,172 @@ class AtletaNotificacaoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: fundo,
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildCabecalho(context),
 
-      appBar: AppBar(
-        backgroundColor: fundo,
-        elevation: 0,
-        centerTitle: false,
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(
+                  16,
+                  16,
+                  16,
+                  30,
+                ),
+                children: [
+                  _buildTituloSecao(),
 
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black87,
-          ),
+                  const SizedBox(height: 12),
+
+                  _notificacao(
+                    icone: Icons.calendar_month_outlined,
+                    corIcone: const Color(0xFFB45A8B),
+                    fundoIcone: const Color(0xFFF7E6F0),
+                    titulo: 'Novo treino agendado',
+                    descricao: 'Treino de força hoje às 18:00',
+                    tempo: 'Agora',
+                    nova: true,
+                  ),
+
+                  _notificacao(
+                    icone: Icons.check_box_outlined,
+                    corIcone: const Color(0xFF70A85C),
+                    fundoIcone: const Color(0xFFE8F3E4),
+                    titulo: 'Meta concluída',
+                    descricao:
+                        'Parabéns! Você concluiu a meta\n'
+                        '"Melhorar resistência".',
+                    tempo: '20 min',
+                    nova: true,
+                  ),
+
+                  _notificacao(
+                    icone: Icons.notifications_none_rounded,
+                    corIcone: const Color(0xFFC47A9F),
+                    fundoIcone: const Color(0xFFF7E6F0),
+                    titulo: 'Lembrete de treino',
+                    descricao:
+                        'Seu treino começa em 30 minutos.',
+                    tempo: '1h',
+                    nova: false,
+                  ),
+
+                  _notificacao(
+                    icone: Icons.sports_handball_outlined,
+                    corIcone: const Color(0xFF76A85F),
+                    fundoIcone: const Color(0xFFE8F3E4),
+                    titulo: 'Novo desafio',
+                    descricao:
+                        'Participe do desafio\n'
+                        '"30 dias de foco".',
+                    tempo: '2h',
+                    nova: false,
+                  ),
+
+                  _notificacao(
+                    icone: Icons.bar_chart_rounded,
+                    corIcone: const Color(0xFF8270B7),
+                    fundoIcone: const Color(0xFFEDE9F8),
+                    titulo: 'Avaliação disponível',
+                    descricao:
+                        'Sua avaliação física está disponível.',
+                    tempo: '1d',
+                    nova: false,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
 
-        title: const Text(
-          'Notificações',
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+  Widget _buildCabecalho(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(
+        16,
+        8,
+        16,
+        14,
+      ),
+      decoration: const BoxDecoration(
+        color: verdeEscuro,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(22),
+          bottomRight: Radius.circular(22),
         ),
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(
+              minWidth: 40,
+              minHeight: 40,
+            ),
+            icon: const Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.white,
+              size: 24,
+            ),
+          ),
 
-        actions: [
+          const SizedBox(width: 4),
+
+          const Expanded(
+            child: Text(
+              'Notificações',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+
           IconButton(
             onPressed: () {
               _mostrarOpcoes(context);
             },
             icon: const Icon(
               Icons.more_horiz_rounded,
-              color: Colors.black87,
+              color: Colors.white,
               size: 25,
             ),
           ),
-
-          const SizedBox(width: 4),
         ],
       ),
+    );
+  }
 
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          16,
-          16,
-          16,
-          30,
+  Widget _buildTituloSecao() {
+    return Row(
+      children: [
+        const Text(
+          'Notificações recentes',
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
         ),
-        children: [
-          _notificacao(
-            icone: Icons.calendar_month_outlined,
-            corIcone: const Color(0xFFB45A8B),
-            fundoIcone: const Color(0xFFF7E6F0),
-            titulo: 'Novo treino agendado',
-            descricao: 'Treino de força hoje às 18:00',
-            tempo: 'Agora',
-            nova: true,
-          ),
 
-          _notificacao(
-            icone: Icons.check_box_outlined,
-            corIcone: const Color(0xFF70A85C),
-            fundoIcone: const Color(0xFFE8F3E4),
-            titulo: 'Meta concluída',
-            descricao:
-                'Parabéns! Você concluiu a meta\n'
-                '"Melhorar resistência".',
-            tempo: '20 min',
-            nova: true,
-          ),
+        const Spacer(),
 
-          _notificacao(
-            icone: Icons.notifications_none_rounded,
-            corIcone: const Color(0xFFC47A9F),
-            fundoIcone: const Color(0xFFF7E6F0),
-            titulo: 'Lembrete de treino',
-            descricao:
-                'Seu treino começa em 30 minutos.',
-            tempo: '1h',
-            nova: false,
+        Text(
+          '5 notificações',
+          style: TextStyle(
+            fontSize: 10,
+            color: cinza,
           ),
-
-          _notificacao(
-            icone: Icons.sports_handball_outlined,
-            corIcone: const Color(0xFF76A85F),
-            fundoIcone: const Color(0xFFE8F3E4),
-            titulo: 'Novo desafio',
-            descricao:
-                'Participe do desafio\n'
-                '"30 dias de foco".',
-            tempo: '2h',
-            nova: false,
-          ),
-
-          _notificacao(
-            icone: Icons.bar_chart_rounded,
-            corIcone: const Color(0xFF8270B7),
-            fundoIcone: const Color(0xFFEDE9F8),
-            titulo: 'Avaliação disponível',
-            descricao:
-                'Sua avaliação física está disponível.',
-            tempo: '1d',
-            nova: false,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -140,9 +201,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(
-              alpha: 0.025,
-            ),
+            color: Colors.black.withValues(alpha: 0.025),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -151,16 +210,14 @@ class AtletaNotificacaoPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Row(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               width: 48,
               height: 48,
               decoration: BoxDecoration(
                 color: fundoIcone,
-                borderRadius:
-                    BorderRadius.circular(13),
+                borderRadius: BorderRadius.circular(13),
               ),
               child: Icon(
                 icone,
@@ -185,8 +242,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
                           titulo,
                           style: const TextStyle(
                             fontSize: 13,
-                            fontWeight:
-                                FontWeight.bold,
+                            fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
                         ),
@@ -196,7 +252,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
 
                       Text(
                         tempo,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 9,
                           color: cinza,
                         ),
@@ -219,24 +275,19 @@ class AtletaNotificacaoPage extends StatelessWidget {
                     const SizedBox(height: 8),
 
                     Container(
-                      padding:
-                          const EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 8,
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(
-                          0xFFEAF5F1,
-                        ),
-                        borderRadius:
-                            BorderRadius.circular(10),
+                        color: const Color(0xFFEAF5F1),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Text(
                         'Nova',
                         style: TextStyle(
                           fontSize: 8,
-                          fontWeight:
-                              FontWeight.w600,
+                          fontWeight: FontWeight.w600,
                           color: verde,
                         ),
                       ),

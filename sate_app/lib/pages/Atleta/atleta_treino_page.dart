@@ -122,6 +122,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
   void initState() {
     super.initState();
 
+    // Primeiro dia aberto = hoje
     diaSelecionado = DateTime(
       DateTime.now().year,
       DateTime.now().month,
@@ -135,10 +136,15 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
     return Scaffold(
       backgroundColor: fundo,
+
+      // ========================================================
+      // APP BAR
+      // ========================================================
       appBar: AppBar(
         backgroundColor: fundo,
         elevation: 0,
         centerTitle: false,
+
         title: const Text(
           'Meus treinos',
           style: TextStyle(
@@ -147,6 +153,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+
         actions: [
           IconButton(
             onPressed: () {
@@ -165,26 +172,35 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           ),
         ],
       ),
+
+      // ========================================================
+      // CONTEÚDO
+      // ========================================================
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // CABEÇALHO
               _buildHeader(),
 
               const SizedBox(height: 22),
 
+              // FILTROS
               _buildFiltros(),
 
               const SizedBox(height: 22),
 
+              // CALENDÁRIO
               _buildCalendario(),
 
               const SizedBox(height: 24),
 
+              // TREINO DO DIA
               _buildTreinoDoDia(treinoDoDia),
 
+              // DETALHES
               if (mostrandoDetalhes && treinoDoDia != null) ...[
                 const SizedBox(height: 18),
                 _buildDetalhesTreino(treinoDoDia),
@@ -193,6 +209,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           ),
         ),
       ),
+
+      // ========================================================
+      // MENU INFERIOR
+      // ========================================================
       bottomNavigationBar: MenuInferiorAtleta(
         indiceSelecionado: 1,
         onItemSelecionado: (index) {
@@ -244,6 +264,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
+  // ============================================================
+  // CABEÇALHO
+  // ============================================================
+
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
@@ -267,7 +291,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               size: 27,
             ),
           ),
+
           const SizedBox(width: 14),
+
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,13 +322,17 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
+  // ============================================================
+  // FILTROS
+  // ============================================================
+
   Widget _buildFiltros() {
     return SizedBox(
       height: 38,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: filtros.length,
-        separatorBuilder: (_, _) {
+        separatorBuilder: (_, __) {
           return const SizedBox(width: 8);
         },
         itemBuilder: (context, index) {
@@ -347,6 +377,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
+  // ============================================================
+  // CALENDÁRIO
+  // ============================================================
+
   Widget _buildCalendario() {
     final primeiroDia = DateTime(
       mesAtual.year,
@@ -362,10 +396,14 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
     final quantidadeDias = ultimoDia.day;
 
+    // DateTime.weekday:
+    // segunda = 1
+    // domingo = 7
     final primeiroDiaSemana = primeiroDia.weekday;
 
     final List<Widget> dias = [];
 
+    // Espaços antes do primeiro dia
     for (int i = 1; i < primeiroDiaSemana; i++) {
       dias.add(const SizedBox());
     }
@@ -399,6 +437,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       ),
       child: Column(
         children: [
+          // ======================================================
+          // MÊS
+          // ======================================================
           Row(
             children: [
               GestureDetector(
@@ -431,7 +472,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               Expanded(
                 child: Center(
                   child: Text(
-                    '${_nomeMes(mesAtual.month)} ${mesAtual.year}',
+                    _nomeMes(mesAtual.month),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -472,6 +513,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 18),
 
+          // ======================================================
+          // DIAS DA SEMANA
+          // ======================================================
           Row(
             children: [
               _buildDiaSemana('SEG'),
@@ -486,6 +530,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 8),
 
+          // ======================================================
+          // DIAS
+          // ======================================================
           GridView.count(
             crossAxisCount: 7,
             shrinkWrap: true,
@@ -498,6 +545,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 12),
 
+          // ======================================================
+          // LEGENDA
+          // ======================================================
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -523,6 +573,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       ),
     );
   }
+
+  // ============================================================
+  // DIA DO CALENDÁRIO
+  // ============================================================
 
   Widget _buildDiaCalendario(DateTime data) {
     final bool selecionado = _mesmoDia(
@@ -597,6 +651,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
+  // ============================================================
+  // DIA DA SEMANA
+  // ============================================================
+
   Widget _buildDiaSemana(String texto) {
     return Expanded(
       child: Center(
@@ -611,6 +669,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       ),
     );
   }
+
+  // ============================================================
+  // TREINO DO DIA
+  // ============================================================
 
   Widget _buildTreinoDoDia(
     Map<String, dynamic>? treino,
@@ -691,6 +753,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // ======================================================
+          // DATA SELECIONADA
+          // ======================================================
           Row(
             children: [
               Container(
@@ -720,9 +785,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                         color: Colors.grey.shade600,
                       ),
                     ),
-
                     const SizedBox(height: 3),
-
                     const Text(
                       'Treino programado',
                       style: TextStyle(
@@ -746,6 +809,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 16),
 
+          // ======================================================
+          // TREINO
+          // ======================================================
           Row(
             children: [
               Container(
@@ -832,6 +898,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 14),
 
+          // ======================================================
+          // HORÁRIO
+          // ======================================================
           Row(
             children: [
               Icon(
@@ -872,6 +941,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 16),
 
+          // ======================================================
+          // BOTÃO VER DETALHES
+          // ======================================================
           SizedBox(
             width: double.infinity,
             height: 42,
@@ -902,9 +974,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(width: 5),
-
                   Icon(
                     mostrandoDetalhes
                         ? Icons.keyboard_arrow_up_rounded
@@ -919,6 +989,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       ),
     );
   }
+
+  // ============================================================
+  // DETALHES DO TREINO
+  // ============================================================
 
   Widget _buildDetalhesTreino(
     Map<String, dynamic> treino,
@@ -946,6 +1020,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // ======================================================
+          // TÍTULO
+          // ======================================================
           Row(
             children: [
               Expanded(
@@ -1002,6 +1079,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 18),
 
+          // ======================================================
+          // DATA / HORÁRIO / DURAÇÃO
+          // ======================================================
           Row(
             children: [
               Expanded(
@@ -1032,6 +1112,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 20),
 
+          // ======================================================
+          // OBJETIVO
+          // ======================================================
           const Text(
             'Objetivo',
             style: TextStyle(
@@ -1054,6 +1137,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 22),
 
+          // ======================================================
+          // EXERCÍCIOS
+          // ======================================================
           Row(
             children: [
               const Expanded(
@@ -1079,6 +1165,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 12),
 
+          // ======================================================
+          // LISTA DE EXERCÍCIOS
+          // ======================================================
           ...List.generate(
             (treino['exercicios'] as List).length,
             (index) {
@@ -1099,6 +1188,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 8),
 
+          // ======================================================
+          // BOTÃO INICIAR
+          // ======================================================
           SizedBox(
             width: double.infinity,
             height: 48,
@@ -1141,13 +1233,18 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
+  // ============================================================
+  // ITEM DE INFORMAÇÃO
+  // ============================================================
+
   Widget _buildInfoItem(
     IconData icon,
     String titulo,
     String valor,
   ) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+          CrossAxisAlignment.start,
       children: [
         Icon(
           icon,
@@ -1179,6 +1276,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
+  // ============================================================
+  // EXERCÍCIO
+  // ============================================================
+
   Widget _buildExercicio({
     required int numero,
     required Map<String, dynamic> exercicio,
@@ -1194,6 +1295,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       ),
       child: Row(
         children: [
+          // NÚMERO
           Container(
             width: 32,
             height: 32,
@@ -1214,6 +1316,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(width: 11),
 
+          // ÍCONE
           Container(
             width: 35,
             height: 35,
@@ -1230,6 +1333,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(width: 10),
 
+          // TEXTO
           Expanded(
             child: Column(
               crossAxisAlignment:
@@ -1267,6 +1371,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
+  // ============================================================
+  // BUSCAR TREINO DO DIA
+  // ============================================================
+
   Map<String, dynamic>? _getTreinoDoDia(
     DateTime data,
   ) {
@@ -1278,6 +1386,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
     return treinos[indice];
   }
+
+  // ============================================================
+  // ÍNDICE DO TREINO
+  // ============================================================
 
   int? _getIndiceTreino(DateTime data) {
     final hoje = DateTime.now();
@@ -1294,12 +1406,14 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       data.day,
     );
 
+    // TREINO DE HOJE
     if (_mesmoDia(dataSelecionada, dataHoje)) {
       if (_filtroPermiteTreino(treinos[0])) {
         return 0;
       }
     }
 
+    // TREINO DE AMANHÃ
     final amanha = dataHoje.add(
       const Duration(days: 1),
     );
@@ -1310,6 +1424,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       }
     }
 
+    // TREINO DO DIA 24
     final dia24 = DateTime(
       hoje.year,
       hoje.month,
@@ -1324,6 +1439,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
     return null;
   }
+
+  // ============================================================
+  // FILTRO
+  // ============================================================
 
   bool _filtroPermiteTreino(
     Map<String, dynamic> treino,
@@ -1343,6 +1462,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     return true;
   }
 
+  // ============================================================
+  // COMPARAR DATAS
+  // ============================================================
+
   bool _mesmoDia(
     DateTime a,
     DateTime b,
@@ -1351,6 +1474,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
         a.month == b.month &&
         a.day == b.day;
   }
+
+  // ============================================================
+  // NOME DO MÊS
+  // ============================================================
 
   String _nomeMes(int mes) {
     const meses = [
@@ -1371,11 +1498,19 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     return meses[mes - 1];
   }
 
+  // ============================================================
+  // DATA FORMATADA
+  // ============================================================
+
   String _formatarData(DateTime data) {
     return '${data.day.toString().padLeft(2, '0')}/'
         '${data.month.toString().padLeft(2, '0')}/'
         '${data.year}';
   }
+
+  // ============================================================
+  // TEXTO DA DATA SELECIONADA
+  // ============================================================
 
   String _textoDataSelecionada() {
     final hoje = DateTime.now();

@@ -1,4 +1,4 @@
-import {
+﻿import {
   Bell,
   CalendarDays,
   ChevronDown,
@@ -107,22 +107,22 @@ const searchData: SearchItem[] = [
   {
     id: 4,
     type: 'partida',
-    title: 'Poli x Jacareí',
+    title: 'Poli x JacareÃ­',
     subtitle: '12/08/2026',
   },
 ];
 
 /* =====================================
-   DADOS MOCKADOS - NOTIFICAÇÕES
+   DADOS MOCKADOS - NOTIFICAÃ‡Ã•ES
 ===================================== */
 
 const initialNotifications: NotificationItem[] = [
   {
     id: 1,
     type: 'convocacao',
-    title: 'Nova Convocação',
+    title: 'Nova ConvocaÃ§Ã£o',
     description:
-      'Você foi convocado para o jogo contra Poli Rugby',
+      'VocÃª foi convocado para o jogo contra Poli Rugby',
     time: 'Hoje, 10:34',
     read: false,
   },
@@ -131,16 +131,16 @@ const initialNotifications: NotificationItem[] = [
     type: 'treino',
     title: 'Treino Atualizado',
     description:
-      'O treino de amanhã foi atualizado pela comissão técnica',
+      'O treino de amanhÃ£ foi atualizado pela comissÃ£o tÃ©cnica',
     time: 'Hoje, 10:34',
     read: false,
   },
   {
     id: 3,
     type: 'avaliacao',
-    title: 'Avaliação Disponível',
+    title: 'AvaliaÃ§Ã£o DisponÃ­vel',
     description:
-      'Nova avaliação técnica disponível para o time',
+      'Nova avaliaÃ§Ã£o tÃ©cnica disponÃ­vel para o time',
     time: 'Hoje, 10:34',
     read: true,
   },
@@ -149,7 +149,7 @@ const initialNotifications: NotificationItem[] = [
     type: 'convocacao',
     title: 'Partida Confirmada',
     description:
-      'A próxima partida da equipe foi confirmada',
+      'A prÃ³xima partida da equipe foi confirmada',
     time: 'Ontem, 18:20',
     read: false,
   },
@@ -173,7 +173,7 @@ const Header = ({
 }: HeaderProps) => {
 
   /* =====================================
-     NAVEGAÇÃO
+     NAVEGAÃ‡ÃƒO
   ===================================== */
 
   const navigate = useNavigate();
@@ -194,14 +194,14 @@ const Header = ({
   );
 
   /* =====================================
-     USUÁRIO LOGADO
+     USUÃRIO LOGADO
   ===================================== */
 
   const [usuario, setUsuario] =
     useState<Usuario | null>(null);
 
   /* =====================================
-     CARREGAR USUÁRIO
+     CARREGAR USUÃRIO
   ===================================== */
 
   useEffect(() => {
@@ -211,7 +211,7 @@ const Header = ({
         sessionStorage.getItem('token');
 
       /*
-       * Primeiro tenta pegar os dados já
+       * Primeiro tenta pegar os dados jÃ¡
        * salvos no navegador.
        */
       const usuarioSalvo =
@@ -263,7 +263,7 @@ const Header = ({
         );
 
         /*
-         * Mantém o storage sincronizado.
+         * MantÃ©m o storage sincronizado.
          */
         const estaNoLocalStorage =
           localStorage.getItem('usuario') !== null;
@@ -285,7 +285,7 @@ const Header = ({
         }
       } catch (error) {
         console.error(
-          'Erro ao carregar usuário do backend:',
+          'Erro ao carregar usuÃ¡rio do backend:',
           error,
         );
       }
@@ -316,7 +316,7 @@ const Header = ({
 
   const handleLogout = () => {
 
-    // Remove os dados do usuário
+    // Remove os dados do usuÃ¡rio
     localStorage.removeItem('usuario');
     localStorage.removeItem('token');
 
@@ -326,8 +326,8 @@ const Header = ({
     // Fecha o menu
     setOpenPanel(null);
 
-    // Mantém o callback caso outro componente
-    // esteja utilizando essa função
+    // MantÃ©m o callback caso outro componente
+    // esteja utilizando essa funÃ§Ã£o
     onLogout?.();
 
     // Vai para a tela de login
@@ -430,7 +430,7 @@ const Header = ({
   };
 
   /* =====================================
-     NOTIFICAÇÕES
+     NOTIFICAÃ‡Ã•ES
   ===================================== */
 
   const unreadNotifications =
@@ -455,7 +455,7 @@ const Header = ({
   };
 
   /* =====================================
-     CONTROLE DOS PAINÉIS
+     CONTROLE DOS PAINÃ‰IS
   ===================================== */
 
   const togglePanel = (
@@ -473,7 +473,7 @@ const Header = ({
     >
 
       {/* =====================================
-          TÍTULO
+          TÃTULO
       ===================================== */}
 
       <h1 className={styles.title}>
@@ -481,7 +481,7 @@ const Header = ({
       </h1>
 
       {/* =====================================
-          ÁREA DIREITA
+          ÃREA DIREITA
       ===================================== */}
 
       <div className={styles.right}>
@@ -593,7 +593,7 @@ const Header = ({
         </div>
 
         {/* =====================================
-            NOTIFICAÇÕES
+            NOTIFICAÃ‡Ã•ES
         ===================================== */}
 
         <div
@@ -606,7 +606,7 @@ const Header = ({
               styles.notification
             }
             type="button"
-            aria-label="Notificações"
+            aria-label="NotificaÃ§Ãµes"
             aria-expanded={
               openPanel ===
               'notifications'
@@ -651,7 +651,7 @@ const Header = ({
                   }
                 >
                   <h2>
-                    Notificações
+                    NotificaÃ§Ãµes
                   </h2>
 
                   {unreadNotifications >
@@ -757,7 +757,7 @@ const Header = ({
         </div>
 
         {/* =====================================
-            USUÁRIO
+            USUÃRIO
         ===================================== */}
 
         <div
@@ -817,7 +817,7 @@ const Header = ({
             />
           </button>
 
-          {/* MENU DO USUÁRIO */}
+          {/* MENU DO USUÃRIO */}
 
           {openPanel === 'user' && (
             <div
@@ -882,12 +882,12 @@ const Header = ({
                     styles.userMenuItem
                   }
                   onClick={() => {
-                    onSettings?.();
+                    onSettings ? onSettings() : navigate('/configuracoes');
                     setOpenPanel(null);
                   }}
                 >
                   <Settings size={18} />
-                  Configurações
+                  ConfiguraÃ§Ãµes
                 </button>
 
                 <button
@@ -933,7 +933,7 @@ const Header = ({
 };
 
 /* =====================================
-   SEÇÃO DA PESQUISA
+   SEÃ‡ÃƒO DA PESQUISA
 ===================================== */
 
 interface SearchSectionProps {
@@ -1016,7 +1016,7 @@ const SearchSection = ({
 };
 
 /* =====================================
-   ÍCONE DO RESULTADO
+   ÃCONE DO RESULTADO
 ===================================== */
 
 interface SearchItemIconProps {
@@ -1062,7 +1062,7 @@ const SearchItemIcon = ({
 };
 
 /* =====================================
-   ÍCONE DA NOTIFICAÇÃO
+   ÃCONE DA NOTIFICAÃ‡ÃƒO
 ===================================== */
 
 interface NotificationIconProps {

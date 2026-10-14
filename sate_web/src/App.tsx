@@ -1,3 +1,4 @@
+''
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // ==========================================
@@ -45,36 +46,17 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ========================================
-            PÁGINAS PÚBLICAS
-        ======================================== */}
-
+        {/* PÁGINAS PÚBLICAS */}
         <Route path="/" element={<Login />} />
 
-        <Route
-          path="/cadastro"
-          element={<Cadastro />}
-        />
+        <Route path="/cadastro" element={<Cadastro />} />
 
         <Route
           path="/esqueci-senha"
           element={<EsqueciSenha />}
         />
 
-        {/* ========================================
-            ONBOARDING / CONFIGURAÇÃO INICIAL
-
-            RotaInicial verifica:
-            - se está logado
-            - se já possui equipe
-
-            Se já tiver equipe:
-            -> /inicio
-
-            Se não tiver:
-            -> permite continuar o onboarding
-        ======================================== */}
-
+        {/* CONFIGURAÇÃO INICIAL */}
         <Route element={<RotaInicial />}>
           <Route
             path="/boas-vindas"
@@ -102,29 +84,9 @@ function App() {
           />
         </Route>
 
-        {/* ========================================
-            ÁREA PRIVADA
-
-            RotaPrivada verifica:
-            - se está logado
-            - se possui equipe
-
-            Sem login:
-            -> /
-
-            Sem equipe:
-            -> /boas-vindas
-
-            Com equipe:
-            -> libera o sistema
-        ======================================== */}
-
+        {/* ÁREA PRIVADA */}
         <Route element={<RotaPrivada />}>
           <Route element={<Layout />}>
-            {/* ====================================
-                DASHBOARD
-            ==================================== */}
-
             <Route
               path="/inicio"
               element={<Dashboard />}
@@ -135,55 +97,47 @@ function App() {
               element={<Dashboard />}
             />
 
-            {/* EQUIPES */}
             <Route
               path="/equipes"
               element={<Equipes />}
             />
 
-            {/* ATLETAS */}
             <Route
               path="/atletas"
               element={<Altetas />}
             />
 
-            {/* CADASTRO DE ATLETA */}
             <Route
               path="/cadastro-atleta"
               element={<CadastroAtleta />}
             />
 
-            {/* ANÁLISE DE VÍDEO */}
             <Route
               path="/videos"
               element={<AnaliseVideo />}
             />
 
-            {/* PARTIDAS */}
             <Route
               path="/partidas"
               element={<Partidas />}
             />
 
-            {/* DETALHES DA PARTIDA */}
             <Route
               path="/detalhes-partida"
               element={<DetalhesDaPartida />}
             />
 
-            {/* ESTATÍSTICAS */}
             <Route
               path="/estatisticas"
               element={<Estatisticas />}
             />
 
-            {/* COMPARAÇÕES */}
             <Route
               path="/comparacoes"
               element={<Comparacoes />}
             />
 
-            {/* CONFIGURAÇÕES */}
+            {/* CONFIGURAÇÕES: página original mantida */}
             <Route
               path="/configuracoes"
               element={<Configuracoes />}

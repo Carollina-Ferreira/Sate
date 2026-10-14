@@ -38,7 +38,7 @@ import RotaInicial from "./components/RotaInicial/RotaInicial";
 import Dashboard from "./pages/Dashboard/dashboard";
 import Equipes from "./pages/Equipes/equipes";
 import Altetas from "./pages/Atletas/atletas";
-import Comparacoes from "./pages/Comparacoes/compracoes";
+import Comparacoes from "./pages/Comparacoes/comparacoes";
 import Estatisticas from "./pages/Estatisticas/estatisticas";
 import Configuracoes from "./pages/Configuracoes/configuracoes";
 import AnaliseVideo from "./pages/AnaliseVideos/analiseVideos";

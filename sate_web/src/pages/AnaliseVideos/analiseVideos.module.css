@@ -125,40 +125,98 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   background: #050505;
 }
+
+/* =====================================
+   BOTÃO PLAY
+===================================== */
 
 .playButton {
   width: 76px;
   height: 76px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  margin: 0;
   padding: 0;
+
+  box-sizing: border-box;
+
   border: 7px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
+
+  outline: none;
+
   background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
+
   cursor: pointer;
+
+  transform: translate(-50%, -50%);
+
   transition:
     transform 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .playButton:hover {
-  transform: scale(1.06);
-  border-color: rgba(255, 255, 255, 0.6);
+  transform: translate(-50%, -50%) scale(1.06);
+  border-color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.13);
 }
+
+.playButton:active {
+  transform: translate(-50%, -50%) scale(0.96);
+}
+
+.playButton:focus-visible {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.22);
+}
+
+/* ÍCONE DENTRO DO PLAY */
+
+.playButton svg {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+
+  display: block;
+
+  margin: 0;
+  padding: 0;
+
+  flex-shrink: 0;
+
+  color: #ffffff;
+  stroke: currentColor;
+}
+
+/* ÍCONE DE PAUSE */
 
 .pauseIcon {
   font-size: 25px;
+  line-height: 1;
   font-weight: 700;
 }
+
+/* TEMPO DO VÍDEO */
 
 .videoTime {
   position: absolute;
   bottom: 12px;
   left: 14px;
+  z-index: 6;
+
   color: rgba(255, 255, 255, 0.78);
   font-size: 12px;
 }
@@ -1522,4 +1580,123 @@
   .ratingGrid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .videoSelectors {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .videoSelectorGroup {
+    width: 100%;
+  }
+
+  .matchSelector {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .matchDetails {
+    width: 100%;
+    min-height: auto;
+    padding-top: 4px;
+    flex-wrap: wrap;
+  }
+}
+
+/* =====================================
+   SELEÇÃO DE PARTIDA E VÍDEO
+===================================== */
+
+.videoSelectors {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.videoSelectorGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.videoSelectorGroup label {
+  margin-left: 2px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.matchSelector {
+  min-width: 220px;
+  height: 42px;
+  padding: 0 38px 0 13px;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 10px;
+  outline: none;
+  appearance: auto;
+  background: #ffffff;
+  color: #294139;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.matchSelector:hover {
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.matchSelector:focus {
+  border-color: #ffffff;
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.16),
+    0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+.matchSelector:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: #e8eeeb;
+}
+
+.matchSelector option {
+  padding: 10px;
+  background: #ffffff;
+  color: #294139;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* =====================================
+   INFORMAÇÕES DA PARTIDA
+===================================== */
+
+.matchDetails {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 4px;
+  box-sizing: border-box;
+
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.matchDetails i {
+  width: 4px;
+  height: 4px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.58);
 }

@@ -1,781 +1,621 @@
-
+/* =========================================================
+   SATE — ESTATÍSTICAS
+   CSS alinhado às classes usadas em Estatisticas.tsx
+========================================================= */
 
 .page {
   width: 100%;
   min-height: 100vh;
-
-  padding: 32px 38px 40px;
-
+  padding: 42px 56px 56px;
   box-sizing: border-box;
-
   background: #005942;
-
-  font-family: 'Poppins', sans-serif;
+  color: #ffffff;
+  font-family: 'Poppins', 'Inter', sans-serif;
 }
-
-
 
 .pageHeader {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
-
   gap: 24px;
-
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .pageHeader h1 {
   margin: 0;
-
   color: #ffffff;
-
   font-size: 32px;
-
+  line-height: 1.2;
   font-weight: 700;
-
-  letter-spacing: -0.5px;
 }
 
 .pageHeader p {
-  margin: 7px 0 0;
-
-  color: rgba(255, 255, 255, 0.74);
-
+  margin: 9px 0 0;
+  color: rgba(255, 255, 255, 0.76);
   font-size: 14px;
+  line-height: 1.6;
 }
 
-.newTeamButton {
-  height: 44px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  padding: 0 20px;
-
-  border: 1px solid rgba(255, 255, 255, 0.16);
-
-  border-radius: 10px;
-
-  background: #0b765b;
-
-  color: #ffffff;
-
-  font-family: inherit;
-
-  font-size: 12px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
-}
-
-.newTeamButton:hover {
-  background: #0d8465;
-
-  transform: translateY(-1px);
-}
-
-
-/* =====================================
-   FILTROS
-===================================== */
-
+/* FILTROS */
 .filters {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) 150px;
   gap: 12px;
-
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 }
 
 .filterSelect {
-  min-width: 210px;
-  height: 44px;
-
   position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  background: #ffffff;
+  color: #263a31;
 }
 
 .filterSelect select {
   width: 100%;
   height: 100%;
-
-  padding: 0 38px 0 14px;
-
-  box-sizing: border-box;
-
+  min-width: 0;
   appearance: none;
-
-  outline: none;
-
-  border: 1px solid rgba(
-    255,
-    255,
-    255,
-    0.12
-  );
-
-  border-radius: 10px;
-
-  background: #e7efeb;
-
-  color: #31443c;
-
-  font-family: inherit;
-
-  font-size: 12px;
-
-  font-weight: 500;
-
+  border: 0;
+  outline: 0;
+  padding: 0 38px 0 14px;
+  border-radius: inherit;
+  background: transparent;
+  color: #263a31;
+  font: inherit;
+  font-size: 13px;
   cursor: pointer;
-
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
 }
 
-.filterSelect select:hover {
-  background: #eef4f1;
-}
-
-.filterSelect select:focus {
-  border-color: #31c895;
-
-  box-shadow:
-    0 0 0 3px rgba(49, 200, 149, 0.12);
+.filterSelect select:focus-visible,
+.sportFilter:focus-visible {
+  outline: 3px solid rgba(78, 165, 217, 0.55);
+  outline-offset: 2px;
 }
 
 .selectIcon {
   position: absolute;
-
-  top: 50%;
-  right: 12px;
-
-  color: #5c6b65;
-
+  right: 13px;
+  color: #53665d;
   pointer-events: none;
+}
 
-  transform: translateY(-50%);
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .sportFilter {
-  height: 44px;
-
-  display: flex;
+  display: inline-flex;
   align-items: center;
-
+  justify-content: center;
   gap: 8px;
-
-  padding: 0 18px;
-
-  border: none;
-
-  border-radius: 22px;
-
-  background: #0b765b;
-
+  min-width: 0;
+  height: 48px;
+  padding: 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 10px;
+  background: #16a875;
   color: #ffffff;
-
-  font-family: inherit;
-
-  font-size: 12px;
-
+  font: inherit;
+  font-size: 13px;
   font-weight: 600;
-
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .sportFilter:hover {
-  background: #0d8465;
-
+  background: #129d6c;
   transform: translateY(-1px);
 }
 
-
-/* =====================================
-   CARDS DE RESUMO
-===================================== */
-
+/* CARDS DE RESUMO */
 .summaryGrid {
   display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
-
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
-
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 
 .summaryCard {
-  min-height: 110px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 20px 22px;
-
+  gap: 14px;
+  min-width: 0;
+  min-height: 112px;
+  padding: 22px;
   box-sizing: border-box;
-
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 14px;
   background: #e7efeb;
-
-  border: 1px solid rgba(
-    255,
-    255,
-    255,
-    0.08
-  );
-
-  border-radius: 16px;
-
-  box-shadow:
-    0 7px 18px rgba(0, 0, 0, 0.11);
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease;
+  color: #263a31;
+  box-shadow: 0 8px 20px rgba(0, 31, 22, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .summaryCard:hover {
-  transform: translateY(-2px);
-
-  background: #edf3f0;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0, 31, 22, 0.18);
 }
 
 .summaryContent {
   display: flex;
   flex-direction: column;
+  gap: 6px;
+  min-width: 0;
 }
 
 .summaryContent strong {
-  color: #119167;
-
-  font-size: 30px;
-
-  font-weight: 700;
-
+  color: #173d2f;
+  font-size: 29px;
   line-height: 1;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .summaryContent span {
-  margin-top: 10px;
-
-  color: #66756e;
-
-  font-size: 12px;
-
+  color: #687970;
+  font-size: 13px;
   font-weight: 500;
 }
 
 .summaryIcon {
-  width: 46px;
-  height: 46px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
   border-radius: 12px;
-
-  background: #d3e5dc;
-
-  color: #087a57;
+  background: #d2e9df;
+  color: #0b8c64;
 }
 
-
-/* =====================================
-   GRID DOS GRÁFICOS
-===================================== */
-
+/* ÁREA DOS GRÁFICOS */
 .chartsGrid {
   display: grid;
-
-  grid-template-columns:
-    minmax(0, 1.8fr)
-    minmax(340px, 0.9fr);
-
-  gap: 18px;
-
-  margin-bottom: 18px;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 20px;
+  margin-bottom: 20px;
 }
-
-
-/* =====================================
-   CARD DOS GRÁFICOS
-===================================== */
 
 .chartCard {
   min-width: 0;
-
-  padding: 22px 24px;
-
+  padding: 24px;
   box-sizing: border-box;
-
-  background: #e7efeb;
-
-  border: 1px solid rgba(
-    255,
-    255,
-    255,
-    0.08
-  );
-
+  border: 1px solid #d9e5df;
   border-radius: 16px;
-
-  box-shadow:
-    0 7px 18px rgba(0, 0, 0, 0.11);
+  background: #f7faf8;
+  color: #263a31;
+  box-shadow: 0 9px 24px rgba(0, 31, 22, 0.12);
 }
 
 .chartHeader {
-  min-height: 50px;
-
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-
-  gap: 16px;
-
-  margin-bottom: 12px;
+  gap: 14px;
+  margin-bottom: 20px;
 }
 
-.chartHeader h2 {
-  margin: 4px 0 0;
-
-  color: #21352d;
-
-  font-size: 17px;
-
-  font-weight: 700;
+.chartHeader > div:first-child {
+  min-width: 0;
 }
 
 .chartEyebrow {
-  color: #7a8a83;
-
+  display: block;
+  margin-bottom: 6px;
+  color: #0b966b;
   font-size: 10px;
-
-  font-weight: 600;
-
-  letter-spacing: 0.6px;
-
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
-.teamTag {
-  padding: 6px 11px;
-
-  border-radius: 20px;
-
-  background: #d2e2da;
-
-  color: #527066;
-
-  font-size: 10px;
-
-  font-weight: 600;
+.chartHeader h2 {
+  margin: 0;
+  color: #20382d;
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 700;
 }
 
+.teamTag {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  max-width: 45%;
+  padding: 7px 10px;
+  overflow: hidden;
+  border: 1px solid #c5e5d7;
+  border-radius: 999px;
+  background: #e3f4ec;
+  color: #087b58;
+  font-size: 11px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-/* =====================================
-   SVG
-===================================== */
-
+/* GRÁFICO DE BARRAS E EIXOS */
 .svgWrapper,
 .lineWrapper {
   width: 100%;
+  min-width: 0;
 }
 
-.chartSvg {
-  width: 100%;
-  min-height: 320px;
-
-  display: block;
-
-  overflow: visible;
-}
-
+.chartSvg,
 .lineSvg {
-  width: 100%;
-  min-height: 340px;
-
   display: block;
-
+  width: 100%;
+  height: auto;
   overflow: visible;
 }
 
 .gridLine {
-  stroke: #cbd8d2;
-
+  stroke: #dce6e1;
   stroke-width: 1;
+  stroke-dasharray: 4 5;
 }
 
 .axisText {
-  fill: #82918a;
-
-  font-size: 10px;
-
-  font-family: 'Poppins', sans-serif;
+  fill: #819087;
+  font-family: inherit;
+  font-size: 11px;
 }
 
 .categoryText {
-  fill: #697972;
-
-  font-size: 10px;
-
-  font-family: 'Poppins', sans-serif;
+  fill: #586b61;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-
-/* =====================================
-   GRÁFICO DE BARRAS
-===================================== */
-
 .barGoals {
-  fill: #568c4b;
+  fill: #16a875;
+  transition: opacity 0.2s ease;
 }
 
 .barAssists {
-  fill: #147ca2;
+  fill: #4ea5d9;
+  transition: opacity 0.2s ease;
+}
+
+.chartLegend,
+.legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: #66786f;
+  font-size: 11px;
 }
 
 .chartLegend {
-  display: flex;
-  align-items: center;
   justify-content: center;
-
-  gap: 20px;
-
-  margin-top: 4px;
+  margin-top: 7px;
 }
 
 .chartLegend span,
 .legend span {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-
-  gap: 6px;
-
-  color: #64736c;
-
-  font-size: 10px;
-
-  font-weight: 500;
+  gap: 7px;
 }
 
 .chartLegend i,
 .legend i {
-  width: 8px;
-  height: 8px;
-
-  display: block;
-
-  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
 }
 
-.goalLegend {
-  background: #568c4b;
+.goalLegend,
+.teamLegend {
+  background: #16a875;
 }
 
 .assistLegend {
-  background: #147ca2;
+  background: #4ea5d9;
 }
 
+.opponentLegend {
+  background: #ef476f;
+}
 
-/* =====================================
-   DONUT
-===================================== */
-
+/* GRÁFICO DONUT */
 .donutArea {
-  min-height: 320px;
-
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+  gap: 20px;
+  min-height: 220px;
 }
 
 .donutSvg {
-  width: 220px;
-  height: 220px;
-
   display: block;
+  flex: 0 1 180px;
+  width: 180px;
+  max-width: 52%;
+  height: auto;
+  overflow: visible;
 }
 
 .donutCenter {
-  fill: #e7efeb;
+  fill: #f7faf8;
 }
 
 .donutTotal {
-  fill: #20352c;
-
-  font-size: 18px;
-
+  fill: #20382d;
+  font-family: inherit;
+  font-size: 23px;
   font-weight: 700;
-
-  font-family: 'Poppins', sans-serif;
 }
 
 .donutLabel {
-  fill: #778780;
-
-  font-size: 8px;
-
-  font-family: 'Poppins', sans-serif;
+  fill: #819087;
+  font-family: inherit;
+  font-size: 10px;
 }
 
 .donutLegend {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-
-  gap: 10px 14px;
-
-  margin-top: 8px;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
 }
 
 .donutLegend span {
-  display: flex;
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
   align-items: center;
-
-  gap: 5px;
-
-  color: #67766f;
-
-  font-size: 9px;
+  gap: 8px;
+  color: #65766d;
+  font-size: 12px;
 }
 
 .donutLegend i {
-  width: 8px;
-  height: 8px;
-
-  display: inline-block;
-
-  border-radius: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
 }
 
 .donutLegend strong {
-  margin-left: 2px;
-
-  color: #41534b;
-
-  font-size: 9px;
+  color: #263a31;
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
-
-/* =====================================
-   EVOLUÇÃO
-===================================== */
-
+/* GRÁFICO DE EVOLUÇÃO */
 .evolutionCard {
-  width: 100%;
+  margin-bottom: 0;
 }
 
-.legend {
-  display: flex;
-
-  gap: 16px;
+.evolutionCard .chartHeader {
+  align-items: center;
 }
 
-.teamLegend {
-  background: #308e5a;
+.lineSvg {
+  min-height: 160px;
 }
 
-.opponentLegend {
-  background: #5a9ae6;
+.teamLine,
+.opponentLine {
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .teamLine {
-  stroke: #308e5a;
-
-  stroke-width: 2.8;
-
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke: #16a875;
 }
 
 .opponentLine {
-  stroke: #5a9ae6;
-
-  stroke-width: 2.5;
-
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke: #ef476f;
 }
 
 .teamPoint {
-  fill: #e7efeb;
-
-  stroke: #308e5a;
-
+  fill: #16a875;
+  stroke: #f7faf8;
   stroke-width: 2;
 }
 
 .opponentPoint {
-  fill: #e7efeb;
-
-  stroke: #5a9ae6;
-
+  fill: #ef476f;
+  stroke: #f7faf8;
   stroke-width: 2;
 }
 
-
-/* =====================================
-   ACESSIBILIDADE
-===================================== */
-
-.srOnly {
-  position: absolute;
-
-  width: 1px;
-  height: 1px;
-
-  padding: 0;
-  margin: -1px;
-
-  overflow: hidden;
-
-  clip: rect(0, 0, 0, 0);
-
-  white-space: nowrap;
-
-  border: 0;
-}
-
-
-/* =====================================
-   RESPONSIVIDADE
-===================================== */
-
-@media (max-width: 1100px) {
+/* RESPONSIVIDADE */
+@media (max-width: 1200px) {
+  .page {
+    padding: 36px 36px 46px;
+  }
 
   .summaryGrid {
-    grid-template-columns:
-      repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .summaryCard {
+    padding: 18px;
+  }
+
+  .summaryContent strong {
+    font-size: 26px;
+  }
+
+  .chartCard {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 950px) {
+  .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .summaryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .chartsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
+  .donutArea {
+    justify-content: center;
+  }
+
+  .donutSvg {
+    max-width: 180px;
+  }
 }
 
-
-@media (max-width: 800px) {
-
+@media (max-width: 600px) {
   .page {
-    padding: 24px 20px 30px;
+    padding: 26px 16px 34px;
   }
 
   .pageHeader {
-    align-items: flex-start;
+    margin-bottom: 22px;
   }
 
   .pageHeader h1 {
     font-size: 27px;
   }
 
+  .pageHeader p {
+    font-size: 12px;
+  }
+
   .filters {
+    grid-template-columns: minmax(0, 1fr);
     gap: 10px;
+    margin-bottom: 22px;
   }
 
-  .filterSelect {
-    flex: 1;
-
-    min-width: 180px;
-  }
-
-}
-
-
-@media (max-width: 600px) {
-
-  .page {
-    padding: 18px 12px 24px;
-  }
-
-  .pageHeader {
-    flex-direction: column;
-  }
-
-  .pageHeader h1 {
-    font-size: 24px;
-  }
-
-  .newTeamButton {
-    width: 100%;
+  .filterSelect,
+  .sportFilter {
+    height: 46px;
   }
 
   .summaryGrid {
-    grid-template-columns: 1fr 1fr;
-
     gap: 10px;
+    margin-bottom: 16px;
   }
 
   .summaryCard {
-    min-height: 90px;
-
-    padding: 15px;
+    min-height: 96px;
+    gap: 8px;
+    padding: 14px;
+    border-radius: 12px;
   }
 
   .summaryContent strong {
-    font-size: 24px;
+    font-size: 23px;
+  }
+
+  .summaryContent span {
+    font-size: 11px;
   }
 
   .summaryIcon {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
   }
 
   .chartCard {
-    padding: 17px 14px;
+    padding: 16px 13px;
+    border-radius: 13px;
   }
 
   .chartHeader {
-    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 16px;
   }
 
-  .legend {
-    width: 100%;
+  .chartHeader h2 {
+    font-size: 16px;
   }
 
-  .chartSvg {
-    min-height: 260px;
+  .chartEyebrow {
+    font-size: 9px;
   }
 
-  .lineSvg {
-    min-height: 280px;
+  .teamTag {
+    max-width: 40%;
+    padding: 6px 8px;
+    font-size: 10px;
   }
 
   .donutArea {
-    min-height: 260px;
+    flex-direction: column;
+    gap: 18px;
   }
 
   .donutSvg {
-    width: 180px;
-    height: 180px;
+    width: 165px;
+    max-width: 100%;
+    flex-basis: auto;
   }
 
+  .donutLegend {
+    width: 100%;
+  }
+
+  .legend {
+    gap: 10px;
+    font-size: 10px;
+  }
+
+  .categoryText {
+    font-size: 10px;
+  }
+
+  .axisText {
+    font-size: 10px;
+  }
 }
 
-
-@media (max-width: 400px) {
-
-  .summaryGrid {
-    grid-template-columns: 1fr;
+@media (max-width: 380px) {
+  .page {
+    padding-right: 11px;
+    padding-left: 11px;
   }
 
+  .summaryCard {
+    padding: 11px;
+  }
+
+  .summaryIcon {
+    width: 31px;
+    height: 31px;
+  }
+
+  .summaryContent strong {
+    font-size: 21px;
+  }
+
+  .chartHeader h2 {
+    font-size: 14px;
+  }
 }

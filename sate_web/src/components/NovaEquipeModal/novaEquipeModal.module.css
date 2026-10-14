@@ -1,105 +1,117 @@
-/* =====================================
-   OVERLAY
-===================================== */
+/* =========================================
+   OVERLAY — FUNDO DO MODAL
+========================================= */
 
 .overlay {
   position: fixed;
   inset: 0;
-
   z-index: 1000;
 
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 
-  padding: 14px;
-
+  padding: 24px 16px;
   box-sizing: border-box;
 
-  background: rgba(0, 30, 22, 0.68);
+  background: rgba(0, 35, 25, 0.68);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 
-  backdrop-filter: blur(4px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
 
-  overflow: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #b9cfc2 transparent;
 }
 
-
-/* =====================================
-   MODAL
-===================================== */
+/* =========================================
+   MODAL PRINCIPAL
+========================================= */
 
 .modal {
-  width: min(1080px, calc(100vw - 28px));
-  max-height: calc(100vh - 28px);
+  position: relative;
+
+  width: min(100%, 1000px);
+  min-width: 0;
+  height: auto;
+  flex: 0 0 auto;
 
   display: flex;
   flex-direction: column;
 
-  overflow: hidden;
+  margin: auto 0;
+  box-sizing: border-box;
 
-  background: #e7efeb;
+  overflow: visible;
 
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #f5f8f5;
+  color: #203b30;
 
-  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
 
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 24px 70px rgba(0, 35, 25, 0.3);
+
+  font-family: 'Inter', 'Poppins', sans-serif;
 }
 
-
-/* =====================================
-   HEADER
-===================================== */
+/* =========================================
+   CABEÇALHO
+========================================= */
 
 .modalHeader {
+  flex-shrink: 0;
+
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  gap: 18px;
 
-  gap: 24px;
+  padding: 24px 28px 21px;
 
-  padding: 18px 26px 15px;
+  background: linear-gradient(135deg, #e8f3eb, #f0f6f1);
+  border-bottom: 1px solid #d7e5db;
+  border-radius: 20px 20px 0 0;
+}
 
-  border-bottom: 1px solid #cbd8d2;
+.modalHeader > div:first-child {
+  min-width: 0;
 }
 
 .eyebrow {
   display: block;
+  margin-bottom: 7px;
 
-  margin-bottom: 3px;
-
-  color: #11845f;
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.8px;
+  color: #10845d;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .modalHeader h2 {
   margin: 0;
 
-  color: #20332b;
-
-  font-size: 27px;
-
-  font-weight: 700;
+  color: #193b2e;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.6px;
 }
 
 .modalHeader p {
-  margin: 5px 0 0;
+  margin: 8px 0 0;
 
-  color: #6d7b74;
-
+  color: #718479;
   font-size: 12px;
+  line-height: 1.6;
 }
 
 .closeButton {
-  width: 40px;
-  height: 40px;
-
+  width: 38px;
+  height: 38px;
   flex-shrink: 0;
 
   display: flex;
@@ -108,203 +120,346 @@
 
   padding: 0;
 
-  border: none;
+  color: #60776a;
+  background: rgba(255, 255, 255, 0.65);
 
-  border-radius: 10px;
-
-  background: transparent;
-
-  color: #65756d;
+  border: 1px solid #d5e3d9;
+  border-radius: 11px;
 
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .closeButton:hover {
-  background: #d7e2dd;
-
-  color: #24362e;
+  color: #087b5b;
+  background: #dceee2;
+  border-color: #b9d8c4;
+  transform: rotate(4deg);
 }
 
-
-/* =====================================
+/* =========================================
    CONTEÚDO
-===================================== */
+   FORMULÁRIO À ESQUERDA
+   IMAGEM À DIREITA
+========================================= */
 
 .content {
+  min-width: 0;
+
   display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  align-items: start;
+  gap: 28px;
 
-  grid-template-columns: 210px minmax(0, 1fr);
-
-  gap: 24px;
-
-  padding: 18px 26px 14px;
-
+  padding: 25px 28px;
   box-sizing: border-box;
 }
 
-
-/* =====================================
-   IMAGEM
-===================================== */
+/* =========================================
+   ÁREA DA IMAGEM
+========================================= */
 
 .imageArea {
+  min-width: 0;
+  grid-column: 2;
+  grid-row: 1;
+
   display: flex;
   flex-direction: column;
-
-  gap: 10px;
+  align-items: stretch;
+  gap: 11px;
 }
 
 .imagePreview {
+  position: relative;
+
   width: 100%;
-  height: 185px;
+  height: 190px;
+  flex-shrink: 0;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  gap: 8px;
-
-  overflow: hidden;
+  gap: 10px;
 
   padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 
-  border: 1px dashed #9eb4aa;
+  color: #426451;
+  background: linear-gradient(145deg, #e4f0e7, #d5e7da);
 
-  border-radius: 13px;
-
-  background: #dce7e2;
-
-  color: #52635b;
-
-  font-family: inherit;
+  border: 1px dashed #a4c3b0;
+  border-radius: 16px;
 
   cursor: pointer;
-
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .imagePreview:hover {
   border-color: #16a875;
-
-  background: #d6e4dd;
+  background: #d9ebdf;
 }
 
-.imagePreview img {
+.imagePreview:focus-visible {
+  outline: 3px solid rgba(22, 168, 117, 0.3);
+  outline-offset: 3px;
+}
+
+.imagePreview img,
+.previewImage {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+
   width: 100%;
   height: 100%;
 
   object-fit: cover;
+  object-position: center;
+}
+
+.imagePlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  padding: 14px;
+  text-align: center;
 }
 
 .cameraCircle {
-  width: 48px;
-  height: 48px;
+  width: 49px;
+  height: 49px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 50%;
-
-  background: #c5dbd0;
-
   color: #087b5b;
+  background: #cce5d4;
+
+  border: 1px solid #bad9c5;
+  border-radius: 50%;
 }
 
+.imagePlaceholder strong,
 .imagePreview strong {
+  color: #365746;
   font-size: 12px;
+  font-weight: 750;
 }
 
+.imagePlaceholder span,
 .imagePreview span {
-  color: #829088;
-
-  font-size: 9px;
+  color: #82968a;
+  font-size: 10px;
+  line-height: 1.5;
 }
 
 .hiddenInput {
   display: none;
 }
 
+/* =========================================
+   BOTÕES DA IMAGEM
+========================================= */
+
 .changeImageButton {
-  height: 38px;
+  width: 100%;
+  min-height: 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+  box-sizing: border-box;
+
+  color: #426151;
+  background: #ffffff;
+
+  border: 1px solid #c8dacf;
+  border-radius: 10px;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.changeImageButton:hover {
+  color: #087b5b;
+  border-color: #16a875;
+  background: #e8f5ec;
+}
+
+.removeImageButton {
+  width: 100%;
+  min-height: 35px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 7px 10px;
+
+  color: #bd354b;
+  background: #fff0f1;
+
+  border: 1px solid #f2cbd1;
+  border-radius: 9px;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.removeImageButton:hover {
+  background: #ffe1e5;
+  border-color: #e8aab5;
+}
+
+.imageError {
+  margin: 0;
+
+  color: #c62f47;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.identityHint {
+  margin: 2px 0 0;
+
+  color: #829187;
+  font-size: 10px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* =========================================
+   FORMULÁRIO À ESQUERDA
+========================================= */
+
+.form {
+  min-width: 0;
+  grid-column: 1;
+  grid-row: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.formSection {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 0;
+}
+
+.sectionNumber {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 7px;
+  color: #087b5b;
+  background: #dcefe2;
 
-  border: 1px solid #c4d2cb;
+  border: 1px solid #c9e3d1;
+  border-radius: 9px;
 
-  border-radius: 8px;
-
-  background: #f6f9f7;
-
-  color: #41534a;
-
-  font-family: inherit;
-
-  font-size: 10px;
-
-  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
 }
 
+.sectionHeading > div {
+  min-width: 0;
 
-/* =====================================
-   FORM
-===================================== */
-
-.form {
   display: flex;
   flex-direction: column;
+  gap: 3px;
+}
 
-  gap: 13px;
+.sectionHeading strong {
+  color: #294b38;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.sectionHeading span {
+  color: #819086;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   CAMPOS DO FORMULÁRIO
+========================================= */
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px 13px;
 }
 
 .field {
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
-
-  gap: 6px;
+  gap: 7px;
 }
 
 .field label {
-  color: #42554c;
-
-  font-size: 12px;
-
-  font-weight: 600;
+  color: #40594b;
+  font-size: 11px;
+  font-weight: 750;
 }
 
 .field input,
 .field select {
   width: 100%;
-  height: 46px;
+  min-width: 0;
+  height: 43px;
 
-  padding: 0 14px;
-
+  padding: 0 12px;
   box-sizing: border-box;
 
+  color: #2c4336;
+  background: #ffffff;
+
+  border: 1px solid #cbdad1;
+  border-radius: 10px;
   outline: none;
 
-  border: 1px solid #c6d4cd;
-
-  border-radius: 9px;
-
-  background: #f8faf9;
-
-  color: #293a32;
-
   font-family: inherit;
-
-  font-size: 13px;
+  font-size: 12px;
 
   transition:
     border-color 0.2s ease,
@@ -312,233 +467,320 @@
     background 0.2s ease;
 }
 
+.field input::placeholder {
+  color: #9aa99f;
+}
+
 .field input:focus,
 .field select:focus {
   border-color: #16a875;
-
   background: #ffffff;
-
-  box-shadow:
-    0 0 0 3px rgba(22, 168, 117, 0.1);
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
 }
 
-.twoColumns {
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 14px;
-}
-
-
-/* =====================================
-   MODALIDADES
-===================================== */
-
-.sports {
-  display: flex;
-  flex-wrap: wrap;
-
-  gap: 8px;
-}
-
-.sportButton {
-  height: 38px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 6px;
-
-  padding: 0 13px;
-
-  border: 1px solid #c8d5cf;
-
-  border-radius: 20px;
-
-  background: #f5f8f6;
-
-  color: #56675f;
-
-  font-family: inherit;
-
-  font-size: 11px;
-
+.field select {
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
 }
 
-.sportButtonActive {
-  border-color: #087b5b;
-
-  background: #087b5b;
-
-  color: #ffffff;
+.fieldHint {
+  color: #819086;
+  font-size: 10px;
+  line-height: 1.5;
 }
 
+/* =========================================
+   SELEÇÃO DE ATLETAS
+========================================= */
 
-/* =====================================
-   PRÓXIMA PARTIDA
-===================================== */
+.selectionCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-.matchSection {
-  display: grid;
+  min-width: 25px;
+  min-height: 23px;
 
-  grid-template-columns:
-    minmax(220px, 1.2fr)
-    minmax(150px, 0.8fr)
-    minmax(150px, 0.8fr);
-
-  gap: 12px;
-
-  align-items: end;
-
-  padding: 14px;
-
+  padding: 2px 8px;
   box-sizing: border-box;
 
-  border: 1px solid #cbd8d2;
+  color: #087b5b;
+  background: #dcefe2;
 
-  border-radius: 12px;
+  border: 1px solid #c9e3d1;
+  border-radius: 20px;
 
-  background: #dde8e3;
+  font-size: 10px;
+  font-weight: 800;
 }
 
-.matchSectionHeader {
-  grid-column: 1 / -1;
+.athleteSearch {
+  position: relative;
+  min-width: 0;
+}
+
+.athleteSearch input {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+
+  padding: 0 12px 0 38px;
+  box-sizing: border-box;
+
+  color: #2c4336;
+  background: #ffffff;
+
+  border: 1px solid #cbdad1;
+  border-radius: 10px;
+  outline: none;
+
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.athleteSearch input:focus {
+  border-color: #16a875;
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.1);
+}
+
+.athletesList {
+  min-width: 0;
+  max-height: 220px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  padding: 3px;
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: #bdcfc4 transparent;
+}
+
+.athletesList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.athletesList::-webkit-scrollbar-thumb {
+  background: #bdcfc4;
+  border-radius: 10px;
+}
+
+.athleteItem {
+  width: 100%;
+  min-width: 0;
+  min-height: 58px;
 
   display: flex;
   align-items: center;
+  gap: 11px;
 
-  gap: 10px;
+  padding: 9px 11px;
+  box-sizing: border-box;
 
-  margin-bottom: 2px;
+  color: #30483a;
+  background: #ffffff;
+
+  border: 1px solid #d8e4dc;
+  border-radius: 11px;
+
+  text-align: left;
+  cursor: pointer;
+  transition: 0.18s ease;
 }
 
-.matchSectionIcon {
-  width: 38px;
-  height: 38px;
+.athleteItem:hover {
+  background: #edf7f0;
+  border-color: #a9d5b8;
+}
 
+.athleteSelected {
+  background: #e5f5e9;
+  border-color: #58b982;
+  box-shadow: inset 0 0 0 1px rgba(22, 168, 117, 0.08);
+}
+
+.athleteAvatar {
+  width: 37px;
+  height: 37px;
   flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 10px;
-
-  background: #c5dbd0;
+  overflow: hidden;
 
   color: #087b5b;
+  background: #dcefe2;
+
+  border-radius: 10px;
+
+  font-size: 11px;
+  font-weight: 800;
 }
 
-.matchSectionHeader > div:last-child {
+.athleteAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.athleteInfo {
+  min-width: 0;
+  flex: 1;
+
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
-.matchSectionHeader strong {
-  color: #2a3b33;
+.athleteInfo strong {
+  overflow: hidden;
 
-  font-size: 12px;
+  color: #294b38;
+  font-size: 11px;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.matchSectionHeader span {
-  color: #708078;
+.athleteInfo span {
+  overflow: hidden;
 
-  font-size: 9px;
+  color: #819086;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-
-/* =====================================
-   DATA E HORÁRIO
-===================================== */
-
-.dateTimeGrid {
-  display: contents;
-}
-
-.dateInputWrapper {
-  height: 46px;
+.athleteCheck {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
+  justify-content: center;
 
+  color: #829187;
+  background: #f4f7f4;
+
+  border: 1px solid #d7e2da;
+  border-radius: 7px;
+}
+
+.athleteSelected .athleteCheck {
+  color: #ffffff;
+  background: #16a875;
+  border-color: #16a875;
+}
+
+.emptyAthletes {
+  padding: 20px 12px;
+
+  color: #819086;
+  background: #ffffff;
+
+  border: 1px dashed #d0ded5;
+  border-radius: 11px;
+
+  font-size: 11px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* =========================================
+   DATA E HORÁRIO
+========================================= */
+
+.dateTimeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.dateInputWrapper {
+  width: 100%;
+  min-width: 0;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
   gap: 8px;
 
-  padding: 0 11px;
-
+  padding: 0 10px;
   box-sizing: border-box;
 
-  border: 1px solid #c6d4cd;
+  color: #087b5b;
+  background: #ffffff;
 
-  border-radius: 9px;
+  border: 1px solid #cbdad1;
+  border-radius: 10px;
 
-  background: #f8faf9;
+  transition: 0.2s ease;
 }
 
 .dateInputWrapper:focus-within {
   border-color: #16a875;
-
-  box-shadow:
-    0 0 0 3px rgba(22, 168, 117, 0.1);
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.1);
 }
 
 .dateInputWrapper svg {
   flex-shrink: 0;
-
-  color: #087b5b;
 }
 
 .dateInputWrapper input {
   flex: 1;
 
+  width: 100%;
   min-width: 0;
   height: 100%;
 
   padding: 0;
 
-  border: none;
-
-  outline: none;
-
+  color: #30483a;
   background: transparent;
 
-  color: #293a32;
+  border: none;
+  outline: none;
+  box-shadow: none;
 
   font-family: inherit;
-
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .dateInputWrapper input:focus {
+  border: none;
   box-shadow: none;
 }
 
-
-/* =====================================
-   PREVIEW DA PARTIDA
-===================================== */
+/* =========================================
+   PRÉVIA DA PARTIDA
+========================================= */
 
 .matchPreview {
-  grid-column: 1 / -1;
+  min-width: 0;
 
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  gap: 10px;
 
-  gap: 8px;
+  padding: 12px;
 
-  padding: 9px 11px;
+  color: #087b5b;
+  background: #e4f2e8;
 
-  border-radius: 8px;
+  border: 1px solid #c9dfd0;
+  border-radius: 11px;
+}
 
-  background: #cfdfd7;
-
-  color: #356253;
+.matchPreview > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .matchPreview > div {
@@ -546,77 +788,68 @@
 
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }
 
 .matchPreview span {
-  color: #718079;
-
-  font-size: 7px;
-
-  text-transform: uppercase;
-
-  letter-spacing: 0.5px;
+  color: #718679;
+  font-size: 10px;
 }
 
 .matchPreview strong {
-  overflow: hidden;
-
-  color: #29463c;
-
-  font-size: 10px;
-
-  white-space: nowrap;
-
-  text-overflow: ellipsis;
+  color: #294b38;
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
-
-/* =====================================
-   CORES
-===================================== */
+/* =========================================
+   CORES DA EQUIPE
+========================================= */
 
 .colorsArea {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  min-width: 0;
 
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+
+  padding: 14px;
+  box-sizing: border-box;
+
+  background: #edf4ef;
+  border: 1px solid #d3e2d8;
+  border-radius: 13px;
 }
 
 .colors {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-
-  gap: 7px;
+  gap: 11px;
 }
 
 .colorButton {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  flex-shrink: 0;
-
   padding: 0;
 
   border: 2px solid transparent;
-
   border-radius: 50%;
 
   color: #ffffff;
 
   cursor: pointer;
+  box-shadow: 0 2px 6px rgba(26, 61, 43, 0.13);
 
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.1);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: 0.18s ease;
 }
 
 .colorButton:hover {
@@ -625,74 +858,59 @@
 
 .colorSelected {
   border-color: #ffffff;
-
-  box-shadow:
-    0 0 0 2px #244c3e;
+  box-shadow: 0 0 0 2px #245d43;
 }
 
-
-/* =====================================
-   COR PERSONALIZADA / RGB
-===================================== */
-
 .customColorButton {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  flex-shrink: 0;
-
   padding: 0;
 
-  border: none;
-
+  background: #ffffff;
+  border: 2px solid transparent;
   border-radius: 50%;
 
-  background: transparent;
-
   cursor: pointer;
-
-  transition:
-    transform 0.2s ease;
+  transition: 0.18s ease;
 }
 
 .customColorButton:hover {
   transform: scale(1.08);
 }
 
+.customColorSelected {
+  box-shadow: 0 0 0 2px #245d43;
+}
+
 .rgbCircle {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  padding: 3px;
-
+  padding: 2px;
   box-sizing: border-box;
 
+  background: conic-gradient(
+    #ef476f,
+    #d9822b,
+    #b6b51a,
+    #16a875,
+    #1674b8,
+    #7c5ce5,
+    #d652a2,
+    #ef476f
+  );
+
   border-radius: 50%;
-
-  background:
-    conic-gradient(
-      #ff3b30,
-      #ff9500,
-      #ffcc00,
-      #34c759,
-      #00c7be,
-      #007aff,
-      #5856d6,
-      #af52de,
-      #ff2d55,
-      #ff3b30
-    );
-
-  box-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.18);
 }
 
 .rgbCircleCenter {
@@ -703,19 +921,11 @@
   align-items: center;
   justify-content: center;
 
-  border: 2px solid #ffffff;
-
-  border-radius: 50%;
-
   color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
 
-  box-sizing: border-box;
-}
-
-.customColorSelected .rgbCircle {
-  box-shadow:
-    0 0 0 2px #244c3e,
-    0 3px 7px rgba(0, 0, 0, 0.2);
+  border: 2px solid #ffffff;
+  border-radius: 50%;
 }
 
 .hiddenColorInput {
@@ -724,241 +934,436 @@
   width: 1px;
   height: 1px;
 
-  opacity: 0;
+  padding: 0;
+  overflow: hidden;
 
-  pointer-events: none;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+
+  white-space: nowrap;
+  border: 0;
 }
-
-
-/* =====================================
-   COR SELECIONADA
-===================================== */
 
 .selectedColorInfo {
   display: flex;
   align-items: center;
+  gap: 9px;
 
-  gap: 7px;
+  padding-top: 11px;
 
-  padding: 5px 8px;
-
-  border-radius: 8px;
-
-  background: #d8e4de;
+  border-top: 1px solid #d3e2d8;
 }
 
 .selectedColorInfo span {
-  color: #718078;
-
-  font-size: 8px;
+  color: #718479;
+  font-size: 11px;
 }
 
 .selectedColorInfo strong {
-  color: #35483f;
-
-  font-size: 9px;
-
-  font-weight: 600;
+  color: #365746;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
 }
 
 .selectedColorPreview {
-  width: 19px;
-  height: 19px;
-
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
 
-  border: 2px solid #ffffff;
+  margin-left: auto;
 
+  border: 2px solid #ffffff;
   border-radius: 50%;
 
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 5px rgba(25, 55, 40, 0.15);
 }
 
-
-/* =====================================
-   PREVIEW EQUIPE
-===================================== */
+/* =========================================
+   RESUMO DA EQUIPE
+========================================= */
 
 .teamPreview {
+  min-width: 0;
+
   display: flex;
   align-items: center;
+  gap: 13px;
 
-  gap: 12px;
+  margin: 0 28px 22px;
+  padding: 15px 17px;
 
-  margin: 0 26px 12px;
+  box-sizing: border-box;
 
-  padding: 11px 14px;
-
-  border-radius: 10px;
-
-  background: #d7e4de;
+  background: linear-gradient(135deg, #e8f3eb, #f0f6f1);
+  border: 1px solid #cfdfd5;
+  border-radius: 13px;
 }
 
 .previewAvatar {
-  width: 42px;
-  height: 42px;
+  position: relative;
 
+  width: 50px;
+  height: 50px;
   flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 50%;
+  overflow: hidden;
 
   color: #ffffff;
 
-  font-size: 10px;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  border-radius: 13px;
 
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+
+  box-shadow: 0 3px 8px rgba(25, 55, 40, 0.12);
 }
 
-.teamPreview > div:last-child {
+.previewImage {
+  border-radius: inherit;
+}
+
+.previewInfo {
+  min-width: 0;
+  flex: 1;
+
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
-.teamPreview span {
-  color: #7b8982;
-
-  font-size: 7px;
-
-  font-weight: 700;
-}
-
-.teamPreview strong {
-  color: #263930;
-
-  font-size: 12px;
-}
-
-.teamPreview small {
-  color: #66766e;
-
+.previewInfo span {
+  color: #718679;
   font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
+.previewInfo strong {
+  overflow: hidden;
 
-/* =====================================
-   FOOTER
-===================================== */
+  color: #254532;
+  font-size: 13px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.previewInfo small {
+  color: #687e70;
+  font-size: 10px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   RODAPÉ
+========================================= */
 
 .footer {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  padding: 16px 28px;
+
+  background: #eaf2ec;
+  border-top: 1px solid #d1ded6;
+  border-radius: 0 0 20px 20px;
+}
+
+.requiredHint {
+  margin: 0;
+
+  color: #819086;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.footerActions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   gap: 10px;
-
-  padding: 12px 26px;
-
-  border-top: 1px solid #cbd8d2;
-
-  background: #dfe9e4;
 }
 
 .cancelButton,
 .createButton {
-  height: 40px;
+  min-height: 42px;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  gap: 7px;
+  gap: 8px;
 
   padding: 0 18px;
+  box-sizing: border-box;
 
-  border-radius: 8px;
+  border-radius: 10px;
 
   font-family: inherit;
-
-  font-size: 11px;
-
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 750;
 
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .cancelButton {
-  border: 1px solid #bfcfc7;
+  color: #50695a;
+  background: #ffffff;
 
-  background: transparent;
+  border: 1px solid #c5d6cb;
+}
 
-  color: #586960;
+.cancelButton:hover {
+  background: #e5f0e8;
+  border-color: #9fbdab;
 }
 
 .createButton {
-  border: none;
-
+  color: #ffffff;
   background: #087b5b;
 
-  color: #ffffff;
+  border: 1px solid #087b5b;
+  box-shadow: 0 3px 8px rgba(8, 123, 91, 0.15);
+}
+
+.createButton:hover:not(:disabled) {
+  background: #05684c;
+  border-color: #05684c;
+  transform: translateY(-1px);
 }
 
 .createButton:disabled {
-  opacity: 0.4;
-
+  opacity: 0.45;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
+/* =========================================
+   ACESSIBILIDADE
+========================================= */
 
-/* =====================================
-   RESPONSIVIDADE
-===================================== */
+.closeButton:focus-visible,
+.changeImageButton:focus-visible,
+.removeImageButton:focus-visible,
+.customColorButton:focus-visible,
+.colorButton:focus-visible,
+.cancelButton:focus-visible,
+.createButton:focus-visible,
+.athleteItem:focus-visible {
+  outline: 3px solid rgba(22, 168, 117, 0.35);
+  outline-offset: 3px;
+}
 
-@media (max-width: 900px) {
+@media (prefers-reduced-motion: reduce) {
+  .modal *,
+  .modal *::before,
+  .modal *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* =========================================
+   TABLETS
+========================================= */
+
+@media (max-width: 800px) {
+  .modal {
+    width: min(100%, 700px);
+  }
+
+  .content {
+    grid-template-columns: minmax(0, 1fr) 155px;
+    gap: 20px;
+    padding: 21px;
+  }
+
+  .imagePreview {
+    height: 155px;
+  }
+
+  .modalHeader {
+    padding-right: 21px;
+    padding-left: 21px;
+  }
+
+  .teamPreview {
+    margin-right: 21px;
+    margin-left: 21px;
+  }
+
+  .footer {
+    padding-right: 21px;
+    padding-left: 21px;
+  }
+}
+
+/* =========================================
+   CELULARES
+========================================= */
+
+@media (max-width: 600px) {
+  .overlay {
+    padding: 10px;
+  }
 
   .modal {
-    width: calc(100vw - 20px);
+    width: 100%;
+    margin: 0;
+    border-radius: 15px;
+  }
+
+  .modalHeader {
+    padding: 17px 16px;
+    gap: 12px;
+    border-radius: 15px 15px 0 0;
+  }
+
+  .modalHeader h2 {
+    font-size: 21px;
+  }
+
+  .modalHeader p {
+    font-size: 11px;
   }
 
   .content {
-    grid-template-columns: 180px 1fr;
-
-    gap: 18px;
-  }
-
-  .matchSection {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .matchSection > .field:first-of-type {
-    grid-column: 1 / -1;
-  }
-
-}
-
-
-@media (max-width: 620px) {
-
-  .overlay {
-    align-items: flex-start;
-  }
-
-  .content {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    padding: 16px;
   }
 
   .imageArea {
+    grid-column: 1;
+    grid-row: 1;
+
     display: grid;
-
-    grid-template-columns: 160px 1fr;
+    grid-template-columns: minmax(115px, 145px) minmax(0, 1fr);
+    align-items: center;
+    gap: 11px;
   }
 
-  .twoColumns {
-    grid-template-columns: 1fr;
+  .form {
+    grid-column: 1;
+    grid-row: 2;
   }
 
-  .matchSection {
-    grid-template-columns: 1fr;
+  .imagePreview {
+    height: 135px;
+    grid-row: span 2;
+  }
+
+  .changeImageButton,
+  .removeImageButton {
+    align-self: center;
+  }
+
+  .identityHint,
+  .imageError {
+    grid-column: 1 / -1;
+  }
+
+  .form {
+    gap: 20px;
+  }
+
+  .formGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
   }
 
   .dateTimeGrid {
-    display: grid;
-
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
+  .colorsArea {
+    padding: 12px;
+  }
+
+  .teamPreview {
+    margin: 0 16px 16px;
+    padding: 12px;
+  }
+
+  .footer {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 14px 16px;
+    border-radius: 0 0 15px 15px;
+  }
+
+  .requiredHint {
+    text-align: center;
+  }
+
+  .footerActions {
+    width: 100%;
+  }
+
+  .cancelButton,
+  .createButton {
+    flex: 1;
+    padding: 0 12px;
+  }
+}
+
+/* =========================================
+   CELULARES PEQUENOS
+========================================= */
+
+@media (max-width: 360px) {
+  .overlay {
+    padding: 6px;
+  }
+
+  .modalHeader {
+    padding: 14px 12px;
+  }
+
+  .content {
+    padding: 12px;
+  }
+
+  .imageArea {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .imagePreview {
+    height: 165px;
+    grid-row: auto;
+  }
+
+  .changeImageButton,
+  .removeImageButton {
+    width: 100%;
+  }
+
+  .teamPreview {
+    margin-right: 12px;
+    margin-left: 12px;
+  }
+
+  .footer {
+    padding: 12px;
+  }
+
+  .cancelButton,
+  .createButton {
+    padding: 0 9px;
+    font-size: 11px;
+  }
 }

@@ -32,7 +32,7 @@ import RotaInicial from "./components/RotaInicial/RotaInicial";
 // ==========================================
 import Dashboard from "./pages/Dashboard/dashboard";
 import Equipes from "./pages/Equipes/equipes";
-import Altetas from "./pages/Atletas/atletas";
+import Atletas from "./pages/Atletas/atletas";
 import Comparacoes from "./pages/Comparacoes/compracoes";
 import Estatisticas from "./pages/Estatisticas/estatisticas";
 import Configuracoes from "./pages/Configuracoes/configuracoes";
@@ -48,13 +48,9 @@ function App() {
         {/* ========================================
             PÁGINAS PÚBLICAS
         ======================================== */}
-
         <Route path="/" element={<Login />} />
 
-        <Route
-          path="/cadastro"
-          element={<Cadastro />}
-        />
+        <Route path="/cadastro" element={<Cadastro />} />
 
         <Route
           path="/esqueci-senha"
@@ -63,18 +59,7 @@ function App() {
 
         {/* ========================================
             ONBOARDING / CONFIGURAÇÃO INICIAL
-
-            RotaInicial verifica:
-            - se está logado
-            - se já possui equipe
-
-            Se já tiver equipe:
-            -> /inicio
-
-            Se não tiver:
-            -> permite continuar o onboarding
         ======================================== */}
-
         <Route element={<RotaInicial />}>
           <Route
             path="/boas-vindas"
@@ -104,32 +89,16 @@ function App() {
 
         {/* ========================================
             ÁREA PRIVADA
-
-            RotaPrivada verifica:
-            - se está logado
-            - se possui equipe
-
-            Sem login:
-            -> /
-
-            Sem equipe:
-            -> /boas-vindas
-
-            Com equipe:
-            -> libera o sistema
         ======================================== */}
-
         <Route element={<RotaPrivada />}>
           <Route element={<Layout />}>
-            {/* ====================================
-                DASHBOARD
-            ==================================== */}
-
+            {/* DASHBOARD */}
             <Route
               path="/inicio"
               element={<Dashboard />}
             />
 
+            {/* COMPATIBILIDADE COM A ROTA ANTIGA */}
             <Route
               path="/dashboard"
               element={<Dashboard />}
@@ -144,7 +113,7 @@ function App() {
             {/* ATLETAS */}
             <Route
               path="/atletas"
-              element={<Altetas />}
+              element={<Atletas />}
             />
 
             {/* CADASTRO DE ATLETA */}

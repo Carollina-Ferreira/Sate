@@ -11,13 +11,7 @@ const equipeRoutes = require('./routes/equipeRoutes');
 const partidaRoutes = require('./routes/partidaRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 
-
-// ======================================================
-// APP
-// ======================================================
-
 const app = express();
-
 
 // ======================================================
 // CORS
@@ -42,7 +36,6 @@ app.use(
     })
 );
 
-
 // ======================================================
 // JSON
 // ======================================================
@@ -53,17 +46,16 @@ app.use(
     })
 );
 
-
 // ======================================================
 // URL ENCODED
 // ======================================================
 
 app.use(
     express.urlencoded({
-        extended: true
+        extended: true,
+        limit: '10mb'
     })
 );
-
 
 // ======================================================
 // UPLOADS
@@ -72,220 +64,97 @@ app.use(
 app.use(
     '/uploads',
     express.static(
-        path.join(
-            __dirname,
-            '../uploads'
-        )
+        path.join(__dirname, '../uploads')
     )
 );
-
 
 // ======================================================
 // TESTE DA API
 // ======================================================
 
-app.get(
-    '/',
-    (req, res) => {
-
-        return res.status(200).json({
-            mensagem: 'API SATE funcionando!'
-        });
-
-    }
-);
-
+app.get('/', (req, res) => {
+    return res.status(200).json({
+        mensagem: 'API SATE funcionando!'
+    });
+});
 
 // ======================================================
 // HEALTH CHECK
 // ======================================================
 
-app.get(
-    '/api/health',
-    (req, res) => {
-
-        return res.status(200).json({
-            status: 'ok',
-            mensagem: 'Backend SATE funcionando.'
-        });
-
-    }
-);
-
+app.get('/api/health', (req, res) => {
+    return res.status(200).json({
+        status: 'ok',
+        mensagem: 'Backend SATE funcionando.'
+    });
+});
 
 // ======================================================
-// ROTAS DE AUTENTICAÇÃO
+// ROTAS DA API
 // ======================================================
 
-app.use(
-    '/api/auth',
-    authRoutes
-);
-
-
-// ======================================================
-// ROTAS DE ATLETAS
-// ======================================================
-
-app.use(
-    '/api/atletas',
-    atletaRoutes
-);
-
-
-// ======================================================
-// ROTAS DE TREINADORES
-// ======================================================
-
-app.use(
-    '/api/treinadores',
-    treinadorRoutes
-);
-
-
-// ======================================================
-// ROTAS DE SENHA
-// ======================================================
-
-app.use(
-    '/api/password',
-    passwordRoutes
-);
-
-
-// ======================================================
-// ROTAS DE USUÁRIOS
-// ======================================================
-
-app.use(
-    '/api/usuarios',
-    usuarioRoutes
-);
-
-
-// ======================================================
-// ROTAS DE EQUIPES
-// ======================================================
-
-app.use(
-    '/api/equipes',
-    equipeRoutes
-);
-
-
-// ======================================================
-// ROTAS DE PARTIDAS
-// ======================================================
-
-app.use(
-    '/api/partidas',
-    partidaRoutes
-);
-
-
-// ======================================================
-// ROTAS DO DASHBOARD
-// ======================================================
-
-app.use(
-    '/api/dashboard',
-    dashboardRoutes
-);
-
+app.use('/api/auth', authRoutes);
+app.use('/api/atletas', atletaRoutes);
+app.use('/api/treinadores', treinadorRoutes);
+app.use('/api/password', passwordRoutes);
+app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/equipes', equipeRoutes);
+app.use('/api/partidas', partidaRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // ======================================================
 // ROTA NÃO ENCONTRADA
-//
-// IMPORTANTE:
-// evita o Express devolver HTML quando uma rota não existe.
-// Assim o frontend sempre recebe JSON.
 // ======================================================
 
-app.use(
-    (req, res) => {
-
-        return res.status(404).json({
-            mensagem: 'Rota não encontrada.',
-            metodo: req.method,
-            rota: req.originalUrl
-        });
-
-    }
-);
-
+app.use((req, res) => {
+    return res.status(404).json({
+        mensagem: 'Rota não encontrada.',
+        metodo: req.method,
+        rota: req.originalUrl
+    });
+});
 
 // ======================================================
 // ERRO GLOBAL
 // ======================================================
 
-app.use(
-    (err, req, res, next) => {
+app.use((err, req, res, next) => {
+    console.error('');
+    console.error('=================================');
+    console.error('ERRO NO SERVIDOR');
+    console.error('=================================');
+    console.error(err);
+    console.error('=================================');
+    console.error('');
 
-        console.error('');
-        console.error('=================================');
-        console.error('ERRO NO SERVIDOR');
-        console.error('=================================');
-        console.error(err);
-        console.error('=================================');
-        console.error('');
-
-
-        if (res.headersSent) {
-            return next(err);
-        }
-
-
-        return res.status(
-            err.status ||
-            err.statusCode ||
-            500
-        ).json({
-            mensagem:
-                err.message ||
-                'Erro interno do servidor.'
-        });
-
+    if (res.headersSent) {
+        return next(err);
     }
-);
 
+    return res.status(
+        err.status ||
+        err.statusCode ||
+        500
+    ).json({
+        mensagem: err.message || 'Erro interno do servidor.'
+    });
+});
 
 // ======================================================
 // SERVIDOR
 // ======================================================
 
-const PORT =
-    process.env.PORT ||
-    3000;
+const PORT = process.env.PORT || 3000;
 
-
-app.listen(
-    PORT,
-    '0.0.0.0',
-    () => {
-
-        console.log('');
-        console.log('=================================');
-        console.log('          SATE BACKEND');
-        console.log('=================================');
-
-        console.log(
-            `Servidor: http://localhost:${PORT}`
-        );
-
-        console.log(
-            `API: http://localhost:${PORT}/api`
-        );
-
-        console.log(
-            `Dashboard: http://localhost:${PORT}/api/dashboard`
-        );
-
-        console.log(
-            `Health: http://localhost:${PORT}/api/health`
-        );
-
-        console.log('=================================');
-        console.log('');
-
-    }
-);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log('');
+    console.log('=================================');
+    console.log('          SATE BACKEND');
+    console.log('=================================');
+    console.log(`Servidor: http://localhost:${PORT}`);
+    console.log(`API: http://localhost:${PORT}/api`);
+    console.log(`Dashboard: http://localhost:${PORT}/api/dashboard`);
+    console.log(`Health: http://localhost:${PORT}/api/health`);
+    console.log('=================================');
+    console.log('');
+});

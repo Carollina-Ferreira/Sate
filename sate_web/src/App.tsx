@@ -32,7 +32,7 @@ import RotaInicial from "./components/RotaInicial/RotaInicial";
 // ==========================================
 import Dashboard from "./pages/Dashboard/dashboard";
 import Equipes from "./pages/Equipes/equipes";
-import Altetas from "./pages/Atletas/atletas";
+import Atletas from "./pages/Atletas/atletas";
 import Comparacoes from "./pages/Comparacoes/compracoes";
 import Estatisticas from "./pages/Estatisticas/estatisticas";
 import Configuracoes from "./pages/Configuracoes/configuracoes";
@@ -42,157 +42,136 @@ import Partidas from "./pages/Partidas/partidas";
 import DetalhesDaPartida from "./pages/DetalhesDaPartida/partidas2";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* ========================================
-            PÁGINAS PÚBLICAS
-        ======================================== */}
+    return (
+        <BrowserRouter>
+            <Routes>
 
-        <Route path="/" element={<Login />} />
+                {/* ========================================
+                    PÁGINAS PÚBLICAS
+                ======================================== */}
 
-        <Route
-          path="/cadastro"
-          element={<Cadastro />}
-        />
+                <Route path="/" element={<Login />} />
 
-        <Route
-          path="/esqueci-senha"
-          element={<EsqueciSenha />}
-        />
+                <Route
+                    path="/cadastro"
+                    element={<Cadastro />}
+                />
 
-        {/* ========================================
-            ONBOARDING / CONFIGURAÇÃO INICIAL
+                <Route
+                    path="/esqueci-senha"
+                    element={<EsqueciSenha />}
+                />
 
-            RotaInicial verifica:
-            - se está logado
-            - se já possui equipe
+                {/* ========================================
+                    ONBOARDING / CONFIGURAÇÃO INICIAL
+                ======================================== */}
 
-            Se já tiver equipe:
-            -> /inicio
+                <Route element={<RotaInicial />}>
+                    <Route
+                        path="/boas-vindas"
+                        element={<BoasVindas />}
+                    />
 
-            Se não tiver:
-            -> permite continuar o onboarding
-        ======================================== */}
+                    <Route
+                        path="/selecao-esporte"
+                        element={<SelecaoEsporte />}
+                    />
 
-        <Route element={<RotaInicial />}>
-          <Route
-            path="/boas-vindas"
-            element={<BoasVindas />}
-          />
+                    <Route
+                        path="/configuracao-analise"
+                        element={<ConfiguracaoAnalise />}
+                    />
 
-          <Route
-            path="/selecao-esporte"
-            element={<SelecaoEsporte />}
-          />
+                    <Route
+                        path="/configuracao-equipe"
+                        element={<ConfiguracaoEquipe />}
+                    />
 
-          <Route
-            path="/configuracao-analise"
-            element={<ConfiguracaoAnalise />}
-          />
+                    <Route
+                        path="/configuracao-concluida"
+                        element={<ConfiguracaoConcluida />}
+                    />
+                </Route>
 
-          <Route
-            path="/configuracao-equipe"
-            element={<ConfiguracaoEquipe />}
-          />
+                {/* ========================================
+                    ÁREA PRIVADA
+                ======================================== */}
 
-          <Route
-            path="/configuracao-concluida"
-            element={<ConfiguracaoConcluida />}
-          />
-        </Route>
+                <Route element={<RotaPrivada />}>
+                    <Route element={<Layout />}>
 
-        {/* ========================================
-            ÁREA PRIVADA
+                        {/* DASHBOARD */}
+                        <Route
+                            path="/inicio"
+                            element={<Dashboard />}
+                        />
 
-            RotaPrivada verifica:
-            - se está logado
-            - se possui equipe
+                        {/* COMPATIBILIDADE COM A ROTA ANTIGA */}
+                        <Route
+                            path="/dashboard"
+                            element={<Dashboard />}
+                        />
 
-            Sem login:
-            -> /
+                        {/* EQUIPES */}
+                        <Route
+                            path="/equipes"
+                            element={<Equipes />}
+                        />
 
-            Sem equipe:
-            -> /boas-vindas
+                        {/* ATLETAS */}
+                        <Route
+                            path="/atletas"
+                            element={<Atletas />}
+                        />
 
-            Com equipe:
-            -> libera o sistema
-        ======================================== */}
+                        {/* CADASTRO DE ATLETA */}
+                        <Route
+                            path="/cadastro-atleta"
+                            element={<CadastroAtleta />}
+                        />
 
-        <Route element={<RotaPrivada />}>
-          <Route element={<Layout />}>
-            {/* ====================================
-                DASHBOARD
-            ==================================== */}
+                        {/* ANÁLISE DE VÍDEO */}
+                        <Route
+                            path="/videos"
+                            element={<AnaliseVideo />}
+                        />
 
-            <Route
-              path="/inicio"
-              element={<Dashboard />}
-            />
+                        {/* PARTIDAS */}
+                        <Route
+                            path="/partidas"
+                            element={<Partidas />}
+                        />
 
-            <Route
-              path="/dashboard"
-              element={<Dashboard />}
-            />
+                        {/* DETALHES DA PARTIDA */}
+                        <Route
+                            path="/detalhes-partida"
+                            element={<DetalhesDaPartida />}
+                        />
 
-            {/* EQUIPES */}
-            <Route
-              path="/equipes"
-              element={<Equipes />}
-            />
+                        {/* ESTATÍSTICAS */}
+                        <Route
+                            path="/estatisticas"
+                            element={<Estatisticas />}
+                        />
 
-            {/* ATLETAS */}
-            <Route
-              path="/atletas"
-              element={<Altetas />}
-            />
+                        {/* COMPARAÇÕES */}
+                        <Route
+                            path="/comparacoes"
+                            element={<Comparacoes />}
+                        />
 
-            {/* CADASTRO DE ATLETA */}
-            <Route
-              path="/cadastro-atleta"
-              element={<CadastroAtleta />}
-            />
+                        {/* CONFIGURAÇÕES */}
+                        <Route
+                            path="/configuracoes"
+                            element={<Configuracoes />}
+                        />
 
-            {/* ANÁLISE DE VÍDEO */}
-            <Route
-              path="/videos"
-              element={<AnaliseVideo />}
-            />
+                    </Route>
+                </Route>
 
-            {/* PARTIDAS */}
-            <Route
-              path="/partidas"
-              element={<Partidas />}
-            />
-
-            {/* DETALHES DA PARTIDA */}
-            <Route
-              path="/detalhes-partida"
-              element={<DetalhesDaPartida />}
-            />
-
-            {/* ESTATÍSTICAS */}
-            <Route
-              path="/estatisticas"
-              element={<Estatisticas />}
-            />
-
-            {/* COMPARAÇÕES */}
-            <Route
-              path="/comparacoes"
-              element={<Comparacoes />}
-            />
-
-            {/* CONFIGURAÇÕES */}
-            <Route
-              path="/configuracoes"
-              element={<Configuracoes />}
-            />
-          </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

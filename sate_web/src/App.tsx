@@ -1,6 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // ==========================================
+// LANDING PAGE
+// ==========================================
+import LandingPage from "./pages/LandingPage/landingPage";
+
+// ==========================================
 // PÁGINAS DE ACESSO
 // ==========================================
 import Login from "./pages/Login/login";
@@ -49,7 +54,17 @@ function App() {
             PÁGINAS PÚBLICAS
         ======================================== */}
 
-        <Route path="/" element={<Login />} />
+        {/* LANDING PAGE */}
+        <Route
+          path="/"
+          element={<LandingPage />}
+        />
+
+        {/* LOGIN */}
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
         <Route
           path="/cadastro"

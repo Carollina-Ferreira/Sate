@@ -10,7 +10,7 @@ const usuarioRoutes = require('./routes/usuarioRoutes');
 const equipeRoutes = require('./routes/equipeRoutes');
 const partidaRoutes = require('./routes/partidaRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
-
+const headerRoutes = require('./routes/headerRoutes');
 
 // ======================================================
 // APP

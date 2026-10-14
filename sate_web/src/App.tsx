@@ -42,136 +42,126 @@ import Partidas from "./pages/Partidas/partidas";
 import DetalhesDaPartida from "./pages/DetalhesDaPartida/partidas2";
 
 function App() {
-    return (
-        <BrowserRouter>
-            <Routes>
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* ========================================
+            PÁGINAS PÚBLICAS
+        ======================================== */}
+        <Route path="/" element={<Login />} />
 
-                {/* ========================================
-                    PÁGINAS PÚBLICAS
-                ======================================== */}
+        <Route path="/cadastro" element={<Cadastro />} />
 
-                <Route path="/" element={<Login />} />
+        <Route
+          path="/esqueci-senha"
+          element={<EsqueciSenha />}
+        />
 
-                <Route
-                    path="/cadastro"
-                    element={<Cadastro />}
-                />
+        {/* ========================================
+            ONBOARDING / CONFIGURAÇÃO INICIAL
+        ======================================== */}
+        <Route element={<RotaInicial />}>
+          <Route
+            path="/boas-vindas"
+            element={<BoasVindas />}
+          />
 
-                <Route
-                    path="/esqueci-senha"
-                    element={<EsqueciSenha />}
-                />
+          <Route
+            path="/selecao-esporte"
+            element={<SelecaoEsporte />}
+          />
 
-                {/* ========================================
-                    ONBOARDING / CONFIGURAÇÃO INICIAL
-                ======================================== */}
+          <Route
+            path="/configuracao-analise"
+            element={<ConfiguracaoAnalise />}
+          />
 
-                <Route element={<RotaInicial />}>
-                    <Route
-                        path="/boas-vindas"
-                        element={<BoasVindas />}
-                    />
+          <Route
+            path="/configuracao-equipe"
+            element={<ConfiguracaoEquipe />}
+          />
 
-                    <Route
-                        path="/selecao-esporte"
-                        element={<SelecaoEsporte />}
-                    />
+          <Route
+            path="/configuracao-concluida"
+            element={<ConfiguracaoConcluida />}
+          />
+        </Route>
 
-                    <Route
-                        path="/configuracao-analise"
-                        element={<ConfiguracaoAnalise />}
-                    />
+        {/* ========================================
+            ÁREA PRIVADA
+        ======================================== */}
+        <Route element={<RotaPrivada />}>
+          <Route element={<Layout />}>
+            {/* DASHBOARD */}
+            <Route
+              path="/inicio"
+              element={<Dashboard />}
+            />
 
-                    <Route
-                        path="/configuracao-equipe"
-                        element={<ConfiguracaoEquipe />}
-                    />
+            {/* COMPATIBILIDADE COM A ROTA ANTIGA */}
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
+            />
 
-                    <Route
-                        path="/configuracao-concluida"
-                        element={<ConfiguracaoConcluida />}
-                    />
-                </Route>
+            {/* EQUIPES */}
+            <Route
+              path="/equipes"
+              element={<Equipes />}
+            />
 
-                {/* ========================================
-                    ÁREA PRIVADA
-                ======================================== */}
+            {/* ATLETAS */}
+            <Route
+              path="/atletas"
+              element={<Atletas />}
+            />
 
-                <Route element={<RotaPrivada />}>
-                    <Route element={<Layout />}>
+            {/* CADASTRO DE ATLETA */}
+            <Route
+              path="/cadastro-atleta"
+              element={<CadastroAtleta />}
+            />
 
-                        {/* DASHBOARD */}
-                        <Route
-                            path="/inicio"
-                            element={<Dashboard />}
-                        />
+            {/* ANÁLISE DE VÍDEO */}
+            <Route
+              path="/videos"
+              element={<AnaliseVideo />}
+            />
 
-                        {/* COMPATIBILIDADE COM A ROTA ANTIGA */}
-                        <Route
-                            path="/dashboard"
-                            element={<Dashboard />}
-                        />
+            {/* PARTIDAS */}
+            <Route
+              path="/partidas"
+              element={<Partidas />}
+            />
 
-                        {/* EQUIPES */}
-                        <Route
-                            path="/equipes"
-                            element={<Equipes />}
-                        />
+            {/* DETALHES DA PARTIDA */}
+            <Route
+              path="/detalhes-partida"
+              element={<DetalhesDaPartida />}
+            />
 
-                        {/* ATLETAS */}
-                        <Route
-                            path="/atletas"
-                            element={<Atletas />}
-                        />
+            {/* ESTATÍSTICAS */}
+            <Route
+              path="/estatisticas"
+              element={<Estatisticas />}
+            />
 
-                        {/* CADASTRO DE ATLETA */}
-                        <Route
-                            path="/cadastro-atleta"
-                            element={<CadastroAtleta />}
-                        />
+            {/* COMPARAÇÕES */}
+            <Route
+              path="/comparacoes"
+              element={<Comparacoes />}
+            />
 
-                        {/* ANÁLISE DE VÍDEO */}
-                        <Route
-                            path="/videos"
-                            element={<AnaliseVideo />}
-                        />
-
-                        {/* PARTIDAS */}
-                        <Route
-                            path="/partidas"
-                            element={<Partidas />}
-                        />
-
-                        {/* DETALHES DA PARTIDA */}
-                        <Route
-                            path="/detalhes-partida"
-                            element={<DetalhesDaPartida />}
-                        />
-
-                        {/* ESTATÍSTICAS */}
-                        <Route
-                            path="/estatisticas"
-                            element={<Estatisticas />}
-                        />
-
-                        {/* COMPARAÇÕES */}
-                        <Route
-                            path="/comparacoes"
-                            element={<Comparacoes />}
-                        />
-
-                        {/* CONFIGURAÇÕES */}
-                        <Route
-                            path="/configuracoes"
-                            element={<Configuracoes />}
-                        />
-
-                    </Route>
-                </Route>
-
-            </Routes>
-        </BrowserRouter>
-    );
+            {/* CONFIGURAÇÕES */}
+            <Route
+              path="/configuracoes"
+              element={<Configuracoes />}
+            />
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

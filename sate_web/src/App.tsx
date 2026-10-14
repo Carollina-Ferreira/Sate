@@ -37,7 +37,7 @@ import RotaInicial from "./components/RotaInicial/RotaInicial";
 // ==========================================
 import Dashboard from "./pages/Dashboard/dashboard";
 import Equipes from "./pages/Equipes/equipes";
-import Altetas from "./pages/Atletas/atletas";
+import Atletas from "./pages/Atletas/atletas";
 import Comparacoes from "./pages/Comparacoes/comparacoes";
 import Estatisticas from "./pages/Estatisticas/estatisticas";
 import Configuracoes from "./pages/Configuracoes/configuracoes";
@@ -54,40 +54,16 @@ function App() {
             PÁGINAS PÚBLICAS
         ======================================== */}
 
-        {/* LANDING PAGE */}
-        <Route
-          path="/"
-          element={<LandingPage />}
-        />
+        <Route path="/" element={<LandingPage />} />
 
-        {/* LOGIN */}
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/cadastro"
-          element={<Cadastro />}
-        />
+        <Route path="/cadastro" element={<Cadastro />} />
 
-        <Route
-          path="/esqueci-senha"
-          element={<EsqueciSenha />}
-        />
+        <Route path="/esqueci-senha" element={<EsqueciSenha />} />
 
         {/* ========================================
             ONBOARDING / CONFIGURAÇÃO INICIAL
-
-            RotaInicial verifica:
-            - se está logado
-            - se já possui equipe
-
-            Se já tiver equipe:
-            -> /inicio
-
-            Se não tiver:
-            -> permite continuar o onboarding
         ======================================== */}
 
         <Route element={<RotaInicial />}>
@@ -119,48 +95,20 @@ function App() {
 
         {/* ========================================
             ÁREA PRIVADA
-
-            RotaPrivada verifica:
-            - se está logado
-            - se possui equipe
-
-            Sem login:
-            -> /
-
-            Sem equipe:
-            -> /boas-vindas
-
-            Com equipe:
-            -> libera o sistema
         ======================================== */}
 
         <Route element={<RotaPrivada />}>
           <Route element={<Layout />}>
-            {/* ====================================
-                DASHBOARD
-            ==================================== */}
+            {/* DASHBOARD */}
+            <Route path="/inicio" element={<Dashboard />} />
 
-            <Route
-              path="/inicio"
-              element={<Dashboard />}
-            />
-
-            <Route
-              path="/dashboard"
-              element={<Dashboard />}
-            />
+            <Route path="/dashboard" element={<Dashboard />} />
 
             {/* EQUIPES */}
-            <Route
-              path="/equipes"
-              element={<Equipes />}
-            />
+            <Route path="/equipes" element={<Equipes />} />
 
             {/* ATLETAS */}
-            <Route
-              path="/atletas"
-              element={<Altetas />}
-            />
+            <Route path="/atletas" element={<Atletas />} />
 
             {/* CADASTRO DE ATLETA */}
             <Route
@@ -169,16 +117,10 @@ function App() {
             />
 
             {/* ANÁLISE DE VÍDEO */}
-            <Route
-              path="/videos"
-              element={<AnaliseVideo />}
-            />
+            <Route path="/videos" element={<AnaliseVideo />} />
 
             {/* PARTIDAS */}
-            <Route
-              path="/partidas"
-              element={<Partidas />}
-            />
+            <Route path="/partidas" element={<Partidas />} />
 
             {/* DETALHES DA PARTIDA */}
             <Route

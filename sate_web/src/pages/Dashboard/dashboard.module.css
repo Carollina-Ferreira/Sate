@@ -1,301 +1,166 @@
+
 .page {
   width: 100%;
   min-height: 100vh;
-
   background: #005942;
-
-  font-family:
-    'Poppins',
-    sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
-
 
 .dashboard {
   width: 100%;
   max-width: 1540px;
-
   margin: 0 auto;
-
-  padding:
-    44px
-    52px
-    58px;
-
+  padding: 44px 52px 58px;
   box-sizing: border-box;
 }
 
-
-/* ============================================================
-   HEADER
-============================================================ */
+/* HEADER */
 
 .header {
   display: flex;
-
   align-items: flex-end;
   justify-content: space-between;
-
   gap: 30px;
-
   margin-bottom: 27px;
 }
 
-
 .header h1 {
   margin: 0;
-
-  color: #ffffff;
-
+  color: #fff;
   font-size: 31px;
   font-weight: 600;
-
   letter-spacing: -0.8px;
-
   line-height: 1.15;
 }
 
-
 .header p {
-  margin:
-    7px
-    0
-    0;
-
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.56
-    );
-
+  margin: 7px 0 0;
+  color: rgba(255, 255, 255, 0.56);
   font-size: 12px;
 }
 
-
 .date {
   display: flex;
-
   align-items: center;
-
   gap: 7px;
-
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.5
-    );
-
+  color: rgba(255, 255, 255, 0.5);
   font-size: 10px;
 }
 
-
 .date strong {
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.9
-    );
-
+  color: rgba(255, 255, 255, 0.9);
   font-size: 12px;
   font-weight: 500;
 }
 
-
-/* ============================================================
-   RESUMO
-============================================================ */
+/* RESUMO */
 
 .scoreboard {
   display: grid;
-
-  grid-template-columns:
-    repeat(
-      4,
-      minmax(
-        0,
-        1fr
-      )
-    );
-
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   overflow: hidden;
-
   margin-bottom: 17px;
-
   border-radius: 12px;
-
   background: #f7f7f5;
 }
-
 
 .scoreItem {
   min-width: 0;
   min-height: 126px;
-
   display: flex;
-
   flex-direction: column;
   justify-content: space-between;
-
-  padding:
-    19px
-    22px;
-
+  padding: 19px 22px;
   box-sizing: border-box;
-
   border: none;
-
-  border-right:
-    1px solid
-    #e3e4e1;
-
+  border-right: 1px solid #e3e4e1;
   background: transparent;
-
   color: #282d2a;
-
   text-align: left;
-
   cursor: pointer;
-
-  transition:
-    background
-    0.16s ease;
+  transition: background 0.16s ease;
 }
-
 
 .scoreItem:last-child {
   border-right: none;
 }
 
-
 .scoreItem:hover {
-  background: #ffffff;
+  background: #fff;
 }
-
 
 .scoreMain {
   display: flex;
-
   align-items: baseline;
-
   gap: 11px;
 }
 
-
 .scoreMain strong {
   color: #005942;
-
   font-size: 34px;
   font-weight: 650;
-
   line-height: 1;
-
   letter-spacing: -1px;
 }
 
-
 .scoreMain span {
   color: #343936;
-
   font-size: 12px;
   font-weight: 600;
 }
 
-
 .scoreFooter {
   display: flex;
-
   align-items: center;
   justify-content: space-between;
-
   gap: 10px;
 }
 
-
 .scoreFooter > span {
   overflow: hidden;
-
   color: #898e8a;
-
   font-size: 8px;
-
   white-space: nowrap;
-
   text-overflow: ellipsis;
 }
-
 
 .scoreFooter small {
   font-size: 8px;
   font-weight: 700;
 }
 
-
 .positive {
   color: #08795a;
 }
-
 
 .negative {
   color: #bd5269;
 }
 
-
-/* ============================================================
-   LAYOUT PRINCIPAL
-============================================================ */
+/* LAYOUT PRINCIPAL */
 
 .mainArea {
   display: grid;
-
-  grid-template-columns:
-    minmax(
-      0,
-      1.65fr
-    )
-    minmax(
-      285px,
-      0.75fr
-    );
-
+  grid-template-columns: minmax(0, 1.65fr) minmax(285px, 0.75fr);
   gap: 17px;
-
   align-items: stretch;
-
   margin-bottom: 17px;
 }
-
 
 .leftColumn,
 .rightColumn {
   min-width: 0;
-
   display: flex;
-
   flex-direction: column;
-
   gap: 17px;
 }
 
-
-/* ============================================================
-   ÚLTIMAS PARTIDAS EMBAIXO
-============================================================ */
-
 .bottomArea {
   width: 100%;
-
   display: block;
 }
 
-
-/* ============================================================
-   CARDS
-============================================================ */
+/* CARDS */
 
 .performance,
 .calendar,
@@ -303,1371 +168,843 @@
 .teams,
 .matches {
   min-width: 0;
-
-  padding:
-    22px
-    23px;
-
+  padding: 22px 23px;
   box-sizing: border-box;
-
   border-radius: 12px;
-
   background: #f7f7f5;
 }
-
 
 .performance {
   min-height: 318px;
 }
 
-
 .calendar {
   min-height: 330px;
 }
-
 
 .activities {
   min-height: 318px;
 }
 
-
 .teams {
   min-height: 330px;
-
   flex: 1;
 }
 
+.matches {
+  width: 100%;
+}
 
-/* ============================================================
-   CABEÇALHO
-============================================================ */
+/* CABEÇALHOS DAS SEÇÕES */
 
 .sectionHeader {
   display: flex;
-
   align-items: flex-start;
   justify-content: space-between;
-
   gap: 18px;
-
   margin-bottom: 19px;
 }
 
-
 .sectionHeader h2 {
   margin: 0;
-
   color: #292e2b;
-
   font-size: 15px;
   font-weight: 600;
-
   letter-spacing: -0.2px;
 }
 
-
 .sectionHeader p {
-  margin:
-    3px
-    0
-    0;
-
+  margin: 3px 0 0;
   color: #8d918f;
-
   font-size: 8px;
 }
 
-
-/* ============================================================
-   PERÍODO
-============================================================ */
+/* PERÍODO */
 
 .period {
   width: 148px;
   height: 32px;
-
   position: relative;
-
   flex-shrink: 0;
-
-  border-bottom:
-    1px solid
-    #c2c5c3;
+  border-bottom: 1px solid #c2c5c3;
 }
-
 
 .period select {
   width: 100%;
   height: 100%;
-
-  padding:
-    0
-    26px
-    0
-    0;
-
+  padding: 0 26px 0 0;
   border: none;
-
   outline: none;
-
   appearance: none;
-
   background: transparent;
-
   color: #565d59;
-
   font-family: inherit;
-
   font-size: 9px;
-
   cursor: pointer;
 }
 
-
 .period svg {
   position: absolute;
-
   top: 8px;
   right: 0;
-
   color: #666d69;
-
   pointer-events: none;
 }
 
-
-/* ============================================================
-   GRÁFICO
-============================================================ */
+/* GRÁFICO */
 
 .chartBody {
   display: flex;
-
   gap: 10px;
 }
-
 
 .axis {
   width: 29px;
   height: 190px;
-
   display: flex;
-
   flex-direction: column;
   justify-content: space-between;
-
   padding-bottom: 20px;
-
   box-sizing: border-box;
 }
 
-
 .axis span {
   color: #949895;
-
   font-size: 8px;
-
   text-align: right;
 }
-
 
 .chartArea {
   min-width: 0;
   height: 210px;
-
   position: relative;
-
   flex: 1;
 }
-
 
 .horizontal1,
 .horizontal2,
 .horizontal3,
 .horizontal4 {
   position: absolute;
-
   left: 0;
   right: 0;
-
   height: 1px;
-
   background: #e3e4e1;
 }
-
 
 .horizontal1 {
   top: 0;
 }
 
-
 .horizontal2 {
   top: 51px;
 }
-
 
 .horizontal3 {
   top: 102px;
 }
 
-
 .horizontal4 {
   top: 153px;
 }
 
-
 .chartArea svg {
   width: 100%;
   height: 190px;
-
   position: absolute;
-
   top: 0;
   left: 0;
-
   overflow: visible;
 }
-
 
 .teamLine,
 .adversaryLine {
   fill: none;
-
   stroke-width: 2.15;
-
-  vector-effect:
-    non-scaling-stroke;
+  vector-effect: non-scaling-stroke;
 }
-
 
 .teamLine {
   stroke: #08795a;
 }
 
-
 .adversaryLine {
   stroke: #7593a0;
 }
 
-
 .teamPoint {
   fill: #08795a;
-
   stroke: #f7f7f5;
-
   stroke-width: 2;
 }
-
 
 .adversaryPoint {
   fill: #7593a0;
-
   stroke: #f7f7f5;
-
   stroke-width: 2;
 }
 
-
 .labels {
   position: absolute;
-
   left: 0;
   right: 0;
   bottom: 0;
-
   display: flex;
-
   justify-content: space-between;
 }
 
-
 .labels span {
   color: #929794;
-
   font-size: 8px;
 }
-
 
 .chartFooter {
   display: flex;
-
   justify-content: flex-end;
-
   gap: 22px;
-
   margin-top: 3px;
 }
 
-
 .chartFooter span {
   display: flex;
-
   align-items: center;
-
   gap: 6px;
-
   color: #747a76;
-
   font-size: 8px;
 }
-
 
 .chartFooter i {
   width: 19px;
   height: 2px;
 }
 
-
 .teamLegend {
   background: #08795a;
 }
-
 
 .adversaryLegend {
   background: #7593a0;
 }
 
-
-/* ============================================================
-   CALENDÁRIO
-============================================================ */
+/* CALENDÁRIO */
 
 .calendarHeader {
   display: flex;
-
   align-items: flex-start;
   justify-content: space-between;
-
   margin-bottom: 20px;
 }
 
-
 .calendarHeader h2 {
   margin: 0;
-
   color: #292e2b;
-
   font-size: 15px;
   font-weight: 600;
 }
 
-
 .calendarHeader p {
-  margin:
-    3px
-    0
-    0;
-
+  margin: 3px 0 0;
   color: #8d918f;
-
   font-size: 8px;
 }
-
 
 .calendarHeader > svg {
   color: #005942;
 }
 
-
 .calendarContent {
   display: grid;
-
-  grid-template-columns:
-    minmax(
-      0,
-      1fr
-    )
-    220px;
-
+  grid-template-columns: minmax(0, 1fr) 220px;
   gap: 30px;
-
   align-items: stretch;
 }
-
 
 .calendarMain {
   min-width: 0;
 }
 
-
 .calendarNavigation {
   display: grid;
-
-  grid-template-columns:
-    32px
-    minmax(
-      0,
-      1fr
-    )
-    32px;
-
+  grid-template-columns: 32px minmax(0, 1fr) 32px;
   align-items: center;
-
   margin-bottom: 17px;
 }
 
-
 .calendarNavigation strong {
   color: #343936;
-
   font-size: 11px;
   font-weight: 600;
-
   text-align: center;
-
   text-transform: capitalize;
 }
-
 
 .calendarNavigation button {
   width: 32px;
   height: 32px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
   border: none;
-
   border-radius: 8px;
-
   background: #ececea;
-
   color: #565c58;
-
   cursor: pointer;
 }
 
-
 .calendarNavigation button:hover {
   background: #e4e5e2;
-
   color: #005942;
 }
 
+.calendarWeek,
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
 
 .calendarWeek {
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      7,
-      minmax(
-        0,
-        1fr
-      )
-    );
-
   margin-bottom: 5px;
 }
 
-
 .calendarWeek span {
   color: #9a9e9b;
-
   font-size: 7px;
   font-weight: 650;
-
   text-align: center;
 }
 
-
 .calendarGrid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      7,
-      minmax(
-        0,
-        1fr
-      )
-    );
-
   gap: 4px;
 }
-
 
 .calendarEmpty {
   height: 34px;
 }
 
-
 .calendarDay {
   height: 34px;
-
   position: relative;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
   border: none;
-
   border-radius: 8px;
-
   background: transparent;
-
   color: #585e5a;
-
   font-family: inherit;
-
   font-size: 9px;
-
   cursor: pointer;
-
-  transition:
-    background
-      0.15s ease,
-    color
-      0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
-
 
 .calendarDay:hover {
   background: #ececea;
 }
 
-
 .calendarDay i {
   width: 4px;
   height: 4px;
-
   position: absolute;
-
   bottom: 4px;
-
   border-radius: 50%;
-
   background: #005942;
 }
-
 
 .calendarDayMatch {
   color: #005942;
-
   font-weight: 700;
 }
 
-
 .calendarDaySelected {
   background: #005942;
-
-  color: #ffffff;
+  color: #fff;
 }
-
 
 .calendarDaySelected:hover {
   background: #005942;
 }
 
-
 .calendarDaySelected i {
-  background: #ffffff;
+  background: #fff;
 }
 
-
-/* ============================================================
-   PARTIDA DO CALENDÁRIO
-============================================================ */
+/* PARTIDA DO CALENDÁRIO */
 
 .calendarDetails {
   min-height: 205px;
-
   padding-left: 23px;
-
-  border-left:
-    1px solid
-    #e1e2df;
+  border-left: 1px solid #e1e2df;
 }
-
 
 .calendarDetailsLabel {
   display: block;
-
   margin-bottom: 14px;
-
   color: #8c918d;
-
   font-size: 8px;
   font-weight: 600;
-
   text-transform: uppercase;
-
   letter-spacing: 0.4px;
 }
 
-
 .calendarMatch {
   width: 100%;
-
   display: flex;
-
   align-items: center;
   justify-content: space-between;
-
   gap: 12px;
-
-  padding:
-    12px
-    0;
-
+  padding: 12px 0;
   border: none;
-
-  border-bottom:
-    1px solid
-    #e4e5e2;
-
+  border-bottom: 1px solid #e4e5e2;
   background: transparent;
-
   text-align: left;
-
   cursor: pointer;
 }
 
-
 .calendarMatch div {
   min-width: 0;
-
   display: flex;
-
   flex-direction: column;
 }
-
 
 .calendarMatch div > span {
   margin-bottom: 4px;
-
   color: #005942;
-
   font-size: 7px;
   font-weight: 650;
-
   text-transform: uppercase;
 }
 
-
 .calendarMatch strong {
   overflow: hidden;
-
   color: #323734;
-
   font-size: 10px;
   font-weight: 600;
-
   white-space: nowrap;
-
   text-overflow: ellipsis;
 }
 
-
 .calendarMatch small {
   margin-top: 2px;
-
   color: #8b908d;
-
   font-size: 8px;
 }
-
 
 .calendarMatch > svg {
   flex-shrink: 0;
-
   color: #787d79;
 }
 
-
 .calendarNoMatch {
   min-height: 130px;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
   gap: 8px;
-
   color: #a0a4a1;
-
   text-align: center;
 }
 
-
 .calendarNoMatch span {
   max-width: 140px;
-
   font-size: 8px;
-
   line-height: 1.5;
 }
 
-
-/* ============================================================
-   ATIVIDADES
-============================================================ */
+/* ATIVIDADES */
 
 .activityList {
   display: flex;
-
   flex-direction: column;
 }
-
 
 .activity {
   width: 100%;
   min-height: 58px;
-
   display: grid;
-
-  grid-template-columns:
-    25px
-    minmax(
-      0,
-      1fr
-    )
-    22px;
-
+  grid-template-columns: 25px minmax(0, 1fr) 22px;
   align-items: center;
-
   gap: 10px;
-
-  padding:
-    12px
-    0;
-
+  padding: 12px 0;
   border: none;
-
-  border-bottom:
-    1px solid
-    #e3e4e1;
-
+  border-bottom: 1px solid #e3e4e1;
   background: transparent;
-
   text-align: left;
-
   cursor: pointer;
 }
-
 
 .activity:last-child {
   border-bottom: none;
 }
 
-
 .activityNumber {
   color: #a1a5a2;
-
   font-size: 8px;
   font-weight: 500;
 }
 
-
 .activityContent {
   min-width: 0;
-
   display: flex;
-
   flex-direction: column;
 }
 
-
 .activityContent strong {
   overflow: hidden;
-
   color: #363b38;
-
   font-size: 9px;
   font-weight: 550;
-
   white-space: nowrap;
-
   text-overflow: ellipsis;
 }
 
-
 .activityContent span {
   margin-top: 3px;
-
   color: #929692;
-
   font-size: 7px;
 }
-
 
 .activityIcon {
   color: #626864;
 }
 
-
-/* ============================================================
-   EQUIPES
-============================================================ */
+/* EQUIPES */
 
 .teamList {
   display: flex;
-
   flex-direction: column;
 }
 
-
 .team {
   width: 100%;
-
   display: grid;
-
-  grid-template-columns:
-    24px
-    37px
-    minmax(
-      0,
-      1fr
-    )
-    auto;
-
+  grid-template-columns: 24px 37px minmax(0, 1fr) auto;
   align-items: center;
-
   gap: 9px;
-
-  padding:
-    13px
-    0;
-
+  padding: 13px 0;
   border: none;
-
-  border-bottom:
-    1px solid
-    #e3e4e1;
-
+  border-bottom: 1px solid #e3e4e1;
   background: transparent;
-
   text-align: left;
-
   cursor: pointer;
 }
-
 
 .team:last-child {
   border-bottom: none;
 }
 
-
 .team:hover {
-  background: #ffffff;
+  background: #fff;
 }
-
 
 .teamPosition {
   color: #a0a4a1;
-
   font-size: 8px;
 }
-
 
 .teamBadge {
   width: 34px;
   height: 34px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
   background: #176e56;
-
-  color: #ffffff;
-
+  color: #fff;
   font-size: 8px;
   font-weight: 600;
 }
 
-
-.team:nth-child(2)
-.teamBadge {
+.team:nth-child(2) .teamBadge {
   background: #668e9e;
 }
 
-
-.team:nth-child(3)
-.teamBadge {
+.team:nth-child(3) .teamBadge {
   background: #9c7454;
 }
 
-
 .teamText {
   min-width: 0;
-
   display: flex;
-
   flex-direction: column;
 }
 
-
 .teamText strong {
   overflow: hidden;
-
   color: #343936;
-
   font-size: 9px;
   font-weight: 600;
-
   white-space: nowrap;
-
   text-overflow: ellipsis;
 }
 
-
 .teamText span {
   margin-top: 2px;
-
   color: #929692;
-
   font-size: 7px;
 }
 
-
 .teamValue {
   color: #005942;
-
   font-size: 14px;
   font-weight: 650;
 }
-
 
 .teamValue small {
   font-size: 7px;
 }
 
-
-/* ============================================================
-   LINKS
-============================================================ */
+/* LINKS */
 
 .link {
   padding: 0;
-
   border: none;
-
   background: transparent;
-
   color: #005942;
-
   font-family: inherit;
-
   font-size: 9px;
   font-weight: 600;
-
   cursor: pointer;
 }
-
 
 .link:hover {
   text-decoration: underline;
 }
 
-
-/* ============================================================
-   ÚLTIMAS PARTIDAS
-============================================================ */
-
-.matches {
-  width: 100%;
-}
-
+/* ÚLTIMAS PARTIDAS */
 
 .tableWrapper {
   width: 100%;
-
   overflow-x: auto;
 }
 
-
 .tableWrapper table {
   width: 100%;
-
   border-collapse: collapse;
 }
 
-
 .tableWrapper th {
-  padding:
-    0
-    12px
-    10px;
-
+  padding: 0 12px 10px;
   color: #8e938f;
-
   font-size: 8px;
   font-weight: 600;
-
   text-align: left;
 }
 
-
 .tableWrapper td {
-  padding:
-    14px
-    12px;
-
-  border-top:
-    1px solid
-    #e3e4e1;
-
+  padding: 14px 12px;
+  border-top: 1px solid #e3e4e1;
   color: #6e7470;
-
   font-size: 9px;
-
   cursor: pointer;
 }
 
-
 .tableWrapper tbody tr:hover {
-  background: #ffffff;
+  background: #fff;
 }
-
 
 .tableWrapper td:first-child strong,
 .tableWrapper td:first-child span {
   display: block;
 }
 
-
 .tableWrapper td:first-child strong {
   color: #343936;
-
   font-size: 10px;
   font-weight: 600;
 }
 
-
 .tableWrapper td:first-child span {
   margin-top: 3px;
-
   color: #919592;
-
   font-size: 8px;
 }
 
-
 .result {
   color: #323734 !important;
-
   font-size: 11px !important;
   font-weight: 650;
 }
 
-
-/* ============================================================
-   STATUS
-============================================================ */
+/* STATUS */
 
 .status {
   font-size: 8px;
-
   font-weight: 600;
 }
-
 
 .statusDone {
   color: #087859;
 }
 
-
 .statusAnalysis {
   color: #477e95;
 }
-
 
 .statusPending {
   color: #b44f65;
 }
 
+/* NOTEBOOK */
 
-/* ============================================================
-   NOTEBOOK
-============================================================ */
-
-@media (
-  max-width: 1150px
-) {
+@media (max-width: 1150px) {
   .dashboard {
-    padding:
-      38px
-      34px
-      50px;
+    padding: 38px 34px 50px;
   }
-
 
   .mainArea {
-    grid-template-columns:
-      minmax(
-        0,
-        1.45fr
-      )
-      minmax(
-        250px,
-        0.8fr
-      );
+    grid-template-columns: minmax(0, 1.45fr) minmax(250px, 0.8fr);
   }
-
 
   .calendarContent {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
-
 
   .calendarDetails {
     min-height: auto;
-
-    padding:
-      17px
-      0
-      0;
-
+    padding: 17px 0 0;
     border-left: none;
-
-    border-top:
-      1px solid
-      #e1e2df;
+    border-top: 1px solid #e1e2df;
   }
 }
 
+/* TABLET */
 
-/* ============================================================
-   TABLET
-============================================================ */
-
-@media (
-  max-width: 900px
-) {
+@media (max-width: 900px) {
   .scoreboard {
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(
-          0,
-          1fr
-        )
-      );
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 
   .scoreItem:nth-child(2) {
     border-right: none;
   }
 
-
   .scoreItem:nth-child(-n + 2) {
-    border-bottom:
-      1px solid
-      #e2e3e0;
+    border-bottom: 1px solid #e2e3e0;
   }
-
 
   .mainArea {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
-
 
   .calendarContent {
-    grid-template-columns:
-      minmax(
-        0,
-        1fr
-      )
-      220px;
+    grid-template-columns: minmax(0, 1fr) 220px;
   }
-
 
   .calendarDetails {
     min-height: 205px;
-
-    padding:
-      0
-      0
-      0
-      23px;
-
+    padding: 0 0 0 23px;
     border-top: none;
-
-    border-left:
-      1px solid
-      #e1e2df;
+    border-left: 1px solid #e1e2df;
   }
 }
 
+/* CELULAR */
 
-/* ============================================================
-   CELULAR
-============================================================ */
-
-@media (
-  max-width: 600px
-) {
+@media (max-width: 600px) {
   .dashboard {
-    padding:
-      28px
-      15px
-      36px;
+    padding: 28px 15px 36px;
   }
-
 
   .header {
     align-items: flex-start;
-
     flex-direction: column;
-
     gap: 10px;
   }
-
 
   .header h1 {
     font-size: 26px;
   }
 
-
   .date {
     display: none;
   }
 
-
   .scoreboard {
-    grid-template-columns:
-      1fr
-      1fr;
+    grid-template-columns: 1fr 1fr;
   }
-
 
   .scoreItem {
     min-height: 112px;
-
     padding: 16px;
   }
 
-
   .scoreMain {
     flex-direction: column;
-
     gap: 3px;
   }
-
 
   .scoreMain strong {
     font-size: 29px;
   }
-
 
   .performance,
   .calendar,
   .activities,
   .teams,
   .matches {
-    padding:
-      18px
-      16px;
+    padding: 18px 16px;
   }
-
 
   .sectionHeader {
     flex-direction: column;
-
     gap: 10px;
   }
-
 
   .period {
     width: 100%;
   }
 
-
   .calendarContent {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
-
 
   .calendarDetails {
     min-height: auto;
-
-    padding:
-      18px
-      0
-      0;
-
+    padding: 18px 0 0;
     border-left: none;
-
-    border-top:
-      1px solid
-      #e1e2df;
+    border-top: 1px solid #e1e2df;
   }
-
 
   .calendarDay {
     height: 38px;
-
     font-size: 10px;
   }
-
 
   .calendarEmpty {
     height: 38px;
   }
 
-
   .tableWrapper table {
     min-width: 590px;
   }
-
 
   .activityContent strong {
     white-space: normal;
   }
 }
 
+/* CELULAR PEQUENO */
 
-/* ============================================================
-   CELULAR PEQUENO
-============================================================ */
-
-@media (
-  max-width: 390px
-) {
+@media (max-width: 390px) {
   .scoreboard {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
-
 
   .scoreItem {
     border-right: none;
-
-    border-bottom:
-      1px solid
-      #e2e3e0;
+    border-bottom: 1px solid #e2e3e0;
   }
-
 
   .scoreItem:last-child {
     border-bottom: none;
   }
 
-
   .scoreMain {
     flex-direction: row;
-
     align-items: baseline;
-
     gap: 10px;
   }
 }

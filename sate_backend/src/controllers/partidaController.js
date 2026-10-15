@@ -33,13 +33,11 @@ async function listarPartidas(req, res) {
         const treinador =
             await obterTreinadorLogado(req);
 
-
         if (!treinador) {
             return res.status(401).json({
                 mensagem: 'Treinador não identificado.'
             });
         }
-
 
         const partidas =
             await prisma.partida.findMany({
@@ -67,49 +65,53 @@ async function listarPartidas(req, res) {
                 }
             });
 
-
-        return res.status(200).json(partidas);
+        return res
+            .status(200)
+            .json(partidas);
 
     } catch (error) {
-        console.error('=================================');
-        console.error('ERRO AO LISTAR PARTIDAS:');
-        console.error(error);
-        console.error('=================================');
+        console.error(
+            'ERRO AO LISTAR PARTIDAS:',
+            error
+        );
 
         return res.status(500).json({
-            mensagem: 'Erro ao buscar partidas.',
-            erro: error.message
+            mensagem:
+                'Erro ao buscar partidas.',
+
+            erro:
+                error.message
         });
     }
 }
 
 
 // ============================================================
-// BUSCAR PARTIDA POR ID
+// BUSCAR PARTIDA
 // GET /api/partidas/:id
 // ============================================================
 
 async function buscarPartida(req, res) {
     try {
-        const id = Number(req.params.id);
+        const id =
+            Number(req.params.id);
 
         if (Number.isNaN(id)) {
             return res.status(400).json({
-                mensagem: 'ID da partida inválido.'
+                mensagem:
+                    'ID da partida inválido.'
             });
         }
-
 
         const treinador =
             await obterTreinadorLogado(req);
 
-
         if (!treinador) {
             return res.status(401).json({
-                mensagem: 'Treinador não identificado.'
+                mensagem:
+                    'Treinador não identificado.'
             });
         }
-
 
         const partida =
             await prisma.partida.findFirst({
@@ -117,7 +119,8 @@ async function buscarPartida(req, res) {
                     id,
 
                     equipe: {
-                        treinadorId: treinador.id
+                        treinadorId:
+                            treinador.id
                     }
                 },
 
@@ -135,25 +138,29 @@ async function buscarPartida(req, res) {
                 }
             });
 
-
         if (!partida) {
             return res.status(404).json({
-                mensagem: 'Partida não encontrada.'
+                mensagem:
+                    'Partida não encontrada.'
             });
         }
 
-
-        return res.status(200).json(partida);
+        return res
+            .status(200)
+            .json(partida);
 
     } catch (error) {
-        console.error('=================================');
-        console.error('ERRO AO BUSCAR PARTIDA:');
-        console.error(error);
-        console.error('=================================');
+        console.error(
+            'ERRO AO BUSCAR PARTIDA:',
+            error
+        );
 
         return res.status(500).json({
-            mensagem: 'Erro ao buscar partida.',
-            erro: error.message
+            mensagem:
+                'Erro ao buscar partida.',
+
+            erro:
+                error.message
         });
     }
 }
@@ -169,13 +176,12 @@ async function criarPartida(req, res) {
         const treinador =
             await obterTreinadorLogado(req);
 
-
         if (!treinador) {
             return res.status(401).json({
-                mensagem: 'Treinador não identificado.'
+                mensagem:
+                    'Treinador não identificado.'
             });
         }
-
 
         const {
             equipeId,
@@ -184,30 +190,49 @@ async function criarPartida(req, res) {
             local,
             campeonato,
             rodada,
-            observacoes,
-            status,
-            golsEquipe,
-            golsAdversario
+            observacoes
         } = req.body;
 
 
         if (!equipeId) {
             return res.status(400).json({
-                mensagem: 'A equipe é obrigatória.'
+                mensagem:
+                    'A equipe é obrigatória.'
             });
         }
 
 
-        if (!adversario) {
+        if (
+            !adversario ||
+            !String(adversario).trim()
+        ) {
             return res.status(400).json({
-                mensagem: 'O adversário é obrigatório.'
+                mensagem:
+                    'O adversário é obrigatório.'
             });
         }
 
 
         if (!data) {
             return res.status(400).json({
-                mensagem: 'A data da partida é obrigatória.'
+                mensagem:
+                    'A data da partida é obrigatória.'
+            });
+        }
+
+
+        const dataPartida =
+            new Date(data);
+
+
+        if (
+            Number.isNaN(
+                dataPartida.getTime()
+            )
+        ) {
+            return res.status(400).json({
+                mensagem:
+                    'Data da partida inválida.'
             });
         }
 
@@ -216,7 +241,9 @@ async function criarPartida(req, res) {
             await prisma.equipe.findFirst({
                 where: {
                     id: Number(equipeId),
-                    treinadorId: treinador.id
+
+                    treinadorId:
+                        treinador.id
                 }
             });
 
@@ -232,13 +259,16 @@ async function criarPartida(req, res) {
         const partida =
             await prisma.partida.create({
                 data: {
-                    equipeId: Number(equipeId),
+                    equipeId:
+                        equipe.id,
 
                     adversario:
-                        String(adversario).trim(),
+                        String(
+                            adversario
+                        ).trim(),
 
                     data:
-                        new Date(data),
+                        dataPartida,
 
                     local:
                         local
@@ -260,22 +290,17 @@ async function criarPartida(req, res) {
                             ? String(observacoes).trim()
                             : null,
 
+                    /*
+                      NOVA PARTIDA SEMPRE COMEÇA PENDENTE
+                    */
                     status:
-                        status || 'AGENDADA',
+                        'AGENDADA',
 
                     golsEquipe:
-                        golsEquipe !== undefined &&
-                        golsEquipe !== null &&
-                        golsEquipe !== ''
-                            ? Number(golsEquipe)
-                            : null,
+                        null,
 
                     golsAdversario:
-                        golsAdversario !== undefined &&
-                        golsAdversario !== null &&
-                        golsAdversario !== ''
-                            ? Number(golsAdversario)
-                            : null
+                        null
                 },
 
                 include: {
@@ -293,20 +318,27 @@ async function criarPartida(req, res) {
             });
 
 
-        return res.status(201).json({
-            mensagem: 'Partida criada com sucesso.',
-            partida
-        });
+        return res
+            .status(201)
+            .json({
+                mensagem:
+                    'Partida criada com sucesso.',
+
+                partida
+            });
 
     } catch (error) {
-        console.error('=================================');
-        console.error('ERRO AO CRIAR PARTIDA:');
-        console.error(error);
-        console.error('=================================');
+        console.error(
+            'ERRO AO CRIAR PARTIDA:',
+            error
+        );
 
         return res.status(500).json({
-            mensagem: 'Erro ao criar partida.',
-            erro: error.message
+            mensagem:
+                'Erro ao criar partida.',
+
+            erro:
+                error.message
         });
     }
 }
@@ -319,11 +351,13 @@ async function criarPartida(req, res) {
 
 async function atualizarPartida(req, res) {
     try {
-        const id = Number(req.params.id);
+        const id =
+            Number(req.params.id);
 
         if (Number.isNaN(id)) {
             return res.status(400).json({
-                mensagem: 'ID da partida inválido.'
+                mensagem:
+                    'ID da partida inválido.'
             });
         }
 
@@ -334,7 +368,8 @@ async function atualizarPartida(req, res) {
 
         if (!treinador) {
             return res.status(401).json({
-                mensagem: 'Treinador não identificado.'
+                mensagem:
+                    'Treinador não identificado.'
             });
         }
 
@@ -345,7 +380,8 @@ async function atualizarPartida(req, res) {
                     id,
 
                     equipe: {
-                        treinadorId: treinador.id
+                        treinadorId:
+                            treinador.id
                     }
                 }
             });
@@ -353,7 +389,8 @@ async function atualizarPartida(req, res) {
 
         if (!partidaExistente) {
             return res.status(404).json({
-                mensagem: 'Partida não encontrada.'
+                mensagem:
+                    'Partida não encontrada.'
             });
         }
 
@@ -379,19 +416,20 @@ async function atualizarPartida(req, res) {
             const equipe =
                 await prisma.equipe.findFirst({
                     where: {
-                        id: Number(equipeId),
-                        treinadorId: treinador.id
+                        id:
+                            Number(equipeId),
+
+                        treinadorId:
+                            treinador.id
                     }
                 });
-
 
             if (!equipe) {
                 return res.status(404).json({
                     mensagem:
-                        'Equipe não encontrada ou não pertence ao treinador.'
+                        'Equipe não encontrada.'
                 });
             }
-
 
             dadosPartida.equipeId =
                 Number(equipeId);
@@ -405,8 +443,22 @@ async function atualizarPartida(req, res) {
 
 
         if (data !== undefined) {
-            dadosPartida.data =
+            const novaData =
                 new Date(data);
+
+            if (
+                Number.isNaN(
+                    novaData.getTime()
+                )
+            ) {
+                return res.status(400).json({
+                    mensagem:
+                        'Data inválida.'
+                });
+            }
+
+            dadosPartida.data =
+                novaData;
         }
 
 
@@ -450,19 +502,19 @@ async function atualizarPartida(req, res) {
 
         if (golsEquipe !== undefined) {
             dadosPartida.golsEquipe =
-                golsEquipe !== null &&
-                golsEquipe !== ''
-                    ? Number(golsEquipe)
-                    : null;
+                golsEquipe === null ||
+                golsEquipe === ''
+                    ? null
+                    : Number(golsEquipe);
         }
 
 
         if (golsAdversario !== undefined) {
             dadosPartida.golsAdversario =
-                golsAdversario !== null &&
-                golsAdversario !== ''
-                    ? Number(golsAdversario)
-                    : null;
+                golsAdversario === null ||
+                golsAdversario === ''
+                    ? null
+                    : Number(golsAdversario);
         }
 
 
@@ -472,7 +524,8 @@ async function atualizarPartida(req, res) {
                     id
                 },
 
-                data: dadosPartida,
+                data:
+                    dadosPartida,
 
                 include: {
                     equipe: {
@@ -490,19 +543,25 @@ async function atualizarPartida(req, res) {
 
 
         return res.status(200).json({
-            mensagem: 'Partida atualizada com sucesso.',
-            partida: partidaAtualizada
+            mensagem:
+                'Partida atualizada com sucesso.',
+
+            partida:
+                partidaAtualizada
         });
 
     } catch (error) {
-        console.error('=================================');
-        console.error('ERRO AO ATUALIZAR PARTIDA:');
-        console.error(error);
-        console.error('=================================');
+        console.error(
+            'ERRO AO ATUALIZAR PARTIDA:',
+            error
+        );
 
         return res.status(500).json({
-            mensagem: 'Erro ao atualizar partida.',
-            erro: error.message
+            mensagem:
+                'Erro ao atualizar partida.',
+
+            erro:
+                error.message
         });
     }
 }
@@ -515,11 +574,14 @@ async function atualizarPartida(req, res) {
 
 async function excluirPartida(req, res) {
     try {
-        const id = Number(req.params.id);
+        const id =
+            Number(req.params.id);
+
 
         if (Number.isNaN(id)) {
             return res.status(400).json({
-                mensagem: 'ID da partida inválido.'
+                mensagem:
+                    'ID da partida inválido.'
             });
         }
 
@@ -530,7 +592,8 @@ async function excluirPartida(req, res) {
 
         if (!treinador) {
             return res.status(401).json({
-                mensagem: 'Treinador não identificado.'
+                mensagem:
+                    'Treinador não identificado.'
             });
         }
 
@@ -541,7 +604,8 @@ async function excluirPartida(req, res) {
                     id,
 
                     equipe: {
-                        treinadorId: treinador.id
+                        treinadorId:
+                            treinador.id
                     }
                 }
             });
@@ -549,7 +613,8 @@ async function excluirPartida(req, res) {
 
         if (!partida) {
             return res.status(404).json({
-                mensagem: 'Partida não encontrada.'
+                mensagem:
+                    'Partida não encontrada.'
             });
         }
 
@@ -562,26 +627,26 @@ async function excluirPartida(req, res) {
 
 
         return res.status(200).json({
-            mensagem: 'Partida excluída com sucesso.'
+            mensagem:
+                'Partida excluída com sucesso.'
         });
 
     } catch (error) {
-        console.error('=================================');
-        console.error('ERRO AO EXCLUIR PARTIDA:');
-        console.error(error);
-        console.error('=================================');
+        console.error(
+            'ERRO AO EXCLUIR PARTIDA:',
+            error
+        );
 
         return res.status(500).json({
-            mensagem: 'Erro ao excluir partida.',
-            erro: error.message
+            mensagem:
+                'Erro ao excluir partida.',
+
+            erro:
+                error.message
         });
     }
 }
 
-
-// ============================================================
-// EXPORTS
-// ============================================================
 
 module.exports = {
     listarPartidas,

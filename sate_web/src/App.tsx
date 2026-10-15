@@ -99,16 +99,30 @@ function App() {
 
         <Route element={<RotaPrivada />}>
           <Route element={<Layout />}>
-            {/* DASHBOARD */}
-            <Route path="/inicio" element={<Dashboard />} />
 
-            <Route path="/dashboard" element={<Dashboard />} />
+            {/* DASHBOARD */}
+            <Route
+              path="/inicio"
+              element={<Dashboard />}
+            />
+
+            {/* COMPATIBILIDADE COM A ROTA ANTIGA */}
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
+            />
 
             {/* EQUIPES */}
-            <Route path="/equipes" element={<Equipes />} />
+            <Route
+              path="/equipes"
+              element={<Equipes />}
+            />
 
             {/* ATLETAS */}
-            <Route path="/atletas" element={<Atletas />} />
+            <Route
+              path="/atletas"
+              element={<Atletas />}
+            />
 
             {/* CADASTRO DE ATLETA */}
             <Route
@@ -117,10 +131,16 @@ function App() {
             />
 
             {/* ANÁLISE DE VÍDEO */}
-            <Route path="/videos" element={<AnaliseVideo />} />
+            <Route
+              path="/videos"
+              element={<AnaliseVideo />}
+            />
 
             {/* PARTIDAS */}
-            <Route path="/partidas" element={<Partidas />} />
+            <Route
+              path="/partidas"
+              element={<Partidas />}
+            />
 
             {/* DETALHES DA PARTIDA */}
             <Route
@@ -145,8 +165,10 @@ function App() {
               path="/configuracoes"
               element={<Configuracoes />}
             />
+
           </Route>
         </Route>
+
       </Routes>
     </BrowserRouter>
   );

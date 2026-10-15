@@ -2,7 +2,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-
 import {
   ArrowRight,
   BarChart3,
@@ -16,24 +15,18 @@ import {
   Users,
   Video,
 } from 'lucide-react';
-
 import {
   FaApple,
   FaGooglePlay,
 } from 'react-icons/fa';
-
 import {
   useNavigate,
 } from 'react-router-dom';
-
 import styles from './landingPage.module.css';
-
 /* ==========================================
    ASSETS
 ========================================== */
-
-import logoSate from '../../assets/img/sate-logo.png';
-
+import logoSate from '../../assets/img/logo_grande.png';
 import heroFutebol from '../../assets/img/hero/futebol.png.png';
 import heroBasquete from '../../assets/img/hero/basquete.png.png';
 import heroVolei from '../../assets/img/hero/volei.png.png';
@@ -42,11 +35,17 @@ import heroRugby from '../../assets/img/hero/rugby.png.png';
 import heroNatacao from '../../assets/img/hero/natacao.png.png';
 import heroAtletismo from '../../assets/img/hero/atletismo.png.png';
 import heroTenis from '../../assets/img/hero/tenis.png.png';
-
+import futebolImg from '../../assets/img/itens/futebolImg.png';
+import basqueteImg from '../../assets/img/itens/basqueteImg.png';
+import voleiImg from '../../assets/img/itens/voleiImg.png';
+import handebolImg from '../../assets/img/itens/handebolImg.png';
+import rugbyImg from '../../assets/img/itens/rugbyImg.png';
+import natacaoImg from '../../assets/img/itens/natacaoImg.png';
+import atletismoImg from '../../assets/img/itens/atletismoImg.png';
+import tenisImg from '../../assets/img/itens/tenisImg.png';
 /* ==========================================
    HERO
 ========================================== */
-
 const heroSlides = [
   {
     nome: 'Futebol',
@@ -89,63 +88,55 @@ const heroSlides = [
     position: '72% center',
   },
 ];
-
 /* ==========================================
    ESPORTES
 ========================================== */
-
 const esportes = [
   {
     nome: 'Futebol',
-    simbolo: '⚽',
+    imagem: futebolImg,
   },
   {
     nome: 'Basquete',
-    simbolo: '🏀',
+    imagem: basqueteImg,
   },
   {
     nome: 'Vôlei',
-    simbolo: '🏐',
+    imagem: voleiImg,
   },
   {
     nome: 'Handebol',
-    simbolo: '🤾',
+    imagem: handebolImg,
   },
   {
     nome: 'Rugby',
-    simbolo: '🏉',
+    imagem: rugbyImg,
   },
   {
     nome: 'Natação',
-    simbolo: '🏊',
+    imagem: natacaoImg,
   },
   {
     nome: 'Atletismo',
-    simbolo: '🏃',
+    imagem: atletismoImg,
   },
   {
     nome: 'Tênis',
-    simbolo: '🎾',
+    imagem: tenisImg,
   },
 ];
-
 export default function LandingPage() {
   const navigate = useNavigate();
-
   const [heroAtual, setHeroAtual] =
     useState(0);
-
   /* ========================================
      FADE AUTOMÁTICO
   ======================================== */
-
   useEffect(() => {
     heroSlides.forEach((slide) => {
       const imagem = new Image();
-
       imagem.src = slide.imagem;
     });
-
     const intervalo =
       window.setInterval(() => {
         setHeroAtual((atual) =>
@@ -153,22 +144,18 @@ export default function LandingPage() {
           heroSlides.length
         );
       }, 5500);
-
     return () => {
       window.clearInterval(
         intervalo,
       );
     };
   }, []);
-
   /* ========================================
      NAVEGAÇÃO
   ======================================== */
-
   const irParaLogin = () => {
     navigate('/login');
   };
-
   const rolarPara = (
     id: string,
   ) => {
@@ -179,13 +166,11 @@ export default function LandingPage() {
         block: 'start',
       });
   };
-
   return (
     <main className={styles.page}>
       {/* ======================================
           HERO
       ====================================== */}
-
       <section
         className={styles.hero}
       >
@@ -199,13 +184,12 @@ export default function LandingPage() {
               <div
                 key={slide.nome}
                 className={`${styles.heroBackground} ${index === heroAtual
-                    ? styles.heroBackgroundActive
-                    : ''
+                  ? styles.heroBackgroundActive
+                  : ''
                   }`}
                 style={{
                   backgroundImage:
                     `url(${slide.imagem})`,
-
                   backgroundPosition:
                     slide.position,
                 }}
@@ -213,15 +197,12 @@ export default function LandingPage() {
             ),
           )}
         </div>
-
         <div
           className={
             styles.heroOverlay
           }
         />
-
         {/* HEADER */}
-
         <header
           className={styles.header}
         >
@@ -242,12 +223,10 @@ export default function LandingPage() {
               alt="SATE"
               className={styles.logo}
             />
-
             <strong>
               SATE
             </strong>
           </button>
-
           <nav
             className={
               styles.navigation
@@ -263,7 +242,6 @@ export default function LandingPage() {
             >
               Produto
             </button>
-
             <button
               type="button"
               onClick={() =>
@@ -274,7 +252,6 @@ export default function LandingPage() {
             >
               Esportes
             </button>
-
             <button
               type="button"
               onClick={() =>
@@ -285,7 +262,6 @@ export default function LandingPage() {
             >
               Aplicativos
             </button>
-
             <button
               type="button"
               onClick={() =>
@@ -297,7 +273,6 @@ export default function LandingPage() {
               Sobre
             </button>
           </nav>
-
           <div
             className={
               styles.headerActions
@@ -312,7 +287,6 @@ export default function LandingPage() {
             >
               Entrar
             </button>
-
             <button
               type="button"
               className={
@@ -321,16 +295,13 @@ export default function LandingPage() {
               onClick={irParaLogin}
             >
               Começar agora
-
               <ArrowRight
                 size={17}
               />
             </button>
           </div>
         </header>
-
         {/* CONTEÚDO HERO */}
-
         <div
           className={
             styles.heroContent
@@ -343,20 +314,16 @@ export default function LandingPage() {
           >
             DESEMPENHO SEM LIMITES
           </span>
-
           <h1>
             Acompanhamento e
             <br />
-
             treinamento esportivo
             <br />
-
             em{' '}
             <em>
               outro nível.
             </em>
           </h1>
-
           <p>
             O SATE é uma plataforma
             completa para gerenciar
@@ -364,7 +331,6 @@ export default function LandingPage() {
             analisar desempenho e tomar
             decisões com mais confiança.
           </p>
-
           <div
             className={
               styles.heroButtons
@@ -378,12 +344,10 @@ export default function LandingPage() {
               onClick={irParaLogin}
             >
               Começar agora
-
               <ArrowRight
                 size={18}
               />
             </button>
-
             <button
               type="button"
               className={
@@ -405,11 +369,9 @@ export default function LandingPage() {
                   fill="currentColor"
                 />
               </span>
-
               Conheça o produto
             </button>
           </div>
-
           <div
             className={
               styles.heroBenefits
@@ -419,33 +381,26 @@ export default function LandingPage() {
               <BarChart3
                 size={16}
               />
-
               Mais desempenho
             </span>
-
             <span>
               <Database
                 size={16}
               />
-
               Decisões com dados
             </span>
-
             <span>
               <Users
                 size={16}
               />
-
               Para todos os esportes
             </span>
           </div>
         </div>
       </section>
-
       {/* ======================================
           FUNCIONALIDADES
       ====================================== */}
-
       <section
         id="funcionalidades"
         className={
@@ -470,17 +425,15 @@ export default function LandingPage() {
               >
                 FUNCIONALIDADES
               </span>
-
               <h2>
                 Tudo o que o seu
                 <br />
                 time precisa, {' '}
                 <em>
-                 em um só lugar.
+                  em um só lugar.
                 </em>
               </h2>
             </div>
-
             <p>
               Ferramentas poderosas
               e intuitivas para
@@ -489,7 +442,6 @@ export default function LandingPage() {
               e potencializar resultados.
             </p>
           </div>
-
           <div
             className={
               styles.featureGrid
@@ -507,17 +459,14 @@ export default function LandingPage() {
                   size={26}
                 />
               </div>
-
               <h3>
                 Gestão de atletas
               </h3>
-
               <p>
                 Perfis completos,
                 informações e evolução
                 individual em um só lugar.
               </p>
-
               <button
                 type="button"
                 className={
@@ -530,7 +479,6 @@ export default function LandingPage() {
                 />
               </button>
             </article>
-
             <article
               className={
                 styles.featureCard
@@ -545,17 +493,14 @@ export default function LandingPage() {
                   size={26}
                 />
               </div>
-
               <h3>
                 Equipes
               </h3>
-
               <p>
                 Organize elencos,
                 categorias e informações
                 das suas equipes.
               </p>
-
               <button
                 type="button"
                 className={
@@ -568,7 +513,6 @@ export default function LandingPage() {
                 />
               </button>
             </article>
-
             <article
               className={
                 styles.featureCard
@@ -583,17 +527,14 @@ export default function LandingPage() {
                   size={26}
                 />
               </div>
-
               <h3>
                 Partidas
               </h3>
-
               <p>
                 Planejamento,
                 campeonatos e registros
                 completos dos jogos.
               </p>
-
               <button
                 type="button"
                 className={
@@ -606,7 +547,6 @@ export default function LandingPage() {
                 />
               </button>
             </article>
-
             <article
               className={
                 styles.featureCard
@@ -621,17 +561,14 @@ export default function LandingPage() {
                   size={26}
                 />
               </div>
-
               <h3>
                 Análise de vídeo
               </h3>
-
               <p>
                 Marque lances,
                 crie clipes e analise
                 partidas com facilidade.
               </p>
-
               <button
                 type="button"
                 className={
@@ -644,7 +581,6 @@ export default function LandingPage() {
                 />
               </button>
             </article>
-
             <article
               className={
                 styles.featureCard
@@ -659,17 +595,14 @@ export default function LandingPage() {
                   size={26}
                 />
               </div>
-
               <h3>
                 Estatísticas
               </h3>
-
               <p>
                 Visualize desempenho,
                 evolução e indicadores
                 importantes.
               </p>
-
               <button
                 type="button"
                 className={
@@ -685,11 +618,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
       {/* ======================================
           PLATAFORMA WEB
       ====================================== */}
-
       <section
         className={
           styles.platformSection
@@ -707,23 +638,19 @@ export default function LandingPage() {
           >
             VISÃO COMPLETA
           </span>
-
           <h2>
             Do treino ao resultado,
             <br />
-
             <em>
               na sua tela.
             </em>
           </h2>
-
           <p>
             Uma experiência moderna
             e intuitiva para acompanhar,
             analisar e tomar decisões
             com mais confiança.
           </p>
-
           <button
             type="button"
             className={
@@ -732,13 +659,11 @@ export default function LandingPage() {
             onClick={irParaLogin}
           >
             Conheça o produto
-
             <ArrowRight
               size={17}
             />
           </button>
         </div>
-
         <div
           className={
             styles.laptopArea
@@ -768,12 +693,10 @@ export default function LandingPage() {
                     src={logoSate}
                     alt=""
                   />
-
                   <strong>
                     SATE
                   </strong>
                 </div>
-
                 <nav>
                   <span
                     className={
@@ -782,29 +705,23 @@ export default function LandingPage() {
                   >
                     Início
                   </span>
-
                   <span>
                     Atletas
                   </span>
-
                   <span>
                     Equipes
                   </span>
-
                   <span>
                     Partidas
                   </span>
-
                   <span>
                     Vídeos
                   </span>
-
                   <span>
                     Estatísticas
                   </span>
                 </nav>
               </aside>
-
               <div
                 className={
                   styles.mockDashboard
@@ -819,12 +736,10 @@ export default function LandingPage() {
                     <span>
                       Visão geral
                     </span>
-
                     <h4>
                       Desempenho
                     </h4>
                   </div>
-
                   <div
                     className={
                       styles.mockUser
@@ -833,7 +748,6 @@ export default function LandingPage() {
                     JS
                   </div>
                 </div>
-
                 <div
                   className={
                     styles.mockStats
@@ -844,26 +758,22 @@ export default function LandingPage() {
                     label="Atletas"
                     change="+12%"
                   />
-
                   <MockStat
                     value="24"
                     label="Treinos"
                     change="+9%"
                   />
-
                   <MockStat
                     value="6"
                     label="Partidas"
                     change="+30%"
                   />
-
                   <MockStat
                     value="87%"
                     label="Evolução"
                     change="+14%"
                   />
                 </div>
-
                 <div
                   className={
                     styles.mockChart
@@ -877,12 +787,10 @@ export default function LandingPage() {
                     <strong>
                       Evolução do desempenho
                     </strong>
-
                     <span>
                       Últimos 6 meses
                     </span>
                   </div>
-
                   <svg
                     viewBox="0 0 700 190"
                     preserveAspectRatio="none"
@@ -900,7 +808,6 @@ export default function LandingPage() {
                           stopColor="#16a875"
                           stopOpacity="0.28"
                         />
-
                         <stop
                           offset="100%"
                           stopColor="#16a875"
@@ -908,7 +815,6 @@ export default function LandingPage() {
                         />
                       </linearGradient>
                     </defs>
-
                     <path
                       d="
                         M0 145
@@ -926,7 +832,6 @@ export default function LandingPage() {
                       "
                       fill="url(#landingChart)"
                     />
-
                     <polyline
                       points="
                         0,145
@@ -947,7 +852,6 @@ export default function LandingPage() {
                     />
                   </svg>
                 </div>
-
                 <div
                   className={
                     styles.mockBottom
@@ -961,26 +865,22 @@ export default function LandingPage() {
                     <strong>
                       Atletas em destaque
                     </strong>
-
                     <MockAthlete
                       initials="PL"
                       name="Pedro Lima"
                       value="9.2"
                     />
-
                     <MockAthlete
                       initials="LM"
                       name="Lucas Martins"
                       value="8.7"
                     />
-
                     <MockAthlete
                       initials="GS"
                       name="Gabriel Souza"
                       value="8.1"
                     />
                   </div>
-
                   <div
                     className={
                       styles.mockTraining
@@ -996,11 +896,9 @@ export default function LandingPage() {
                         fill="currentColor"
                       />
                     </div>
-
                     <strong>
                       Treino técnico
                     </strong>
-
                     <span>
                       Análise de desempenho
                     </span>
@@ -1008,7 +906,6 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-
             <div
               className={
                 styles.laptopBottom
@@ -1017,11 +914,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
       {/* ======================================
           EXCEL
       ====================================== */}
-
       <section
         className={
           styles.excelSection
@@ -1039,16 +934,13 @@ export default function LandingPage() {
           >
             AUTOMAÇÃO INTELIGENTE
           </span>
-
           <h2>
             Importação de
             <br />
-
             <em>
               planilhas Excel.
             </em>
           </h2>
-
           <p>
             Importe informações em
             segundos, reduza cadastros
@@ -1056,7 +948,6 @@ export default function LandingPage() {
             equipes e dados sempre
             atualizados.
           </p>
-
           <button
             type="button"
             className={
@@ -1065,12 +956,10 @@ export default function LandingPage() {
             onClick={irParaLogin}
           >
             Saiba mais
-
             <ArrowRight
               size={17}
             />
           </button>
-
           <div
             className={
               styles.excelBenefits
@@ -1080,28 +969,22 @@ export default function LandingPage() {
               <Upload
                 size={17}
               />
-
               Importação rápida
             </span>
-
             <span>
               <Check
                 size={17}
               />
-
               Menos trabalho manual
             </span>
-
             <span>
               <Database
                 size={17}
               />
-
               Dados centralizados
             </span>
           </div>
         </div>
-
         <div
           className={
             styles.excelVisual
@@ -1122,16 +1005,13 @@ export default function LandingPage() {
                 strokeWidth={1.8}
               />
             </div>
-
             <strong>
               Atletas.xlsx
             </strong>
-
             <span>
               Planilha Excel
             </span>
           </div>
-
           <div
             className={
               styles.excelArrow
@@ -1141,7 +1021,6 @@ export default function LandingPage() {
               size={28}
             />
           </div>
-
           <div
             className={
               styles.excelTable
@@ -1155,20 +1034,16 @@ export default function LandingPage() {
               <span>
                 Nome
               </span>
-
               <span>
                 Posição
               </span>
-
               <span>
                 Categoria
               </span>
-
               <span>
                 Status
               </span>
             </div>
-
             {[
               [
                 'Carlos Silva',
@@ -1201,15 +1076,12 @@ export default function LandingPage() {
                   <span>
                     {atleta[0]}
                   </span>
-
                   <span>
                     {atleta[1]}
                   </span>
-
                   <span>
                     {atleta[2]}
                   </span>
-
                   <span
                     className={
                       styles.importBadge
@@ -1220,7 +1092,6 @@ export default function LandingPage() {
                 </div>
               ),
             )}
-
             <div
               className={
                 styles.progressCard
@@ -1230,14 +1101,11 @@ export default function LandingPage() {
                 <Check
                   size={15}
                 />
-
                 Importando dados...
               </div>
-
               <span>
                 78%
               </span>
-
               <div
                 className={
                   styles.progressBar
@@ -1249,11 +1117,60 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
+      {/* ======================================
+          ESPORTES
+      ====================================== */}
+      <section
+        id="esportes"
+        className={
+          styles.sportsSection
+        }
+      >
+        <span
+          className={
+            styles.eyebrow
+          }
+        >
+          DIVERSAS MODALIDADES
+        </span>
+        <h2>
+          Feito para{' '}
+          <em>
+            todos os esportes.
+          </em>
+        </h2>
+        <p>
+          O SATE se adapta às
+          particularidades de cada
+          modalidade, com campos de
+          análise específicos e
+          personalizáveis.
+        </p>
+        <div
+          className={
+            styles.sportsGrid
+          }
+        >
+          {esportes.map((esporte) => (
+            <article
+              key={esporte.nome}
+              className={styles.sportCard}
+            >
+              <div className={styles.sportImageBox}>
+                <img
+                  src={esporte.imagem}
+                  alt={esporte.nome}
+                  className={styles.sportImage}
+                />
+              </div>
+              <strong>{esporte.nome}</strong>
+            </article>
+          ))}
+        </div>
+      </section>
       {/* ======================================
           APLICATIVOS
       ====================================== */}
-
       <section
         id="aplicativos"
         className={
@@ -1272,19 +1189,15 @@ export default function LandingPage() {
           >
             SEMPRE COM VOCÊ
           </span>
-
           <h2>
             Para treinadores
             <br />
-
             e atletas, em
             <br />
-
             <em>
               qualquer lugar.
             </em>
           </h2>
-
           <p>
             Além da plataforma web,
             o SATE também está
@@ -1292,7 +1205,6 @@ export default function LandingPage() {
             pensados para treinadores
             e atletas.
           </p>
-
           <div
             className={
               styles.storeButtons
@@ -1307,18 +1219,15 @@ export default function LandingPage() {
                   styles.storeIcon
                 }
               />
-
               <div>
                 <small>
                   Baixar na
                 </small>
-
                 <strong>
                   App Store
                 </strong>
               </div>
             </button>
-
             <button
               type="button"
               onClick={irParaLogin}
@@ -1328,12 +1237,10 @@ export default function LandingPage() {
                   styles.storeIcon
                 }
               />
-
               <div>
                 <small>
                   Disponível no
                 </small>
-
                 <strong>
                   Google Play
                 </strong>
@@ -1341,14 +1248,12 @@ export default function LandingPage() {
             </button>
           </div>
         </div>
-
         <div
           className={
             styles.phonesArea
           }
         >
           {/* TREINADOR */}
-
           <div
             className={`${styles.phone} ${styles.phoneTrainer}`}
           >
@@ -1360,12 +1265,10 @@ export default function LandingPage() {
               <span>
                 9:41
               </span>
-
               <span>
                 •••
               </span>
             </div>
-
             <div
               className={
                 styles.phoneBrand
@@ -1375,12 +1278,10 @@ export default function LandingPage() {
                 src={logoSate}
                 alt=""
               />
-
               <strong>
                 SATE
               </strong>
             </div>
-
             <div
               className={
                 styles.phoneUser
@@ -1389,22 +1290,18 @@ export default function LandingPage() {
               <div>
                 C
               </div>
-
               <span>
                 <small>
                   Olá, Professora!
                 </small>
-
                 <strong>
                   Carolina
                 </strong>
               </span>
             </div>
-
             <h4>
               Visão geral
             </h4>
-
             <div
               className={
                 styles.phoneStats
@@ -1414,33 +1311,27 @@ export default function LandingPage() {
                 <strong>
                   24
                 </strong>
-
                 <span>
                   Atletas
                 </span>
               </div>
-
               <div>
                 <strong>
                   2
                 </strong>
-
                 <span>
                   Equipes
                 </span>
               </div>
-
               <div>
                 <strong>
                   3-1
                 </strong>
-
                 <span>
                   Última
                 </span>
               </div>
             </div>
-
             <div
               className={
                 styles.phoneMatches
@@ -1449,35 +1340,27 @@ export default function LandingPage() {
               <strong>
                 Últimas partidas
               </strong>
-
               <p>
                 SATE FC
-
                 <b>
                   3 - 1
                 </b>
               </p>
-
               <p>
                 Real Clube
-
                 <b>
                   1 - 1
                 </b>
               </p>
-
               <p>
                 União
-
                 <b>
                   2 - 0
                 </b>
               </p>
             </div>
           </div>
-
           {/* ATLETA */}
-
           <div
             className={`${styles.phone} ${styles.phoneAthlete}`}
           >
@@ -1489,12 +1372,10 @@ export default function LandingPage() {
               <span>
                 9:41
               </span>
-
               <span>
                 •••
               </span>
             </div>
-
             <div
               className={
                 styles.phoneBrand
@@ -1504,12 +1385,10 @@ export default function LandingPage() {
                 src={logoSate}
                 alt=""
               />
-
               <strong>
                 SATE
               </strong>
             </div>
-
             <div
               className={
                 styles.phoneUser
@@ -1518,22 +1397,18 @@ export default function LandingPage() {
               <div>
                 P
               </div>
-
               <span>
                 <small>
                   Olá, Pedro!
                 </small>
-
                 <strong>
                   Atleta
                 </strong>
               </span>
             </div>
-
             <h4>
               Meu desempenho
             </h4>
-
             <div
               className={
                 styles.phoneStats
@@ -1543,33 +1418,27 @@ export default function LandingPage() {
                 <strong>
                   12
                 </strong>
-
                 <span>
                   Treinos
                 </span>
               </div>
-
               <div>
                 <strong>
                   540
                 </strong>
-
                 <span>
                   Minutos
                 </span>
               </div>
-
               <div>
                 <strong>
                   8.2
                 </strong>
-
                 <span>
                   Média
                 </span>
               </div>
             </div>
-
             <div
               className={
                 styles.phoneChart
@@ -1596,7 +1465,6 @@ export default function LandingPage() {
                 />
               </svg>
             </div>
-
             <div
               className={
                 styles.phoneTraining
@@ -1605,11 +1473,9 @@ export default function LandingPage() {
               <small>
                 Próximo treino
               </small>
-
               <strong>
                 Treino técnico
               </strong>
-
               <span>
                 Hoje • 18:00
               </span>
@@ -1617,249 +1483,134 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
       {/* ======================================
-          ESPORTES
-      ====================================== */}
-
-      <section
-        id="esportes"
-        className={
-          styles.sportsSection
-        }
-      >
-        <span
-          className={
-            styles.eyebrow
-          }
-        >
-          DIVERSAS MODALIDADES
-        </span>
-
-        <h2>
-          Feito para{' '}
-
-          <em>
-            todos os esportes.
-          </em>
-        </h2>
-
-        <p>
-          O SATE se adapta às
-          particularidades de cada
-          modalidade, com campos de
-          análise específicos e
-          personalizáveis.
-        </p>
-
-        <div
-          className={
-            styles.sportsGrid
-          }
-        >
-          {esportes.map(
-            (esporte) => (
-              <article
-                key={
-                  esporte.nome
-                }
-                className={
-                  styles.sportCard
-                }
-              >
-                <span>
-                  {
-                    esporte.simbolo
-                  }
-                </span>
-
-                <strong>
-                  {
-                    esporte.nome
-                  }
-                </strong>
-              </article>
-            ),
-          )}
-        </div>
-      </section>
-
-      {/* ======================================
-          CTA
-      ====================================== */}
-
+    CTA
+====================================== */}
       <section
         id="sobre"
-        className={
-          styles.finalCta
-        }
+        className={styles.finalCta}
       >
-        <div>
-          <span>
-            RESULTADOS REAIS COMEÇAM AQUI
-          </span>
-
+        <div className={styles.finalCtaContent}>
+          <span>RESULTADOS REAIS COMEÇAM AQUI</span>
           <h2>
             Pronto para levar
             <br />
-
-            seu time mais longe?
+            seu time <em>mais longe?</em>
           </h2>
-
           <p>
-            Transforme organização,
-            dados e desempenho em
-            evolução.
+            Transforme organização, dados e desempenho
+            em evolução dentro e fora de campo.
           </p>
         </div>
-
         <button
           type="button"
+          className={styles.finalCtaButton}
           onClick={irParaLogin}
         >
           Começar agora
-
-          <ArrowRight
-            size={19}
-          />
+          <ArrowRight size={20} />
         </button>
       </section>
-
       {/* ======================================
-          FOOTER
-      ====================================== */}
-
-      <footer
-        className={
-          styles.footer
-        }
-      >
-        <div
-          className={
-            styles.footerBrand
-          }
-        >
-          <div>
-            <img
-              src={logoSate}
-              alt="SATE"
-            />
-
-            <strong>
-              SATE
-            </strong>
-          </div>
-
-          <p>
-            Dados hoje.
-            <br />
-
-            Grandes conquistas amanhã.
-          </p>
-        </div>
-
-        <div
-          className={
-            styles.footerLinks
-          }
-        >
-          <div>
-            <strong>
-              Produto
-            </strong>
-
-            <button
-              type="button"
-              onClick={() =>
-                rolarPara(
-                  'funcionalidades',
-                )
-              }
-            >
-              Funcionalidades
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                rolarPara(
-                  'esportes',
-                )
-              }
-            >
-              Esportes
-            </button>
-
-            <button
-              type="button"
-              onClick={
-                irParaLogin
-              }
-            >
-              Entrar
-            </button>
-          </div>
-
-          <div>
-            <strong>
-              Suporte
-            </strong>
-
-            <span>
-              Central de ajuda
-            </span>
-
-            <span>
-              Contato
-            </span>
-
-            <span>
-              Termos de uso
+    FOOTER
+====================================== */}
+      <footer className={styles.footer}>
+        <div className={styles.footerTop}>
+          <div className={styles.footerBrand}>
+            <div className={styles.footerLogo}>
+              <img
+                src={logoSate}
+                alt="SATE"
+              />
+              <strong>SATE</strong>
+            </div>
+            <p>
+              Tecnologia para transformar dados
+              esportivos em decisões melhores.
+            </p>
+            <span className={styles.footerPhrase}>
+              Dados hoje. Grandes conquistas amanhã.
             </span>
           </div>
-
-          <div>
-            <strong>
-              Sobre
-            </strong>
-
-            <span>
-              SATE
-            </span>
-
-            <span>
-              Privacidade
-            </span>
-
-            <span>
-              Projeto
-            </span>
+          <div className={styles.footerLinks}>
+            <div>
+              <strong>Produto</strong>
+              <button
+                type="button"
+                onClick={() =>
+                  rolarPara('funcionalidades')
+                }
+              >
+                Funcionalidades
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  rolarPara('esportes')
+                }
+              >
+                Esportes
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  rolarPara('aplicativos')
+                }
+              >
+                Aplicativos
+              </button>
+              <button
+                type="button"
+                onClick={irParaLogin}
+              >
+                Entrar
+              </button>
+            </div>
+            <div>
+              <strong>Plataforma</strong>
+              <span>Gestão de atletas</span>
+              <span>Gestão de equipes</span>
+              <span>Análise de partidas</span>
+              <span>Estatísticas</span>
+            </div>
+            <div>
+              <strong>Recursos</strong>
+              <span>Análise de vídeo</span>
+              <span>Importação por Excel</span>
+              <span>Aplicativo mobile</span>
+              <span>Múltiplos esportes</span>
+            </div>
+            <div>
+              <strong>Sobre</strong>
+              <span>Projeto SATE</span>
+              <span>Privacidade</span>
+              <span>Termos de uso</span>
+              <span>Contato</span>
+            </div>
           </div>
         </div>
-
-        <span
-          className={
-            styles.copyright
-          }
-        >
-          © 2026 SATE. Todos os
-          direitos reservados.
-        </span>
+        <div className={styles.footerDivider} />
+        <div className={styles.footerBottom}>
+          <span>
+            © 2026 SATE. Todos os direitos reservados.
+          </span>
+          <div>
+            <span>Sistema de Acompanhamento</span>
+            <span>e Treinamento Esportivo</span>
+          </div>
+        </div>
       </footer>
     </main>
   );
 }
-
 /* ==========================================
    MOCK DASHBOARD
 ========================================== */
-
 interface MockStatProps {
   value: string;
   label: string;
   change: string;
 }
-
 function MockStat({
   value,
   label,
@@ -1874,24 +1625,20 @@ function MockStat({
       <strong>
         {value}
       </strong>
-
       <span>
         {label}
       </span>
-
       <small>
         {change}
       </small>
     </div>
   );
 }
-
 interface MockAthleteProps {
   initials: string;
   name: string;
   value: string;
 }
-
 function MockAthlete({
   initials,
   name,
@@ -1906,13 +1653,10 @@ function MockAthlete({
       <span>
         {initials}
       </span>
-
       <strong>
         {name}
       </strong>
-
       <i />
-
       <b>
         {value}
       </b>

@@ -1,6 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // ==========================================
+// LANDING PAGE
+// ==========================================
+import LandingPage from "./pages/LandingPage/landingPage";
+
+// ==========================================
 // PÁGINAS DE ACESSO
 // ==========================================
 import Login from "./pages/Login/login";
@@ -33,7 +38,7 @@ import RotaInicial from "./components/RotaInicial/RotaInicial";
 import Dashboard from "./pages/Dashboard/dashboard";
 import Equipes from "./pages/Equipes/equipes";
 import Atletas from "./pages/Atletas/atletas";
-import Comparacoes from "./pages/Comparacoes/compracoes";
+import Comparacoes from "./pages/Comparacoes/comparacoes";
 import Estatisticas from "./pages/Estatisticas/estatisticas";
 import Configuracoes from "./pages/Configuracoes/configuracoes";
 import AnaliseVideo from "./pages/AnaliseVideos/analiseVideos";
@@ -48,18 +53,19 @@ function App() {
         {/* ========================================
             PÁGINAS PÚBLICAS
         ======================================== */}
-        <Route path="/" element={<Login />} />
+
+        <Route path="/" element={<LandingPage />} />
+
+        <Route path="/login" element={<Login />} />
 
         <Route path="/cadastro" element={<Cadastro />} />
 
-        <Route
-          path="/esqueci-senha"
-          element={<EsqueciSenha />}
-        />
+        <Route path="/esqueci-senha" element={<EsqueciSenha />} />
 
         {/* ========================================
             ONBOARDING / CONFIGURAÇÃO INICIAL
         ======================================== */}
+
         <Route element={<RotaInicial />}>
           <Route
             path="/boas-vindas"
@@ -90,8 +96,10 @@ function App() {
         {/* ========================================
             ÁREA PRIVADA
         ======================================== */}
+
         <Route element={<RotaPrivada />}>
           <Route element={<Layout />}>
+
             {/* DASHBOARD */}
             <Route
               path="/inicio"
@@ -157,8 +165,10 @@ function App() {
               path="/configuracoes"
               element={<Configuracoes />}
             />
+
           </Route>
         </Route>
+
       </Routes>
     </BrowserRouter>
   );

@@ -13,7 +13,21 @@ class SateApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: 'Arial',
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF00845F),
+          primary: const Color(0xFF00845F),
+        ),
       ),
+
+      // Força formato 24h em qualquer TimePicker do app
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: true,
+          ),
+          child: child!,
+        );
+      },
 
       home: const InicialPage(),
     );

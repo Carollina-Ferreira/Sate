@@ -2,6 +2,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // ==========================================
+// LANDING PAGE
+// ==========================================
+import LandingPage from "./pages/LandingPage/landingPage";
+
+// ==========================================
 // PÁGINAS DE ACESSO
 // ==========================================
 import Login from "./pages/Login/login";
@@ -33,8 +38,8 @@ import RotaInicial from "./components/RotaInicial/RotaInicial";
 // ==========================================
 import Dashboard from "./pages/Dashboard/dashboard";
 import Equipes from "./pages/Equipes/equipes";
-import Altetas from "./pages/Atletas/atletas";
-import Comparacoes from "./pages/Comparacoes/compracoes";
+import Atletas from "./pages/Atletas/atletas";
+import Comparacoes from "./pages/Comparacoes/comparacoes";
 import Estatisticas from "./pages/Estatisticas/estatisticas";
 import Configuracoes from "./pages/Configuracoes/configuracoes";
 import AnaliseVideo from "./pages/AnaliseVideos/analiseVideos";
@@ -46,17 +51,33 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+<<<<<<< HEAD
         {/* PÁGINAS PÚBLICAS */}
         <Route path="/" element={<Login />} />
 
         <Route path="/cadastro" element={<Cadastro />} />
+=======
+        {/* ========================================
+            PÁGINAS PÚBLICAS
+        ======================================== */}
 
-        <Route
-          path="/esqueci-senha"
-          element={<EsqueciSenha />}
-        />
+        <Route path="/" element={<LandingPage />} />
 
+        <Route path="/login" element={<Login />} />
+>>>>>>> c40bc0e1564aead88cfebd3d7a095525c352b1e8
+
+        <Route path="/cadastro" element={<Cadastro />} />
+
+        <Route path="/esqueci-senha" element={<EsqueciSenha />} />
+
+<<<<<<< HEAD
         {/* CONFIGURAÇÃO INICIAL */}
+=======
+        {/* ========================================
+            ONBOARDING / CONFIGURAÇÃO INICIAL
+        ======================================== */}
+
+>>>>>>> c40bc0e1564aead88cfebd3d7a095525c352b1e8
         <Route element={<RotaInicial />}>
           <Route
             path="/boas-vindas"
@@ -84,14 +105,26 @@ function App() {
           />
         </Route>
 
+<<<<<<< HEAD
         {/* ÁREA PRIVADA */}
         <Route element={<RotaPrivada />}>
           <Route element={<Layout />}>
+=======
+        {/* ========================================
+            ÁREA PRIVADA
+        ======================================== */}
+
+        <Route element={<RotaPrivada />}>
+          <Route element={<Layout />}>
+
+            {/* DASHBOARD */}
+>>>>>>> c40bc0e1564aead88cfebd3d7a095525c352b1e8
             <Route
               path="/inicio"
               element={<Dashboard />}
             />
 
+            {/* COMPATIBILIDADE COM A ROTA ANTIGA */}
             <Route
               path="/dashboard"
               element={<Dashboard />}
@@ -104,7 +137,7 @@ function App() {
 
             <Route
               path="/atletas"
-              element={<Altetas />}
+              element={<Atletas />}
             />
 
             <Route
@@ -142,8 +175,10 @@ function App() {
               path="/configuracoes"
               element={<Configuracoes />}
             />
+
           </Route>
         </Route>
+
       </Routes>
     </BrowserRouter>
   );

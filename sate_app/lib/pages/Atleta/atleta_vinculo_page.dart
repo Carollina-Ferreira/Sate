@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'atleta_navigation.dart';
+import 'atleta_qrcode_page.dart';
 
 class AtletaVinculoPage extends StatefulWidget {
   final String nomeUsuario;
@@ -32,6 +33,10 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
     super.dispose();
   }
 
+  // ============================================================
+  // VINCULAR (manual)
+  // ============================================================
+
   Future<void> vincular() async {
     final codigo = codigoController.text.trim();
 
@@ -59,6 +64,38 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
 
     mostrarTreinador();
   }
+
+  // ============================================================
+  // ESCANEAR QR CODE
+  // ============================================================
+
+  Future<void> _escanearQrCode() async {
+    final codigoLido = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const AtletaQrCodePage(),
+      ),
+    );
+
+    if (codigoLido == null || codigoLido.isEmpty) return;
+
+    // Se o QR Code tiver uma URL tipo "https://sate.app/join/TRN-4829",
+    // pega só o último segmento. Caso contrário, usa o valor direto.
+    final codigoLimpo = codigoLido.contains('/')
+        ? codigoLido.split('/').last
+        : codigoLido;
+
+    codigoController.text = codigoLimpo;
+
+    // Chama o vínculo direto após ler o QR
+    if (mounted) {
+      vincular();
+    }
+  }
+
+  // ============================================================
+  // BOTTOM SHEET DE CONFIRMAÇÃO
+  // ============================================================
 
   void mostrarTreinador() {
     showModalBottomSheet(
@@ -264,6 +301,10 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
     );
   }
 
+  // ============================================================
+  // BUILD
+  // ============================================================
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -322,7 +363,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
               Center(
                 child: Text(
                   'Digite o código fornecido pelo seu treinador '
-                  'para entrar na equipe.',
+                  'ou escaneie o QR Code.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -397,7 +438,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
 
               const SizedBox(height: 16),
 
-              // BOTÃO
+              // BOTÃO VINCULAR
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -443,6 +484,56 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                 ),
               ),
 
+              const SizedBox(height: 18),
+
+              // DIVISOR "OU"
+              Row(
+                children: [
+                  Expanded(child: Divider(color: Colors.grey.shade300)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Text(
+                      'ou',
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  Expanded(child: Divider(color: Colors.grey.shade300)),
+                ],
+              ),
+
+              const SizedBox(height: 18),
+
+              // BOTÃO ESCANEAR QR CODE
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: OutlinedButton.icon(
+                  onPressed: carregando ? null : _escanearQrCode,
+                  icon: const Icon(
+                    Icons.qr_code_scanner_rounded,
+                    size: 22,
+                  ),
+                  label: const Text(
+                    'Escanear QR Code',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: verde,
+                    side: const BorderSide(color: verde, width: 1.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
+              ),
+
               const SizedBox(height: 32),
 
               // COMO FUNCIONA
@@ -468,8 +559,8 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
 
               _buildStep(
                 numero: '2',
-                titulo: 'Digite o código',
-                descricao: 'Insira o código no campo acima.',
+                titulo: 'Digite o código ou escaneie',
+                descricao: 'Insira o código no campo ou use o QR Code.',
                 cor: rosa,
               ),
 
@@ -521,6 +612,10 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
       ),
     );
   }
+
+  // ============================================================
+  // STEP
+  // ============================================================
 
   Widget _buildStep({
     required String numero,

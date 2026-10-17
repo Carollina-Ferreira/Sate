@@ -10,7 +10,11 @@ const usuarioRoutes = require('./routes/usuarioRoutes');
 const equipeRoutes = require('./routes/equipeRoutes');
 const partidaRoutes = require('./routes/partidaRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
-const videoRoutes = require('./routes/videoRoutes');
+
+const {
+  partidaVideoRoutes,
+  videoRoutes,
+} = require('./routes/videoRoutes');
 
 const app = express();
 
@@ -23,7 +27,10 @@ app.use(
     origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+    ],
   })
 );
 
@@ -50,7 +57,9 @@ app.use(
 
 app.use(
   '/uploads',
-  express.static(path.join(__dirname, '../uploads'))
+  express.static(
+    path.join(__dirname, '../uploads')
+  )
 );
 
 // ======================================================
@@ -75,28 +84,74 @@ app.get('/api/health', (req, res) => {
 // ======================================================
 
 app.use('/api/auth', authRoutes);
+
 app.use('/api/atletas', atletaRoutes);
-app.use('/api/treinadores', treinadorRoutes);
-app.use('/api/password', passwordRoutes);
-app.use('/api/usuarios', usuarioRoutes);
-app.use('/api/equipes', equipeRoutes);
-app.use('/api/partidas', partidaRoutes);
-app.use('/api/dashboard', dashboardRoutes);
+
+app.use(
+  '/api/treinadores',
+  treinadorRoutes
+);
+
+app.use(
+  '/api/password',
+  passwordRoutes
+);
+
+app.use(
+  '/api/usuarios',
+  usuarioRoutes
+);
+
+app.use(
+  '/api/equipes',
+  equipeRoutes
+);
+
+app.use(
+  '/api/partidas',
+  partidaRoutes
+);
+
+app.use(
+  '/api/dashboard',
+  dashboardRoutes
+);
 
 // ======================================================
-// ROTAS DE VÍDEO
+// ROTAS DE VÍDEOS
 // ======================================================
 //
-// videoRoutes.js já possui:
+// videoRoutes.js exporta:
 //
-// GET    /partidas/:partidaId/videos
-// POST   /partidas/:partidaId/videos
-// DELETE /videos/:id
+// {
+//   partidaVideoRoutes,
+//   videoRoutes
+// }
 //
-// Então o router é montado em /api.
+// partidaVideoRoutes:
+// GET  /:id/videos
+// POST /:id/videos
+//
+// videoRoutes:
+// DELETE /:id
+//
+// Portanto:
+//
+// GET    /api/partidas/:id/videos
+// POST   /api/partidas/:id/videos
+// DELETE /api/videos/:id
+//
 // ======================================================
 
-app.use('/api', videoRoutes);
+app.use(
+  '/api/partidas',
+  partidaVideoRoutes
+);
+
+app.use(
+  '/api/videos',
+  videoRoutes
+);
 
 // ======================================================
 // ROTA NÃO ENCONTRADA
@@ -115,26 +170,50 @@ app.use((req, res) => {
 // ======================================================
 
 app.use((err, req, res, next) => {
-  console.error('ERRO NO SERVIDOR:', err);
+  console.error(
+    'ERRO NO SERVIDOR:',
+    err
+  );
 
   if (res.headersSent) {
     return next(err);
   }
 
+  // ====================================================
+  // ARQUIVO MUITO GRANDE
+  // ====================================================
+
   if (err.code === 'LIMIT_FILE_SIZE') {
     return res.status(413).json({
-      mensagem: 'Vídeo muito grande. Limite de 500 MB por arquivo.',
+      mensagem:
+        'Vídeo muito grande. Limite de 500 MB por arquivo.',
     });
   }
 
-  if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+  // ====================================================
+  // CAMPO DE UPLOAD INCORRETO
+  // ====================================================
+
+  if (
+    err.code ===
+    'LIMIT_UNEXPECTED_FILE'
+  ) {
     return res.status(400).json({
-      mensagem: 'Campo de arquivo inválido. Use o campo "arquivo".',
+      mensagem:
+        'Campo de arquivo inválido. Use o campo "arquivo".',
     });
   }
+
+  // ====================================================
+  // ERRO GENÉRICO
+  // ====================================================
 
   return res
-    .status(err.status || err.statusCode || 500)
+    .status(
+      err.status ||
+        err.statusCode ||
+        500
+    )
     .json({
       mensagem:
         err.message ||
@@ -146,20 +225,47 @@ app.use((err, req, res, next) => {
 // SERVIDOR
 // ======================================================
 
-const PORT = process.env.PORT || 3000;
+const PORT =
+  process.env.PORT || 3000;
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log('');
-  console.log('=================================');
-  console.log('          SATE BACKEND');
-  console.log('=================================');
-  console.log(`Servidor: http://localhost:${PORT}`);
-  console.log(`API: http://localhost:${PORT}/api`);
-  console.log(`Dashboard: http://localhost:${PORT}/api/dashboard`);
-  console.log(`Health: http://localhost:${PORT}/api/health`);
-  console.log(
-    `Vídeos: http://localhost:${PORT}/api/partidas/:partidaId/videos`
-  );
-  console.log('=================================');
-  console.log('');
-});
+app.listen(
+  PORT,
+  '0.0.0.0',
+  () => {
+    console.log('');
+    console.log(
+      '================================='
+    );
+    console.log(
+      '          SATE BACKEND'
+    );
+    console.log(
+      '================================='
+    );
+
+    console.log(
+      `Servidor: http://localhost:${PORT}`
+    );
+
+    console.log(
+      `API: http://localhost:${PORT}/api`
+    );
+
+    console.log(
+      `Dashboard: http://localhost:${PORT}/api/dashboard`
+    );
+
+    console.log(
+      `Health: http://localhost:${PORT}/api/health`
+    );
+
+    console.log(
+      `Vídeos: http://localhost:${PORT}/api/partidas/:id/videos`
+    );
+
+    console.log(
+      '================================='
+    );
+    console.log('');
+  }
+);

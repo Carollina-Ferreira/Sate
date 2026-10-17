@@ -994,7 +994,8 @@ export default function Comparacoes() {
         }
       >
         <h1>
-          Comparações
+          Suas{' '}
+          <em>comparações.</em>
         </h1>
 
         <p>

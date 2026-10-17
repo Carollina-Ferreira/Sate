@@ -1,16 +1,28 @@
+@import url(
+  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap'
+);
+
 /* =====================================
    PÁGINA
 ===================================== */
 
 .page {
+  --verde-dark: #005942;
+  --verde-profundo: #003d31;
+  --verde-claro: #dff7ee;
+  --card: #f8fbf9;
+  --texto: #10251f;
+  --texto-secundario: #66756f;
+  --linha: #dce5e0;
+
   width: 100%;
   min-height: 100vh;
 
-  padding: 26px 30px 34px;
+  padding: 38px 42px 54px;
 
   box-sizing: border-box;
 
-  background: #005942;
+  background: var(--verde-dark);
 
   font-family: 'Poppins', sans-serif;
 }
@@ -21,7 +33,10 @@
 ===================================== */
 
 .pageHeader {
-  margin-bottom: 20px;
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 0 auto 30px;
 }
 
 .pageHeader h1 {
@@ -29,21 +44,37 @@
 
   color: #ffffff;
 
-  font-size: 27px;
+  font-size: clamp(34px, 3.1vw, 46px);
 
   font-weight: 700;
 
-  letter-spacing: -0.4px;
+  line-height: 1.05;
+
+  letter-spacing: -1.4px;
+}
+
+.pageHeader h1 em {
+  color: var(--verde-claro);
+
+  font-family: 'DM Serif Display', serif;
+
+  font-style: italic;
+
+  font-weight: 400;
+
+  letter-spacing: -0.5px;
 }
 
 .pageHeader p {
-  margin: 5px 0 0;
+  margin: 10px 0 0;
 
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.74);
 
-  font-size: 12px;
+  font-size: 13px;
 
   font-weight: 400;
+
+  line-height: 1.6;
 }
 
 
@@ -53,22 +84,27 @@
 
 .stateCard {
   width: 100%;
+  max-width: 1180px;
 
-  padding: 28px;
+  margin: 0 auto;
+
+  padding: 34px;
 
   box-sizing: border-box;
 
-  border-radius: 14px;
+  border: 1px solid rgba(16, 37, 31, 0.08);
 
-  background: #e7efeb;
+  border-radius: 20px;
 
-  color: #24332d;
+  background: var(--card);
+
+  color: var(--texto);
 
   text-align: center;
 
   box-shadow:
-    0 6px 18px
-    rgba(0, 0, 0, 0.11);
+    0 14px 34px
+    rgba(0, 35, 26, 0.11);
 }
 
 .stateCard h2 {
@@ -82,7 +118,7 @@
 .stateCard p {
   margin: 7px 0 0;
 
-  color: #687970;
+  color: var(--texto-secundario);
 
   font-size: 12px;
 }
@@ -94,33 +130,34 @@
 
 .selectionCard {
   width: 100%;
+  max-width: 1180px;
 
   display: grid;
 
   grid-template-columns:
-    1fr 42px 1fr;
+    minmax(0, 1fr)
+    48px
+    minmax(0, 1fr);
 
   align-items: end;
 
   gap: 14px;
 
-  padding: 17px;
+  padding: 22px;
 
   box-sizing: border-box;
 
-  margin-bottom: 14px;
+  margin: 0 auto 20px;
 
-  background: #e7efeb;
+  background: var(--card);
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(16, 37, 31, 0.08);
 
-  border-radius: 14px;
+  border-radius: 20px;
 
   box-shadow:
-    0 6px 18px
-    rgba(0, 0, 0, 0.11);
+    0 14px 34px
+    rgba(0, 35, 26, 0.1);
 }
 
 
@@ -133,11 +170,11 @@
 
   flex-direction: column;
 
-  gap: 7px;
+  gap: 8px;
 }
 
 .selectGroup label {
-  color: #53645d;
+  color: #30453d;
 
   font-size: 11px;
 
@@ -146,29 +183,27 @@
 
 .selectGroup select {
   width: 100%;
-  height: 42px;
+  height: 52px;
 
   padding:
-    0 38px
-    0 13px;
+    0 42px
+    0 15px;
 
   box-sizing: border-box;
 
-  border:
-    1px solid
-    #c7d6cf;
+  border: 1px solid #cbd8d2;
 
-  border-radius: 8px;
+  border-radius: 11px;
 
   outline: none;
 
-  background: #f4f8f6;
+  background: #ffffff;
 
-  color: #24332d;
+  color: var(--texto);
 
   font-family: inherit;
 
-  font-size: 13px;
+  font-size: 12px;
 
   font-weight: 500;
 
@@ -181,19 +216,17 @@
 }
 
 .selectGroup select:hover:not(:disabled) {
-  background: #eef4f1;
-
-  border-color: #a8bbb2;
+  border-color: #9eb5aa;
 }
 
 .selectGroup select:focus {
   background: #ffffff;
 
-  border-color: #16a875;
+  border-color: var(--verde-dark);
 
   box-shadow:
-    0 0 0 3px
-    rgba(22, 168, 117, 0.1);
+    0 0 0 4px
+    rgba(0, 89, 66, 0.08);
 }
 
 .selectGroup select:disabled {
@@ -208,8 +241,8 @@
 ===================================== */
 
 .switchButton {
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 52px;
 
   display: flex;
 
@@ -219,27 +252,30 @@
 
   padding: 0;
 
-  border: none;
+  border: 1px solid #cbd8d2;
 
-  border-radius: 9px;
+  border-radius: 11px;
 
-  background: #00674f;
+  background: #ffffff;
 
-  color: #ffffff;
+  color: var(--verde-dark);
 
   cursor: pointer;
 
   transition:
     background 0.2s ease,
+    border-color 0.2s ease,
     transform 0.2s ease;
 }
 
 .switchButton:hover:not(:disabled) {
-  background: #00795e;
+  background: #edf6f2;
+
+  border-color: #8daaa0;
 }
 
 .switchButton:active:not(:disabled) {
-  transform: scale(0.95);
+  transform: scale(0.96);
 }
 
 .switchButton:disabled {
@@ -255,22 +291,23 @@
 
 .comparison {
   width: 100%;
+  max-width: 1180px;
 
-  padding: 22px;
+  margin: 0 auto;
+
+  padding: 30px;
 
   box-sizing: border-box;
 
-  background: #e7efeb;
+  background: var(--card);
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(16, 37, 31, 0.08);
 
-  border-radius: 14px;
+  border-radius: 20px;
 
   box-shadow:
-    0 6px 18px
-    rgba(0, 0, 0, 0.11);
+    0 14px 34px
+    rgba(0, 35, 26, 0.1);
 }
 
 
@@ -286,7 +323,7 @@
   grid-template-columns:
     1fr 1fr;
 
-  gap: 30px;
+  gap: 40px;
 }
 
 .matchLeft,
@@ -306,17 +343,17 @@
 .matchLabel {
   display: inline-block;
 
-  margin-bottom: 6px;
+  margin-bottom: 7px;
 
-  color: #708078;
+  color: #75847d;
 
-  font-size: 10px;
+  font-size: 9px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   text-transform: uppercase;
 
-  letter-spacing: 0.6px;
+  letter-spacing: 1.4px;
 }
 
 
@@ -327,19 +364,23 @@
 .matchHeader h2 {
   margin: 0;
 
-  font-size: 20px;
+  color: var(--texto);
+
+  font-size: 22px;
 
   font-weight: 700;
 
-  line-height: 1.3;
+  line-height: 1.25;
+
+  letter-spacing: -0.5px;
 }
 
 .matchLeft h2 {
-  color: #11875f;
+  color: var(--verde-dark);
 }
 
 .matchRight h2 {
-  color: #258fa8;
+  color: #455851;
 }
 
 
@@ -354,9 +395,9 @@
 
   gap: 7px;
 
-  margin-top: 8px;
+  margin-top: 10px;
 
-  color: #24332d;
+  color: var(--texto);
 }
 
 .matchRight .teamSummary {
@@ -364,15 +405,21 @@
 }
 
 .teamSummary strong {
-  font-size: 22px;
+  color: var(--verde-dark);
+
+  font-size: 18px;
 
   font-weight: 700;
 }
 
-.teamSummary span {
-  color: #788880;
+.matchRight .teamSummary strong {
+  color: #52635c;
+}
 
-  font-size: 11px;
+.teamSummary span {
+  color: #7a8982;
+
+  font-size: 10px;
 }
 
 
@@ -385,9 +432,9 @@
 
   flex-wrap: wrap;
 
-  gap: 8px;
+  gap: 7px;
 
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .matchRight .matchMeta {
@@ -395,14 +442,15 @@
 }
 
 .matchMeta span {
-  padding:
-    4px 9px;
+  padding: 5px 9px;
 
-  border-radius: 20px;
+  border: 1px solid #dce5e0;
 
-  background: #d4e1db;
+  border-radius: 999px;
 
-  color: #586a62;
+  background: #f2f6f4;
+
+  color: #5f7068;
 
   font-size: 9px;
 
@@ -418,9 +466,9 @@
   width: 100%;
   height: 1px;
 
-  margin: 20px 0;
+  margin: 26px 0;
 
-  background: #c8d6cf;
+  background: var(--linha);
 }
 
 
@@ -433,7 +481,7 @@
 
   flex-direction: column;
 
-  gap: 18px;
+  gap: 22px;
 }
 
 .statRow {
@@ -449,11 +497,15 @@
   display: grid;
 
   grid-template-columns:
-    1fr auto 1fr;
+    minmax(60px, 1fr)
+    auto
+    minmax(60px, 1fr);
 
   align-items: center;
 
-  margin-bottom: 7px;
+  gap: 14px;
+
+  margin-bottom: 9px;
 }
 
 .valueA,
@@ -464,23 +516,23 @@
 }
 
 .valueA {
-  color: #11875f;
+  color: var(--verde-dark);
 
   text-align: left;
 }
 
 .valueB {
-  color: #258fa8;
+  color: #52635c;
 
   text-align: right;
 }
 
 .statName {
-  min-width: 175px;
+  min-width: 190px;
 
-  color: #56665f;
+  color: #65756e;
 
-  font-size: 11px;
+  font-size: 10px;
 
   font-weight: 500;
 
@@ -499,9 +551,11 @@
   display: grid;
 
   grid-template-columns:
-    1fr 2px 1fr;
+    1fr
+    2px
+    1fr;
 
-  gap: 5px;
+  gap: 6px;
 
   align-items: center;
 }
@@ -514,9 +568,9 @@
 
   overflow: hidden;
 
-  border-radius: 20px;
+  border-radius: 999px;
 
-  background: #d0ddd7;
+  background: #e8eeeb;
 }
 
 .barSideLeft {
@@ -534,32 +588,30 @@
 .barA {
   height: 100%;
 
-  background: #16a875;
+  background: var(--verde-dark);
 
-  border-radius: 20px;
+  border-radius: 999px;
 
-  transition:
-    width 0.3s ease;
+  transition: width 0.3s ease;
 }
 
 .barB {
   height: 100%;
 
-  background: #35abc2;
+  background: #9eada6;
 
-  border-radius: 20px;
+  border-radius: 999px;
 
-  transition:
-    width 0.3s ease;
+  transition: width 0.3s ease;
 }
 
 .barCenter {
   width: 2px;
-  height: 14px;
+  height: 13px;
 
   border-radius: 4px;
 
-  background: #a4b5ad;
+  background: #c3cec8;
 }
 
 
@@ -570,24 +622,27 @@
 @media (max-width: 900px) {
   .page {
     padding:
-      22px 20px
-      28px;
+      30px 24px
+      42px;
   }
 
   .pageHeader h1 {
-    font-size: 24px;
+    font-size: 34px;
+  }
+
+  .comparison {
+    padding: 24px;
   }
 
   .matchHeader h2 {
-    font-size: 17px;
+    font-size: 20px;
   }
 }
 
 
 @media (max-width: 800px) {
   .selectionCard {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
 
     gap: 12px;
   }
@@ -597,7 +652,7 @@
   }
 
   .matchHeader {
-    gap: 18px;
+    gap: 24px;
   }
 }
 
@@ -605,24 +660,30 @@
 @media (max-width: 600px) {
   .page {
     padding:
-      18px 12px
-      24px;
+      24px 14px
+      32px;
+  }
+
+  .pageHeader {
+    margin-bottom: 24px;
   }
 
   .pageHeader h1 {
-    font-size: 23px;
+    font-size: 30px;
   }
 
   .comparison {
-    padding:
-      17px 13px;
+    padding: 20px 16px;
+  }
+
+  .selectionCard {
+    padding: 17px;
   }
 
   .matchHeader {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
 
-    gap: 18px;
+    gap: 20px;
   }
 
   .matchRight {
@@ -631,14 +692,22 @@
 
   .matchRight .matchMeta,
   .matchRight .teamSummary {
-    justify-content:
-      flex-start;
+    justify-content: flex-start;
+  }
+
+  .statValues {
+    grid-template-columns:
+      52px
+      1fr
+      52px;
+
+    gap: 8px;
   }
 
   .statName {
-    min-width: 120px;
+    min-width: 0;
 
-    font-size: 10px;
+    font-size: 9px;
   }
 
   .valueA,
@@ -648,23 +717,28 @@
 }
 
 
-@media (max-width: 450px) {
+@media (max-width: 420px) {
+  .page {
+    padding:
+      20px 10px
+      28px;
+  }
+
   .selectionCard {
-    padding: 13px;
+    padding: 14px;
+
+    border-radius: 16px;
   }
 
   .comparison {
-    padding:
-      15px 11px;
+    padding: 18px 13px;
+
+    border-radius: 16px;
   }
 
-  .statValues {
-    grid-template-columns:
-      55px 1fr
-      55px;
-  }
+  .stateCard {
+    padding: 24px 16px;
 
-  .statName {
-    min-width: 0;
+    border-radius: 16px;
   }
 }

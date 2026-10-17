@@ -258,7 +258,9 @@ const Estatisticas = () => {
 
       <div className={styles.pageHeader}>
         <div>
-          <h1>Estatísticas</h1>
+          <h1>
+            Suas <em>estatísticas.</em>
+          </h1>
 
           <p>
             Acompanhe o desempenho da sua equipe e dos
@@ -582,7 +584,7 @@ const BarChart = ({ data }: BarChartProps) => {
             paddingTop +
             chartHeight -
             (value / maxValue) *
-              chartHeight;
+            chartHeight;
 
           return (
             <g key={value}>
@@ -847,7 +849,7 @@ const LineChart = ({
     paddingLeft +
     (index /
       Math.max(data.length - 1, 1)) *
-      chartWidth;
+    chartWidth;
 
   const y = (value: number) =>
     paddingTop +

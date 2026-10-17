@@ -1095,7 +1095,7 @@ export default function AnaliseVideos() {
             Voltar
           </button>
 
-          <h1>Análise de vídeo</h1>
+          <h1>Análise de <em> vídeo</em></h1>
 
           <div
             className={

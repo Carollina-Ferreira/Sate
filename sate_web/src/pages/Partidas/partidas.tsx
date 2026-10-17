@@ -1078,7 +1078,8 @@ export default function Partidas() {
       >
         <div>
           <h2>
-            Partidas
+            Suas{' '}
+            <em>partidas.</em>
           </h2>
 
           <p>

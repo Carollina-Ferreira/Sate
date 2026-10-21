@@ -1,345 +1,788 @@
-.container {
+
+/* ==========================================================
+   SATE — PERFIL DO ATLETA
+   IDENTIDADE VISUAL DO DASHBOARD
+========================================================== */
+
+.page {
+    --verde-dark: #005942;
+    --verde-principal: #00664d;
+    --verde-menta: #42c995;
+
+    --card-bg: #f6faf8;
+    --card-border: #e1eae5;
+
+    --texto-principal: #092b25;
+    --texto-secundario: #71847e;
+    --texto-suave: #93a59d;
+
+    width: 100%;
     min-height: 100vh;
-    background-color: #004d40; /* Fundo verde escuro */
-    display: flex;
-    flex-direction: column;
+
+    background: var(--verde-dark);
+    color: var(--texto-principal);
+
     font-family: 'Poppins', sans-serif;
 }
 
-/* HEADER */
-.header {
-    background: #ffffff;
-    padding: 10px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.headerLeft {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.logo {
-    font-weight: 900;
-    font-size: 20px;
-    color: #004d40;
-    font-style: italic;
-}
-
-.headerTitle h1 {
-    font-size: 16px;
-    margin: 0;
-    color: #000;
-}
-
-.headerTitle span {
-    font-size: 12px;
-    color: #666;
-}
-
-.headerSearch {
-    flex: 1;
-    max-width: 400px;
-    margin: 0 24px;
-    position: relative;
-}
-
-.headerSearch svg {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-}
-
-.headerSearch input {
-    width: 100%;
-    padding: 8px 12px 8px 40px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    background: #f5f5f5;
-    font-size: 14px;
-    outline: none;
-}
-
-.headerRight {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.userProfile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-}
-
-.avatarSmall {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #004d40;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.userProfile div {
-    display: flex;
-    flex-direction: column;
-}
-
-.userProfile strong {
-    font-size: 14px;
-}
-
-.userProfile span {
-    font-size: 12px;
-    color: #666;
-}
-
-/* MAIN */
-.main {
-    flex: 1;
-    padding: 24px 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
+.page *,
+.page *::before,
+.page *::after {
     box-sizing: border-box;
 }
 
+/* ==========================================================
+   CONTEÚDO PRINCIPAL
+========================================================== */
+
+.main {
+    width: min(1420px, calc(100% - 80px));
+
+    margin: 0 auto;
+    padding: 28px 0 70px;
+}
+
+/* ==========================================================
+   BOTÃO VOLTAR
+========================================================== */
+
 .backButton {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 9px;
+
+    margin: 0 0 25px;
+    padding: 0;
+
     background: transparent;
     border: none;
-    color: #a7c6bd;
-    font-size: 14px;
-    cursor: pointer;
-    padding: 0;
-    margin-bottom: 16px;
+
+    color: #d7eee4;
+
     font-family: inherit;
-    transition: color 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
 }
 
 .backButton:hover {
     color: #ffffff;
+    transform: translateX(-2px);
 }
 
-/* CARD DO PERFIL */
+.backButton svg {
+    flex-shrink: 0;
+    stroke-width: 1.8;
+}
+
+/* ==========================================================
+   CARD PRINCIPAL DO ATLETA
+========================================================== */
+
 .profileCard {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 24px;
+    width: 100%;
+    min-height: 128px;
+
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    justify-content: space-between;
+
+    gap: 28px;
+    padding: 26px 30px;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+
+    box-shadow: 0 8px 25px rgba(0, 28, 21, 0.10);
 }
 
-.profileInfo {
+/* ==========================================================
+   FOTO E INFORMAÇÕES
+========================================================== */
+
+.profileLeft {
     display: flex;
     align-items: center;
     gap: 20px;
+
+    min-width: 0;
+    flex: 1;
 }
 
-.avatarLarge {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: #3498db;
-    color: white;
+.avatar {
+    width: 70px;
+    height: 70px;
+
+    flex-shrink: 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
-    font-weight: bold;
-}
 
-.profileDetails h2 {
-    margin: 0 0 8px 0;
+    overflow: hidden;
+    border-radius: 50%;
+
+    background: var(--verde-dark);
+    color: #ffffff;
+
     font-size: 24px;
-    color: #000;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
-.profileDetails p {
+.avatar img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+    object-fit: cover;
+}
+
+.nameGroup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-width: 0;
+    gap: 7px;
+}
+
+.nameGroup h1 {
     margin: 0;
-    color: #666;
-    font-size: 14px;
+
+    color: var(--texto-principal);
+
+    font-size: clamp(20px, 2vw, 29px);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.8px;
 }
 
-.performanceIndex {
+/* SEM EQUIPE · M17 · MODALIDADE */
+
+.metaInfo {
+    display: block;
+
+    margin: 0;
+
+    color: var(--texto-secundario);
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+/* ==========================================================
+   ÍNDICE DE DESEMPENHO
+========================================================== */
+
+.profilePerformance {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    justify-content: center;
+
+    flex-shrink: 0;
+    gap: 5px;
 }
 
-.indexValue {
-    font-size: 24px;
-    font-weight: bold;
-    color: #3498db;
+.profilePerformance strong {
+    color: #008564;
+
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1.5px;
 }
 
-.indexLabel {
+.profilePerformance span {
+    color: var(--texto-secundario);
+
     font-size: 12px;
-    color: #999;
+    font-weight: 400;
 }
 
-/* BOTÕES DE AÇÃO */
+/* ==========================================================
+   BOTÕES DE AÇÃO
+========================================================== */
+
 .actionsRow {
     display: flex;
-    gap: 12px;
-    margin-bottom: 24px;
+    align-items: center;
     flex-wrap: wrap;
+
+    gap: 12px;
+    margin: 20px 0 25px;
 }
 
 .actionButton {
-    background: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px 16px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+
+    min-height: 47px;
+
+    gap: 10px;
+    padding: 0 20px;
+
+    background: var(--card-bg);
+    color: var(--verde-dark);
+
+    border: 1px solid #d8e5de;
+    border-radius: 12px;
+
+    font-family: inherit;
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+
     cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.actionButton:hover {
-    border-color: #004d40;
-    background: #f0fdf9;
+.actionButton svg {
+    width: 17px;
+    height: 17px;
+
+    flex-shrink: 0;
+    stroke-width: 1.9;
 }
 
-/* CARDS DE ESTATÍSTICAS */
+.actionButton:hover:not(:disabled) {
+    background: #e7f3ed;
+    border-color: #008564;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 12px rgba(0, 28, 21, 0.10);
+}
+
+.actionButton:focus-visible {
+    outline: 3px solid #8ce4bd;
+    outline-offset: 3px;
+}
+
+.actionButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ==========================================================
+   ESTATÍSTICAS
+   CARD ÚNICO COM DIVISÓRIAS VERTICAIS
+   MESMO PADRÃO DO DASHBOARD
+========================================================== */
+
 .statsGrid {
+    width: 100%;
+
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    margin-bottom: 25px;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: 0 8px 25px rgba(0, 28, 21, 0.08);
 }
 
-.statCard {
-    background: #ffffff;
-    border-radius: 8px;
-    padding: 20px;
+/* CADA DIVISÃO DA FAIXA */
+
+.statItem {
+    min-width: 0;
+    min-height: 145px;
+
     display: flex;
     flex-direction: column;
-    border-top: 4px solid #ccc;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding: 24px 27px;
+
+    background: transparent;
+
+    border: none;
+    border-right: 1px solid #dce6e0;
+    border-radius: 0;
+
+    box-shadow: none;
 }
 
-.statValue {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 4px;
+.statItem:last-child {
+    border-right: none;
 }
+
+/* TÍTULOS PEQUENOS */
 
 .statLabel {
-    font-size: 14px;
-    color: #666;
+    display: block;
+
+    margin: 0 0 10px;
+
+    color: var(--texto-secundario);
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    line-height: 1.4;
+    text-transform: uppercase;
 }
 
-.statGood { border-color: #2ecc71; }
-.statGood .statValue { color: #2ecc71; }
+/* NÚMEROS GRANDES */
 
-.statBad { border-color: #e74c3c; }
-.statBad .statValue { color: #e74c3c; }
+.statValue {
+    display: block;
 
-.statNeutral { border-color: #3498db; }
-.statNeutral .statValue { color: #3498db; }
+    margin: 0;
 
-.statHighlight { border-color: #e74c3c; }
-.statHighlight .statValue { color: #e74c3c; }
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1px;
+}
 
-/* GRÁFICOS */
+/* CORES DOS NÚMEROS */
+
+.good {
+    color: #00664d;
+}
+
+.bad {
+    color: #ce4545;
+}
+
+.neutral {
+    color: #72867f;
+}
+
+.highlight {
+    color: #25b981;
+}
+
+/* ==========================================================
+   GRID DOS GRÁFICOS
+========================================================== */
+
 .chartsGrid {
+    width: 100%;
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+        minmax(0, 1.75fr)
+        minmax(350px, 1fr);
+
+    align-items: stretch;
+
     gap: 24px;
 }
 
+/* ==========================================================
+   CARDS DOS GRÁFICOS
+   AMBOS CLAROS
+========================================================== */
+
 .chartCard {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
+    min-width: 0;
+    min-height: 450px;
 
-.chartCard h3 {
-    margin: 0 0 16px 0;
-    font-size: 16px;
-    color: #333;
-}
-
-.chartContainer {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+
+    padding: 30px;
+
+    background: var(--card-bg);
+    color: var(--texto-principal);
+
+    border: 1px solid var(--card-border);
+    border-radius: 23px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 28px rgba(0, 28, 21, 0.11);
+}
+
+/* ==========================================================
+   CABEÇALHO DOS GRÁFICOS
+========================================================== */
+
+.chartHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+.chartHeader h2 {
+    margin: 0 0 6px;
+
+    color: var(--texto-principal);
+
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+}
+
+.chartHeader p {
+    margin: 0;
+
+    color: var(--texto-secundario);
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ÍCONE AO LADO DO TÍTULO */
+
+.chartIcon {
+    width: 43px;
+    height: 43px;
+
+    flex-shrink: 0;
+
+    display: flex;
     align-items: center;
-    height: 250px;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: #e2f3ea;
+    color: #00664d;
+}
+
+/* ==========================================================
+   GRÁFICO DE EVOLUÇÃO
+========================================================== */
+
+.lineChartContainer {
+    flex: 1;
+
+    width: 100%;
+    min-height: 285px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 20px;
 }
 
 .lineChart {
+    display: block;
+
     width: 100%;
-    height: 100%;
+    height: auto;
+
+    max-height: 310px;
+
+    overflow: visible;
+}
+
+/* LINHAS DE REFERÊNCIA */
+
+.gridLine {
+    stroke: #dce8e1;
+    stroke-width: 1;
+    stroke-dasharray: 4 5;
+}
+
+/* NUMERAÇÕES E EIXOS */
+
+.axisLabel {
+    fill: #82988e;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+}
+
+/* LINHA PRINCIPAL */
+
+.dataLine {
+    stroke: #00664d;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* PONTOS DO GRÁFICO */
+
+.dataPoint {
+    fill: #f6faf8;
+    stroke: #00664d;
+    stroke-width: 2.5;
+}
+
+/* ==========================================================
+   GRÁFICO RADAR
+========================================================== */
+
+.radarContainer {
+    flex: 1;
+
+    width: 100%;
+    min-height: 285px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 15px;
 }
 
 .radarChart {
+    display: block;
+
     width: 100%;
-    height: 100%;
-    max-width: 250px;
+    max-width: 330px;
+    height: auto;
+
+    overflow: visible;
 }
 
-/* RESPONSIVO */
-@media (max-width: 900px) {
-    .statsGrid {
-        grid-template-columns: repeat(2, 1fr);
+/* HEXÁGONOS DO RADAR */
+
+.radarGrid {
+    fill: none;
+
+    stroke: #d8e5de;
+    stroke-width: 1.2;
+}
+
+/* LINHAS INTERNAS */
+
+.radarAxis {
+    stroke: #d8e5de;
+    stroke-width: 1;
+}
+
+/* ÁREA DE DESEMPENHO */
+
+.radarArea {
+    fill: rgba(0, 102, 77, 0.13);
+
+    stroke: #00664d;
+    stroke-width: 3;
+    stroke-linejoin: round;
+}
+
+/* MARCADORES */
+
+.radarPoint {
+    fill: #00664d;
+}
+
+/* NOMES DOS ATRIBUTOS */
+
+.radarLabel {
+    fill: #637c70;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+}
+
+/* ==========================================================
+   RESPONSIVIDADE — NOTEBOOK
+========================================================== */
+
+@media (max-width: 1150px) {
+    .main {
+        width: calc(100% - 48px);
     }
+
     .chartsGrid {
         grid-template-columns: 1fr;
     }
+
+    .chartCard {
+        min-height: 390px;
+    }
+
+    .radarChart {
+        max-width: 320px;
+    }
 }
 
-@media (max-width: 600px) {
-    .header {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
-    }
-    .headerSearch {
-        width: 100%;
-        margin: 10px 0;
-    }
-    .main {
-        padding: 16px;
-    }
+/* ==========================================================
+   RESPONSIVIDADE — TABLET
+========================================================== */
+
+@media (max-width: 760px) {
     .profileCard {
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
+        gap: 22px;
     }
-    .performanceIndex {
+
+    .profilePerformance {
         align-items: flex-start;
     }
+
     .statsGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .statItem:nth-child(2) {
+        border-right: none;
+    }
+
+    .statItem:nth-child(1),
+    .statItem:nth-child(2) {
+        border-bottom: 1px solid #dce6e0;
+    }
+}
+
+/* ==========================================================
+   RESPONSIVIDADE — CELULAR
+========================================================== */
+
+@media (max-width: 540px) {
+    .main {
+        width: calc(100% - 28px);
+        padding: 20px 0 45px;
+    }
+
+    .backButton {
+        margin-bottom: 19px;
+        font-size: 13px;
+    }
+
+    /* PERFIL */
+
+    .profileCard {
+        padding: 22px 18px;
+        border-radius: 18px;
+        gap: 18px;
+    }
+
+    .profileLeft {
+        align-items: flex-start;
+        gap: 13px;
+    }
+
+    .avatar {
+        width: 55px;
+        height: 55px;
+        font-size: 20px;
+    }
+
+    .nameGroup h1 {
+        font-size: 19px;
+    }
+
+    .metaInfo {
+        font-size: 12px;
+    }
+
+    .profilePerformance strong {
+        font-size: 32px;
+    }
+
+    .profilePerformance span {
+        font-size: 11px;
+    }
+
+    /* BOTÕES */
+
     .actionsRow {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        gap: 9px;
     }
+
     .actionButton {
         width: 100%;
-        justify-content: center;
+        min-height: 44px;
+
+        padding: 0 9px;
+
+        font-size: 12px;
+        gap: 7px;
+    }
+
+    .actionButton svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* ESTATÍSTICAS */
+
+    .statsGrid {
+        border-radius: 17px;
+        margin-bottom: 18px;
+    }
+
+    .statItem {
+        min-height: 112px;
+        padding: 19px 17px;
+    }
+
+    .statLabel {
+        font-size: 10px;
+        letter-spacing: 0.8px;
+        margin-bottom: 9px;
+    }
+
+    .statValue {
+        font-size: 35px;
+    }
+
+    /* GRÁFICOS */
+
+    .chartsGrid {
+        gap: 18px;
+    }
+
+    .chartCard {
+        min-height: 340px;
+        padding: 23px 18px;
+        border-radius: 18px;
+    }
+
+    .chartHeader h2 {
+        font-size: 19px;
+    }
+
+    .chartHeader p {
+        font-size: 12px;
+    }
+
+    .chartIcon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .chartIcon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .lineChartContainer {
+        min-height: 220px;
+    }
+
+    .radarContainer {
+        min-height: 250px;
+    }
+
+    .radarChart {
+        max-width: 275px;
     }
 }

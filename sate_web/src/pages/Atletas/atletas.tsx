@@ -5,7 +5,6 @@ import {
     ChevronDown,
     Eye,
     FileSpreadsheet,
-    ListFilter,
     Plus,
     Search,
     Scissors,
@@ -1044,8 +1043,8 @@ const Atletas = () => {
         <div className={styles.page}>
             <div className={styles.top}>
                 <div className={styles.titleArea}>
-                    <h1>Atletas</h1>
-                    <p>Gerencie os atletas das suas equipes.</p>
+                    <h1>Seus <em>atletas.</em></h1>
+                    <p>Acompanhe desempenho, evolução e informações individuais.</p>
                 </div>
 
                 <div className={styles.headerActions}>
@@ -1152,16 +1151,6 @@ const Atletas = () => {
                     <ChevronDown size={17} />
                 </div>
 
-                <button
-                    type="button"
-                    className={styles.filterButton}
-                    onClick={() =>
-                        setMostrarFiltros((atual) => !atual)
-                    }
-                >
-                    <ListFilter size={17} />
-                    {mostrarFiltros ? 'Ocultar' : 'Filtros'}
-                </button>
 
                 {(busca ||
                     filtroModalidade !== 'Todas' ||
@@ -1250,14 +1239,9 @@ const Atletas = () => {
             {!carregando && atletasFiltrados.length > 0 && (
                 <div className={styles.athletesGrid}>
                     {atletasFiltrados.map((atleta) => (
-                        <div
-                            key={atleta.id}
-                            className={styles.athleteCard}
-                        >
+                        <div key={atleta.id} className={styles.athleteCard}>
                             <div className={styles.cardContent}>
-                                <div
-                                    className={`${styles.avatar} ${styles[obterCorAvatar(atleta.id)]}`}
-                                >
+                                <div className={`${styles.avatar} ${styles[obterCorAvatar(atleta.id)]}`}>
                                     {atleta.avatarUrl ? (
                                         <img
                                             className={styles.avatarImage}
@@ -1265,64 +1249,42 @@ const Atletas = () => {
                                             alt={`Foto de ${atleta.nome}`}
                                         />
                                     ) : (
-                                        atleta.nome
-                                            .charAt(0)
-                                            .toUpperCase()
+                                        atleta.nome.charAt(0).toUpperCase()
                                     )}
                                 </div>
 
-                                <div className={styles.cardInfo}>
+                                <div className={styles.athleteName}>
                                     <h2>{atleta.nome}</h2>
+                                </div>
 
-                                    <span className={styles.team}>
-                                        {atleta.equipe}
-                                    </span>
+                                <div className={styles.team}>
+                                    {atleta.equipe || 'Sem equipe'}
+                                </div>
 
-                                    <p>
-                                        <span>Modalidade:</span>
-                                        {atleta.modalidade}
-                                    </p>
-
-                                    {atleta.categoria && (
-                                        <p>
-                                            <span>Categoria:</span>
-                                            {atleta.categoria}
-                                        </p>
-                                    )}
+                                <div className={styles.category}>
+                                    {atleta.categoria || 'Não informado'}
                                 </div>
 
                                 <div className={styles.frequency}>
                                     {atleta.frequencia}%
                                 </div>
+
+                                <div
+                                    className={styles.actionSpace}
+                                    aria-hidden="true"
+                                />
                             </div>
 
                             <div className={styles.cardHover}>
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        abrirPerfil(atleta.id)
-                                    }
-                                >
+                                <button type="button" onClick={() => abrirPerfil(atleta.id)}>
                                     <Eye size={17} />
                                     Perfil
                                 </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        abrirInformacoes(atleta.id)
-                                    }
-                                >
+                                <button type="button" onClick={() => abrirInformacoes(atleta.id)}>
                                     <UserRound size={17} />
                                     Informações
                                 </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        abrirClipes(atleta.id)
-                                    }
-                                >
+                                <button type="button" onClick={() => abrirClipes(atleta.id)}>
                                     <Scissors size={17} />
                                     Clipes
                                 </button>

@@ -1,12 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+/* ============================================================
+   PÁGINA
+============================================================ */
+
 .page {
+  --verde-dark: #005942;
+  --verde-profundo: #003d31;
+  --verde-claro: #dff7ee;
+  --verde-botao: #16a875;
+  --verde-botao-hover: #129d6c;
+
   width: 100%;
   min-height: 100vh;
-
-  padding: 48px 70px 60px;
-
+  padding: 38px 42px 54px;
   box-sizing: border-box;
 
-  background: #005942;
+  background: var(--verde-dark);
 
   font-family: 'Poppins', sans-serif;
 }
@@ -23,9 +33,9 @@
   align-items: flex-end;
   justify-content: space-between;
 
-  gap: 30px;
+  gap: 28px;
 
-  margin-bottom: 30px;
+  margin-bottom: 28px;
 }
 
 .titleArea {
@@ -37,74 +47,124 @@
 
   color: #ffffff;
 
-  font-size: 34px;
+  font-size: clamp(34px, 3vw, 44px);
   font-weight: 700;
 
-  line-height: 1.2;
+  line-height: 1.05;
+
+  letter-spacing: -1.2px;
+}
+
+.titleArea h1 em {
+  color: var(--verde-claro);
+
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-weight: 400;
+
+  letter-spacing: -0.4px;
 }
 
 .titleArea p {
-  max-width: 620px;
+  max-width: 650px;
 
-  margin: 8px 0 0;
+  margin: 10px 0 0;
 
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.74);
 
-  font-size: 14px;
+  font-size: 13px;
 
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 
 /* ============================================================
-   NOVO ATLETA
+   AÇÕES DO TOPO
 ============================================================ */
 
-.newAthleteButton {
-  min-width: 160px;
-  height: 52px;
+.headerActions {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
 
   flex-shrink: 0;
+}
 
-  display: flex;
+.exportButton,
+.newAthleteButton {
+  height: 50px;
+
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
   gap: 9px;
 
-  padding: 0 21px;
+  padding: 0 18px;
 
   box-sizing: border-box;
 
-  border: none;
-
   border-radius: 11px;
 
-  background: #16a875;
-
-  color: #ffffff;
-
   font-family: inherit;
-
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
 
   white-space: nowrap;
 
   cursor: pointer;
 
-  box-shadow:
-    0 8px 18px rgba(0, 37, 26, 0.18);
-
   transition:
     background 0.2s ease,
-    transform 0.2s ease;
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
 }
 
-.newAthleteButton:hover {
-  background: #129d6c;
+.exportButton {
+  min-width: 165px;
 
-  transform: translateY(-2px);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: #ffffff;
+}
+
+.exportButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.14);
+
+  border-color: rgba(255, 255, 255, 0.55);
+
+  transform: translateY(-1px);
+}
+
+.newAthleteButton {
+  min-width: 168px;
+
+  border: none;
+
+  background: var(--verde-botao);
+
+  color: #ffffff;
+
+  box-shadow: 0 8px 18px rgba(0, 37, 26, 0.17);
+}
+
+.newAthleteButton:hover:not(:disabled) {
+  background: var(--verde-botao-hover);
+
+  transform: translateY(-1px);
+}
+
+.exportButton:disabled,
+.newAthleteButton:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+
+  transform: none;
 }
 
 
@@ -118,43 +178,47 @@
   display: grid;
 
   grid-template-columns:
-    minmax(280px, 1fr)
-    minmax(180px, 220px)
-    minmax(190px, 230px)
-    118px;
+    minmax(320px, 1fr)
+    260px
+    260px;
 
-  gap: 13px;
+  gap: 0;
 
-  margin-bottom: 40px;
+  overflow: hidden;
+
+  margin-bottom: 30px;
+
+  border: 1px solid #c9d6d0;
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  box-shadow: 0 8px 22px rgba(0, 35, 25, 0.08);
 }
 
+.searchBox,
+.selectBox {
+  min-width: 0;
+  height: 56px;
 
-/* ============================================================
-   BUSCA
-============================================================ */
-
-.searchBox {
-  width: 100%;
-  height: 54px;
+  position: relative;
 
   display: flex;
   align-items: center;
 
-  gap: 11px;
-
-  padding: 0 16px;
-
-  box-sizing: border-box;
-
-  border-radius: 11px;
-
   background: #ffffff;
+}
 
-  color: #738078;
+.searchBox {
+  gap: 10px;
+
+  padding: 0 18px;
 }
 
 .searchBox svg {
   flex-shrink: 0;
+
+  color: #71837a;
 }
 
 .searchBox input {
@@ -162,7 +226,6 @@
   min-width: 0;
 
   border: none;
-
   outline: none;
 
   background: transparent;
@@ -170,33 +233,43 @@
   color: #263930;
 
   font-family: inherit;
-
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .searchBox input::placeholder {
-  color: #909b96;
+  color: #85948d;
 }
 
+.clearSearchButton {
+  width: 28px;
+  height: 28px;
 
-/* ============================================================
-   SELECT
-============================================================ */
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #71837a;
+
+  cursor: pointer;
+}
+
+.clearSearchButton:hover {
+  background: #eef4f1;
+
+  color: #244238;
+}
 
 .selectBox {
-  width: 100%;
-  height: 54px;
-
-  position: relative;
-
-  display: flex;
-  align-items: center;
-
-  min-width: 0;
-
-  border-radius: 11px;
-
-  background: #ffffff;
+  border-left: 1px solid #dce5e1;
 }
 
 .selectBox select {
@@ -204,25 +277,23 @@
   height: 100%;
   min-width: 0;
 
-  padding: 0 42px 0 15px;
+  padding: 0 42px 0 18px;
 
   box-sizing: border-box;
 
   border: none;
-
   outline: none;
 
   appearance: none;
+  -webkit-appearance: none;
 
   background: transparent;
 
-  color: #2a3b33;
+  color: #172b23;
 
   font-family: inherit;
-
   font-size: 13px;
-
-  text-overflow: ellipsis;
+  font-weight: 500;
 
   cursor: pointer;
 }
@@ -230,128 +301,173 @@
 .selectBox svg {
   position: absolute;
 
-  right: 13px;
+  right: 15px;
 
-  flex-shrink: 0;
-
-  color: #43564d;
+  color: #263930;
 
   pointer-events: none;
 }
 
-
-/* ============================================================
-   BOTÃO FILTROS
-============================================================ */
-
 .filterButton {
-  width: 100%;
-  height: 54px;
+  height: 56px;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
   gap: 8px;
 
-  padding: 0 12px;
-
-  box-sizing: border-box;
+  padding: 0 15px;
 
   border: none;
-
-  border-radius: 11px;
+  border-left: 1px solid #dce5e1;
 
   background: #ffffff;
 
-  color: #3297c6;
+  color: #006b52;
 
   font-family: inherit;
-
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-
-  white-space: nowrap;
 
   cursor: pointer;
 }
 
+.filterButton:hover {
+  background: #f4f8f6;
+}
+
+.clearFiltersButton {
+  width: fit-content;
+
+  margin: -18px 0 18px auto;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.clearFiltersButton:hover {
+  color: #ffffff;
+
+  text-decoration: underline;
+}
+
+.teamFilter {
+  width: 100%;
+
+  margin: -14px 0 22px;
+}
+
+.teamFilter .selectBox {
+  width: min(280px, 100%);
+  height: 48px;
+
+  overflow: hidden;
+
+  border: 1px solid #c9d6d0;
+  border-radius: 11px;
+
+  background: #ffffff;
+}
+
 
 /* ============================================================
-   GRID DOS ATLETAS
+   CONTADOR
+============================================================ */
+
+.athleteCount {
+  margin: 0 0 12px;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+
+/* ============================================================
+   LISTA — EXATAMENTE EM LINHAS
 ============================================================ */
 
 .athletesGrid {
   width: 100%;
 
-  display: grid;
+  display: flex;
+  flex-direction: column;
 
-  grid-template-columns:
-    repeat(
-      3,
-      minmax(0, 1fr)
-    );
-
-  gap: 20px;
+  gap: 0;
 }
-
-
-/* ============================================================
-   CARD
-============================================================ */
 
 .athleteCard {
   width: 100%;
-  min-width: 0;
-  min-height: 250px;
 
   position: relative;
 
   overflow: hidden;
 
-  border-radius: 15px;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0;
 
-  background: #e7efeb;
+  background: transparent;
 
-  box-shadow:
-    0 8px 20px rgba(0, 31, 22, 0.14);
+  box-shadow: none;
 
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    background 0.18s ease;
+}
+
+.athleteCard:first-child {
+  border-radius: 12px 12px 0 0;
+}
+
+.athleteCard:last-child {
+  border-bottom: none;
+  border-radius: 0 0 12px 12px;
 }
 
 .athleteCard:hover {
-  transform: translateY(-4px);
-
-  box-shadow:
-    0 13px 26px rgba(0, 31, 22, 0.22);
+  background: rgba(255, 255, 255, 0.035);
 }
 
 
 /* ============================================================
-   CARD NORMAL
+   ESTRUTURA DA LINHA
+   avatar | nome | equipe | categoria | desempenho | ações
 ============================================================ */
 
 .cardContent {
   width: 100%;
-  min-height: 250px;
+  min-height: 72px;
 
-  position: relative;
+  display: grid;
 
-  padding: 23px;
+  grid-template-columns:
+    48px
+    minmax(300px, 1.35fr)
+    minmax(150px, 0.7fr)
+    minmax(90px, 0.45fr)
+    80px
+    270px;
+
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 10px 14px;
 
   box-sizing: border-box;
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-}
-
-.athleteCard:hover .cardContent {
-  opacity: 0;
-
-  transform: scale(0.97);
 }
 
 
@@ -360,230 +476,220 @@
 ============================================================ */
 
 .avatar {
-  width: 68px;
-  height: 68px;
-
-  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  margin-bottom: 18px;
+  overflow: hidden;
 
   border-radius: 50%;
 
   color: #ffffff;
 
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 700;
 }
 
+.avatarImage {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
 .verde {
-  background: #16ad7a;
+  background: #008f72;
 }
 
 .rosa {
-  background: #ed4e78;
+  background: #c95e80;
 }
 
 .azul {
-  background: #4aa8da;
+  background: #4289c7;
 }
 
 .roxo {
-  background: #7665dc;
+  background: #7b5cda;
 }
 
 .laranja {
-  background: #e58a32;
+  background: #dc8235;
 }
 
 
 /* ============================================================
-   CARD INFO
+   NOME
 ============================================================ */
 
-.cardInfo {
-  width: 100%;
+.athleteName {
   min-width: 0;
 }
 
-.cardInfo h2 {
+.athleteName h2 {
   overflow: hidden;
 
   margin: 0;
 
-  color: #1c3027;
-
-  font-size: 20px;
-  font-weight: 700;
-
-  line-height: 1.3;
-
-  white-space: nowrap;
-
-  text-overflow: ellipsis;
-}
-
-.team {
-  display: block;
-
-  overflow: hidden;
-
-  margin-top: 4px;
-
-  color: #607168;
-
-  font-size: 14px;
-
-  white-space: nowrap;
-
-  text-overflow: ellipsis;
-}
-
-.cardInfo p {
-  display: flex;
-  align-items: center;
-
-  gap: 6px;
-
-  overflow: hidden;
-
-  margin: 8px 0 0;
-
-  color: #74827b;
+  color: #ffffff;
 
   font-size: 13px;
+  font-weight: 600;
+
+  line-height: 1.35;
 
   white-space: nowrap;
-
   text-overflow: ellipsis;
-}
-
-.cardInfo p span {
-  color: #a1aca6;
-
-  flex-shrink: 0;
 }
 
 
 /* ============================================================
-   FREQUÊNCIA
+   EQUIPE
+============================================================ */
+
+.team {
+  min-width: 0;
+
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.74);
+
+  font-size: 12px;
+  font-weight: 400;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* ============================================================
+   CATEGORIA
+============================================================ */
+
+.category {
+  min-width: 0;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 12px;
+  font-weight: 400;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   DESEMPENHO
 ============================================================ */
 
 .frequency {
-  position: absolute;
+  color: #35dda8;
 
-  right: 19px;
-  bottom: 18px;
-
-  min-width: 50px;
-  height: 30px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0 10px;
-
-  box-sizing: border-box;
-
-  border-radius: 999px;
-
-  background: #d5e8df;
-
-  color: #0d9668;
-
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
+
+  white-space: nowrap;
 }
 
 
 /* ============================================================
-   HOVER DO CARD
+   ESPAÇO FIXO DOS BOTÕES
+============================================================ */
+
+.actionSpace {
+  width: 270px;
+  height: 1px;
+
+  justify-self: end;
+}
+
+
+/* ============================================================
+   BOTÕES DO HOVER
 ============================================================ */
 
 .cardHover {
+  width: 270px;
+
   position: absolute;
 
-  inset: 0;
+  top: 0;
+  right: 14px;
+  bottom: 0;
 
-  z-index: 5;
+  z-index: 3;
 
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-end;
 
-  gap: 11px;
-
-  padding: 22px;
-
-  box-sizing: border-box;
+  gap: 7px;
 
   opacity: 0;
   visibility: hidden;
 
-  background:
-    linear-gradient(
-      145deg,
-      #08785b,
-      #08694f
-    );
+  transform: translateX(8px);
 
   transition:
-    opacity 0.2s ease,
-    visibility 0.2s ease;
+    opacity 0.18s ease,
+    visibility 0.18s ease,
+    transform 0.18s ease;
 }
 
 .athleteCard:hover .cardHover {
   opacity: 1;
   visibility: visible;
+
+  transform: translateX(0);
 }
 
 .cardHover button {
-  width: 100%;
-  height: 50px;
+  height: 36px;
 
-  flex-shrink: 0;
-
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  gap: 10px;
+  gap: 6px;
 
-  padding: 0 12px;
+  padding: 0 10px;
 
-  box-sizing: border-box;
+  border: 1px solid rgba(223, 247, 238, 0.28);
+  border-radius: 9px;
 
-  border:
-    1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.04);
 
-  border-radius: 10px;
-
-  background:
-    rgba(255, 255, 255, 0.1);
-
-  color: #ffffff;
+  color: #42e3b0;
 
   font-family: inherit;
-
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
+
+  white-space: nowrap;
 
   cursor: pointer;
 
   transition:
     background 0.18s ease,
-    transform 0.18s ease;
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.cardHover button svg {
+  flex-shrink: 0;
 }
 
 .cardHover button:hover {
-  background:
-    rgba(255, 255, 255, 0.21);
+  background: rgba(255, 255, 255, 0.1);
 
-  transform: translateY(-1px);
+  border-color: rgba(223, 247, 238, 0.5);
+
+  color: #ffffff;
 }
 
 
@@ -594,7 +700,7 @@
 .message,
 .empty {
   width: 100%;
-  min-height: 220px;
+  min-height: 170px;
 
   display: flex;
   flex-direction: column;
@@ -603,45 +709,45 @@
 
   gap: 8px;
 
-  padding: 30px;
+  padding: 28px;
 
   box-sizing: border-box;
 
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 15px;
 
-  background: #e7efeb;
+  background: rgba(0, 47, 38, 0.24);
 
-  color: #66776f;
+  color: rgba(255, 255, 255, 0.72);
 
   text-align: center;
 }
 
 .message strong,
 .empty strong {
-  color: #263a31;
+  color: #ffffff;
 
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .message span,
 .empty span {
-  max-width: 500px;
+  max-width: 520px;
 
   font-size: 12px;
 }
 
 .message button {
-  height: 38px;
+  height: 36px;
 
-  margin-top: 7px;
+  margin-top: 6px;
 
-  padding: 0 14px;
+  padding: 0 13px;
 
   border: none;
-
   border-radius: 8px;
 
-  background: #087b5b;
+  background: #16a875;
 
   color: #ffffff;
 
@@ -650,13 +756,220 @@
   cursor: pointer;
 }
 
-.empty {
-  grid-column: 1 / -1;
+
+/* ============================================================
+   RESPONSIVO DA LISTA
+============================================================ */
+
+@media (max-width: 1180px) {
+  .page {
+    padding:
+      36px
+      30px
+      48px;
+  }
+
+  .filters {
+    grid-template-columns:
+      minmax(260px, 1fr)
+      220px
+      220px;
+  }
+
+  .cardContent {
+    grid-template-columns:
+      46px
+      minmax(220px, 1.2fr)
+      minmax(120px, 0.65fr)
+      80px
+      65px
+      235px;
+
+    gap: 13px;
+  }
+
+  .actionSpace,
+  .cardHover {
+    width: 235px;
+  }
+
+  .cardHover button {
+    padding: 0 8px;
+
+    font-size: 9px;
+  }
 }
 
 
+@media (max-width: 920px) {
+  .top {
+    align-items: stretch;
+    flex-direction: column;
+
+    gap: 18px;
+  }
+
+  .headerActions {
+    width: 100%;
+  }
+
+  .exportButton,
+  .newAthleteButton {
+    flex: 1;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+
+    gap: 8px;
+
+    overflow: visible;
+
+    border: none;
+
+    background: transparent;
+
+    box-shadow: none;
+  }
+
+  .searchBox,
+  .selectBox {
+    overflow: hidden;
+
+    border: 1px solid #c9d6d0;
+    border-radius: 12px;
+  }
+
+  .selectBox {
+    border-left: 1px solid #c9d6d0;
+  }
+
+  .cardContent {
+    grid-template-columns:
+      44px
+      minmax(0, 1fr)
+      80px
+      60px;
+
+    gap: 12px;
+  }
+
+  .team {
+    display: none;
+  }
+
+  .actionSpace {
+    display: none;
+  }
+
+  .cardHover {
+    position: static;
+
+    width: 100%;
+
+    padding:
+      0
+      14px
+      12px
+      70px;
+
+    box-sizing: border-box;
+
+    opacity: 1;
+    visibility: visible;
+
+    transform: none;
+  }
+
+  .cardHover button {
+    flex: 1;
+  }
+}
+
+
+@media (max-width: 650px) {
+  .page {
+    padding:
+      26px
+      14px
+      36px;
+  }
+
+  .titleArea h1 {
+    font-size: 30px;
+  }
+
+  .titleArea p {
+    font-size: 12px;
+  }
+
+  .headerActions {
+    flex-direction: column;
+  }
+
+  .exportButton,
+  .newAthleteButton {
+    width: 100%;
+
+    flex: none;
+  }
+
+  .cardContent {
+    grid-template-columns:
+      42px
+      minmax(0, 1fr)
+      54px;
+
+    gap: 10px;
+
+    min-height: 66px;
+
+    padding:
+      10px
+      11px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .athleteName h2 {
+    font-size: 11px;
+  }
+
+  .category {
+    display: none;
+  }
+
+  .frequency {
+    font-size: 11px;
+  }
+
+  .cardHover {
+    padding:
+      0
+      11px
+      10px;
+  }
+}
+
+
+@media (max-width: 430px) {
+  .cardHover {
+    flex-direction: column;
+  }
+
+  .cardHover button {
+    width: 100%;
+  }
+}
+
+
+
+
 /* ============================================================
-   OVERLAY MODAL
+   MODAL / FORMULÁRIOS EXISTENTES
 ============================================================ */
 
 .modalOverlay {
@@ -1524,91 +1837,10 @@
    Mantém o visual do CSS anterior e adiciona apenas o que faltava.
 ============================================================ */
 
-.headerActions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
 
-.exportButton {
-  min-width: 145px;
-  height: 52px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  padding: 0 18px;
-  box-sizing: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 11px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background .2s ease, transform .2s ease, border-color .2s ease;
-}
-.exportButton:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-}
-.exportButton:disabled,
-.newAthleteButton:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-
-.clearSearchButton {
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: #7c8a83;
-  cursor: pointer;
-}
-.clearSearchButton:hover { background: #eef3f0; color: #263930; }
-
-.clearFiltersButton {
-  height: 54px;
-  padding: 0 10px;
-  border: none;
-  background: transparent;
-  color: rgba(255,255,255,.78);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.clearFiltersButton:hover { color: #fff; text-decoration: underline; }
-
-.teamFilter {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  margin: -22px 0 28px;
-}
-.teamFilter .selectBox { width: min(280px, 100%); }
-
-.athleteCount {
-  margin: -18px 0 16px;
-  color: rgba(255,255,255,.72);
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.avatarImage {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  border-radius: inherit;
-}
+/* ============================================================
+   COMPLEMENTOS DO CADASTRO / IMPORTAÇÃO
+============================================================ */
 
 .modalForm {
   min-height: 0;
@@ -1777,3 +2009,4 @@
   .modalError { grid-template-columns: 1fr; margin-left: 15px; margin-right: 15px; }
   .cadastroOpcao { min-height: 165px; }
 }
+

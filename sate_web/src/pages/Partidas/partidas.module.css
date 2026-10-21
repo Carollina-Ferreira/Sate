@@ -88,57 +88,57 @@
    BOTÃO NOVA PARTIDA
 ========================= */
 
+/* =====================================
+   BOTÃO NOVA PARTIDA
+===================================== */
+
 .newButton {
-  min-width: 158px;
-  height: 46px;
+    min-width: 158px;
+    height: 46px;
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 
-  gap: 8px;
+    padding: 0 18px;
 
-  padding: 0 18px;
+    border: 1px solid #28ba8c;
+    border-radius: 11px;
 
-  border: 1px solid rgba(255, 255, 255, 0.18);
+    background: #008765;
+    color: #ffffff;
 
-  border-radius: 11px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
 
-  background: #ffffff;
+    cursor: pointer;
 
-  color: var(--verde-dark);
+    box-shadow: 0 8px 18px rgba(0, 35, 26, 0.12);
 
-  font-family: inherit;
-
-  font-size: 12px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 8px 18px
-    rgba(0, 35, 26, 0.12);
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .newButton:hover {
-  background: #f1f7f4;
+    background: #009e76;
+    border-color: #44c69b;
 
-  transform: translateY(-1px);
+    transform: translateY(-2px);
 
-  box-shadow:
-    0 12px 22px
-    rgba(0, 35, 26, 0.16);
+    box-shadow: 0 12px 22px rgba(0, 35, 26, 0.16);
+}
+
+.newButton:active {
+    transform: translateY(0);
 }
 
 .newButton span {
-  font-size: 18px;
+    font-size: 18px;
 }
-
 
 /* =========================
    FILTROS

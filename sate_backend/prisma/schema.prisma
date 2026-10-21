@@ -70,14 +70,12 @@ model Atleta {
   treinadorId    Int?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-
-  endereco       Endereco?        @relation(fields: [enderecoId], references: [id])
-  responsavel    Responsavel?     @relation(fields: [responsavelId], references: [id])
-  usuario        Usuario          @relation(fields: [usuarioId], references: [id])
-  equipe         Equipe?          @relation(fields: [equipeId], references: [id], onDelete: SetNull)
-  treinador      Treinador?       @relation(fields: [treinadorId], references: [id], onDelete: SetNull)
-  documentos     Documento[]
-  marcacoesVideo MarcacaoVideo[]
+  endereco    Endereco?    @relation(fields: [enderecoId], references: [id])
+  responsavel Responsavel? @relation(fields: [responsavelId], references: [id])
+  usuario     Usuario      @relation(fields: [usuarioId], references: [id])
+  equipe      Equipe?      @relation(fields: [equipeId], references: [id], onDelete: SetNull)
+  treinador   Treinador?   @relation(fields: [treinadorId], references: [id], onDelete: SetNull)
+  documentos  Documento[]
 
   @@index([equipeId])
   @@index([treinadorId])
@@ -152,13 +150,10 @@ model MarcacaoVideo {
   observacao  String?  @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  video  VideoPartida @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  atleta Atleta?      @relation(fields: [atletaId], references: [id], onDelete: SetNull)
+  video VideoPartida @relation(fields: [videoId], references: [id], onDelete: Cascade)
 
   @@index([videoId])
   @@index([videoId, tempoInicio])
-  @@index([atletaId])
 }
 
 model Responsavel {

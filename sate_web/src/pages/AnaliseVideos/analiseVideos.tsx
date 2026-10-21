@@ -1,8 +1,8 @@
+
 import {
   ArrowLeft,
   Check,
   Clock3,
-  Edit3,
   Flag,
   Pause,
   Play,
@@ -196,7 +196,7 @@ function obterNomeVideo(video: VideoPartida): string {
 }
 
 /**
- * Converte o tipo recebido do backend para o padrão utilizado na interface.
+ * Converte a categoria recebida do backend para o tipo utilizado na interface.
  */
 function converterTipo(categoria: string): TipoEvento {
   const valor = categoria.toLowerCase().trim();
@@ -225,11 +225,8 @@ function converterTipo(categoria: string): TipoEvento {
 }
 
 /**
- * Converte o tipo da interface para o enum utilizado pelo backend.
- *
- * IMPORTANTE:
- * O backend e o schema.prisma precisam aceitar DESTAQUE para que essa
- * classificação seja persistida. Veja a observação após o código.
+ * Converte o tipo da interface para o padrão usado pelo backend.
+ * O campo categoria da API precisa aceitar essas strings.
  */
 function converterTipoParaBackend(tipo: TipoEvento): string {
   const tipos: Record<TipoEvento, string> = {
@@ -448,6 +445,7 @@ export default function AnaliseVideos() {
 
       setEventos([]);
       setClipes([]);
+
       setMensagemErro(
         erro instanceof Error
           ? erro.message
@@ -931,7 +929,7 @@ export default function AnaliseVideos() {
           },
           body: JSON.stringify({
             titulo: novoEvento.nome.trim(),
-            categoria: novoEvento.tipo,
+            categoria: converterTipoParaBackend(novoEvento.tipo),
             tempoInicio: inicio,
             tempoFim: fim,
             observacao: novoEvento.descricao.trim(),
@@ -1081,7 +1079,9 @@ export default function AnaliseVideos() {
             Voltar
           </button>
 
-          <h1>Análise de <em> vídeo</em></h1>
+          <h1>
+            Análise de <em>vídeo</em>
+          </h1>
 
           <div className={styles.videoSelectors}>
             <div className={styles.videoSelectorGroup}>
@@ -1284,6 +1284,7 @@ export default function AnaliseVideos() {
                   }}
                   onPlay={() => {
                     setVideoExecutando(true);
+
                     if (videoRef.current) {
                       videoRef.current.playbackRate = velocidade;
                     }

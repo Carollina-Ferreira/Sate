@@ -1,4 +1,3 @@
-
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -16,6 +15,33 @@ const PASTA_VIDEOS = path.resolve(
 );
 
 fs.mkdirSync(PASTA_VIDEOS, { recursive: true });
+
+// Validar os imports para identificar a causa do erro
+if (typeof autenticar !== 'function') {
+  throw new TypeError(
+    'authMiddleware deve exportar uma função middleware. ' +
+    'Verifique src/middleware/authMiddleware.js.'
+  );
+}
+
+const metodosObrigatorios = [
+  'listarVideos',
+  'adicionarVideo',
+  'excluirVideo',
+  'listarMarcacoes',
+  'adicionarMarcacao',
+  'editarMarcacao',
+  'excluirMarcacao',
+];
+
+for (const metodo of metodosObrigatorios) {
+  if (typeof videoController?.[metodo] !== 'function') {
+    throw new TypeError(
+      `videoController.${metodo} não é uma função. ` +
+      'Verifique src/controllers/videoController.js e seus exports.'
+    );
+  }
+}
 
 const extensoesPermitidas = new Set([
   '.mp4',
@@ -38,10 +64,7 @@ const upload = multer({
         .extname(arquivo.originalname)
         .toLowerCase();
 
-      callback(
-        null,
-        `${randomUUID()}${extensao}`
-      );
+      callback(null, `${randomUUID()}${extensao}`);
     },
   }),
 

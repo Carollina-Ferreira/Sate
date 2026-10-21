@@ -88,15 +88,7 @@ class _FeedPageState extends State<FeedPage> {
         elevation: 0,
         centerTitle: false,
 
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black87,
-          ),
-        ),
+        automaticallyImplyLeading: false,
 
         title: const Text(
           'Feed',

@@ -1,27 +1,49 @@
-/* =====================================
+@import url(
+  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap'
+);
+
+/* =========================================================
    PÁGINA
-===================================== */
+========================================================= */
 
 .page {
+  --verde-dark: #005942;
+  --verde-profundo: #003d31;
+  --verde-claro: #dff7ee;
+
   width: 100%;
   min-height: 100vh;
 
-  padding: 30px 38px 42px;
-
   box-sizing: border-box;
 
-  background: #005942;
+  padding:
+    38px
+    42px
+    64px;
 
-  font-family: 'Poppins', sans-serif;
+  background:
+    var(--verde-dark);
+
+  color: #ffffff;
+
+  font-family:
+    'Poppins',
+    sans-serif;
 }
 
 
-/* =====================================
+/* =========================================================
    CABEÇALHO
-===================================== */
+========================================================= */
 
 .pageHeader {
-  margin-bottom: 22px;
+  width: 100%;
+  max-width: 1180px;
+
+  margin:
+    0
+    auto
+    32px;
 }
 
 .pageHeader h1 {
@@ -29,56 +51,110 @@
 
   color: #ffffff;
 
-  font-size: 30px;
+  font-size:
+    clamp(
+      34px,
+      3.1vw,
+      46px
+    );
+
+  line-height: 1.05;
 
   font-weight: 700;
 
-  letter-spacing: -0.4px;
+  letter-spacing: -1.4px;
+}
+
+.pageHeader h1 em {
+  color: #dff7ee;
+
+  font-family:
+    'DM Serif Display',
+    serif;
+
+  font-style: italic;
+  font-weight: 400;
+
+  letter-spacing: -0.5px;
 }
 
 .pageHeader p {
-  margin: 6px 0 0;
+  max-width: 620px;
 
-  color: rgba(255, 255, 255, 0.72);
+  margin:
+    10px
+    0
+    0;
 
-  font-size: 12px;
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.74
+    );
+
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 
-/* =====================================
+/* =========================================================
    CONTEÚDO
-===================================== */
+========================================================= */
 
 .content {
   width: 100%;
-  max-width: 980px;
+  max-width: 1180px;
 
   display: flex;
   flex-direction: column;
 
-  gap: 16px;
+  gap: 20px;
+
+  margin: 0 auto;
 }
 
 
-/* =====================================
-   CARDS
-===================================== */
+/* =========================================================
+   CARD
+========================================================= */
 
 .card {
   width: 100%;
 
-  padding: 22px;
-
   box-sizing: border-box;
 
-  background: #e7efeb;
+  padding:
+    28px
+    30px
+    30px;
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border:
+    1px solid
+    rgba(
+      16,
+      37,
+      31,
+      0.08
+    );
 
-  border-radius: 16px;
+  border-radius: 20px;
+
+  background: #f8fbf9;
+
+  color: #10251f;
 
   box-shadow:
-    0 7px 20px rgba(0, 0, 0, 0.12);
+    0
+    14px
+    34px
+    rgba(
+      0,
+      35,
+      26,
+      0.12
+    );
 }
 
 .cardHeader {
@@ -86,50 +162,47 @@
   align-items: flex-start;
   justify-content: space-between;
 
-  gap: 18px;
-
-  margin-bottom: 20px;
+  gap: 20px;
 }
 
 .cardHeader h2 {
   margin: 0;
 
-  color: #20332c;
+  color: #10251f;
 
-  font-size: 17px;
-
+  font-size: 19px;
   font-weight: 700;
+
+  letter-spacing: -0.35px;
 }
 
 .cardHeader p {
-  margin: 5px 0 0;
+  margin:
+    6px
+    0
+    0;
 
-  color: #6a7872;
+  color: #738079;
 
-  font-size: 10px;
-
-  line-height: 1.4;
+  font-size: 11px;
+  line-height: 1.55;
 }
 
-.cardIcon {
-  width: 40px;
-  height: 40px;
+.cardDivider {
+  width: 100%;
+  height: 1px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin:
+    20px
+    0;
 
-  border-radius: 11px;
-
-  background: #d2e2da;
-
-  color: #087a57;
+  background: #dde6e1;
 }
 
 
-/* =====================================
+/* =========================================================
    PERFIL
-===================================== */
+========================================================= */
 
 .profileTop {
   margin-bottom: 22px;
@@ -143,8 +216,8 @@
 }
 
 .avatar {
-  width: 72px;
-  height: 72px;
+  width: 70px;
+  height: 70px;
 
   flex-shrink: 0;
 
@@ -156,13 +229,26 @@
 
   border-radius: 50%;
 
-  background: #16a875;
+  background:
+    var(--verde-dark);
 
   color: #ffffff;
 
-  font-size: 22px;
+  font-size: 20px;
+  font-weight: 700;
 
-  font-weight: 600;
+  letter-spacing: -0.4px;
+
+  box-shadow:
+    0
+    8px
+    20px
+    rgba(
+      0,
+      89,
+      66,
+      0.18
+    );
 }
 
 .avatar img {
@@ -173,44 +259,51 @@
 }
 
 .photoButton {
-  height: 38px;
+  height: 44px;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
   gap: 8px;
 
-  padding: 0 14px;
+  padding:
+    0
+    16px;
 
-  border: 1px solid #c6d3cd;
+  border:
+    1px solid
+    #c7d5cf;
 
-  border-radius: 8px;
+  border-radius: 11px;
 
-  background: #f5f8f6;
+  background: #ffffff;
 
-  color: #2f3f38;
+  color:
+    var(--verde-dark);
 
   font-family: inherit;
 
-  font-size: 10px;
-
+  font-size: 11px;
   font-weight: 600;
 
   cursor: pointer;
 
   transition:
-    background 0.2s ease,
     border-color 0.2s ease,
+    background 0.2s ease,
     transform 0.2s ease;
 }
 
 .photoButton:hover {
-  background: #ffffff;
+  border-color:
+    #8eaea3;
 
-  border-color: #9fb3aa;
+  background:
+    #f4f8f6;
 
-  transform: translateY(-1px);
+  transform:
+    translateY(-1px);
 }
 
 .hiddenInput {
@@ -218,20 +311,25 @@
 }
 
 
-/* =====================================
+/* =========================================================
    FORMULÁRIO
-===================================== */
+========================================================= */
 
 .formGrid {
   display: grid;
 
   grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
 
-  gap: 18px;
+  gap: 16px;
 }
 
 .field {
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
 
@@ -239,58 +337,287 @@
 }
 
 .field label {
-  color: #57675f;
+  color: #455851;
 
   font-size: 10px;
-
   font-weight: 600;
 }
 
 .field input {
   width: 100%;
-  height: 42px;
-
-  padding: 0 13px;
+  height: 52px;
 
   box-sizing: border-box;
 
-  border: 1px solid #cbd7d1;
+  padding:
+    0
+    15px;
 
-  border-radius: 8px;
+  border:
+    1px solid
+    #cbd8d2;
+
+  border-radius: 11px;
 
   outline: none;
 
-  background: #f5f8f6;
+  background: #ffffff;
 
-  color: #26372f;
+  color: #10251f;
 
   font-family: inherit;
 
-  font-size: 11px;
+  font-size: 12px;
 
   transition:
-    background 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
+.field input::placeholder {
+  color: #9aa7a2;
+}
+
 .field input:hover {
-  border-color: #aebfb7;
+  border-color:
+    #a6b9b1;
 }
 
 .field input:focus {
-  background: #ffffff;
-
-  border-color: #16a875;
+  border-color:
+    var(--verde-dark);
 
   box-shadow:
-    0 0 0 3px rgba(22, 168, 117, 0.1);
+    0
+    0
+    0
+    4px
+    rgba(
+      0,
+      89,
+      66,
+      0.08
+    );
 }
 
 
-/* =====================================
+/* =========================================================
+   ALTERAR SENHA
+========================================================= */
+
+.passwordSection {
+  margin-top: 26px;
+
+  padding-top: 24px;
+
+  border-top:
+    1px solid
+    #dde6e1;
+}
+
+.passwordTitle {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.passwordIcon {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #e4f3ed;
+
+  color:
+    var(--verde-dark);
+}
+
+.passwordTitle h3 {
+  margin: 0;
+
+  color: #10251f;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.passwordTitle p {
+  margin:
+    3px
+    0
+    0;
+
+  color: #798780;
+
+  font-size: 10px;
+}
+
+.passwordGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 16px;
+}
+
+.passwordField {
+  position: relative;
+}
+
+.passwordField input {
+  padding-right: 48px;
+}
+
+.eyeButton {
+  width: 36px;
+  height: 36px;
+
+  position: absolute;
+
+  top: 50%;
+  right: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #71817a;
+
+  cursor: pointer;
+
+  transform:
+    translateY(-50%);
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.eyeButton:hover {
+  background: #edf4f1;
+
+  color:
+    var(--verde-dark);
+}
+
+.passwordError {
+  margin-top: 12px;
+
+  padding:
+    10px
+    12px;
+
+  border:
+    1px solid
+    #efcccc;
+
+  border-radius: 9px;
+
+  background: #fff6f6;
+
+  color: #a03e3e;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   SALVAR
+========================================================= */
+
+.saveArea {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 26px;
+  padding-top: 22px;
+
+  border-top:
+    1px solid
+    #dde6e1;
+}
+
+.saveButton {
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding:
+    0
+    18px;
+
+  border:
+    1px solid
+    var(--verde-dark);
+
+  border-radius: 11px;
+
+  background:
+    var(--verde-dark);
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0
+    7px
+    17px
+    rgba(
+      0,
+      89,
+      66,
+      0.13
+    );
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.saveButton:hover {
+  background:
+    var(--verde-profundo);
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* =========================================================
    PREFERÊNCIAS
-===================================== */
+========================================================= */
 
 .preferences {
   display: flex;
@@ -298,54 +625,62 @@
 }
 
 .preferenceRow {
-  min-height: 61px;
+  min-height: 65px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  gap: 18px;
+  gap: 20px;
 
-  padding: 11px 2px;
+  padding:
+    11px
+    2px;
 
-  box-sizing: border-box;
+  border-bottom:
+    1px solid
+    #e1e8e4;
+}
 
-  border-bottom: 1px solid #ccd8d2;
+.preferenceRow:first-child {
+  padding-top: 2px;
 }
 
 .preferenceRow:last-child {
+  padding-bottom: 2px;
+
   border-bottom: none;
 }
 
-.preferenceRow > div {
+.preferenceText {
   display: flex;
   flex-direction: column;
 
   gap: 3px;
 }
 
-.preferenceRow strong {
-  color: #34463e;
+.preferenceText strong {
+  color: #10251f;
 
   font-size: 11px;
-
   font-weight: 600;
 }
 
-.preferenceRow span {
+.preferenceText span {
   color: #78867f;
 
   font-size: 9px;
+  line-height: 1.45;
 }
 
 
-/* =====================================
+/* =========================================================
    SWITCH
-===================================== */
+========================================================= */
 
 .switch {
   width: 42px;
-  height: 23px;
+  height: 24px;
 
   flex-shrink: 0;
 
@@ -357,16 +692,17 @@
 
   border-radius: 999px;
 
-  background: #aeb9b4;
+  background: #bdc9c4;
 
   cursor: pointer;
 
-  transition: background 0.2s ease;
+  transition:
+    background 0.2s ease;
 }
 
 .switch > span {
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
 
   position: absolute;
 
@@ -378,251 +714,97 @@
   background: #ffffff;
 
   box-shadow:
-    0 1px 4px rgba(0, 0, 0, 0.22);
+    0
+    1px
+    4px
+    rgba(
+      0,
+      0,
+      0,
+      0.18
+    );
 
-  transition: transform 0.2s ease;
+  transition:
+    transform 0.2s ease;
 }
 
 .switchActive {
-  background: #2e9b53;
+  background:
+    var(--verde-dark);
 }
 
 .switchActive > span {
-  transform: translateX(19px);
+  transform:
+    translateX(18px);
 }
 
 
-/* =====================================
-   PERSONALIZAÇÃO
-===================================== */
-
-.personalizationTitle {
-  display: flex;
-  align-items: center;
-
-  gap: 7px;
-}
-
-.personalizationTitle svg {
-  color: #2d984f;
-}
-
-.colorList {
-  display: flex;
-  flex-wrap: wrap;
-
-  gap: 11px;
-
-  margin-bottom: 18px;
-}
-
-.colorButton {
-  width: 38px;
-  height: 38px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-
-  border: 3px solid transparent;
-
-  border-radius: 50%;
-
-  color: #ffffff;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.12);
-
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.colorButton:hover {
-  transform: scale(1.07);
-}
-
-.colorButtonSelected {
-  border-color: #ffffff;
-
-  box-shadow:
-    0 0 0 2px #244f40,
-    0 3px 8px rgba(0, 0, 0, 0.16);
-}
-
-
-/* =====================================
-   PALETA
-===================================== */
-
-.paletteSection {
-  display: flex;
-  flex-direction: column;
-
-  gap: 7px;
-}
-
-.paletteSection > span {
-  color: #57675f;
-
-  font-size: 10px;
-
-  font-weight: 600;
-}
-
-.palettePreview {
-  width: 100%;
-  height: 54px;
-
-  display: flex;
-
-  overflow: hidden;
-
-  border-radius: 9px;
-
-  background: #d3ded9;
-
-  border: 1px solid #c7d3cd;
-}
-
-.paletteColor {
-  flex: 1;
-
-  min-width: 40px;
-
-  transition: background 0.2s ease;
-}
-
-.emptyPalette {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #7a8881;
-
-  font-size: 10px;
-}
-
-
-/* =====================================
+/* =========================================================
    RESPONSIVIDADE
-===================================== */
+========================================================= */
 
-@media (max-width: 900px) {
-
+@media (
+  max-width: 950px
+) {
   .page {
-    padding: 24px 20px 30px;
+    padding:
+      30px
+      24px
+      48px;
   }
 
-  .content {
+  .content,
+  .pageHeader {
     max-width: none;
   }
-
 }
 
 
-@media (max-width: 650px) {
-
+@media (
+  max-width: 720px
+) {
   .page {
-    padding: 20px 14px 26px;
+    padding:
+      24px
+      16px
+      38px;
   }
 
+  .formGrid,
+  .passwordGrid {
+    grid-template-columns:
+      1fr;
+  }
+}
+
+
+@media (
+  max-width: 520px
+) {
   .pageHeader h1 {
-    font-size: 25px;
+    font-size: 31px;
   }
 
   .card {
-    padding: 18px;
-  }
+    padding:
+      21px
+      17px;
 
-  .formGrid {
-    grid-template-columns: 1fr;
+    border-radius: 17px;
   }
 
   .avatarWrapper {
     align-items: flex-start;
+
     flex-direction: column;
   }
 
-  .photoButton {
+  .photoButton,
+  .saveButton {
     width: 100%;
   }
 
-}
-
-
-@media (max-width: 450px) {
-
-  .page {
-    padding: 17px 10px 22px;
+  .saveArea {
+    justify-content: stretch;
   }
-
-  .card {
-    padding: 15px;
-
-    border-radius: 13px;
-  }
-
-  .preferenceRow {
-    align-items: flex-start;
-  }
-
-  .switch {
-    margin-top: 2px;
-  }
-
-  .colorButton {
-    width: 34px;
-    height: 34px;
-  }
-
-}
-
-.saveArea {
-  display: flex;
-  justify-content: flex-end;
-
-  margin-top: 24px;
-  padding-top: 20px;
-
-  border-top: 1px solid var(--linha);
-}
-
-.saveButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  height: 42px;
-
-  padding: 0 18px;
-
-  border: none;
-  border-radius: 10px;
-
-  background: var(--verde-principal);
-  color: white;
-
-  font-size: 14px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.saveButton:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
 }

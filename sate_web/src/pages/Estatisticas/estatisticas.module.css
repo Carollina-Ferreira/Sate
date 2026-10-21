@@ -1,621 +1,1282 @@
+@import url(
+  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap'
+);
+
+
 /* =========================================================
    SATE — ESTATÍSTICAS
-   CSS alinhado às classes usadas em Estatisticas.tsx
 ========================================================= */
 
 .page {
+  --verde-dark: #005942;
+  --verde-profundo: #003d31;
+  --verde-claro: #dff7ee;
+
+  --verde: #16a875;
+
+  --texto: #10251f;
+  --texto-secundario: #66756f;
+
+  --linha: #dce5e0;
+  --card: #f8fbf9;
+
   width: 100%;
   min-height: 100vh;
-  padding: 42px 56px 56px;
+
+  padding:
+    38px
+    42px
+    54px;
+
   box-sizing: border-box;
-  background: #005942;
+
+  background:
+    var(--verde-dark);
+
   color: #ffffff;
-  font-family: 'Poppins', 'Inter', sans-serif;
+
+  font-family:
+    'Poppins',
+    sans-serif;
 }
 
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
 .pageHeader {
+  width: 100%;
+
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
   gap: 24px;
+
   margin-bottom: 28px;
 }
+
 
 .pageHeader h1 {
   margin: 0;
+
   color: #ffffff;
-  font-size: 32px;
-  line-height: 1.2;
+
+  font-family:
+    'Poppins',
+    sans-serif;
+
+  font-size:
+    clamp(
+      34px,
+      3.1vw,
+      46px
+    );
+
+  line-height: 1.05;
+
   font-weight: 700;
+
+  letter-spacing: -1.4px;
 }
 
+
+/* PARTE ITÁLICA */
+
+.pageHeader h1 em {
+  color:
+    var(--verde-claro);
+
+  font-family:
+    'DM Serif Display',
+    serif;
+
+  font-style: italic;
+
+  font-weight: 400;
+
+  letter-spacing: -0.5px;
+}
+
+
 .pageHeader p {
-  margin: 9px 0 0;
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 14px;
+  margin:
+    10px
+    0
+    0;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.74
+    );
+
+  font-size: 13px;
+
   line-height: 1.6;
 }
 
-/* FILTROS */
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
 .filters {
+  width: 100%;
+
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) 150px;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    )
+    150px;
+
   gap: 12px;
+
   margin-bottom: 28px;
 }
 
+
+/* =========================================================
+   SELECT
+========================================================= */
+
 .filterSelect {
   position: relative;
+
+  width: 100%;
+  height: 50px;
+
   display: flex;
   align-items: center;
+
   min-width: 0;
-  height: 48px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 10px;
+
+  box-sizing: border-box;
+
+  border:
+    1px solid
+    #cad8d2;
+
+  border-radius: 11px;
+
   background: #ffffff;
-  color: #263a31;
+
+  color:
+    var(--texto);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
+
+
+.filterSelect:hover {
+  border-color:
+    #aebfb7;
+}
+
+
+.filterSelect:focus-within {
+  border-color:
+    #7da598;
+
+  box-shadow:
+    0
+    0
+    0
+    3px
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
+}
+
+
+/* =========================================================
+   SELECT INTERNO
+========================================================= */
 
 .filterSelect select {
   width: 100%;
   height: 100%;
+
   min-width: 0;
+
   appearance: none;
-  border: 0;
-  outline: 0;
-  padding: 0 38px 0 14px;
+  -webkit-appearance: none;
+
+  border: none;
+
+  outline: none;
+
+  padding:
+    0
+    42px
+    0
+    15px;
+
   border-radius: inherit;
-  background: transparent;
-  color: #263a31;
-  font: inherit;
-  font-size: 13px;
+
+  background:
+    transparent;
+
+  color:
+    #405149;
+
+  font-family:
+    'Poppins',
+    sans-serif;
+
+  font-size: 12px;
+
+  font-weight: 400;
+
   cursor: pointer;
 }
 
-.filterSelect select:focus-visible,
-.sportFilter:focus-visible {
-  outline: 3px solid rgba(78, 165, 217, 0.55);
-  outline-offset: 2px;
+
+.filterSelect select:focus {
+  outline: none;
 }
+
+
+/* =========================================================
+   SETA DO SELECT
+========================================================= */
 
 .selectIcon {
   position: absolute;
-  right: 13px;
-  color: #53665d;
+
+  top: 50%;
+  right: 14px;
+
+  color:
+    #71817a;
+
   pointer-events: none;
+
+  transform:
+    translateY(-50%);
 }
+
+
+/* =========================================================
+   LABEL ACESSÍVEL
+========================================================= */
 
 .srOnly {
   position: absolute;
+
   width: 1px;
   height: 1px;
+
   padding: 0;
+
   margin: -1px;
+
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+
+  clip: rect(
+    0,
+    0,
+    0,
+    0
+  );
+
   white-space: nowrap;
+
   border: 0;
 }
 
+
+/* =========================================================
+   FILTRO DE ESPORTE
+========================================================= */
+
 .sportFilter {
+  height: 50px;
+
+  min-width: 0;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   gap: 8px;
-  min-width: 0;
-  height: 48px;
-  padding: 0 15px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 10px;
-  background: #16a875;
+
+  padding:
+    0
+    15px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.12
+    );
+
+  border-radius: 11px;
+
+  background:
+    #007d62;
+
   color: #ffffff;
-  font: inherit;
-  font-size: 13px;
+
+  font-family:
+    'Poppins',
+    sans-serif;
+
+  font-size: 12px;
+
   font-weight: 600;
+
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+
+  box-shadow:
+    0
+    6px
+    14px
+    rgba(
+      0,
+      35,
+      26,
+      0.14
+    );
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
 
 .sportFilter:hover {
-  background: #129d6c;
-  transform: translateY(-1px);
+  background:
+    #009875;
+
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0
+    9px
+    18px
+    rgba(
+      0,
+      35,
+      26,
+      0.18
+    );
 }
 
-/* CARDS DE RESUMO */
+
+.sportFilter:focus-visible {
+  outline:
+    2px solid
+    #ffffff;
+
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   CARDS DE RESUMO
+========================================================= */
+
 .summaryGrid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
   gap: 16px;
+
   margin-bottom: 24px;
 }
 
+
 .summaryCard {
+  min-width: 0;
+  min-height: 112px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   gap: 14px;
-  min-width: 0;
-  min-height: 112px;
+
   padding: 22px;
+
   box-sizing: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 14px;
-  background: #e7efeb;
-  color: #263a31;
-  box-shadow: 0 8px 20px rgba(0, 31, 22, 0.12);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.24
+    );
+
+  border-radius: 16px;
+
+  background:
+    #e7efeb;
+
+  color:
+    #263a31;
+
+  box-shadow:
+    0
+    8px
+    20px
+    rgba(
+      0,
+      31,
+      22,
+      0.11
+    );
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
+
 .summaryCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 24px rgba(0, 31, 22, 0.18);
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0
+    11px
+    24px
+    rgba(
+      0,
+      31,
+      22,
+      0.15
+    );
 }
+
+
+/* =========================================================
+   CONTEÚDO DOS CARDS
+========================================================= */
 
 .summaryContent {
   display: flex;
   flex-direction: column;
+
   gap: 6px;
+
   min-width: 0;
 }
 
+
 .summaryContent strong {
-  color: #173d2f;
+  color:
+    #173d2f;
+
   font-size: 29px;
+
   line-height: 1;
+
   font-weight: 700;
-  font-variant-numeric: tabular-nums;
+
+  font-variant-numeric:
+    tabular-nums;
 }
 
+
 .summaryContent span {
-  color: #687970;
-  font-size: 13px;
+  color:
+    #687970;
+
+  font-size: 12px;
+
   font-weight: 500;
 }
 
+
+/* =========================================================
+   ÍCONE DOS CARDS
+========================================================= */
+
 .summaryIcon {
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  width: 46px;
-  height: 46px;
+
   border-radius: 12px;
-  background: #d2e9df;
-  color: #0b8c64;
+
+  background:
+    #d2e9df;
+
+  color:
+    #0b8c64;
 }
 
-/* ÁREA DOS GRÁFICOS */
+
+/* =========================================================
+   GRID DOS GRÁFICOS
+========================================================= */
+
 .chartsGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+
+  grid-template-columns:
+    minmax(0, 1.15fr)
+    minmax(0, 0.85fr);
+
   gap: 20px;
+
   margin-bottom: 20px;
 }
 
+
+/* =========================================================
+   CARD DOS GRÁFICOS
+========================================================= */
+
 .chartCard {
   min-width: 0;
+
   padding: 24px;
+
   box-sizing: border-box;
-  border: 1px solid #d9e5df;
-  border-radius: 16px;
-  background: #f7faf8;
-  color: #263a31;
-  box-shadow: 0 9px 24px rgba(0, 31, 22, 0.12);
+
+  border:
+    1px solid
+    #d9e5df;
+
+  border-radius: 18px;
+
+  background:
+    #f7faf8;
+
+  color:
+    #263a31;
+
+  box-shadow:
+    0
+    9px
+    24px
+    rgba(
+      0,
+      31,
+      22,
+      0.11
+    );
 }
+
+
+/* =========================================================
+   HEADER DOS GRÁFICOS
+========================================================= */
 
 .chartHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
   gap: 14px;
+
   margin-bottom: 20px;
 }
+
 
 .chartHeader > div:first-child {
   min-width: 0;
 }
 
+
 .chartEyebrow {
   display: block;
+
   margin-bottom: 6px;
-  color: #0b966b;
-  font-size: 10px;
+
+  color:
+    #0b966b;
+
+  font-size: 9px;
+
   line-height: 1.3;
+
   font-weight: 700;
+
   letter-spacing: 1px;
+
   text-transform: uppercase;
 }
 
+
 .chartHeader h2 {
   margin: 0;
-  color: #20382d;
+
+  color:
+    #20382d;
+
   font-size: 18px;
+
   line-height: 1.35;
+
   font-weight: 700;
 }
 
+
+/* =========================================================
+   TAG DA EQUIPE
+========================================================= */
+
 .teamTag {
+  max-width: 45%;
+
+  flex-shrink: 0;
+
   display: inline-flex;
   align-items: center;
-  flex-shrink: 0;
-  max-width: 45%;
-  padding: 7px 10px;
+
+  padding:
+    7px
+    10px;
+
   overflow: hidden;
-  border: 1px solid #c5e5d7;
+
+  border:
+    1px solid
+    #c5e5d7;
+
   border-radius: 999px;
-  background: #e3f4ec;
-  color: #087b58;
-  font-size: 11px;
+
+  background:
+    #e3f4ec;
+
+  color:
+    #087b58;
+
+  font-size: 10px;
+
   font-weight: 700;
+
   text-overflow: ellipsis;
+
   white-space: nowrap;
 }
 
-/* GRÁFICO DE BARRAS E EIXOS */
+
+/* =========================================================
+   SVG
+========================================================= */
+
 .svgWrapper,
 .lineWrapper {
   width: 100%;
+
   min-width: 0;
 }
 
+
 .chartSvg,
 .lineSvg {
-  display: block;
   width: 100%;
   height: auto;
+
+  display: block;
+
   overflow: visible;
 }
 
+
+/* =========================================================
+   GRADE DOS GRÁFICOS
+========================================================= */
+
 .gridLine {
-  stroke: #dce6e1;
+  stroke:
+    #dce6e1;
+
   stroke-width: 1;
-  stroke-dasharray: 4 5;
+
+  stroke-dasharray:
+    4 5;
 }
 
+
 .axisText {
-  fill: #819087;
-  font-family: inherit;
+  fill:
+    #819087;
+
+  font-family:
+    inherit;
+
   font-size: 11px;
 }
 
+
 .categoryText {
-  fill: #586b61;
-  font-family: inherit;
+  fill:
+    #586b61;
+
+  font-family:
+    inherit;
+
   font-size: 12px;
+
   font-weight: 600;
 }
 
+
+/* =========================================================
+   BARRAS
+========================================================= */
+
 .barGoals {
-  fill: #16a875;
-  transition: opacity 0.2s ease;
+  fill:
+    #16a875;
+
+  transition:
+    opacity 0.2s ease;
 }
 
+
 .barAssists {
-  fill: #4ea5d9;
-  transition: opacity 0.2s ease;
+  fill:
+    #4ea5d9;
+
+  transition:
+    opacity 0.2s ease;
 }
+
+
+/* =========================================================
+   LEGENDAS
+========================================================= */
 
 .chartLegend,
 .legend {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+
   gap: 16px;
-  color: #66786f;
+
+  color:
+    #66786f;
+
   font-size: 11px;
 }
 
+
 .chartLegend {
   justify-content: center;
+
   margin-top: 7px;
 }
+
 
 .chartLegend span,
 .legend span {
   display: inline-flex;
   align-items: center;
+
   gap: 7px;
 }
 
+
 .chartLegend i,
 .legend i {
-  display: inline-block;
-  flex-shrink: 0;
   width: 9px;
   height: 9px;
+
+  display: inline-block;
+
+  flex-shrink: 0;
+
   border-radius: 3px;
 }
 
+
 .goalLegend,
 .teamLegend {
-  background: #16a875;
+  background:
+    #16a875;
 }
+
 
 .assistLegend {
-  background: #4ea5d9;
+  background:
+    #4ea5d9;
 }
+
 
 .opponentLegend {
-  background: #ef476f;
+  background:
+    #ef476f;
 }
 
-/* GRÁFICO DONUT */
+
+/* =========================================================
+   DONUT
+========================================================= */
+
 .donutArea {
+  min-height: 220px;
+
   display: flex;
   align-items: center;
   justify-content: space-around;
+
   gap: 20px;
-  min-height: 220px;
 }
 
+
 .donutSvg {
-  display: block;
-  flex: 0 1 180px;
   width: 180px;
-  max-width: 52%;
   height: auto;
+
+  max-width: 52%;
+
+  display: block;
+
+  flex:
+    0 1 180px;
+
   overflow: visible;
 }
 
+
 .donutCenter {
-  fill: #f7faf8;
+  fill:
+    #f7faf8;
 }
 
+
 .donutTotal {
-  fill: #20382d;
-  font-family: inherit;
+  fill:
+    #20382d;
+
+  font-family:
+    inherit;
+
   font-size: 23px;
+
   font-weight: 700;
 }
 
+
 .donutLabel {
-  fill: #819087;
-  font-family: inherit;
+  fill:
+    #819087;
+
+  font-family:
+    inherit;
+
   font-size: 10px;
 }
 
+
+/* =========================================================
+   LEGENDA DO DONUT
+========================================================= */
+
 .donutLegend {
+  min-width: 0;
+
   display: flex;
   flex: 1;
   flex-direction: column;
+
   gap: 14px;
-  min-width: 0;
 }
+
 
 .donutLegend span {
   display: grid;
-  grid-template-columns: 10px minmax(0, 1fr) auto;
+
+  grid-template-columns:
+    10px
+    minmax(0, 1fr)
+    auto;
+
   align-items: center;
+
   gap: 8px;
-  color: #65766d;
+
+  color:
+    #65766d;
+
   font-size: 12px;
 }
+
 
 .donutLegend i {
   width: 9px;
   height: 9px;
+
   border-radius: 3px;
 }
 
+
 .donutLegend strong {
-  color: #263a31;
+  color:
+    #263a31;
+
   font-size: 12px;
+
   font-weight: 700;
-  font-variant-numeric: tabular-nums;
+
+  font-variant-numeric:
+    tabular-nums;
 }
 
-/* GRÁFICO DE EVOLUÇÃO */
+
+/* =========================================================
+   EVOLUÇÃO
+========================================================= */
+
 .evolutionCard {
   margin-bottom: 0;
 }
+
 
 .evolutionCard .chartHeader {
   align-items: center;
 }
 
+
 .lineSvg {
   min-height: 160px;
 }
 
+
 .teamLine,
 .opponentLine {
   stroke-width: 3.5;
+
   stroke-linecap: round;
+
   stroke-linejoin: round;
 }
 
+
 .teamLine {
-  stroke: #16a875;
+  stroke:
+    #16a875;
 }
+
 
 .opponentLine {
-  stroke: #ef476f;
+  stroke:
+    #ef476f;
 }
+
 
 .teamPoint {
-  fill: #16a875;
-  stroke: #f7faf8;
+  fill:
+    #16a875;
+
+  stroke:
+    #f7faf8;
+
   stroke-width: 2;
 }
+
 
 .opponentPoint {
-  fill: #ef476f;
-  stroke: #f7faf8;
+  fill:
+    #ef476f;
+
+  stroke:
+    #f7faf8;
+
   stroke-width: 2;
 }
 
-/* RESPONSIVIDADE */
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
 @media (max-width: 1200px) {
+
   .page {
-    padding: 36px 36px 46px;
+    padding:
+      36px
+      36px
+      46px;
   }
+
 
   .summaryGrid {
     gap: 12px;
   }
 
+
   .summaryCard {
     padding: 18px;
   }
+
 
   .summaryContent strong {
     font-size: 26px;
   }
 
+
   .chartCard {
     padding: 20px;
   }
+
 }
+
 
 @media (max-width: 950px) {
+
   .filters {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
   }
+
 
   .summaryGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
   }
+
 
   .chartsGrid {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns:
+      minmax(0, 1fr);
   }
+
 
   .donutArea {
-    justify-content: center;
+    justify-content:
+      center;
   }
+
 
   .donutSvg {
-    max-width: 180px;
+    max-width:
+      180px;
   }
+
 }
 
+
 @media (max-width: 600px) {
+
   .page {
-    padding: 26px 16px 34px;
+    padding:
+      26px
+      16px
+      34px;
   }
+
 
   .pageHeader {
-    margin-bottom: 22px;
+    margin-bottom:
+      22px;
   }
+
 
   .pageHeader h1 {
-    font-size: 27px;
+    font-size:
+      30px;
   }
+
 
   .pageHeader p {
-    font-size: 12px;
+    font-size:
+      12px;
   }
 
+
   .filters {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns:
+      minmax(0, 1fr);
+
     gap: 10px;
-    margin-bottom: 22px;
+
+    margin-bottom:
+      22px;
   }
+
 
   .filterSelect,
   .sportFilter {
-    height: 46px;
+    height: 48px;
   }
+
 
   .summaryGrid {
     gap: 10px;
-    margin-bottom: 16px;
+
+    margin-bottom:
+      16px;
   }
+
 
   .summaryCard {
     min-height: 96px;
+
     gap: 8px;
+
     padding: 14px;
+
     border-radius: 12px;
   }
+
 
   .summaryContent strong {
     font-size: 23px;
   }
 
+
   .summaryContent span {
     font-size: 11px;
   }
 
+
   .summaryIcon {
     width: 36px;
     height: 36px;
+
     border-radius: 10px;
   }
 
+
   .chartCard {
-    padding: 16px 13px;
+    padding:
+      16px
+      13px;
+
     border-radius: 13px;
   }
 
+
   .chartHeader {
     gap: 9px;
+
     margin-bottom: 16px;
   }
+
 
   .chartHeader h2 {
     font-size: 16px;
   }
 
+
   .chartEyebrow {
     font-size: 9px;
   }
 
+
   .teamTag {
     max-width: 40%;
-    padding: 6px 8px;
+
+    padding:
+      6px
+      8px;
+
     font-size: 10px;
   }
 
+
   .donutArea {
     flex-direction: column;
+
     gap: 18px;
   }
 
+
   .donutSvg {
     width: 165px;
+
     max-width: 100%;
+
     flex-basis: auto;
   }
+
 
   .donutLegend {
     width: 100%;
   }
 
+
   .legend {
     gap: 10px;
+
     font-size: 10px;
   }
+
 
   .categoryText {
     font-size: 10px;
   }
 
+
   .axisText {
     font-size: 10px;
   }
+
 }
 
+
 @media (max-width: 380px) {
+
   .page {
-    padding-right: 11px;
-    padding-left: 11px;
+    padding-right:
+      11px;
+
+    padding-left:
+      11px;
   }
+
 
   .summaryCard {
     padding: 11px;
   }
+
 
   .summaryIcon {
     width: 31px;
     height: 31px;
   }
 
+
   .summaryContent strong {
     font-size: 21px;
   }
 
+
   .chartHeader h2 {
     font-size: 14px;
   }
+
 }

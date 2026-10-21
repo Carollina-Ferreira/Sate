@@ -11,6 +11,7 @@ const equipeRoutes = require('./routes/equipeRoutes');
 const partidaRoutes = require('./routes/partidaRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const videoRoutes = require('./routes/videoRoutes');
+const configuracaoAnaliseRoutes = require('./routes/configuracaoAnaliseRoutes');
 
 const app = express();
 
@@ -79,9 +80,10 @@ app.use('/api/equipes', equipeRoutes);
 app.use('/api/partidas', partidaRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+// Configuração dos campos de análise de vídeo
+app.use('/api/configuracao-analise', configuracaoAnaliseRoutes);
+
 // Rotas de vídeos e marcações
-// O router contém os caminhos /partidas/:partidaId/videos
-// e /videos/:id, entre outros.
 app.use('/api', videoRoutes);
 
 // ======================================================
@@ -140,6 +142,7 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Dashboard: http://localhost:${PORT}/api/dashboard`);
   console.log(`Health: http://localhost:${PORT}/api/health`);
   console.log(`Vídeos: http://localhost:${PORT}/api/partidas/:id/videos`);
+  console.log('Configuração de análise: http://localhost:${PORT}/api/configuracao-analise');
   console.log('=================================');
   console.log('');
 });

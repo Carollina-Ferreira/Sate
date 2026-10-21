@@ -54,12 +54,16 @@ function App() {
             PÁGINAS PÚBLICAS
         ======================================== */}
 
+        {/* Landing Page */}
         <Route path="/" element={<LandingPage />} />
 
+        {/* Login */}
         <Route path="/login" element={<Login />} />
 
+        {/* Cadastro */}
         <Route path="/cadastro" element={<Cadastro />} />
 
+        {/* Recuperação de senha */}
         <Route path="/esqueci-senha" element={<EsqueciSenha />} />
 
         {/* ========================================
@@ -106,7 +110,7 @@ function App() {
               element={<Dashboard />}
             />
 
-            {/* COMPATIBILIDADE COM A ROTA ANTIGA */}
+            {/* Compatibilidade com rota antiga */}
             <Route
               path="/dashboard"
               element={<Dashboard />}
@@ -168,7 +172,6 @@ function App() {
 
           </Route>
         </Route>
-
       </Routes>
     </BrowserRouter>
   );

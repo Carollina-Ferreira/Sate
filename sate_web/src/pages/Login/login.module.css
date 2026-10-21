@@ -1,40 +1,61 @@
-/* =====================================
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+
+/* ============================================================
    PÁGINA
-===================================== */
+============================================================ */
 
 .page {
   width: 100%;
   min-height: 100vh;
 
-  display: flex;
+  display: grid;
+  grid-template-columns: 56% 44%;
 
   overflow: hidden;
 
-  background: var(--cinza-fundo);
+  background: #f6f8f7;
+
+  font-family: 'Poppins', sans-serif;
 }
 
 
-/* =====================================
-   LADO ESQUERDO
-===================================== */
+/* ============================================================
+   HERO
+============================================================ */
 
-.left {
+.hero {
   position: relative;
 
-  width: 52%;
+  min-width: 0;
   min-height: 100vh;
 
   overflow: hidden;
 
-  background: var(--verde-escuro);
+  background: #002f26;
+
+  isolation: isolate;
 }
 
 
-/* =====================================
-   IMAGEM
-===================================== */
+/* ============================================================
+   IMAGENS
+============================================================ */
 
-.leftImage {
+.heroImages {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -5;
+
+  overflow: hidden;
+
+  background: #002f26;
+}
+
+
+.heroSlide {
   position: absolute;
 
   inset: 0;
@@ -42,121 +63,460 @@
   width: 100%;
   height: 100%;
 
-  object-fit: cover;
+  background-size: cover;
 
-  object-position: center;
+  background-position:
+    72% center;
 
-  z-index: 0;
+  background-repeat:
+    no-repeat;
+
+  opacity: 0;
+
+  filter:
+    saturate(1.03)
+    contrast(1.02)
+    brightness(1);
+
+  transition:
+    opacity 8s ease-in-out;
+
+  will-change:
+    opacity;
 }
 
 
-/* =====================================
-   CURVAS COLORIDAS
-===================================== */
+.heroSlideActive {
+  opacity: 1;
+}
 
-.curves {
+
+/* ============================================================
+   OVERLAY
+============================================================ */
+
+.heroOverlay {
   position: absolute;
 
-  bottom: -40px;
-  left: -60px;
+  inset: 0;
 
-  width: 320px;
-  height: 320px;
+  z-index: -4;
 
-  opacity: 0.85;
+  pointer-events: none;
+
+  background:
+
+    linear-gradient(
+      90deg,
+
+      rgba(0, 25, 20, 0.84) 0%,
+
+      rgba(0, 27, 21, 0.63) 25%,
+
+      rgba(0, 28, 22, 0.35) 47%,
+
+      rgba(0, 28, 22, 0.10) 70%,
+
+      transparent 100%
+    ),
+
+    linear-gradient(
+      0deg,
+
+      rgba(0, 22, 17, 0.90) 0%,
+
+      rgba(0, 23, 18, 0.80) 8%,
+
+      rgba(0, 24, 19, 0.61) 19%,
+
+      rgba(0, 25, 20, 0.39) 32%,
+
+      rgba(0, 25, 20, 0.19) 45%,
+
+      rgba(0, 25, 20, 0.06) 58%,
+
+      transparent 71%
+    );
+}
+
+
+/* ============================================================
+   VINHETA
+============================================================ */
+
+.hero::after {
+  content: '';
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -3;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 15% 58%,
+
+      rgba(0, 18, 14, 0.23) 0%,
+
+      rgba(0, 18, 14, 0.09) 34%,
+
+      transparent 63%
+    );
+
+  box-shadow:
+    inset
+    0
+    -30px
+    65px
+    rgba(0, 18, 14, 0.12);
+}
+
+
+/* ============================================================
+   3 CURVAS ESQUERDA
+============================================================ */
+
+.topCurves {
+  position: absolute;
+
+  top: -2px;
+  left: -20px;
 
   z-index: 2;
+
+  width: 465px;
+  height: 250px;
+
+  overflow: visible;
+
+  pointer-events: none;
+
+  opacity: 0.42;
+}
+
+
+.topCurves path {
+  fill: none;
+
+  stroke:
+    rgba(33, 207, 155, 0.32);
+
+  stroke-width: 1;
+
+  stroke-linecap: round;
+}
+
+
+.topCurves path:nth-child(2) {
+  stroke:
+    rgba(33, 207, 155, 0.18);
+
+  stroke-dasharray:
+    3 8;
+}
+
+
+.topCurves path:nth-child(3) {
+  stroke:
+    rgba(33, 207, 155, 0.17);
+}
+
+
+/* ============================================================
+   LINHA ROSA
+============================================================ */
+
+.pinkAccent {
+  position: absolute;
+
+  right: -55px;
+  bottom: 185px;
+
+  z-index: 2;
+
+  width: 230px;
+  height: 1px;
+
+  transform:
+    rotate(43deg);
+
+  background:
+    linear-gradient(
+      90deg,
+
+      transparent,
+
+      rgba(255, 52, 105, 0.34)
+    );
 
   pointer-events: none;
 }
 
 
-/* =====================================
-   TEXTO
-===================================== */
+/* ============================================================
+   LOGO HERO
+============================================================ */
 
-.leftContent {
+.heroLogoLink {
   position: absolute;
 
-  left: 20px;
-  bottom: 145px;
+  top: 47px;
+  left: 66px;
 
-  z-index: 3;
+  z-index: 10;
 
-  max-width: 440px;
+  display: inline-flex;
 
-  color: var(--branco);
+  align-items: center;
+
+  text-decoration: none;
 }
 
-.leftContent h1 {
-  margin: 0 0 12px;
 
-  font-size: 27px;
+.heroLogo {
+  display: block;
 
-  line-height: 1.18;
+  width: 88px;
+  height: auto;
 
-  font-weight: 700;
+  max-height: 54px;
 
-  letter-spacing: -0.5px;
+  object-fit: contain;
+
+  filter:
+    drop-shadow(
+      0 3px 7px
+      rgba(0, 0, 0, 0.13)
+    );
 }
 
-.leftContent p {
+
+/* ============================================================
+   CONTEÚDO HERO
+============================================================ */
+
+.heroContent {
+  position: absolute;
+
+  left: 68px;
+  bottom: 230px;
+
+  z-index: 10;
+
+  width: 560px;
+
+  max-width:
+    calc(100% - 110px);
+
+  color: #ffffff;
+}
+
+
+.heroContent::before {
+  content: '';
+
+  position: absolute;
+
+  z-index: -1;
+
+  top: -50px;
+  left: -58px;
+
+  width: 590px;
+  height: 320px;
+
+  background:
+    radial-gradient(
+      ellipse,
+
+      rgba(0, 16, 13, 0.33) 0%,
+
+      rgba(0, 17, 14, 0.10) 48%,
+
+      transparent 73%
+    );
+
+  filter:
+    blur(8px);
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   TÍTULO
+============================================================ */
+
+.heroContent h1 {
   margin: 0;
 
-  font-size: 11px;
+  display: flex;
 
-  line-height: 1.35;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  color: #ffffff;
+
+  font-size:
+    clamp(
+      34px,
+      2.75vw,
+      46px
+    );
+
+  line-height: 1.07;
+
+  font-weight: 600;
+
+  letter-spacing:
+    -0.035em;
+
+  text-shadow:
+    0 3px 12px
+    rgba(0, 0, 0, 0.27);
+}
+
+
+.heroContent h1 span {
+  display: block;
+
+  white-space: nowrap;
+}
+
+
+.heroContent h1 em {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #20cf99;
+
+  font-family:
+    'DM Serif Display',
+    serif;
+
+  font-size: 1.08em;
+
+  font-style: italic;
 
   font-weight: 400;
 
-  color: rgba(255, 255, 255, 0.88);
+  letter-spacing:
+    -0.025em;
+
+  text-shadow: none;
+
+  filter: none;
 }
 
 
-/* =====================================
-   ESTATÍSTICAS
-===================================== */
+/* ============================================================
+   TEXTO
+============================================================ */
 
-.leftFooter {
+.heroContent p {
+  max-width: 450px;
+
+  margin:
+    21px
+    0
+    0;
+
+  color:
+    rgba(255, 255, 255, 0.88);
+
+  font-size: 13px;
+
+  line-height: 1.62;
+
+  font-weight: 400;
+
+  text-shadow:
+    0 2px 8px
+    rgba(0, 0, 0, 0.28);
+}
+
+
+/* ============================================================
+   INDICADORES
+============================================================ */
+
+.heroStats {
   position: absolute;
 
-  left: 34px;
-  bottom: 13px;
+  left: 68px;
+  bottom: 62px;
+
+  z-index: 10;
 
   display: flex;
 
   align-items: center;
 
-  gap: 25px;
+  gap: 29px;
+}
 
-  z-index: 4;
 
-  color: var(--branco);
+.heroStat {
+  min-width: 88px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+
+.heroStat strong {
+  color: #ffffff;
+
+  font-size: 26px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  letter-spacing:
+    -0.035em;
+
+  text-shadow:
+    0 2px 8px
+    rgba(0, 0, 0, 0.30);
+}
+
+
+.heroStat span {
+  color:
+    rgba(255, 255, 255, 0.84);
 
   font-size: 10px;
 }
 
-.leftFooter span {
-  font-size: 10px;
 
-  font-weight: 400;
+.statDivider {
+  width: 1px;
+  height: 44px;
 
-  color: rgba(255, 255, 255, 0.85);
+  display: block;
+
+  background:
+    rgba(33, 211, 157, 0.73);
 }
 
-.leftFooter .dot {
-  color: var(--verde-principal);
-}
 
-
-/* =====================================
+/* ============================================================
    LADO DIREITO
-===================================== */
+============================================================ */
 
-.right {
+.loginArea {
   position: relative;
 
-  width: 48%;
+  min-width: 0;
   min-height: 100vh;
 
   display: flex;
@@ -164,637 +524,1339 @@
   align-items: center;
   justify-content: center;
 
-  padding: 40px;
+  box-sizing: border-box;
+
+  padding:
+    55px
+    50px;
 
   overflow: hidden;
 
   background:
-    radial-gradient(
-      100% 100% at 100% 0%,
-      rgba(22, 168, 117, 0.10) 0%,
-      transparent 45%
-    ),
-    radial-gradient(
-      80% 80% at 0% 100%,
-      rgba(78, 165, 217, 0.08) 0%,
-      transparent 45%
-    ),
-    var(--cinza-fundo);
+    linear-gradient(
+      145deg,
+      #fbfdfc 0%,
+      #f5faf7 47%,
+      #f1f8f4 100%
+    );
 }
 
 
-/* =====================================
-   DECORAÇÕES
-===================================== */
+/* ============================================================
+   FUNDO ANIMADO
+============================================================ */
 
-.decor {
+.backgroundDecor {
   position: absolute;
 
   inset: 0;
 
-  pointer-events: none;
+  z-index: 0;
 
   overflow: hidden;
-}
 
-.dotGrid {
-  position: absolute;
-
-  inset: 0;
-
-  background-image:
-    radial-gradient(
-      rgba(18, 38, 31, 0.07) 1px,
-      transparent 1px
-    );
-
-  background-size: 22px 22px;
-
-  mask-image:
-    radial-gradient(
-      circle at 65% 35%,
-      rgba(0, 0, 0, 0.9) 0%,
-      transparent 65%
-    );
-
-  -webkit-mask-image:
-    radial-gradient(
-      circle at 65% 35%,
-      rgba(0, 0, 0, 0.9) 0%,
-      transparent 65%
-    );
+  pointer-events: none;
 }
 
 
-/* =====================================
-   BLOBS
-===================================== */
+/* ============================================================
+   ORBS
+============================================================ */
 
-.blob {
+.gradientOrb {
   position: absolute;
+
+  display: block;
+
+  border-radius:
+    52% 48% 62% 38% /
+    45% 58% 42% 55%;
+
+  filter:
+    blur(22px);
+
+  will-change:
+    transform,
+    border-radius;
+
+  animation:
+    morphOrb
+    16s
+    ease-in-out
+    infinite alternate;
+}
+
+
+/* ============================================================
+   ORB TOPO
+============================================================ */
+
+.orbTop {
+  width: 390px;
+  height: 390px;
+
+  top: -190px;
+  right: -110px;
+
+  background:
+    radial-gradient(
+      circle at 38% 42%,
+
+      rgba(37, 223, 166, 0.54) 0%,
+
+      rgba(81, 229, 183, 0.31) 35%,
+
+      rgba(112, 235, 197, 0.12) 56%,
+
+      transparent 75%
+    );
+
+  opacity: 0.90;
+
+  animation-duration: 18s;
+}
+
+
+/* ============================================================
+   ORB DIREITO
+============================================================ */
+
+.orbRight {
+  width: 330px;
+  height: 410px;
+
+  top: 30%;
+  right: -180px;
+
+  background:
+    radial-gradient(
+      circle at 30% 48%,
+
+      rgba(0, 132, 96, 0.28) 0%,
+
+      rgba(35, 213, 158, 0.23) 37%,
+
+      rgba(93, 231, 190, 0.09) 61%,
+
+      transparent 77%
+    );
+
+  opacity: 0.76;
+
+  animation-duration: 21s;
+
+  animation-delay: -8s;
+}
+
+
+/* ============================================================
+   ORB INFERIOR
+============================================================ */
+
+.orbBottom {
+  width: 430px;
+  height: 430px;
+
+  right: -130px;
+  bottom: -210px;
+
+  background:
+    radial-gradient(
+      circle at 42% 35%,
+
+      rgba(32, 216, 160, 0.58) 0%,
+
+      rgba(71, 226, 178, 0.31) 38%,
+
+      rgba(125, 236, 203, 0.10) 61%,
+
+      transparent 76%
+    );
+
+  opacity: 0.90;
+
+  animation-duration: 17s;
+
+  animation-delay: -5s;
+}
+
+
+/* ============================================================
+   ORB ESQUERDA
+============================================================ */
+
+.orbLeft {
+  width: 310px;
+  height: 390px;
+
+  left: -180px;
+  top: 34%;
+
+  background:
+    radial-gradient(
+      circle at 62% 50%,
+
+      rgba(112, 232, 196, 0.34) 0%,
+
+      rgba(89, 220, 181, 0.21) 42%,
+
+      rgba(127, 234, 203, 0.07) 64%,
+
+      transparent 78%
+    );
+
+  opacity: 0.76;
+
+  animation-duration: 23s;
+
+  animation-delay: -11s;
+}
+
+
+/* ============================================================
+   ORB CENTRAL
+============================================================ */
+
+.orbCenter {
+  width: 470px;
+  height: 470px;
+
+  top: 24%;
+  left: 11%;
+
+  background:
+    radial-gradient(
+      circle,
+
+      rgba(212, 247, 235, 0.66) 0%,
+
+      rgba(194, 241, 225, 0.35) 35%,
+
+      rgba(199, 243, 228, 0.12) 58%,
+
+      transparent 76%
+    );
+
+  filter:
+    blur(40px);
+
+  opacity: 0.72;
+
+  animation-duration: 25s;
+
+  animation-delay: -14s;
+}
+
+
+/* ============================================================
+   ORB PEQUENO SUPERIOR ESQUERDO
+============================================================ */
+
+.orbSmallOne {
+  width: 185px;
+  height: 185px;
+
+  top: 7%;
+  left: -65px;
+
+  background:
+    radial-gradient(
+      circle,
+
+      rgba(97, 226, 187, 0.38) 0%,
+
+      rgba(104, 228, 191, 0.16) 48%,
+
+      transparent 75%
+    );
+
+  opacity: 0.66;
+
+  animation-duration: 14s;
+
+  animation-delay: -3s;
+}
+
+
+/* ============================================================
+   ORB PEQUENO INFERIOR
+============================================================ */
+
+.orbSmallTwo {
+  width: 190px;
+  height: 190px;
+
+  bottom: 7%;
+  left: 15%;
+
+  background:
+    radial-gradient(
+      circle,
+
+      rgba(78, 220, 177, 0.31) 0%,
+
+      rgba(111, 232, 197, 0.13) 51%,
+
+      transparent 76%
+    );
+
+  opacity: 0.66;
+
+  animation-duration: 19s;
+
+  animation-delay: -9s;
+}
+
+
+/* ============================================================
+   AURORA SUPERIOR
+============================================================ */
+
+.auroraTop {
+  position: absolute;
+
+  width: 660px;
+  height: 260px;
+
+  top: -150px;
+  left: -80px;
 
   border-radius: 50%;
 
-  filter: blur(38px);
-}
+  transform:
+    rotate(-10deg);
 
-.blobGreen {
-  width: 260px;
-  height: 260px;
+  background:
+    linear-gradient(
+      100deg,
 
-  top: -60px;
-  right: -40px;
+      transparent 0%,
 
-  background: var(--verde-principal);
+      rgba(138, 238, 208, 0.08) 18%,
 
-  opacity: 0.35;
-}
+      rgba(58, 218, 168, 0.24) 45%,
 
-.blobBlue {
-  width: 220px;
-  height: 220px;
+      rgba(112, 235, 198, 0.15) 64%,
 
-  bottom: 10%;
-  right: 12%;
+      transparent 90%
+    );
 
-  background: var(--azul);
+  filter:
+    blur(30px);
 
-  opacity: 0.28;
-}
+  opacity: 0.77;
 
-.blobPink {
-  width: 180px;
-  height: 180px;
-
-  bottom: -40px;
-  left: 6%;
-
-  background: var(--rosa);
-
-  opacity: 0.22;
+  animation:
+    auroraTopMove
+    20s
+    ease-in-out
+    infinite alternate;
 }
 
 
-/* =====================================
-   ANIMAÇÃO
-===================================== */
+/* ============================================================
+   AURORA INFERIOR
+============================================================ */
 
-@media (prefers-reduced-motion: no-preference) {
-  .blob {
-    animation: floatSlow 10s ease-in-out infinite;
-  }
-
-  .blobBlue {
-    animation-duration: 12s;
-    animation-delay: 0.8s;
-  }
-
-  .blobPink {
-    animation-duration: 14s;
-    animation-delay: 1.4s;
-  }
-}
-
-@keyframes floatSlow {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-
-  50% {
-    transform: translate(14px, -18px);
-  }
-}
-
-
-/* =====================================
-   GRÁFICO
-===================================== */
-
-.dataLine {
+.auroraBottom {
   position: absolute;
 
-  top: 14%;
-  right: 4%;
+  width: 650px;
+  height: 270px;
 
-  width: 260px;
-  height: 120px;
+  right: -170px;
+  bottom: -135px;
 
-  opacity: 0.5;
+  border-radius: 50%;
+
+  transform:
+    rotate(10deg);
+
+  background:
+    linear-gradient(
+      100deg,
+
+      transparent 0%,
+
+      rgba(119, 235, 201, 0.09) 20%,
+
+      rgba(31, 205, 151, 0.25) 48%,
+
+      rgba(113, 233, 198, 0.12) 70%,
+
+      transparent 93%
+    );
+
+  filter:
+    blur(32px);
+
+  opacity: 0.76;
+
+  animation:
+    auroraBottomMove
+    22s
+    ease-in-out
+    infinite alternate;
 }
 
 
-/* =====================================
-   CARD
-===================================== */
+/* ============================================================
+   ANIMAÇÃO ORBS
+============================================================ */
 
-.formCard {
+@keyframes morphOrb {
+
+  0% {
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      )
+      rotate(0deg)
+      scale(1);
+
+    border-radius:
+      52% 48% 62% 38% /
+      45% 58% 42% 55%;
+  }
+
+
+  25% {
+    transform:
+      translate3d(
+        24px,
+        -18px,
+        0
+      )
+      rotate(3deg)
+      scale(1.04);
+
+    border-radius:
+      44% 56% 39% 61% /
+      57% 45% 55% 43%;
+  }
+
+
+  50% {
+    transform:
+      translate3d(
+        -13px,
+        24px,
+        0
+      )
+      rotate(-4deg)
+      scale(0.97);
+
+    border-radius:
+      61% 39% 52% 48% /
+      40% 62% 38% 60%;
+  }
+
+
+  75% {
+    transform:
+      translate3d(
+        18px,
+        11px,
+        0
+      )
+      rotate(5deg)
+      scale(1.06);
+
+    border-radius:
+      39% 61% 58% 42% /
+      59% 41% 55% 45%;
+  }
+
+
+  100% {
+    transform:
+      translate3d(
+        -8px,
+        -10px,
+        0
+      )
+      rotate(-2deg)
+      scale(1.01);
+
+    border-radius:
+      56% 44% 46% 54% /
+      43% 57% 61% 39%;
+  }
+
+}
+
+
+/* ============================================================
+   ANIMAÇÃO AURORA
+============================================================ */
+
+@keyframes auroraTopMove {
+
+  from {
+    transform:
+      translate3d(
+        -30px,
+        0,
+        0
+      )
+      rotate(-10deg)
+      scale(0.94);
+  }
+
+
+  to {
+    transform:
+      translate3d(
+        55px,
+        28px,
+        0
+      )
+      rotate(-5deg)
+      scale(1.08);
+  }
+
+}
+
+
+@keyframes auroraBottomMove {
+
+  from {
+    transform:
+      translate3d(
+        30px,
+        18px,
+        0
+      )
+      rotate(10deg)
+      scale(1);
+  }
+
+
+  to {
+    transform:
+      translate3d(
+        -55px,
+        -20px,
+        0
+      )
+      rotate(5deg)
+      scale(1.09);
+  }
+
+}
+
+
+/* ============================================================
+   CARD
+============================================================ */
+
+.loginCard {
   position: relative;
 
   z-index: 5;
 
   width: 100%;
-  max-width: 380px;
+  max-width: 460px;
 
-  padding: 40px 36px;
+  box-sizing: border-box;
 
-  background: var(--branco);
+  padding:
+    42px
+    44px
+    40px;
 
-  border-radius: 24px;
+  border:
+    1px solid
+    rgba(222, 231, 226, 0.78);
+
+  border-radius: 25px;
+
+  background:
+    rgba(255, 255, 255, 0.92);
 
   box-shadow:
-    0 2px 6px rgba(18, 38, 31, 0.04),
-    0 24px 48px rgba(18, 38, 31, 0.09);
+    0 8px 20px
+      rgba(0, 48, 35, 0.025),
 
-  animation: fadeSlideUp 0.55s ease both;
+    0 30px 70px
+      rgba(0, 48, 35, 0.07);
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
+
+  animation:
+    cardEnter
+    0.55s
+    ease
+    both;
 }
 
-@keyframes fadeSlideUp {
+
+@keyframes cardEnter {
+
   from {
     opacity: 0;
-    transform: translateY(18px);
+
+    transform:
+      translateY(14px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+
+    transform:
+      translateY(0);
   }
+
 }
 
 
-/* =====================================
-   LOGO
-===================================== */
+/* ============================================================
+   LOGO CARD
+============================================================ */
 
-.brandMark {
-  width: 38px;
-  height: 38px;
+.cardLogo {
+  display: block;
 
-  display: flex;
+  width: 78px;
+  height: auto;
 
-  align-items: center;
-  justify-content: center;
+  max-height: 50px;
 
-  margin-bottom: 18px;
+  margin:
+    0
+    0
+    23px;
 
-  border-radius: 11px;
-
-  background:
-    linear-gradient(
-      135deg,
-      var(--verde-principal),
-      var(--azul)
-    );
+  object-fit: contain;
 }
 
 
-/* =====================================
-   TÍTULO
-===================================== */
+/* ============================================================
+   HEADER CARD
+============================================================ */
 
-.formCard h2 {
-  margin: 0 0 6px;
-
-  color: var(--preto);
-
-  font-size: 25px;
-
-  line-height: 1.2;
-
-  font-weight: 700;
+.cardHeader {
+  margin-bottom: 28px;
 }
 
 
-/* =====================================
-   SUBTÍTULO
-===================================== */
+.cardHeader h2 {
+  margin: 0;
 
-.subtitle {
-  margin: 0 0 26px;
+  color: #10251f;
 
-  color: var(--cinza-texto);
+  font-size: 29px;
+
+  line-height: 1.15;
+
+  font-weight: 600;
+
+  letter-spacing:
+    -0.035em;
+}
+
+
+.cardHeader p {
+  max-width: 330px;
+
+  margin:
+    9px
+    0
+    0;
+
+  color: #66756f;
 
   font-size: 13px;
 
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 
-/* =====================================
-   FORMULÁRIO
-===================================== */
+/* ============================================================
+   FORM
+============================================================ */
 
 .form {
   display: flex;
 
   flex-direction: column;
 
-  gap: 16px;
+  gap: 18px;
 }
 
-
-/* =====================================
-   CAMPOS
-===================================== */
 
 .field {
   display: flex;
 
   flex-direction: column;
 
-  gap: 6px;
+  gap: 7px;
 }
 
+
 .field label {
-  color: var(--preto);
+  color: #10251f;
 
   font-size: 12px;
 
   font-weight: 600;
 }
 
-.field input {
-  width: 100%;
-  height: 42px;
 
-  padding: 0 13px;
+/* ============================================================
+   INPUTS
+============================================================ */
+
+.inputWrapper {
+  position: relative;
+
+  width: 100%;
+}
+
+
+.inputWrapper input {
+  width: 100%;
+  height: 52px;
 
   box-sizing: border-box;
 
-  border: 1.5px solid #B8C2BE;
+  padding:
+    0
+    46px
+    0
+    45px;
 
-  border-radius: 10px;
+  border:
+    1px solid
+    #c4d2cb;
+
+  border-radius: 11px;
 
   outline: none;
 
-  background: var(--branco);
+  background: #ffffff;
 
-  color: var(--preto);
+  color: #10251f;
 
-  font-family: inherit;
+  font-family:
+    'Poppins',
+    sans-serif;
 
   font-size: 13px;
 
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+    border-color
+      0.2s ease,
+
+    box-shadow
+      0.2s ease;
 }
 
-.field input:hover {
-  border-color: #8FA09A;
+
+.inputWrapper input::placeholder {
+  color: #9aa8a3;
 }
 
-.field input:focus {
-  border-color: var(--verde-principal);
 
-  background: var(--branco);
+.inputWrapper input:hover {
+  border-color: #9eafa8;
+}
+
+
+.inputWrapper input:focus {
+  border-color: #005942;
 
   box-shadow:
-    0 0 0 4px rgba(22, 168, 117, 0.12);
-}
-
-.field input:focus {
-  border-color: var(--verde-principal);
-
-  box-shadow:
-    0 0 0 4px rgba(22, 168, 117, 0.12);
+    0 0 0 3px
+    rgba(0, 89, 66, 0.10);
 }
 
 
-/* =====================================
-   OPÇÕES
-===================================== */
+.inputIcon {
+  position: absolute;
 
-.rowBetween {
+  top: 50%;
+  left: 15px;
+
+  z-index: 2;
+
+  transform:
+    translateY(-50%);
+
+  color: #64766f;
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   SENHA
+============================================================ */
+
+.passwordToggle {
+  position: absolute;
+
+  top: 50%;
+  right: 11px;
+
+  z-index: 3;
+
+  width: 34px;
+  height: 34px;
+
   display: flex;
 
   align-items: center;
+  justify-content: center;
 
-  justify-content: space-between;
+  padding: 0;
 
-  gap: 10px;
+  transform:
+    translateY(-50%);
 
-  margin-top: 2px;
+  border: none;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #61736c;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
-.checkboxLabel {
+
+.passwordToggle:hover {
+  background: #eef5f2;
+
+  color: #005942;
+}
+
+
+/* ============================================================
+   OPÇÕES
+============================================================ */
+
+.options {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+
+.remember {
   display: flex;
 
   align-items: center;
 
   gap: 7px;
 
+  color: #243c34;
+
+  font-size: 11px;
+
   cursor: pointer;
-
-  color: var(--preto);
-
-  font-size: 12px;
 }
 
-.checkboxLabel input {
-  width: 14px;
-  height: 14px;
+
+.remember input {
+  width: 16px;
+  height: 16px;
 
   margin: 0;
 
-  accent-color: var(--verde-principal);
+  accent-color: #005942;
 }
 
-.link {
-  color: var(--rosa);
 
-  font-size: 12px;
+.forgotPassword {
+  color: #00694e;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  text-decoration: underline;
+
+  text-underline-offset: 3px;
+}
+
+
+.forgotPassword:hover {
+  color: #003d31;
+}
+
+
+/* ============================================================
+   ERRO
+============================================================ */
+
+.errorMessage {
+  padding:
+    10px
+    12px;
+
+  border:
+    1px solid
+    #f0c9ce;
+
+  border-radius: 9px;
+
+  background: #fff5f6;
+
+  color: #b5283d;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   BOTÃO ENTRAR
+============================================================ */
+
+.submitButton {
+  width: 100%;
+  height: 54px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 17px;
+
+  margin-top: 3px;
+
+  border: none;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #007154 0%,
+      #005942 52%,
+      #003f33 100%
+    );
+
+  color: #ffffff;
+
+  font-family:
+    'Poppins',
+    sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 22px
+    rgba(0, 89, 66, 0.14);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.submitButton svg {
+  transition:
+    transform 0.2s ease;
+}
+
+
+.submitButton:hover:not(:disabled) {
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 14px 27px
+    rgba(0, 89, 66, 0.20);
+}
+
+
+.submitButton:hover:not(:disabled) svg {
+  transform:
+    translateX(4px);
+}
+
+
+.submitButton:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+
+/* ============================================================
+   DIVISOR
+============================================================ */
+
+.signupDivider {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    auto
+    1fr;
+
+  align-items: center;
+
+  gap: 13px;
+
+  margin:
+    26px
+    0
+    18px;
+}
+
+
+.signupDivider span {
+  height: 1px;
+
+  background: #dce5e1;
+}
+
+
+.signupDivider p {
+  margin: 0;
+
+  color: #74837d;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   CRIAR CONTA
+============================================================ */
+
+.createAccount {
+  width: 100%;
+  height: 50px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border:
+    1.5px solid
+    #007355;
+
+  border-radius: 999px;
+
+  background: transparent;
+
+  color: #005942;
+
+  font-size: 13px;
 
   font-weight: 600;
 
   text-decoration: none;
-}
-
-.link:hover {
-  color: var(--vermelho);
-
-  text-decoration: underline;
-}
-
-
-/* =====================================
-   BOTÃO
-===================================== */
-
-.submitButton {
-  width: 100%;
-  height: 42px;
-
-  margin-top: 5px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: var(--verde-principal);
-
-  color: var(--branco);
-
-  font-family: inherit;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-.submitButton:hover {
-  background: var(--verde-escuro);
-
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 12px 26px rgba(22, 168, 117, 0.28);
-}
-
-.submitButton:active {
-  transform: translateY(0);
-}
-
-
-/* =====================================
-   CRIAR CONTA
-===================================== */
-
-.signupText {
-  margin: 20px 0 0;
-
-  text-align: center;
-
-  color: var(--cinza-texto);
-
-  font-size: 12px;
-}
-
-/* =====================================
-   CAMPO DE SENHA
-===================================== */
-
-.passwordWrapper {
-  position: relative;
-  width: 100%;
-}
-
-.passwordWrapper input {
-  width: 100%;
-  height: 42px;
-
-  padding: 0 42px 0 13px;
-
-  box-sizing: border-box;
-
-  border: 1.5px solid #B8C2BE;
-
-  border-radius: 10px;
-
-  outline: none;
-
-  background: var(--branco);
-
-  color: var(--texto);
-
-  font-family: inherit;
-  font-size: 13px;
 
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
+    background
+      0.2s ease,
 
-.passwordWrapper input::placeholder {
-  color: #9AA8A3;
-}
+    color
+      0.2s ease,
 
-.passwordWrapper input:hover {
-  border-color: #8FA09A;
-}
-
-.passwordWrapper input:focus {
-  border-color: var(--verde-principal);
-
-  box-shadow:
-    0 0 0 4px rgba(22, 168, 117, 0.12);
+    transform
+      0.2s ease;
 }
 
 
-/* Olho */
+.createAccount:hover {
+  transform:
+    translateY(-2px);
 
-.passwordToggle {
-  position: absolute;
+  background: #005942;
 
-  top: 50%;
-  right: 12px;
-
-  transform: translateY(-50%);
-
-  width: 28px;
-  height: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-
-  border: none;
-  background: transparent;
-
-  color: var(--texto-suave);
-
-  font-family: 'Material Icons';
-  font-size: 20px;
-
-  cursor: pointer;
+  color: #ffffff;
 }
 
-.passwordToggle:hover {
-  color: var(--verde-principal);
+
+/* ============================================================
+   NOTEBOOK
+============================================================ */
+
+@media (max-width: 1250px) {
+
+  .page {
+    grid-template-columns:
+      54% 46%;
+  }
+
+
+  .heroSlide {
+    background-position:
+      74% center;
+  }
+
+
+  .topCurves {
+    width: 420px;
+
+    opacity: 0.38;
+  }
+
+
+  .heroLogoLink {
+    top: 38px;
+    left: 45px;
+  }
+
+
+  .heroLogo {
+    width: 82px;
+  }
+
+
+  .heroContent {
+    left: 45px;
+
+    bottom: 210px;
+
+    width:
+      calc(
+        100% - 70px
+      );
+  }
+
+
+  .heroContent h1 {
+    font-size: 39px;
+  }
+
+
+  .heroContent p {
+    font-size: 12px;
+  }
+
+
+  .heroStats {
+    left: 45px;
+
+    bottom: 48px;
+
+    gap: 22px;
+  }
+
+
+  .loginArea {
+    padding:
+      46px
+      35px;
+  }
+
+
+  .loginCard {
+    max-width: 420px;
+  }
+
+
+  .orbCenter {
+    width: 390px;
+    height: 390px;
+
+    left: 7%;
+  }
+
+
+  .orbTop {
+    width: 340px;
+    height: 340px;
+  }
+
+
+  .orbBottom {
+    width: 370px;
+    height: 370px;
+  }
+
 }
 
-/* =====================================
-   RESPONSIVIDADE
-===================================== */
+
+/* ============================================================
+   TABLET
+============================================================ */
 
 @media (max-width: 900px) {
-  .left {
-    width: 50%;
-  }
 
-  .right {
-    width: 50%;
-
-    padding: 30px;
-  }
-
-  .leftContent h1 {
-    font-size: 23px;
-  }
-}
-
-
-@media (max-width: 700px) {
   .page {
-    flex-direction: column;
+    grid-template-columns:
+      50% 50%;
   }
 
-  .left {
-    width: 100%;
-    min-height: 300px;
+
+  .heroContent h1 {
+    font-size: 32px;
   }
 
-  .right {
-    width: 100%;
-    min-height: 500px;
 
-    padding: 50px 20px;
+  .heroContent p {
+    font-size: 11px;
   }
 
-  .leftContent {
-    left: 25px;
-    bottom: 70px;
-  }
 
-  .leftFooter {
-    left: 25px;
-  }
-}
-
-
-@media (max-width: 450px) {
-  .left {
-    min-height: 260px;
-  }
-
-  .leftContent {
-    left: 20px;
-    bottom: 55px;
-  }
-
-  .leftContent h1 {
-    font-size: 20px;
-  }
-
-  .leftContent p {
-    font-size: 8px;
-  }
-
-  .leftContent p br {
-    display: none;
-  }
-
-  .leftFooter {
-    left: 20px;
-
-    gap: 12px;
-  }
-
-  .leftFooter span {
-    font-size: 8px;
-  }
-
-  .right {
-    padding: 40px 20px;
-  }
-
-  .formCard {
-    width: 85%;
-    max-width: 304px;
-
-    padding: 30px 24px;
-
-    border-radius: 20px;
-  }
-
-  .formCard h2 {
+  .heroStat strong {
     font-size: 21px;
   }
+
+
+  .gradientOrb {
+    opacity: 0.60;
+  }
+
+
+  .auroraTop,
+  .auroraBottom {
+    opacity: 0.55;
+  }
+
+
+  .loginArea {
+    padding:
+      40px
+      22px;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 720px) {
+
+  .page {
+    display: block;
+
+    overflow: visible;
+  }
+
+
+  .hero {
+    min-height: 650px;
+  }
+
+
+  .heroSlide {
+    background-position:
+      65% center;
+  }
+
+
+  .heroLogoLink {
+    top: 28px;
+    left: 24px;
+  }
+
+
+  .heroLogo {
+    width: 78px;
+  }
+
+
+  .heroContent {
+    left: 24px;
+
+    bottom: 175px;
+
+    width:
+      calc(
+        100% - 48px
+      );
+  }
+
+
+  .heroContent h1 {
+    font-size: 33px;
+  }
+
+
+  .heroContent h1 span {
+    white-space: normal;
+  }
+
+
+  .heroStats {
+    left: 24px;
+    right: 24px;
+
+    bottom: 37px;
+
+    justify-content:
+      space-between;
+  }
+
+
+  .loginArea {
+    min-height: 700px;
+
+    padding:
+      55px
+      18px;
+  }
+
+
+  .orbCenter {
+    left: -3%;
+
+    width: 400px;
+    height: 400px;
+  }
+
+
+  .gradientOrb {
+    opacity: 0.55;
+  }
+
+}
+
+
+/* ============================================================
+   REDUZIR MOVIMENTO
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .heroSlide,
+  .gradientOrb,
+  .auroraTop,
+  .auroraBottom {
+    animation: none;
+
+    transition: none;
+  }
+
+
+  .loginCard {
+    animation: none;
+  }
+
 }

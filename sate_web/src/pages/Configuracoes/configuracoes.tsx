@@ -1,8 +1,8 @@
 import {
   Camera,
-  Check,
-  Palette,
-  ShieldCheck,
+  Eye,
+  EyeOff,
+  LockKeyhole,
   Save,
 } from 'lucide-react';
 
@@ -25,12 +25,6 @@ interface Preferencias {
   twoFactor: boolean;
 }
 
-interface CorEquipe {
-  id: string;
-  nome: string;
-  valor: string;
-}
-
 interface Usuario {
   id?: number;
   nome?: string;
@@ -41,46 +35,13 @@ interface Usuario {
 
 const API_URL = 'http://localhost:3000';
 
-const coresDisponiveis: CorEquipe[] = [
-  {
-    id: 'verde',
-    nome: 'Verde',
-    valor: '#16A875',
-  },
-  {
-    id: 'azul',
-    nome: 'Azul',
-    valor: '#2F78C4',
-  },
-  {
-    id: 'roxo',
-    nome: 'Roxo',
-    valor: '#7D1A86',
-  },
-  {
-    id: 'vermelho',
-    nome: 'Vermelho',
-    valor: '#B53A22',
-  },
-  {
-    id: 'laranja',
-    nome: 'Laranja',
-    valor: '#FFA548',
-  },
-  {
-    id: 'rosa',
-    nome: 'Rosa',
-    valor: '#D652A2',
-  },
-];
-
 const Configuracoes = () => {
   const fileInputRef =
     useRef<HTMLInputElement>(null);
 
-  /* =====================================
-     USUÁRIO LOGADO
-  ===================================== */
+  // =====================================================
+  // USUÁRIO
+  // =====================================================
 
   const [usuario, setUsuario] =
     useState<Usuario | null>(null);
@@ -91,9 +52,9 @@ const Configuracoes = () => {
   const [email, setEmail] =
     useState('');
 
-  /* =====================================
-     FOTO
-  ===================================== */
+  // =====================================================
+  // FOTO
+  // =====================================================
 
   const [avatarPreview, setAvatarPreview] =
     useState<string | null>(null);
@@ -101,9 +62,9 @@ const Configuracoes = () => {
   const [novaFoto, setNovaFoto] =
     useState<File | null>(null);
 
-  /* =====================================
-     PREFERÊNCIAS
-  ===================================== */
+  // =====================================================
+  // PREFERÊNCIAS
+  // =====================================================
 
   const [preferencias, setPreferencias] =
     useState<Preferencias>({
@@ -112,20 +73,32 @@ const Configuracoes = () => {
       twoFactor: false,
     });
 
-  /* =====================================
-     CORES
-  ===================================== */
+  // =====================================================
+  // SENHA
+  // =====================================================
 
-  const [coresSelecionadas, setCoresSelecionadas] =
-    useState<string[]>([
-      '#16A875',
-      '#2F78C4',
-      '#D652A2',
-    ]);
+  const [novaSenha, setNovaSenha] =
+    useState('');
 
-  /* =====================================
-     TOKEN
-  ===================================== */
+  const [confirmarSenha, setConfirmarSenha] =
+    useState('');
+
+  const [
+    mostrarNovaSenha,
+    setMostrarNovaSenha,
+  ] = useState(false);
+
+  const [
+    mostrarConfirmarSenha,
+    setMostrarConfirmarSenha,
+  ] = useState(false);
+
+  const [erroSenha, setErroSenha] =
+    useState('');
+
+  // =====================================================
+  // TOKEN
+  // =====================================================
 
   const obterToken = () => {
     return (
@@ -134,9 +107,9 @@ const Configuracoes = () => {
     );
   };
 
-  /* =====================================
-     CARREGAR USUÁRIO
-  ===================================== */
+  // =====================================================
+  // CARREGAR USUÁRIO
+  // =====================================================
 
   useEffect(() => {
     const carregarUsuario = async () => {
@@ -151,8 +124,10 @@ const Configuracoes = () => {
           `${API_URL}/api/usuarios/perfil`,
           {
             method: 'GET',
+
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization:
+                `Bearer ${token}`,
             },
           },
         );
@@ -163,7 +138,8 @@ const Configuracoes = () => {
           );
         }
 
-        const dados = await resposta.json();
+        const dados =
+          await resposta.json();
 
         const usuarioAtual: Usuario =
           dados.usuario;
@@ -189,11 +165,6 @@ const Configuracoes = () => {
           error,
         );
 
-        /*
-         * Caso a API esteja indisponível,
-         * tenta carregar os dados antigos
-         * do storage.
-         */
         const usuarioSalvo =
           localStorage.getItem('usuario') ||
           sessionStorage.getItem('usuario');
@@ -230,9 +201,9 @@ const Configuracoes = () => {
     carregarUsuario();
   }, []);
 
-  /* =====================================
-     INICIAIS
-  ===================================== */
+  // =====================================================
+  // INICIAIS
+  // =====================================================
 
   const iniciais = useMemo(() => {
     const partes = nome
@@ -255,9 +226,9 @@ const Configuracoes = () => {
     }`.toUpperCase();
   }, [nome]);
 
-  /* =====================================
-     FOTO
-  ===================================== */
+  // =====================================================
+  // FOTO
+  // =====================================================
 
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
@@ -279,6 +250,7 @@ const Configuracoes = () => {
       );
 
       event.target.value = '';
+
       return;
     }
 
@@ -288,6 +260,7 @@ const Configuracoes = () => {
       );
 
       event.target.value = '';
+
       return;
     }
 
@@ -299,45 +272,24 @@ const Configuracoes = () => {
     setAvatarPreview(imageUrl);
   };
 
-  /* =====================================
-     PREFERÊNCIAS
-  ===================================== */
+  // =====================================================
+  // PREFERÊNCIAS
+  // =====================================================
 
   const togglePreferencia = (
     key: keyof Preferencias,
   ) => {
     setPreferencias((atual) => ({
       ...atual,
-      [key]: !atual[key],
+
+      [key]:
+        !atual[key],
     }));
   };
 
-  /* =====================================
-     CORES
-  ===================================== */
-
-  const toggleCor = (cor: string) => {
-    setCoresSelecionadas((atuais) => {
-      const jaSelecionada =
-        atuais.includes(cor);
-
-      if (jaSelecionada) {
-        return atuais.filter(
-          (item) => item !== cor,
-        );
-      }
-
-      if (atuais.length >= 3) {
-        return atuais;
-      }
-
-      return [...atuais, cor];
-    });
-  };
-
-  /* =====================================
-     SALVAR PERFIL
-  ===================================== */
+  // =====================================================
+  // SALVAR PERFIL
+  // =====================================================
 
   const handleSalvar = async () => {
     if (!usuario) {
@@ -348,7 +300,8 @@ const Configuracoes = () => {
       return;
     }
 
-    const token = obterToken();
+    const token =
+      obterToken();
 
     if (!token) {
       alert(
@@ -374,8 +327,50 @@ const Configuracoes = () => {
       return;
     }
 
+    // VALIDAÇÃO VISUAL DA NOVA SENHA
+
+    setErroSenha('');
+
+    if (
+      novaSenha ||
+      confirmarSenha
+    ) {
+      if (
+        !novaSenha ||
+        !confirmarSenha
+      ) {
+        setErroSenha(
+          'Preencha os dois campos de senha.',
+        );
+
+        return;
+      }
+
+      if (
+        novaSenha.length < 6
+      ) {
+        setErroSenha(
+          'A nova senha deve ter pelo menos 6 caracteres.',
+        );
+
+        return;
+      }
+
+      if (
+        novaSenha !==
+        confirmarSenha
+      ) {
+        setErroSenha(
+          'As senhas não coincidem.',
+        );
+
+        return;
+      }
+    }
+
     try {
-      const formData = new FormData();
+      const formData =
+        new FormData();
 
       formData.append(
         'nome',
@@ -400,7 +395,8 @@ const Configuracoes = () => {
           method: 'PUT',
 
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization:
+              `Bearer ${token}`,
           },
 
           body: formData,
@@ -413,7 +409,7 @@ const Configuracoes = () => {
       if (!resposta.ok) {
         throw new Error(
           dados.mensagem ||
-          'Não foi possível atualizar o perfil.',
+            'Não foi possível atualizar o perfil.',
         );
       }
 
@@ -432,7 +428,9 @@ const Configuracoes = () => {
         usuarioAtualizado.email || '',
       );
 
-      if (usuarioAtualizado.avatarUrl) {
+      if (
+        usuarioAtualizado.avatarUrl
+      ) {
         setAvatarPreview(
           `${API_URL}${usuarioAtualizado.avatarUrl}`,
         );
@@ -440,17 +438,15 @@ const Configuracoes = () => {
 
       setNovaFoto(null);
 
-      /*
-       * Atualiza também o usuário salvo
-       * no navegador para o Header pegar
-       * o novo nome.
-       */
       const estaNoLocalStorage =
-        localStorage.getItem('usuario') !== null;
+        localStorage.getItem(
+          'usuario',
+        ) !== null;
 
       if (estaNoLocalStorage) {
         localStorage.setItem(
           'usuario',
+
           JSON.stringify(
             usuarioAtualizado,
           ),
@@ -458,6 +454,7 @@ const Configuracoes = () => {
       } else {
         sessionStorage.setItem(
           'usuario',
+
           JSON.stringify(
             usuarioAtualizado,
           ),
@@ -483,72 +480,107 @@ const Configuracoes = () => {
 
   return (
     <main className={styles.page}>
-
-      {/* =====================================
+      {/* =================================================
           CABEÇALHO
-      ===================================== */}
+      ================================================= */}
 
-      <div className={styles.pageHeader}>
-        <div>
-          <h1>Configurações</h1>
+      <header
+        className={
+          styles.pageHeader
+        }
+      >
+        <h1>
+          Suas{' '}
+          <em>
+            configurações.
+          </em>
+        </h1>
 
-          <p>
-            Gerencie seu perfil, preferências e a identidade da sua equipe.
-          </p>
-        </div>
-      </div>
+        <p>
+          Gerencie seu perfil e suas
+          preferências.
+        </p>
+      </header>
 
       <div className={styles.content}>
-
-        {/* =====================================
+        {/* =================================================
             PERFIL
-        ===================================== */}
+        ================================================= */}
 
-        <section className={styles.card}>
-
-          <div className={styles.cardHeader}>
+        <section
+          className={styles.card}
+        >
+          <div
+            className={
+              styles.cardHeader
+            }
+          >
             <div>
               <h2>
-                Perfil do usuário
+                Perfil
               </h2>
 
               <p>
-                Atualize suas informações pessoais.
+                Suas informações pessoais.
               </p>
             </div>
           </div>
 
-          <div className={styles.profileTop}>
+          <div
+            className={
+              styles.cardDivider
+            }
+          />
 
-            <div className={styles.avatarWrapper}>
+          {/* FOTO */}
 
-              <div className={styles.avatar}>
-
+          <div
+            className={
+              styles.profileTop
+            }
+          >
+            <div
+              className={
+                styles.avatarWrapper
+              }
+            >
+              <div
+                className={
+                  styles.avatar
+                }
+              >
                 {avatarPreview ? (
                   <img
-                    src={avatarPreview}
+                    src={
+                      avatarPreview
+                    }
                     alt="Foto do usuário"
                   />
                 ) : (
                   iniciais
                 )}
-
               </div>
 
               <button
                 type="button"
-                className={styles.photoButton}
+                className={
+                  styles.photoButton
+                }
                 onClick={
                   handleAvatarClick
                 }
               >
-                <Camera size={17} />
+                <Camera
+                  size={17}
+                />
 
                 Alterar foto
               </button>
 
               <input
-                ref={fileInputRef}
+                ref={
+                  fileInputRef
+                }
                 type="file"
                 accept="image/*"
                 className={
@@ -558,16 +590,24 @@ const Configuracoes = () => {
                   handleAvatarChange
                 }
               />
-
             </div>
-
           </div>
 
-          <div className={styles.formGrid}>
+          {/* NOME E EMAIL */}
 
-            <div className={styles.field}>
-
-              <label htmlFor="nome">
+          <div
+            className={
+              styles.formGrid
+            }
+          >
+            <div
+              className={
+                styles.field
+              }
+            >
+              <label
+                htmlFor="nome"
+              >
                 Nome
               </label>
 
@@ -575,82 +615,298 @@ const Configuracoes = () => {
                 id="nome"
                 type="text"
                 value={nome}
-                onChange={(event) =>
+                placeholder="Seu nome"
+                onChange={(
+                  event,
+                ) =>
                   setNome(
-                    event.target.value,
+                    event.target
+                      .value,
                   )
                 }
               />
-
             </div>
 
-            <div className={styles.field}>
-
-              <label htmlFor="email">
-                Email
+            <div
+              className={
+                styles.field
+              }
+            >
+              <label
+                htmlFor="email"
+              >
+                E-mail
               </label>
 
               <input
                 id="email"
                 type="email"
                 value={email}
-                onChange={(event) =>
+                placeholder="seu@email.com"
+                onChange={(
+                  event,
+                ) =>
                   setEmail(
-                    event.target.value,
+                    event.target
+                      .value,
                   )
                 }
               />
-
             </div>
-
           </div>
 
-          {/* BOTÃO SALVAR */}
+          {/* SENHA */}
 
-          <div className={styles.saveArea}>
+          <div
+            className={
+              styles.passwordSection
+            }
+          >
+            <div
+              className={
+                styles.passwordTitle
+              }
+            >
+              <div
+                className={
+                  styles.passwordIcon
+                }
+              >
+                <LockKeyhole
+                  size={18}
+                />
+              </div>
 
+              <div>
+                <h3>
+                  Alterar senha
+                </h3>
+
+                <p>
+                  Defina uma nova senha
+                  para sua conta.
+                </p>
+              </div>
+            </div>
+
+            <div
+              className={
+                styles.passwordGrid
+              }
+            >
+              <div
+                className={
+                  styles.field
+                }
+              >
+                <label
+                  htmlFor="novaSenha"
+                >
+                  Nova senha
+                </label>
+
+                <div
+                  className={
+                    styles.passwordField
+                  }
+                >
+                  <input
+                    id="novaSenha"
+                    type={
+                      mostrarNovaSenha
+                        ? 'text'
+                        : 'password'
+                    }
+                    value={
+                      novaSenha
+                    }
+                    autoComplete="new-password"
+                    placeholder="Digite sua nova senha"
+                    onChange={(
+                      event,
+                    ) => {
+                      setNovaSenha(
+                        event.target
+                          .value,
+                      );
+
+                      setErroSenha(
+                        '',
+                      );
+                    }}
+                  />
+
+                  <button
+                    type="button"
+                    className={
+                      styles.eyeButton
+                    }
+                    onClick={() =>
+                      setMostrarNovaSenha(
+                        (atual) =>
+                          !atual,
+                      )
+                    }
+                    aria-label={
+                      mostrarNovaSenha
+                        ? 'Ocultar senha'
+                        : 'Mostrar senha'
+                    }
+                  >
+                    {mostrarNovaSenha ? (
+                      <EyeOff
+                        size={18}
+                      />
+                    ) : (
+                      <Eye
+                        size={18}
+                      />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div
+                className={
+                  styles.field
+                }
+              >
+                <label
+                  htmlFor="confirmarSenha"
+                >
+                  Confirmar nova senha
+                </label>
+
+                <div
+                  className={
+                    styles.passwordField
+                  }
+                >
+                  <input
+                    id="confirmarSenha"
+                    type={
+                      mostrarConfirmarSenha
+                        ? 'text'
+                        : 'password'
+                    }
+                    value={
+                      confirmarSenha
+                    }
+                    autoComplete="new-password"
+                    placeholder="Digite novamente"
+                    onChange={(
+                      event,
+                    ) => {
+                      setConfirmarSenha(
+                        event.target
+                          .value,
+                      );
+
+                      setErroSenha(
+                        '',
+                      );
+                    }}
+                  />
+
+                  <button
+                    type="button"
+                    className={
+                      styles.eyeButton
+                    }
+                    onClick={() =>
+                      setMostrarConfirmarSenha(
+                        (atual) =>
+                          !atual,
+                      )
+                    }
+                    aria-label={
+                      mostrarConfirmarSenha
+                        ? 'Ocultar senha'
+                        : 'Mostrar senha'
+                    }
+                  >
+                    {mostrarConfirmarSenha ? (
+                      <EyeOff
+                        size={18}
+                      />
+                    ) : (
+                      <Eye
+                        size={18}
+                      />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {erroSenha && (
+              <div
+                className={
+                  styles.passwordError
+                }
+              >
+                {erroSenha}
+              </div>
+            )}
+          </div>
+
+          {/* SALVAR */}
+
+          <div
+            className={
+              styles.saveArea
+            }
+          >
             <button
               type="button"
-              className={styles.saveButton}
-              onClick={handleSalvar}
+              className={
+                styles.saveButton
+              }
+              onClick={
+                handleSalvar
+              }
             >
               <Save size={17} />
 
               Salvar alterações
             </button>
-
           </div>
-
         </section>
 
-        {/* =====================================
+        {/* =================================================
             PREFERÊNCIAS
-        ===================================== */}
+        ================================================= */}
 
-        <section className={styles.card}>
-
-          <div className={styles.cardHeader}>
-
+        <section
+          className={styles.card}
+        >
+          <div
+            className={
+              styles.cardHeader
+            }
+          >
             <div>
-
               <h2>
-                Preferências do sistema
+                Preferências
               </h2>
 
               <p>
                 Notificações e segurança.
               </p>
-
             </div>
-
-            <div className={styles.cardIcon}>
-              <ShieldCheck size={20} />
-            </div>
-
           </div>
 
-          <div className={styles.preferences}>
+          <div
+            className={
+              styles.cardDivider
+            }
+          />
 
+          <div
+            className={
+              styles.preferences
+            }
+          >
             <PreferenceRow
               label="Notificações por e-mail"
               description="Receba novidades e avisos importantes por e-mail."
@@ -689,140 +945,9 @@ const Configuracoes = () => {
                 )
               }
             />
-
           </div>
-
         </section>
-
-        {/* =====================================
-            PERSONALIZAÇÃO
-        ===================================== */}
-
-        <section className={styles.card}>
-
-          <div className={styles.cardHeader}>
-
-            <div>
-
-              <div
-                className={
-                  styles.personalizationTitle
-                }
-              >
-                <Palette size={18} />
-
-                <h2>
-                  Personalização da equipe
-                </h2>
-              </div>
-
-              <p>
-                Escolha até 3 cores para representar a identidade da sua equipe.
-              </p>
-
-            </div>
-
-          </div>
-
-          <div className={styles.colorList}>
-
-            {coresDisponiveis.map(
-              (cor) => {
-
-                const selecionada =
-                  coresSelecionadas.includes(
-                    cor.valor,
-                  );
-
-                return (
-                  <button
-                    key={cor.id}
-                    type="button"
-                    className={`${styles.colorButton} ${
-                      selecionada
-                        ? styles.colorButtonSelected
-                        : ''
-                    }`}
-                    style={{
-                      background:
-                        cor.valor,
-                    }}
-                    title={cor.nome}
-                    onClick={() =>
-                      toggleCor(
-                        cor.valor,
-                      )
-                    }
-                  >
-
-                    {selecionada && (
-                      <Check
-                        size={15}
-                      />
-                    )}
-
-                  </button>
-                );
-              },
-            )}
-
-          </div>
-
-          <div
-            className={
-              styles.paletteSection
-            }
-          >
-
-            <span>
-              Paleta
-            </span>
-
-            <div
-              className={
-                styles.palettePreview
-              }
-            >
-
-              {coresSelecionadas.length ===
-              0 ? (
-
-                <div
-                  className={
-                    styles.emptyPalette
-                  }
-                >
-                  Selecione uma cor
-                </div>
-
-              ) : (
-
-                coresSelecionadas.map(
-                  (cor) => (
-
-                    <div
-                      key={cor}
-                      className={
-                        styles.paletteColor
-                      }
-                      style={{
-                        background: cor,
-                      }}
-                    />
-
-                  ),
-                )
-
-              )}
-
-            </div>
-
-          </div>
-
-        </section>
-
       </div>
-
     </main>
   );
 };
@@ -840,16 +965,17 @@ const PreferenceRow = ({
   active,
   onClick,
 }: PreferenceRowProps) => {
-
   return (
     <div
       className={
         styles.preferenceRow
       }
     >
-
-      <div>
-
+      <div
+        className={
+          styles.preferenceText
+        }
+      >
         <strong>
           {label}
         </strong>
@@ -857,7 +983,6 @@ const PreferenceRow = ({
         <span>
           {description}
         </span>
-
       </div>
 
       <button
@@ -868,11 +993,11 @@ const PreferenceRow = ({
             : ''
         }`}
         aria-pressed={active}
+        aria-label={label}
         onClick={onClick}
       >
         <span />
       </button>
-
     </div>
   );
 };

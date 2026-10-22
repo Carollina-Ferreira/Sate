@@ -1,34 +1,49 @@
-@import url(
-  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap'
-);
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* =========================================================
-   PÁGINA
+   SATE — CONFIGURAÇÕES
+   Nova identidade visual igual às telas de Partidas/Comparações
 ========================================================= */
 
 .page {
-  --verde-dark: #005942;
+  --verde: #005942;
   --verde-profundo: #003d31;
-  --verde-claro: #dff7ee;
+  --verde-suave: #dff3eb;
 
-  width: 100%;
-  min-height: 100vh;
+  --rosa: #ef3f6f;
+  --rosa-claro: #ffe4ec;
+
+  --creme: #faf5ee;
+  --creme-card: #fffaf4;
+  --creme-linha: #e8ddd2;
+
+  --texto: #172a23;
+  --texto-secundario: #777e79;
+
+  width: calc(100% + 60px);
+  min-height: calc(100vh + 60px);
+
+  margin: -30px;
+  padding: 48px 34px 64px;
 
   box-sizing: border-box;
 
-  padding:
-    38px
-    42px
-    64px;
-
   background:
-    var(--verde-dark);
+    radial-gradient(
+      ellipse 380px 280px at 97% 0%,
+      rgba(239, 63, 111, 0.14) 0%,
+      rgba(239, 63, 111, 0.06) 43%,
+      rgba(239, 63, 111, 0) 76%
+    ),
+    var(--creme);
 
-  color: #ffffff;
+  color: var(--texto);
 
-  font-family:
-    'Poppins',
-    sans-serif;
+  font-family: 'Poppins', sans-serif;
+}
+
+.page * {
+  box-sizing: border-box;
 }
 
 
@@ -37,41 +52,28 @@
 ========================================================= */
 
 .pageHeader {
-  width: 100%;
-  max-width: 1180px;
+  width: min(100%, 1180px);
 
-  margin:
-    0
-    auto
-    32px;
+  margin: 0 auto 30px;
 }
 
 .pageHeader h1 {
   margin: 0;
 
-  color: #ffffff;
+  color: var(--texto);
 
-  font-size:
-    clamp(
-      34px,
-      3.1vw,
-      46px
-    );
-
-  line-height: 1.05;
+  font-size: clamp(36px, 3.3vw, 48px);
+  line-height: 1.04;
 
   font-weight: 700;
 
-  letter-spacing: -1.4px;
+  letter-spacing: -1.7px;
 }
 
 .pageHeader h1 em {
-  color: #dff7ee;
+  color: var(--rosa);
 
-  font-family:
-    'DM Serif Display',
-    serif;
-
+  font-family: 'DM Serif Display', serif;
   font-style: italic;
   font-weight: 400;
 
@@ -81,18 +83,9 @@
 .pageHeader p {
   max-width: 620px;
 
-  margin:
-    10px
-    0
-    0;
+  margin: 10px 0 0;
 
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.74
-    );
+  color: var(--texto-secundario);
 
   font-size: 13px;
   line-height: 1.6;
@@ -104,13 +97,12 @@
 ========================================================= */
 
 .content {
-  width: 100%;
-  max-width: 1180px;
+  width: min(100%, 1180px);
 
   display: flex;
   flex-direction: column;
 
-  gap: 20px;
+  gap: 18px;
 
   margin: 0 auto;
 }
@@ -123,38 +115,17 @@
 .card {
   width: 100%;
 
-  box-sizing: border-box;
+  padding: 28px 30px 30px;
 
-  padding:
-    28px
-    30px
-    30px;
+  border: 1px solid var(--creme-linha);
+  border-radius: 18px;
 
-  border:
-    1px solid
-    rgba(
-      16,
-      37,
-      31,
-      0.08
-    );
+  background: rgba(255, 250, 244, 0.88);
 
-  border-radius: 20px;
-
-  background: #f8fbf9;
-
-  color: #10251f;
+  color: var(--texto);
 
   box-shadow:
-    0
-    14px
-    34px
-    rgba(
-      0,
-      35,
-      26,
-      0.12
-    );
+    0 12px 28px rgba(75, 53, 39, 0.07);
 }
 
 .cardHeader {
@@ -168,21 +139,18 @@
 .cardHeader h2 {
   margin: 0;
 
-  color: #10251f;
+  color: var(--texto);
 
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 700;
 
   letter-spacing: -0.35px;
 }
 
 .cardHeader p {
-  margin:
-    6px
-    0
-    0;
+  margin: 6px 0 0;
 
-  color: #738079;
+  color: var(--texto-secundario);
 
   font-size: 11px;
   line-height: 1.55;
@@ -192,11 +160,9 @@
   width: 100%;
   height: 1px;
 
-  margin:
-    20px
-    0;
+  margin: 20px 0;
 
-  background: #dde6e1;
+  background: var(--creme-linha);
 }
 
 
@@ -229,8 +195,7 @@
 
   border-radius: 50%;
 
-  background:
-    var(--verde-dark);
+  background: var(--verde);
 
   color: #ffffff;
 
@@ -240,15 +205,7 @@
   letter-spacing: -0.4px;
 
   box-shadow:
-    0
-    8px
-    20px
-    rgba(
-      0,
-      89,
-      66,
-      0.18
-    );
+    0 8px 20px rgba(0, 89, 66, 0.17);
 }
 
 .avatar img {
@@ -267,20 +224,14 @@
 
   gap: 8px;
 
-  padding:
-    0
-    16px;
+  padding: 0 16px;
 
-  border:
-    1px solid
-    #c7d5cf;
-
-  border-radius: 11px;
+  border: 1px solid #d9cdbf;
+  border-radius: 10px;
 
   background: #ffffff;
 
-  color:
-    var(--verde-dark);
+  color: var(--verde);
 
   font-family: inherit;
 
@@ -290,20 +241,17 @@
   cursor: pointer;
 
   transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s ease;
 }
 
 .photoButton:hover {
-  border-color:
-    #8eaea3;
+  border-color: #aebdb5;
 
-  background:
-    #f4f8f6;
+  background: #f4f8f6;
 
-  transform:
-    translateY(-1px);
+  transform: translateY(-1px);
 }
 
 .hiddenInput {
@@ -319,10 +267,7 @@
   display: grid;
 
   grid-template-columns:
-    repeat(
-      2,
-      minmax(0, 1fr)
-    );
+    repeat(2, minmax(0, 1fr));
 
   gap: 16px;
 }
@@ -345,59 +290,43 @@
 
 .field input {
   width: 100%;
-  height: 52px;
+  height: 50px;
 
-  box-sizing: border-box;
+  padding: 0 15px;
 
-  padding:
-    0
-    15px;
-
-  border:
-    1px solid
-    #cbd8d2;
-
-  border-radius: 11px;
+  border: 1px solid #d9cdbf;
+  border-radius: 10px;
 
   outline: none;
 
   background: #ffffff;
 
-  color: #10251f;
+  color: var(--texto);
 
   font-family: inherit;
 
   font-size: 12px;
 
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
 }
 
 .field input::placeholder {
-  color: #9aa7a2;
+  color: #9a9e9b;
 }
 
 .field input:hover {
-  border-color:
-    #a6b9b1;
+  border-color: #b7aa9d;
 }
 
 .field input:focus {
-  border-color:
-    var(--verde-dark);
+  border-color: #9ab5aa;
 
   box-shadow:
-    0
-    0
-    0
-    4px
-    rgba(
-      0,
-      89,
-      66,
-      0.08
-    );
+    0 0 0 3px
+    rgba(0, 89, 66, 0.07);
 }
 
 
@@ -407,12 +336,9 @@
 
 .passwordSection {
   margin-top: 26px;
-
   padding-top: 24px;
 
-  border-top:
-    1px solid
-    #dde6e1;
+  border-top: 1px solid var(--creme-linha);
 }
 
 .passwordTitle {
@@ -434,30 +360,26 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 11px;
+  border-radius: 10px;
 
-  background: #e4f3ed;
+  background: var(--rosa-claro);
 
-  color:
-    var(--verde-dark);
+  color: var(--rosa);
 }
 
 .passwordTitle h3 {
   margin: 0;
 
-  color: #10251f;
+  color: var(--texto);
 
   font-size: 14px;
   font-weight: 700;
 }
 
 .passwordTitle p {
-  margin:
-    3px
-    0
-    0;
+  margin: 3px 0 0;
 
-  color: #798780;
+  color: var(--texto-secundario);
 
   font-size: 10px;
 }
@@ -466,10 +388,7 @@
   display: grid;
 
   grid-template-columns:
-    repeat(
-      2,
-      minmax(0, 1fr)
-    );
+    repeat(2, minmax(0, 1fr));
 
   gap: 16px;
 }
@@ -498,46 +417,38 @@
   padding: 0;
 
   border: none;
-
   border-radius: 8px;
 
   background: transparent;
 
-  color: #71817a;
+  color: #7a817d;
 
   cursor: pointer;
 
-  transform:
-    translateY(-50%);
+  transform: translateY(-50%);
 
   transition:
-    background 0.2s ease,
-    color 0.2s ease;
+    background 0.18s ease,
+    color 0.18s ease;
 }
 
 .eyeButton:hover {
-  background: #edf4f1;
+  background: #f2eee8;
 
-  color:
-    var(--verde-dark);
+  color: var(--verde);
 }
 
 .passwordError {
   margin-top: 12px;
 
-  padding:
-    10px
-    12px;
+  padding: 10px 12px;
 
-  border:
-    1px solid
-    #efcccc;
-
+  border: 1px solid #efc5d1;
   border-radius: 9px;
 
-  background: #fff6f6;
+  background: #fff1f5;
 
-  color: #a03e3e;
+  color: #a83a5a;
 
   font-size: 10px;
 }
@@ -554,9 +465,7 @@
   margin-top: 26px;
   padding-top: 22px;
 
-  border-top:
-    1px solid
-    #dde6e1;
+  border-top: 1px solid var(--creme-linha);
 }
 
 .saveButton {
@@ -568,18 +477,12 @@
 
   gap: 8px;
 
-  padding:
-    0
-    18px;
+  padding: 0 18px;
 
-  border:
-    1px solid
-    var(--verde-dark);
+  border: 1px solid var(--verde);
+  border-radius: 10px;
 
-  border-radius: 11px;
-
-  background:
-    var(--verde-dark);
+  background: var(--verde);
 
   color: #ffffff;
 
@@ -591,27 +494,17 @@
   cursor: pointer;
 
   box-shadow:
-    0
-    7px
-    17px
-    rgba(
-      0,
-      89,
-      66,
-      0.13
-    );
+    0 7px 17px rgba(0, 89, 66, 0.12);
 
   transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+    background 0.18s ease,
+    transform 0.18s ease;
 }
 
 .saveButton:hover {
-  background:
-    var(--verde-profundo);
+  background: var(--verde-profundo);
 
-  transform:
-    translateY(-1px);
+  transform: translateY(-1px);
 }
 
 
@@ -633,13 +526,9 @@
 
   gap: 20px;
 
-  padding:
-    11px
-    2px;
+  padding: 11px 2px;
 
-  border-bottom:
-    1px solid
-    #e1e8e4;
+  border-bottom: 1px solid var(--creme-linha);
 }
 
 .preferenceRow:first-child {
@@ -660,14 +549,14 @@
 }
 
 .preferenceText strong {
-  color: #10251f;
+  color: var(--texto);
 
   font-size: 11px;
   font-weight: 600;
 }
 
 .preferenceText span {
-  color: #78867f;
+  color: var(--texto-secundario);
 
   font-size: 9px;
   line-height: 1.45;
@@ -689,15 +578,14 @@
   padding: 0;
 
   border: none;
-
   border-radius: 999px;
 
-  background: #bdc9c4;
+  background: #c5c4bf;
 
   cursor: pointer;
 
   transition:
-    background 0.2s ease;
+    background 0.18s ease;
 }
 
 .switch > span {
@@ -714,28 +602,18 @@
   background: #ffffff;
 
   box-shadow:
-    0
-    1px
-    4px
-    rgba(
-      0,
-      0,
-      0,
-      0.18
-    );
+    0 1px 4px rgba(0, 0, 0, 0.15);
 
   transition:
-    transform 0.2s ease;
+    transform 0.18s ease;
 }
 
 .switchActive {
-  background:
-    var(--verde-dark);
+  background: var(--verde);
 }
 
 .switchActive > span {
-  transform:
-    translateX(18px);
+  transform: translateX(18px);
 }
 
 
@@ -743,14 +621,17 @@
    RESPONSIVIDADE
 ========================================================= */
 
-@media (
-  max-width: 950px
-) {
+@media (max-width: 950px) {
   .page {
+    width: calc(100% + 48px);
+    min-height: calc(100vh + 48px);
+
+    margin: -24px;
+
     padding:
-      30px
+      38px
       24px
-      48px;
+      50px;
   }
 
   .content,
@@ -759,28 +640,26 @@
   }
 }
 
-
-@media (
-  max-width: 720px
-) {
+@media (max-width: 720px) {
   .page {
+    width: calc(100% + 32px);
+    min-height: calc(100vh + 32px);
+
+    margin: -16px;
+
     padding:
-      24px
+      28px
       16px
-      38px;
+      40px;
   }
 
   .formGrid,
   .passwordGrid {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
 }
 
-
-@media (
-  max-width: 520px
-) {
+@media (max-width: 520px) {
   .pageHeader h1 {
     font-size: 31px;
   }
@@ -790,12 +669,11 @@
       21px
       17px;
 
-    border-radius: 17px;
+    border-radius: 16px;
   }
 
   .avatarWrapper {
     align-items: flex-start;
-
     flex-direction: column;
   }
 

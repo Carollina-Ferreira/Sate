@@ -1,186 +1,147 @@
+
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { randomUUID } = require('crypto');
 
-const autenticar =
-    require('../middleware/authMiddleware');
-
-const {
-    listarVideos,
-    adicionarVideo,
-    excluirVideo
-} = require('../controllers/videoController');
+const autenticar = require('../middleware/authMiddleware');
+const videoController = require('../controllers/videoController');
 
 const router = express.Router();
 
+const PASTA_VIDEOS = path.resolve(
+  __dirname,
+  '../../uploads/videos'
+);
 
-// ============================================================
-// PASTA DOS VÍDEOS
-// ============================================================
+fs.mkdirSync(PASTA_VIDEOS, { recursive: true });
 
-const pastaVideos =
-    path.join(
-        __dirname,
-        '../../uploads/videos'
-    );
-
-
-if (!fs.existsSync(pastaVideos)) {
-    fs.mkdirSync(
-        pastaVideos,
-        {
-            recursive: true
-        }
-    );
+// Validar os imports para identificar erros de configuração.
+if (typeof autenticar !== 'function') {
+  throw new TypeError(
+    'authMiddleware deve exportar uma função middleware. ' +
+    'Verifique src/middleware/authMiddleware.js.'
+  );
 }
 
+const metodosObrigatorios = [
+  'listarVideos',
+  'adicionarVideo',
+  'excluirVideo',
+  'listarMarcacoes',
+  'adicionarMarcacao',
+  'editarMarcacao',
+  'excluirMarcacao',
+];
 
-// ============================================================
-// CONFIGURAÇÃO DO MULTER
-// ============================================================
+for (const metodo of metodosObrigatorios) {
+  if (typeof videoController?.[metodo] !== 'function') {
+    throw new TypeError(
+      `videoController.${metodo} não é uma função. ` +
+      'Verifique src/controllers/videoController.js e seus exports.'
+    );
+  }
+}
 
-const storage =
-    multer.diskStorage({
+const extensoesPermitidas = new Set([
+  '.mp4',
+  '.webm',
+  '.mov',
+  '.m4v',
+  '.ogv',
+  '.avi',
+  '.mkv',
+]);
 
-        destination: (
-            req,
-            file,
-            cb
-        ) => {
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, arquivo, callback) {
+      callback(null, PASTA_VIDEOS);
+    },
 
-            cb(
-                null,
-                pastaVideos
-            );
+    filename(req, arquivo, callback) {
+      const extensao = path
+        .extname(arquivo.originalname)
+        .toLowerCase();
 
-        },
+      callback(null, `${randomUUID()}${extensao}`);
+    },
+  }),
 
+  limits: {
+    fileSize: 500 * 1024 * 1024,
+  },
 
-        filename: (
-            req,
-            file,
-            cb
-        ) => {
+  fileFilter(req, arquivo, callback) {
+    const extensao = path
+      .extname(arquivo.originalname)
+      .toLowerCase();
 
-            const extensao =
-                path.extname(
-                    file.originalname
-                );
+    if (
+      !arquivo.mimetype.startsWith('video/') ||
+      !extensoesPermitidas.has(extensao)
+    ) {
+      const erro = new Error(
+        'Envie um vídeo MP4, WebM, MOV, M4V, OGV, AVI ou MKV.'
+      );
 
+      erro.status = 400;
+      return callback(erro);
+    }
 
-            const nomeBase =
-                path
-                    .basename(
-                        file.originalname,
-                        extensao
-                    )
-                    .replace(
-                        /[^a-zA-Z0-9_-]/g,
-                        '_'
-                    );
+    callback(null, true);
+  },
+});
 
-
-            const nomeFinal =
-                `${nomeBase}_${Date.now()}${extensao}`;
-
-
-            cb(
-                null,
-                nomeFinal
-            );
-
-        }
-
-    });
-
-
-// ============================================================
-// UPLOAD
-// ============================================================
-
-const upload =
-    multer({
-
-        storage,
-
-        limits: {
-            fileSize:
-                500 * 1024 * 1024
-        },
-
-        fileFilter: (
-            req,
-            file,
-            cb
-        ) => {
-
-            if (
-                file.mimetype &&
-                file.mimetype.startsWith(
-                    'video/'
-                )
-            ) {
-
-                cb(
-                    null,
-                    true
-                );
-
-            } else {
-
-                cb(
-                    new Error(
-                        'Apenas arquivos de vídeo são permitidos.'
-                    )
-                );
-
-            }
-
-        }
-
-    });
-
-
-// ============================================================
-// LISTAR VÍDEOS
-// GET /api/partidas/:partidaId/videos
-// ============================================================
-
+// Listar vídeos de uma partida.
 router.get(
-    '/partidas/:partidaId/videos',
-    autenticar,
-    listarVideos
+  '/partidas/:partidaId/videos',
+  autenticar,
+  videoController.listarVideos
 );
 
-
-// ============================================================
-// ADICIONAR VÍDEO
-// POST /api/partidas/:partidaId/videos
-// ============================================================
-
+// Cadastrar vídeo de uma partida.
 router.post(
-    '/partidas/:partidaId/videos',
-    autenticar,
-    upload.single('arquivo'),
-    adicionarVideo
+  '/partidas/:partidaId/videos',
+  autenticar,
+  upload.single('arquivo'),
+  videoController.adicionarVideo
 );
 
-
-// ============================================================
-// EXCLUIR VÍDEO
-// DELETE /api/videos/:id
-// ============================================================
-
+// Excluir vídeo.
 router.delete(
-    '/videos/:id',
-    autenticar,
-    excluirVideo
+  '/videos/:id',
+  autenticar,
+  videoController.excluirVideo
 );
 
+// Listar marcações de um vídeo.
+router.get(
+  '/videos/:videoId/marcacoes',
+  autenticar,
+  videoController.listarMarcacoes
+);
 
-// ============================================================
-// EXPORTAR
-// ============================================================
+// Criar marcação em um vídeo.
+router.post(
+  '/videos/:videoId/marcacoes',
+  autenticar,
+  videoController.adicionarMarcacao
+);
+
+// Editar marcação.
+router.put(
+  '/marcacoes/:id',
+  autenticar,
+  videoController.editarMarcacao
+);
+
+// Excluir marcação.
+router.delete(
+  '/marcacoes/:id',
+  autenticar,
+  videoController.excluirMarcacao
+);
 
 module.exports = router;

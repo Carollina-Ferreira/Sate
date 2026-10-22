@@ -1,0 +1,516 @@
+/* =========================================================
+   LOADING SCREEN - SATE
+
+   IMPORTANTE:
+   Este CSS NÃO altera body, html ou #root.
+   O verde existe SOMENTE enquanto o LoadingScreen aparece.
+========================================================= */
+
+
+/* =========================================================
+   TELA DE CARREGAMENTO
+========================================================= */
+
+.overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 999999;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: #005942;
+
+  font-family:
+    'Poppins',
+    sans-serif;
+}
+
+
+/* =========================================================
+   DECORAÇÃO DE FUNDO
+========================================================= */
+
+.overlay::before {
+  content: '';
+
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  top: -260px;
+  right: -220px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.07
+    );
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+
+.overlay::after {
+  content: '';
+
+  position: absolute;
+
+  width: 340px;
+  height: 340px;
+
+  left: -210px;
+  bottom: -230px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.05
+    );
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CONTEÚDO
+========================================================= */
+
+.content {
+  position: relative;
+
+  z-index: 2;
+
+  width:
+    min(
+      420px,
+      calc(100% - 40px)
+    );
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   MARCA
+========================================================= */
+
+.brand {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-bottom: 42px;
+
+  color: #ffffff;
+}
+
+
+.brandIcon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.20
+    );
+
+  border-radius: 12px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.09
+    );
+
+  color: #ffffff;
+}
+
+
+.brand span {
+  color: #ffffff;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   ÁREA DO LOADING
+========================================================= */
+
+.loaderArea {
+  position: relative;
+
+  width: 120px;
+  height: 120px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 30px;
+}
+
+
+/* =========================================================
+   CÍRCULO EXTERNO
+========================================================= */
+
+.loaderRing {
+  position: absolute;
+
+  inset: 0;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.12
+    );
+
+  border-radius: 50%;
+}
+
+
+/* =========================================================
+   PARTE GIRANDO
+========================================================= */
+
+.loaderRing span {
+  position: absolute;
+
+  inset: -1px;
+
+  display: block;
+
+  border:
+    3px solid
+    transparent;
+
+  border-top-color:
+    #ffffff;
+
+  border-right-color:
+    rgba(
+      255,
+      255,
+      255,
+      0.24
+    );
+
+  border-radius: 50%;
+
+  animation:
+    spin
+    1.1s
+    linear
+    infinite;
+}
+
+
+/* =========================================================
+   CENTRO
+========================================================= */
+
+.loaderCenter {
+  width: 76px;
+  height: 76px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.13
+    );
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
+
+  color: #ffffff;
+
+  animation:
+    pulse
+    1.6s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   TEXTO
+========================================================= */
+
+.textArea {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  text-align: center;
+}
+
+
+.textArea h1 {
+  margin:
+    0
+    0
+    8px;
+
+  color: #ffffff;
+
+  font-size: 27px;
+
+  line-height: 1.2;
+
+  font-weight: 650;
+
+  letter-spacing: -0.5px;
+}
+
+
+.textArea p {
+  margin: 0;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.64
+    );
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   LINHA DE CARREGAMENTO
+========================================================= */
+
+.loadingLine {
+  position: relative;
+
+  width: 210px;
+  height: 3px;
+
+  margin-top: 27px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.11
+    );
+}
+
+
+.loadingLine span {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  width: 45%;
+
+  border-radius: inherit;
+
+  background: #ffffff;
+
+  animation:
+    loadingLine
+    1.4s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+  margin-top: 14px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.38
+    );
+
+  font-size: 9px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.7px;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes spin {
+  from {
+    transform:
+      rotate(0deg);
+  }
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform:
+      scale(1);
+
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        0.07
+      );
+  }
+
+  50% {
+    transform:
+      scale(1.05);
+
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        0.12
+      );
+  }
+}
+
+
+@keyframes loadingLine {
+  0% {
+    left: -50%;
+  }
+
+  50% {
+    left: 55%;
+  }
+
+  100% {
+    left: 105%;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 500px) {
+  .brand {
+    margin-bottom: 34px;
+  }
+
+
+  .loaderArea {
+    width: 110px;
+    height: 110px;
+
+    margin-bottom: 26px;
+  }
+
+
+  .loaderCenter {
+    width: 70px;
+    height: 70px;
+  }
+
+
+  .textArea h1 {
+    font-size: 23px;
+  }
+
+
+  .loadingLine {
+    width: 180px;
+  }
+}

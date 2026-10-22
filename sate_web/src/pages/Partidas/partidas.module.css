@@ -1,311 +1,379 @@
-@import url(
-  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap'
-);
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* =====================================
-   PÁGINA
-===================================== */
+/* =========================================================
+   SATE — PARTIDAS
+   Nova identidade visual baseada na referência enviada.
+========================================================= */
 
 .page {
-  --verde-dark: #005942;
+  --verde: #005942;
   --verde-profundo: #003d31;
-  --verde-claro: #dff7ee;
-  --card: #f8fbf9;
-  --texto: #10251f;
-  --texto-secundario: #66756f;
-  --linha: #dce5e0;
+  --rosa: #f04470;
+  --creme: #faf5ee;
+  --creme-linha: #e8ddd2;
+  --texto: #172a23;
+  --texto-secundario: #7a807b;
+  --branco: #ffffff;
 
-  width: 100%;
-  min-height: 100vh;
+  width: calc(100% + 60px);
+  min-height: calc(100vh + 60px);
+   margin: -30px;
+  padding: 0;
 
-  padding: 38px 42px 54px;
+  background:
+    radial-gradient(
+      ellipse 360px 260px at 96% 0%,
+      rgba(240, 68, 112, 0.15) 0%,
+      rgba(240, 68, 112, 0.07) 42%,
+      rgba(240, 68, 112, 0) 76%
+    ),
+    #faf5ee;
 
-  box-sizing: border-box;
-
-  background: var(--verde-dark);
-
-  color: #ffffff;
-
+  color: var(--texto);
   font-family: 'Poppins', sans-serif;
 }
 
+.page * {
+  box-sizing: border-box;
+}
 
-/* =========================
-   TÍTULO
-========================= */
+.pageInner {
+  width: 100%;
+  max-width: 1235px;
+  margin: 0 auto;
+  padding: 48px 34px 64px;
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
 
 .titleRow {
   width: 100%;
-  max-width: 1180px;
 
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
 
-  gap: 24px;
+  gap: 28px;
 
-  margin: 0 auto 28px;
+  margin-bottom: 24px;
 }
 
 .titleRow h2 {
   margin: 0;
 
-  color: #ffffff;
+  color: var(--texto);
 
-  font-size: clamp(34px, 3.1vw, 46px);
-
+  font-size: clamp(36px, 3.2vw, 48px);
+  line-height: 1.03;
   font-weight: 700;
 
-  line-height: 1.05;
-
-  letter-spacing: -1.4px;
+  letter-spacing: -1.7px;
 }
 
 .titleRow h2 em {
-  color: var(--verde-claro);
+  color: var(--rosa);
 
   font-family: 'DM Serif Display', serif;
-
   font-style: italic;
-
   font-weight: 400;
 
-  letter-spacing: -0.5px;
+  letter-spacing: -0.6px;
 }
 
 .titleRow p {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
 
-  color: rgba(255, 255, 255, 0.74);
+  color: #777d78;
 
   font-size: 13px;
-
   line-height: 1.6;
 }
 
 
-/* =========================
+/* =========================================================
    BOTÃO NOVA PARTIDA
-========================= */
-
-/* =====================================
-   BOTÃO NOVA PARTIDA
-===================================== */
+========================================================= */
 
 .newButton {
-    min-width: 158px;
-    height: 46px;
+  min-width: 170px;
+  height: 48px;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  flex-shrink: 0;
 
-    padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-    border: 1px solid #28ba8c;
-    border-radius: 11px;
+  gap: 10px;
 
-    background: #008765;
-    color: #ffffff;
+  padding: 0 22px;
 
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 600;
+  border: 1px solid var(--verde);
+  border-radius: 11px;
 
-    cursor: pointer;
+  background: var(--verde);
+  color: #ffffff;
 
-    box-shadow: 0 8px 18px rgba(0, 35, 26, 0.12);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
 
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
-}
+  cursor: pointer;
 
-.newButton:hover {
-    background: #009e76;
-    border-color: #44c69b;
-
-    transform: translateY(-2px);
-
-    box-shadow: 0 12px 22px rgba(0, 35, 26, 0.16);
-}
-
-.newButton:active {
-    transform: translateY(0);
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .newButton span {
-    font-size: 18px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
 }
 
-/* =========================
+.newButton:hover {
+  background: #00735a;
+  border-color: #00735a;
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   ABAS DE STATUS
+========================================================= */
+
+.statusTabs {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 32px;
+
+  overflow-x: auto;
+
+  margin-bottom: 31px;
+
+  border-bottom: 1px solid var(--creme-linha);
+
+  scrollbar-width: none;
+}
+
+.statusTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.statusTab,
+.statusTabActive {
+  min-height: 50px;
+
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  flex-shrink: 0;
+
+  padding: 0 2px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #858782;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: color 0.18s ease;
+}
+
+.statusTab:hover {
+  color: var(--texto);
+}
+
+.statusTabActive {
+  color: var(--texto);
+}
+
+.statusTabActive::after {
+  content: '';
+
+  position: absolute;
+
+  right: 0;
+  bottom: -1px;
+  left: 0;
+
+  height: 2px;
+
+  background: var(--rosa);
+}
+
+.statusTab small,
+.statusTabActive small {
+  color: var(--rosa);
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
    FILTROS
-========================= */
+========================================================= */
 
 .filters {
-  width: 100%;
-  max-width: 1180px;
+  width: 760px;
+  max-width: 100%;
 
   display: grid;
 
   grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+    minmax(210px, 1fr)
+    minmax(210px, 1fr)
+    minmax(210px, 1fr);
 
-  gap: 12px;
+  gap: 0;
 
-  margin: 0 auto 20px;
+  overflow: hidden;
+
+  margin-bottom: 0;
+
+  border: 1px solid #ddcfc0;
+  border-radius: 14px;
+
+  background: #ffffff;
 }
 
 .filters select,
-.filters input[type="date"] {
+.dateInput {
   width: 100%;
-  height: 50px;
+  height: 54px;
 
-  box-sizing: border-box;
-
-  padding: 0 14px;
-
-  border: 1px solid #cbd8d2;
-
-  border-radius: 11px;
+  border: none;
 
   background: #ffffff;
 
-  color: var(--texto);
+  color: #263930;
 
   font-family: inherit;
-
   font-size: 12px;
+}
+
+.filters select {
+  appearance: none;
+
+  padding: 0 44px 0 18px;
 
   outline: none;
 
   cursor: pointer;
 
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #20352d 50%),
+    linear-gradient(135deg, #20352d 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) calc(50% - 2px),
+    calc(100% - 15px) calc(50% - 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
 }
 
-.filters select:hover,
-.filters input[type="date"]:hover {
-  border-color: #9eb5aa;
+.filters > select + select,
+.dateInput {
+  border-left: 1px solid #e8ddd2;
 }
 
 .filters select:focus,
-.filters input[type="date"]:focus {
-  border-color: var(--verde-dark);
-
-  box-shadow:
-    0 0 0 4px
-    rgba(0, 89, 66, 0.08);
+.dateInput:focus-within {
+  box-shadow: inset 0 0 0 1px rgba(0, 89, 66, 0.34);
 }
 
-
-/* =========================
-   CAMPO DE DATA
-========================= */
-
 .dateInput {
-  height: 50px;
-
   display: flex;
   align-items: center;
 
-  gap: 8px;
-
-  padding: 0 12px;
-
-  box-sizing: border-box;
-
-  border: 1px solid #cbd8d2;
-
-  border-radius: 11px;
-
-  background: #ffffff;
-
-  color: var(--texto);
+  padding: 0 14px 0 17px;
 }
 
 .dateInput input {
   width: 100%;
+  height: 100%;
+
+  min-width: 0;
 
   border: none;
-
   outline: none;
 
   background: transparent;
 
-  color: var(--texto);
+  color: #263930;
 
   font-family: inherit;
-
   font-size: 12px;
+
+  cursor: pointer;
 }
 
 .clearDate {
-  width: 24px;
-  height: 24px;
+  width: 25px;
+  height: 25px;
 
   flex-shrink: 0;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
   padding: 0;
 
   border: none;
-
   border-radius: 50%;
 
   background: transparent;
 
-  color: #75847d;
+  color: #818882;
 
   font-size: 17px;
 
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
 }
 
 .clearDate:hover {
-  background: #edf3f0;
-
-  color: var(--verde-dark);
+  background: #f4eee7;
+  color: var(--rosa);
 }
 
 
-/* =========================
+/* =========================================================
    TABELA
-========================= */
+========================================================= */
 
 .tableContainer {
   width: 100%;
-  max-width: 1180px;
-
-  margin: 0 auto;
 
   overflow-x: auto;
 
-  border: 1px solid rgba(16, 37, 31, 0.08);
+  margin-top: 0;
 
-  border-radius: 20px;
+  background: transparent;
 
-  background: var(--card);
-
-  box-shadow:
-    0 14px 34px
-    rgba(0, 35, 26, 0.1);
+  box-shadow: none;
 }
 
 .tableContainer table {
   width: 100%;
+  min-width: 760px;
 
   border-collapse: collapse;
 
@@ -315,177 +383,138 @@
 }
 
 .tableContainer thead {
-  background: #f1f5f3;
+  background: transparent;
 }
 
 .tableContainer th {
-  padding: 16px 18px;
+  padding: 13px 14px 12px;
 
-  text-align: left;
+  border-bottom: 1px solid var(--creme-linha);
 
-  color: #6b7a73;
+  color: #7e817d;
 
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 600;
 
-  letter-spacing: 0.04em;
-
+  text-align: left;
   white-space: nowrap;
 }
 
 .tableContainer td {
-  padding: 18px;
+  padding: 18px 14px;
 
-  border-top: 1px solid #e5ebe8;
+  border-bottom: 1px solid var(--creme-linha);
 
-  color: #53635c;
+  color: #253830;
+
+  font-size: 11px;
 
   white-space: nowrap;
 }
 
-.tableContainer tbody tr {
-  transition: background 0.2s ease;
+.tableRow {
+  cursor: pointer;
+
+  transition:
+    background 0.16s ease,
+    transform 0.16s ease;
 }
 
-.tableContainer tbody tr:hover {
-  background: #f5f8f6;
+.tableRow:hover,
+.tableRow:focus-visible {
+  background: rgba(255, 255, 255, 0.58);
+
+  outline: none;
 }
-
-
-/* =========================
-   CONFRONTO
-========================= */
 
 .confronto {
-  color: var(--texto) !important;
-
+  color: #1a2f27 !important;
   font-weight: 600;
 }
 
-
-/* =========================
-   RESULTADO
-========================= */
-
 .resultado {
-  color: var(--texto) !important;
-
+  color: #20352d !important;
   font-weight: 700;
 }
 
 
-/* =========================
-   STATUS
-========================= */
+/* =========================================================
+   STATUS — BOLINHA + TEXTO
+========================================================= */
 
-.status,
-.analisada,
-.analise,
-.pendente {
+.status {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
 
-  min-width: 92px;
-
-  padding: 6px 11px;
-
-  border-radius: 999px;
-
-  font-size: 10px;
-  font-weight: 600;
-}
-
-.analisada {
-  background: #dff3ea;
-
-  color: #087653;
-}
-
-.analise {
-  background: #fff4d8;
-
-  color: #8b650a;
-}
-
-.pendente {
-  background: #e9efec;
-
-  color: #687870;
-}
-
-
-/* =========================
-   BOTÃO DETALHES
-========================= */
-
-.details {
-  width: 34px;
-  height: 34px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 7px;
 
   padding: 0;
 
-  border: 1px solid #d7e1dc;
+  border-radius: 0;
 
-  border-radius: 9px;
+  background: transparent !important;
 
-  background: #ffffff;
+  font-size: 10px;
+  font-weight: 600;
 
-  color: var(--verde-dark);
-
-  font-size: 20px;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+  white-space: nowrap;
 }
 
-.details:hover {
-  background: #edf5f1;
+.status i {
+  width: 7px;
+  height: 7px;
 
-  border-color: #a5b9b0;
+  flex-shrink: 0;
 
-  transform: translateX(1px);
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+.analisada {
+  color: #00634d;
+}
+
+.analise {
+  color: #ca8a04;
+}
+
+.pendente {
+  color: #ef3f6f;
 }
 
 
-/* =========================
-   SEM RESULTADOS
-========================= */
+/* =========================================================
+   ESTADOS VAZIOS / ERROS
+========================================================= */
 
 .empty {
-  padding: 42px !important;
+  padding: 42px 16px !important;
+
+  color: #7b817d;
 
   text-align: center;
-
-  color: #78877f;
-
-  font-size: 12px;
 }
 
 .empty h3 {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 
-  color: var(--texto);
+  color: #23372f;
 
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .empty p {
   margin: 0;
+
+  font-size: 11px;
 }
 
 
-/* =========================
-   MODAL / OVERLAY
-========================= */
+/* =========================================================
+   MODAL
+========================================================= */
 
 .modalOverlay {
   position: fixed;
@@ -497,41 +526,27 @@
   align-items: center;
   justify-content: center;
 
-  padding: 24px;
+  padding: 22px;
 
-  box-sizing: border-box;
-
-  background:
-    rgba(0, 28, 21, 0.72);
+  background: rgba(32, 23, 18, 0.38);
 
   backdrop-filter: blur(5px);
 }
 
-
-/* =========================
-   MODAL NOVA PARTIDA
-========================= */
-
 .modal {
-  position: relative;
+  width: min(600px, 100%);
 
-  z-index: 100000;
-
-  width: min(620px, 100%);
-
-  max-height: calc(100vh - 48px);
+  max-height: calc(100vh - 44px);
 
   overflow: hidden;
 
-  border: 1px solid #c5d4cd;
+  border: 1px solid #e1d5c8;
+  border-radius: 20px;
 
-  border-radius: 22px;
-
-  background: #f6fcf9;
+  background: #fffaf4;
 
   box-shadow:
-    0 28px 70px
-    rgba(0, 0, 0, 0.32);
+    0 30px 70px rgba(67, 40, 26, 0.2);
 }
 
 .modalHeader {
@@ -543,7 +558,7 @@
 
   padding: 24px 26px 18px;
 
-  border-bottom: 1px solid #d6e1dc;
+  border-bottom: 1px solid #e8ddd2;
 }
 
 .modalHeader h3 {
@@ -551,25 +566,13 @@
 
   color: var(--texto);
 
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
-
-  letter-spacing: -0.4px;
-}
-
-.modalHeader p {
-  margin: 5px 0 0;
-
-  color: #75847d;
-
-  font-size: 11px;
 }
 
 .closeButton {
-  width: 36px;
-  height: 36px;
-
-  flex-shrink: 0;
+  width: 35px;
+  height: 35px;
 
   display: flex;
   align-items: center;
@@ -578,35 +581,24 @@
   padding: 0;
 
   border: 1px solid transparent;
-
-  border-radius: 10px;
+  border-radius: 9px;
 
   background: transparent;
 
-  color: #607068;
+  color: #737b76;
 
-  font-size: 23px;
+  font-size: 22px;
 
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
 }
 
 .closeButton:hover {
-  border-color: #d5e0db;
-
-  background: #edf4f1;
+  border-color: #e0d5ca;
+  background: #f7f0e8;
 }
 
-
-/* =========================
-   FORMULÁRIO DO MODAL
-========================= */
-
 .form {
-  padding: 22px 26px 10px;
+  padding: 22px 26px 8px;
 }
 
 .formRow {
@@ -628,7 +620,7 @@
 }
 
 .formGroup label {
-  color: #40534a;
+  color: #45584f;
 
   font-size: 10px;
   font-weight: 600;
@@ -637,58 +629,40 @@
 .formGroup input,
 .formGroup select {
   width: 100%;
-  height: 50px;
+  height: 48px;
 
-  box-sizing: border-box;
+  padding: 0 13px;
 
-  padding: 0 14px;
+  border: 1px solid #d9cdbf;
+  border-radius: 10px;
 
-  border: 1px solid #cbd8d2;
-
-  border-radius: 11px;
+  outline: none;
 
   background: #ffffff;
 
   color: var(--texto);
 
   font-family: inherit;
-
   font-size: 12px;
 
-  outline: none;
-
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
-}
-
-.formGroup input:hover,
-.formGroup select:hover {
-  border-color: #a9bab2;
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .formGroup input:focus,
 .formGroup select:focus {
-  border-color: var(--verde-dark);
+  border-color: #9bb9ae;
 
   box-shadow:
-    0 0 0 4px
-    rgba(0, 89, 66, 0.08);
+    0 0 0 3px rgba(0, 89, 66, 0.07);
 }
 
 .formGroup input[readonly] {
-  background: #eef3f0;
+  background: #f4efe9;
 
-  color: #6c7a73;
-
-  cursor: default;
+  color: #747c77;
 }
-
-
-/* =========================
-   AÇÕES DO MODAL
-========================= */
 
 .modalActions {
   display: flex;
@@ -698,55 +672,53 @@
 
   padding: 16px 26px 22px;
 
-  border-top: 1px solid #dbe4df;
+  border-top: 1px solid #e8ddd2;
 }
 
 .cancelButton,
 .saveButton {
-  min-width: 118px;
-  height: 44px;
+  min-width: 116px;
+  height: 42px;
 
-  padding: 0 18px;
+  padding: 0 17px;
 
-  border-radius: 11px;
+  border-radius: 10px;
 
   font-family: inherit;
-
   font-size: 11px;
   font-weight: 600;
 
   cursor: pointer;
 
   transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease;
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .cancelButton {
-  border: 1px solid #c9d5cf;
+  border: 1px solid #d9cdbf;
 
   background: #ffffff;
 
-  color: #53645c;
+  color: #55655e;
 }
 
 .cancelButton:hover {
-  background: #f0f5f2;
-
-  border-color: #a9bbb2;
+  background: #f6f0e9;
 }
 
 .saveButton {
-  border: 1px solid var(--verde-dark);
+  border: 1px solid var(--verde);
 
-  background: var(--verde-dark);
+  background: var(--verde);
 
   color: #ffffff;
 }
 
 .saveButton:hover {
-  background: var(--verde-profundo);
+  background: #00735a;
+  border-color: #00735a;
 
   transform: translateY(-1px);
 }
@@ -761,120 +733,73 @@
 }
 
 
-/* =========================
-   MODAL DETALHES TEMPORÁRIO
-========================= */
-
-.selectedModal {
-  position: relative;
-
-  width: min(440px, 100%);
-
-  padding: 30px;
-
-  box-sizing: border-box;
-
-  border: 1px solid #c5d4cd;
-
-  border-radius: 20px;
-
-  background: #f8fbf9;
-
-  color: var(--texto);
-
-  text-align: center;
-
-  box-shadow:
-    0 28px 70px
-    rgba(0, 0, 0, 0.28);
-}
-
-.selectedModal .closeButton {
-  position: absolute;
-
-  top: 12px;
-  right: 12px;
-}
-
-.selectedModal h3 {
-  margin: 0 0 18px;
-
-  font-size: 20px;
-}
-
-.selectedModal strong {
-  display: block;
-
-  font-size: 16px;
-}
-
-.selectedModal p {
-  margin: 10px 0;
-
-  color: #687870;
-
-  font-size: 12px;
-}
-
-.selectedScore {
-  color: var(--texto) !important;
-
-  font-size: 28px !important;
-  font-weight: 800;
-}
-
-.nextStep {
-  margin-top: 20px !important;
-
-  padding: 12px;
-
-  border-radius: 10px;
-
-  background: #edf4f1;
-
-  color: #52635c !important;
-
-  font-size: 11px !important;
-}
-
-
-/* =========================
+/* =========================================================
    RESPONSIVIDADE
-========================= */
+========================================================= */
 
-@media (max-width: 980px) {
-  .page {
+@media (max-width: 900px) {
+  .pageInner {
     padding:
-      30px 24px
-      42px;
+      38px
+      24px
+      50px;
   }
 
   .filters {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    width: 100%;
   }
 }
 
-
 @media (max-width: 700px) {
-  .page {
+  .pageInner {
     padding:
-      24px 14px
-      32px;
+      28px
+      15px
+      40px;
   }
 
   .titleRow {
-    align-items: flex-start;
-
+    align-items: stretch;
     flex-direction: column;
+
+    gap: 18px;
+  }
+
+  .titleRow h2 {
+    font-size: 36px;
   }
 
   .newButton {
     width: 100%;
   }
 
+  .statusTabs {
+    gap: 24px;
+  }
+
   .filters {
     grid-template-columns: 1fr;
+
+    overflow: visible;
+
+    border: none;
+    border-radius: 0;
+
+    background: transparent;
+  }
+
+  .filters select,
+  .dateInput {
+    height: 50px;
+
+    overflow: hidden;
+
+    margin-bottom: 8px;
+
+    border: 1px solid #ddcfc0 !important;
+    border-radius: 11px;
+
+    background: #ffffff;
   }
 
   .formRow {
@@ -883,35 +808,35 @@
     gap: 0;
   }
 
-  .modal {
-    max-height: calc(100vh - 28px);
+  .modalOverlay {
+    padding: 13px;
   }
 
-  .modalOverlay {
-    padding: 14px;
+  .modal {
+    max-height: calc(100vh - 26px);
   }
 
   .modalHeader {
     padding:
       20px
       18px
-      16px;
+      15px;
   }
 
   .form {
     padding:
       18px
       18px
-      6px;
+      7px;
   }
 
   .modalActions {
+    flex-direction: column;
+
     padding:
       14px
       18px
       18px;
-
-    flex-direction: column;
   }
 
   .cancelButton,
@@ -920,20 +845,39 @@
   }
 }
 
-
-@media (max-width: 450px) {
+@media (max-width: 430px) {
   .titleRow h2 {
-    font-size: 30px;
+    font-size: 31px;
   }
 
-  .tableContainer {
-    border-radius: 16px;
+  .statusTabs {
+    gap: 20px;
+  }
+
+  .statusTab,
+  .statusTabActive {
+    font-size: 11px;
   }
 
   .tableContainer th,
   .tableContainer td {
     padding:
       14px
-      12px;
+      11px;
   }
+}
+
+
+/* =========================================================
+   AJUSTE FINAL — SEM BORDA VERDE EXTERNA
+========================================================= */
+
+.page {
+  border: none !important;
+  outline: none !important;
+}
+
+.pageInner {
+  border: none !important;
+  outline: none !important;
 }

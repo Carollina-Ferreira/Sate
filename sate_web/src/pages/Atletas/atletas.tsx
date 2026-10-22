@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import type { FormEvent } from 'react';
 import * as XLSX from 'xlsx';
 
@@ -161,12 +162,26 @@ const FORMULARIO_VAZIO: NovoAtletaForm = {
 // ============================================================
 
 const Atletas = () => {
+    const [searchParams, setSearchParams] =
+        useSearchParams();
+
+    const telaDaUrl = searchParams.get('tela');
+    const idDaUrl = searchParams.get('id');
+
+    const telaInicial: TelaAtual =
+        telaDaUrl === 'perfil' ||
+        telaDaUrl === 'editar' ||
+        telaDaUrl === 'informacoes' ||
+        telaDaUrl === 'clipes'
+            ? telaDaUrl
+            : 'lista';
+
     const [atletas, setAtletas] = useState<Atleta[]>([]);
     const [atletaSelecionado, setAtletaSelecionado] =
         useState<AtletaBackend | null>(null);
 
     const [telaAtual, setTelaAtual] =
-        useState<TelaAtual>('lista');
+        useState<TelaAtual>(telaInicial);
 
     const [busca, setBusca] = useState('');
     const [filtroModalidade, setFiltroModalidade] =
@@ -385,6 +400,73 @@ const Atletas = () => {
     };
 
     // ========================================================
+    // RESTAURAR TELA/ATLETA PELA URL
+    // ========================================================
+
+    useEffect(() => {
+        const telasComAtleta: TelaAtual[] = [
+            'perfil',
+            'editar',
+            'informacoes',
+            'clipes',
+        ];
+
+        if (
+            !telaDaUrl ||
+            !telasComAtleta.includes(
+                telaDaUrl as TelaAtual
+            )
+        ) {
+            return;
+        }
+
+        const id = Number(idDaUrl);
+
+        if (
+            !Number.isFinite(id) ||
+            id <= 0
+        ) {
+            setSearchParams(
+                {},
+                {
+                    replace: true,
+                }
+            );
+
+            setAtletaSelecionado(null);
+            setTelaAtual('lista');
+            return;
+        }
+
+        let cancelado = false;
+
+        const restaurarAtleta = async () => {
+            const atleta =
+                await buscarAtletaPorId(id);
+
+            if (
+                cancelado ||
+                !atleta
+            ) {
+                return;
+            }
+
+            setAtletaSelecionado(atleta);
+            setTelaAtual(
+                telaDaUrl as TelaAtual
+            );
+        };
+
+        void restaurarAtleta();
+
+        return () => {
+            cancelado = true;
+        };
+        // A URL é a fonte de verdade para as subtelas.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [telaDaUrl, idDaUrl]);
+
+    // ========================================================
     // NAVEGAÇÃO E MODAL
     // ========================================================
 
@@ -417,6 +499,11 @@ const Atletas = () => {
 
         setAtletaSelecionado(atleta);
         setTelaAtual('perfil');
+
+        setSearchParams({
+            tela: 'perfil',
+            id: String(id),
+        });
     };
 
     const abrirInformacoes = async (id: number) => {
@@ -428,6 +515,11 @@ const Atletas = () => {
 
         setAtletaSelecionado(atleta);
         setTelaAtual('informacoes');
+
+        setSearchParams({
+            tela: 'informacoes',
+            id: String(id),
+        });
     };
 
     const abrirClipes = async (id: number) => {
@@ -439,26 +531,49 @@ const Atletas = () => {
 
         setAtletaSelecionado(atleta);
         setTelaAtual('clipes');
+
+        setSearchParams({
+            tela: 'clipes',
+            id: String(id),
+        });
     };
 
     const voltarParaLista = () => {
         setAtletaSelecionado(null);
         setTelaAtual('lista');
         setErro('');
+
+        setSearchParams({});
     };
 
     const voltarParaPerfil = () => {
         if (!atletaSelecionado) {
+            setAtletaSelecionado(null);
             setTelaAtual('lista');
+            setSearchParams({});
             return;
         }
 
         setTelaAtual('perfil');
+
+        setSearchParams({
+            tela: 'perfil',
+            id: String(atletaSelecionado.id),
+        });
     };
 
     const abrirEdicao = () => {
-        if (!atletaSelecionado) return;
+        if (!atletaSelecionado) {
+            return;
+        }
+
+        setErro('');
         setTelaAtual('editar');
+
+        setSearchParams({
+            tela: 'editar',
+            id: String(atletaSelecionado.id),
+        });
     };
 
     // ========================================================
@@ -973,6 +1088,11 @@ const Atletas = () => {
 
             await carregarAtletas();
             setTelaAtual('perfil');
+
+            setSearchParams({
+                tela: 'perfil',
+                id: String(atletaSelecionado.id),
+            });
         } catch (error) {
             console.error('Erro ao atualizar atleta:', error);
 
@@ -1125,7 +1245,7 @@ const Atletas = () => {
                                 key={modalidade}
                                 value={modalidade}
                             >
-                                {modalidade}
+                                {modalidade === 'Todas' ? 'Todas as modalidades' : modalidade}
                             </option>
                         ))}
                     </select>
@@ -1144,7 +1264,7 @@ const Atletas = () => {
                                 key={categoria}
                                 value={categoria}
                             >
-                                {categoria}
+                                {categoria === 'Todas' ? 'Todas as categorias' : categoria}
                             </option>
                         ))}
                     </select>

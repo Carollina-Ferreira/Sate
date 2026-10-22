@@ -86,38 +86,51 @@ const PerfilAtleta = ({
 }: PerfilAtletaProps) => {
     const iniciais = atleta.nome
         ? atleta.nome
-            .trim()
-            .split(/\s+/)
-            .filter(Boolean)
-            .slice(0, 2)
-            .map((nome) => nome.charAt(0))
-            .join('')
-            .toUpperCase()
+              .trim()
+              .split(/\s+/)
+              .filter(Boolean)
+              .slice(0, 2)
+              .map((nome) => nome.charAt(0))
+              .join('')
+              .toUpperCase()
         : 'AT';
 
-    const calcularIdade = () => {
+    const calcularIdade = (): number | null => {
         if (!atleta.dataNascimento) return null;
 
         const apenasData = atleta.dataNascimento.split('T')[0];
-        const partes = apenasData.split('-');
+        let ano: number;
+        let mes: number;
+        let dia: number;
 
-        if (partes.length !== 3) return null;
+        // Aceita datas no formato ISO (AAAA-MM-DD).
+        const partesISO = apenasData.split('-');
 
-        const ano = Number(partes[0]);
-        const mes = Number(partes[1]);
-        const dia = Number(partes[2]);
+        if (partesISO.length === 3) {
+            ano = Number(partesISO[0]);
+            mes = Number(partesISO[1]);
+            dia = Number(partesISO[2]);
+        } else {
+            return null;
+        }
 
         const nascimento = new Date(ano, mes - 1, dia);
 
-        if (Number.isNaN(nascimento.getTime())) return null;
+        if (
+            Number.isNaN(nascimento.getTime()) ||
+            nascimento.getFullYear() !== ano ||
+            nascimento.getMonth() !== mes - 1 ||
+            nascimento.getDate() !== dia
+        ) {
+            return null;
+        }
 
         const hoje = new Date();
-        let idade = hoje.getFullYear() - nascimento.getFullYear();
+        let idade = hoje.getFullYear() - ano;
 
         if (
-            hoje.getMonth() < nascimento.getMonth() ||
-            (hoje.getMonth() === nascimento.getMonth() &&
-                hoje.getDate() < nascimento.getDate())
+            hoje.getMonth() < mes - 1 ||
+            (hoje.getMonth() === mes - 1 && hoje.getDate() < dia)
         ) {
             idade--;
         }
@@ -131,19 +144,36 @@ const PerfilAtleta = ({
     const categoria =
         atleta.categoria ||
         atleta.equipe?.categoria ||
-        'Sem categoria';
+        'Categoria não informada';
     const modalidade =
         atleta.equipe?.modalidade || 'Modalidade não informada';
 
     const fotoUrl = atleta.usuario?.avatarUrl || null;
 
+    // Valores demonstrativos até a integração com as estatísticas reais.
     const desempenho = 69;
 
     const estatisticas = [
-        { titulo: 'Ações boas', valor: 0, classe: styles.good },
-        { titulo: 'Ações ruins', valor: 1, classe: styles.bad },
-        { titulo: 'Ações neutras', valor: 0, classe: styles.neutral },
-        { titulo: 'Ações destaque', valor: 3, classe: styles.highlight },
+        {
+            titulo: 'Ações boas',
+            valor: 0,
+            classe: styles.good,
+        },
+        {
+            titulo: 'Ações ruins',
+            valor: 1,
+            classe: styles.bad,
+        },
+        {
+            titulo: 'Ações neutras',
+            valor: 0,
+            classe: styles.neutral,
+        },
+        {
+            titulo: 'Ações destaque',
+            valor: 3,
+            classe: styles.highlight,
+        },
     ];
 
     const metaLinha = [
@@ -155,7 +185,7 @@ const PerfilAtleta = ({
         .filter(Boolean)
         .join(' · ');
 
-    // ===== gráfico evolução =====
+    // Gráfico de evolução.
     const pontosEvolucao = dadosEvolucao.map((valor, index) => ({
         x: 55 + index * 90,
         y: 225 - valor * 1.85,
@@ -171,7 +201,7 @@ const PerfilAtleta = ({
 
     const areaEvolucao = `${linhaEvolucao} L 595 225 L 55 225 Z`;
 
-    // ===== radar =====
+    // Gráfico radar.
     const coordenadaRadar = (
         index: number,
         porcentagem: number
@@ -200,6 +230,14 @@ const PerfilAtleta = ({
         })
         .join(' ');
 
+    const handleEditar = (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        event.preventDefault();
+        event.stopPropagation();
+        onEdit();
+    };
+
     return (
         <div className={styles.page}>
             <main className={styles.main}>
@@ -207,12 +245,17 @@ const PerfilAtleta = ({
                     className={styles.backButton}
                     onClick={onBack}
                     type="button"
+                    style={{
+                        position: 'relative',
+                        zIndex: 1,
+                        width: 'fit-content',
+                    }}
                 >
                     <ArrowLeft size={17} />
                     Voltar para atletas
                 </button>
 
-                {/* PERFIL */}
+                {/* PERFIL DO ATLETA */}
                 <section className={styles.profileCard}>
                     <div className={styles.profileLeft}>
                         <div className={styles.avatar}>
@@ -227,9 +270,7 @@ const PerfilAtleta = ({
                         </div>
 
                         <div className={styles.nameGroup}>
-                            <h1>
-                                {atleta.nome || 'Atleta sem nome'}
-                            </h1>
+                            <h1>{atleta.nome || 'Atleta sem nome'}</h1>
 
                             <p className={styles.metaInfo}>
                                 {metaLinha}
@@ -243,12 +284,24 @@ const PerfilAtleta = ({
                     </div>
                 </section>
 
-                {/* BOTÕES */}
-                <div className={styles.actionsRow}>
+                {/* NAVEGAÇÃO */}
+                <nav
+                    className={styles.actionsRow}
+                    aria-label="Ações do perfil do atleta"
+                    style={{
+                        position: 'relative',
+                        zIndex: 10,
+                    }}
+                >
                     <button
                         type="button"
                         className={styles.actionButton}
-                        onClick={onEdit}
+                        onClick={handleEditar}
+                        style={{
+                            position: 'relative',
+                            zIndex: 11,
+                            pointerEvents: 'auto',
+                        }}
                     >
                         <Edit3 size={17} />
                         Editar atleta
@@ -281,36 +334,29 @@ const PerfilAtleta = ({
                         <Video size={17} />
                         Clipes
                     </button>
-                </div>
+                </nav>
 
-                <section className={styles.statsGrid}>
-                    <div className={styles.statItem}>
-                        <span className={styles.statLabel}>AÇÕES BOAS</span>
-                        <strong className={`${styles.statValue} ${styles.good}`}>
-                            0
-                        </strong>
-                    </div>
+                {/* ESTATÍSTICAS */}
+                <section
+                    className={styles.statsGrid}
+                    aria-label="Estatísticas do atleta"
+                >
+                    {estatisticas.map((estatistica) => (
+                        <div
+                            className={styles.statItem}
+                            key={estatistica.titulo}
+                        >
+                            <span className={styles.statLabel}>
+                                {estatistica.titulo}
+                            </span>
 
-                    <div className={styles.statItem}>
-                        <span className={styles.statLabel}>AÇÕES RUINS</span>
-                        <strong className={`${styles.statValue} ${styles.bad}`}>
-                            1
-                        </strong>
-                    </div>
-
-                    <div className={styles.statItem}>
-                        <span className={styles.statLabel}>AÇÕES NEUTRAS</span>
-                        <strong className={`${styles.statValue} ${styles.neutral}`}>
-                            0
-                        </strong>
-                    </div>
-
-                    <div className={styles.statItem}>
-                        <span className={styles.statLabel}>DESTAQUES</span>
-                        <strong className={`${styles.statValue} ${styles.highlight}`}>
-                            3
-                        </strong>
-                    </div>
+                            <strong
+                                className={`${styles.statValue} ${estatistica.classe}`}
+                            >
+                                {estatistica.valor}
+                            </strong>
+                        </div>
+                    ))}
                 </section>
 
                 {/* GRÁFICOS */}
@@ -319,7 +365,9 @@ const PerfilAtleta = ({
                         <div className={styles.chartHeader}>
                             <div>
                                 <h2>Evolução ao longo do tempo</h2>
-                                <p>Índice de desempenho por partida.</p>
+                                <p>
+                                    Índice de desempenho por partida.
+                                </p>
                             </div>
 
                             <div className={styles.chartIcon}>
@@ -332,7 +380,7 @@ const PerfilAtleta = ({
                                 className={styles.lineChart}
                                 viewBox="0 0 650 270"
                                 role="img"
-                                aria-label="Evolução do desempenho nas últimas partidas"
+                                aria-label="Evolução do desempenho nas últimas sete partidas"
                             >
                                 <defs>
                                     <linearGradient
@@ -344,12 +392,12 @@ const PerfilAtleta = ({
                                     >
                                         <stop
                                             offset="0%"
-                                            stopColor="#59D9A7"
-                                            stopOpacity="0.20"
+                                            stopColor="#16A875"
+                                            stopOpacity="0.18"
                                         />
                                         <stop
                                             offset="100%"
-                                            stopColor="#59D9A7"
+                                            stopColor="#16A875"
                                             stopOpacity="0"
                                         />
                                     </linearGradient>
@@ -395,8 +443,12 @@ const PerfilAtleta = ({
                                         <circle
                                             cx={ponto.x}
                                             cy={ponto.y}
-                                            r={index === 6 ? 6 : 4}
-                                            className={styles.dataPoint}
+                                            r={index === 6 ? 5.5 : 3.5}
+                                            className={
+                                                index === 6
+                                                    ? styles.lastDataPoint
+                                                    : styles.dataPoint
+                                            }
                                         />
 
                                         <text
@@ -430,7 +482,7 @@ const PerfilAtleta = ({
                                 className={styles.radarChart}
                                 viewBox="0 0 320 300"
                                 role="img"
-                                aria-label="Perfil de atributos do atleta"
+                                aria-label="Gráfico dos atributos técnicos e físicos do atleta"
                             >
                                 {[25, 50, 75, 100].map((nivel) => (
                                     <polygon
@@ -441,7 +493,10 @@ const PerfilAtleta = ({
                                 ))}
 
                                 {dadosAtributos.map((_, index) => {
-                                    const ponto = coordenadaRadar(index, 100);
+                                    const ponto = coordenadaRadar(
+                                        index,
+                                        100
+                                    );
 
                                     return (
                                         <line
@@ -460,38 +515,45 @@ const PerfilAtleta = ({
                                     className={styles.radarArea}
                                 />
 
-                                {dadosAtributos.map((atributo, index) => {
-                                    const ponto = coordenadaRadar(
-                                        index,
-                                        atributo.valor
-                                    );
+                                {dadosAtributos.map(
+                                    (atributo, index) => {
+                                        const ponto = coordenadaRadar(
+                                            index,
+                                            atributo.valor
+                                        );
 
-                                    return (
-                                        <circle
-                                            key={atributo.nome}
-                                            cx={ponto.x}
-                                            cy={ponto.y}
-                                            r="3"
-                                            className={styles.radarPoint}
-                                        />
-                                    );
-                                })}
+                                        return (
+                                            <circle
+                                                key={atributo.nome}
+                                                cx={ponto.x}
+                                                cy={ponto.y}
+                                                r="4"
+                                                className={styles.radarPoint}
+                                            />
+                                        );
+                                    }
+                                )}
 
-                                {dadosAtributos.map((atributo, index) => {
-                                    const ponto = coordenadaRadar(index, 126);
+                                {dadosAtributos.map(
+                                    (atributo, index) => {
+                                        const ponto = coordenadaRadar(
+                                            index,
+                                            126
+                                        );
 
-                                    return (
-                                        <text
-                                            key={atributo.nome}
-                                            x={ponto.x}
-                                            y={ponto.y + 4}
-                                            textAnchor="middle"
-                                            className={styles.radarLabel}
-                                        >
-                                            {atributo.nome}
-                                        </text>
-                                    );
-                                })}
+                                        return (
+                                            <text
+                                                key={atributo.nome}
+                                                x={ponto.x}
+                                                y={ponto.y + 4}
+                                                textAnchor="middle"
+                                                className={styles.radarLabel}
+                                            >
+                                                {atributo.nome}
+                                            </text>
+                                        );
+                                    }
+                                )}
                             </svg>
                         </div>
                     </article>

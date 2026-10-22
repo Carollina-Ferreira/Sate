@@ -1,117 +1,106 @@
-@import url(
-  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap'
-);
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* =====================================
-   PÁGINA
-===================================== */
+/* =========================================================
+   SATE — COMPARAÇÕES
+   Visual baseado na nova identidade de Partidas.
+========================================================= */
 
 .page {
-  --verde-dark: #005942;
-  --verde-profundo: #003d31;
-  --verde-claro: #dff7ee;
-  --card: #f8fbf9;
-  --texto: #10251f;
-  --texto-secundario: #66756f;
-  --linha: #dce5e0;
+    --creme: #FAF5EE;
+    --creme-card: #FFFCF7;
+    --verde: #006B4F;
+    --verde-principal: #16A875;
+    --texto: #12261F;
+    --texto-suave: #6C7C77;
+    --borda: #E8DED1;
 
-  width: 100%;
-  min-height: 100vh;
+    width: 100%;
+    min-height: 100vh;
 
-  padding: 38px 42px 54px;
+    background: var(--creme);
+    color: var(--texto);
 
-  box-sizing: border-box;
+    font-family: var(--fonte-base), sans-serif;
+    box-sizing: border-box;
+}
 
-  background: var(--verde-dark);
-
-  font-family: 'Poppins', sans-serif;
+.page *,
+.page *::before,
+.page *::after {
+    box-sizing: border-box;
 }
 
 
-/* =====================================
+
+
+/* =========================================================
    CABEÇALHO
-===================================== */
+========================================================= */
 
 .pageHeader {
-  width: 100%;
-  max-width: 1180px;
+  width: min(100%, 1235px);
 
-  margin: 0 auto 30px;
+  margin: 0 auto 54px;
 }
 
 .pageHeader h1 {
   margin: 0;
 
-  color: #ffffff;
+  color: var(--texto);
 
-  font-size: clamp(34px, 3.1vw, 46px);
+  font-size: clamp(36px, 3.4vw, 50px);
+  line-height: 1.04;
 
   font-weight: 700;
 
-  line-height: 1.05;
-
-  letter-spacing: -1.4px;
+  letter-spacing: -1.8px;
 }
 
 .pageHeader h1 em {
-  color: var(--verde-claro);
+  color: var(--rosa);
 
   font-family: 'DM Serif Display', serif;
-
   font-style: italic;
-
   font-weight: 400;
 
   letter-spacing: -0.5px;
 }
 
 .pageHeader p {
-  margin: 10px 0 0;
+  margin: 11px 0 0;
 
-  color: rgba(255, 255, 255, 0.74);
+  color: var(--texto-secundario);
 
   font-size: 13px;
-
-  font-weight: 400;
-
   line-height: 1.6;
 }
 
 
-/* =====================================
+/* =========================================================
    ESTADOS
-===================================== */
+========================================================= */
 
 .stateCard {
-  width: 100%;
-  max-width: 1180px;
+  width: min(100%, 1235px);
 
   margin: 0 auto;
 
-  padding: 34px;
+  padding: 42px 24px;
 
-  box-sizing: border-box;
+  border: 1px solid var(--creme-linha);
+  border-radius: 15px;
 
-  border: 1px solid rgba(16, 37, 31, 0.08);
-
-  border-radius: 20px;
-
-  background: var(--card);
+  background: rgba(255, 255, 255, 0.42);
 
   color: var(--texto);
 
   text-align: center;
-
-  box-shadow:
-    0 14px 34px
-    rgba(0, 35, 26, 0.11);
 }
 
 .stateCard h2 {
   margin: 0;
 
-  font-size: 18px;
-
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -120,64 +109,50 @@
 
   color: var(--texto-secundario);
 
-  font-size: 12px;
+  font-size: 11px;
 }
 
 
-/* =====================================
-   CARD DE SELEÇÃO
-===================================== */
+/* =========================================================
+   SELEÇÃO DAS EQUIPES
+========================================================= */
 
 .selectionCard {
-  width: 100%;
-  max-width: 1180px;
+  width: min(100%, 1235px);
 
   display: grid;
 
   grid-template-columns:
     minmax(0, 1fr)
-    48px
+    54px
     minmax(0, 1fr);
 
   align-items: end;
 
   gap: 14px;
 
-  padding: 22px;
+  margin: 0 auto 48px;
+  padding: 0;
 
-  box-sizing: border-box;
+  background: transparent;
 
-  margin: 0 auto 20px;
+  border: none;
+  border-radius: 0;
 
-  background: var(--card);
-
-  border: 1px solid rgba(16, 37, 31, 0.08);
-
-  border-radius: 20px;
-
-  box-shadow:
-    0 14px 34px
-    rgba(0, 35, 26, 0.1);
+  box-shadow: none;
 }
-
-
-/* =====================================
-   SELECT
-===================================== */
 
 .selectGroup {
   display: flex;
-
   flex-direction: column;
 
   gap: 8px;
 }
 
 .selectGroup label {
-  color: #30453d;
+  color: #263a31;
 
-  font-size: 11px;
-
+  font-size: 10px;
   font-weight: 600;
 }
 
@@ -185,93 +160,98 @@
   width: 100%;
   height: 52px;
 
-  padding:
-    0 42px
-    0 15px;
+  padding: 0 46px 0 15px;
 
-  box-sizing: border-box;
-
-  border: 1px solid #cbd8d2;
-
-  border-radius: 11px;
+  border: 1px solid #d7c9bb;
+  border-radius: 12px;
 
   outline: none;
 
-  background: #ffffff;
+  appearance: none;
+  -webkit-appearance: none;
 
-  color: var(--texto);
+  background:
+    linear-gradient(45deg, transparent 50%, #20352d 50%),
+    linear-gradient(135deg, #20352d 50%, transparent 50%),
+    #ffffff;
+
+  background-position:
+    calc(100% - 21px) calc(50% - 2px),
+    calc(100% - 16px) calc(50% - 2px),
+    0 0;
+
+  background-size:
+    5px 5px,
+    5px 5px,
+    auto;
+
+  background-repeat: no-repeat;
+
+  color: #243830;
 
   font-family: inherit;
-
   font-size: 12px;
-
   font-weight: 500;
 
   cursor: pointer;
 
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .selectGroup select:hover:not(:disabled) {
-  border-color: #9eb5aa;
+  border-color: #bcae9f;
 }
 
 .selectGroup select:focus {
-  background: #ffffff;
-
-  border-color: var(--verde-dark);
+  border-color: #9ab5aa;
 
   box-shadow:
-    0 0 0 4px
-    rgba(0, 89, 66, 0.08);
+    0 0 0 3px
+    rgba(0, 89, 66, 0.07);
 }
 
 .selectGroup select:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
 
   cursor: not-allowed;
 }
 
 
-/* =====================================
+/* =========================================================
    TROCAR EQUIPES
-===================================== */
+========================================================= */
 
 .switchButton {
-  width: 48px;
+  width: 54px;
   height: 52px;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
   padding: 0;
 
-  border: 1px solid #cbd8d2;
-
-  border-radius: 11px;
+  border: 1px solid #d7c9bb;
+  border-radius: 12px;
 
   background: #ffffff;
 
-  color: var(--verde-dark);
+  color: var(--verde);
 
   cursor: pointer;
 
   transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
 }
 
 .switchButton:hover:not(:disabled) {
-  background: #edf6f2;
+  background: #f2f7f4;
 
-  border-color: #8daaa0;
+  border-color: #a8bdb4;
 }
 
 .switchButton:active:not(:disabled) {
@@ -285,35 +265,29 @@
 }
 
 
-/* =====================================
-   CARD PRINCIPAL
-===================================== */
+/* =========================================================
+   ÁREA PRINCIPAL DA COMPARAÇÃO
+========================================================= */
 
 .comparison {
-  width: 100%;
-  max-width: 1180px;
+  width: min(100%, 1235px);
 
   margin: 0 auto;
 
-  padding: 30px;
+  padding: 0;
 
-  box-sizing: border-box;
+  background: transparent;
 
-  background: var(--card);
+  border: none;
+  border-radius: 0;
 
-  border: 1px solid rgba(16, 37, 31, 0.08);
-
-  border-radius: 20px;
-
-  box-shadow:
-    0 14px 34px
-    rgba(0, 35, 26, 0.1);
+  box-shadow: none;
 }
 
 
-/* =====================================
-   CABEÇALHO DAS EQUIPES
-===================================== */
+/* =========================================================
+   EQUIPES
+========================================================= */
 
 .matchHeader {
   width: 100%;
@@ -323,7 +297,9 @@
   grid-template-columns:
     1fr 1fr;
 
-  gap: 40px;
+  gap: 80px;
+
+  margin-bottom: 36px;
 }
 
 .matchLeft,
@@ -335,65 +311,39 @@
   text-align: right;
 }
 
-
-/* =====================================
-   LABEL
-===================================== */
-
 .matchLabel {
-  display: inline-block;
-
-  margin-bottom: 7px;
-
-  color: #75847d;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  text-transform: uppercase;
-
-  letter-spacing: 1.4px;
+  display: none;
 }
-
-
-/* =====================================
-   NOMES
-===================================== */
 
 .matchHeader h2 {
   margin: 0;
 
-  color: var(--texto);
-
-  font-size: 22px;
+  font-size: 23px;
+  line-height: 1.2;
 
   font-weight: 700;
-
-  line-height: 1.25;
 
   letter-spacing: -0.5px;
 }
 
 .matchLeft h2 {
-  color: var(--verde-dark);
+  color: var(--verde);
 }
 
 .matchRight h2 {
-  color: #455851;
+  color: var(--rosa);
 }
 
 
-/* =====================================
-   RESUMO
-===================================== */
+/* =========================================================
+   RESUMO DA EQUIPE
+========================================================= */
 
 .teamSummary {
   display: flex;
-
   align-items: baseline;
 
-  gap: 7px;
+  gap: 6px;
 
   margin-top: 10px;
 
@@ -405,36 +355,22 @@
 }
 
 .teamSummary strong {
-  color: var(--verde-dark);
-
-  font-size: 18px;
-
-  font-weight: 700;
-}
-
-.matchRight .teamSummary strong {
-  color: #52635c;
+  display: none;
 }
 
 .teamSummary span {
-  color: #7a8982;
+  color: var(--texto-secundario);
 
-  font-size: 10px;
+  font-size: 11px;
 }
-
-
-/* =====================================
-   META
-===================================== */
 
 .matchMeta {
   display: flex;
-
   flex-wrap: wrap;
 
-  gap: 7px;
+  gap: 6px;
 
-  margin-top: 10px;
+  margin-top: 11px;
 }
 
 .matchRight .matchMeta {
@@ -442,43 +378,41 @@
 }
 
 .matchMeta span {
-  padding: 5px 9px;
+  padding: 5px 10px;
 
-  border: 1px solid #dce5e0;
-
+  border: none;
   border-radius: 999px;
 
-  background: #f2f6f4;
+  background: #dff3eb;
 
-  color: #5f7068;
+  color: #007057;
 
   font-size: 9px;
+  font-weight: 600;
+}
 
-  font-weight: 500;
+.matchRight .matchMeta span {
+  background: var(--rosa-claro);
+
+  color: var(--rosa);
 }
 
 
-/* =====================================
+/* =========================================================
    DIVISOR
-===================================== */
+========================================================= */
 
 .divider {
-  width: 100%;
-  height: 1px;
-
-  margin: 26px 0;
-
-  background: var(--linha);
+  display: none;
 }
 
 
-/* =====================================
+/* =========================================================
    ESTATÍSTICAS
-===================================== */
+========================================================= */
 
 .stats {
   display: flex;
-
   flex-direction: column;
 
   gap: 22px;
@@ -489,80 +423,78 @@
 }
 
 
-/* =====================================
-   VALORES
-===================================== */
+/* =========================================================
+   VALORES E NOME
+========================================================= */
 
 .statValues {
   display: grid;
 
   grid-template-columns:
-    minmax(60px, 1fr)
+    minmax(70px, 1fr)
     auto
-    minmax(60px, 1fr);
+    minmax(70px, 1fr);
 
   align-items: center;
 
-  gap: 14px;
+  gap: 18px;
 
-  margin-bottom: 9px;
+  margin-bottom: 8px;
 }
 
 .valueA,
 .valueB {
   font-size: 14px;
-
   font-weight: 700;
 }
 
 .valueA {
-  color: var(--verde-dark);
+  color: var(--verde);
 
   text-align: left;
 }
 
 .valueB {
-  color: #52635c;
+  color: var(--rosa);
 
   text-align: right;
 }
 
 .statName {
-  min-width: 190px;
+  min-width: 180px;
 
-  color: #65756e;
+  color: #737a75;
 
   font-size: 10px;
-
   font-weight: 500;
 
   text-align: center;
 }
 
 
-/* =====================================
+/* =========================================================
    BARRAS
-===================================== */
+========================================================= */
 
 .barArea {
   width: 100%;
-  height: 9px;
+  height: 7px;
 
   display: grid;
 
   grid-template-columns:
     1fr
-    2px
+    6px
     1fr;
 
-  gap: 6px;
+  gap: 0;
 
   align-items: center;
 }
 
 .barSideLeft,
 .barSideRight {
-  height: 9px;
+  height: 7px;
 
   position: relative;
 
@@ -570,25 +502,29 @@
 
   border-radius: 999px;
 
-  background: #e8eeeb;
+  background: var(--trilho);
 }
 
 .barSideLeft {
   display: flex;
 
   justify-content: flex-end;
+
+  border-radius: 999px 0 0 999px;
 }
 
 .barSideRight {
   display: flex;
 
   justify-content: flex-start;
+
+  border-radius: 0 999px 999px 0;
 }
 
 .barA {
   height: 100%;
 
-  background: var(--verde-dark);
+  background: var(--verde);
 
   border-radius: 999px;
 
@@ -598,7 +534,7 @@
 .barB {
   height: 100%;
 
-  background: #9eada6;
+  background: var(--rosa);
 
   border-radius: 999px;
 
@@ -606,45 +542,47 @@
 }
 
 .barCenter {
-  width: 2px;
-  height: 13px;
+  width: 6px;
+  height: 7px;
 
-  border-radius: 4px;
-
-  background: #c3cec8;
+  background: var(--creme);
 }
 
 
-/* =====================================
+/* =========================================================
    RESPONSIVO
-===================================== */
+========================================================= */
 
 @media (max-width: 900px) {
   .page {
+    width: calc(100% + 48px);
+    min-height: calc(100vh + 48px);
+
+    margin: -24px;
+
     padding:
-      30px 24px
-      42px;
+      38px
+      24px
+      50px;
   }
 
   .pageHeader h1 {
-    font-size: 34px;
+    font-size: 38px;
   }
 
-  .comparison {
-    padding: 24px;
-  }
-
-  .matchHeader h2 {
-    font-size: 20px;
+  .matchHeader {
+    gap: 50px;
   }
 }
 
 
-@media (max-width: 800px) {
+@media (max-width: 760px) {
   .selectionCard {
     grid-template-columns: 1fr;
 
-    gap: 12px;
+    gap: 11px;
+
+    margin-bottom: 36px;
   }
 
   .switchButton {
@@ -652,38 +590,42 @@
   }
 
   .matchHeader {
-    gap: 24px;
+    gap: 26px;
   }
 }
 
 
 @media (max-width: 600px) {
   .page {
+    width: calc(100% + 28px);
+    min-height: calc(100vh + 28px);
+
+    margin: -14px;
+
     padding:
-      24px 14px
-      32px;
+      28px
+      15px
+      40px;
   }
 
   .pageHeader {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
 
   .pageHeader h1 {
-    font-size: 30px;
+    font-size: 31px;
   }
 
-  .comparison {
-    padding: 20px 16px;
-  }
-
-  .selectionCard {
-    padding: 17px;
+  .pageHeader p {
+    font-size: 11px;
   }
 
   .matchHeader {
     grid-template-columns: 1fr;
 
-    gap: 20px;
+    gap: 18px;
+
+    margin-bottom: 30px;
   }
 
   .matchRight {
@@ -697,9 +639,9 @@
 
   .statValues {
     grid-template-columns:
-      52px
+      56px
       1fr
-      52px;
+      56px;
 
     gap: 8px;
   }
@@ -720,25 +662,16 @@
 @media (max-width: 420px) {
   .page {
     padding:
-      20px 10px
-      28px;
+      24px
+      11px
+      34px;
   }
 
-  .selectionCard {
-    padding: 14px;
-
-    border-radius: 16px;
+  .matchHeader h2 {
+    font-size: 20px;
   }
 
-  .comparison {
-    padding: 18px 13px;
-
-    border-radius: 16px;
-  }
-
-  .stateCard {
-    padding: 24px 16px;
-
-    border-radius: 16px;
+  .stats {
+    gap: 19px;
   }
 }

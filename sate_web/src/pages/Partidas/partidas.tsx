@@ -429,9 +429,11 @@ export default function Partidas() {
 
 
   const [
-    temporadaFiltro,
-    setTemporadaFiltro,
-  ] = useState('todas');
+    abaStatus,
+    setAbaStatus,
+  ] = useState<
+    'todas' | 'proximas' | 'finalizadas' | 'analise'
+  >('todas');
 
 
   const [
@@ -676,37 +678,6 @@ export default function Partidas() {
 
     }, [equipes]);
 
-
-  /* ============================================================
-     TEMPORADAS
-  ============================================================ */
-
-  const temporadas =
-    useMemo(() => {
-      const lista =
-        new Set<string>();
-
-
-      partidas.forEach(
-        (partida) => {
-          lista.add(
-            partida.temporada,
-          );
-        },
-      );
-
-
-      return Array.from(
-        lista,
-      ).sort(
-        (a, b) =>
-          Number(b) -
-          Number(a),
-      );
-
-    }, [partidas]);
-
-
   /* ============================================================
      FILTROS
   ============================================================ */
@@ -714,44 +685,51 @@ export default function Partidas() {
   const partidasFiltradas =
     partidas.filter(
       (partida) => {
-
         const equipeOk =
-          equipeFiltro ===
-            'todas' ||
-          String(
-            partida.equipeId,
-          ) === equipeFiltro;
-
+          equipeFiltro === 'todas' ||
+          String(partida.equipeId) === equipeFiltro;
 
         const modalidadeOk =
-          modalidadeFiltro ===
-            'modalidades' ||
-          partida.modalidade ===
-            modalidadeFiltro;
-
+          modalidadeFiltro === 'modalidades' ||
+          partida.modalidade === modalidadeFiltro;
 
         const dataOk =
           dataFiltro === '' ||
-          partida.dataOriginal
-            .slice(0, 10) ===
-            dataFiltro;
+          partida.dataOriginal.slice(0, 10) === dataFiltro;
 
-
-        const temporadaOk =
-          temporadaFiltro ===
-            'todas' ||
-          partida.temporada ===
-            temporadaFiltro;
-
+        const statusOk =
+          abaStatus === 'todas' ||
+          (abaStatus === 'proximas' &&
+            partida.tipo === 'pendente') ||
+          (abaStatus === 'finalizadas' &&
+            partida.tipo === 'analisada') ||
+          (abaStatus === 'analise' &&
+            partida.tipo === 'analise');
 
         return (
           equipeOk &&
           modalidadeOk &&
           dataOk &&
-          temporadaOk
+          statusOk
         );
       },
     );
+
+  const contadores = useMemo(
+    () => ({
+      todas: partidas.length,
+      proximas: partidas.filter(
+        (partida) => partida.tipo === 'pendente',
+      ).length,
+      finalizadas: partidas.filter(
+        (partida) => partida.tipo === 'analisada',
+      ).length,
+      analise: partidas.filter(
+        (partida) => partida.tipo === 'analise',
+      ).length,
+    }),
+    [partidas],
+  );
 
 
   /* ============================================================
@@ -1065,331 +1043,231 @@ export default function Partidas() {
 
 
   return (
-    <div
-      className={
-        styles.page
-      }
-    >
+    <div className={styles.page}>
+      <div className={styles.pageInner}>
+        <div className={styles.titleRow}>
+          <div>
+            <h2>
+              Suas <em>partidas.</em>
+            </h2>
 
-      <div
-        className={
-          styles.titleRow
-        }
-      >
-        <div>
-          <h2>
-            Suas{' '}
-            <em>partidas.</em>
-          </h2>
+            <p>
+              Organize jogos, resultados e análises.
+            </p>
+          </div>
 
-          <p>
-            Gerencie e acompanhe
-            as partidas das suas equipes.
-          </p>
+          <button
+            type="button"
+            className={styles.newButton}
+            onClick={abrirModal}
+          >
+            <span aria-hidden="true">+</span>
+            Nova partida
+          </button>
         </div>
 
-
-        <button
-          type="button"
-          className={
-            styles.newButton
-          }
-          onClick={
-            abrirModal
-          }
+        <div
+          className={styles.statusTabs}
+          role="tablist"
+          aria-label="Filtrar partidas por status"
         >
-          + Nova Partida
-        </button>
-      </div>
+          <button
+            type="button"
+            className={
+              abaStatus === 'todas'
+                ? styles.statusTabActive
+                : styles.statusTab
+            }
+            onClick={() => setAbaStatus('todas')}
+          >
+            Todas
+            <small>{contadores.todas}</small>
+          </button>
 
+          <button
+            type="button"
+            className={
+              abaStatus === 'proximas'
+                ? styles.statusTabActive
+                : styles.statusTab
+            }
+            onClick={() => setAbaStatus('proximas')}
+          >
+            Pendentes
+            <small>{contadores.proximas}</small>
+          </button>
 
-      <div
-        className={
-          styles.filters
-        }
-      >
+          <button
+            type="button"
+            className={
+              abaStatus === 'finalizadas'
+                ? styles.statusTabActive
+                : styles.statusTab
+            }
+            onClick={() => setAbaStatus('finalizadas')}
+          >
+            Finalizadas
+            <small>{contadores.finalizadas}</small>
+          </button>
 
-        <select
-          value={
-            equipeFiltro
-          }
-          onChange={(event) =>
-            setEquipeFiltro(
-              event.target.value,
-            )
-          }
-        >
-          <option value="todas">
-            Todas as equipes
-          </option>
+          <button
+            type="button"
+            className={
+              abaStatus === 'analise'
+                ? styles.statusTabActive
+                : styles.statusTab
+            }
+            onClick={() => setAbaStatus('analise')}
+          >
+            Em análise
+            <small>{contadores.analise}</small>
+          </button>
+        </div>
 
-          {equipes.map(
-            (equipe) => (
+        <div className={styles.filters}>
+          <select
+            value={equipeFiltro}
+            onChange={(event) =>
+              setEquipeFiltro(event.target.value)
+            }
+          >
+            <option value="todas">
+              Todas as equipes
+            </option>
+
+            {equipes.map((equipe) => (
               <option
-                key={
-                  equipe.id
-                }
-                value={
-                  String(
-                    equipe.id,
-                  )
-                }
+                key={equipe.id}
+                value={String(equipe.id)}
               >
-                {
-                  equipe.nome
-                }
+                {equipe.nome}
               </option>
-            ),
-          )}
-        </select>
+            ))}
+          </select>
 
+          <select
+            value={modalidadeFiltro}
+            onChange={(event) =>
+              setModalidadeFiltro(event.target.value)
+            }
+          >
+            <option value="modalidades">
+              Todas as modalidades
+            </option>
 
-        <select
-          value={
-            modalidadeFiltro
-          }
-          onChange={(event) =>
-            setModalidadeFiltro(
-              event.target.value,
-            )
-          }
-        >
-          <option value="modalidades">
-            Todas as modalidades
-          </option>
-
-          {modalidades.map(
-            (modalidade) => (
+            {modalidades.map((modalidade) => (
               <option
-                key={
-                  modalidade
-                }
-                value={
-                  modalidade
-                }
+                key={modalidade}
+                value={modalidade}
               >
-                {
-                  modalidade
-                }
+                {modalidade}
               </option>
-            ),
-          )}
-        </select>
+            ))}
+          </select>
 
+          <div className={styles.dateInput}>
+            <input
+              type="date"
+              value={dataFiltro}
+              onChange={(event) =>
+                setDataFiltro(event.target.value)
+              }
+            />
 
-        <input
-          type="date"
-          value={
-            dataFiltro
-          }
-          onChange={(event) =>
-            setDataFiltro(
-              event.target.value,
-            )
-          }
-        />
-
-
-        <select
-          value={
-            temporadaFiltro
-          }
-          onChange={(event) =>
-            setTemporadaFiltro(
-              event.target.value,
-            )
-          }
-        >
-          <option value="todas">
-            Todas as temporadas
-          </option>
-
-          {temporadas.map(
-            (temporada) => (
-              <option
-                key={
-                  temporada
-                }
-                value={
-                  temporada
-                }
+            {dataFiltro && (
+              <button
+                type="button"
+                className={styles.clearDate}
+                onClick={() => setDataFiltro('')}
+                aria-label="Limpar data"
               >
-                {
-                  temporada
-                }
-              </option>
-            ),
-          )}
-        </select>
+                ×
+              </button>
+            )}
+          </div>
+        </div>
 
-      </div>
+        <div className={styles.tableContainer}>
+          <table>
+            <thead>
+              <tr>
+                <th>Confronto</th>
+                <th>Modalidade</th>
+                <th>Data</th>
+                <th>Resultado</th>
+                <th>Status</th>
+              </tr>
+            </thead>
 
-
-      <div
-        className={
-          styles.tableContainer
-        }
-      >
-
-        <table>
-          <thead>
-            <tr>
-              <th>
-                Confronto
-              </th>
-
-              <th>
-                Modalidade
-              </th>
-
-              <th>
-                Data
-              </th>
-
-              <th>
-                Resultado
-              </th>
-
-              <th>
-                Status
-              </th>
-
-              <th />
-            </tr>
-          </thead>
-
-
-          <tbody>
-            {partidasFiltradas.map(
-              (partida) => (
+            <tbody>
+              {partidasFiltradas.map((partida) => (
                 <tr
-                  key={
-                    partida.id
-                  }
+                  key={partida.id}
+                  className={styles.tableRow}
+                  onClick={() => abrirDetalhes(partida)}
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (
+                      event.key === 'Enter' ||
+                      event.key === ' '
+                    ) {
+                      event.preventDefault();
+                      abrirDetalhes(partida);
+                    }
+                  }}
                 >
-                  <td
-                    className={
-                      styles.confronto
-                    }
-                  >
-                    {
-                      partida.confronto
-                    }
+                  <td className={styles.confronto}>
+                    {partida.confronto}
                   </td>
 
+                  <td>{partida.modalidade || '—'}</td>
 
-                  <td>
-                    {
-                      partida.modalidade
-                    }
+                  <td>{partida.data}</td>
+
+                  <td className={styles.resultado}>
+                    {partida.resultado}
                   </td>
-
-
-                  <td>
-                    {
-                      partida.data
-                    }
-                  </td>
-
-
-                  <td
-                    className={
-                      styles.resultado
-                    }
-                  >
-                    {
-                      partida.resultado
-                    }
-                  </td>
-
 
                   <td>
                     <span
-                      className={
-                        styles[
-                          partida.tipo
-                        ]
-                      }
+                      className={`${styles.status} ${
+                        styles[partida.tipo]
+                      }`}
                     >
-                      {
-                        partida.status
-                      }
+                      <i aria-hidden="true" />
+                      {partida.status}
                     </span>
                   </td>
-
-
-                  <td>
-                    <button
-                      type="button"
-                      className={
-                        styles.details
-                      }
-                      onClick={() =>
-                        abrirDetalhes(
-                          partida,
-                        )
-                      }
-                    >
-                      ›
-                    </button>
-                  </td>
                 </tr>
-              ),
+              ))}
+            </tbody>
+          </table>
+
+          {carregando && (
+            <div className={styles.empty}>
+              <h3>Carregando partidas...</h3>
+            </div>
+          )}
+
+          {!carregando && erro && (
+            <div className={styles.empty}>
+              <h3>Erro ao carregar</h3>
+              <p>{erro}</p>
+            </div>
+          )}
+
+          {!carregando &&
+            !erro &&
+            partidasFiltradas.length === 0 && (
+              <div className={styles.empty}>
+                <h3>Nenhuma partida encontrada</h3>
+                <p>
+                  Tente alterar os filtros ou cadastre
+                  uma nova partida.
+                </p>
+              </div>
             )}
-          </tbody>
-        </table>
-
-
-        {carregando && (
-          <div
-            className={
-              styles.empty
-            }
-          >
-            <h3>
-              Carregando partidas...
-            </h3>
-          </div>
-        )}
-
-
-        {!carregando &&
-          erro && (
-            <div
-              className={
-                styles.empty
-              }
-            >
-              <h3>
-                Erro ao carregar
-              </h3>
-
-              <p>
-                {erro}
-              </p>
-            </div>
-          )}
-
-
-        {!carregando &&
-          !erro &&
-          partidasFiltradas.length ===
-            0 && (
-            <div
-              className={
-                styles.empty
-              }
-            >
-              <h3>
-                Nenhuma partida encontrada
-              </h3>
-
-              <p>
-                Cadastre uma nova partida.
-              </p>
-            </div>
-          )}
-
+        </div>
       </div>
 
 

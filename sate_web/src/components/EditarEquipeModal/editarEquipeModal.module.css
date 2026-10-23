@@ -1,30 +1,22 @@
-
-/* =====================================
-   OVERLAY
-   Permite rolar até o final do modal
-===================================== */
-
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+
+  z-index: 2000;
 
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 
-  padding: 24px 16px;
+  padding: 16px;
+
   box-sizing: border-box;
 
-  background: rgba(0, 35, 25, 0.64);
-  backdrop-filter: blur(5px);
+  overflow: hidden;
 
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
+  background: rgba(0, 44, 33, 0.58);
 
-  scrollbar-width: thin;
-  scrollbar-color: #bdcfc4 transparent;
+  backdrop-filter: blur(7px);
 }
 
 
@@ -33,29 +25,23 @@
 ===================================== */
 
 .modal {
-  position: relative;
-
-  width: min(100%, 1040px);
-  height: auto;
-  max-height: none;
-  min-height: 0;
-  flex-shrink: 0;
+  width: min(1080px, 100%);
 
   display: flex;
   flex-direction: column;
 
-  margin: auto 0;
+  overflow: hidden;
 
-  overflow: visible;
+  border-radius: 26px;
 
-  background: #f0f5f2;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 18px;
+  background: #dfe7e3;
 
-  box-shadow: 0 24px 70px rgba(0, 35, 25, 0.25);
+  color: #273c33;
 
-  color: #203b30;
-  font-family: 'Inter', 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif;
+
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.28);
 }
 
 
@@ -64,104 +50,96 @@
 ===================================== */
 
 .header {
-  flex-shrink: 0;
-
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
   gap: 20px;
 
-  padding: 22px 26px 18px;
+  padding: 22px 30px 16px;
 
-  border-bottom: 1px solid #d5e2db;
-  border-radius: 18px 18px 0 0;
-
-  background: #e8f0eb;
+  border-bottom: 1px solid #c8d4ce;
 }
 
 .eyebrow {
   display: block;
 
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 
-  color: #10845d;
-  font-size: 10px;
-  font-weight: 800;
+  color: #10845f;
+
+  font-size: 11px;
+  font-weight: 700;
+
   letter-spacing: 1.2px;
+
+  text-transform: uppercase;
 }
 
 .header h2 {
   margin: 0;
 
-  color: #193b2e;
-  font-size: 25px;
-  font-weight: 750;
-  line-height: 1.25;
+  color: #24372f;
+
+  font-size: 31px;
+  font-weight: 700;
+
+  line-height: 1.1;
 }
 
 .header p {
-  max-width: 420px;
+  margin: 5px 0 0;
 
-  margin: 7px 0 0;
+  color: #6b7b74;
 
-  color: #687d72;
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: 13px;
 }
 
 .closeButton {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
+
   flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  padding: 0;
+  border: none;
 
-  border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: 11px;
 
   background: transparent;
-  color: #61776b;
+
+  color: #6f7f78;
 
   cursor: pointer;
 
   transition:
     background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
+    color 0.2s ease;
 }
 
 .closeButton:hover {
-  background: #d8e8df;
-  border-color: #c8ddd1;
-  color: #087b5b;
-}
+  background: rgba(0, 0, 0, 0.05);
 
-.closeButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  color: #31483e;
 }
 
 
 /* =====================================
    CONTEÚDO
-   Não limita a altura do formulário
 ===================================== */
 
 .content {
-  flex: initial;
-  min-height: 0;
-  min-width: 0;
-
   display: grid;
-  grid-template-columns: 190px minmax(0, 1fr);
-  align-items: start;
-  gap: 25px;
 
-  padding: 22px 26px;
+  grid-template-columns:
+    235px 1fr;
+
+  gap: 26px;
+
+  padding: 20px 30px 16px;
 
   box-sizing: border-box;
 
@@ -170,94 +148,88 @@
 
 
 /* =====================================
-   COLUNA DA IMAGEM
+   IMAGEM
 ===================================== */
 
 .imageColumn {
-  min-width: 0;
-
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+
   gap: 10px;
 }
 
-
-/* =====================================
-   IMAGEM DA EQUIPE
-===================================== */
-
 .imagePreview {
-  position: relative;
-
   width: 100%;
-  height: 190px;
-  flex-shrink: 0;
+  height: 220px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-  box-sizing: border-box;
   overflow: hidden;
 
-  border: 1px dashed #9bb9a9;
-  border-radius: 15px;
+  padding: 0;
 
-  background: #dceae1;
-  color: #4b6758;
+  border: 1px dashed #9eb3aa;
+
+  border-radius: 18px;
+
+  background: #dbe5e0;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.imagePreview:hover {
+  border-color: #16a875;
+
+  background: #d5e2dc;
 }
 
 .imagePreview img {
-  position: absolute;
-  inset: 0;
-
-  display: block;
-
   width: 100%;
   height: 100%;
 
+  display: block;
+
   object-fit: cover;
-  object-position: center;
 }
 
 .imageEmpty {
+  width: 100%;
+  height: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 9px;
 
-  padding: 15px;
+  gap: 7px;
 
-  text-align: center;
+  color: #586a62;
 }
 
 .cameraCircle {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #c3ddce;
   border-radius: 50%;
 
-  background: #cbe2d3;
-  color: #087b5b;
+  background: #c7ddd3;
+
+  color: #0b8a62;
 }
 
 .imageEmpty strong {
-  color: #365746;
   font-size: 12px;
-  font-weight: 700;
 }
 
 .imageEmpty span {
-  color: #82978a;
+  color: #85938c;
+
   font-size: 10px;
 }
 
@@ -265,32 +237,27 @@
   display: none;
 }
 
-
-/* =====================================
-   BOTÃO DE ALTERAR IMAGEM
-===================================== */
-
 .changeImage {
-  width: 100%;
-  min-height: 38px;
+  height: 43px;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 7px;
 
-  padding: 8px 12px;
-  box-sizing: border-box;
+  border: 1px solid #c5d3cc;
 
-  border: 1px solid #c9dacf;
-  border-radius: 9px;
+  border-radius: 12px;
 
-  background: #f8fbf9;
-  color: #426151;
+  background: #edf3f0;
+
+  color: #566961;
 
   font-family: inherit;
-  font-size: 11px;
-  font-weight: 600;
+
+  font-size: 12px;
+  font-weight: 500;
 
   cursor: pointer;
 
@@ -299,14 +266,10 @@
     border-color 0.2s ease;
 }
 
-.changeImage:hover:not(:disabled) {
-  border-color: #16a875;
-  background: #e4f2e9;
-}
+.changeImage:hover {
+  border-color: #9fbab0;
 
-.changeImage:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
+  background: #f5f8f6;
 }
 
 
@@ -315,46 +278,48 @@
 ===================================== */
 
 .form {
-  min-width: 0;
-
   display: flex;
   flex-direction: column;
-  gap: 17px;
+
+  gap: 13px;
 }
 
 .field {
-  min-width: 0;
-
   display: flex;
   flex-direction: column;
-  gap: 7px;
+
+  gap: 6px;
 }
 
 .field label {
-  color: #40594b;
+  color: #44574f;
+
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .field input,
 .field select {
   width: 100%;
-  min-width: 0;
-  height: 43px;
+  height: 50px;
 
-  padding: 0 12px;
+  padding: 0 15px;
+
   box-sizing: border-box;
 
-  border: 1px solid #cbdad1;
-  border-radius: 9px;
+  border: 1px solid #c6d4cd;
 
-  outline: none;
+  border-radius: 12px;
 
-  background: #fbfdfb;
-  color: #2c4336;
+  background: #f9fbfa;
+
+  color: #2d3d36;
 
   font-family: inherit;
-  font-size: 12px;
+
+  font-size: 13px;
+
+  outline: none;
 
   transition:
     border-color 0.2s ease,
@@ -363,491 +328,56 @@
 }
 
 .field input::placeholder {
-  color: #9aa99f;
+  color: #8c9892;
 }
 
 .field input:focus,
 .field select:focus {
   border-color: #16a875;
+
+  box-shadow:
+    0 0 0 3px rgba(22, 168, 117, 0.1);
+
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
 }
-
-.field input:disabled,
-.field select:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.field select {
-  cursor: pointer;
-}
-
-
-/* =====================================
-   DUAS COLUNAS
-===================================== */
 
 .twoColumns {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 13px;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 14px;
 }
 
 
 /* =====================================
-   BUSCA DE ATLETAS
-===================================== */
-
-.searchAthlete {
-  min-width: 0;
-  height: 43px;
-
-  display: flex;
-  align-items: center;
-  gap: 9px;
-
-  padding: 0 12px;
-  box-sizing: border-box;
-
-  border: 1px solid #cbdad1;
-  border-radius: 10px;
-
-  background: #fbfdfb;
-  color: #758a7d;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.searchAthlete:focus-within {
-  border-color: #16a875;
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.1);
-}
-
-.searchAthlete > svg {
-  flex-shrink: 0;
-}
-
-.searchAthlete input {
-  flex: 1;
-
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-
-  padding: 0;
-
-  border: none;
-  border-radius: 0;
-  outline: none;
-  box-shadow: none;
-
-  background: transparent;
-  color: #2c4336;
-
-  font-family: inherit;
-  font-size: 12px;
-}
-
-.searchAthlete input:focus {
-  border: none;
-  box-shadow: none;
-  background: transparent;
-}
-
-.searchAthlete button {
-  width: 25px;
-  height: 25px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-
-  border: none;
-  border-radius: 6px;
-
-  background: transparent;
-  color: #718679;
-
-  cursor: pointer;
-}
-
-.searchAthlete button:hover {
-  background: #e3eee7;
-  color: #087b5b;
-}
-
-
-/* =====================================
-   LISTA DE ATLETAS
-===================================== */
-
-.athletesList {
-  width: 100%;
-  max-height: 200px;
-  min-height: 58px;
-
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  border: 1px solid #d4e1d8;
-  border-radius: 11px;
-
-  background: #fbfdfb;
-
-  scrollbar-width: thin;
-  scrollbar-color: #bdcfc4 transparent;
-}
-
-.athletesList::-webkit-scrollbar {
-  width: 6px;
-}
-
-.athletesList::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: #bdcfc4;
-}
-
-.athleteItem {
-  width: 100%;
-  min-height: 62px;
-
-  display: flex;
-  align-items: center;
-  gap: 11px;
-
-  padding: 9px 12px;
-  box-sizing: border-box;
-
-  border: none;
-  border-bottom: 1px solid #e4ece7;
-
-  background: transparent;
-  color: #30483a;
-
-  text-align: left;
-  font-family: inherit;
-
-  cursor: pointer;
-
-  transition: background 0.15s ease;
-}
-
-.athleteItem:last-child {
-  border-bottom: none;
-}
-
-.athleteItem:hover {
-  background: #edf6f0;
-}
-
-.athleteItem:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.athleteSelected {
-  background: #e4f3e9;
-}
-
-.athleteSelected:hover {
-  background: #d9eddf;
-}
-
-.athleteAvatar {
-  width: 38px;
-  height: 38px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  overflow: hidden;
-
-  border: 1px solid #d1e2d6;
-  border-radius: 50%;
-
-  background: #e1eee5;
-  color: #16835e;
-}
-
-.athleteAvatar img {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-}
-
-.athleteInfo {
-  flex: 1;
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.athleteInfo strong {
-  overflow: hidden;
-
-  color: #2c4436;
-  font-size: 12px;
-  font-weight: 650;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.athleteInfo span {
-  overflow: hidden;
-
-  color: #829389;
-  font-size: 10px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.athleteCheck {
-  width: 23px;
-  height: 23px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid #cbdad1;
-  border-radius: 7px;
-
-  background: #ffffff;
-  color: #ffffff;
-}
-
-.athleteSelected .athleteCheck {
-  border-color: #16a875;
-  background: #16a875;
-}
-
-.emptyAthletes {
-  min-height: 90px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-
-  padding: 15px;
-
-  color: #829389;
-  text-align: center;
-}
-
-.emptyAthletes span {
-  font-size: 11px;
-}
-
-
-/* =====================================
-   PRÓXIMA PARTIDA
-===================================== */
-
-.matchSection {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-
-  padding: 15px;
-  box-sizing: border-box;
-
-  border: 1px solid #cbded1;
-  border-radius: 13px;
-
-  background: #e3eee7;
-}
-
-.matchSectionHeader {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.matchSectionIcon {
-  width: 37px;
-  height: 37px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid #c4ddcd;
-  border-radius: 10px;
-
-  background: #d1e6d8;
-  color: #087b5b;
-}
-
-.matchSectionHeader > div:last-child {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.matchSectionHeader strong {
-  color: #294b38;
-  font-size: 12px;
-  font-weight: 750;
-}
-
-.matchSectionHeader span {
-  color: #72877a;
-  font-size: 10px;
-  line-height: 1.4;
-}
-
-
-/* =====================================
-   DATA E HORÁRIO
-===================================== */
-
-.dateTimeGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.dateInputWrapper {
-  width: 100%;
-  min-width: 0;
-  height: 43px;
-
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  padding: 0 10px;
-  box-sizing: border-box;
-
-  border: 1px solid #cbdad1;
-  border-radius: 9px;
-
-  background: #fbfdfb;
-  color: #087b5b;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.dateInputWrapper:focus-within {
-  border-color: #16a875;
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.1);
-}
-
-.dateInputWrapper svg {
-  flex-shrink: 0;
-}
-
-.dateInputWrapper input {
-  flex: 1;
-
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-
-  padding: 0;
-
-  border: none;
-  outline: none;
-  box-shadow: none;
-
-  background: transparent;
-  color: #30483a;
-
-  font-family: inherit;
-  font-size: 11px;
-}
-
-.dateInputWrapper input:focus {
-  border: none;
-  box-shadow: none;
-}
-
-.dateInputWrapper input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-
-/* =====================================
-   PRÉVIA DA PARTIDA
-===================================== */
-
-.matchPreview {
-  min-width: 0;
-
-  display: flex;
-  align-items: center;
-  gap: 9px;
-
-  padding: 11px;
-
-  border: 1px solid #c9dfd0;
-  border-radius: 9px;
-
-  background: #d6e8dc;
-  color: #087b5b;
-}
-
-.matchPreview > svg {
-  flex-shrink: 0;
-}
-
-.matchPreview span {
-  min-width: 0;
-
-  color: #294b38;
-  font-size: 11px;
-  line-height: 1.5;
-
-  overflow-wrap: anywhere;
-}
-
-
-/* =====================================
-   CORES DA EQUIPE
+   CORES
 ===================================== */
 
 .colorsRow {
-  min-width: 0;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  gap: 16px;
+
   flex-wrap: wrap;
-  gap: 12px;
 }
 
 .colorOptions {
   display: flex;
   align-items: center;
+
+  gap: 10px;
+
   flex-wrap: wrap;
-  gap: 9px;
 }
 
 .colorButton {
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
+
   flex-shrink: 0;
 
   display: flex;
@@ -856,93 +386,207 @@
 
   padding: 0;
 
-  border: 2px solid transparent;
+  border: none;
+
   border-radius: 50%;
 
   color: #ffffff;
 
   cursor: pointer;
 
-  box-shadow: 0 2px 5px rgba(26, 61, 43, 0.13);
+  box-shadow:
+    0 3px 9px rgba(0, 0, 0, 0.13);
 
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease;
 }
 
-.colorButton:hover:not(:disabled) {
-  transform: scale(1.08);
-}
-
-.colorButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.colorButton:hover {
+  transform: scale(1.06);
 }
 
 .colorSelected {
-  border-color: #ffffff;
-  box-shadow: 0 0 0 2px #245d43;
-}
+  outline: 3px solid #ffffff;
 
-.selectedColorBox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  padding: 7px 10px;
-
-  border: 1px solid #d0e0d5;
-  border-radius: 9px;
-
-  background: #edf5ef;
-
-  color: #385544;
-  font-size: 10px;
-  font-weight: 750;
-}
-
-.selectedColorPreview {
-  width: 19px;
-  height: 19px;
-  flex-shrink: 0;
-
-  display: inline-block;
-
-  border: 2px solid #ffffff;
-  border-radius: 50%;
-
-  box-shadow: 0 1px 4px rgba(25, 55, 40, 0.15);
+  box-shadow:
+    0 0 0 2px #1a5a46,
+    0 3px 9px rgba(0, 0, 0, 0.13);
 }
 
 
 /* =====================================
-   PRÉVIA DA EQUIPE
+   RGB PERSONALIZADO
 ===================================== */
 
-.preview {
-  min-width: 0;
+.rgbButton {
+  position: relative;
+
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.rgbButton input {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+
+  cursor: pointer;
+}
+
+.rgbIconOuter {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      #ff5f57,
+      #ffad3d,
+      #ffe45d,
+      #55d874,
+      #34c7f4,
+      #5d77ff,
+      #b45aff,
+      #ff5f57
+    );
+
+  box-shadow:
+    0 3px 9px rgba(0, 0, 0, 0.16);
+
+  transition:
+    transform 0.18s ease;
+}
+
+.rgbButton:hover .rgbIconOuter {
+  transform: scale(1.07);
+}
+
+.rgbIconInner {
+  width: 29px;
+  height: 29px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #ffffff;
+
+  border-radius: 50%;
+
+  background: #005b42;
+
+  color: #ffffff;
+}
+
+
+/* =====================================
+   COR SELECIONADA
+===================================== */
+
+.selectedColorBox {
+  min-width: 185px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  padding: 0 10px;
+
+  box-sizing: border-box;
+
+  border-radius: 10px;
+
+  background: #d1dbd6;
+}
+
+.selectedColorBox span {
+  margin-right: auto;
+
+  color: #7b8883;
+
+  font-size: 10px;
+}
+
+.selectedColorBox strong {
+  color: #41524a;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.selectedColorPreview {
+  width: 22px;
+  height: 22px;
+
+  flex-shrink: 0;
+
+  border: 2px solid #ffffff;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =====================================
+   PRÉVIA
+===================================== */
+
+.preview {
+  display: flex;
+  align-items: center;
+
   gap: 12px;
+
+  margin: 0 30px 14px;
 
   padding: 12px 15px;
 
-  border: 1px solid #d0e0d5;
-  border-radius: 12px;
+  box-sizing: border-box;
 
-  background: #e0ece4;
+  border-radius: 14px;
+
+  background: #d3ddd8;
 }
 
 .previewColor {
-  width: 43px;
-  height: 43px;
+  width: 48px;
+  height: 48px;
+
   flex-shrink: 0;
 
-  border: 3px solid rgba(255, 255, 255, 0.8);
-  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  box-shadow: 0 3px 8px rgba(25, 55, 40, 0.12);
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .preview > div:last-child {
@@ -950,31 +594,38 @@
 
   display: flex;
   flex-direction: column;
-  gap: 4px;
 }
 
 .preview span {
-  color: #758a7c;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
+  color: #8a9891;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.7px;
+
+  text-transform: uppercase;
 }
 
 .preview strong {
   overflow: hidden;
 
-  color: #254532;
-  font-size: 13px;
-  font-weight: 750;
-  text-overflow: ellipsis;
+  color: #2b3b34;
+
+  font-size: 14px;
+  font-weight: 700;
+
   white-space: nowrap;
+
+  text-overflow: ellipsis;
 }
 
 .preview small {
-  color: #687e70;
+  margin-top: 1px;
+
+  color: #71817a;
+
   font-size: 10px;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
 }
 
 
@@ -983,296 +634,170 @@
 ===================================== */
 
 .footer {
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-
-  padding: 14px 26px;
-
-  border-top: 1px solid #d1ded6;
-  border-radius: 0 0 18px 18px;
-
-  background: #e8f0eb;
-}
-
-.footer > div:first-child {
-  min-width: 0;
-}
-
-.footerActions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+
   gap: 10px;
+
+  padding: 15px 30px 18px;
+
+  border-top: 1px solid #c8d4ce;
 }
 
 .cancelButton,
-.saveButton,
-.deleteButton {
-  min-height: 41px;
+.saveButton {
+  height: 45px;
 
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 8px;
 
-  padding: 0 16px;
-  box-sizing: border-box;
+  padding: 0 19px;
 
-  border-radius: 9px;
+  border-radius: 12px;
 
   font-family: inherit;
+
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
 
   cursor: pointer;
 
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
-    transform 0.2s ease,
-    opacity 0.2s ease;
+    transform 0.2s ease;
 }
 
 .cancelButton {
-  border: 1px solid #c5d6cb;
-  background: #f6faf7;
-  color: #50695a;
+  border: 1px solid #bccac4;
+
+  background: transparent;
+
+  color: #5d6e66;
 }
 
-.cancelButton:hover:not(:disabled) {
-  border-color: #9fbdab;
-  background: #e5f0e8;
+.cancelButton:hover {
+  background: #d6dfda;
 }
 
 .saveButton {
-  border: 1px solid #087b5b;
-  background: #087b5b;
-  color: #ffffff;
+  border: none;
 
-  box-shadow: 0 3px 8px rgba(8, 123, 91, 0.15);
+  background: #0b875f;
+
+  color: #ffffff;
 }
 
 .saveButton:hover:not(:disabled) {
-  border-color: #05684c;
-  background: #05684c;
+  background: #087251;
+
   transform: translateY(-1px);
 }
 
-.deleteButton {
-  border: 1px solid #edc8cc;
-  background: #fff4f4;
-  color: #c22c40;
-}
-
-.deleteButton:hover:not(:disabled) {
-  border-color: #d52941;
-  background: #fde7e9;
-}
-
-.cancelButton:disabled,
-.saveButton:disabled,
-.deleteButton:disabled {
+.saveButton:disabled {
   opacity: 0.5;
+
   cursor: not-allowed;
-  box-shadow: none;
 }
 
 
 /* =====================================
-   FOCO ACESSÍVEL
+   TELAS MENORES
 ===================================== */
 
-.closeButton:focus-visible,
-.changeImage:focus-visible,
-.colorButton:focus-visible,
-.cancelButton:focus-visible,
-.saveButton:focus-visible,
-.deleteButton:focus-visible,
-.athleteItem:focus-visible {
-  outline: 3px solid rgba(22, 168, 117, 0.35);
-  outline-offset: 3px;
-}
-
-
-/* =====================================
-   TABLETS
-===================================== */
-
-@media (max-width: 850px) {
+@media (max-width: 900px) {
   .modal {
-    width: min(100%, 760px);
+    width: min(820px, 100%);
   }
 
   .content {
-    grid-template-columns: 155px minmax(0, 1fr);
-    gap: 18px;
-    padding: 18px 20px;
+    grid-template-columns:
+      210px 1fr;
+
+    gap: 20px;
+
+    padding:
+      18px 24px 14px;
   }
 
   .imagePreview {
-    height: 155px;
-  }
-
-  .matchSection {
-    gap: 11px;
-  }
-
-  .colorsRow {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .footer {
-    padding-right: 20px;
-    padding-left: 20px;
+    height: 190px;
   }
 
   .header {
-    padding-right: 20px;
-    padding-left: 20px;
-  }
-}
-
-
-/* =====================================
-   CELULARES
-===================================== */
-
-@media (max-width: 600px) {
-  .overlay {
-    align-items: flex-start;
-    padding: 10px;
-  }
-
-  .modal {
-    width: 100%;
-    max-height: none;
-    margin: 0;
-    border-radius: 14px;
-  }
-
-  .header {
-    padding: 17px 16px;
-    gap: 12px;
-    border-radius: 14px 14px 0 0;
+    padding:
+      18px 24px 14px;
   }
 
   .header h2 {
-    font-size: 22px;
+    font-size: 27px;
   }
 
-  .header p {
-    font-size: 11px;
-  }
-
-  .content {
-    flex: initial;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
-    padding: 16px;
-    overflow: visible;
-  }
-
-  .imageColumn {
-    display: grid;
-    grid-template-columns: minmax(120px, 155px) minmax(0, 1fr);
-    align-items: center;
-    gap: 12px;
-  }
-
-  .imagePreview {
-    height: 140px;
-  }
-
-  .changeImage {
-    align-self: center;
-  }
-
-  .form {
-    gap: 15px;
-  }
-
-  .twoColumns {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .dateTimeGrid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .colorsRow {
-    flex-direction: column;
+  .preview {
+    margin:
+      0 24px 12px;
   }
 
   .footer {
-    align-items: stretch;
-    flex-direction: column;
-    padding: 12px 16px;
-    border-radius: 0 0 14px 14px;
+    padding:
+      13px 24px 16px;
+  }
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 650px) {
+  .overlay {
+    align-items: flex-start;
+
+    padding: 10px;
+
+    overflow-y: auto;
   }
 
-  .footerActions {
+  .modal {
+    margin: 10px 0;
+
+    border-radius: 20px;
+  }
+
+  .content {
+    grid-template-columns:
+      1fr;
+
+    overflow: visible;
+  }
+
+  .imagePreview {
+    height: 160px;
+  }
+
+  .twoColumns {
+    grid-template-columns:
+      1fr;
+  }
+
+  .colorsRow {
+    align-items: flex-start;
+  }
+
+  .selectedColorBox {
     width: 100%;
+  }
+
+  .footer {
+    flex-direction: column-reverse;
   }
 
   .cancelButton,
   .saveButton {
-    flex: 1;
-    padding: 0 10px;
-  }
-}
-
-
-/* =====================================
-   CELULARES PEQUENOS
-===================================== */
-
-@media (max-width: 360px) {
-  .overlay {
-    padding: 6px;
-  }
-
-  .header {
-    padding: 15px 12px;
-  }
-
-  .content {
-    padding: 12px;
-  }
-
-  .imageColumn {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .imagePreview {
-    height: 165px;
-  }
-
-  .changeImage {
     width: 100%;
-  }
-
-  .matchSection {
-    padding: 12px;
-  }
-
-  .footer {
-    padding: 12px;
-  }
-
-  .footerActions {
-    gap: 8px;
-  }
-
-  .cancelButton,
-  .saveButton,
-  .deleteButton {
-    padding: 0 9px;
-    font-size: 11px;
   }
 }

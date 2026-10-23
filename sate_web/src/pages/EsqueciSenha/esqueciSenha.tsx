@@ -1,99 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
-
 import { Link } from 'react-router-dom';
-
-import {
-  ArrowRight,
-  Check,
-  Mail,
-} from 'lucide-react';
 
 import styles from './esqueciSenha.module.css';
 
-import logoVerdeImg from '../../assets/img/logoVerde_img.png';
-
-import futebolHero from '../../assets/img/hero/futebol.png.png';
-import basqueteHero from '../../assets/img/hero/basquete.png.png';
-import voleiHero from '../../assets/img/hero/volei.png.png';
-import handebolHero from '../../assets/img/hero/handebol.png.png';
-import rugbyHero from '../../assets/img/hero/rugby.png.png';
-import natacaoHero from '../../assets/img/hero/natacao.png.png';
-import atletismoHero from '../../assets/img/hero/atletismo.png.png';
-import tenisHero from '../../assets/img/hero/tenis.png.png';
-
+import athleteImg from '../../assets/img/login_img.png';
 
 interface ForgotPasswordState {
   email: string;
 }
 
-
 interface ForgotPasswordResponse {
   mensagem: string;
 }
 
-
-const heroSlides = [
-  futebolHero,
-  basqueteHero,
-  voleiHero,
-  handebolHero,
-  rugbyHero,
-  natacaoHero,
-  atletismoHero,
-  tenisHero,
-];
-
-
 const EsqueciSenha = () => {
-  const [form, setForm] =
-    useState<ForgotPasswordState>({
-      email: '',
-    });
+  const [form, setForm] = useState<ForgotPasswordState>({
+    email: '',
+  });
 
-  const [emailEnviado, setEmailEnviado] =
-    useState(false);
+  const [emailEnviado, setEmailEnviado] = useState(false);
+  const [reenviando, setReenviando] = useState(false);
+  const [mensagemReenvio, setMensagemReenvio] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState('');
 
-  const [reenviando, setReenviando] =
-    useState(false);
-
-  const [mensagemReenvio, setMensagemReenvio] =
-    useState('');
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [erro, setErro] =
-    useState('');
-
-  const [activeSlide, setActiveSlide] =
-    useState(0);
-
-
-  /* ============================================================
-     FADE DAS IMAGENS
-  ============================================================ */
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setActiveSlide((current) => {
-        return (current + 1) % heroSlides.length;
-      });
-    }, 18000);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, []);
-
-
-  /* ============================================================
-     INPUT
-  ============================================================ */
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({
       email: e.target.value,
     });
@@ -103,41 +35,30 @@ const EsqueciSenha = () => {
     }
   };
 
-
-  /* ============================================================
-     RECUPERAÇÃO
-  ============================================================ */
-
   const solicitarRecuperacao = async () => {
     const resposta = await fetch(
       'http://localhost:3000/api/password/esqueci-senha',
       {
         method: 'POST',
-
         headers: {
-          'Content-Type':
-            'application/json',
+          'Content-Type': 'application/json',
         },
-
         body: JSON.stringify({
           email: form.email,
         }),
       }
     );
 
-    const data: ForgotPasswordResponse =
-      await resposta.json();
+    const data: ForgotPasswordResponse = await resposta.json();
 
     if (!resposta.ok) {
       throw new Error(
-        data.mensagem ||
-          'Não foi possível solicitar a recuperação.'
+        data.mensagem || 'Não foi possível solicitar a recuperação.'
       );
     }
 
     return data;
   };
-
 
   const handleSubmit = async (
     e: FormEvent<HTMLFormElement>
@@ -170,12 +91,10 @@ const EsqueciSenha = () => {
     }
   };
 
-
   const fecharModal = () => {
     setEmailEnviado(false);
     setMensagemReenvio('');
   };
-
 
   const reenviarEmail = async () => {
     setReenviando(true);
@@ -201,235 +120,139 @@ const EsqueciSenha = () => {
     }
   };
 
-
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
 
-      {/* =====================================================
-          LADO ESQUERDO
-      ===================================================== */}
+      {/* ===================== LADO ESQUERDO ===================== */}
 
       <section className={styles.left}>
 
-        {/* IMAGENS */}
-
-        <div
-          className={styles.heroImages}
-          aria-hidden="true"
-        >
-          {heroSlides.map((image, index) => (
-            <div
-              key={image}
-              className={`${styles.heroSlide} ${
-                index === activeSlide
-                  ? styles.heroSlideActive
-                  : ''
-              }`}
-              style={{
-                backgroundImage: `url(${image})`,
-              }}
-            />
-          ))}
-        </div>
-
-
-        {/* OVERLAY */}
-
-        <div
-          className={styles.leftOverlay}
-          aria-hidden="true"
+        <img
+          src={athleteImg}
+          alt=""
+          className={styles.leftImage}
         />
 
+        <div className={styles.leftOverlay} />
 
-        {/* 3 CURVAS */}
+        <div
+          className={styles.rings}
+          aria-hidden="true"
+        >
+          <span className={styles.ring1} />
+          <span className={styles.ring2} />
+          <span className={styles.ring3} />
+          <span className={styles.ring4} />
+          <span className={styles.ring5} />
+        </div>
 
         <svg
-          className={styles.topCurves}
-          viewBox="0 0 620 320"
+          className={styles.curves}
+          viewBox="0 0 320 320"
           fill="none"
           aria-hidden="true"
         >
-          <path d="M-110 265 C80 245 205 142 252 -48" />
-
-          <path d="M-95 320 C130 290 284 165 332 -62" />
-
-          <path d="M25 332 C235 292 392 154 425 -70" />
-        </svg>
-
-
-        <span
-          className={styles.pinkAccent}
-          aria-hidden="true"
-        />
-
-
-        {/* LOGO */}
-
-        <Link
-          to="/"
-          className={styles.heroLogoLink}
-          aria-label="Página inicial do SATE"
-        >
-          <img
-            src={logoVerdeImg}
-            alt="SATE"
-            className={styles.heroLogo}
+          <path
+            d="M -20 260 C 40 220, 60 160, 40 90"
+            stroke="var(--rosa)"
+            strokeWidth="3"
+            strokeLinecap="round"
           />
-        </Link>
 
-
-        {/* CONTEÚDO */}
+          <path
+            d="M -30 300 C 30 280, 70 230, 60 150"
+            stroke="var(--azul)"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+        </svg>
 
         <div className={styles.leftContent}>
 
           <h1>
-            <span>
-              Seu desempenho,
-            </span>
-
-            <span>
-              sempre{' '}
-              <em>
-                acompanhado.
-              </em>
-            </span>
+            Seu desempenho,
+            <br />
+            sempre acompanhado.
           </h1>
 
           <p>
-            Tenha controle dos seus treinamentos,
-            estatísticas e evolução esportiva em
-            um único lugar.
+            Tenha controle dos seus treinamentos, estatísticas e evolução
+            esportiva em um único lugar.
           </p>
 
         </div>
 
-
-        {/* ESTATÍSTICAS */}
-
         <div className={styles.leftFooter}>
 
-          <div className={styles.stat}>
-            <strong>
-              50+
-            </strong>
+          <span>50+ atletas</span>
 
-            <span>
-              atletas
-            </span>
-          </div>
+          <span className={styles.dot}>•</span>
 
+          <span>100+ partidas analisadas</span>
 
-          <span
-            className={styles.statDivider}
-          />
+          <span className={styles.dot}>•</span>
 
-
-          <div className={styles.stat}>
-            <strong>
-              100+
-            </strong>
-
-            <span>
-              partidas analisadas
-            </span>
-          </div>
-
-
-          <span
-            className={styles.statDivider}
-          />
-
-
-          <div className={styles.stat}>
-            <strong>
-              5+
-            </strong>
-
-            <span>
-              modalidades
-            </span>
-          </div>
+          <span>5+ modalidades</span>
 
         </div>
 
       </section>
 
 
-      {/* =====================================================
-          LADO DIREITO
-      ===================================================== */}
+      {/* ===================== LADO DIREITO ===================== */}
 
       <section className={styles.right}>
 
-        {/* FUNDO ANIMADO */}
-
         <div
-          className={styles.backgroundDecor}
+          className={styles.decor}
           aria-hidden="true"
         >
+
+          <div className={styles.dotGrid} />
+
           <span
-            className={`${styles.gradientOrb} ${styles.orbTop}`}
+            className={`${styles.blob} ${styles.blobGreen}`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbRight}`}
+            className={`${styles.blob} ${styles.blobBlue}`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbBottom}`}
+            className={`${styles.blob} ${styles.blobPink}`}
           />
 
-          <span
-            className={`${styles.gradientOrb} ${styles.orbLeft}`}
-          />
-
-          <span
-            className={`${styles.gradientOrb} ${styles.orbCenter}`}
-          />
-
-          <span
-            className={`${styles.gradientOrb} ${styles.orbSmallOne}`}
-          />
-
-          <span
-            className={`${styles.gradientOrb} ${styles.orbSmallTwo}`}
-          />
-
-          <span
-            className={styles.auroraTop}
-          />
-
-          <span
-            className={styles.auroraBottom}
-          />
         </div>
 
 
-        {/* =====================================================
-            CARD
-        ===================================================== */}
+        {/* ===================== FORMULÁRIO ===================== */}
 
         <div className={styles.formContainer}>
 
-          <img
-            src={logoVerdeImg}
-            alt="SATE"
-            className={styles.cardLogo}
-          />
+          <div className={styles.brandMark}>
 
-
-          <div className={styles.cardHeader}>
-
-            <h2>
-              Esqueceu sua senha?
-            </h2>
-
-            <p className={styles.subtitle}>
-              Informe seu email e enviaremos
-              um link para você redefinir sua senha.
-            </p>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="2 12 8 12 11 20 14 4 17 12 22 12" />
+            </svg>
 
           </div>
+
+          <h2>
+            Esqueceu sua senha?
+          </h2>
+
+          <p className={styles.subtitle}>
+            Informe seu email e enviaremos um link para você redefinir sua senha.
+          </p>
 
 
           <form
@@ -443,34 +266,31 @@ const EsqueciSenha = () => {
                 Email
               </label>
 
-              <div className={styles.inputWrapper}>
-
-                <Mail
-                  size={18}
-                  className={styles.inputIcon}
-                />
-
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  autoComplete="email"
-                  placeholder="Digite seu email"
-                  required
-                  disabled={loading}
-                />
-
-              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                autoComplete="email"
+                placeholder="Digite seu email"
+                required
+                disabled={loading}
+              />
 
             </div>
 
 
             {erro && (
-              <div className={styles.errorMessage}>
+              <p
+                style={{
+                  color: '#D52941',
+                  marginTop: '8px',
+                  fontSize: '14px',
+                }}
+              >
                 {erro}
-              </div>
+              </p>
             )}
 
 
@@ -479,46 +299,31 @@ const EsqueciSenha = () => {
               className={styles.submitButton}
               disabled={loading}
             >
-              <span>
-                {loading
-                  ? 'Enviando...'
-                  : 'Enviar link'}
-              </span>
-
-              {!loading && (
-                <ArrowRight
-                  size={20}
-                  strokeWidth={1.8}
-                />
-              )}
+              {loading ? 'Enviando...' : 'Enviar link'}
             </button>
 
           </form>
 
 
-          <div className={styles.backArea}>
+          <p className={styles.backText}>
 
-            <span>
-              Lembrou da senha?
-            </span>
+            Lembrou da senha?{' '}
 
             <Link
-              to="/login"
+              to="/"
               className={styles.link}
             >
               Voltar para o login
             </Link>
 
-          </div>
+          </p>
 
         </div>
 
       </section>
 
 
-      {/* =====================================================
-          MODAL
-      ===================================================== */}
+      {/* ===================== MODAL DE CONFIRMAÇÃO ===================== */}
 
       {emailEnviado && (
 
@@ -531,30 +336,49 @@ const EsqueciSenha = () => {
 
           <div className={styles.confirmationCard}>
 
+            {/* ÍCONE DE SUCESSO */}
+
             <div className={styles.successIcon}>
-              <Check
-                size={28}
-                strokeWidth={2.4}
-              />
+
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+
             </div>
 
+
+            {/* TÍTULO */}
 
             <h2 id="confirmationTitle">
               E-mail enviado!
             </h2>
 
 
+            {/* DESCRIÇÃO */}
+
             <p>
-              Enviamos um link para redefinir
-              sua senha. Verifique sua caixa
-              de entrada e a pasta de spam.
+              Enviamos um link para redefinir sua senha.
+              Verifique sua caixa de entrada e a pasta de spam.
             </p>
 
+
+            {/* EMAIL */}
 
             <span className={styles.emailText}>
               {form.email}
             </span>
 
+
+            {/* BOTÃO ENTENDI */}
 
             <button
               type="button"
@@ -564,6 +388,8 @@ const EsqueciSenha = () => {
               Entendi
             </button>
 
+
+            {/* REENVIAR E-MAIL */}
 
             <button
               type="button"
@@ -577,15 +403,21 @@ const EsqueciSenha = () => {
             </button>
 
 
+            {/* MENSAGEM DE REENVIO */}
+
             {mensagemReenvio && (
+
               <p className={styles.resendMessage}>
                 {mensagemReenvio}
               </p>
+
             )}
 
 
+            {/* VOLTAR PARA LOGIN */}
+
             <Link
-              to="/login"
+              to="/"
               className={styles.confirmationLink}
             >
               Voltar para o login
@@ -597,7 +429,7 @@ const EsqueciSenha = () => {
 
       )}
 
-    </main>
+    </div>
   );
 };
 

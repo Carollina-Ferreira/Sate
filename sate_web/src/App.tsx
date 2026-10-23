@@ -1,11 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // ==========================================
-// LANDING PAGE
-// ==========================================
-import LandingPage from "./pages/LandingPage/landingPage";
-
-// ==========================================
 // PÁGINAS DE ACESSO
 // ==========================================
 import Login from "./pages/Login/login";
@@ -37,8 +32,8 @@ import RotaInicial from "./components/RotaInicial/RotaInicial";
 // ==========================================
 import Dashboard from "./pages/Dashboard/dashboard";
 import Equipes from "./pages/Equipes/equipes";
-import Atletas from "./pages/Atletas/atletas";
-import Comparacoes from "./pages/Comparacoes/comparacoes";
+import Altetas from "./pages/Atletas/atletas";
+import Comparacoes from "./pages/Comparacoes/compracoes";
 import Estatisticas from "./pages/Estatisticas/estatisticas";
 import Configuracoes from "./pages/Configuracoes/configuracoes";
 import AnaliseVideo from "./pages/AnaliseVideos/analiseVideos";
@@ -54,20 +49,30 @@ function App() {
             PÁGINAS PÚBLICAS
         ======================================== */}
 
-        {/* Landing Page */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<Login />} />
 
-        {/* Login */}
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/cadastro"
+          element={<Cadastro />}
+        />
 
-        {/* Cadastro */}
-        <Route path="/cadastro" element={<Cadastro />} />
-
-        {/* Recuperação de senha */}
-        <Route path="/esqueci-senha" element={<EsqueciSenha />} />
+        <Route
+          path="/esqueci-senha"
+          element={<EsqueciSenha />}
+        />
 
         {/* ========================================
             ONBOARDING / CONFIGURAÇÃO INICIAL
+
+            RotaInicial verifica:
+            - se está logado
+            - se já possui equipe
+
+            Se já tiver equipe:
+            -> /inicio
+
+            Se não tiver:
+            -> permite continuar o onboarding
         ======================================== */}
 
         <Route element={<RotaInicial />}>
@@ -99,18 +104,32 @@ function App() {
 
         {/* ========================================
             ÁREA PRIVADA
+
+            RotaPrivada verifica:
+            - se está logado
+            - se possui equipe
+
+            Sem login:
+            -> /
+
+            Sem equipe:
+            -> /boas-vindas
+
+            Com equipe:
+            -> libera o sistema
         ======================================== */}
 
         <Route element={<RotaPrivada />}>
           <Route element={<Layout />}>
+            {/* ====================================
+                DASHBOARD
+            ==================================== */}
 
-            {/* DASHBOARD */}
             <Route
               path="/inicio"
               element={<Dashboard />}
             />
 
-            {/* Compatibilidade com rota antiga */}
             <Route
               path="/dashboard"
               element={<Dashboard />}
@@ -125,7 +144,7 @@ function App() {
             {/* ATLETAS */}
             <Route
               path="/atletas"
-              element={<Atletas />}
+              element={<Altetas />}
             />
 
             {/* CADASTRO DE ATLETA */}
@@ -169,7 +188,6 @@ function App() {
               path="/configuracoes"
               element={<Configuracoes />}
             />
-
           </Route>
         </Route>
       </Routes>

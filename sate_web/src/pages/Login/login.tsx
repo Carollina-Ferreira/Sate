@@ -1,29 +1,10 @@
-import { useEffect, useState } from 'react';
-import type { ChangeEvent, FormEvent } from 'react';
-
+import { useState } from 'react';
+import type { FormEvent, ChangeEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-import {
-    ArrowRight,
-    Eye,
-    EyeOff,
-    LockKeyhole,
-    Mail,
-} from 'lucide-react';
 
 import styles from './login.module.css';
 
-import logoVerdeImg from '../../assets/img/logoVerde_img.png';
-
-import futebolHero from '../../assets/img/hero/futebol.png.png';
-import basqueteHero from '../../assets/img/hero/basquete.png.png';
-import voleiHero from '../../assets/img/hero/volei.png.png';
-import handebolHero from '../../assets/img/hero/handebol.png.png';
-import rugbyHero from '../../assets/img/hero/rugby.png.png';
-import natacaoHero from '../../assets/img/hero/natacao.png.png';
-import atletismoHero from '../../assets/img/hero/atletismo.png.png';
-import tenisHero from '../../assets/img/hero/tenis.png.png';
-
+import athleteImg from '../../assets/img/login_img.png';
 
 interface LoginFormState {
     email: string;
@@ -33,9 +14,7 @@ interface LoginFormState {
 
 interface LoginResponse {
     mensagem: string;
-
     token?: string;
-
     usuario?: {
         id: number;
         email: string;
@@ -43,19 +22,6 @@ interface LoginResponse {
         primeiroAcesso: boolean;
     };
 }
-
-
-const heroSlides = [
-    futebolHero,
-    basqueteHero,
-    voleiHero,
-    handebolHero,
-    rugbyHero,
-    natacaoHero,
-    atletismoHero,
-    tenisHero,
-];
-
 
 const Login = () => {
     const navigate = useNavigate();
@@ -69,50 +35,14 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const [loading, setLoading] = useState(false);
-
     const [erro, setErro] = useState('');
 
-    const [activeSlide, setActiveSlide] = useState(0);
-
-
-    /* ============================================================
-       FADE DAS IMAGENS
-    ============================================================ */
-
-    useEffect(() => {
-        const interval = window.setInterval(() => {
-            setActiveSlide((current) => {
-                return (current + 1) % heroSlides.length;
-            });
-        }, 18000);
-
-        return () => {
-            window.clearInterval(interval);
-        };
-    }, []);
-
-
-    /* ============================================================
-       INPUTS
-    ============================================================ */
-
-    const handleChange = (
-        e: ChangeEvent<HTMLInputElement>
-    ) => {
-        const {
-            name,
-            value,
-            type,
-            checked,
-        } = e.target;
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type, checked } = e.target;
 
         setForm((prev) => ({
             ...prev,
-
-            [name]:
-                type === 'checkbox'
-                    ? checked
-                    : value,
+            [name]: type === 'checkbox' ? checked : value,
         }));
 
         if (erro) {
@@ -120,14 +50,7 @@ const Login = () => {
         }
     };
 
-
-    /* ============================================================
-       LOGIN
-    ============================================================ */
-
-    const handleSubmit = async (
-        e: FormEvent<HTMLFormElement>
-    ) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setErro('');
@@ -138,396 +61,272 @@ const Login = () => {
                 'http://localhost:3000/api/auth/login',
                 {
                     method: 'POST',
-
                     headers: {
-                        'Content-Type':
-                            'application/json',
+                        'Content-Type': 'application/json',
                     },
-
                     body: JSON.stringify({
                         email: form.email,
                         senha: form.senha,
+
+                        // O site SATE é exclusivo para treinadores
                         tipo: 'TREINADOR',
                     }),
                 }
             );
 
-            const data: LoginResponse =
-                await resposta.json();
+            const data: LoginResponse = await resposta.json();
 
             if (!resposta.ok) {
                 throw new Error(
-                    data.mensagem ||
-                        'Não foi possível realizar o login.'
+                    data.mensagem || 'Não foi possível realizar o login.'
                 );
             }
 
             if (!data.token || !data.usuario) {
-                throw new Error(
-                    'Resposta inválida do servidor.'
-                );
+                throw new Error('Resposta inválida do servidor.');
             }
 
-
-            /* =================================================
-               LEMBRAR DE MIM
-            ================================================= */
-
+            /*
+             * Lembrar de mim
+             */
             if (form.lembrar) {
-                localStorage.setItem(
-                    'token',
-                    data.token
-                );
+                localStorage.setItem('token', data.token);
 
                 localStorage.setItem(
                     'usuario',
                     JSON.stringify(data.usuario)
                 );
 
+                // Limpa uma sessão anterior, caso exista
                 sessionStorage.removeItem('token');
                 sessionStorage.removeItem('usuario');
             } else {
-                sessionStorage.setItem(
-                    'token',
-                    data.token
-                );
+                sessionStorage.setItem('token', data.token);
 
                 sessionStorage.setItem(
                     'usuario',
                     JSON.stringify(data.usuario)
                 );
 
+                // Limpa um login permanente anterior
                 localStorage.removeItem('token');
                 localStorage.removeItem('usuario');
             }
 
+            console.log('Login realizado:', data.usuario);
 
-            /* =================================================
-               TREINADOR
-            ================================================= */
-
+            /*
+             * O Web é exclusivo para TREINADOR.
+             */
             if (data.usuario.tipo === 'TREINADOR') {
+
+                /*
+                 * Primeiro acesso:
+                 * vai passar pelas 3 páginas de configuração.
+                 */
                 if (data.usuario.primeiroAcesso) {
                     navigate('/boas-vindas');
-
                     return;
                 }
 
+                /*
+                 * Usuário que já concluiu a configuração:
+                 * vai direto para a Dashboard.
+                 */
                 navigate('/inicio');
-
                 return;
             }
 
-
-            /* =================================================
-               ATLETA
-            ================================================= */
-
+            /*
+             * Caso uma conta de atleta tente entrar pelo Web.
+             */
             setErro(
                 'Esta conta está cadastrada como Atleta e não pode acessar o sistema do treinador.'
             );
 
         } catch (error) {
-            console.error(
-                'Erro no login:',
-                error
-            );
+            console.error('Erro no login:', error);
 
             if (error instanceof Error) {
                 setErro(error.message);
             } else {
-                setErro(
-                    'Não foi possível conectar ao servidor.'
-                );
+                setErro('Não foi possível conectar ao servidor.');
             }
-
         } finally {
             setLoading(false);
         }
     };
 
-
     return (
-        <main className={styles.page}>
+        <div className={styles.page}>
 
-            {/* =================================================
-                LADO ESQUERDO
-            ================================================= */}
+            {/* ===================== LADO ESQUERDO ===================== */}
 
-            <section className={styles.hero}>
+            <section className={styles.left}>
 
-                {/* IMAGENS */}
-
-                <div
-                    className={styles.heroImages}
-                    aria-hidden="true"
-                >
-                    {heroSlides.map((image, index) => (
-                        <div
-                            key={image}
-                            className={`${styles.heroSlide} ${
-                                index === activeSlide
-                                    ? styles.heroSlideActive
-                                    : ''
-                            }`}
-                            style={{
-                                backgroundImage: `url(${image})`,
-                            }}
-                        />
-                    ))}
-                </div>
-
-
-                {/* OVERLAY */}
-
-                <div
-                    className={styles.heroOverlay}
-                    aria-hidden="true"
+                <img
+                    src={athleteImg}
+                    alt=""
+                    className={styles.leftImage}
                 />
 
+                <div className={styles.leftOverlay} />
 
-                {/* 3 CURVAS SUPERIORES */}
+                <div
+                    className={styles.rings}
+                    aria-hidden="true"
+                >
+                    <span />
+                    <span />
+                    <span />
+                </div>
 
                 <svg
-                    className={styles.topCurves}
-                    viewBox="0 0 620 320"
+                    className={styles.curves}
+                    viewBox="0 0 320 320"
                     fill="none"
                     aria-hidden="true"
                 >
                     <path
-                        d="M-110 265 C80 245 205 142 252 -48"
+                        d="M -20 260 C 40 220, 60 160, 40 90"
+                        stroke="var(--rosa)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
                     />
 
                     <path
-                        d="M-95 320 C130 290 284 165 332 -62"
-                    />
-
-                    <path
-                        d="M25 332 C235 292 392 154 425 -70"
+                        d="M -30 300 C 30 280, 70 230, 60 150"
+                        stroke="var(--azul)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
                     />
                 </svg>
 
-
-                {/* LINHA ROSA */}
-
-                <span
-                    className={styles.pinkAccent}
-                    aria-hidden="true"
-                />
-
-
-                {/* LOGO */}
-
-                <Link
-                    to="/"
-                    className={styles.heroLogoLink}
-                    aria-label="Página inicial do SATE"
-                >
-                    <img
-                        src={logoVerdeImg}
-                        alt="SATE"
-                        className={styles.heroLogo}
-                    />
-                </Link>
-
-
-                {/* TEXTO */}
-
-                <div className={styles.heroContent}>
-
+                <div className={styles.leftContent}>
                     <h1>
-                        <span>
-                            Dados que revelam
-                        </span>
-
-                        <span>
-                            o verdadeiro
-                        </span>
-
-                        <em>
-                            desempenho.
-                        </em>
+                        Dados que revelam o
+                        <br />
+                        verdadeiro desempenho.
                     </h1>
 
                     <p>
-                        Gerencie equipes, analise vídeos e acompanhe
-                        estatísticas de qualquer modalidade esportiva
-                        em um único painel.
+                        Gerencie equipes, analise vídeos e acompanhe estatísticas de
+                        qualquer modalidade esportiva em um único painel.
                     </p>
-
                 </div>
 
+                <div className={styles.leftFooter}>
+                    <span>50+ atletas</span>
 
-                {/* INDICADORES */}
+                    <span className={styles.dot}>•</span>
 
-                <div className={styles.heroStats}>
+                    <span>100+ partidas analisadas</span>
 
-                    <div className={styles.heroStat}>
-                        <strong>
-                            50+
-                        </strong>
+                    <span className={styles.dot}>•</span>
 
-                        <span>
-                            atletas
-                        </span>
-                    </div>
-
-
-                    <span
-                        className={styles.statDivider}
-                    />
-
-
-                    <div className={styles.heroStat}>
-                        <strong>
-                            100+
-                        </strong>
-
-                        <span>
-                            partidas analisadas
-                        </span>
-                    </div>
-
-
-                    <span
-                        className={styles.statDivider}
-                    />
-
-
-                    <div className={styles.heroStat}>
-                        <strong>
-                            5+
-                        </strong>
-
-                        <span>
-                            modalidades
-                        </span>
-                    </div>
-
+                    <span>5+ modalidades</span>
                 </div>
 
             </section>
 
 
-            {/* =================================================
-                LADO DIREITO
-            ================================================= */}
+            {/* ===================== LADO DIREITO ===================== */}
 
-            <section className={styles.loginArea}>
-
-                {/* =================================================
-                    FUNDO DECORATIVO
-                ================================================= */}
+            <section className={styles.right}>
 
                 <div
-                    className={styles.backgroundDecor}
+                    className={styles.decor}
                     aria-hidden="true"
                 >
 
-                    {/* ORB GRANDE SUPERIOR */}
+                    <div className={styles.dotGrid} />
 
                     <span
-                        className={`${styles.gradientOrb} ${styles.orbTop}`}
+                        className={`${styles.blob} ${styles.blobGreen}`}
                     />
-
-
-                    {/* ORB GRANDE DIREITO */}
 
                     <span
-                        className={`${styles.gradientOrb} ${styles.orbRight}`}
+                        className={`${styles.blob} ${styles.blobBlue}`}
                     />
-
-
-                    {/* ORB GRANDE INFERIOR */}
 
                     <span
-                        className={`${styles.gradientOrb} ${styles.orbBottom}`}
+                        className={`${styles.blob} ${styles.blobPink}`}
                     />
 
+                    <svg
+                        className={styles.dataLine}
+                        viewBox="0 0 260 120"
+                        fill="none"
+                    >
+                        <polyline
+                            points="0,100 40,80 80,90 120,55 160,68 200,30 240,45"
+                            stroke="var(--azul)"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
 
-                    {/* ORB LATERAL ESQUERDO */}
-
-                    <span
-                        className={`${styles.gradientOrb} ${styles.orbLeft}`}
-                    />
-
-
-                    {/* ORB CENTRAL */}
-
-                    <span
-                        className={`${styles.gradientOrb} ${styles.orbCenter}`}
-                    />
-
-
-                    {/* ORB PEQUENO 1 */}
-
-                    <span
-                        className={`${styles.gradientOrb} ${styles.orbSmallOne}`}
-                    />
-
-
-                    {/* ORB PEQUENO 2 */}
-
-                    <span
-                        className={`${styles.gradientOrb} ${styles.orbSmallTwo}`}
-                    />
-
-
-                    {/* FAIXA AURORA SUPERIOR */}
-
-                    <span
-                        className={styles.auroraTop}
-                    />
-
-
-                    {/* FAIXA AURORA INFERIOR */}
-
-                    <span
-                        className={styles.auroraBottom}
-                    />
+                        {[
+                            [0, 100],
+                            [80, 90],
+                            [160, 68],
+                            [240, 45],
+                        ].map(([cx, cy], index) => (
+                            <circle
+                                key={index}
+                                cx={cx}
+                                cy={cy}
+                                r="3.5"
+                                fill={
+                                    index % 2 === 0
+                                        ? 'var(--rosa)'
+                                        : 'var(--verde-principal)'
+                                }
+                            />
+                        ))}
+                    </svg>
 
                 </div>
 
 
-                {/* =================================================
-                    CARD
-                ================================================= */}
+                {/* ===================== CARD DE LOGIN ===================== */}
 
-                <div className={styles.loginCard}>
+                <div className={styles.formCard}>
 
-                    {/* LOGO */}
-
-                    <img
-                        src={logoVerdeImg}
-                        alt="SATE"
-                        className={styles.cardLogo}
-                    />
-
-
-                    {/* HEADER */}
-
-                    <div className={styles.cardHeader}>
-
-                        <h2>
-                            Bem-vindo de volta!
-                        </h2>
-
-                        <p>
-                            Entre para continuar acompanhando
-                            o treinamento da sua equipe.
-                        </p>
-
+                    <div
+                        className={styles.brandMark}
+                        aria-hidden="true"
+                    >
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <polyline points="2 12 8 12 11 20 14 4 17 12 22 12" />
+                        </svg>
                     </div>
 
 
-                    {/* FORM */}
+                    <h2>
+                        Bem-vindo de volta!
+                    </h2>
+
+                    <p className={styles.subtitle}>
+                        Entre para continuar acompanhando o treinamento da sua equipe.
+                    </p>
+
 
                     <form
                         className={styles.form}
                         onSubmit={handleSubmit}
                     >
 
-                        {/* EMAIL */}
+                        {/* ===================== EMAIL ===================== */}
 
                         <div className={styles.field}>
 
@@ -535,30 +334,21 @@ const Login = () => {
                                 Email
                             </label>
 
-                            <div className={styles.inputWrapper}>
-
-                                <Mail
-                                    size={18}
-                                    className={styles.inputIcon}
-                                />
-
-                                <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    value={form.email}
-                                    onChange={handleChange}
-                                    autoComplete="email"
-                                    placeholder="Digite seu email"
-                                    required
-                                />
-
-                            </div>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                value={form.email}
+                                onChange={handleChange}
+                                autoComplete="email"
+                                placeholder="Digite seu email"
+                                required
+                            />
 
                         </div>
 
 
-                        {/* SENHA */}
+                        {/* ===================== SENHA ===================== */}
 
                         <div className={styles.field}>
 
@@ -566,21 +356,12 @@ const Login = () => {
                                 Senha
                             </label>
 
-                            <div className={styles.inputWrapper}>
-
-                                <LockKeyhole
-                                    size={18}
-                                    className={styles.inputIcon}
-                                />
+                            <div className={styles.passwordWrapper}>
 
                                 <input
                                     id="senha"
                                     name="senha"
-                                    type={
-                                        showPassword
-                                            ? 'text'
-                                            : 'password'
-                                    }
+                                    type={showPassword ? 'text' : 'password'}
                                     value={form.senha}
                                     onChange={handleChange}
                                     autoComplete="current-password"
@@ -588,17 +369,12 @@ const Login = () => {
                                     required
                                 />
 
-
                                 {form.senha.length > 0 && (
                                     <button
                                         type="button"
-                                        className={
-                                            styles.passwordToggle
-                                        }
+                                        className={styles.passwordToggle}
                                         onClick={() =>
-                                            setShowPassword(
-                                                (prev) => !prev
-                                            )
+                                            setShowPassword((prev) => !prev)
                                         }
                                         aria-label={
                                             showPassword
@@ -606,11 +382,9 @@ const Login = () => {
                                                 : 'Mostrar senha'
                                         }
                                     >
-                                        {showPassword ? (
-                                            <EyeOff size={18} />
-                                        ) : (
-                                            <Eye size={18} />
-                                        )}
+                                        {showPassword
+                                            ? 'visibility_off'
+                                            : 'visibility'}
                                     </button>
                                 )}
 
@@ -619,24 +393,30 @@ const Login = () => {
                         </div>
 
 
-                        {/* ERRO */}
+                        {/* ===================== ERRO ===================== */}
 
                         {erro && (
                             <div
-                                className={styles.errorMessage}
+                                style={{
+                                    color: '#D52941',
+                                    backgroundColor: '#FFF1F3',
+                                    border: '1px solid #FFD5DB',
+                                    borderRadius: '8px',
+                                    padding: '10px 12px',
+                                    fontSize: '14px',
+                                }}
                             >
                                 {erro}
                             </div>
                         )}
 
 
-                        {/* OPÇÕES */}
+                        {/* ===================== OPÇÕES ===================== */}
 
-                        <div className={styles.options}>
+                        <div className={styles.rowBetween}>
 
-                            <label
-                                className={styles.remember}
-                            >
+                            <label className={styles.checkboxLabel}>
+
                                 <input
                                     type="checkbox"
                                     name="lembrar"
@@ -647,14 +427,13 @@ const Login = () => {
                                 <span>
                                     Lembrar de mim
                                 </span>
+
                             </label>
 
 
                             <Link
                                 to="/esqueci-senha"
-                                className={
-                                    styles.forgotPassword
-                                }
+                                className={styles.link}
                             >
                                 Esqueci minha senha
                             </Link>
@@ -662,59 +441,37 @@ const Login = () => {
                         </div>
 
 
-                        {/* BOTÃO */}
+                        {/* ===================== BOTÃO ===================== */}
 
                         <button
                             type="submit"
                             className={styles.submitButton}
                             disabled={loading}
                         >
-                            <span>
-                                {loading
-                                    ? 'Entrando...'
-                                    : 'Entrar'}
-                            </span>
-
-                            {!loading && (
-                                <ArrowRight
-                                    size={20}
-                                    strokeWidth={1.8}
-                                />
-                            )}
+                            {loading ? 'Entrando...' : 'Entrar'}
                         </button>
 
                     </form>
 
 
-                    {/* DIVISOR */}
+                    {/* ===================== CRIAR CONTA ===================== */}
 
-                    <div className={styles.signupDivider}>
+                    <p className={styles.signupText}>
+                        Ainda não possui uma conta?{' '}
 
-                        <span />
-
-                        <p>
-                            Ainda não possui uma conta?
-                        </p>
-
-                        <span />
-
-                    </div>
-
-
-                    {/* CADASTRO */}
-
-                    <Link
-                        to="/cadastro"
-                        className={styles.createAccount}
-                    >
-                        Criar conta
-                    </Link>
+                        <Link
+                            to="/cadastro"
+                            className={styles.link}
+                        >
+                            Criar conta
+                        </Link>
+                    </p>
 
                 </div>
 
             </section>
 
-        </main>
+        </div>
     );
 };
 

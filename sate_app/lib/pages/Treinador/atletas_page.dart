@@ -95,6 +95,208 @@ class _AtletasPageState extends State<AtletasPage> {
     );
   }
 
+  void _abrirAdicionarAtleta() {
+    final nomeController = TextEditingController();
+    final modalidadeController = TextEditingController();
+    final frequenciaController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (modalContext) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(modalContext)
+                .viewInsets
+                .bottom,
+          ),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(
+              20,
+              12,
+              20,
+              30,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(26),
+              ),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 44,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius:
+                            BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  const Text(
+                    'Adicionar atleta',
+                    style: TextStyle(
+                      color: Color(0xFF12261F),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  Text(
+                    'Cadastre um novo atleta na sua equipe.',
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 13,
+                    ),
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  _campo(
+                    controller: nomeController,
+                    label: 'Nome',
+                    hint: 'Ex: Pedro Santos',
+                    icone: Icons.person_outline_rounded,
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  _campo(
+                    controller: modalidadeController,
+                    label: 'Modalidade',
+                    hint: 'Ex: Futebol',
+                    icone:
+                        Icons.sports_soccer_outlined,
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  _campo(
+                    controller: frequenciaController,
+                    label: 'Frequência',
+                    hint: 'Ex: 90%',
+                    icone:
+                        Icons.calendar_month_outlined,
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final nome =
+                            nomeController.text.trim();
+
+                        final modalidade =
+                            modalidadeController.text
+                                .trim();
+
+                        final frequencia =
+                            frequenciaController.text
+                                .trim();
+
+                        if (nome.isEmpty) {
+                          ScaffoldMessenger.of(
+                            modalContext,
+                          ).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Digite o nome do atleta.',
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+
+                        if (modalidade.isEmpty) {
+                          ScaffoldMessenger.of(
+                            modalContext,
+                          ).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Digite a modalidade.',
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+
+                        setState(() {
+                          atletas.insert(
+                            0,
+                            {
+                              'nome': nome,
+                              'modalidade':
+                                  modalidade,
+                              'frequencia':
+                                  frequencia.isEmpty
+                                      ? '0%'
+                                      : frequencia,
+                              'inicial':
+                                  nome[0].toUpperCase(),
+                              'status':
+                                  'Atleta ativo',
+                            },
+                          );
+                        });
+
+                        Navigator.pop(modalContext);
+
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Atleta adicionado com sucesso!',
+                            ),
+                            behavior:
+                                SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                      style:
+                          ElevatedButton.styleFrom(
+                        backgroundColor: verde,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape:
+                            RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: const Text(
+                        'Adicionar atleta',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _campo({
     required TextEditingController controller,
     required String label,
@@ -131,9 +333,15 @@ class _AtletasPageState extends State<AtletasPage> {
         backgroundColor: fundo,
         elevation: 0,
         centerTitle: false,
-
-        automaticallyImplyLeading: false,
-        
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black87,
+          ),
+        ),
         title: const Text(
           'Atletas',
           style: TextStyle(
@@ -157,6 +365,9 @@ class _AtletasPageState extends State<AtletasPage> {
                   100,
                 ),
                 children: [
+                  _resumo(),
+
+                  const SizedBox(height: 18),
 
                   _campoPesquisa(),
 
@@ -209,6 +420,108 @@ class _AtletasPageState extends State<AtletasPage> {
             ),
           ],
         ),
+      ),
+
+      floatingActionButton:
+          FloatingActionButton(
+        onPressed: _abrirAdicionarAtleta,
+        backgroundColor: verde,
+        elevation: 3,
+        child: const Icon(
+          Icons.add_rounded,
+          color: Colors.white,
+          size: 28,
+        ),
+      ),
+    );
+  }
+
+  Widget _resumo() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.grey.shade200,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(
+              alpha: 0.025,
+            ),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: verdeClaro,
+              borderRadius:
+                  BorderRadius.circular(14),
+            ),
+            child: const Icon(
+              Icons.groups_rounded,
+              color: verde,
+              size: 25,
+            ),
+          ),
+
+          const SizedBox(width: 13),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Atletas da equipe',
+                  style: TextStyle(
+                    color: Color(0xFF12261F),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                Text(
+                  '${atletas.length} atletas cadastrados',
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 8,
+            ),
+            decoration: BoxDecoration(
+              color: verdeClaro,
+              borderRadius:
+                  BorderRadius.circular(20),
+            ),
+            child: Text(
+              '${atletas.length}',
+              style: const TextStyle(
+                color: verde,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -474,4 +787,4 @@ class _AtletasPageState extends State<AtletasPage> {
       ),
     );
   }
-} 
+}

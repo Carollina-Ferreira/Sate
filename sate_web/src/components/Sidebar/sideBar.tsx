@@ -16,12 +16,14 @@ const menuItems = [
   { label: 'Partidas', icon: 'emoji_events', path: '/partidas' },
   { label: 'Estatísticas', icon: 'bar_chart', path: '/estatisticas' },
   { label: 'Comparações', icon: 'compare_arrows', path: '/comparacoes' },
+  { label: 'Configurações', icon: 'settings', path: '/configuracoes' },
 ];
 
 const Sidebar = ({
   onExpand,
   onCollapse,
 }: SidebarProps) => {
+
   const location = useLocation();
 
   return (
@@ -30,6 +32,7 @@ const Sidebar = ({
       onMouseEnter={onExpand}
       onMouseLeave={onCollapse}
     >
+
       {/* LOGO */}
       <div className={styles.logoContainer}>
         <img
@@ -41,8 +44,11 @@ const Sidebar = ({
 
       {/* MENU */}
       <nav className={styles.menu}>
+
         {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
+
+          const isActive =
+            location.pathname === item.path;
 
           return (
             <Link
@@ -61,6 +67,7 @@ const Sidebar = ({
               </span>
             </Link>
           );
+
         })}
 
         {/* LINHA SEPARADORA */}
@@ -79,7 +86,9 @@ const Sidebar = ({
             Sair
           </span>
         </Link>
+
       </nav>
+
     </aside>
   );
 };

@@ -206,8 +206,11 @@ const ClipesAtleta = ({ onBack }: ClipesAtletaProps) => {
                     <div className={styles.titleArea}>
 
                         <div className={styles.titleRow}>
-                            <h1>Clipes <em>analisados.</em></h1>
+                            <h1>Clipes</h1>
 
+                            <span className={styles.countBadge}>
+                                10 clipes analisados
+                            </span>
                         </div>
 
                         <p className={styles.subtitle}>
@@ -260,6 +263,10 @@ const ClipesAtleta = ({ onBack }: ClipesAtletaProps) => {
 
                 <div className={styles.filtersRow}>
 
+                    <span className={styles.filterLabel}>
+                        Filtrar:
+                    </span>
+
                     {filtros.map((filtro) => (
                         <button
                             key={filtro.id}
@@ -289,8 +296,7 @@ const ClipesAtleta = ({ onBack }: ClipesAtletaProps) => {
                                 <Activity size={14} />
                             )}
 
-                            {filtro.label}
-                            <small>{filtro.qtd}</small>
+                            {filtro.label} ({filtro.qtd})
 
                         </button>
                     ))}

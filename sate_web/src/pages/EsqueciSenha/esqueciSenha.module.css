@@ -1,1208 +1,462 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
-
-/* ============================================================
+/* =====================================
    PÁGINA
-============================================================ */
+===================================== */
 
 .page {
   width: 100%;
   min-height: 100vh;
-
-  display: grid;
-  grid-template-columns: 56% 44%;
-
+  display: flex;
   overflow: hidden;
-
-  background: #f6f8f7;
-
-  font-family: 'Poppins', sans-serif;
+  background: var(--cinza-100);
 }
 
-
-/* ============================================================
-   ESQUERDA
-============================================================ */
+/* =====================================
+   LADO ESQUERDO
+===================================== */
 
 .left {
   position: relative;
-
-  min-width: 0;
+  width: 52%;
   min-height: 100vh;
-
   overflow: hidden;
-
-  background: #002f26;
-
-  isolation: isolate;
 }
 
+/* =====================================
+   IMAGEM
+===================================== */
 
-/* ============================================================
-   IMAGENS
-============================================================ */
-
-.heroImages {
+.leftImage {
   position: absolute;
-
   inset: 0;
-
-  z-index: -5;
-
-  overflow: hidden;
-
-  background: #002f26;
-}
-
-
-.heroSlide {
-  position: absolute;
-
-  inset: 0;
-
   width: 100%;
   height: 100%;
-
-  background-size: cover;
-
-  background-position: 72% center;
-
-  background-repeat: no-repeat;
-
-  opacity: 0;
-
-  filter:
-    saturate(1.03)
-    contrast(1.02)
-    brightness(1);
-
-  transition:
-    opacity 8s ease-in-out;
-
-  will-change: opacity;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
 }
 
+/* =====================================
+   CURVAS COLORIDAS
+===================================== */
 
-.heroSlideActive {
-  opacity: 1;
-}
-
-
-/* ============================================================
-   OVERLAY
-============================================================ */
-
-.leftOverlay {
+.curves {
   position: absolute;
-
-  inset: 0;
-
-  z-index: -4;
-
-  pointer-events: none;
-
-  background:
-
-    linear-gradient(
-      90deg,
-      rgba(0, 25, 20, 0.84) 0%,
-      rgba(0, 27, 21, 0.63) 25%,
-      rgba(0, 28, 22, 0.35) 47%,
-      rgba(0, 28, 22, 0.10) 70%,
-      transparent 100%
-    ),
-
-    linear-gradient(
-      0deg,
-      rgba(0, 22, 17, 0.90) 0%,
-      rgba(0, 23, 18, 0.80) 8%,
-      rgba(0, 24, 19, 0.61) 19%,
-      rgba(0, 25, 20, 0.39) 32%,
-      rgba(0, 25, 20, 0.19) 45%,
-      rgba(0, 25, 20, 0.06) 58%,
-      transparent 71%
-    );
-}
-
-
-.left::after {
-  content: '';
-
-  position: absolute;
-
-  inset: 0;
-
-  z-index: -3;
-
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      ellipse at 15% 58%,
-      rgba(0, 18, 14, 0.23) 0%,
-      rgba(0, 18, 14, 0.09) 34%,
-      transparent 63%
-    );
-
-  box-shadow:
-    inset 0 -30px 65px
-    rgba(0, 18, 14, 0.12);
-}
-
-
-/* ============================================================
-   CURVAS
-============================================================ */
-
-.topCurves {
-  position: absolute;
-
-  top: -2px;
-  left: -20px;
-
+  bottom: -40px;
+  left: -60px;
+  width: 320px;
+  height: 320px;
+  opacity: 0.85;
   z-index: 2;
-
-  width: 465px;
-  height: 250px;
-
-  overflow: visible;
-
-  pointer-events: none;
-
-  opacity: 0.42;
-}
-
-
-.topCurves path {
-  fill: none;
-
-  stroke:
-    rgba(33, 207, 155, 0.32);
-
-  stroke-width: 1;
-
-  stroke-linecap: round;
-}
-
-
-.topCurves path:nth-child(2) {
-  stroke:
-    rgba(33, 207, 155, 0.18);
-
-  stroke-dasharray: 3 8;
-}
-
-
-.topCurves path:nth-child(3) {
-  stroke:
-    rgba(33, 207, 155, 0.17);
-}
-
-
-.pinkAccent {
-  position: absolute;
-
-  right: -55px;
-  bottom: 185px;
-
-  z-index: 2;
-
-  width: 230px;
-  height: 1px;
-
-  transform: rotate(43deg);
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 52, 105, 0.34)
-    );
-
   pointer-events: none;
 }
 
-
-/* ============================================================
-   LOGO
-============================================================ */
-
-.heroLogoLink {
-  position: absolute;
-
-  top: 47px;
-  left: 66px;
-
-  z-index: 10;
-
-  display: inline-flex;
-
-  text-decoration: none;
-}
-
-
-.heroLogo {
-  display: block;
-
-  width: 88px;
-  height: auto;
-
-  max-height: 54px;
-
-  object-fit: contain;
-
-  filter:
-    drop-shadow(
-      0 3px 7px rgba(0, 0, 0, 0.13)
-    );
-}
-
-
-/* ============================================================
-   TEXTO ESQUERDO
-============================================================ */
+/* =====================================
+   CONTEÚDO ESQUERDO
+===================================== */
 
 .leftContent {
   position: absolute;
-
-  left: 68px;
-  bottom: 230px;
-
-  z-index: 10;
-
-  width: 570px;
-
-  max-width:
-    calc(100% - 110px);
-
-  color: #ffffff;
+  left: 20px;
+  bottom: 145px;
+  z-index: 3;
+  max-width: 440px;
+  color: var(--branco);
 }
-
-
-.leftContent::before {
-  content: '';
-
-  position: absolute;
-
-  z-index: -1;
-
-  top: -55px;
-  left: -60px;
-
-  width: 600px;
-  height: 330px;
-
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(0, 16, 13, 0.34) 0%,
-      rgba(0, 17, 14, 0.10) 48%,
-      transparent 73%
-    );
-
-  filter: blur(8px);
-}
-
 
 .leftContent h1 {
-  margin: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  color: #ffffff;
-
-  font-size:
-    clamp(34px, 2.75vw, 46px);
-
-  line-height: 1.07;
-
-  font-weight: 600;
-
-  letter-spacing: -0.035em;
-
-  text-shadow:
-    0 3px 12px
-    rgba(0, 0, 0, 0.27);
+  margin: 0 0 12px;
+  font-family: var(--fonte-titulo);
+  font-size: 27px;
+  line-height: 1.18;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
-
-
-.leftContent h1 span {
-  display: block;
-
-  white-space: nowrap;
-}
-
-
-.leftContent h1 em {
-  color: #20cf99;
-
-  font-family:
-    'DM Serif Display',
-    serif;
-
-  font-style: italic;
-
-  font-weight: 400;
-
-  letter-spacing: -0.025em;
-
-  text-shadow: none;
-}
-
 
 .leftContent p {
-  max-width: 450px;
-
-  margin:
-    21px
-    0
-    0;
-
-  color:
-    rgba(255, 255, 255, 0.88);
-
-  font-size: 13px;
-
-  line-height: 1.62;
+  margin: 0;
+  font-family: var(--fonte-base);
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.88);
 }
 
-
-/* ============================================================
+/* =====================================
    ESTATÍSTICAS
-============================================================ */
+===================================== */
 
 .leftFooter {
   position: absolute;
-
-  left: 68px;
-  bottom: 62px;
-
-  z-index: 10;
-
+  left: 34px;
+  bottom: 13px;
   display: flex;
   align-items: center;
-
-  gap: 29px;
-}
-
-
-.stat {
-  min-width: 88px;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 5px;
-}
-
-
-.stat strong {
-  color: #ffffff;
-
-  font-size: 26px;
-
-  line-height: 1;
-
-  font-weight: 600;
-
-  letter-spacing: -0.035em;
-}
-
-
-.stat span {
-  color:
-    rgba(255, 255, 255, 0.84);
-
+  gap: 25px;
+  z-index: 4;
+  color: var(--branco);
   font-size: 10px;
 }
 
-
-.statDivider {
-  width: 1px;
-  height: 44px;
-
-  background:
-    rgba(33, 211, 157, 0.73);
+.leftFooter span {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
 }
 
+.leftFooter .dot {
+  color: var(--verde-principal);
+}
 
-/* ============================================================
-   DIREITA
-============================================================ */
+/* =====================================
+   LADO DIREITO
+===================================== */
 
 .right {
   position: relative;
-
-  min-width: 0;
+  width: 48%;
   min-height: 100vh;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  padding:
-    55px
-    50px;
-
-  box-sizing: border-box;
-
+  padding: 40px;
   overflow: hidden;
 
   background:
-    linear-gradient(
-      145deg,
-      #fbfdfc 0%,
-      #f5faf7 47%,
-      #f1f8f4 100%
-    );
+    radial-gradient(
+      100% 100% at 100% 0%,
+      rgba(22, 168, 117, 0.10) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      80% 80% at 0% 100%,
+      rgba(78, 165, 217, 0.08) 0%,
+      transparent 45%
+    ),
+    var(--cinza-100);
 }
 
+/* =====================================
+   DECORAÇÕES
+===================================== */
 
-/* ============================================================
-   FUNDO DECORATIVO
-============================================================ */
-
-.backgroundDecor {
+.decor {
   position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
 
+/* =====================================
+   GRADE DE PONTOS
+===================================== */
+
+.dotGrid {
+  position: absolute;
   inset: 0;
 
-  z-index: 0;
+  background-image:
+    radial-gradient(
+      rgba(18, 38, 31, 0.07) 1px,
+      transparent 1px
+    );
 
-  overflow: hidden;
+  background-size: 22px 22px;
 
-  pointer-events: none;
+  mask-image:
+    radial-gradient(
+      circle at 65% 35%,
+      rgba(0, 0, 0, 0.9) 0%,
+      transparent 65%
+    );
+
+  -webkit-mask-image:
+    radial-gradient(
+      circle at 65% 35%,
+      rgba(0, 0, 0, 0.9) 0%,
+      transparent 65%
+    );
 }
 
+/* =====================================
+   BLOBS
+===================================== */
 
-.gradientOrb {
+.blob {
   position: absolute;
-
-  display: block;
-
-  border-radius:
-    52% 48% 62% 38% /
-    45% 58% 42% 55%;
-
-  filter: blur(22px);
-
-  animation:
-    morphOrb
-    16s
-    ease-in-out
-    infinite alternate;
-
-  will-change:
-    transform,
-    border-radius;
+  border-radius: 50%;
+  filter: blur(38px);
 }
 
-
-.orbTop {
-  width: 390px;
-  height: 390px;
-
-  top: -190px;
-  right: -110px;
-
-  background:
-    radial-gradient(
-      circle at 38% 42%,
-      rgba(37, 223, 166, 0.54) 0%,
-      rgba(81, 229, 183, 0.31) 35%,
-      rgba(112, 235, 197, 0.12) 56%,
-      transparent 75%
-    );
-
-  opacity: 0.9;
-
-  animation-duration: 18s;
-}
-
-
-.orbRight {
-  width: 330px;
-  height: 410px;
-
-  top: 30%;
-  right: -180px;
-
-  background:
-    radial-gradient(
-      circle at 30% 48%,
-      rgba(0, 132, 96, 0.28) 0%,
-      rgba(35, 213, 158, 0.23) 37%,
-      rgba(93, 231, 190, 0.09) 61%,
-      transparent 77%
-    );
-
-  opacity: 0.76;
-
-  animation-duration: 21s;
-
-  animation-delay: -8s;
-}
-
-
-.orbBottom {
-  width: 430px;
-  height: 430px;
-
-  right: -130px;
-  bottom: -210px;
-
-  background:
-    radial-gradient(
-      circle at 42% 35%,
-      rgba(32, 216, 160, 0.58) 0%,
-      rgba(71, 226, 178, 0.31) 38%,
-      rgba(125, 236, 203, 0.10) 61%,
-      transparent 76%
-    );
-
-  opacity: 0.9;
-
-  animation-duration: 17s;
-
-  animation-delay: -5s;
-}
-
-
-.orbLeft {
-  width: 310px;
-  height: 390px;
-
-  left: -180px;
-  top: 34%;
-
-  background:
-    radial-gradient(
-      circle at 62% 50%,
-      rgba(112, 232, 196, 0.34) 0%,
-      rgba(89, 220, 181, 0.21) 42%,
-      rgba(127, 234, 203, 0.07) 64%,
-      transparent 78%
-    );
-
-  opacity: 0.76;
-
-  animation-duration: 23s;
-
-  animation-delay: -11s;
-}
-
-
-.orbCenter {
-  width: 470px;
-  height: 470px;
-
-  top: 24%;
-  left: 11%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(212, 247, 235, 0.66) 0%,
-      rgba(194, 241, 225, 0.35) 35%,
-      rgba(199, 243, 228, 0.12) 58%,
-      transparent 76%
-    );
-
-  filter: blur(40px);
-
-  opacity: 0.72;
-
-  animation-duration: 25s;
-
-  animation-delay: -14s;
-}
-
-
-.orbSmallOne {
-  width: 185px;
-  height: 185px;
-
-  top: 7%;
-  left: -65px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(97, 226, 187, 0.38) 0%,
-      rgba(104, 228, 191, 0.16) 48%,
-      transparent 75%
-    );
-
-  opacity: 0.66;
-
-  animation-duration: 14s;
-}
-
-
-.orbSmallTwo {
-  width: 190px;
-  height: 190px;
-
-  bottom: 7%;
-  left: 15%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(78, 220, 177, 0.31) 0%,
-      rgba(111, 232, 197, 0.13) 51%,
-      transparent 76%
-    );
-
-  opacity: 0.66;
-
-  animation-duration: 19s;
-
-  animation-delay: -9s;
-}
-
-
-.auroraTop {
-  position: absolute;
-
-  width: 660px;
+.blobGreen {
+  width: 260px;
   height: 260px;
-
-  top: -150px;
-  left: -80px;
-
-  border-radius: 50%;
-
-  background:
-    linear-gradient(
-      100deg,
-      transparent,
-      rgba(58, 218, 168, 0.24),
-      rgba(112, 235, 198, 0.15),
-      transparent
-    );
-
-  filter: blur(30px);
-
-  opacity: 0.77;
-
-  animation:
-    auroraTopMove
-    20s
-    ease-in-out
-    infinite alternate;
+  top: -60px;
+  right: -40px;
+  background: var(--verde-principal);
+  opacity: 0.35;
 }
 
-
-.auroraBottom {
-  position: absolute;
-
-  width: 650px;
-  height: 270px;
-
-  right: -170px;
-  bottom: -135px;
-
-  border-radius: 50%;
-
-  background:
-    linear-gradient(
-      100deg,
-      transparent,
-      rgba(31, 205, 151, 0.25),
-      rgba(113, 233, 198, 0.12),
-      transparent
-    );
-
-  filter: blur(32px);
-
-  opacity: 0.76;
-
-  animation:
-    auroraBottomMove
-    22s
-    ease-in-out
-    infinite alternate;
+.blobBlue {
+  width: 220px;
+  height: 220px;
+  bottom: 10%;
+  right: 12%;
+  background: var(--azul);
+  opacity: 0.28;
 }
 
+.blobPink {
+  width: 180px;
+  height: 180px;
+  bottom: -40px;
+  left: 6%;
+  background: var(--rosa);
+  opacity: 0.22;
+}
 
-@keyframes morphOrb {
+/* =====================================
+   ANIMAÇÃO
+===================================== */
 
-  0% {
-    transform:
-      translate3d(0, 0, 0)
-      rotate(0deg)
-      scale(1);
-
-    border-radius:
-      52% 48% 62% 38% /
-      45% 58% 42% 55%;
+@media (prefers-reduced-motion: no-preference) {
+  .blob {
+    animation: floatSlow 10s ease-in-out infinite;
   }
 
-
-  35% {
-    transform:
-      translate3d(24px, -18px, 0)
-      rotate(3deg)
-      scale(1.04);
-
-    border-radius:
-      44% 56% 39% 61% /
-      57% 45% 55% 43%;
+  .blobBlue {
+    animation-duration: 12s;
+    animation-delay: 0.8s;
   }
 
-
-  70% {
-    transform:
-      translate3d(-13px, 24px, 0)
-      rotate(-4deg)
-      scale(0.97);
-
-    border-radius:
-      61% 39% 52% 48% /
-      40% 62% 38% 60%;
+  .blobPink {
+    animation-duration: 14s;
+    animation-delay: 1.4s;
   }
+}
 
-
+@keyframes floatSlow {
+  0%,
   100% {
-    transform:
-      translate3d(18px, 11px, 0)
-      rotate(5deg)
-      scale(1.05);
-
-    border-radius:
-      39% 61% 58% 42% /
-      59% 41% 55% 45%;
+    transform: translate(0, 0);
   }
 
+  50% {
+    transform: translate(14px, -18px);
+  }
 }
 
-
-@keyframes auroraTopMove {
-
-  from {
-    transform:
-      translate3d(-30px, 0, 0)
-      rotate(-10deg);
-  }
-
-  to {
-    transform:
-      translate3d(55px, 28px, 0)
-      rotate(-5deg);
-  }
-
-}
-
-
-@keyframes auroraBottomMove {
-
-  from {
-    transform:
-      translate3d(30px, 18px, 0)
-      rotate(10deg);
-  }
-
-  to {
-    transform:
-      translate3d(-55px, -20px, 0)
-      rotate(5deg);
-  }
-
-}
-
-
-/* ============================================================
-   CARD
-============================================================ */
+/* =====================================
+   FORMULÁRIO
+===================================== */
 
 .formContainer {
   position: relative;
-
   z-index: 5;
-
   width: 100%;
-  max-width: 460px;
-
-  box-sizing: border-box;
-
-  padding:
-    42px
-    44px
-    40px;
-
-  border:
-    1px solid
-    rgba(222, 231, 226, 0.78);
-
-  border-radius: 25px;
-
-  background:
-    rgba(255, 255, 255, 0.92);
+  max-width: 380px;
+  padding: 40px 36px;
+  background: var(--branco);
+  border-radius: 24px;
 
   box-shadow:
-    0 8px 20px
-      rgba(0, 48, 35, 0.025),
-    0 30px 70px
-      rgba(0, 48, 35, 0.07);
+    0 2px 6px rgba(18, 38, 31, 0.04),
+    0 24px 48px rgba(18, 38, 31, 0.09);
 
-  backdrop-filter: blur(18px);
-
-  -webkit-backdrop-filter: blur(18px);
-
-  animation:
-    cardEnter
-    0.55s
-    ease
-    both;
+  animation: fadeSlideUp 0.55s ease both;
 }
 
-
-@keyframes cardEnter {
-
+@keyframes fadeSlideUp {
   from {
     opacity: 0;
-
-    transform:
-      translateY(14px);
+    transform: translateY(18px);
   }
 
   to {
     opacity: 1;
-
-    transform:
-      translateY(0);
+    transform: translateY(0);
   }
-
 }
 
+/* =====================================
+   LOGO
+===================================== */
 
-/* ============================================================
-   LOGO CARD
-============================================================ */
+.brandMark {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  border-radius: 11px;
 
-.cardLogo {
-  display: block;
-
-  width: 78px;
-  height: auto;
-
-  margin:
-    0
-    0
-    24px;
-
-  object-fit: contain;
+  background:
+    linear-gradient(
+      135deg,
+      var(--verde-principal),
+      var(--azul)
+    );
 }
 
+/* =====================================
+   TÍTULO
+===================================== */
 
-/* ============================================================
-   HEADER
-============================================================ */
-
-.cardHeader {
-  margin-bottom: 28px;
+.formContainer h2 {
+  margin: 0 0 6px;
+  font-family: var(--fonte-titulo);
+  color: var(--texto);
+  font-size: 25px;
+  line-height: 1.2;
+  font-weight: 700;
 }
 
-
-.cardHeader h2 {
-  margin: 0;
-
-  color: #10251f;
-
-  font-size: 29px;
-
-  line-height: 1.15;
-
-  font-weight: 600;
-
-  letter-spacing: -0.035em;
-}
-
+/* =====================================
+   SUBTÍTULO
+===================================== */
 
 .subtitle {
-  max-width: 340px;
-
-  margin:
-    9px
-    0
-    0;
-
-  color: #66756f;
-
+  margin: 0 0 26px;
+  color: var(--texto-suave);
+  font-family: var(--fonte-base);
   font-size: 13px;
-
-  line-height: 1.55;
+  line-height: 1.5;
+  font-weight: 400;
 }
 
-
-/* ============================================================
+/* =====================================
    FORM
-============================================================ */
+===================================== */
 
 .form {
   display: flex;
-
   flex-direction: column;
-
-  gap: 18px;
+  gap: 16px;
 }
 
+/* =====================================
+   CAMPOS
+===================================== */
 
 .inputGroup {
   display: flex;
-
   flex-direction: column;
-
-  gap: 7px;
+  gap: 6px;
 }
 
-
 .inputGroup label {
-  color: #10251f;
-
+  color: var(--texto);
   font-size: 12px;
-
   font-weight: 600;
 }
 
-
-.inputWrapper {
-  position: relative;
-
+.inputGroup input {
   width: 100%;
-}
-
-
-.inputWrapper input {
-  width: 100%;
-  height: 52px;
-
+  height: 42px;
+  padding: 0 13px;
   box-sizing: border-box;
 
-  padding:
-    0
-    16px
-    0
-    45px;
-
-  border:
-    1px solid #c4d2cb;
-
-  border-radius: 11px;
-
+  border: 1.5px solid #B8C2BE;
+  border-radius: 10px;
   outline: none;
 
-  background: #ffffff;
-
-  color: #10251f;
-
-  font-family:
-    'Poppins',
-    sans-serif;
-
+  background: var(--branco);
+  color: var(--texto);
+  font-family: inherit;
   font-size: 13px;
 
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
-
-.inputWrapper input::placeholder {
-  color: #9aa8a3;
+.inputGroup input::placeholder {
+  color: #9AA8A3;
 }
 
-
-.inputWrapper input:hover {
-  border-color: #9eafa8;
+.inputGroup input:hover {
+  border-color: #8FA09A;
 }
 
-
-.inputWrapper input:focus {
-  border-color: #005942;
+.inputGroup input:focus {
+  border-color: var(--verde-principal);
+  background: var(--branco);
 
   box-shadow:
-    0 0 0 3px
-    rgba(0, 89, 66, 0.10);
+    0 0 0 4px rgba(22, 168, 117, 0.12);
 }
 
-
-.inputWrapper input:disabled {
-  opacity: 0.7;
-
-  cursor: not-allowed;
-}
-
-
-.inputIcon {
-  position: absolute;
-
-  top: 50%;
-  left: 15px;
-
-  transform:
-    translateY(-50%);
-
-  color: #64766f;
-
-  pointer-events: none;
-}
-
-
-/* ============================================================
-   ERRO
-============================================================ */
-
-.errorMessage {
-  padding:
-    10px
-    12px;
-
-  border:
-    1px solid #f0c9ce;
-
-  border-radius: 9px;
-
-  background: #fff5f6;
-
-  color: #b5283d;
-
-  font-size: 11px;
-
-  line-height: 1.5;
-}
-
-
-/* ============================================================
+/* =====================================
    BOTÃO
-============================================================ */
+===================================== */
 
 .submitButton {
   width: 100%;
-  height: 54px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 15px;
-
-  margin-top: 2px;
+  height: 42px;
+  margin-top: 5px;
 
   border: none;
+  border-radius: 10px;
 
-  border-radius: 999px;
+  background: var(--verde-principal);
+  color: var(--branco);
 
-  background:
-    linear-gradient(
-      100deg,
-      #007154 0%,
-      #005942 52%,
-      #003f33 100%
-    );
-
-  color: #ffffff;
-
-  font-family:
-    'Poppins',
-    sans-serif;
-
-  font-size: 14px;
-
-  font-weight: 600;
+  font-family: var(--fonte-base);
+  font-size: 13px;
+  font-weight: 700;
 
   cursor: pointer;
+  transition: 0.2s;
+}
+
+.submitButton:hover {
+  background: var(--verde-escuro);
+  transform: translateY(-2px);
 
   box-shadow:
-    0 10px 22px
-    rgba(0, 89, 66, 0.14);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    0 12px 26px rgba(22, 168, 117, 0.28);
 }
 
-
-.submitButton:hover:not(:disabled) {
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 14px 27px
-    rgba(0, 89, 66, 0.20);
+.submitButton:active {
+  transform: translateY(0);
 }
 
-
-.submitButton:hover svg {
-  transform:
-    translateX(3px);
-}
-
-
-.submitButton svg {
-  transition:
-    transform 0.2s ease;
-}
-
-
-.submitButton:disabled {
-  opacity: 0.65;
-
-  cursor: not-allowed;
-}
-
-
-/* ============================================================
-   VOLTAR
-============================================================ */
-
-.backArea {
-  margin-top: 25px;
-
-  padding-top: 21px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 5px;
-
-  border-top:
-    1px solid #e1e8e4;
-
-  color: #74837d;
-
-  font-size: 11px;
-}
-
+/* =====================================
+   LINK
+===================================== */
 
 .link {
-  color: #005942;
-
-  font-size: 11px;
-
+  color: var(--rosa);
+  font-size: 12px;
   font-weight: 600;
-
   text-decoration: none;
 }
 
-
 .link:hover {
+  color: var(--vermelho);
   text-decoration: underline;
 }
 
+/* =====================================
+   TEXTO VOLTAR
+===================================== */
 
-/* ============================================================
-   MODAL
-============================================================ */
+.backText {
+  margin: 20px 0 0;
+  text-align: center;
+  color: var(--texto-suave);
+  font-size: 12px;
+}
+
+/* =====================================
+   MODAL DE CONFIRMAÇÃO
+===================================== */
 
 .modalOverlay {
   position: fixed;
-
   inset: 0;
-
   z-index: 1000;
 
   display: flex;
@@ -1211,362 +465,322 @@
 
   padding: 20px;
 
-  background:
-    rgba(0, 28, 21, 0.72);
-
+  background: rgba(10, 30, 23, 0.72);
   backdrop-filter: blur(5px);
-
-  -webkit-backdrop-filter:
-    blur(5px);
 }
 
+/* =====================================
+   CARD DE CONFIRMAÇÃO
+===================================== */
 
 .confirmationCard {
+  position: relative;
+
   width: 100%;
-  max-width: 390px;
+  max-width: 380px;
 
-  padding:
-    38px
-    34px;
+  padding: 36px 30px;
 
-  box-sizing: border-box;
+  border-radius: 24px;
 
-  border:
-    1px solid #c5d4cd;
-
-  border-radius: 22px;
-
-  background: #f8fcfa;
+  background: var(--branco);
 
   text-align: center;
 
   box-shadow:
-    0 28px 70px
-    rgba(0, 0, 0, 0.26);
+    0 20px 60px rgba(18, 38, 31, 0.20);
 
-  animation:
-    modalAppear
-    0.25s ease;
+  animation: modalAppear 0.25s ease;
 }
 
-
 @keyframes modalAppear {
-
   from {
     opacity: 0;
-
-    transform:
-      translateY(12px)
-      scale(0.98);
+    transform: translateY(15px) scale(0.97);
   }
 
   to {
     opacity: 1;
-
-    transform:
-      translateY(0)
-      scale(1);
+    transform: translateY(0) scale(1);
   }
-
 }
 
+/* =====================================
+   BOTÃO FECHAR
+===================================== */
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+
+  border: none;
+  background: transparent;
+
+  color: var(--texto-suave);
+  font-size: 26px;
+
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: var(--texto);
+}
+
+/* =====================================
+   ÍCONE DE SUCESSO
+===================================== */
 
 .successIcon {
-  width: 58px;
-  height: 58px;
+  width: 60px;
+  height: 60px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  margin:
-    0
-    auto
-    20px;
+  margin: 0 auto 20px;
 
   border-radius: 50%;
 
-  background: #dff7ee;
+  background: rgba(22, 168, 117, 0.12);
+  color: var(--verde-principal);
 
-  color: #005942;
+  font-size: 30px;
+  font-weight: 700;
 }
 
+/* =====================================
+   TEXTOS DO MODAL
+===================================== */
 
 .confirmationCard h2 {
-  margin:
-    0
-    0
-    10px;
+  margin: 0 0 12px;
 
-  color: #10251f;
-
-  font-size: 25px;
-
-  font-weight: 600;
+  color: var(--texto);
+  font-family: var(--fonte-titulo);
+  font-size: 24px;
 }
-
 
 .confirmationCard p {
-  margin:
-    0
-    auto
-    12px;
+  margin: 0 auto 12px;
 
-  color: #66756f;
-
-  font-size: 12px;
-
-  line-height: 1.55;
+  color: var(--texto-suave);
+  font-family: var(--fonte-base);
+  font-size: 13px;
+  line-height: 1.5;
 }
-
 
 .emailText {
   display: block;
 
-  margin:
-    17px
-    0
-    20px;
+  margin: 14px 0 18px;
 
-  padding:
-    10px
-    14px;
+  color: var(--verde-escuro);
 
-  border-radius: 10px;
-
-  background: #edf7f3;
-
-  color: #005942;
-
-  font-size: 12px;
-
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
 
   overflow-wrap: anywhere;
 }
 
+.instruction {
+  margin-bottom: 24px !important;
+  font-size: 12px !important;
+}
+
+/* =====================================
+   BOTÃO ENTENDI
+===================================== */
 
 .confirmationButton {
   width: 100%;
-  height: 49px;
+  height: 42px;
 
   border: none;
+  border-radius: 10px;
 
-  border-radius: 999px;
+  background: var(--verde-principal);
+  color: var(--branco);
 
-  background: #005942;
-
-  color: #ffffff;
-
-  font-family:
-    'Poppins',
-    sans-serif;
-
-  font-weight: 600;
+  font-family: var(--fonte-base);
+  font-size: 13px;
+  font-weight: 700;
 
   cursor: pointer;
+  transition: 0.2s;
 }
 
+.confirmationButton:hover {
+  background: var(--verde-escuro);
+}
+
+/* =====================================
+   BOTÃO REENVIAR E-MAIL
+===================================== */
 
 .resendButton {
   width: 100%;
-  height: 47px;
 
-  margin-top: 11px;
+  margin-top: 12px;
+  padding: 11px;
 
-  border:
-    1px solid #005942;
-
-  border-radius: 999px;
+  border: 1px solid var(--verde-principal);
+  border-radius: 10px;
 
   background: transparent;
+  color: var(--verde-principal);
 
-  color: #005942;
-
-  font-family:
-    'Poppins',
-    sans-serif;
-
-  font-weight: 600;
+  font-family: var(--fonte-base);
+  font-size: 12px;
+  font-weight: 700;
 
   cursor: pointer;
+  transition: 0.2s;
 }
-
 
 .resendButton:hover {
-  background: #eaf6f1;
+  background: rgba(22, 168, 117, 0.08);
 }
 
-
 .resendButton:disabled {
-  opacity: 0.55;
-
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
+/* =====================================
+   MENSAGEM DE REENVIO
+===================================== */
 
 .resendMessage {
   margin-top: 12px !important;
 
-  color: #005942 !important;
+  color: var(--verde-principal) !important;
 
+  font-size: 12px !important;
   font-weight: 600;
 }
 
+/* =====================================
+   LINK DO MODAL
+===================================== */
 
 .confirmationLink {
-  display: inline-block;
+  display: block;
 
   margin-top: 20px;
 
-  color: #005942;
+  color: var(--rosa);
 
-  font-size: 11px;
-
+  font-size: 12px;
   font-weight: 600;
 
   text-decoration: none;
 }
 
-
 .confirmationLink:hover {
+  color: var(--vermelho);
   text-decoration: underline;
 }
 
-
-/* ============================================================
-   RESPONSIVO
-============================================================ */
-
-@media (max-width: 1250px) {
-
-  .page {
-    grid-template-columns:
-      54% 46%;
-  }
-
-
-  .leftContent {
-    left: 45px;
-  }
-
-
-  .leftFooter {
-    left: 45px;
-  }
-
-
-  .heroLogoLink {
-    left: 45px;
-  }
-
-
-  .right {
-    padding:
-      45px
-      35px;
-  }
-
-}
-
+/* =====================================
+   RESPONSIVIDADE
+===================================== */
 
 @media (max-width: 900px) {
-
-  .page {
-    grid-template-columns:
-      50% 50%;
+  .left {
+    width: 50%;
   }
 
+  .right {
+    width: 50%;
+    padding: 30px;
+  }
 
   .leftContent h1 {
-    font-size: 32px;
+    font-size: 23px;
   }
-
-
-  .right {
-    padding:
-      40px
-      22px;
-  }
-
-
-  .formContainer {
-    padding:
-      36px
-      30px;
-  }
-
 }
 
-
-@media (max-width: 720px) {
-
+@media (max-width: 700px) {
   .page {
-    display: block;
-
-    overflow: visible;
+    flex-direction: column;
   }
-
 
   .left {
-    min-height: 650px;
+    width: 100%;
+    min-height: 300px;
   }
-
-
-  .leftContent {
-    left: 24px;
-
-    bottom: 175px;
-
-    width:
-      calc(100% - 48px);
-  }
-
-
-  .leftContent h1 span {
-    white-space: normal;
-  }
-
-
-  .leftFooter {
-    left: 24px;
-    right: 24px;
-
-    bottom: 37px;
-
-    justify-content:
-      space-between;
-  }
-
-
-  .heroLogoLink {
-    left: 24px;
-  }
-
 
   .right {
-    min-height: 680px;
-
-    padding:
-      55px
-      18px;
+    width: 100%;
+    min-height: 500px;
+    padding: 50px 20px;
   }
 
+  .leftContent {
+    left: 25px;
+    bottom: 70px;
+  }
+
+  .leftFooter {
+    left: 25px;
+  }
 }
 
-
-@media (
-  prefers-reduced-motion:
-  reduce
-) {
-
-  .heroSlide,
-  .gradientOrb,
-  .auroraTop,
-  .auroraBottom {
-    transition: none;
-
-    animation: none;
+@media (max-width: 450px) {
+  .left {
+    min-height: 260px;
   }
 
+  .leftContent {
+    left: 20px;
+    bottom: 55px;
+  }
+
+  .leftContent h1 {
+    font-size: 20px;
+  }
+
+  .leftContent p {
+    font-size: 8px;
+  }
+
+  .leftContent p br {
+    display: none;
+  }
+
+  .leftFooter {
+    left: 20px;
+    gap: 12px;
+  }
+
+  .leftFooter span {
+    font-size: 8px;
+  }
+
+  .right {
+    padding: 40px 20px;
+  }
+
+  .formContainer {
+    width: 85%;
+    max-width: 304px;
+    padding: 30px 24px;
+    border-radius: 20px;
+  }
+
+  .formContainer h2 {
+    font-size: 21px;
+  }
+
+  .confirmationCard {
+    max-width: 304px;
+    padding: 32px 24px;
+    border-radius: 20px;
+  }
+
+  .confirmationCard h2 {
+    font-size: 21px;
+  }
 }

@@ -89,7 +89,15 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
         backgroundColor: fundo,
         elevation: 0,
         centerTitle: false,
-        
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black87,
+          ),
+        ),
         title: const Text(
           'Feed',
           style: TextStyle(

@@ -1,825 +1,345 @@
-/* =========================================
-   SATE — PERFIL DO ATLETA
-   FUNDO CREME / VERDE / ROSA
-========================================= */
-
-.page {
-    --creme: #FAF5EE;
-    --creme-card: #FFFCF7;
-    --creme-borda: #E8DED1;
-
-    --verde-principal: #16A875;
-    --verde-escuro: #006B4F;
-    --verde-dark: #005942;
-
-    --rosa: #EF476F;
-    --vermelho: #D52941;
-
-    --texto: #12261F;
-    --texto-suave: #6C7C77;
-    --texto-claro: #93A19A;
-
-    width: 100%;
+.container {
     min-height: 100vh;
+    background-color: #004d40; /* Fundo verde escuro */
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* HEADER */
+.header {
+    background: #ffffff;
+    padding: 10px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo {
+    font-weight: 900;
+    font-size: 20px;
+    color: #004d40;
+    font-style: italic;
+}
+
+.headerTitle h1 {
+    font-size: 16px;
     margin: 0;
-    padding: 0;
-
-    background: var(--creme);
-    color: var(--texto);
-
-    font-family: var(--fonte-base, 'Inter'), sans-serif;
-    box-sizing: border-box;
+    color: #000;
 }
 
-.page *,
-.page *::before,
-.page *::after {
-    box-sizing: border-box;
+.headerTitle span {
+    font-size: 12px;
+    color: #666;
 }
 
-/* =========================================
-   CONTEÚDO PRINCIPAL
-========================================= */
+.headerSearch {
+    flex: 1;
+    max-width: 400px;
+    margin: 0 24px;
+    position: relative;
+}
 
+.headerSearch svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+.headerSearch input {
+    width: 100%;
+    padding: 8px 12px 8px 40px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    font-size: 14px;
+    outline: none;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.userProfile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.avatarSmall {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #004d40;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.userProfile div {
+    display: flex;
+    flex-direction: column;
+}
+
+.userProfile strong {
+    font-size: 14px;
+}
+
+.userProfile span {
+    font-size: 12px;
+    color: #666;
+}
+
+/* MAIN */
 .main {
-    width: min(1230px, calc(100% - 64px));
+    flex: 1;
+    padding: 24px 40px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 48px 0 55px;
+    width: 100%;
+    box-sizing: border-box;
 }
-
-/* =========================================
-   VOLTAR PARA ATLETAS
-========================================= */
 
 .backButton {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 7px;
-
-    margin: 0 0 25px;
-    padding: 0;
-
-    border: none;
+    gap: 8px;
     background: transparent;
-
-    color: var(--texto-suave);
-
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
-
+    border: none;
+    color: #a7c6bd;
+    font-size: 14px;
     cursor: pointer;
-
-    transition: color 0.2s ease;
+    padding: 0;
+    margin-bottom: 16px;
+    font-family: inherit;
+    transition: color 0.2s;
 }
 
 .backButton:hover {
-    color: var(--verde-escuro);
+    color: #ffffff;
 }
 
-.backButton svg {
-    flex-shrink: 0;
-    stroke-width: 1.8;
-}
-
-/* =========================================
-   CABEÇALHO DO PERFIL
-========================================= */
-
+/* CARD DO PERFIL */
 .profileCard {
-    width: 100%;
-    min-height: 112px;
-
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-
-    gap: 28px;
-    padding: 0;
-
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
+    align-items: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.profileLeft {
+.profileInfo {
     display: flex;
     align-items: center;
-    gap: 23px;
-
-    flex: 1;
-    min-width: 0;
+    gap: 20px;
 }
 
-.avatar {
-    width: 84px;
-    height: 84px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
+.avatarLarge {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-
-    background: var(--rosa);
-    color: #FFFFFF;
-
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
-    font-size: 25px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-}
-
-.avatar img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.nameGroup {
+    background: #3498db;
+    color: white;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
-
-    min-width: 0;
-    gap: 7px;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-.nameGroup h1 {
+.profileDetails h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    color: #000;
+}
+
+.profileDetails p {
     margin: 0;
-
-    color: var(--texto);
-
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
-    font-size: clamp(22px, 2.1vw, 32px);
-    font-weight: 800;
-    line-height: 1.25;
-    letter-spacing: -1.2px;
-
-    overflow-wrap: anywhere;
+    color: #666;
+    font-size: 14px;
 }
 
-.metaInfo {
-    margin: 0;
-
-    color: var(--texto-suave);
-
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.6;
-}
-
-/* =========================================
-   ÍNDICE DE DESEMPENHO
-========================================= */
-
-.profilePerformance {
+.performanceIndex {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    justify-content: center;
-
-    flex-shrink: 0;
-    gap: 7px;
 }
 
-.profilePerformance strong {
-    color: var(--verde-escuro);
-
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
-    font-size: 38px;
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -1.5px;
+.indexValue {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3498db;
 }
 
-.profilePerformance span {
-    color: var(--texto-suave);
+.indexLabel {
     font-size: 12px;
-    font-weight: 400;
+    color: #999;
 }
 
-/* =========================================
-   BOTÕES DE NAVEGAÇÃO
-========================================= */
-
+/* BOTÕES DE AÇÃO */
 .actionsRow {
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-
     gap: 12px;
-    margin: 24px 0 36px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
 }
 
 .actionButton {
-    display: inline-flex;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
     align-items: center;
-    justify-content: center;
-
-    min-height: 47px;
-    gap: 9px;
-    padding: 0 20px;
-
-    background: var(--creme-card);
-    color: var(--verde-escuro);
-
-    border: 1px solid #DCCDBB;
-    border-radius: 12px;
-
-    font-family: inherit;
-    font-size: 13px;
+    gap: 8px;
+    font-size: 14px;
     font-weight: 600;
-
-    white-space: nowrap;
+    color: #333;
     cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
+    font-family: inherit;
+    transition: all 0.2s;
 }
 
-.actionButton svg {
-    width: 16px;
-    height: 16px;
-
-    flex-shrink: 0;
-    stroke-width: 1.9;
+.actionButton:hover {
+    border-color: #004d40;
+    background: #f0fdf9;
 }
 
-.actionButton:hover:not(:disabled) {
-    background: #F0E9DE;
-    border-color: var(--verde-principal);
-    color: var(--verde-dark);
-
-    transform: translateY(-1px);
-}
-
-.actionButton:focus-visible {
-    outline: 3px solid rgba(22, 168, 117, 0.25);
-    outline-offset: 3px;
-}
-
-.actionButton:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-}
-
-/* =========================================
-   ESTATÍSTICAS
-   FAIXA COM DIVISÓRIAS VERTICAIS
-========================================= */
-
+/* CARDS DE ESTATÍSTICAS */
 .statsGrid {
-    width: 100%;
-
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-
-    margin-bottom: 45px;
-
-    background: transparent;
-
-    border-top: 1px solid var(--creme-borda);
-    border-bottom: 1px solid var(--creme-borda);
-    border-radius: 0;
-
-    overflow: hidden;
-    box-shadow: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
-.statItem {
-    min-width: 0;
-    min-height: 106px;
-
+.statCard {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-
-    padding: 20px 27px;
-
-    background: transparent;
-
-    border: none;
-    border-right: 1px solid var(--creme-borda);
-    border-radius: 0;
-    box-shadow: none;
-}
-
-.statItem:first-child {
-    padding-left: 0;
-}
-
-.statItem:last-child {
-    border-right: none;
-}
-
-.statLabel {
-    display: block;
-    margin: 0 0 7px;
-
-    color: var(--texto-suave);
-
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1.5;
+    border-top: 4px solid #ccc;
 }
 
 .statValue {
-    display: block;
-    margin: 0;
-
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
-    font-size: 36px;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -1px;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 4px;
 }
 
-.good {
-    color: var(--verde-escuro);
+.statLabel {
+    font-size: 14px;
+    color: #666;
 }
 
-.bad {
-    color: var(--vermelho);
-}
+.statGood { border-color: #2ecc71; }
+.statGood .statValue { color: #2ecc71; }
 
-.neutral {
-    color: #737A75;
-}
+.statBad { border-color: #e74c3c; }
+.statBad .statValue { color: #e74c3c; }
 
-.highlight {
-    color: var(--rosa);
-}
+.statNeutral { border-color: #3498db; }
+.statNeutral .statValue { color: #3498db; }
 
-/* =========================================
-   ÁREA DOS GRÁFICOS
-========================================= */
+.statHighlight { border-color: #e74c3c; }
+.statHighlight .statValue { color: #e74c3c; }
 
+/* GRÁFICOS */
 .chartsGrid {
-    width: 100%;
-
     display: grid;
-    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
-
-    align-items: start;
-    gap: 48px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
 }
-
-/* =========================================
-   CARDS DOS GRÁFICOS
-   FUNDO CREME CONTÍNUO, SEM BORDA EXTERNA
-========================================= */
 
 .chartCard {
-    min-width: 0;
-    min-height: 355px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
 
+.chartCard h3 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.chartContainer {
     display: flex;
-    flex-direction: column;
-
-    padding: 0;
-
-    background: transparent;
-    color: var(--texto);
-
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    overflow: visible;
-}
-
-/* =========================================
-   CABEÇALHO DOS GRÁFICOS
-========================================= */
-
-.chartHeader {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    gap: 15px;
-}
-
-.chartHeader h2 {
-    margin: 0 0 6px;
-
-    color: var(--texto);
-
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
-    font-size: 19px;
-    font-weight: 700;
-    line-height: 1.4;
-    letter-spacing: -0.5px;
-}
-
-.chartHeader p {
-    margin: 0;
-
-    color: var(--texto-suave);
-
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.6;
-}
-
-.chartIcon {
-    display: none;
-}
-
-/* =========================================
-   GRÁFICO DE EVOLUÇÃO
-========================================= */
-
-.lineChartContainer {
-    flex: 1;
-
-    width: 100%;
-    min-height: 255px;
-
-    display: flex;
-    align-items: center;
     justify-content: center;
-
-    margin-top: 20px;
+    align-items: center;
+    height: 250px;
 }
 
 .lineChart {
-    display: block;
-
     width: 100%;
-    height: auto;
-    max-height: 285px;
-
-    overflow: visible;
-}
-
-.gridLine {
-    stroke: #E8DED1;
-    stroke-width: 1;
-    stroke-dasharray: 3 5;
-}
-
-.axisLabel {
-    fill: #89968F;
-
-    font-family: var(--fonte-base, 'Inter'), sans-serif;
-    font-size: 11px;
-}
-
-.dataLine {
-    stroke: var(--verde-escuro);
-    stroke-width: 2.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.dataPoint {
-    fill: var(--creme);
-    stroke: var(--verde-escuro);
-    stroke-width: 2;
-}
-
-.lastDataPoint {
-    fill: var(--rosa);
-    stroke: var(--verde-escuro);
-    stroke-width: 1.5;
-}
-
-/* =========================================
-   GRÁFICO RADAR
-========================================= */
-
-.radarContainer {
-    flex: 1;
-
-    width: 100%;
-    min-height: 285px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-top: 14px;
+    height: 100%;
 }
 
 .radarChart {
-    display: block;
-
     width: 100%;
-    max-width: 340px;
-    height: auto;
-
-    overflow: visible;
+    height: 100%;
+    max-width: 250px;
 }
 
-.radarGrid {
-    fill: none;
-    stroke: #E8DED1;
-    stroke-width: 1.2;
-}
-
-.radarAxis {
-    stroke: #E8DED1;
-    stroke-width: 1;
-}
-
-.radarArea {
-    fill: rgba(22, 168, 117, 0.16);
-
-    stroke: var(--verde-escuro);
-    stroke-width: 2.5;
-    stroke-linejoin: round;
-}
-
-.radarPoint {
-    fill: var(--rosa);
-    stroke: var(--rosa);
-    stroke-width: 1;
-}
-
-.radarLabel {
-    fill: #89968F;
-
-    font-family: var(--fonte-base, 'Inter'), sans-serif;
-    font-size: 12px;
-}
-
-/* =========================================
-   NOTEBOOKS
-========================================= */
-
-@media (max-width: 1100px) {
-    .main {
-        width: calc(100% - 48px);
-    }
-
-    .chartsGrid {
-        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-        gap: 30px;
-    }
-
-    .nameGroup h1 {
-        font-size: 25px;
-    }
-
-    .statItem {
-        padding-right: 18px;
-        padding-left: 18px;
-    }
-
-    .statItem:first-child {
-        padding-left: 0;
-    }
-
-    .chartHeader h2 {
-        font-size: 17px;
-    }
-}
-
-/* =========================================
-   TABLETS
-========================================= */
-
-@media (max-width: 800px) {
-    .main {
-        width: calc(100% - 40px);
-        padding-top: 32px;
-    }
-
-    .profileCard {
-        align-items: flex-start;
-        gap: 20px;
-    }
-
-    .profileLeft {
-        gap: 16px;
-    }
-
-    .avatar {
-        width: 68px;
-        height: 68px;
-        font-size: 22px;
-    }
-
-    .nameGroup h1 {
-        font-size: 22px;
-    }
-
-    .metaInfo {
-        font-size: 12px;
-    }
-
-    .profilePerformance strong {
-        font-size: 32px;
-    }
-
-    .actionsRow {
-        margin-bottom: 28px;
-    }
-
+/* RESPONSIVO */
+@media (max-width: 900px) {
     .statsGrid {
-        margin-bottom: 34px;
+        grid-template-columns: repeat(2, 1fr);
     }
-
-    .statItem {
-        min-height: 92px;
-        padding: 16px;
-    }
-
-    .statItem:first-child {
-        padding-left: 0;
-    }
-
-    .statValue {
-        font-size: 31px;
-    }
-
     .chartsGrid {
         grid-template-columns: 1fr;
-        gap: 36px;
-    }
-
-    .chartCard {
-        min-height: 320px;
-    }
-
-    .lineChartContainer {
-        min-height: 245px;
-    }
-
-    .radarContainer {
-        min-height: 275px;
-    }
-
-    .radarChart {
-        max-width: 320px;
     }
 }
 
-/* =========================================
-   CELULARES
-========================================= */
-
-@media (max-width: 540px) {
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    .headerSearch {
+        width: 100%;
+        margin: 10px 0;
+    }
     .main {
-        width: calc(100% - 32px);
-        padding: 24px 0 36px;
+        padding: 16px;
     }
-
-    .backButton {
-        margin-bottom: 22px;
-        font-size: 12px;
-    }
-
     .profileCard {
         flex-direction: column;
         align-items: flex-start;
-        gap: 20px;
+        gap: 16px;
     }
-
-    .profileLeft {
-        width: 100%;
-        align-items: flex-start;
-        gap: 13px;
-    }
-
-    .avatar {
-        width: 57px;
-        height: 57px;
-        font-size: 19px;
-    }
-
-    .nameGroup {
-        flex: 1;
-    }
-
-    .nameGroup h1 {
-        font-size: 20px;
-        letter-spacing: -0.6px;
-    }
-
-    .metaInfo {
-        font-size: 11px;
-        overflow-wrap: anywhere;
-    }
-
-    .profilePerformance {
+    .performanceIndex {
         align-items: flex-start;
     }
-
-    .profilePerformance strong {
-        font-size: 30px;
+    .statsGrid {
+        grid-template-columns: 1fr;
     }
-
-    .profilePerformance span {
-        font-size: 11px;
-    }
-
-    /* Botões */
-
     .actionsRow {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-
-        gap: 9px;
-        margin: 23px 0 28px;
+        flex-direction: column;
     }
-
     .actionButton {
         width: 100%;
-        min-width: 0;
-        min-height: 44px;
-
-        gap: 6px;
-        padding: 0 8px;
-
-        font-size: 11px;
-    }
-
-    .actionButton svg {
-        width: 15px;
-        height: 15px;
-    }
-
-    /* Estatísticas */
-
-    .statsGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        margin-bottom: 30px;
-    }
-
-    .statItem {
-        min-height: 90px;
-        padding: 17px 12px;
-        border-bottom: 1px solid var(--creme-borda);
-    }
-
-    .statItem:first-child {
-        padding-left: 0;
-    }
-
-    .statItem:nth-child(2) {
-        border-right: none;
-    }
-
-    .statItem:nth-child(3),
-    .statItem:nth-child(4) {
-        border-bottom: none;
-    }
-
-    .statLabel {
-        margin-bottom: 8px;
-        font-size: 11px;
-    }
-
-    .statValue {
-        font-size: 30px;
-    }
-
-    /* Gráficos */
-
-    .chartsGrid {
-        gap: 32px;
-    }
-
-    .chartCard {
-        min-height: 0;
-    }
-
-    .chartHeader h2 {
-        font-size: 17px;
-    }
-
-    .chartHeader p {
-        font-size: 12px;
-    }
-
-    .lineChartContainer {
-        min-height: 0;
-        margin-top: 20px;
-    }
-
-    .lineChart {
-        width: 100%;
-    }
-
-    .radarContainer {
-        min-height: 0;
-        margin-top: 22px;
-        padding: 0 5px;
-    }
-
-    .radarChart {
-        width: 100%;
-        max-width: 310px;
+        justify-content: center;
     }
 }

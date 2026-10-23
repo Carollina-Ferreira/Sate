@@ -1,131 +1,84 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
-
-/* =========================================================
-   SATE — CONFIGURAÇÕES
-   Nova identidade visual igual às telas de Partidas/Comparações
-========================================================= */
+/* =====================================
+   PÁGINA
+===================================== */
 
 .page {
-  --verde: #005942;
-  --verde-profundo: #003d31;
-  --verde-suave: #dff3eb;
+  width: 100%;
+  min-height: 100vh;
 
-  --rosa: #ef3f6f;
-  --rosa-claro: #ffe4ec;
-
-  --creme: #faf5ee;
-  --creme-card: #fffaf4;
-  --creme-linha: #e8ddd2;
-
-  --texto: #172a23;
-  --texto-secundario: #777e79;
-
-  width: calc(100% + 60px);
-  min-height: calc(100vh + 60px);
-
-  margin: -30px;
-  padding: 48px 34px 64px;
+  padding: 30px 38px 42px;
 
   box-sizing: border-box;
 
-  background:
-    radial-gradient(
-      ellipse 380px 280px at 97% 0%,
-      rgba(239, 63, 111, 0.14) 0%,
-      rgba(239, 63, 111, 0.06) 43%,
-      rgba(239, 63, 111, 0) 76%
-    ),
-    var(--creme);
-
-  color: var(--texto);
+  background: #005942;
 
   font-family: 'Poppins', sans-serif;
 }
 
-.page * {
-  box-sizing: border-box;
-}
 
-
-/* =========================================================
+/* =====================================
    CABEÇALHO
-========================================================= */
+===================================== */
 
 .pageHeader {
-  width: min(100%, 1180px);
-
-  margin: 0 auto 30px;
+  margin-bottom: 22px;
 }
 
 .pageHeader h1 {
   margin: 0;
 
-  color: var(--texto);
+  color: #ffffff;
 
-  font-size: clamp(36px, 3.3vw, 48px);
-  line-height: 1.04;
+  font-size: 30px;
 
   font-weight: 700;
 
-  letter-spacing: -1.7px;
-}
-
-.pageHeader h1 em {
-  color: var(--rosa);
-
-  font-family: 'DM Serif Display', serif;
-  font-style: italic;
-  font-weight: 400;
-
-  letter-spacing: -0.5px;
+  letter-spacing: -0.4px;
 }
 
 .pageHeader p {
-  max-width: 620px;
+  margin: 6px 0 0;
 
-  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.72);
 
-  color: var(--texto-secundario);
-
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 12px;
 }
 
 
-/* =========================================================
+/* =====================================
    CONTEÚDO
-========================================================= */
+===================================== */
 
 .content {
-  width: min(100%, 1180px);
+  width: 100%;
+  max-width: 980px;
 
   display: flex;
   flex-direction: column;
 
-  gap: 18px;
-
-  margin: 0 auto;
+  gap: 16px;
 }
 
 
-/* =========================================================
-   CARD
-========================================================= */
+/* =====================================
+   CARDS
+===================================== */
 
 .card {
   width: 100%;
 
-  padding: 28px 30px 30px;
+  padding: 22px;
 
-  border: 1px solid var(--creme-linha);
-  border-radius: 18px;
+  box-sizing: border-box;
 
-  background: rgba(255, 250, 244, 0.88);
+  background: #e7efeb;
 
-  color: var(--texto);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 16px;
 
   box-shadow:
-    0 12px 28px rgba(75, 53, 39, 0.07);
+    0 7px 20px rgba(0, 0, 0, 0.12);
 }
 
 .cardHeader {
@@ -133,42 +86,50 @@
   align-items: flex-start;
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 18px;
+
+  margin-bottom: 20px;
 }
 
 .cardHeader h2 {
   margin: 0;
 
-  color: var(--texto);
+  color: #20332c;
 
-  font-size: 18px;
+  font-size: 17px;
+
   font-weight: 700;
-
-  letter-spacing: -0.35px;
 }
 
 .cardHeader p {
-  margin: 6px 0 0;
+  margin: 5px 0 0;
 
-  color: var(--texto-secundario);
+  color: #6a7872;
 
-  font-size: 11px;
-  line-height: 1.55;
+  font-size: 10px;
+
+  line-height: 1.4;
 }
 
-.cardDivider {
-  width: 100%;
-  height: 1px;
+.cardIcon {
+  width: 40px;
+  height: 40px;
 
-  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  background: var(--creme-linha);
+  border-radius: 11px;
+
+  background: #d2e2da;
+
+  color: #087a57;
 }
 
 
-/* =========================================================
+/* =====================================
    PERFIL
-========================================================= */
+===================================== */
 
 .profileTop {
   margin-bottom: 22px;
@@ -182,8 +143,8 @@
 }
 
 .avatar {
-  width: 70px;
-  height: 70px;
+  width: 72px;
+  height: 72px;
 
   flex-shrink: 0;
 
@@ -195,17 +156,13 @@
 
   border-radius: 50%;
 
-  background: var(--verde);
+  background: #16a875;
 
   color: #ffffff;
 
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 22px;
 
-  letter-spacing: -0.4px;
-
-  box-shadow:
-    0 8px 20px rgba(0, 89, 66, 0.17);
+  font-weight: 600;
 }
 
 .avatar img {
@@ -216,40 +173,42 @@
 }
 
 .photoButton {
-  height: 44px;
+  height: 38px;
 
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 
   gap: 8px;
 
-  padding: 0 16px;
+  padding: 0 14px;
 
-  border: 1px solid #d9cdbf;
-  border-radius: 10px;
+  border: 1px solid #c6d3cd;
 
-  background: #ffffff;
+  border-radius: 8px;
 
-  color: var(--verde);
+  background: #f5f8f6;
+
+  color: #2f3f38;
 
   font-family: inherit;
 
-  font-size: 11px;
+  font-size: 10px;
+
   font-weight: 600;
 
   cursor: pointer;
 
   transition:
-    border-color 0.18s ease,
-    background 0.18s ease,
-    transform 0.18s ease;
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .photoButton:hover {
-  border-color: #aebdb5;
+  background: #ffffff;
 
-  background: #f4f8f6;
+  border-color: #9fb3aa;
 
   transform: translateY(-1px);
 }
@@ -259,9 +218,9 @@
 }
 
 
-/* =========================================================
+/* =====================================
    FORMULÁRIO
-========================================================= */
+===================================== */
 
 .formGrid {
   display: grid;
@@ -269,12 +228,10 @@
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap: 16px;
+  gap: 18px;
 }
 
 .field {
-  min-width: 0;
-
   display: flex;
   flex-direction: column;
 
@@ -282,235 +239,58 @@
 }
 
 .field label {
-  color: #455851;
+  color: #57675f;
 
   font-size: 10px;
+
   font-weight: 600;
 }
 
 .field input {
   width: 100%;
-  height: 50px;
+  height: 42px;
 
-  padding: 0 15px;
+  padding: 0 13px;
 
-  border: 1px solid #d9cdbf;
-  border-radius: 10px;
+  box-sizing: border-box;
+
+  border: 1px solid #cbd7d1;
+
+  border-radius: 8px;
 
   outline: none;
 
-  background: #ffffff;
+  background: #f5f8f6;
 
-  color: var(--texto);
-
-  font-family: inherit;
-
-  font-size: 12px;
-
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease;
-}
-
-.field input::placeholder {
-  color: #9a9e9b;
-}
-
-.field input:hover {
-  border-color: #b7aa9d;
-}
-
-.field input:focus {
-  border-color: #9ab5aa;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(0, 89, 66, 0.07);
-}
-
-
-/* =========================================================
-   ALTERAR SENHA
-========================================================= */
-
-.passwordSection {
-  margin-top: 26px;
-  padding-top: 24px;
-
-  border-top: 1px solid var(--creme-linha);
-}
-
-.passwordTitle {
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  margin-bottom: 18px;
-}
-
-.passwordIcon {
-  width: 40px;
-  height: 40px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 10px;
-
-  background: var(--rosa-claro);
-
-  color: var(--rosa);
-}
-
-.passwordTitle h3 {
-  margin: 0;
-
-  color: var(--texto);
-
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.passwordTitle p {
-  margin: 3px 0 0;
-
-  color: var(--texto-secundario);
-
-  font-size: 10px;
-}
-
-.passwordGrid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 16px;
-}
-
-.passwordField {
-  position: relative;
-}
-
-.passwordField input {
-  padding-right: 48px;
-}
-
-.eyeButton {
-  width: 36px;
-  height: 36px;
-
-  position: absolute;
-
-  top: 50%;
-  right: 8px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-
-  border: none;
-  border-radius: 8px;
-
-  background: transparent;
-
-  color: #7a817d;
-
-  cursor: pointer;
-
-  transform: translateY(-50%);
-
-  transition:
-    background 0.18s ease,
-    color 0.18s ease;
-}
-
-.eyeButton:hover {
-  background: #f2eee8;
-
-  color: var(--verde);
-}
-
-.passwordError {
-  margin-top: 12px;
-
-  padding: 10px 12px;
-
-  border: 1px solid #efc5d1;
-  border-radius: 9px;
-
-  background: #fff1f5;
-
-  color: #a83a5a;
-
-  font-size: 10px;
-}
-
-
-/* =========================================================
-   SALVAR
-========================================================= */
-
-.saveArea {
-  display: flex;
-  justify-content: flex-end;
-
-  margin-top: 26px;
-  padding-top: 22px;
-
-  border-top: 1px solid var(--creme-linha);
-}
-
-.saveButton {
-  min-height: 44px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  padding: 0 18px;
-
-  border: 1px solid var(--verde);
-  border-radius: 10px;
-
-  background: var(--verde);
-
-  color: #ffffff;
+  color: #26372f;
 
   font-family: inherit;
 
   font-size: 11px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 7px 17px rgba(0, 89, 66, 0.12);
 
   transition:
-    background 0.18s ease,
-    transform 0.18s ease;
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.saveButton:hover {
-  background: var(--verde-profundo);
+.field input:hover {
+  border-color: #aebfb7;
+}
 
-  transform: translateY(-1px);
+.field input:focus {
+  background: #ffffff;
+
+  border-color: #16a875;
+
+  box-shadow:
+    0 0 0 3px rgba(22, 168, 117, 0.1);
 }
 
 
-/* =========================================================
+/* =====================================
    PREFERÊNCIAS
-========================================================= */
+===================================== */
 
 .preferences {
   display: flex;
@@ -518,58 +298,54 @@
 }
 
 .preferenceRow {
-  min-height: 65px;
+  min-height: 61px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 18px;
 
   padding: 11px 2px;
 
-  border-bottom: 1px solid var(--creme-linha);
-}
+  box-sizing: border-box;
 
-.preferenceRow:first-child {
-  padding-top: 2px;
+  border-bottom: 1px solid #ccd8d2;
 }
 
 .preferenceRow:last-child {
-  padding-bottom: 2px;
-
   border-bottom: none;
 }
 
-.preferenceText {
+.preferenceRow > div {
   display: flex;
   flex-direction: column;
 
   gap: 3px;
 }
 
-.preferenceText strong {
-  color: var(--texto);
+.preferenceRow strong {
+  color: #34463e;
 
   font-size: 11px;
+
   font-weight: 600;
 }
 
-.preferenceText span {
-  color: var(--texto-secundario);
+.preferenceRow span {
+  color: #78867f;
 
   font-size: 9px;
-  line-height: 1.45;
 }
 
 
-/* =========================================================
+/* =====================================
    SWITCH
-========================================================= */
+===================================== */
 
 .switch {
   width: 42px;
-  height: 24px;
+  height: 23px;
 
   flex-shrink: 0;
 
@@ -578,19 +354,19 @@
   padding: 0;
 
   border: none;
+
   border-radius: 999px;
 
-  background: #c5c4bf;
+  background: #aeb9b4;
 
   cursor: pointer;
 
-  transition:
-    background 0.18s ease;
+  transition: background 0.2s ease;
 }
 
 .switch > span {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
 
   position: absolute;
 
@@ -602,74 +378,172 @@
   background: #ffffff;
 
   box-shadow:
-    0 1px 4px rgba(0, 0, 0, 0.15);
+    0 1px 4px rgba(0, 0, 0, 0.22);
 
-  transition:
-    transform 0.18s ease;
+  transition: transform 0.2s ease;
 }
 
 .switchActive {
-  background: var(--verde);
+  background: #2e9b53;
 }
 
 .switchActive > span {
-  transform: translateX(18px);
+  transform: translateX(19px);
 }
 
 
-/* =========================================================
+/* =====================================
+   PERSONALIZAÇÃO
+===================================== */
+
+.personalizationTitle {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+.personalizationTitle svg {
+  color: #2d984f;
+}
+
+.colorList {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 11px;
+
+  margin-bottom: 18px;
+}
+
+.colorButton {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 3px solid transparent;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.colorButton:hover {
+  transform: scale(1.07);
+}
+
+.colorButtonSelected {
+  border-color: #ffffff;
+
+  box-shadow:
+    0 0 0 2px #244f40,
+    0 3px 8px rgba(0, 0, 0, 0.16);
+}
+
+
+/* =====================================
+   PALETA
+===================================== */
+
+.paletteSection {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.paletteSection > span {
+  color: #57675f;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.palettePreview {
+  width: 100%;
+  height: 54px;
+
+  display: flex;
+
+  overflow: hidden;
+
+  border-radius: 9px;
+
+  background: #d3ded9;
+
+  border: 1px solid #c7d3cd;
+}
+
+.paletteColor {
+  flex: 1;
+
+  min-width: 40px;
+
+  transition: background 0.2s ease;
+}
+
+.emptyPalette {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #7a8881;
+
+  font-size: 10px;
+}
+
+
+/* =====================================
    RESPONSIVIDADE
-========================================================= */
+===================================== */
 
-@media (max-width: 950px) {
+@media (max-width: 900px) {
+
   .page {
-    width: calc(100% + 48px);
-    min-height: calc(100vh + 48px);
-
-    margin: -24px;
-
-    padding:
-      38px
-      24px
-      50px;
+    padding: 24px 20px 30px;
   }
 
-  .content,
-  .pageHeader {
+  .content {
     max-width: none;
   }
+
 }
 
-@media (max-width: 720px) {
+
+@media (max-width: 650px) {
+
   .page {
-    width: calc(100% + 32px);
-    min-height: calc(100vh + 32px);
-
-    margin: -16px;
-
-    padding:
-      28px
-      16px
-      40px;
+    padding: 20px 14px 26px;
   }
 
-  .formGrid,
-  .passwordGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 520px) {
   .pageHeader h1 {
-    font-size: 31px;
+    font-size: 25px;
   }
 
   .card {
-    padding:
-      21px
-      17px;
+    padding: 18px;
+  }
 
-    border-radius: 16px;
+  .formGrid {
+    grid-template-columns: 1fr;
   }
 
   .avatarWrapper {
@@ -677,12 +551,78 @@
     flex-direction: column;
   }
 
-  .photoButton,
-  .saveButton {
+  .photoButton {
     width: 100%;
   }
 
-  .saveArea {
-    justify-content: stretch;
+}
+
+
+@media (max-width: 450px) {
+
+  .page {
+    padding: 17px 10px 22px;
   }
+
+  .card {
+    padding: 15px;
+
+    border-radius: 13px;
+  }
+
+  .preferenceRow {
+    align-items: flex-start;
+  }
+
+  .switch {
+    margin-top: 2px;
+  }
+
+  .colorButton {
+    width: 34px;
+    height: 34px;
+  }
+
+}
+
+.saveArea {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 24px;
+  padding-top: 20px;
+
+  border-top: 1px solid var(--linha);
+}
+
+.saveButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  height: 42px;
+
+  padding: 0 18px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: var(--verde-principal);
+  color: white;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.saveButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }

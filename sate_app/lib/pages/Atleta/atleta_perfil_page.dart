@@ -36,21 +36,23 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
         elevation: 0,
         centerTitle: false,
 
-        // Seta só aparece no modo perfil esportivo
-        leading: _visualizandoPerfil
-            ? IconButton(
-                onPressed: () {
-                  setState(() {
-                    _visualizandoPerfil = false;
-                  });
-                },
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: Colors.black87,
-                  size: 28,
-                ),
-              )
-            : null,
+        leading: IconButton(
+          onPressed: () {
+            if (_visualizandoPerfil) {
+              setState(() {
+                _visualizandoPerfil = false;
+              });
+              return;
+            }
+
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black87,
+            size: 28,
+          ),
+        ),
 
         title: const Text(
           'Perfil',
@@ -77,6 +79,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
               size: 27,
             ),
           ),
+
           const SizedBox(width: 4),
         ],
       ),

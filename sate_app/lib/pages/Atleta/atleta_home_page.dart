@@ -22,11 +22,6 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
   static const Color textoSecundario = Color(0xFF68736F);
   static const Color linha = Color(0xFFDCE7E2);
 
-  // Cor padrão usada nas telas internas (perfil, feedbacks etc.)
-  static const Color verdePadrao = Color(0xFF00845F);
-  static const Color fundoPadrao = Color(0xFFF7F7F7);
-  static const Color bordaPadrao = Color(0xFFE0E7E4);
-
   bool _visualizandoFeedbacks = false;
 
   @override
@@ -71,14 +66,15 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
     );
   }
 
-  // ============================================================
-  // INÍCIO
-  // ============================================================
-
   Widget _buildInicio() {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 40),
+      padding: const EdgeInsets.fromLTRB(
+        20,
+        10,
+        20,
+        40,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -218,7 +214,9 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: linha),
+        border: Border.all(
+          color: linha,
+        ),
       ),
       child: Row(
         children: [
@@ -265,7 +263,11 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
               color: cor.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: cor, size: 20),
+            child: Icon(
+              icon,
+              color: cor,
+              size: 20,
+            ),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -306,7 +308,9 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: linha),
+        border: Border.all(
+          color: linha,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,9 +377,16 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
               ),
             ],
           ),
+
           const SizedBox(height: 16),
-          Container(height: 1, color: linha),
+
+          Container(
+            height: 1,
+            color: linha,
+          ),
+
           const SizedBox(height: 14),
+
           Row(
             children: [
               const Icon(
@@ -456,7 +467,9 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: linha),
+            border: Border.all(
+              color: linha,
+            ),
           ),
           child: Row(
             children: [
@@ -467,7 +480,11 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   color: cor.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: cor, size: 21),
+                child: Icon(
+                  icon,
+                  color: cor,
+                  size: 21,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -505,98 +522,97 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
     );
   }
 
-  // ============================================================
-  // FEEDBACKS (padronizado com o resto do projeto)
-  // ============================================================
-
   Widget _buildFeedbacks() {
-    return Scaffold(
-      backgroundColor: fundoPadrao,
-
-      appBar: AppBar(
-        backgroundColor: fundoPadrao,
-        elevation: 0,
-        centerTitle: false,
-
-        leading: IconButton(
-          onPressed: () {
-            setState(() {
-              _visualizandoFeedbacks = false;
-            });
-          },
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black87,
-            size: 28,
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(
+            20,
+            18,
+            20,
+            18,
           ),
-        ),
-
-        title: const Text(
-          'Feedbacks',
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+          decoration: const BoxDecoration(
+            color: verde,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
           ),
-        ),
-      ),
-
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              const Text(
-                'Feedbacks do treinador',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _visualizandoFeedbacks = false;
+                  });
+                },
+                child: const Icon(
+                  Icons.arrow_back_rounded,
+                  color: Colors.white,
+                  size: 25,
                 ),
               ),
-
-              const SizedBox(height: 6),
-
+              const SizedBox(width: 14),
               const Text(
-                'Veja os comentários sobre seus treinos.',
+                'Feedbacks',
                 style: TextStyle(
-                  fontSize: 12,
-                  color: textoSecundario,
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
                 ),
-              ),
-
-              const SizedBox(height: 18),
-
-              _buildFeedbackCard(
-                treino: 'Treino de velocidade',
-                comentario:
-                    'Boa evolução na velocidade. Continue trabalhando a explosão nos primeiros metros.',
-                data: 'Hoje',
-              ),
-
-              const SizedBox(height: 12),
-
-              _buildFeedbackCard(
-                treino: 'Treino de finalização',
-                comentario:
-                    'Boa execução. Procure manter mais precisão nas finalizações sob pressão.',
-                data: 'Ontem',
-              ),
-
-              const SizedBox(height: 12),
-
-              _buildFeedbackCard(
-                treino: 'Treino tático',
-                comentario:
-                    'Bom posicionamento durante o treino. Continue atento à organização da equipe.',
-                data: '22/09',
               ),
             ],
           ),
         ),
-      ),
+        Expanded(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(
+              20,
+              20,
+              20,
+              30,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _tituloSecao('Feedbacks do treinador'),
+                const SizedBox(height: 5),
+                const Text(
+                  'Veja os comentários sobre seus treinos.',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: textoSecundario,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                _buildFeedbackCard(
+                  treino: 'Treino de velocidade',
+                  comentario:
+                      'Boa evolução na velocidade. Continue trabalhando a explosão nos primeiros metros.',
+                  data: 'Hoje',
+                ),
+                const SizedBox(height: 10),
+                _buildFeedbackCard(
+                  treino: 'Treino de finalização',
+                  comentario:
+                      'Boa execução. Procure manter mais precisão nas finalizações sob pressão.',
+                  data: 'Ontem',
+                ),
+                const SizedBox(height: 10),
+                _buildFeedbackCard(
+                  treino: 'Treino tático',
+                  comentario:
+                      'Bom posicionamento durante o treino. Continue atento à organização da equipe.',
+                  data: '22/09',
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -610,15 +626,10 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: bordaPadrao),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: linha,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -626,21 +637,19 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
           Row(
             children: [
               Container(
-                width: 42,
-                height: 42,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE8F5F0),
-                  borderRadius: BorderRadius.circular(13),
+                  color: verdeClaro,
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
                   Icons.chat_bubble_outline_rounded,
-                  color: verdePadrao,
+                  color: verde,
                   size: 21,
                 ),
               ),
-
-              const SizedBox(width: 12),
-
+              const SizedBox(width: 11),
               Expanded(
                 child: Text(
                   treino,
@@ -651,19 +660,16 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                   ),
                 ),
               ),
-
               Text(
                 data,
                 style: const TextStyle(
                   fontSize: 10,
-                  color: Color(0xFF777777),
+                  color: textoSecundario,
                 ),
               ),
             ],
           ),
-
           const SizedBox(height: 13),
-
           Text(
             comentario,
             style: const TextStyle(

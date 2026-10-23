@@ -14,7 +14,6 @@ class PerfilPage extends StatelessWidget {
 
   static const Color verde = Color(0xFF00845F);
   static const Color verdeEscuro = Color(0xFF006B4F);
-  static const Color verdeClaro = Color(0xFFE8F5F0);
   static const Color fundo = Color(0xFFF7F7F7);
   static const Color cinza = Color(0xFF777777);
 
@@ -23,12 +22,20 @@ class PerfilPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: fundo,
 
+      // =========================================================
+      // APP BAR - IGUAL AO FEED
+      // =========================================================
       appBar: AppBar(
         backgroundColor: fundo,
         elevation: 0,
         centerTitle: false,
 
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+        ),
 
         title: const Text(
           'Perfil',
@@ -42,34 +49,25 @@ class PerfilPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const NotificacoesPage(),
-                ),
-              );
+              _abrirNotificacoes(context);
             },
             icon: const Icon(
               Icons.notifications_none_rounded,
               color: Colors.black87,
-              size: 27,
             ),
           ),
-          const SizedBox(width: 4),
         ],
       ),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      // =========================================================
+      // CONTEÚDO
+      // =========================================================
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
           children: [
-            _buildResumoUsuario(),
-
-            const SizedBox(height: 22),
-
             const Text(
-              'Configurações da conta',
+              'Minha conta',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
@@ -79,58 +77,84 @@ class PerfilPage extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            _buildOpcaoConta(
+            // ===================================================
+            // DADOS PESSOAIS
+            // ===================================================
+            _opcao(
               icone: Icons.person_outline_rounded,
-              titulo: 'Conta',
-              subtitulo: 'Dados pessoais e informações da conta',
+              titulo: 'Dados pessoais',
+              subtitulo: 'Nome, email e informações',
               onTap: () {
-                _abrirPagina(
+                Navigator.push(
                   context,
-                  DadosPessoaisPage(
-                    nomeUsuario: nomeUsuario,
-                    emailUsuario: emailUsuario,
+                  MaterialPageRoute(
+                    builder: (_) => DadosPessoaisPage(
+                      nomeUsuario: nomeUsuario,
+                      emailUsuario: emailUsuario,
+                    ),
                   ),
                 );
               },
             ),
 
-            _buildOpcaoConta(
+            // ===================================================
+            // MINHA EQUIPE
+            // ===================================================
+            _opcao(
               icone: Icons.groups_outlined,
               titulo: 'Minha equipe',
               subtitulo: 'Gerencie sua equipe',
               onTap: () {
-                _abrirPagina(context, const MinhaEquipePage());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MinhaEquipePage()),
+                );
               },
             ),
 
-            _buildOpcaoConta(
-              icone: Icons.settings_outlined,
-              titulo: 'Preferências',
-              subtitulo: 'Personalize sua experiência',
+            // ===================================================
+            // NOTIFICAÇÕES
+            // ===================================================
+            _opcao(
+              icone: Icons.notifications_none_rounded,
+              titulo: 'Notificações',
+              subtitulo: 'Configure suas notificações',
               onTap: () {
-                _abrirPagina(context, const PreferenciasPage());
+                _abrirNotificacoes(context);
               },
             ),
 
-            _buildOpcaoConta(
+            // ===================================================
+            // SEGURANÇA
+            // ===================================================
+            _opcao(
               icone: Icons.lock_outline_rounded,
-              titulo: 'Privacidade',
-              subtitulo: 'Controle sua privacidade',
-              onTap: () {
-                _abrirPagina(context, const PrivacidadePage());
-              },
-            ),
-
-            _buildOpcaoConta(
-              icone: Icons.shield_outlined,
               titulo: 'Segurança',
               subtitulo: 'Senha e segurança da conta',
               onTap: () {
-                _abrirPagina(context, const SegurancaPage());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SegurancaPage()),
+                );
               },
             ),
 
-            const SizedBox(height: 20),
+            // ===================================================
+            // CONFIGURAÇÕES
+            // ===================================================
+            _opcao(
+              icone: Icons.settings_outlined,
+              titulo: 'Configurações',
+              subtitulo: 'Preferências do aplicativo',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ConfiguracoesPage()),
+                );
+              },
+            ),
+
+            const SizedBox(height: 12),
 
             const Text(
               'Ajuda',
@@ -143,99 +167,53 @@ class PerfilPage extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            _buildOpcaoConta(
+            // ===================================================
+            // AJUDA
+            // ===================================================
+            _opcao(
               icone: Icons.help_outline_rounded,
               titulo: 'Ajuda e suporte',
-              subtitulo: 'Tire suas dúvidas',
+              subtitulo: 'Tire suas dúvidas e entre em contato',
               onTap: () {
-                _abrirPagina(context, const AjudaSuportePage());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AjudaSuportePage()),
+                );
               },
             ),
 
-            _buildOpcaoConta(
+            // ===================================================
+            // SOBRE
+            // ===================================================
+            _opcao(
               icone: Icons.info_outline_rounded,
               titulo: 'Sobre o SATE',
               subtitulo: 'Informações sobre o aplicativo',
               onTap: () {
-                _abrirPagina(context, const SobreSatePage());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SobreSatePage()),
+                );
               },
             ),
 
-            const SizedBox(height: 22),
+            const SizedBox(height: 12),
 
-            _buildBotaoSair(context),
+            // ===================================================
+            // SAIR
+            // ===================================================
+            _buildSair(context),
           ],
         ),
       ),
     );
   }
 
-  // ============================================================
-  // RESUMO DO USUÁRIO (sem "Ver perfil")
-  // ============================================================
-  Widget _buildResumoUsuario() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 52,
-            height: 52,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: verdeClaro,
-            ),
-            child: const Icon(
-              Icons.person_rounded,
-              color: verde,
-              size: 29,
-            ),
-          ),
+  // =============================================================
+  // OPÇÃO
+  // =============================================================
 
-          const SizedBox(width: 12),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  nomeUsuario,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: verdeEscuro,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  'Treinador',
-                  style: const TextStyle(fontSize: 12, color: cinza),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ============================================================
-  // OPÇÃO DE CONTA
-  // ============================================================
-  Widget _buildOpcaoConta({
+  Widget _opcao({
     required IconData icone,
     required String titulo,
     required String subtitulo,
@@ -246,82 +224,130 @@ class PerfilPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.025),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: ListTile(
-        onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+
         leading: Container(
-          width: 44,
-          height: 44,
+          width: 42,
+          height: 42,
           decoration: BoxDecoration(
-            color: verdeClaro,
-            borderRadius: BorderRadius.circular(13),
+            color: const Color(0xFFEAF5F1),
+            borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icone, color: verde, size: 22),
+          child: Icon(icone, color: verde, size: 21),
         ),
+
         title: Text(
           titulo,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
         ),
-        subtitle: Text(
-          subtitulo,
-          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Text(
+            subtitulo,
+            style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
+          ),
         ),
+
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,
           size: 15,
-          color: Colors.grey.shade500,
+          color: Colors.grey.shade600,
         ),
+
+        onTap: onTap,
       ),
     );
   }
 
-  // ============================================================
-  // BOTÃO SAIR
-  // ============================================================
-  Widget _buildBotaoSair(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: OutlinedButton.icon(
-        onPressed: () {
-          _confirmarSaida(context);
-        },
-        icon: const Icon(Icons.logout_rounded, color: Colors.redAccent),
-        label: const Text(
+  // =============================================================
+  // SAIR DA CONTA
+  // =============================================================
+
+  Widget _buildSair(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(17),
+        border: Border.all(color: const Color(0xFFFFD6D6)),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+
+        leading: Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFEEEE),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Icon(Icons.logout_rounded, color: Colors.red, size: 21),
+        ),
+
+        title: const Text(
           'Sair da conta',
           style: TextStyle(
-            color: Colors.redAccent,
-            fontWeight: FontWeight.w600,
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+            fontSize: 13,
           ),
         ),
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Color(0xFFFFD6DD)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
+
+        subtitle: Text(
+          'Encerrar sua sessão',
+          style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
         ),
+
+        onTap: () {
+          _confirmarSaida(context);
+        },
       ),
     );
   }
 
-  // ============================================================
-  // NAVEGAÇÃO
-  // ============================================================
-  void _abrirPagina(BuildContext context, Widget pagina) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => pagina));
+  // =============================================================
+  // NOTIFICAÇÕES
+  // =============================================================
+
+  void _abrirNotificacoes(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const NotificacoesPage()),
+    );
   }
+
+  // =============================================================
+  // CONFIRMAR SAÍDA
+  // =============================================================
 
   void _confirmarSaida(BuildContext context) {
     showDialog(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          title: const Text('Sair da conta?'),
+          title: const Text(
+            'Sair da conta?',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+
           content: const Text(
             'Você precisará entrar novamente para acessar sua conta.',
           ),
+
           actions: [
             TextButton(
               onPressed: () {
@@ -332,6 +358,7 @@ class PerfilPage extends StatelessWidget {
                 style: TextStyle(color: Colors.grey),
               ),
             ),
+
             TextButton(
               onPressed: () {
                 Navigator.pop(dialogContext);
@@ -340,61 +367,11 @@ class PerfilPage extends StatelessWidget {
                   (route) => false,
                 );
               },
-              child: const Text(
-                'SAIR',
-                style: TextStyle(color: Colors.redAccent),
-              ),
+              child: const Text('SAIR', style: TextStyle(color: Colors.red)),
             ),
           ],
         );
       },
-    );
-  }
-}
-
-// ===================================================================
-// TELA INTERNA PADRÃO (usada por todas as subtelas)
-// ===================================================================
-
-const Color verdeAtleta = Color(0xFF00845F);
-
-class _TelaInterna extends StatelessWidget {
-  final String titulo;
-  final Widget child;
-
-  const _TelaInterna({required this.titulo, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFF7F7F7),
-        elevation: 0,
-        centerTitle: false,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black87,
-            size: 28,
-          ),
-        ),
-        title: Text(
-          titulo,
-          style: const TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
-        child: child,
-      ),
     );
   }
 }
@@ -415,24 +392,58 @@ class DadosPessoaisPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Dados pessoais',
-      child: Column(
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F7F7),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF7F7F7),
+        elevation: 0,
+        centerTitle: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+        ),
+        title: const Text(
+          'Dados pessoais',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
         children: [
-          _CampoInformacao(
-            icone: Icons.person_outline_rounded,
-            titulo: 'Nome',
-            valor: nomeUsuario,
+          _campo('Nome', nomeUsuario),
+          _campo('Email', emailUsuario),
+          _campo('Tipo de usuário', 'Treinador'),
+        ],
+      ),
+    );
+  }
+
+  Widget _campo(String titulo, String valor) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            titulo,
+            style: const TextStyle(fontSize: 10, color: Colors.grey),
           ),
-          _CampoInformacao(
-            icone: Icons.email_outlined,
-            titulo: 'Email',
-            valor: emailUsuario,
-          ),
-          const _CampoInformacao(
-            icone: Icons.badge_outlined,
-            titulo: 'Tipo de usuário',
-            valor: 'Treinador',
+          const SizedBox(height: 5),
+          Text(
+            valor,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -449,155 +460,100 @@ class MinhaEquipePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Minha equipe',
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(18),
+    final List<Map<String, String>> atletas = [
+      {'nome': 'João Silva', 'posicao': 'Meio-campo'},
+      {'nome': 'Ana Costa', 'posicao': 'Atacante'},
+      {'nome': 'Carlos Mendes', 'posicao': 'Defensor'},
+    ];
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F7F7),
+
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF7F7F7),
+        elevation: 0,
+        centerTitle: false,
+
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+        ),
+
+        title: const Text(
+          'Minha equipe',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: atletas.length,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: verdeAtleta,
-              borderRadius: BorderRadius.circular(18),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(17),
+              border: Border.all(color: Colors.grey.shade200),
             ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(
-                  'Falcões FC',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEAF5F1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.person_rounded,
+                    color: Color(0xFF00845F),
                   ),
                 ),
-                SizedBox(height: 4),
-                Text('Futebol', style: TextStyle(color: Colors.white70)),
+
+                const SizedBox(width: 12),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        atletas[index]['nome']!,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 3),
+
+                      Text(
+                        atletas[index]['posicao']!,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 14,
+                  color: Colors.grey,
+                ),
               ],
             ),
-          ),
-          const SizedBox(height: 16),
-          const _MembroEquipe(nome: 'João Silva', funcao: 'Atleta'),
-          const _MembroEquipe(nome: 'Ana Costa', funcao: 'Atleta'),
-          const _MembroEquipe(nome: 'Carlos Mendes', funcao: 'Atleta'),
-          const _MembroEquipe(nome: 'Mariana Souza', funcao: 'Atleta'),
-        ],
-      ),
-    );
-  }
-}
-
-// ===================================================================
-// PREFERÊNCIAS
-// ===================================================================
-
-class PreferenciasPage extends StatefulWidget {
-  const PreferenciasPage({super.key});
-
-  @override
-  State<PreferenciasPage> createState() => _PreferenciasPageState();
-}
-
-class _PreferenciasPageState extends State<PreferenciasPage> {
-  bool notificacoes = true;
-  bool lembretes = true;
-  bool atualizacoes = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Preferências',
-      child: Column(
-        children: [
-          _SwitchItem(
-            titulo: 'Notificações',
-            subtitulo: 'Receber notificações do aplicativo',
-            valor: notificacoes,
-            onChanged: (valor) {
-              setState(() {
-                notificacoes = valor;
-              });
-            },
-          ),
-          _SwitchItem(
-            titulo: 'Lembretes',
-            subtitulo: 'Receber lembretes de treinos',
-            valor: lembretes,
-            onChanged: (valor) {
-              setState(() {
-                lembretes = valor;
-              });
-            },
-          ),
-          _SwitchItem(
-            titulo: 'Atualizações',
-            subtitulo: 'Receber novidades do SATE',
-            valor: atualizacoes,
-            onChanged: (valor) {
-              setState(() {
-                atualizacoes = valor;
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ===================================================================
-// PRIVACIDADE
-// ===================================================================
-
-class PrivacidadePage extends StatefulWidget {
-  const PrivacidadePage({super.key});
-
-  @override
-  State<PrivacidadePage> createState() => _PrivacidadePageState();
-}
-
-class _PrivacidadePageState extends State<PrivacidadePage> {
-  bool perfilPublico = true;
-  bool mostrarEstatisticas = true;
-  bool permitirMensagens = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Privacidade',
-      child: Column(
-        children: [
-          _SwitchItem(
-            titulo: 'Perfil público',
-            subtitulo: 'Permitir que outros vejam seu perfil',
-            valor: perfilPublico,
-            onChanged: (valor) {
-              setState(() {
-                perfilPublico = valor;
-              });
-            },
-          ),
-          _SwitchItem(
-            titulo: 'Mostrar estatísticas',
-            subtitulo: 'Exibir suas estatísticas',
-            valor: mostrarEstatisticas,
-            onChanged: (valor) {
-              setState(() {
-                mostrarEstatisticas = valor;
-              });
-            },
-          ),
-          _SwitchItem(
-            titulo: 'Permitir mensagens',
-            subtitulo: 'Permitir mensagens de outros usuários',
-            valor: permitirMensagens,
-            onChanged: (valor) {
-              setState(() {
-                permitirMensagens = valor;
-              });
-            },
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -612,29 +568,170 @@ class SegurancaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Segurança',
-      child: Column(
-        children: [
-          _ItemInterno(
-            icone: Icons.lock_outline_rounded,
-            titulo: 'Alterar senha',
-            subtitulo: 'Altere a senha da sua conta',
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Alteração de senha em breve.')),
-              );
-            },
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F7F7),
+
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF7F7F7),
+        elevation: 0,
+        centerTitle: false,
+
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+        ),
+
+        title: const Text(
+          'Segurança',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
-          _ItemInterno(
-            icone: Icons.security_rounded,
-            titulo: 'Verificação de segurança',
-            subtitulo: 'Verifique as configurações de segurança',
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Verificação em breve.')),
-              );
-            },
+        ),
+      ),
+
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _item(Icons.lock_outline_rounded, 'Alterar senha'),
+
+          _item(Icons.shield_outlined, 'Segurança da conta'),
+
+          _item(Icons.verified_user_outlined, 'Verificação de segurança'),
+        ],
+      ),
+    );
+  }
+
+  Widget _item(IconData icone, String titulo) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(17),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: ListTile(
+        leading: Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: const Color(0xFFEAF5F1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icone, color: const Color(0xFF00845F)),
+        ),
+
+        title: Text(
+          titulo,
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+        ),
+
+        trailing: const Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 14,
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
+}
+
+// ===================================================================
+// CONFIGURAÇÕES
+// ===================================================================
+
+class ConfiguracoesPage extends StatefulWidget {
+  const ConfiguracoesPage({super.key});
+
+  @override
+  State<ConfiguracoesPage> createState() => _ConfiguracoesPageState();
+}
+
+class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
+  bool notificacoesAtivas = true;
+  bool modoEscuro = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F7F7),
+
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF7F7F7),
+        elevation: 0,
+        centerTitle: false,
+
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+        ),
+
+        title: const Text(
+          'Configurações',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(17),
+              border: Border.all(color: Colors.grey.shade200),
+            ),
+            child: Column(
+              children: [
+                SwitchListTile(
+                  title: const Text(
+                    'Notificações',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: const Text(
+                    'Receber notificações do aplicativo',
+                    style: TextStyle(fontSize: 10, color: Colors.grey),
+                  ),
+                  value: notificacoesAtivas,
+                  activeThumbColor: const Color(0xFF00845F),
+                  onChanged: (valor) {
+                    setState(() {
+                      notificacoesAtivas = valor;
+                    });
+                  },
+                ),
+
+                const Divider(height: 1),
+
+                SwitchListTile(
+                  title: const Text(
+                    'Modo escuro',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: const Text(
+                    'Alterar aparência do aplicativo',
+                    style: TextStyle(fontSize: 10, color: Colors.grey),
+                  ),
+                  value: modoEscuro,
+                  activeThumbColor: const Color(0xFF00845F),
+                  onChanged: (valor) {
+                    setState(() {
+                      modoEscuro = valor;
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -651,40 +748,65 @@ class AjudaSuportePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Ajuda e suporte',
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: verdeAtleta,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.help_outline_rounded, color: Colors.white, size: 32),
-                SizedBox(width: 14),
-                Expanded(
-                  child: Text(
-                    'Como podemos ajudar?',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F7F7),
+
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF7F7F7),
+        elevation: 0,
+        centerTitle: false,
+
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+        ),
+
+        title: const Text(
+          'Ajuda e suporte',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
-          const SizedBox(height: 14),
-          _Pergunta(titulo: 'Como gerenciar minha equipe?'),
-          _Pergunta(titulo: 'Como vincular atletas?'),
-          _Pergunta(titulo: 'Como alterar meus dados?'),
-          _Pergunta(titulo: 'Como entrar em contato com o suporte?'),
+        ),
+      ),
+
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _item(Icons.help_outline_rounded, 'Perguntas frequentes'),
+
+          _item(Icons.chat_outlined, 'Falar com suporte'),
+
+          _item(Icons.report_problem_outlined, 'Relatar um problema'),
         ],
+      ),
+    );
+  }
+
+  Widget _item(IconData icone, String titulo) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(17),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: ListTile(
+        leading: Icon(icone, color: const Color(0xFF00845F)),
+
+        title: Text(
+          titulo,
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+        ),
+
+        trailing: const Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 14,
+          color: Colors.grey,
+        ),
       ),
     );
   }
@@ -699,45 +821,76 @@ class SobreSatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Sobre o SATE',
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFE0E7E4)),
-            ),
-            child: const Column(
-              children: [
-                Icon(Icons.sports_soccer_rounded, color: verdeAtleta, size: 60),
-                SizedBox(height: 12),
-                Text(
-                  'SATE',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: verdeAtleta,
-                  ),
-                ),
-                SizedBox(height: 6),
-                Text(
-                  'Sistema de Acompanhamento e Treinamento Esportivo',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
-                ),
-                SizedBox(height: 15),
-                Text(
-                  'Versão 1.0.0',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F7F7),
+
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF7F7F7),
+        elevation: 0,
+        centerTitle: false,
+
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+        ),
+
+        title: const Text(
+          'Sobre o SATE',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: const Color(0xFFEAF5F1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Icon(
+                Icons.sports_soccer_rounded,
+                color: Color(0xFF00845F),
+                size: 42,
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            const Text(
+              'SATE',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF006B4F),
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            const Text(
+              'Sistema de acompanhamento e treinamento esportivo.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13, color: Colors.grey, height: 1.4),
+            ),
+
+            const SizedBox(height: 16),
+
+            const Text(
+              'Versão 1.0.0',
+              style: TextStyle(fontSize: 10, color: Colors.grey),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -752,29 +905,56 @@ class NotificacoesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _TelaInterna(
-      titulo: 'Notificações',
-      child: Column(
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F7F7),
+
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF7F7F7),
+        elevation: 0,
+        centerTitle: false,
+
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+        ),
+
+        title: const Text(
+          'Notificações',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
         children: [
-          _Notificacao(
+          _notificacao(
             icone: Icons.calendar_month_outlined,
             titulo: 'Novo treino agendado',
             descricao: 'Treino de resistência hoje às 08:00.',
             tempo: 'Agora',
           ),
-          _Notificacao(
+
+          _notificacao(
             icone: Icons.groups_outlined,
             titulo: 'Novo atleta na equipe',
             descricao: 'Um novo atleta foi adicionado à equipe.',
             tempo: '20 min',
           ),
-          _Notificacao(
+
+          _notificacao(
             icone: Icons.notifications_none_rounded,
             titulo: 'Lembrete de treino',
             descricao: 'Você possui um treino próximo.',
             tempo: '1h',
           ),
-          _Notificacao(
+
+          _notificacao(
             icone: Icons.check_circle_outline_rounded,
             titulo: 'Treino concluído',
             descricao: 'O treino de hoje foi registrado.',
@@ -784,248 +964,20 @@ class NotificacoesPage extends StatelessWidget {
       ),
     );
   }
-}
 
-// ===================================================================
-// WIDGETS AUXILIARES
-// ===================================================================
-
-class _CampoInformacao extends StatelessWidget {
-  final IconData icone;
-  final String titulo;
-  final String valor;
-
-  const _CampoInformacao({
-    required this.icone,
-    required this.titulo,
-    required this.valor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: Row(
-        children: [
-          Icon(icone, color: verdeAtleta),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  titulo,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  valor,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SwitchItem extends StatelessWidget {
-  final String titulo;
-  final String subtitulo;
-  final bool valor;
-  final ValueChanged<bool> onChanged;
-
-  const _SwitchItem({
-    required this.titulo,
-    required this.subtitulo,
-    required this.valor,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.fromLTRB(15, 10, 8, 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  titulo,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  subtitulo,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Switch(value: valor, onChanged: onChanged, activeColor: verdeAtleta),
-        ],
-      ),
-    );
-  }
-}
-
-class _ItemInterno extends StatelessWidget {
-  final IconData icone;
-  final String titulo;
-  final String subtitulo;
-  final VoidCallback onTap;
-
-  const _ItemInterno({
-    required this.icone,
-    required this.titulo,
-    required this.subtitulo,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: ListTile(
-        onTap: onTap,
-        leading: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: const Color(0xFFE8F5F0),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icone, color: verdeAtleta),
-        ),
-        title: Text(
-          titulo,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(subtitulo, style: const TextStyle(fontSize: 11)),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 15),
-      ),
-    );
-  }
-}
-
-class _MembroEquipe extends StatelessWidget {
-  final String nome;
-  final String funcao;
-
-  const _MembroEquipe({required this.nome, required this.funcao});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: Row(
-        children: [
-          const CircleAvatar(
-            backgroundColor: Color(0xFFE8F5F0),
-            child: Icon(Icons.person_rounded, color: verdeAtleta),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              nome,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-          ),
-          Text(
-            funcao,
-            style: const TextStyle(fontSize: 11, color: Colors.grey),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Pergunta extends StatelessWidget {
-  final String titulo;
-
-  const _Pergunta({required this.titulo});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
-      ),
-      child: ExpansionTile(
-        title: Text(
-          titulo,
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-        ),
-        children: const [
-          Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: Text(
-              'Essa informação estará disponível em uma próxima atualização do aplicativo.',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Notificacao extends StatelessWidget {
-  final IconData icone;
-  final String titulo;
-  final String descricao;
-  final String tempo;
-
-  const _Notificacao({
-    required this.icone,
-    required this.titulo,
-    required this.descricao,
-    required this.tempo,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _notificacao({
+    required IconData icone,
+    required String titulo,
+    required String descricao,
+    required String tempo,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(13),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.025),
@@ -1044,9 +996,11 @@ class _Notificacao extends StatelessWidget {
               color: const Color(0xFFEAF5F1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icone, color: verdeAtleta, size: 21),
+            child: Icon(icone, color: const Color(0xFF00845F), size: 21),
           ),
+
           const SizedBox(width: 11),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1058,7 +1012,9 @@ class _Notificacao extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
                 const SizedBox(height: 4),
+
                 Text(
                   descricao,
                   style: TextStyle(
@@ -1070,7 +1026,9 @@ class _Notificacao extends StatelessWidget {
               ],
             ),
           ),
+
           const SizedBox(width: 8),
+
           Text(
             tempo,
             style: TextStyle(fontSize: 9, color: Colors.grey.shade500),

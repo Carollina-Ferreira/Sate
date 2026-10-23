@@ -3,24 +3,23 @@ import {
   Camera,
   Check,
   Clock3,
-  ImagePlus,
   Palette,
   Plus,
   Search,
-  Shield,
   UserRound,
   X,
 } from 'lucide-react';
 
 import {
-  useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 
-import type { ChangeEvent } from 'react';
+import type {
+  ChangeEvent,
+} from 'react';
 
 import styles from './novaEquipeModal.module.css';
 
@@ -42,14 +41,18 @@ export interface NovaEquipeData {
   cor: string;
   proximaPartida: string | null;
   imagemPreview: string | null;
-  imagemArquivo?: File | null;
 }
 
 interface NovaEquipeModalProps {
   open: boolean;
   onClose: () => void;
-  onCreate: (equipe: NovaEquipeData) => void;
+
+  onCreate: (
+    equipe: NovaEquipeData,
+  ) => void;
+
   modalidadeInicial?: string;
+
   atletasDisponiveis?: AtletaDisponivel[];
 }
 
@@ -70,6 +73,16 @@ const cores = [
   '#D652A2',
 ];
 
+const diasSemana = [
+  'Dom',
+  'Seg',
+  'Ter',
+  'Qua',
+  'Qui',
+  'Sex',
+  'Sáb',
+];
+
 const formatarProximaPartida = (
   adversario: string,
   data: string,
@@ -83,21 +96,23 @@ const formatarProximaPartida = (
     return `vs ${adversario.trim()}`;
   }
 
-  const [ano, mes, dia] = data.split('-').map(Number);
-  const dataPartida = new Date(ano, mes - 1, dia);
+  const [ano, mes, dia] =
+    data.split('-').map(Number);
 
-  const diasSemana = [
-    'Dom',
-    'Seg',
-    'Ter',
-    'Qua',
-    'Qui',
-    'Sex',
-    'Sáb',
-  ];
+  const dataPartida =
+    new Date(
+      ano,
+      mes - 1,
+      dia,
+    );
 
-  const diaSemana = diasSemana[dataPartida.getDay()];
-  const [hora, minuto] = horario.split(':');
+  const diaSemana =
+    diasSemana[
+      dataPartida.getDay()
+    ];
+
+  const [hora, minuto] =
+    horario.split(':');
 
   const horarioFormatado =
     minuto === '00'
@@ -114,123 +129,145 @@ const NovaEquipeModal = ({
   modalidadeInicial = 'Futebol',
   atletasDisponiveis = [],
 }: NovaEquipeModalProps) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const colorInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef =
+    useRef<HTMLInputElement>(null);
 
-  const [nome, setNome] = useState('');
+  const colorInputRef =
+    useRef<HTMLInputElement>(null);
 
-  const [modalidade, setModalidade] = useState(
-    esportes.includes(modalidadeInicial)
+  const [nome, setNome] =
+    useState('');
+
+  const [
+    modalidade,
+    setModalidade,
+  ] = useState(
+    esportes.includes(
+      modalidadeInicial,
+    )
       ? modalidadeInicial
       : 'Futebol',
   );
 
-  const [categoria, setCategoria] = useState('Principal');
-  const [atletasSelecionados, setAtletasSelecionados] =
-    useState<number[]>([]);
-  const [buscaAtleta, setBuscaAtleta] = useState('');
+  const [
+    categoria,
+    setCategoria,
+  ] = useState('Principal');
 
-  const [cor, setCor] = useState('#16A875');
-  const [corPersonalizada, setCorPersonalizada] =
-    useState('#005942');
+  const [
+    atletasSelecionados,
+    setAtletasSelecionados,
+  ] = useState<number[]>([]);
 
-  const [adversario, setAdversario] = useState('');
-  const [dataPartida, setDataPartida] = useState('');
-  const [horarioPartida, setHorarioPartida] = useState('');
+  const [
+    buscaAtleta,
+    setBuscaAtleta,
+  ] = useState('');
 
-  const [imagemPreview, setImagemPreview] =
-    useState<string | null>(null);
-  const [imagemArquivo, setImagemArquivo] =
-    useState<File | null>(null);
+  const [cor, setCor] =
+    useState('#16A875');
 
-  const [erroImagem, setErroImagem] = useState('');
+  const [
+    corPersonalizada,
+    setCorPersonalizada,
+  ] = useState('#005942');
 
-  const corEhPersonalizada = !cores.includes(cor);
+  const [
+    adversario,
+    setAdversario,
+  ] = useState('');
 
-  const atletasFiltrados = useMemo(() => {
-    const termo = buscaAtleta.trim().toLowerCase();
+  const [
+    dataPartida,
+    setDataPartida,
+  ] = useState('');
 
-    if (!termo) {
-      return atletasDisponiveis;
-    }
+  const [
+    horarioPartida,
+    setHorarioPartida,
+  ] = useState('');
 
-    return atletasDisponiveis.filter((atleta) => {
-      const nomeAtleta = atleta.nome?.toLowerCase() ?? '';
-      const emailAtleta =
-        atleta.usuario?.email?.toLowerCase() ?? '';
+  const [
+    imagemPreview,
+    setImagemPreview,
+  ] = useState<string | null>(null);
 
-      return (
-        nomeAtleta.includes(termo) ||
-        emailAtleta.includes(termo)
-      );
-    });
-  }, [atletasDisponiveis, buscaAtleta]);
-
-  const proximaPartidaPreview = useMemo(
-    () =>
-      formatarProximaPartida(
+  const proximaPartidaPreview =
+    useMemo(() => {
+      return formatarProximaPartida(
         adversario,
         dataPartida,
         horarioPartida,
-      ),
-    [adversario, dataPartida, horarioPartida],
-  );
+      );
+    }, [
+      adversario,
+      dataPartida,
+      horarioPartida,
+    ]);
+
+  const corEhPersonalizada =
+    !cores.includes(cor);
+
+  const atletasFiltrados =
+    useMemo(() => {
+      const termo =
+        buscaAtleta
+          .trim()
+          .toLowerCase();
+
+      if (!termo) {
+        return atletasDisponiveis;
+      }
+
+      return atletasDisponiveis.filter(
+        (atleta) =>
+          atleta.nome
+            ?.toLowerCase()
+            .includes(termo) ||
+          atleta.usuario?.email
+            ?.toLowerCase()
+            .includes(termo),
+      );
+    }, [
+      atletasDisponiveis,
+      buscaAtleta,
+    ]);
 
   const formularioValido =
-    nome.trim().length >= 2 &&
-    modalidade.trim() !== '' &&
-    categoria.trim() !== '';
-
-  const resetFormulario = useCallback(() => {
-    setNome('');
-
-    setModalidade(
-      esportes.includes(modalidadeInicial)
-        ? modalidadeInicial
-        : 'Futebol',
-    );
-
-    setCategoria('Principal');
-    setAtletasSelecionados([]);
-    setBuscaAtleta('');
-    setCor('#16A875');
-    setCorPersonalizada('#005942');
-
-    setAdversario('');
-    setDataPartida('');
-    setHorarioPartida('');
-
-    setImagemPreview(null);
-    setImagemArquivo(null);
-    setErroImagem('');
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  }, [modalidadeInicial]);
-
-  const fecharModal = useCallback(() => {
-    resetFormulario();
-    onClose();
-  }, [onClose, resetFormulario]);
+    useMemo(() => {
+      return (
+        nome.trim().length >= 2 &&
+        modalidade.trim() !== '' &&
+        categoria.trim() !== ''
+      );
+    }, [
+      nome,
+      modalidade,
+      categoria,
+    ]);
 
   useEffect(() => {
     if (!open) {
       return;
     }
 
-    const overflowAnterior = document.body.style.overflow;
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        fecharModal();
+    const handleEscape = (
+      event: KeyboardEvent,
+    ) => {
+      if (
+        event.key === 'Escape'
+      ) {
+        onClose();
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
+    document.addEventListener(
+      'keydown',
+      handleEscape,
+    );
 
-    // O overlay possui rolagem própria.
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow =
+      'hidden';
 
     return () => {
       document.removeEventListener(
@@ -238,80 +275,103 @@ const NovaEquipeModal = ({
         handleEscape,
       );
 
-      document.body.style.overflow = overflowAnterior;
+      document.body.style.overflow =
+        '';
     };
-  }, [open, fecharModal]);
+  }, [open, onClose]);
 
-  useEffect(() => {
-    if (!imagemPreview?.startsWith('blob:')) {
-      return;
-    }
-
-    return () => {
-      URL.revokeObjectURL(imagemPreview);
-    };
-  }, [imagemPreview]);
+  if (!open) {
+    return null;
+  }
 
   const handleImagem = (
     event: ChangeEvent<HTMLInputElement>,
   ) => {
-    const arquivo = event.target.files?.[0];
+    const file =
+      event.target.files?.[0];
 
-    if (!arquivo) {
+    if (!file) {
       return;
     }
 
-    setErroImagem('');
+    const url =
+      URL.createObjectURL(file);
 
-    const tiposPermitidos = [
-      'image/jpeg',
-      'image/png',
-      'image/webp',
-    ];
-
-    if (!tiposPermitidos.includes(arquivo.type)) {
-      setErroImagem('Escolha uma imagem JPG, PNG ou WEBP.');
-      event.target.value = '';
-      return;
-    }
-
-    if (arquivo.size > 5 * 1024 * 1024) {
-      setErroImagem('A imagem deve ter no máximo 5 MB.');
-      event.target.value = '';
-      return;
-    }
-
-    const url = URL.createObjectURL(arquivo);
-
-    setImagemArquivo(arquivo);
     setImagemPreview(url);
-  };
-
-  const removerImagem = () => {
-    setImagemPreview(null);
-    setImagemArquivo(null);
-    setErroImagem('');
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
   };
 
   const handleCorPersonalizada = (
     event: ChangeEvent<HTMLInputElement>,
   ) => {
-    const novaCor = event.target.value;
+    const novaCor =
+      event.target.value;
 
-    setCorPersonalizada(novaCor);
+    setCorPersonalizada(
+      novaCor,
+    );
+
     setCor(novaCor);
   };
 
-  const alternarAtleta = (atletaId: number) => {
-    setAtletasSelecionados((atuais) =>
-      atuais.includes(atletaId)
-        ? atuais.filter((id) => id !== atletaId)
-        : [...atuais, atletaId],
+  const alternarAtleta = (
+    atletaId: number,
+  ) => {
+    setAtletasSelecionados(
+      (atletasAtuais) => {
+        if (
+          atletasAtuais.includes(
+            atletaId,
+          )
+        ) {
+          return atletasAtuais.filter(
+            (id) =>
+              id !== atletaId,
+          );
+        }
+
+        return [
+          ...atletasAtuais,
+          atletaId,
+        ];
+      },
     );
+  };
+
+  const resetFormulario = () => {
+    setNome('');
+
+    setModalidade(
+      esportes.includes(
+        modalidadeInicial,
+      )
+        ? modalidadeInicial
+        : 'Futebol',
+    );
+
+    setCategoria(
+      'Principal',
+    );
+
+    setAtletasSelecionados([]);
+
+    setBuscaAtleta('');
+
+    setCor('#16A875');
+
+    setCorPersonalizada(
+      '#005942',
+    );
+
+    setAdversario('');
+    setDataPartida('');
+    setHorarioPartida('');
+
+    setImagemPreview(null);
+  };
+
+  const fecharModal = () => {
+    resetFormulario();
+    onClose();
   };
 
   const criarEquipe = () => {
@@ -320,446 +380,756 @@ const NovaEquipeModal = ({
     }
 
     const proximaPartida =
-      dataPartida && horarioPartida
+      dataPartida &&
+      horarioPartida
         ? `${dataPartida}T${horarioPartida}:00`
         : null;
 
     onCreate({
       nome: nome.trim(),
-      modalidade,
-      categoria,
-      atletasIds: atletasSelecionados,
+
+      modalidade:
+        modalidade.trim(),
+
+      categoria:
+        categoria.trim(),
+
+      atletasIds:
+        atletasSelecionados,
+
       cor,
+
       proximaPartida,
+
       imagemPreview,
-      imagemArquivo,
     });
 
     resetFormulario();
+
     onClose();
   };
-
-  if (!open) {
-    return null;
-  }
 
   return (
     <div
       className={styles.overlay}
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) {
-          fecharModal();
-        }
-      }}
+      onMouseDown={fecharModal}
     >
-      <section
+      <div
         className={styles.modal}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="nova-equipe-titulo"
+        onMouseDown={(event) =>
+          event.stopPropagation()
+        }
       >
-        {/* CABEÇALHO */}
+        {/* HEADER */}
 
-        <header className={styles.modalHeader}>
+        <div
+          className={
+            styles.modalHeader
+          }
+        >
           <div>
-            <span className={styles.eyebrow}>
-              GESTÃO DE EQUIPES
+            <span
+              className={
+                styles.eyebrow
+              }
+            >
+              NOVA EQUIPE
             </span>
 
-            <h2 id="nova-equipe-titulo">
+            <h2>
               Criar equipe
             </h2>
 
             <p>
-              Configure seu time e organize os atletas.
+              Cadastre as principais
+              informações do novo
+              time.
             </p>
           </div>
 
           <button
             type="button"
-            className={styles.closeButton}
-            onClick={fecharModal}
-            aria-label="Fechar modal"
+            className={
+              styles.closeButton
+            }
+            onClick={
+              fecharModal
+            }
           >
             <X size={20} />
           </button>
-        </header>
+        </div>
 
         {/* CONTEÚDO */}
 
-        <div className={styles.content}>
-          {/* IMAGEM E IDENTIDADE */}
+        <div
+          className={
+            styles.content
+          }
+        >
+          {/* IMAGEM */}
 
-          <aside className={styles.imageArea}>
-            <div className={styles.imagePreview}>
+          <div
+            className={
+              styles.imageArea
+            }
+          >
+            <button
+              type="button"
+              className={
+                styles.imagePreview
+              }
+              onClick={() =>
+                fileInputRef.current?.click()
+              }
+            >
               {imagemPreview ? (
                 <img
-                  src={imagemPreview}
-                  alt="Prévia da imagem da equipe"
+                  src={
+                    imagemPreview
+                  }
+                  alt="Preview da equipe"
                 />
               ) : (
-                <div className={styles.imagePlaceholder}>
-                  <div className={styles.cameraCircle}>
-                    <ImagePlus size={23} />
+                <>
+                  <div
+                    className={
+                      styles.cameraCircle
+                    }
+                  >
+                    <Camera
+                      size={22}
+                    />
                   </div>
 
-                  <strong>Imagem da equipe</strong>
+                  <strong>
+                    Adicionar imagem
+                  </strong>
 
-                  <span>JPG, PNG ou WEBP</span>
-                </div>
+                  <span>
+                    PNG ou JPG
+                  </span>
+                </>
               )}
-            </div>
+            </button>
 
             <input
               ref={fileInputRef}
               type="file"
               accept="image/png,image/jpeg,image/webp"
-              className={styles.hiddenInput}
-              onChange={handleImagem}
+              className={
+                styles.hiddenInput
+              }
+              onChange={
+                handleImagem
+              }
             />
-
-            <button
-              type="button"
-              className={styles.changeImageButton}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <Camera size={15} />
-
-              {imagemPreview ? 'Alterar imagem' : 'Adicionar imagem'}
-            </button>
 
             {imagemPreview && (
               <button
                 type="button"
-                className={styles.removeImageButton}
-                onClick={removerImagem}
+                className={
+                  styles.changeImageButton
+                }
+                onClick={() =>
+                  fileInputRef.current?.click()
+                }
               >
-                Remover imagem
-              </button>
-            )}
-
-            {erroImagem && (
-              <p className={styles.imageError}>
-                {erroImagem}
-              </p>
-            )}
-
-            <div className={styles.identityHint}>
-              <Shield size={17} />
-
-              <span>
-                Personalize a identidade visual do seu time.
-              </span>
-            </div>
-          </aside>
-
-          {/* FORMULÁRIO */}
-
-          <div className={styles.form}>
-            <section className={styles.formSection}>
-              <div className={styles.sectionHeading}>
-                <span className={styles.sectionNumber}>01</span>
-
-                <div>
-                  <h3>Informações da equipe</h3>
-                  <p>Defina o nome, o esporte e a categoria.</p>
-                </div>
-              </div>
-
-              <div className={styles.field}>
-                <label htmlFor="nome-equipe">
-                  Nome da equipe <span>*</span>
-                </label>
-
-                <input
-                  id="nome-equipe"
-                  type="text"
-                  placeholder="Ex.: Falcões FC"
-                  value={nome}
-                  maxLength={60}
-                  onChange={(event) =>
-                    setNome(event.target.value)
-                  }
-                  autoFocus
+                <Camera
+                  size={15}
                 />
 
-                <small className={styles.fieldHint}>
-                  {nome.length}/60 caracteres
-                </small>
-              </div>
+                Alterar imagem
+              </button>
+            )}
+          </div>
 
-              <div className={styles.formGrid}>
-                <div className={styles.field}>
-                  <label htmlFor="esporte-equipe">
-                    Esporte <span>*</span>
-                  </label>
+          {/* FORM */}
 
-                  <select
-                    id="esporte-equipe"
-                    value={modalidade}
-                    onChange={(event) =>
-                      setModalidade(event.target.value)
-                    }
-                  >
-                    {esportes.map((esporte) => (
-                      <option key={esporte} value={esporte}>
-                        {esporte}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+          <div
+            className={
+              styles.form
+            }
+          >
+            {/* NOME */}
 
-                <div className={styles.field}>
-                  <label htmlFor="categoria-equipe">
-                    Categoria <span>*</span>
-                  </label>
+            <div
+              className={
+                styles.field
+              }
+            >
+              <label
+                htmlFor="nome-equipe"
+              >
+                Nome da equipe
+              </label>
 
-                  <select
-                    id="categoria-equipe"
-                    value={categoria}
-                    onChange={(event) =>
-                      setCategoria(event.target.value)
-                    }
-                  >
-                    <option value="Principal">Principal</option>
-                    <option value="Sub-20">Sub-20</option>
-                    <option value="Sub-17">Sub-17</option>
-                    <option value="Sub-15">Sub-15</option>
-                    <option value="Feminino">Feminino</option>
-                    <option value="Masculino">Masculino</option>
-                  </select>
-                </div>
-              </div>
-            </section>
+              <input
+                id="nome-equipe"
+                type="text"
+                placeholder="Ex: Águias Basquete"
+                value={nome}
+                onChange={(event) =>
+                  setNome(
+                    event.target.value,
+                  )
+                }
+                autoFocus
+              />
+            </div>
+
+            {/* ESPORTE */}
+
+            <div
+              className={
+                styles.field
+              }
+            >
+              <label
+                htmlFor="esporte-equipe"
+              >
+                Esporte
+              </label>
+
+              <select
+                id="esporte-equipe"
+                value={modalidade}
+                onChange={(event) =>
+                  setModalidade(
+                    event.target.value,
+                  )
+                }
+              >
+                {esportes.map(
+                  (esporte) => (
+                    <option
+                      key={esporte}
+                      value={esporte}
+                    >
+                      {esporte}
+                    </option>
+                  ),
+                )}
+              </select>
+            </div>
+
+            {/* CATEGORIA */}
+
+            <div
+              className={
+                styles.field
+              }
+            >
+              <label
+                htmlFor="categoria"
+              >
+                Categoria
+              </label>
+
+              <select
+                id="categoria"
+                value={categoria}
+                onChange={(event) =>
+                  setCategoria(
+                    event.target.value,
+                  )
+                }
+              >
+                <option value="Principal">
+                  Principal
+                </option>
+
+                <option value="Sub-20">
+                  Sub-20
+                </option>
+
+                <option value="Sub-17">
+                  Sub-17
+                </option>
+
+                <option value="Sub-15">
+                  Sub-15
+                </option>
+
+                <option value="Feminino">
+                  Feminino
+                </option>
+
+                <option value="Masculino">
+                  Masculino
+                </option>
+              </select>
+            </div>
 
             {/* ATLETAS */}
 
-            <section className={styles.formSection}>
-              <div className={styles.sectionHeading}>
-                <span className={styles.sectionNumber}>02</span>
+            <div
+              className={
+                styles.field
+              }
+            >
+              <label>
+                Atletas da equipe
+              </label>
 
-                <div>
-                  <h3>Atletas</h3>
-                  <p>Selecione quem fará parte da equipe.</p>
-                </div>
-
-                <span className={styles.selectionCount}>
-                  {atletasSelecionados.length} selecionados
-                </span>
-              </div>
-
-              <div className={styles.athleteSearch}>
-                <Search size={17} />
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  border: '1px solid #D8E4DF',
+                  borderRadius: '10px',
+                  padding: '0 12px',
+                  minHeight: '42px',
+                }}
+              >
+                <Search
+                  size={17}
+                />
 
                 <input
                   type="text"
-                  placeholder="Buscar por nome ou e-mail..."
-                  aria-label="Buscar atletas"
-                  value={buscaAtleta}
-                  onChange={(event) =>
-                    setBuscaAtleta(event.target.value)
+                  placeholder="Buscar atleta..."
+                  value={
+                    buscaAtleta
                   }
+                  onChange={(
+                    event,
+                  ) =>
+                    setBuscaAtleta(
+                      event.target.value,
+                    )
+                  }
+                  style={{
+                    border: 'none',
+                    outline: 'none',
+                    width: '100%',
+                    background:
+                      'transparent',
+                  }}
                 />
-
-                {buscaAtleta && (
-                  <button
-                    type="button"
-                    onClick={() => setBuscaAtleta('')}
-                    aria-label="Limpar busca"
-                  >
-                    <X size={15} />
-                  </button>
-                )}
               </div>
 
-              <div className={styles.athletesList}>
-                {atletasFiltrados.length === 0 ? (
-                  <div className={styles.emptyAthletes}>
-                    <UserRound size={25} />
+              <div
+                style={{
+                  marginTop: '8px',
+                  maxHeight: '190px',
+                  overflowY: 'auto',
+                  border:
+                    '1px solid #E1EAE6',
+                  borderRadius: '10px',
+                }}
+              >
+                {atletasFiltrados.length ===
+                0 ? (
+                  <div
+                    style={{
+                      padding: '20px',
+                      textAlign: 'center',
+                      color: '#71817B',
+                    }}
+                  >
+                    <UserRound
+                      size={22}
+                    />
 
-                    <strong>Nenhum atleta encontrado</strong>
-
-                    <span>
-                      Tente outro nome ou e-mail.
-                    </span>
+                    <p>
+                      Nenhum atleta
+                      disponível.
+                    </p>
                   </div>
                 ) : (
-                  atletasFiltrados.map((atleta) => {
-                    const selecionado =
-                      atletasSelecionados.includes(atleta.id);
+                  atletasFiltrados.map(
+                    (atleta) => {
+                      const selecionado =
+                        atletasSelecionados.includes(
+                          atleta.id,
+                        );
 
-                    return (
-                      <button
-                        key={atleta.id}
-                        type="button"
-                        className={`${styles.athleteItem} ${
-                          selecionado ? styles.athleteSelected : ''
-                        }`}
-                        onClick={() => alternarAtleta(atleta.id)}
-                        aria-pressed={selecionado}
-                      >
-                        <span className={styles.athleteAvatar}>
-                          {atleta.usuario?.avatarUrl ? (
-                            <img
-                              src={atleta.usuario.avatarUrl}
-                              alt=""
-                            />
-                          ) : (
-                            <UserRound size={18} />
-                          )}
-                        </span>
+                      return (
+                        <button
+                          key={
+                            atleta.id
+                          }
+                          type="button"
+                          onClick={() =>
+                            alternarAtleta(
+                              atleta.id,
+                            )
+                          }
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems:
+                              'center',
+                            gap: '10px',
+                            padding:
+                              '10px 12px',
+                            border: 'none',
+                            borderBottom:
+                              '1px solid #EDF2EF',
+                            background:
+                              selecionado
+                                ? '#E8F5F0'
+                                : 'transparent',
+                            cursor:
+                              'pointer',
+                            textAlign:
+                              'left',
+                          }}
+                        >
+                          <div
+                            style={{
+                              width:
+                                '34px',
+                              height:
+                                '34px',
+                              borderRadius:
+                                '50%',
+                              overflow:
+                                'hidden',
+                              background:
+                                '#E8F5F0',
+                              display:
+                                'flex',
+                              alignItems:
+                                'center',
+                              justifyContent:
+                                'center',
+                              flexShrink: 0,
+                            }}
+                          >
+                            {atleta
+                              .usuario
+                              ?.avatarUrl ? (
+                              <img
+                                src={
+                                  atleta
+                                    .usuario
+                                    .avatarUrl
+                                }
+                                alt=""
+                                style={{
+                                  width:
+                                    '100%',
+                                  height:
+                                    '100%',
+                                  objectFit:
+                                    'cover',
+                                }}
+                              />
+                            ) : (
+                              <UserRound
+                                size={
+                                  17
+                                }
+                              />
+                            )}
+                          </div>
 
-                        <span className={styles.athleteInfo}>
-                          <strong>
-                            {atleta.nome || 'Atleta sem nome'}
-                          </strong>
+                          <div
+                            style={{
+                              flex: 1,
+                              minWidth: 0,
+                            }}
+                          >
+                            <strong>
+                              {atleta.nome ||
+                                'Atleta sem nome'}
+                            </strong>
 
-                          <small>
-                            {atleta.categoria ||
-                              atleta.usuario?.email ||
-                              'Atleta cadastrado'}
-                          </small>
-                        </span>
+                            {atleta.categoria && (
+                              <small
+                                style={{
+                                  display:
+                                    'block',
+                                  color:
+                                    '#71817B',
+                                }}
+                              >
+                                {
+                                  atleta.categoria
+                                }
+                              </small>
+                            )}
+                          </div>
 
-                        <span className={styles.athleteCheck}>
-                          {selecionado && <Check size={15} />}
-                        </span>
-                      </button>
-                    );
-                  })
+                          <div
+                            style={{
+                              width:
+                                '22px',
+                              height:
+                                '22px',
+                              borderRadius:
+                                '6px',
+                              border:
+                                selecionado
+                                  ? 'none'
+                                  : '1px solid #C9D8D2',
+                              background:
+                                selecionado
+                                  ? '#16A875'
+                                  : '#FFFFFF',
+                              display:
+                                'flex',
+                              alignItems:
+                                'center',
+                              justifyContent:
+                                'center',
+                              flexShrink: 0,
+                            }}
+                          >
+                            {selecionado && (
+                              <Check
+                                size={
+                                  15
+                                }
+                                color="#FFFFFF"
+                              />
+                            )}
+                          </div>
+                        </button>
+                      );
+                    },
+                  )
                 )}
               </div>
-            </section>
+
+              <small
+                style={{
+                  color: '#71817B',
+                  marginTop: '6px',
+                }}
+              >
+                {atletasSelecionados.length}{' '}
+                atleta
+                {atletasSelecionados.length !==
+                1
+                  ? 's'
+                  : ''}{' '}
+                selecionado
+                {atletasSelecionados.length !==
+                1
+                  ? 's'
+                  : ''}
+              </small>
+            </div>
 
             {/* PRÓXIMA PARTIDA */}
 
-            <section className={styles.formSection}>
-              <div className={styles.sectionHeading}>
-                <span className={styles.sectionNumber}>03</span>
+            <div
+              className={
+                styles.matchSection
+              }
+            >
+              <div
+                className={
+                  styles.matchSectionHeader
+                }
+              >
+                <div
+                  className={
+                    styles.matchSectionIcon
+                  }
+                >
+                  <CalendarDays
+                    size={17}
+                  />
+                </div>
 
                 <div>
-                  <h3>Próxima partida</h3>
-                  <p>Você pode preencher essas informações depois.</p>
+                  <strong>
+                    Próxima partida
+                  </strong>
+
+                  <span>
+                    Informe o
+                    adversário,
+                    dia e horário.
+                  </span>
                 </div>
               </div>
 
-              <div className={styles.field}>
-                <label htmlFor="adversario">
-                  Nome do adversário
+              <div
+                className={
+                  styles.field
+                }
+              >
+                <label
+                  htmlFor="adversario"
+                >
+                  Adversário
                 </label>
 
                 <input
                   id="adversario"
                   type="text"
-                  placeholder="Ex.: Tigres do Vale"
+                  placeholder="Ex: Tigres do Vale"
                   value={adversario}
-                  maxLength={60}
                   onChange={(event) =>
-                    setAdversario(event.target.value)
+                    setAdversario(
+                      event.target.value,
+                    )
                   }
                 />
               </div>
 
-              <div className={styles.dateTimeGrid}>
-                <div className={styles.field}>
-                  <label htmlFor="data-partida">
+              <div
+                className={
+                  styles.dateTimeGrid
+                }
+              >
+                <div
+                  className={
+                    styles.field
+                  }
+                >
+                  <label
+                    htmlFor="data-partida"
+                  >
                     Data
                   </label>
 
-                  <div className={styles.dateInputWrapper}>
-                    <CalendarDays size={16} />
+                  <div
+                    className={
+                      styles.dateInputWrapper
+                    }
+                  >
+                    <CalendarDays
+                      size={16}
+                    />
 
                     <input
                       id="data-partida"
                       type="date"
-                      value={dataPartida}
-                      onChange={(event) =>
-                        setDataPartida(event.target.value)
+                      value={
+                        dataPartida
+                      }
+                      onChange={(
+                        event,
+                      ) =>
+                        setDataPartida(
+                          event.target.value,
+                        )
                       }
                     />
                   </div>
                 </div>
 
-                <div className={styles.field}>
-                  <label htmlFor="hora-partida">
+                <div
+                  className={
+                    styles.field
+                  }
+                >
+                  <label
+                    htmlFor="hora-partida"
+                  >
                     Horário
                   </label>
 
-                  <div className={styles.dateInputWrapper}>
-                    <Clock3 size={16} />
+                  <div
+                    className={
+                      styles.dateInputWrapper
+                    }
+                  >
+                    <Clock3
+                      size={16}
+                    />
 
                     <input
                       id="hora-partida"
                       type="time"
-                      value={horarioPartida}
-                      onChange={(event) =>
-                        setHorarioPartida(event.target.value)
+                      value={
+                        horarioPartida
+                      }
+                      onChange={(
+                        event,
+                      ) =>
+                        setHorarioPartida(
+                          event.target.value,
+                        )
                       }
                     />
                   </div>
                 </div>
               </div>
 
-              {(adversario.trim() || dataPartida || horarioPartida) && (
-                <div className={styles.matchPreview}>
-                  <CalendarDays size={17} />
+              {adversario.trim() && (
+                <div
+                  className={
+                    styles.matchPreview
+                  }
+                >
+                  <CalendarDays
+                    size={15}
+                  />
 
                   <div>
-                    <span>Prévia da partida</span>
+                    <span>
+                      Como aparecerá
+                      no card
+                    </span>
 
                     <strong>
-                      {proximaPartidaPreview}
+                      {
+                        proximaPartidaPreview
+                      }
                     </strong>
-
-                    {dataPartida && (
-                      <small>
-                        {new Date(
-                          `${dataPartida}T12:00:00`,
-                        ).toLocaleDateString('pt-BR')}
-                        {horarioPartida
-                          ? ` • ${horarioPartida}`
-                          : ''}
-                      </small>
-                    )}
                   </div>
                 </div>
               )}
-            </section>
+            </div>
 
-            {/* COR DA EQUIPE */}
+            {/* CORES */}
 
-            <section className={styles.formSection}>
-              <div className={styles.sectionHeading}>
-                <span className={styles.sectionNumber}>04</span>
+            <div
+              className={
+                styles.field
+              }
+            >
+              <label>
+                Cor da equipe
+              </label>
 
-                <div>
-                  <h3>Identidade visual</h3>
-                  <p>Escolha a cor principal da equipe.</p>
-                </div>
-              </div>
-
-              <div className={styles.colorsArea}>
-                <div className={styles.colors}>
-                  {cores.map((item) => {
-                    const selecionada = cor === item;
-
-                    return (
+              <div
+                className={
+                  styles.colorsArea
+                }
+              >
+                <div
+                  className={
+                    styles.colors
+                  }
+                >
+                  {cores.map(
+                    (item) => (
                       <button
                         key={item}
                         type="button"
                         className={`${styles.colorButton} ${
-                          selecionada ? styles.colorSelected : ''
+                          cor === item
+                            ? styles.colorSelected
+                            : ''
                         }`}
-                        style={{ backgroundColor: item }}
-                        onClick={() => setCor(item)}
+                        style={{
+                          background:
+                            item,
+                        }}
+                        onClick={() =>
+                          setCor(
+                            item,
+                          )
+                        }
                         title={item}
-                        aria-label={`Selecionar cor ${item}`}
-                        aria-pressed={selecionada}
                       >
-                        {selecionada && <Check size={16} />}
+                        {cor === item && (
+                          <Check
+                            size={16}
+                          />
+                        )}
                       </button>
-                    );
-                  })}
+                    ),
+                  )}
 
                   <button
                     type="button"
@@ -768,111 +1138,159 @@ const NovaEquipeModal = ({
                         ? styles.customColorSelected
                         : ''
                     }`}
-                    onClick={() => colorInputRef.current?.click()}
-                    aria-label="Escolher cor personalizada"
-                    title="Cor personalizada"
+                    onClick={() =>
+                      colorInputRef.current?.click()
+                    }
+                    title="Escolher cor personalizada"
                   >
-                    <span
-                      className={styles.rgbCircle}
-                      style={{
-                        backgroundColor: corPersonalizada,
-                      }}
+                    <div
+                      className={
+                        styles.rgbCircle
+                      }
                     >
-                      <Palette size={16} />
-                    </span>
+                      <div
+                        className={
+                          styles.rgbCircleCenter
+                        }
+                        style={{
+                          background:
+                            corPersonalizada,
+                        }}
+                      >
+                        <Palette
+                          size={14}
+                        />
+                      </div>
+                    </div>
                   </button>
 
                   <input
-                    ref={colorInputRef}
+                    ref={
+                      colorInputRef
+                    }
                     type="color"
-                    value={corPersonalizada}
-                    onChange={handleCorPersonalizada}
-                    className={styles.hiddenColorInput}
-                    aria-label="Selecionar cor personalizada"
+                    value={
+                      corPersonalizada
+                    }
+                    onChange={
+                      handleCorPersonalizada
+                    }
+                    className={
+                      styles.hiddenColorInput
+                    }
                   />
                 </div>
 
-                <div className={styles.selectedColorInfo}>
-                  <div
-                    className={styles.selectedColorPreview}
-                    style={{ backgroundColor: cor }}
-                  />
+                <div
+                  className={
+                    styles.selectedColorInfo
+                  }
+                >
+                  <span>
+                    Cor selecionada
+                  </span>
 
-                  <div>
-                    <span>Cor selecionada</span>
-                    <strong>{cor.toUpperCase()}</strong>
-                  </div>
+                  <strong>
+                    {cor.toUpperCase()}
+                  </strong>
+
+                  <div
+                    className={
+                      styles.selectedColorPreview
+                    }
+                    style={{
+                      background:
+                        cor,
+                    }}
+                  />
                 </div>
               </div>
-            </section>
+            </div>
           </div>
         </div>
 
-        {/* PRÉVIA DA EQUIPE */}
+        {/* PREVIEW */}
 
-        <div className={styles.teamPreview}>
+        <div
+          className={
+            styles.teamPreview
+          }
+        >
           <div
-            className={styles.previewAvatar}
-            style={{ backgroundColor: cor }}
+            className={
+              styles.previewAvatar
+            }
+            style={{
+              background: cor,
+            }}
           >
-            {nome.trim().slice(0, 2).toUpperCase() || (
-              <Shield size={22} />
-            )}
+            {nome
+              .trim()
+              .slice(0, 2)
+              .toUpperCase() ||
+              'EQ'}
           </div>
 
-          <div className={styles.previewInfo}>
-            <span>PRÉVIA DA EQUIPE</span>
+          <div>
+            <span>
+              PREVIEW
+            </span>
 
             <strong>
-              {nome.trim() || 'Nome da equipe'}
+              {nome.trim() ||
+                'Nome da equipe'}
             </strong>
 
             <small>
-              {modalidade} · {categoria} ·{' '}
+              {modalidade} •{' '}
+              {categoria} •{' '}
               {atletasSelecionados.length}{' '}
-              {atletasSelecionados.length === 1
-                ? 'atleta'
-                : 'atletas'}
+              atleta
+              {atletasSelecionados.length !==
+              1
+                ? 's'
+                : ''}
             </small>
           </div>
-
-          {imagemPreview && (
-            <img
-              className={styles.previewImage}
-              src={imagemPreview}
-              alt=""
-            />
-          )}
         </div>
 
-        {/* AÇÕES */}
+        {/* FOOTER */}
 
-        <footer className={styles.footer}>
-          <span className={styles.requiredHint}>
-            * Campos obrigatórios
-          </span>
+        <div
+          className={
+            styles.footer
+          }
+        >
+          <button
+            type="button"
+            className={
+              styles.cancelButton
+            }
+            onClick={
+              fecharModal
+            }
+          >
+            Cancelar
+          </button>
 
-          <div className={styles.footerActions}>
-            <button
-              type="button"
-              className={styles.cancelButton}
-              onClick={fecharModal}
-            >
-              Cancelar
-            </button>
+          <button
+            type="button"
+            className={
+              styles.createButton
+            }
+            disabled={
+              !formularioValido
+            }
+            onClick={
+              criarEquipe
+            }
+          >
+            <Plus size={17} />
 
-            <button
-              type="button"
-              className={styles.createButton}
-              disabled={!formularioValido}
-              onClick={criarEquipe}
-            >
-              <Plus size={17} />
-              Criar equipe
-            </button>
-          </div>
-        </footer>
-      </section>
+            Criar equipe
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

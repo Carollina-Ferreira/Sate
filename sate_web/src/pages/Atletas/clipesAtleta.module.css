@@ -1,270 +1,544 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
+
 .page {
-    min-height: 100vh;
-    background-color: #005942;
-    padding: 24px 40px;
+    --verde: #005942;
+    --verde-profundo: #003d31;
+    --rosa: #ef3f6f;
+    --rosa-claro: #ffe4ec;
+    --creme: #faf5ee;
+    --linha: #e8ddd2;
+    --texto: #172a23;
+    --texto-secundario: #777e79;
+
+    width: calc(100% + 60px);
+    min-height: calc(100vh + 60px);
+    margin: -30px;
+    padding: 34px 34px 64px;
+    box-sizing: border-box;
+
+    background:
+        radial-gradient(
+            ellipse 390px 300px at 97% 0%,
+            rgba(239, 63, 111, 0.14) 0%,
+            rgba(239, 63, 111, 0.06) 44%,
+            rgba(239, 63, 111, 0) 77%
+        ),
+        var(--creme);
+
+    color: var(--texto);
     font-family: 'Poppins', sans-serif;
+}
+
+.page * {
     box-sizing: border-box;
 }
 
+/* VOLTAR */
+
 .backButton {
+    width: min(100%, 1235px);
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: transparent;
-    border: none;
-    color: #a7c6bd;
-    font-size: 14px;
-    cursor: pointer;
+    gap: 7px;
+    margin: 0 auto 22px;
     padding: 0;
-    margin-bottom: 20px;
+    border: none;
+    background: transparent;
+    color: var(--texto-secundario);
     font-family: inherit;
-    transition: color 0.2s;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color .18s ease, transform .18s ease;
 }
 
 .backButton:hover {
-    color: #ffffff;
+    color: var(--verde);
+    transform: translateX(-2px);
 }
 
+/* CABEÇALHO */
+
 .toolbar {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 24px 28px;
-    margin-bottom: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    width: min(100%, 1235px);
+    margin: 0 auto 32px;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 .toolbarHeader {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 32px;
+    margin-bottom: 28px;
 }
 
 .titleArea {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    min-width: 0;
     flex: 1;
 }
 
 .titleRow {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    display: block;
 }
 
 .titleRow h1 {
     margin: 0;
-    font-size: 32px;
-    font-weight: 800;
-    color: #000;
+    color: var(--texto);
+    font-size: clamp(36px, 3.3vw, 48px);
+    line-height: 1.04;
+    font-weight: 700;
+    letter-spacing: -1.6px;
+}
+
+.titleRow h1 em {
+    color: var(--rosa);
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.4px;
 }
 
 .countBadge {
-    background: #d5f5e3;
-    color: #1e8449;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
+    display: none;
 }
 
 .subtitle {
-    margin: 0;
-    font-size: 13px;
-    color: #666;
-    max-width: 600px;
+    max-width: 590px;
+    margin: 10px 0 0;
+    color: var(--texto-secundario);
+    font-size: 12px;
+    line-height: 1.65;
 }
+
+/* SELECT CAMPEONATO */
 
 .championshipSelectWrapper {
     position: relative;
+    flex-shrink: 0;
 }
 
 .championshipSelect {
+    min-width: 240px;
+    height: 52px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    background: #f0f0f0;
-    border-radius: 8px;
-    padding: 12px 18px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-    min-width: 200px;
+    gap: 16px;
+    padding: 0 16px;
+    border: 1px solid #d8c9bb;
+    border-radius: 12px;
+    background: #fff;
+    color: #263930;
+    font-size: 12px;
+    font-weight: 500;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: border-color .18s ease;
 }
 
 .championshipSelect:hover {
-    background: #e5e5e5;
+    border-color: #baa99a;
 }
 
 .dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 8px);
     right: 0;
-    margin-top: 8px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    padding: 8px;
-    min-width: 200px;
     z-index: 100;
+    min-width: 240px;
+    padding: 7px;
+    border: 1px solid var(--linha);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 14px 30px rgba(55, 37, 26, .11);
 }
 
 .dropdownItem {
-    display: block;
     width: 100%;
-    text-align: left;
-    padding: 10px 14px;
+    display: block;
+    padding: 10px 12px;
     border: none;
+    border-radius: 8px;
     background: transparent;
+    color: #34463f;
     font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    color: #333;
+    font-size: 11px;
+    text-align: left;
     cursor: pointer;
-    border-radius: 6px;
-    transition: background 0.2s;
 }
 
 .dropdownItem:hover {
-    background: #f0f0f0;
+    background: #f7f1eb;
 }
 
+/* ABAS / FILTROS */
+
 .filtersRow {
+    min-height: 46px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 30px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--linha);
+    scrollbar-width: none;
+}
+
+.filtersRow::-webkit-scrollbar {
+    display: none;
 }
 
 .filterLabel {
-    font-size: 14px;
-    font-weight: 600;
-    color: #666;
-    margin-right: 4px;
+    display: none;
 }
 
 .filterButton {
-    display: flex;
+    min-height: 46px;
+    position: relative;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 14px;
-    background: #f0f0f0;
+    flex-shrink: 0;
+    padding: 0;
     border: none;
-    border-radius: 20px;
-    color: #333;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
+    background: transparent;
+    color: #777e79;
     font-family: inherit;
-    transition: all 0.2s;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.filterButton svg {
+    display: none;
+}
+
+.filterButton small {
+    color: #8b908c;
+    font-size: 9px;
+    font-weight: 600;
 }
 
 .filterButton:hover {
-    background: #e5e5e5;
+    color: var(--texto);
 }
 
 .filterActive {
-    background: #004d40;
-    color: #ffffff;
+    color: var(--texto);
 }
 
-/* =====================================================
-   TRY — PLAYER + OUTROS CLIPES
-===================================================== */
+.filterActive small {
+    color: var(--rosa);
+}
+
+.filterActive::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: var(--rosa);
+}
+
+/* GRID DOS CLIPES */
+
+.clipesGrid {
+    width: min(100%, 1235px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 34px 28px;
+}
+
+.clipeCard {
+    min-width: 0;
+    height: auto;
+    position: relative;
+    overflow: visible;
+    display: block;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.clipeCard:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* VÍDEO */
+
+.videoWrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    overflow: hidden;
+    border-radius: 13px;
+    background: #004f3d;
+    cursor: pointer;
+}
+
+.thumbnail {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    filter: saturate(.75) contrast(.95);
+    transition: transform .25s ease;
+}
+
+.videoWrapper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0, 72, 53, .12),
+            rgba(0, 72, 53, .34)
+        );
+    pointer-events: none;
+}
+
+.videoWrapper:hover .thumbnail {
+    transform: scale(1.025);
+}
+
+.playOverlay {
+    width: 48px;
+    height: 48px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(0, 54, 42, .8);
+    color: #fff;
+    transform: translate(-50%, -50%);
+    transition: transform .18s ease, background .18s ease;
+}
+
+.videoWrapper:hover .playOverlay {
+    background: rgba(0, 54, 42, .94);
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.playOverlay svg {
+    margin-left: 2px;
+}
+
+/* INFO ABAIXO */
+
+.clipeInfo {
+    position: relative;
+    padding: 11px 0 0;
+}
+
+.timestamp {
+    display: none;
+}
+
+.clipeTitle {
+    margin: 0;
+    color: var(--texto);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.matchName {
+    margin: 6px 0 0;
+    color: var(--texto-secundario);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* TAG ROSA SOBRE A MINIATURA */
+.categoryTag {
+    position: absolute;
+    top: calc(-100% - 2px);
+    left: 13px;
+    z-index: 5;
+
+    min-height: 27px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 0 10px;
+    margin: 0;
+
+    border-radius: 999px;
+    background: var(--rosa);
+    color: #fff;
+
+    font-size: 0;
+    font-weight: 700;
+}
+
+.categoryTag svg {
+    display: none;
+}
+
+.categoryTag::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.categoryTag::after {
+    content: attr(data-label);
+}
+
+/* Como o texto do elemento já existe, voltamos o tamanho só para ele */
+.categoryTag {
+    font-size: 9px;
+}
+
+/* AÇÕES NO HOVER */
+
+.cardFooter {
+    position: absolute;
+    top: 7px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    transition: opacity .18s ease;
+}
+
+.clipeCard:hover .cardFooter {
+    opacity: 1;
+}
+
+.downloadButton,
+.shareButton {
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0 9px;
+    border: 1px solid #ddcfc0;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--verde);
+    font-family: inherit;
+    font-size: 9px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.shareButton {
+    width: 30px;
+    padding: 0;
+}
+
+.downloadButton:hover,
+.shareButton:hover {
+    background: #f3f8f5;
+}
+
+/* ESTADO VAZIO */
+
+.emptyState {
+    width: min(100%, 1235px);
+    margin: 0 auto;
+    padding: 54px 20px;
+    border: 1px solid var(--linha);
+    border-radius: 14px;
+    background: rgba(255,255,255,.48);
+    color: var(--texto-secundario);
+    text-align: center;
+    font-size: 12px;
+}
+
+/* TRY — PLAYER ESPECIAL, MANTIDO FUNCIONAL */
 
 .tryLayout {
+    width: min(100%, 1235px);
+    margin: 0 auto;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 330px;
-    gap: 22px;
-    align-items: stretch;
+    gap: 20px;
 }
 
-/* PLAYER PRINCIPAL */
-
-.mainPlayerCard {
-    background: #ffffff;
-    border-radius: 16px;
+.mainPlayerCard,
+.otherClipsCard {
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--linha);
+    border-radius: 15px;
+    background: rgba(255,255,255,.78);
+    box-shadow: 0 10px 26px rgba(68, 45, 30, .05);
 }
 
 .mainVideo {
     position: relative;
     width: 100%;
     height: 470px;
-    background: #000;
     overflow: hidden;
+    background: #002c21;
     cursor: pointer;
 }
 
 .mainThumbnail {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     display: block;
+    object-fit: cover;
 }
 
 .mainPlayButton {
+    width: 70px;
+    height: 70px;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 76px;
-    height: 76px;
-    border-radius: 50%;
-    background: rgba(0, 40, 30, 0.65);
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+    background: rgba(0, 54, 42, .82);
     color: #fff;
-    transition: transform 0.2s, background 0.2s;
+    transform: translate(-50%, -50%);
 }
-
-.mainPlayButton:hover {
-    transform: translate(-50%, -50%) scale(1.08);
-    background: rgba(0, 77, 50, 0.85);
-}
-
-.mainPlayButton svg {
-    margin-left: 4px;
-}
-
-/* CONTROLES */
 
 .videoControls {
     position: absolute;
-    left: 18px;
     right: 18px;
     bottom: 18px;
-    height: 54px;
-    background: rgba(0, 0, 0, 0.88);
-    border-radius: 12px;
+    left: 18px;
+    height: 52px;
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 0 16px;
-    box-sizing: border-box;
+    gap: 13px;
+    padding: 0 15px;
+    border-radius: 11px;
+    background: rgba(0,0,0,.84);
 }
 
 .controlPlay {
     width: 34px;
     height: 34px;
-    border: none;
-    background: transparent;
-    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #fff;
     cursor: pointer;
-    flex-shrink: 0;
 }
 
 .progressContainer {
@@ -272,165 +546,129 @@
 }
 
 .progressTrack {
-    position: relative;
-    width: 100%;
     height: 4px;
-    background: #ffffff;
-    border-radius: 10px;
+    position: relative;
+    border-radius: 999px;
+    background: rgba(255,255,255,.72);
 }
 
 .progressPlayed {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
     width: 38%;
-    background: #75d5ad;
-    border-radius: 10px;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--rosa);
 }
 
 .progressIndicator {
+    width: 11px;
+    height: 11px;
     position: absolute;
-    left: 38%;
     top: 50%;
-    width: 12px;
-    height: 12px;
-    background: #ffffff;
+    left: 38%;
     border-radius: 50%;
+    background: #fff;
     transform: translate(-50%, -50%);
 }
 
 .videoTime {
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 600;
-    min-width: 38px;
+    color: #fff;
+    font-size: 10px;
 }
 
-/* INFORMAÇÕES ABAIXO DO PLAYER */
-
 .mainVideoInfo {
-    padding: 18px 22px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     gap: 20px;
+    padding: 18px 20px;
 }
 
 .mainVideoTime {
-    display: block;
-    color: #999;
-    font-size: 12px;
+    color: var(--rosa);
+    font-size: 10px;
     font-weight: 700;
-    margin-bottom: 3px;
 }
 
 .mainVideoInfo h2 {
-    margin: 0;
-    font-size: 20px;
-    color: #111;
-    font-weight: 800;
+    margin: 2px 0 0;
+    color: var(--texto);
+    font-size: 18px;
 }
 
 .mainVideoInfo p {
-    margin: 3px 0 0;
-    color: #666;
-    font-size: 13px;
+    margin: 4px 0 0;
+    color: var(--texto-secundario);
+    font-size: 10px;
 }
 
 .mainActions {
     display: flex;
-    gap: 8px;
+    gap: 7px;
 }
 
 .mainActions button {
-    display: flex;
+    height: 34px;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
-    border: none;
-    background: #f1f1f1;
-    color: #333;
-    border-radius: 7px;
-    padding: 9px 12px;
+    padding: 0 10px;
+    border: 1px solid #ddcfc0;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--verde);
     font-family: inherit;
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
 }
-
-.mainActions button:hover {
-    background: #e3e3e3;
-}
-
-/* =====================================================
-   OUTROS CLIPES
-===================================================== */
 
 .otherClipsCard {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 20px;
-    box-sizing: border-box;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 18px;
 }
 
 .otherClipsCard h2 {
-    margin: 0 0 16px;
-    font-size: 18px;
-    color: #111;
-    font-weight: 800;
+    margin: 0 0 14px;
+    color: var(--texto);
+    font-size: 15px;
 }
 
 .otherClipsList {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 9px;
 }
 
 .otherClip {
     width: 100%;
-    min-height: 84px;
-    border: none;
-    background: #f1f3f3;
-    border-radius: 10px;
-    padding: 8px;
+    min-height: 78px;
     display: flex;
     align-items: center;
     gap: 9px;
+    padding: 7px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: #f5efe8;
     text-align: left;
     font-family: inherit;
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-}
-
-.otherClip:hover {
-    background: #e8ebea;
-    transform: translateY(-1px);
 }
 
 .otherClipActive {
-    background: #004d32;
-    color: #ffffff;
-}
-
-.otherClipActive:hover {
-    background: #004d32;
+    background: var(--verde);
+    color: #fff;
 }
 
 .otherThumbnail {
-    width: 82px;
-    height: 66px;
-    border-radius: 7px;
+    width: 76px;
+    height: 61px;
     overflow: hidden;
     flex-shrink: 0;
-    background: #222;
+    border-radius: 8px;
 }
 
 .otherThumbnail img {
     width: 100%;
     height: 100%;
-    display: block;
     object-fit: cover;
 }
 
@@ -443,364 +681,163 @@
 }
 
 .otherClipInfo strong {
-    font-size: 11px;
-    font-weight: 800;
-    white-space: nowrap;
+    font-size: 10px;
 }
 
 .otherClipInfo span {
-    font-size: 10px;
-    color: #666;
-    white-space: nowrap;
     overflow: hidden;
+    color: #777e79;
+    font-size: 9px;
+    white-space: nowrap;
     text-overflow: ellipsis;
 }
 
 .otherClipActive .otherClipInfo span {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255,255,255,.76);
 }
 
 .otherPlay {
-    width: 30px;
-    height: 30px;
-    min-width: 30px;
-    border-radius: 50%;
-    border: 1.5px solid #222;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #222;
+    border: 1px solid #c9bbae;
+    border-radius: 50%;
     background: #fff;
 }
 
 .otherClipActive .otherPlay {
-    background: #55c99b;
-    border-color: #55c99b;
+    border-color: var(--rosa);
+    background: var(--rosa);
     color: #fff;
 }
 
-.otherPlay svg {
-    margin-left: 1px;
-}
-
-/* =====================================================
-   GRID ORIGINAL DOS OUTROS FILTROS
-===================================================== */
-
-.clipesGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
-
-.clipeCard {
-    background: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
-    height: 160px;
-}
-
-.clipeCard:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.videoWrapper {
-    position: relative;
-    width: 45%;
-    flex-shrink: 0;
-    cursor: pointer;
-    overflow: hidden;
-    background: #000;
-}
-
-.thumbnail {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s;
-}
-
-.videoWrapper:hover .thumbnail {
-    transform: scale(1.08);
-}
-
-.playOverlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 44px;
-    height: 44px;
-    background: rgba(0, 77, 64, 0.9);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    transition: background 0.2s, transform 0.2s;
-}
-
-.videoWrapper:hover .playOverlay {
-    background: #004d40;
-    transform: translate(-50%, -50%) scale(1.1);
-}
-
-.clipeInfo {
-    flex: 1;
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    justify-content: center;
-}
-
-.timestamp {
-    font-size: 11px;
-    font-weight: 700;
-    color: #999;
-    letter-spacing: 0.5px;
-}
-
-.clipeTitle {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 700;
-    color: #000;
-    line-height: 1.2;
-}
-
-.matchName {
-    margin: 0;
-    font-size: 12px;
-    color: #666;
-    margin-bottom: 4px;
-}
-
-.categoryTag {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    color: #fff;
-    background: #004d40;
-    width: fit-content;
-    margin-bottom: 6px;
-}
-
-.cardFooter {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: auto;
-    padding-top: 8px;
-}
-
-.downloadButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 7px 12px;
-    background: #f0f0f0;
-    border: none;
-    border-radius: 6px;
-    color: #333;
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.2s;
-    width: fit-content;
-}
-
-.downloadButton:hover {
-    background: #e0e0e0;
-}
-
-.shareButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    background: #f0f0f0;
-    border: none;
-    border-radius: 6px;
-    color: #333;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.shareButton:hover {
-    background: #e0e0e0;
-}
-
-.emptyState {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 60px 20px;
-    text-align: center;
-    color: #666;
-    font-size: 15px;
-}
-
-/* =====================================================
-   MODAL
-===================================================== */
+/* MODAL */
 
 .videoModalOverlay {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: rgba(0, 20, 15, 0.85);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 22px;
+    background: rgba(0, 28, 21, .82);
+    backdrop-filter: blur(5px);
 }
 
 .videoModal {
+    width: min(900px, 100%);
     position: relative;
-    background: #000;
-    border-radius: 12px;
     overflow: hidden;
-    max-width: 900px;
-    width: 100%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    background: #000;
+    box-shadow: 0 25px 70px rgba(0,0,0,.38);
 }
 
 .videoModalClose {
+    width: 36px;
+    height: 36px;
     position: absolute;
     top: 12px;
     right: 12px;
     z-index: 10;
-    width: 36px;
-    height: 36px;
-    background: rgba(0, 0, 0, 0.6);
-    border: none;
-    border-radius: 50%;
-    color: #fff;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
-}
-
-.videoModalClose:hover {
-    background: rgba(0, 0, 0, 0.9);
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,.62);
+    color: #fff;
+    cursor: pointer;
 }
 
 .videoPlayer {
     width: 100%;
-    display: block;
     max-height: 70vh;
+    display: block;
     background: #000;
 }
 
 .videoModalInfo {
-    padding: 16px 20px;
-    background: #fff;
-    color: #000;
+    padding: 15px 18px;
+    background: #fffaf4;
 }
 
 .videoModalInfo h3 {
-    margin: 0 0 4px;
-    font-size: 18px;
+    margin: 0;
+    color: var(--texto);
+    font-size: 15px;
 }
 
 .videoModalInfo p {
-    margin: 0;
-    font-size: 13px;
-    color: #666;
+    margin: 4px 0 0;
+    color: var(--texto-secundario);
+    font-size: 10px;
 }
 
-/* =====================================================
-   RESPONSIVO
-===================================================== */
+/* RESPONSIVO */
 
-@media (max-width: 1100px) {
+@media (max-width: 1050px) {
+    .clipesGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
     .tryLayout {
         grid-template-columns: 1fr;
     }
 
-    .otherClipsCard {
+    .otherClipsList {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .page {
+        width: calc(100% + 32px);
+        min-height: calc(100vh + 32px);
+        margin: -16px;
+        padding: 24px 16px 40px;
+    }
+
+    .toolbarHeader {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .championshipSelectWrapper,
+    .championshipSelect {
         width: 100%;
     }
 
-    .otherClipsList {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+    .filtersRow {
+        gap: 22px;
     }
-
-}
-
-@media (max-width: 1000px) {
 
     .clipesGrid {
         grid-template-columns: 1fr;
     }
 
-}
-
-@media (max-width: 700px) {
-
-    .page {
-        padding: 16px;
-    }
-
-    .toolbar {
-        padding: 20px;
-    }
-
-    .titleRow h1 {
-        font-size: 24px;
-    }
-
-    .toolbarHeader {
-        flex-direction: column;
-    }
-
-    .championshipSelect {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .clipeCard {
-        flex-direction: column;
-        height: auto;
-    }
-
-    .videoWrapper {
-        width: 100%;
-        height: 180px;
+    .cardFooter {
+        position: static;
+        margin-top: 9px;
+        opacity: 1;
     }
 
     .mainVideo {
-        height: 300px;
+        height: 320px;
     }
 
     .mainVideoInfo {
-        flex-direction: column;
         align-items: flex-start;
-    }
-
-    .mainActions {
-        width: 100%;
+        flex-direction: column;
     }
 
     .otherClipsList {
         grid-template-columns: 1fr;
     }
-
 }

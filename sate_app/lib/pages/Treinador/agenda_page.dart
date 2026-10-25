@@ -14,7 +14,6 @@ class _AgendaPageState extends State<AgendaPage> {
   static const Color fundo = Color(0xFFF7F7F7);
 
   DateTime mesAtual = DateTime(2026, 8);
-
   DateTime diaSelecionado = DateTime(2026, 8, 27);
 
   final List<Evento> eventos = [
@@ -73,18 +72,12 @@ class _AgendaPageState extends State<AgendaPage> {
 
     return Scaffold(
       backgroundColor: fundo,
-
       appBar: AppBar(
         backgroundColor: fundo,
         elevation: 0,
         centerTitle: false,
 
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
-        ),
+        automaticallyImplyLeading: false,
 
         title: const Text(
           'Agenda',
@@ -95,7 +88,6 @@ class _AgendaPageState extends State<AgendaPage> {
           ),
         ),
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -104,30 +96,20 @@ class _AgendaPageState extends State<AgendaPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildCabecalho(),
-
               const SizedBox(height: 18),
-
               _calendario(),
-
               const SizedBox(height: 20),
-
               _tituloDia(),
-
               const SizedBox(height: 12),
-
               if (eventosDoDia.isEmpty)
                 _semEventos()
               else
                 ...eventosDoDia.map((evento) {
                   return _cardEvento(evento);
                 }),
-
               const SizedBox(height: 8),
-
               _botaoNovoEvento(),
-
               const SizedBox(height: 20),
-
               _legenda(),
             ],
           ),
@@ -159,9 +141,7 @@ class _AgendaPageState extends State<AgendaPage> {
               size: 27,
             ),
           ),
-
           const SizedBox(width: 14),
-
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,9 +154,7 @@ class _AgendaPageState extends State<AgendaPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 SizedBox(height: 5),
-
                 Text(
                   'Acompanhe os eventos e compromissos da equipe.',
                   style: TextStyle(
@@ -195,9 +173,7 @@ class _AgendaPageState extends State<AgendaPage> {
 
   Widget _calendario() {
     final DateTime primeiroDia = DateTime(mesAtual.year, mesAtual.month, 1);
-
     final DateTime ultimoDia = DateTime(mesAtual.year, mesAtual.month + 1, 0);
-
     final int primeiroDiaSemana = primeiroDia.weekday;
 
     final List<Widget> dias = [];
@@ -208,11 +184,8 @@ class _AgendaPageState extends State<AgendaPage> {
 
     for (int dia = 1; dia <= ultimoDia.day; dia++) {
       final DateTime data = DateTime(mesAtual.year, mesAtual.month, dia);
-
       final bool selecionado = _mesmoDia(data, diaSelecionado);
-
       final bool hoje = _mesmoDia(data, DateTime.now());
-
       final bool possuiEvento = eventos.any((evento) {
         return _mesmoDia(evento.data, data);
       });
@@ -247,9 +220,7 @@ class _AgendaPageState extends State<AgendaPage> {
                         : FontWeight.w500,
                   ),
                 ),
-
                 const SizedBox(height: 3),
-
                 if (possuiEvento)
                   Container(
                     width: 4,
@@ -295,7 +266,6 @@ class _AgendaPageState extends State<AgendaPage> {
                   });
                 },
               ),
-
               Expanded(
                 child: Center(
                   child: Text(
@@ -308,7 +278,6 @@ class _AgendaPageState extends State<AgendaPage> {
                   ),
                 ),
               ),
-
               _botaoMes(
                 icone: Icons.chevron_right_rounded,
                 onTap: () {
@@ -319,9 +288,7 @@ class _AgendaPageState extends State<AgendaPage> {
               ),
             ],
           ),
-
           const SizedBox(height: 18),
-
           Row(
             children: [
               _diaSemana('SEG'),
@@ -333,9 +300,7 @@ class _AgendaPageState extends State<AgendaPage> {
               _diaSemana('DOM'),
             ],
           ),
-
           const SizedBox(height: 8),
-
           GridView.count(
             crossAxisCount: 7,
             shrinkWrap: true,
@@ -400,9 +365,7 @@ class _AgendaPageState extends State<AgendaPage> {
             ),
           ),
         ),
-
         const SizedBox(width: 12),
-
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -414,9 +377,7 @@ class _AgendaPageState extends State<AgendaPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 3),
-
             Text(
               _diaSemanaCompleto(diaSelecionado),
               style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
@@ -458,9 +419,7 @@ class _AgendaPageState extends State<AgendaPage> {
             ),
             child: Icon(evento.icone, color: cor, size: 23),
           ),
-
           const SizedBox(width: 12),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -479,29 +438,42 @@ class _AgendaPageState extends State<AgendaPage> {
                         ),
                       ),
                     ),
-
                     PopupMenuButton<String>(
                       padding: EdgeInsets.zero,
-                      iconSize: 21,
-                      onSelected: (valor) {
-                        if (valor == 'remover') {
-                          _removerEvento(evento);
+                      constraints: const BoxConstraints(minWidth: 40),
+                      icon: const Icon(
+                        Icons.more_horiz,
+                        color: Color(0xFF68736F),
+                        size: 21,
+                      ),
+                      onSelected: (opcao) {
+                        if (opcao == 'excluir') {
+                          _confirmarExclusaoEvento(evento);
                         }
                       },
-                      itemBuilder: (context) {
-                        return const [
-                          PopupMenuItem(
-                            value: 'remover',
-                            child: Text('Remover evento'),
+                      itemBuilder: (context) => [
+                        const PopupMenuItem<String>(
+                          value: 'excluir',
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.delete_outline,
+                                color: Color(0xFF00845F),
+                                size: 20,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Excluir evento',
+                                style: TextStyle(color: Color(0xFF00845F)),
+                              ),
+                            ],
                           ),
-                        ];
-                      },
+                        ),
+                      ],
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 6),
-
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 9,
@@ -520,9 +492,7 @@ class _AgendaPageState extends State<AgendaPage> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 12),
-
                 Row(
                   children: [
                     Icon(
@@ -530,9 +500,7 @@ class _AgendaPageState extends State<AgendaPage> {
                       size: 15,
                       color: Colors.grey.shade600,
                     ),
-
                     const SizedBox(width: 5),
-
                     Text(
                       '${evento.horarioInicio} - ${evento.horarioFim}',
                       style: TextStyle(
@@ -542,9 +510,7 @@ class _AgendaPageState extends State<AgendaPage> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 7),
-
                 Row(
                   children: [
                     Icon(
@@ -552,9 +518,7 @@ class _AgendaPageState extends State<AgendaPage> {
                       size: 15,
                       color: Colors.grey.shade600,
                     ),
-
                     const SizedBox(width: 5),
-
                     Expanded(
                       child: Text(
                         evento.local,
@@ -599,9 +563,7 @@ class _AgendaPageState extends State<AgendaPage> {
               size: 27,
             ),
           ),
-
           const SizedBox(height: 12),
-
           const Text(
             'Nenhum evento',
             style: TextStyle(
@@ -610,9 +572,7 @@ class _AgendaPageState extends State<AgendaPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-
           const SizedBox(height: 5),
-
           Text(
             'Não há eventos programados para este dia.',
             textAlign: TextAlign.center,
@@ -670,9 +630,7 @@ class _AgendaPageState extends State<AgendaPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-
           const SizedBox(height: 12),
-
           Wrap(
             spacing: 16,
             runSpacing: 10,
@@ -697,9 +655,7 @@ class _AgendaPageState extends State<AgendaPage> {
           height: 8,
           decoration: BoxDecoration(color: cor, shape: BoxShape.circle),
         ),
-
         const SizedBox(width: 6),
-
         Text(
           textoLegenda,
           style: TextStyle(color: Colors.grey.shade700, fontSize: 10),
@@ -708,28 +664,28 @@ class _AgendaPageState extends State<AgendaPage> {
     );
   }
 
+  // ============================================================
+  // NOVO EVENTO
+  // ============================================================
+
   void _abrirNovoEvento() {
     final TextEditingController tituloController = TextEditingController();
-
-    final TextEditingController horarioInicioController =
-        TextEditingController();
-
-    final TextEditingController horarioFimController = TextEditingController();
-
     final TextEditingController localController = TextEditingController();
 
+    TimeOfDay? horarioInicio;
+    TimeOfDay? horarioFim;
     TipoEvento tipoSelecionado = TipoEvento.treino;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) {
+      builder: (modalContext) {
         return StatefulBuilder(
-          builder: (context, setModalState) {
+          builder: (modalContext, setModalState) {
             return Padding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
+                bottom: MediaQuery.of(modalContext).viewInsets.bottom,
               ),
               child: Container(
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
@@ -751,9 +707,7 @@ class _AgendaPageState extends State<AgendaPage> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 20),
-
                       const Text(
                         'Novo evento',
                         style: TextStyle(
@@ -762,53 +716,65 @@ class _AgendaPageState extends State<AgendaPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       const SizedBox(height: 20),
-
                       _campo(
                         controller: tituloController,
                         label: 'Título',
                         hint: 'Nome do evento',
                         icone: Icons.edit_outlined,
                       ),
-
                       const SizedBox(height: 12),
-
                       Row(
                         children: [
                           Expanded(
-                            child: _campo(
-                              controller: horarioInicioController,
+                            child: _campoHorario(
                               label: 'Início',
-                              hint: '08:00',
-                              icone: Icons.access_time_outlined,
+                              horario: horarioInicio,
+                              onTap: () async {
+                                final escolhido = await showTimePicker(
+                                  context: modalContext,
+                                  initialTime:
+                                      horarioInicio ??
+                                      const TimeOfDay(hour: 8, minute: 0),
+                                );
+                                if (escolhido != null) {
+                                  setModalState(() {
+                                    horarioInicio = escolhido;
+                                  });
+                                }
+                              },
                             ),
                           ),
-
                           const SizedBox(width: 12),
-
                           Expanded(
-                            child: _campo(
-                              controller: horarioFimController,
+                            child: _campoHorario(
                               label: 'Fim',
-                              hint: '09:30',
-                              icone: Icons.access_time_outlined,
+                              horario: horarioFim,
+                              onTap: () async {
+                                final escolhido = await showTimePicker(
+                                  context: modalContext,
+                                  initialTime:
+                                      horarioInicio ??
+                                      const TimeOfDay(hour: 8, minute: 0),
+                                );
+                                if (escolhido != null) {
+                                  setModalState(() {
+                                    horarioInicio = escolhido;
+                                  });
+                                }
+                              },
                             ),
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 12),
-
                       _campo(
                         controller: localController,
                         label: 'Local',
                         hint: 'Local do evento',
                         icone: Icons.location_on_outlined,
                       ),
-
                       const SizedBox(height: 18),
-
                       const Text(
                         'Tipo de evento',
                         style: TextStyle(
@@ -817,9 +783,7 @@ class _AgendaPageState extends State<AgendaPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       const SizedBox(height: 10),
-
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
@@ -866,26 +830,73 @@ class _AgendaPageState extends State<AgendaPage> {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 24),
-
                       SizedBox(
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () {
                             if (tituloController.text.trim().isEmpty) {
+                              ScaffoldMessenger.of(modalContext).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Digite o título do evento.'),
+                                ),
+                              );
                               return;
                             }
+
+                            if (horarioInicio == null) {
+                              ScaffoldMessenger.of(modalContext).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Selecione o horário de início.',
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            if (horarioFim == null) {
+                              ScaffoldMessenger.of(modalContext).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Selecione o horário de término.',
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            final inicioMinutos =
+                                horarioInicio!.hour * 60 +
+                                horarioInicio!.minute;
+                            final fimMinutos =
+                                horarioFim!.hour * 60 + horarioFim!.minute;
+
+                            if (fimMinutos <= inicioMinutos) {
+                              ScaffoldMessenger.of(modalContext).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'O horário de término deve ser '
+                                    'depois do início.',
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            final inicioFormatado =
+                                '${horarioInicio!.hour.toString().padLeft(2, '0')}:${horarioInicio!.minute.toString().padLeft(2, '0')}';
+                            final fimFormatado =
+                                '${horarioFim!.hour.toString().padLeft(2, '0')}:${horarioFim!.minute.toString().padLeft(2, '0')}';
 
                             setState(() {
                               eventos.add(
                                 Evento(
                                   data: diaSelecionado,
                                   titulo: tituloController.text.trim(),
-                                  horarioInicio: horarioInicioController.text
-                                      .trim(),
-                                  horarioFim: horarioFimController.text.trim(),
+                                  horarioInicio: inicioFormatado,
+                                  horarioFim: fimFormatado,
                                   local: localController.text.trim(),
                                   tipo: tipoSelecionado,
                                   icone: _iconeEvento(tipoSelecionado),
@@ -893,7 +904,7 @@ class _AgendaPageState extends State<AgendaPage> {
                               );
                             });
 
-                            Navigator.pop(context);
+                            Navigator.pop(modalContext);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: verde,
@@ -922,10 +933,48 @@ class _AgendaPageState extends State<AgendaPage> {
       },
     ).whenComplete(() {
       tituloController.dispose();
-      horarioInicioController.dispose();
-      horarioFimController.dispose();
       localController.dispose();
     });
+  }
+
+  Widget _campoHorario({
+    required String label,
+    required TimeOfDay? horario,
+    required VoidCallback onTap,
+  }) {
+    final texto = horario == null
+        ? '--:--'
+        : '${horario.hour.toString().padLeft(2, '0')}:${horario.minute.toString().padLeft(2, '0')}';
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+        decoration: BoxDecoration(
+          color: fundo,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.grey.shade200),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              texto,
+              style: TextStyle(
+                color: horario == null ? Colors.grey.shade500 : Colors.black87,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _campo({
@@ -987,10 +1036,68 @@ class _AgendaPageState extends State<AgendaPage> {
     );
   }
 
-  void _removerEvento(Evento evento) {
-    setState(() {
-      eventos.remove(evento);
-    });
+  void _confirmarExclusaoEvento(Evento evento) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(22),
+          ),
+          title: const Text(
+            'Excluir evento?',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF12261F),
+            ),
+          ),
+          content: Text(
+            'O evento "${evento.titulo}" será removido permanentemente.',
+            style: const TextStyle(color: Color(0xFF68736F), height: 1.4),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+              },
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(color: Color(0xFF68736F)),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  eventos.remove(evento);
+                });
+
+                Navigator.pop(dialogContext);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Evento excluído.'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF00845F),
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'Excluir',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   bool _mesmoDia(DateTime primeira, DateTime segunda) {
@@ -1000,187 +1107,98 @@ class _AgendaPageState extends State<AgendaPage> {
   }
 
   String _nomeMes(DateTime data) {
-    if (data.month == 1) {
-      return 'Janeiro ${data.year}';
-    }
-
-    if (data.month == 2) {
-      return 'Fevereiro ${data.year}';
-    }
-
-    if (data.month == 3) {
-      return 'Março ${data.year}';
-    }
-
-    if (data.month == 4) {
-      return 'Abril ${data.year}';
-    }
-
-    if (data.month == 5) {
-      return 'Maio ${data.year}';
-    }
-
-    if (data.month == 6) {
-      return 'Junho ${data.year}';
-    }
-
-    if (data.month == 7) {
-      return 'Julho ${data.year}';
-    }
-
-    if (data.month == 8) {
-      return 'Agosto ${data.year}';
-    }
-
-    if (data.month == 9) {
-      return 'Setembro ${data.year}';
-    }
-
-    if (data.month == 10) {
-      return 'Outubro ${data.year}';
-    }
-
-    if (data.month == 11) {
-      return 'Novembro ${data.year}';
-    }
-
-    return 'Dezembro ${data.year}';
+    const meses = [
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro',
+    ];
+    return '${meses[data.month - 1]} ${data.year}';
   }
 
   String _diaSemanaCompleto(DateTime data) {
-    if (data.weekday == DateTime.monday) {
-      return 'Segunda-feira, ${data.day} de ${_nomeMesCurto(data.month)}';
-    }
-
-    if (data.weekday == DateTime.tuesday) {
-      return 'Terça-feira, ${data.day} de ${_nomeMesCurto(data.month)}';
-    }
-
-    if (data.weekday == DateTime.wednesday) {
-      return 'Quarta-feira, ${data.day} de ${_nomeMesCurto(data.month)}';
-    }
-
-    if (data.weekday == DateTime.thursday) {
-      return 'Quinta-feira, ${data.day} de ${_nomeMesCurto(data.month)}';
-    }
-
-    if (data.weekday == DateTime.friday) {
-      return 'Sexta-feira, ${data.day} de ${_nomeMesCurto(data.month)}';
-    }
-
-    if (data.weekday == DateTime.saturday) {
-      return 'Sábado, ${data.day} de ${_nomeMesCurto(data.month)}';
-    }
-
-    return 'Domingo, ${data.day} de ${_nomeMesCurto(data.month)}';
+    const dias = [
+      'Segunda-feira',
+      'Terça-feira',
+      'Quarta-feira',
+      'Quinta-feira',
+      'Sexta-feira',
+      'Sábado',
+      'Domingo',
+    ];
+    final nomeDia = dias[data.weekday - 1];
+    return '$nomeDia, ${data.day} de ${_nomeMesCurto(data.month)}';
   }
 
   String _nomeMesCurto(int mes) {
-    if (mes == 1) {
-      return 'jan';
-    }
-
-    if (mes == 2) {
-      return 'fev';
-    }
-
-    if (mes == 3) {
-      return 'mar';
-    }
-
-    if (mes == 4) {
-      return 'abr';
-    }
-
-    if (mes == 5) {
-      return 'mai';
-    }
-
-    if (mes == 6) {
-      return 'jun';
-    }
-
-    if (mes == 7) {
-      return 'jul';
-    }
-
-    if (mes == 8) {
-      return 'ago';
-    }
-
-    if (mes == 9) {
-      return 'set';
-    }
-
-    if (mes == 10) {
-      return 'out';
-    }
-
-    if (mes == 11) {
-      return 'nov';
-    }
-
-    return 'dez';
+    const meses = [
+      'jan',
+      'fev',
+      'mar',
+      'abr',
+      'mai',
+      'jun',
+      'jul',
+      'ago',
+      'set',
+      'out',
+      'nov',
+      'dez',
+    ];
+    return meses[mes - 1];
   }
 
   String _nomeTipo(TipoEvento tipo) {
-    if (tipo == TipoEvento.treino) {
-      return 'Treino';
+    switch (tipo) {
+      case TipoEvento.treino:
+        return 'Treino';
+      case TipoEvento.jogo:
+        return 'Jogo';
+      case TipoEvento.avaliacao:
+        return 'Avaliação';
+      case TipoEvento.reuniao:
+        return 'Reunião';
+      case TipoEvento.lembrete:
+        return 'Lembrete';
     }
-
-    if (tipo == TipoEvento.jogo) {
-      return 'Jogo';
-    }
-
-    if (tipo == TipoEvento.avaliacao) {
-      return 'Avaliação';
-    }
-
-    if (tipo == TipoEvento.reuniao) {
-      return 'Reunião';
-    }
-
-    return 'Lembrete';
   }
 
   Color _corEvento(TipoEvento tipo) {
-    if (tipo == TipoEvento.treino) {
-      return verde;
+    switch (tipo) {
+      case TipoEvento.treino:
+        return verde;
+      case TipoEvento.jogo:
+        return const Color(0xFFE39B18);
+      case TipoEvento.avaliacao:
+        return const Color(0xFFE86BA5);
+      case TipoEvento.reuniao:
+        return const Color(0xFF001E98);
+      case TipoEvento.lembrete:
+        return Colors.grey;
     }
-
-    if (tipo == TipoEvento.jogo) {
-      return const Color(0xFFE39B18);
-    }
-
-    if (tipo == TipoEvento.avaliacao) {
-      return const Color(0xFFE86BA5);
-    }
-
-    if (tipo == TipoEvento.reuniao) {
-      return const Color(0xFF001E98);
-    }
-
-    return Colors.grey;
   }
 
   IconData _iconeEvento(TipoEvento tipo) {
-    if (tipo == TipoEvento.treino) {
-      return Icons.fitness_center_rounded;
+    switch (tipo) {
+      case TipoEvento.treino:
+        return Icons.fitness_center_rounded;
+      case TipoEvento.jogo:
+        return Icons.emoji_events_rounded;
+      case TipoEvento.avaliacao:
+        return Icons.monitor_heart_outlined;
+      case TipoEvento.reuniao:
+        return Icons.groups_rounded;
+      case TipoEvento.lembrete:
+        return Icons.notifications_none_rounded;
     }
-
-    if (tipo == TipoEvento.jogo) {
-      return Icons.emoji_events_rounded;
-    }
-
-    if (tipo == TipoEvento.avaliacao) {
-      return Icons.monitor_heart_outlined;
-    }
-
-    if (tipo == TipoEvento.reuniao) {
-      return Icons.groups_rounded;
-    }
-
-    return Icons.notifications_none_rounded;
   }
 }
 

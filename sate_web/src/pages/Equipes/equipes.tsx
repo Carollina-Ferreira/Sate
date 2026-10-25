@@ -381,7 +381,7 @@ function pegarMensagemErro(
 ) {
   if (
     typeof dados ===
-      'object' &&
+    'object' &&
     dados !== null
   ) {
     const objeto =
@@ -425,7 +425,7 @@ function extrairEquipes(
 
   if (
     typeof dados ===
-      'object' &&
+    'object' &&
     dados !== null
   ) {
     const objeto =
@@ -464,67 +464,67 @@ function extrairEquipes(
 
 const overlayStyle:
   CSSProperties = {
-    position: 'fixed',
-    inset: 0,
-    zIndex: 9999,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '20px',
-    boxSizing: 'border-box',
-    background:
-      'rgba(0, 35, 26, 0.68)',
-    backdropFilter:
-      'blur(4px)',
-  };
+  position: 'fixed',
+  inset: 0,
+  zIndex: 9999,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '20px',
+  boxSizing: 'border-box',
+  background:
+    'rgba(0, 35, 26, 0.68)',
+  backdropFilter:
+    'blur(4px)',
+};
 
 
 const modalStyle:
   CSSProperties = {
-    width:
-      'min(560px, 100%)',
-    maxHeight:
-      '90vh',
-    overflowY:
-      'auto',
-    padding:
-      '24px',
-    boxSizing:
-      'border-box',
-    borderRadius:
-      '18px',
-    background:
-      '#eef4f1',
-    color:
-      '#18352d',
-    boxShadow:
-      '0 24px 60px rgba(0,0,0,.25)',
-    fontFamily:
-      "'Poppins', sans-serif",
-  };
+  width:
+    'min(560px, 100%)',
+  maxHeight:
+    '90vh',
+  overflowY:
+    'auto',
+  padding:
+    '24px',
+  boxSizing:
+    'border-box',
+  borderRadius:
+    '18px',
+  background:
+    '#eef4f1',
+  color:
+    '#18352d',
+  boxShadow:
+    '0 24px 60px rgba(0,0,0,.25)',
+  fontFamily:
+    "'Poppins', sans-serif",
+};
 
 
 const inputStyle:
   CSSProperties = {
-    width: '100%',
-    height: '44px',
-    padding: '0 12px',
-    boxSizing: 'border-box',
-    border:
-      '1px solid #c7d8d1',
-    borderRadius: '9px',
-    outline: 'none',
-    background: '#ffffff',
-    color: '#18352d',
-    fontFamily: 'inherit',
-    fontSize: '13px',
-  };
+  width: '100%',
+  height: '44px',
+  padding: '0 12px',
+  boxSizing: 'border-box',
+  border:
+    '1px solid #c7d8d1',
+  borderRadius: '9px',
+  outline: 'none',
+  background: '#ffffff',
+  color: '#18352d',
+  fontFamily: 'inherit',
+  fontSize: '13px',
+};
 
 
 interface EditarEquipeModalProps {
   equipe:
-    | Equipe
-    | null;
+  | Equipe
+  | null;
 
   salvando: boolean;
 
@@ -577,7 +577,7 @@ function EditarEquipeModalInterno({
 
       categoria:
         equipe.categoria ===
-        'Sem categoria'
+          'Sem categoria'
           ? ''
           : equipe.categoria,
 
@@ -1286,7 +1286,7 @@ const Equipes = () => {
 
       } else if (
         typeof dados ===
-          'object' &&
+        'object' &&
         dados !== null
       ) {
         const objeto =
@@ -1339,14 +1339,14 @@ const Equipes = () => {
               usuario:
                 atleta.usuario
                   ? {
-                      email:
-                        atleta.usuario.email ||
-                        '',
+                    email:
+                      atleta.usuario.email ||
+                      '',
 
-                      avatarUrl:
-                        atleta.usuario.avatarUrl ||
-                        null,
-                    }
+                    avatarUrl:
+                      atleta.usuario.avatarUrl ||
+                      null,
+                  }
                   : undefined,
             } as AtletaDisponivel;
           },
@@ -1391,13 +1391,13 @@ const Equipes = () => {
 
   const equipesFiltradas =
     filtroAtivo ===
-    'Todos'
+      'Todos'
       ? equipes
       : equipes.filter(
-          (equipe) =>
-            equipe.modalidade ===
-            filtroAtivo,
-        );
+        (equipe) =>
+          equipe.modalidade ===
+          filtroAtivo,
+      );
 
 
   async function adicionarEquipe(
@@ -1426,8 +1426,8 @@ const Equipes = () => {
           atletasIds?: number[];
 
           proximaPartida?:
-            | string
-            | null;
+          | string
+          | null;
         };
 
 
@@ -1634,8 +1634,8 @@ const Equipes = () => {
                 proximaPartida:
                   dados.proximaPartida
                     ? new Date(
-                        dados.proximaPartida,
-                      ).toISOString()
+                      dados.proximaPartida,
+                    ).toISOString()
                     : null,
               }),
           },
@@ -1862,14 +1862,9 @@ const Equipes = () => {
             }
           >
 
-            <h1
-              className={
-                styles.title
-              }
-            >
-              Minhas Equipes
+            <h1 className={styles.title}>
+              Minhas <em>equipes.</em>
             </h1>
-
 
             <p
               className={
@@ -1989,81 +1984,35 @@ const Equipes = () => {
         )}
 
 
-        <div
-          className={
-            styles.filters
-          }
-        >
-
+        <div className={styles.filters}>
           {[
-            [
-              'Todos',
-              '⚽',
-            ],
-
-            [
-              'Futebol',
-              '⚽',
-            ],
-
-            [
-              'Basquete',
-              '🏀',
-            ],
-
-            [
-              'Vôlei',
-              '🏐',
-            ],
-
-            [
-              'Rugby',
-              '🏉',
-            ],
-
-            [
-              'Tênis',
-              '🎾',
-            ],
-          ].map(
-            ([
-              nome,
-              icone,
-            ]) => (
-
-              <button
-                key={
-                  nome
-                }
-                type="button"
-                className={`${styles.filterButton} ${
-                  filtroAtivo ===
-                  nome
-                    ? styles.active
-                    : ''
+            ['Todos', '⚽'],
+            ['Futebol', '⚽'],
+            ['Basquete', '🏀'],
+            ['Vôlei', '🏐'],
+            ['Rugby', '🏉'],
+            ['Tênis', '🎾'],
+          ].map(([nome, icone]) => (
+            <button
+              key={nome}
+              type="button"
+              className={`${styles.filterButton} ${filtroAtivo === nome
+                  ? styles.active
+                  : ''
                 }`}
-                onClick={() =>
-                  setFiltroAtivo(
-                    nome as Modalidade,
-                  )
-                }
-              >
+              onClick={() =>
+                setFiltroAtivo(
+                  nome as Modalidade,
+                )
+              }
+            >
+              <span className={styles.filterIcon}>
+                {icone}
+              </span>
 
-                <span
-                  className={
-                    styles.filterIcon
-                  }
-                >
-                  {icone}
-                </span>
-
-                {nome}
-
-              </button>
-
-            ),
-          )}
-
+              {nome}
+            </button>
+          ))}
         </div>
 
 
@@ -2113,9 +2062,9 @@ const Equipes = () => {
 
                     if (
                       event.key ===
-                        'Enter' ||
+                      'Enter' ||
                       event.key ===
-                        ' '
+                      ' '
                     ) {
 
                       event.preventDefault();
@@ -2186,7 +2135,7 @@ const Equipes = () => {
 
         {!carregando &&
           equipesFiltradas.length ===
-            0 && (
+          0 && (
             <div
               style={{
                 padding:
@@ -2218,7 +2167,7 @@ const Equipes = () => {
 
         modalidadeInicial={
           filtroAtivo ===
-          'Todos'
+            'Todos'
             ? 'Futebol'
             : filtroAtivo
         }

@@ -13,7 +13,7 @@ import {
     useState,
 } from 'react';
 
-import styles from './editarAtleta.module.css';
+import styles from './informacoesAtleta.module.css';
 
 
 // ============================================================
@@ -444,6 +444,16 @@ const InformacoesAtleta = ({
 
                 Voltar para atletas
             </button>
+
+            <header className={styles.pageHeader}>
+                <h1>
+                    Informações do <em>atleta.</em>
+                </h1>
+
+                <p>
+                    Consulte os dados pessoais, contato e documentos cadastrados.
+                </p>
+            </header>
 
 
             {/* =====================================================

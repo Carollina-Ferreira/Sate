@@ -13,120 +13,150 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
   static const Color verde = Color(0xFF00845F);
   static const Color rosa = Color(0xFFE98BA8);
   static const Color azul = Color(0xFF001E98);
+  static const Color amarelo = Color(0xFFE39B18);
   static const Color fundo = Color(0xFFFCFCFC);
 
   int filtroSelecionado = 0;
 
-  DateTime mesAtual = DateTime.now();
-  DateTime diaSelecionado = DateTime.now();
+  DateTime mesAtual = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+  );
 
-  int? treinoSelecionado;
+  DateTime diaSelecionado = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+
   bool mostrandoDetalhes = false;
 
   final List<String> filtros = [
     'Todos',
-    'Pendentes',
-    'Concluídos',
+    'Treinos',
+    'Jogos',
+    'Reuniões',
   ];
 
-  final List<Map<String, dynamic>> treinos = [
-    {
-      'categoria': 'Físico',
-      'categoriaCor': verde,
-      'titulo': 'Treino de velocidade',
-      'data': 'Hoje',
-      'dataCalendario': null,
-      'horario': '17:00',
-      'duracao': '45 min',
-      'status': 'Pendente',
-      'objetivo': 'Melhorar potência e velocidade de deslocamento.',
-      'exercicios': [
-        {
-          'nome': 'Aquecimento',
-          'series': '3 × 5-10',
-          'descricao': 'Mobilidade geral',
-          'icone': Icons.directions_run_rounded,
-        },
-        {
-          'nome': 'Sprint',
-          'series': '4 × 50m',
-          'descricao': 'Descanso 1 min',
-          'icone': Icons.speed_rounded,
-        },
-        {
-          'nome': 'Corrida intervalada',
-          'series': '5 × 200m',
-          'descricao': 'Descanso 90s',
-          'icone': Icons.directions_run_rounded,
-        },
-      ],
-    },
-    {
-      'categoria': 'Técnico',
-      'categoriaCor': azul,
-      'titulo': 'Treino de finalização',
-      'data': 'Amanhã',
-      'dataCalendario': null,
-      'horario': '18:00',
-      'duracao': '1h',
-      'status': 'Pendente',
-      'objetivo': 'Aprimorar precisão, controle e finalização.',
-      'exercicios': [
-        {
-          'nome': 'Finalização curta',
-          'series': '3 × 10',
-          'descricao': 'Chutes próximos à área',
-          'icone': Icons.sports_soccer_rounded,
-        },
-        {
-          'nome': 'Finalização em movimento',
-          'series': '4 × 8',
-          'descricao': 'Recepção e chute',
-          'icone': Icons.sports_soccer_rounded,
-        },
-      ],
-    },
-    {
-      'categoria': 'Tático',
-      'categoriaCor': rosa,
-      'titulo': 'Treino tático',
-      'data': '24/09',
-      'dataCalendario': null,
-      'horario': '08:00',
-      'duracao': '1h 30min',
-      'status': 'Concluído',
-      'objetivo': 'Trabalhar posicionamento e organização da equipe.',
-      'exercicios': [
-        {
-          'nome': 'Posicionamento',
-          'series': '3 × 10',
-          'descricao': 'Organização defensiva',
-          'icone': Icons.groups_rounded,
-        },
-        {
-          'nome': 'Movimentação',
-          'series': '4 × 10',
-          'descricao': 'Movimentação coletiva',
-          'icone': Icons.groups_rounded,
-        },
-      ],
-    },
-  ];
+  late final List<Map<String, dynamic>> eventos;
 
   @override
   void initState() {
     super.initState();
 
-    diaSelecionado = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-    );
+    final hoje = DateTime.now();
+    final amanha = hoje.add(const Duration(days: 1));
+    final emTresDias = hoje.add(const Duration(days: 3));
+    final emCincoDias = hoje.add(const Duration(days: 5));
+
+    eventos = [
+      // =========================================
+      // TREINO
+      // =========================================
+      {
+        'tipo': 'treino',
+        'tipoLabel': 'Treino',
+        'tipoCor': verde,
+        'categoria': 'Físico',
+        'titulo': 'Treino de velocidade',
+        'data': hoje,
+        'horario': '17:00',
+        'duracao': '45 min',
+        'status': 'Pendente',
+        'objetivo': 'Melhorar potência e velocidade de deslocamento.',
+        'exercicios': [
+          {
+            'nome': 'Aquecimento',
+            'series': '3 × 5-10',
+            'descricao': 'Mobilidade geral',
+            'icone': Icons.directions_run_rounded,
+          },
+          {
+            'nome': 'Sprint',
+            'series': '4 × 50m',
+            'descricao': 'Descanso 1 min',
+            'icone': Icons.speed_rounded,
+          },
+          {
+            'nome': 'Corrida intervalada',
+            'series': '5 × 200m',
+            'descricao': 'Descanso 90s',
+            'icone': Icons.directions_run_rounded,
+          },
+        ],
+      },
+
+      // =========================================
+      // TREINO
+      // =========================================
+      {
+        'tipo': 'treino',
+        'tipoLabel': 'Treino',
+        'tipoCor': verde,
+        'categoria': 'Técnico',
+        'titulo': 'Treino de finalização',
+        'data': amanha,
+        'horario': '18:00',
+        'duracao': '1h',
+        'status': 'Pendente',
+        'objetivo': 'Aprimorar precisão, controle e finalização.',
+        'exercicios': [
+          {
+            'nome': 'Finalização curta',
+            'series': '3 × 10',
+            'descricao': 'Chutes próximos à área',
+            'icone': Icons.sports_soccer_rounded,
+          },
+          {
+            'nome': 'Finalização em movimento',
+            'series': '4 × 8',
+            'descricao': 'Recepção e chute',
+            'icone': Icons.sports_soccer_rounded,
+          },
+        ],
+      },
+
+      // =========================================
+      // JOGO
+      // =========================================
+      {
+        'tipo': 'jogo',
+        'tipoLabel': 'Jogo',
+        'tipoCor': amarelo,
+        'categoria': 'Amistoso',
+        'titulo': 'Jogo amistoso vs Águias FC',
+        'data': emTresDias,
+        'horario': '10:00',
+        'duracao': '2h',
+        'status': 'Agendado',
+        'objetivo': 'Aplicar em jogo o que foi treinado na semana.',
+        'local': 'Estádio Municipal',
+        'exercicios': [],
+      },
+
+      // =========================================
+      // REUNIÃO
+      // =========================================
+      {
+        'tipo': 'reuniao',
+        'tipoLabel': 'Reunião',
+        'tipoCor': azul,
+        'categoria': 'Reunião',
+        'titulo': 'Reunião com comissão técnica',
+        'data': emCincoDias,
+        'horario': '14:00',
+        'duracao': '1h',
+        'status': 'Agendado',
+        'objetivo': 'Alinhar estratégia e objetivos da próxima semana.',
+        'local': 'Sala da comissão',
+        'exercicios': [],
+      },
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    final treinoDoDia = _getTreinoDoDia(diaSelecionado);
+    final eventoDoDia = _getEventoDoDia(diaSelecionado);
 
     return Scaffold(
       backgroundColor: fundo,
@@ -135,7 +165,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
         elevation: 0,
         centerTitle: false,
         title: const Text(
-          'Meus treinos',
+          'Agenda',
           style: TextStyle(
             color: Colors.black87,
             fontSize: 19,
@@ -178,11 +208,11 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
               const SizedBox(height: 24),
 
-              _buildTreinoDoDia(treinoDoDia),
+              _buildEventoDoDia(eventoDoDia),
 
-              if (mostrandoDetalhes && treinoDoDia != null) ...[
+              if (mostrandoDetalhes && eventoDoDia != null) ...[
                 const SizedBox(height: 18),
-                _buildDetalhesTreino(treinoDoDia),
+                _buildDetalhesEvento(eventoDoDia),
               ],
             ],
           ),
@@ -209,7 +239,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Icon(
-              Icons.fitness_center_rounded,
+              Icons.event_rounded,
               color: Colors.white,
               size: 27,
             ),
@@ -220,7 +250,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Sua rotina de treinos',
+                  'Agenda da equipe',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -229,7 +259,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'Acompanhe seus treinos e exercícios.',
+                  'Treinos, jogos e reuniões da sua equipe.',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 13,
@@ -269,9 +299,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 color: selecionado ? verde : Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: selecionado
-                      ? verde
-                      : Colors.grey.shade200,
+                  color: selecionado ? verde : Colors.grey.shade200,
                 ),
               ),
               alignment: Alignment.center,
@@ -279,12 +307,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 filtros[index],
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: selecionado
-                      ? FontWeight.w600
-                      : FontWeight.w400,
-                  color: selecionado
-                      ? Colors.white
-                      : Colors.grey.shade700,
+                  fontWeight:
+                      selecionado ? FontWeight.w600 : FontWeight.w400,
+                  color: selecionado ? Colors.white : Colors.grey.shade700,
                 ),
               ),
             ),
@@ -295,17 +320,8 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
   }
 
   Widget _buildCalendario() {
-    final primeiroDia = DateTime(
-      mesAtual.year,
-      mesAtual.month,
-      1,
-    );
-
-    final ultimoDia = DateTime(
-      mesAtual.year,
-      mesAtual.month + 1,
-      0,
-    );
+    final primeiroDia = DateTime(mesAtual.year, mesAtual.month, 1);
+    final ultimoDia = DateTime(mesAtual.year, mesAtual.month + 1, 0);
 
     final quantidadeDias = ultimoDia.day;
     final primeiroDiaSemana = primeiroDia.weekday;
@@ -317,12 +333,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     }
 
     for (int dia = 1; dia <= quantidadeDias; dia++) {
-      final data = DateTime(
-        mesAtual.year,
-        mesAtual.month,
-        dia,
-      );
-
+      final data = DateTime(mesAtual.year, mesAtual.month, dia);
       dias.add(_buildDiaCalendario(data));
     }
 
@@ -332,9 +343,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: Colors.grey.shade200,
-        ),
+        border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.035),
@@ -438,27 +447,17 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             children: dias,
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          // LEGENDA
+          Wrap(
+            spacing: 14,
+            runSpacing: 8,
+            alignment: WrapAlignment.center,
             children: [
-              Container(
-                width: 7,
-                height: 7,
-                decoration: const BoxDecoration(
-                  color: verde,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                'Treino programado',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey.shade600,
-                ),
-              ),
+              _buildLegendaItem('Treino', verde),
+              _buildLegendaItem('Jogo', amarelo),
+              _buildLegendaItem('Reunião', azul),
             ],
           ),
         ],
@@ -466,25 +465,39 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
+  Widget _buildLegendaItem(String texto, Color cor) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 7,
+          height: 7,
+          decoration: BoxDecoration(
+            color: cor,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 5),
+        Text(
+          texto,
+          style: TextStyle(
+            fontSize: 10,
+            color: Colors.grey.shade600,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildDiaCalendario(DateTime data) {
-    final bool selecionado = _mesmoDia(
-      data,
-      diaSelecionado,
-    );
-
-    final bool hoje = _mesmoDia(
-      data,
-      DateTime.now(),
-    );
-
-    final int? indiceTreino = _getIndiceTreino(data);
-    final bool temTreino = indiceTreino != null;
+    final bool selecionado = _mesmoDia(data, diaSelecionado);
+    final bool hoje = _mesmoDia(data, DateTime.now());
+    final Color? corEvento = _corEventoDoDia(data);
 
     return GestureDetector(
       onTap: () {
         setState(() {
           diaSelecionado = data;
-          treinoSelecionado = indiceTreino;
           mostrandoDetalhes = false;
         });
       },
@@ -509,12 +522,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               '${data.day}',
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: selecionado || hoje
-                    ? FontWeight.bold
-                    : FontWeight.w500,
-                color: selecionado
-                    ? Colors.white
-                    : Colors.black87,
+                fontWeight:
+                    selecionado || hoje ? FontWeight.bold : FontWeight.w500,
+                color: selecionado ? Colors.white : Colors.black87,
               ),
             ),
             const SizedBox(height: 5),
@@ -522,11 +532,11 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               width: 6,
               height: 6,
               decoration: BoxDecoration(
-                color: temTreino
-                    ? selecionado
+                color: corEvento == null
+                    ? Colors.transparent
+                    : selecionado
                         ? Colors.white
-                        : verde
-                    : Colors.transparent,
+                        : corEvento,
                 shape: BoxShape.circle,
               ),
             ),
@@ -551,19 +561,15 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
-  Widget _buildTreinoDoDia(
-    Map<String, dynamic>? treino,
-  ) {
-    if (treino == null) {
+  Widget _buildEventoDoDia(Map<String, dynamic>? evento) {
+    if (evento == null) {
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Colors.grey.shade200,
-          ),
+          border: Border.all(color: Colors.grey.shade200),
         ),
         child: Column(
           children: [
@@ -591,7 +597,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             ),
             const SizedBox(height: 5),
             Text(
-              'Nenhum treino programado para este dia.',
+              'Nenhum evento programado para este dia.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
@@ -603,8 +609,8 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       );
     }
 
-    final Color cor = treino['categoriaCor'] as Color;
-    final bool concluido = treino['status'] == 'Concluído';
+    final Color cor = evento['tipoCor'] as Color;
+    final bool concluido = evento['status'] == 'Concluído';
 
     return Container(
       width: double.infinity,
@@ -612,9 +618,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: cor.withValues(alpha: 0.22),
-        ),
+        border: Border.all(color: cor.withValues(alpha: 0.22)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.035),
@@ -655,7 +659,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                     ),
                     const SizedBox(height: 3),
                     const Text(
-                      'Treino programado',
+                      'Evento programado',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -670,10 +674,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 17),
 
-          Divider(
-            color: Colors.grey.shade200,
-            height: 1,
-          ),
+          Divider(color: Colors.grey.shade200, height: 1),
 
           const SizedBox(height: 16),
 
@@ -687,11 +688,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(
-                  treino['categoria'] == 'Tático'
-                      ? Icons.groups_rounded
-                      : treino['categoria'] == 'Técnico'
-                          ? Icons.sports_soccer_rounded
-                          : Icons.speed_rounded,
+                  _iconeTipo(evento['tipo']),
                   color: cor,
                   size: 23,
                 ),
@@ -711,7 +708,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        treino['categoria'],
+                        evento['tipoLabel'],
                         style: TextStyle(
                           fontSize: 9,
                           fontWeight: FontWeight.w600,
@@ -721,7 +718,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                     ),
                     const SizedBox(height: 7),
                     Text(
-                      treino['titulo'],
+                      evento['titulo'],
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -743,7 +740,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  treino['status'],
+                  evento['status'],
                   style: TextStyle(
                     fontSize: 9,
                     fontWeight: FontWeight.w600,
@@ -767,7 +764,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               ),
               const SizedBox(width: 5),
               Text(
-                treino['horario'],
+                evento['horario'],
                 style: TextStyle(
                   fontSize: 11,
                   color: Colors.grey.shade600,
@@ -781,7 +778,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               ),
               const SizedBox(width: 5),
               Text(
-                treino['duracao'],
+                evento['duracao'],
                 style: TextStyle(
                   fontSize: 11,
                   color: Colors.grey.shade600,
@@ -803,9 +800,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               },
               style: OutlinedButton.styleFrom(
                 foregroundColor: verde,
-                side: const BorderSide(
-                  color: verde,
-                ),
+                side: const BorderSide(color: verde),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(13),
                 ),
@@ -814,9 +809,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    mostrandoDetalhes
-                        ? 'OCULTAR DETALHES'
-                        : 'VER DETALHES',
+                    mostrandoDetalhes ? 'OCULTAR DETALHES' : 'VER DETALHES',
                     style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
@@ -838,11 +831,11 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
-  Widget _buildDetalhesTreino(
-    Map<String, dynamic> treino,
-  ) {
-    final bool concluido =
-        treino['status'] == 'Concluído';
+  Widget _buildDetalhesEvento(Map<String, dynamic> evento) {
+    final bool concluido = evento['status'] == 'Concluído';
+    final bool isJogo = evento['tipo'] == 'jogo';
+    final bool isReuniao = evento['tipo'] == 'reuniao';
+    final List exercicios = evento['exercicios'] ?? [];
 
     return Container(
       width: double.infinity,
@@ -850,9 +843,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.grey.shade200,
-        ),
+        border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.035),
@@ -868,11 +859,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             children: [
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Treino selecionado',
+                      'Evento selecionado',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey.shade600,
@@ -880,7 +870,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      treino['titulo'],
+                      evento['titulo'],
                       style: const TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
@@ -902,7 +892,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  treino['status'],
+                  evento['status'],
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -930,18 +920,33 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 child: _buildInfoItem(
                   Icons.access_time_rounded,
                   'Horário',
-                  treino['horario'],
+                  evento['horario'],
                 ),
               ),
               Expanded(
                 child: _buildInfoItem(
                   Icons.timelapse_rounded,
                   'Duração',
-                  treino['duracao'],
+                  evento['duracao'],
                 ),
               ),
             ],
           ),
+
+          if (isJogo || isReuniao) ...[
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildInfoItem(
+                    Icons.location_on_outlined,
+                    'Local',
+                    evento['local'] ?? 'Não informado',
+                  ),
+                ),
+              ],
+            ),
+          ],
 
           const SizedBox(height: 20),
 
@@ -957,7 +962,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           const SizedBox(height: 5),
 
           Text(
-            treino['objetivo'],
+            evento['objetivo'],
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey.shade600,
@@ -965,49 +970,45 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             ),
           ),
 
-          const SizedBox(height: 22),
-
-          Row(
-            children: [
-              const Expanded(
-                child: Text(
-                  'Exercícios',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+          if (exercicios.isNotEmpty) ...[
+            const SizedBox(height: 22),
+            Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    'Exercícios',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
                   ),
                 ),
-              ),
-              Text(
-                '${treino['exercicios'].length} exercícios',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.grey.shade600,
+                Text(
+                  '${exercicios.length} exercícios',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey.shade600,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
 
-          const SizedBox(height: 12),
+            const SizedBox(height: 12),
 
-          ...List.generate(
-            (treino['exercicios'] as List).length,
-            (index) {
-              final exercicio =
-                  treino['exercicios'][index];
-
-              return Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 9,
-                ),
-                child: _buildExercicio(
-                  numero: index + 1,
-                  exercicio: exercicio,
-                ),
-              );
-            },
-          ),
+            ...List.generate(
+              exercicios.length,
+              (index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 9),
+                  child: _buildExercicio(
+                    numero: index + 1,
+                    exercicio: exercicios[index],
+                  ),
+                );
+              },
+            ),
+          ],
 
           const SizedBox(height: 8),
 
@@ -1018,29 +1019,33 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               onPressed: concluido
                   ? null
                   : () {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(
-                        const SnackBar(
-                          content:
-                              Text('Treino iniciado!'),
-                        ),
+                      final String texto = isJogo
+                          ? 'Confirmação de presença enviada!'
+                          : isReuniao
+                              ? 'Presença confirmada!'
+                              : 'Treino iniciado!';
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(texto)),
                       );
                     },
               style: ElevatedButton.styleFrom(
                 backgroundColor: verde,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                disabledBackgroundColor:
-                    Colors.grey.shade300,
+                disabledBackgroundColor: Colors.grey.shade300,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14),
                 ),
               ),
               child: Text(
                 concluido
-                    ? 'TREINO CONCLUÍDO'
-                    : 'INICIAR TREINO',
+                    ? 'CONCLUÍDO'
+                    : isJogo
+                        ? 'CONFIRMAR PRESENÇA'
+                        : isReuniao
+                            ? 'CONFIRMAR PARTICIPAÇÃO'
+                            : 'INICIAR TREINO',
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
@@ -1053,19 +1058,11 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
-  Widget _buildInfoItem(
-    IconData icon,
-    String titulo,
-    String valor,
-  ) {
+  Widget _buildInfoItem(IconData icon, String titulo, String valor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          icon,
-          size: 17,
-          color: verde,
-        ),
+        Icon(icon, size: 17, color: verde),
         const SizedBox(height: 5),
         Text(
           titulo,
@@ -1096,9 +1093,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       decoration: BoxDecoration(
         color: const Color(0xFFF8F9F9),
         borderRadius: BorderRadius.circular(13),
-        border: Border.all(
-          color: Colors.grey.shade200,
-        ),
+        border: Border.all(color: Colors.grey.shade200),
       ),
       child: Row(
         children: [
@@ -1136,8 +1131,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           const SizedBox(width: 10),
           Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   exercicio['nome'],
@@ -1168,89 +1162,68 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     );
   }
 
-  Map<String, dynamic>? _getTreinoDoDia(
-    DateTime data,
-  ) {
-    final indice = _getIndiceTreino(data);
+  // ============================================================
+  // LÓGICA
+  // ============================================================
 
-    if (indice == null) {
-      return null;
-    }
-
-    return treinos[indice];
-  }
-
-  int? _getIndiceTreino(DateTime data) {
-    final hoje = DateTime.now();
-
-    final dataHoje = DateTime(
-      hoje.year,
-      hoje.month,
-      hoje.day,
-    );
-
-    final dataSelecionada = DateTime(
-      data.year,
-      data.month,
-      data.day,
-    );
-
-    if (_mesmoDia(dataSelecionada, dataHoje)) {
-      if (_filtroPermiteTreino(treinos[0])) {
-        return 0;
+  Map<String, dynamic>? _getEventoDoDia(DateTime data) {
+    for (final evento in eventos) {
+      final dataEvento = evento['data'] as DateTime;
+      if (_mesmoDia(dataEvento, data) && _filtroPermiteEvento(evento)) {
+        return evento;
       }
     }
-
-    final amanha = dataHoje.add(
-      const Duration(days: 1),
-    );
-
-    if (_mesmoDia(dataSelecionada, amanha)) {
-      if (_filtroPermiteTreino(treinos[1])) {
-        return 1;
-      }
-    }
-
-    final dia24 = DateTime(
-      hoje.year,
-      hoje.month,
-      24,
-    );
-
-    if (_mesmoDia(dataSelecionada, dia24)) {
-      if (_filtroPermiteTreino(treinos[2])) {
-        return 2;
-      }
-    }
-
     return null;
   }
 
-  bool _filtroPermiteTreino(
-    Map<String, dynamic> treino,
-  ) {
-    if (filtroSelecionado == 0) {
-      return true;
+  /// Retorna a cor do evento daquele dia (pra bolinha do calendário).
+  /// Se tiver mais de um, prioriza: jogo > treino > reunião.
+  Color? _corEventoDoDia(DateTime data) {
+    Map<String, dynamic>? encontrado;
+
+    for (final evento in eventos) {
+      final dataEvento = evento['data'] as DateTime;
+      if (_mesmoDia(dataEvento, data)) {
+        if (encontrado == null) {
+          encontrado = evento;
+        } else {
+          // Prioridade: jogo > treino > reunião
+          final atual = encontrado['tipo'];
+          final novo = evento['tipo'];
+
+          if (novo == 'jogo') {
+            encontrado = evento;
+          } else if (novo == 'treino' && atual != 'jogo') {
+            encontrado = evento;
+          }
+        }
+      }
     }
 
-    if (filtroSelecionado == 1) {
-      return treino['status'] != 'Concluído';
-    }
+    return encontrado == null ? null : encontrado['tipoCor'] as Color;
+  }
 
-    if (filtroSelecionado == 2) {
-      return treino['status'] == 'Concluído';
-    }
-
+  bool _filtroPermiteEvento(Map<String, dynamic> evento) {
+    if (filtroSelecionado == 0) return true;
+    if (filtroSelecionado == 1) return evento['tipo'] == 'treino';
+    if (filtroSelecionado == 2) return evento['tipo'] == 'jogo';
+    if (filtroSelecionado == 3) return evento['tipo'] == 'reuniao';
     return true;
   }
 
-  bool _mesmoDia(
-    DateTime a,
-    DateTime b,
-  ) {
-    return a.year == b.year &&
-        a.month == b.month &&
-        a.day == b.day;
+  IconData _iconeTipo(String tipo) {
+    switch (tipo) {
+      case 'jogo':
+        return Icons.emoji_events_rounded;
+      case 'reuniao':
+        return Icons.groups_rounded;
+      default:
+        return Icons.fitness_center_rounded;
+    }
+  }
+
+  bool _mesmoDia(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
   String _nomeMes(int mes) {
@@ -1285,9 +1258,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       return 'Hoje • ${_formatarData(diaSelecionado)}';
     }
 
-    final amanha = hoje.add(
-      const Duration(days: 1),
-    );
+    final amanha = hoje.add(const Duration(days: 1));
 
     if (_mesmoDia(diaSelecionado, amanha)) {
       return 'Amanhã • ${_formatarData(diaSelecionado)}';

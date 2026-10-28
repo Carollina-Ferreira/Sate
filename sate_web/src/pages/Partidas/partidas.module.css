@@ -1,8 +1,8 @@
+
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* =========================================================
    SATE — PARTIDAS
-   Nova identidade visual baseada na referência enviada.
 ========================================================= */
 
 .page {
@@ -17,7 +17,7 @@
 
   width: calc(100% + 60px);
   min-height: calc(100vh + 60px);
-   margin: -30px;
+  margin: -30px;
   padding: 0;
 
   background:
@@ -44,54 +44,42 @@
   padding: 48px 34px 64px;
 }
 
-
 /* =========================================================
    CABEÇALHO
 ========================================================= */
 
 .titleRow {
   width: 100%;
-
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-
   gap: 28px;
-
   margin-bottom: 24px;
 }
 
 .titleRow h2 {
   margin: 0;
-
   color: var(--texto);
-
   font-size: clamp(36px, 3.2vw, 48px);
   line-height: 1.03;
   font-weight: 700;
-
   letter-spacing: -1.7px;
 }
 
 .titleRow h2 em {
   color: var(--rosa);
-
   font-family: 'DM Serif Display', serif;
   font-style: italic;
   font-weight: 400;
-
   letter-spacing: -0.6px;
 }
 
 .titleRow p {
   margin: 12px 0 0;
-
   color: #777d78;
-
   font-size: 13px;
   line-height: 1.6;
 }
-
 
 /* =========================================================
    BOTÃO NOVA PARTIDA
@@ -100,33 +88,24 @@
 .newButton {
   min-width: 170px;
   height: 48px;
-
   flex-shrink: 0;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   gap: 10px;
-
   padding: 0 22px;
 
   border: 1px solid var(--verde);
   border-radius: 11px;
-
   background: var(--verde);
   color: #ffffff;
 
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
-
   cursor: pointer;
 
-  transition:
-    transform 0.18s ease,
-    background 0.18s ease,
-    border-color 0.18s ease;
+  transition: background 0.18s ease;
 }
 
 .newButton span {
@@ -138,9 +117,7 @@
 .newButton:hover {
   background: #00735a;
   border-color: #00735a;
-  transform: translateY(-1px);
 }
-
 
 /* =========================================================
    ABAS DE STATUS
@@ -148,18 +125,12 @@
 
 .statusTabs {
   width: 100%;
-
   display: flex;
   align-items: center;
-
   gap: 32px;
-
   overflow-x: auto;
-
   margin-bottom: 31px;
-
   border-bottom: 1px solid var(--creme-linha);
-
   scrollbar-width: none;
 }
 
@@ -170,30 +141,19 @@
 .statusTab,
 .statusTabActive {
   min-height: 50px;
-
   position: relative;
-
   display: inline-flex;
   align-items: center;
-
   gap: 7px;
-
   flex-shrink: 0;
-
   padding: 0 2px;
-
   border: none;
-
   background: transparent;
-
   color: #858782;
-
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
-
   cursor: pointer;
-
   transition: color 0.18s ease;
 }
 
@@ -207,26 +167,20 @@
 
 .statusTabActive::after {
   content: '';
-
   position: absolute;
-
   right: 0;
   bottom: -1px;
   left: 0;
-
   height: 2px;
-
   background: var(--rosa);
 }
 
 .statusTab small,
 .statusTabActive small {
   color: var(--rosa);
-
   font-size: 9px;
   font-weight: 700;
 }
-
 
 /* =========================================================
    FILTROS
@@ -235,23 +189,16 @@
 .filters {
   width: 760px;
   max-width: 100%;
-
   display: grid;
-
   grid-template-columns:
     minmax(210px, 1fr)
     minmax(210px, 1fr)
     minmax(210px, 1fr);
-
   gap: 0;
-
   overflow: hidden;
-
   margin-bottom: 0;
-
   border: 1px solid #ddcfc0;
   border-radius: 14px;
-
   background: #ffffff;
 }
 
@@ -259,24 +206,17 @@
 .dateInput {
   width: 100%;
   height: 54px;
-
   border: none;
-
   background: #ffffff;
-
   color: #263930;
-
   font-family: inherit;
   font-size: 12px;
 }
 
 .filters select {
   appearance: none;
-
   padding: 0 44px 0 18px;
-
   outline: none;
-
   cursor: pointer;
 
   background-image:
@@ -302,50 +242,35 @@
 .dateInput {
   display: flex;
   align-items: center;
-
   padding: 0 14px 0 17px;
 }
 
 .dateInput input {
   width: 100%;
   height: 100%;
-
   min-width: 0;
-
   border: none;
   outline: none;
-
   background: transparent;
-
   color: #263930;
-
   font-family: inherit;
   font-size: 12px;
-
   cursor: pointer;
 }
 
 .clearDate {
   width: 25px;
   height: 25px;
-
   flex-shrink: 0;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
   border: none;
   border-radius: 50%;
-
   background: transparent;
-
   color: #818882;
-
   font-size: 17px;
-
   cursor: pointer;
 }
 
@@ -354,31 +279,23 @@
   color: var(--rosa);
 }
 
-
 /* =========================================================
    TABELA
 ========================================================= */
 
 .tableContainer {
   width: 100%;
-
   overflow-x: auto;
-
   margin-top: 0;
-
   background: transparent;
-
   box-shadow: none;
 }
 
 .tableContainer table {
   width: 100%;
   min-width: 760px;
-
   border-collapse: collapse;
-
   color: var(--texto);
-
   font-size: 12px;
 }
 
@@ -388,42 +305,30 @@
 
 .tableContainer th {
   padding: 13px 14px 12px;
-
   border-bottom: 1px solid var(--creme-linha);
-
   color: #7e817d;
-
   font-size: 10px;
   font-weight: 600;
-
   text-align: left;
   white-space: nowrap;
 }
 
 .tableContainer td {
   padding: 18px 14px;
-
   border-bottom: 1px solid var(--creme-linha);
-
   color: #253830;
-
   font-size: 11px;
-
   white-space: nowrap;
 }
 
 .tableRow {
   cursor: pointer;
-
-  transition:
-    background 0.16s ease,
-    transform 0.16s ease;
+  transition: background 0.16s ease;
 }
 
 .tableRow:hover,
 .tableRow:focus-visible {
   background: rgba(255, 255, 255, 0.58);
-
   outline: none;
 }
 
@@ -437,6 +342,44 @@
   font-weight: 700;
 }
 
+/* =========================================================
+   BOTÃO ADICIONAR / EDITAR RESULTADO — SIMPLES
+========================================================= */
+
+.adicionarResultado {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 6px 10px;
+
+  border: 1px solid #d9cdbf;
+  border-radius: 6px;
+
+  background: #ffffff;
+  color: #005942;
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.4;
+
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.adicionarResultado:hover {
+  background: #f4f0ea;
+  border-color: #b9c9c0;
+}
+
+.adicionarResultado:focus-visible {
+  outline: 2px solid #005942;
+  outline-offset: 2px;
+}
+
+.adicionarResultado:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 /* =========================================================
    STATUS — BOLINHA + TEXTO
@@ -445,29 +388,20 @@
 .status {
   display: inline-flex;
   align-items: center;
-
   gap: 7px;
-
   padding: 0;
-
   border-radius: 0;
-
   background: transparent !important;
-
   font-size: 10px;
   font-weight: 600;
-
   white-space: nowrap;
 }
 
 .status i {
   width: 7px;
   height: 7px;
-
   flex-shrink: 0;
-
   border-radius: 50%;
-
   background: currentColor;
 }
 
@@ -483,34 +417,27 @@
   color: #ef3f6f;
 }
 
-
 /* =========================================================
    ESTADOS VAZIOS / ERROS
 ========================================================= */
 
 .empty {
   padding: 42px 16px !important;
-
   color: #7b817d;
-
   text-align: center;
 }
 
 .empty h3 {
   margin: 0 0 6px;
-
   color: #23372f;
-
   font-size: 14px;
   font-weight: 600;
 }
 
 .empty p {
   margin: 0;
-
   font-size: 11px;
 }
-
 
 /* =========================================================
    MODAL
@@ -519,53 +446,39 @@
 .modalOverlay {
   position: fixed;
   inset: 0;
-
   z-index: 99999;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 22px;
-
   background: rgba(32, 23, 18, 0.38);
-
   backdrop-filter: blur(5px);
 }
 
 .modal {
+  display: flex;
+  flex-direction: column;
   width: min(600px, 100%);
-
   max-height: calc(100vh - 44px);
-
   overflow: hidden;
-
   border: 1px solid #e1d5c8;
   border-radius: 20px;
-
   background: #fffaf4;
-
-  box-shadow:
-    0 30px 70px rgba(67, 40, 26, 0.2);
+  box-shadow: 0 30px 70px rgba(67, 40, 26, 0.2);
 }
 
 .modalHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-
   gap: 18px;
-
   padding: 24px 26px 18px;
-
   border-bottom: 1px solid #e8ddd2;
 }
 
 .modalHeader h3 {
   margin: 0;
-
   color: var(--texto);
-
   font-size: 21px;
   font-weight: 700;
 }
@@ -573,22 +486,15 @@
 .closeButton {
   width: 35px;
   height: 35px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
   border: 1px solid transparent;
   border-radius: 9px;
-
   background: transparent;
-
   color: #737b76;
-
   font-size: 22px;
-
   cursor: pointer;
 }
 
@@ -598,30 +504,27 @@
 }
 
 .form {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 22px 26px 8px;
 }
 
 .formRow {
   display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
-
   gap: 7px;
-
   margin-bottom: 15px;
 }
 
 .formGroup label {
   color: #45584f;
-
   font-size: 10px;
   font-weight: 600;
 }
@@ -630,48 +533,33 @@
 .formGroup select {
   width: 100%;
   height: 48px;
-
   padding: 0 13px;
-
   border: 1px solid #d9cdbf;
   border-radius: 10px;
-
   outline: none;
-
   background: #ffffff;
-
   color: var(--texto);
-
   font-family: inherit;
   font-size: 12px;
-
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .formGroup input:focus,
 .formGroup select:focus {
   border-color: #9bb9ae;
-
-  box-shadow:
-    0 0 0 3px rgba(0, 89, 66, 0.07);
+  box-shadow: 0 0 0 3px rgba(0, 89, 66, 0.07);
 }
 
 .formGroup input[readonly] {
   background: #f4efe9;
-
   color: #747c77;
 }
 
 .modalActions {
   display: flex;
   justify-content: flex-end;
-
   gap: 10px;
-
   padding: 16px 26px 22px;
-
   border-top: 1px solid #e8ddd2;
 }
 
@@ -679,28 +567,18 @@
 .saveButton {
   min-width: 116px;
   height: 42px;
-
   padding: 0 17px;
-
   border-radius: 10px;
-
   font-family: inherit;
   font-size: 11px;
   font-weight: 600;
-
   cursor: pointer;
-
-  transition:
-    transform 0.18s ease,
-    background 0.18s ease,
-    border-color 0.18s ease;
+  transition: background 0.18s ease, border-color 0.18s ease;
 }
 
 .cancelButton {
   border: 1px solid #d9cdbf;
-
   background: #ffffff;
-
   color: #55655e;
 }
 
@@ -710,28 +588,150 @@
 
 .saveButton {
   border: 1px solid var(--verde);
-
   background: var(--verde);
-
   color: #ffffff;
 }
 
 .saveButton:hover {
   background: #00735a;
   border-color: #00735a;
-
-  transform: translateY(-1px);
 }
 
 .saveButton:disabled,
 .cancelButton:disabled {
   opacity: 0.55;
-
   cursor: not-allowed;
-
-  transform: none;
 }
 
+/* ============================================================
+   SELEÇÃO DE ATLETAS DA PARTIDA
+============================================================ */
+
+.athletePicker {
+  margin: 2px 0 18px;
+  padding: 16px;
+  border: 1px solid #e3d8cd;
+  border-radius: 13px;
+  background: #fffdf9;
+}
+
+.athletePickerHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.athletePickerHeader h4 {
+  margin: 0;
+  color: #172a23;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.athletePickerHeader p {
+  margin: 5px 0 0;
+  color: #7a807b;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.athleteCount {
+  flex-shrink: 0;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #e8f4ee;
+  color: #005942;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.athleteList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 3px;
+}
+
+.athleteOption {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid #e8ddd2;
+  border-radius: 10px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.athleteOption:has(input:checked) {
+  border-color: #79ad9b;
+  background: #f0f8f4;
+}
+
+.athleteOption input {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin: 0;
+  accent-color: #005942;
+  cursor: pointer;
+}
+
+.athleteAvatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fce8ed;
+  color: #d93662;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.athleteName {
+  min-width: 0;
+  overflow: hidden;
+  color: #263930;
+  font-size: 10px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.athleteMessage,
+.athleteError {
+  margin: 0;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f6f0e9;
+  color: #737b76;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.athleteError {
+  background: #fff0f1;
+  color: #b42345;
+}
+
+/* =========================================================
+   AJUSTE FINAL — SEM BORDA VERDE EXTERNA
+========================================================= */
+
+.page,
+.pageInner {
+  border: none !important;
+  outline: none !important;
+}
 
 /* =========================================================
    RESPONSIVIDADE
@@ -739,10 +739,7 @@
 
 @media (max-width: 900px) {
   .pageInner {
-    padding:
-      38px
-      24px
-      50px;
+    padding: 38px 24px 50px;
   }
 
   .filters {
@@ -751,17 +748,19 @@
 }
 
 @media (max-width: 700px) {
+  .page {
+    width: calc(100% + 30px);
+    min-height: calc(100vh + 30px);
+    margin: -15px;
+  }
+
   .pageInner {
-    padding:
-      28px
-      15px
-      40px;
+    padding: 28px 15px 40px;
   }
 
   .titleRow {
     align-items: stretch;
     flex-direction: column;
-
     gap: 18px;
   }
 
@@ -779,32 +778,24 @@
 
   .filters {
     grid-template-columns: 1fr;
-
     overflow: visible;
-
     border: none;
     border-radius: 0;
-
     background: transparent;
   }
 
   .filters select,
   .dateInput {
     height: 50px;
-
     overflow: hidden;
-
     margin-bottom: 8px;
-
     border: 1px solid #ddcfc0 !important;
     border-radius: 11px;
-
-    background: #ffffff;
+    background-color: #ffffff;
   }
 
   .formRow {
     grid-template-columns: 1fr;
-
     gap: 0;
   }
 
@@ -817,31 +808,35 @@
   }
 
   .modalHeader {
-    padding:
-      20px
-      18px
-      15px;
+    padding: 20px 18px 15px;
   }
 
   .form {
-    padding:
-      18px
-      18px
-      7px;
+    padding: 18px 18px 7px;
   }
 
   .modalActions {
     flex-direction: column;
-
-    padding:
-      14px
-      18px
-      18px;
+    padding: 14px 18px 18px;
   }
 
   .cancelButton,
   .saveButton {
     width: 100%;
+  }
+
+  .athletePicker {
+    padding: 12px;
+  }
+
+  .athletePickerHeader {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .athleteList {
+    grid-template-columns: 1fr;
+    max-height: 160px;
   }
 }
 
@@ -861,23 +856,354 @@
 
   .tableContainer th,
   .tableContainer td {
-    padding:
-      14px
-      11px;
+    padding: 14px 11px;
+  }
+
+  .adicionarResultado {
+    margin-left: 5px;
+    padding: 5px 7px;
+    font-size: 9px;
   }
 }
 
 
 /* =========================================================
-   AJUSTE FINAL — SEM BORDA VERDE EXTERNA
+   SATE — PARTIDAS | MODO ESCURO
 ========================================================= */
 
-.page {
-  border: none !important;
-  outline: none !important;
+:global(:root[data-theme='dark']) .page {
+  --verde: #83e3b6;
+  --verde-profundo: #a7edce;
+  --rosa: #83e3b6;
+  --creme: #102a22;
+  --creme-linha: #2b493b;
+  --texto: #edf7f1;
+  --texto-secundario: #a8beb3;
+  --branco: #17372c;
+
+  background:
+    radial-gradient(
+      ellipse 360px 260px at 96% 0%,
+      rgba(22, 168, 117, 0.16) 0%,
+      rgba(22, 168, 117, 0.07) 42%,
+      transparent 76%
+    ),
+    #102a22;
+  color: var(--texto);
 }
 
-.pageInner {
-  border: none !important;
-  outline: none !important;
+/* Cabeçalho */
+
+:global(:root[data-theme='dark']) .titleRow h2 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .titleRow h2 em {
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .titleRow p {
+  color: #a8beb3;
+}
+
+/* Botão Nova Partida */
+
+:global(:root[data-theme='dark']) .newButton {
+  background: #087b5b;
+  border-color: #087b5b;
+  color: #ffffff;
+}
+
+:global(:root[data-theme='dark']) .newButton:hover {
+  background: #10966d;
+  border-color: #10966d;
+}
+
+/* Abas de status */
+
+:global(:root[data-theme='dark']) .statusTabs {
+  border-bottom-color: #2b493b;
+}
+
+:global(:root[data-theme='dark']) .statusTab,
+:global(:root[data-theme='dark']) .statusTabActive {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .statusTab:hover,
+:global(:root[data-theme='dark']) .statusTabActive {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .statusTabActive::after {
+  background: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .statusTab small,
+:global(:root[data-theme='dark']) .statusTabActive small {
+  color: #83e3b6;
+}
+
+/* Filtros */
+
+:global(:root[data-theme='dark']) .filters {
+  background: #17372c;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .filters select,
+:global(:root[data-theme='dark']) .dateInput {
+  background-color: #17372c;
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .filters select {
+  background-image:
+    linear-gradient(45deg, transparent 50%, #b6d5c5 50%),
+    linear-gradient(135deg, #b6d5c5 50%, transparent 50%);
+}
+
+:global(:root[data-theme='dark']) .filters > select + select,
+:global(:root[data-theme='dark']) .dateInput {
+  border-left-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .filters select:focus,
+:global(:root[data-theme='dark']) .dateInput:focus-within {
+  box-shadow: inset 0 0 0 1px rgba(131, 227, 182, 0.5);
+}
+
+:global(:root[data-theme='dark']) .dateInput input {
+  color: #edf7f1;
+  color-scheme: dark;
+}
+
+:global(:root[data-theme='dark']) .clearDate {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .clearDate:hover {
+  background: #29483a;
+  color: #83e3b6;
+}
+
+/* Tabela de partidas */
+
+:global(:root[data-theme='dark']) .tableContainer table {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .tableContainer th {
+  border-bottom-color: #2b493b;
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .tableContainer td {
+  border-bottom-color: #2b493b;
+  color: #c9ddd1;
+}
+
+:global(:root[data-theme='dark']) .tableRow:hover,
+:global(:root[data-theme='dark']) .tableRow:focus-visible {
+  background: rgba(131, 227, 182, 0.07);
+}
+
+:global(:root[data-theme='dark']) .confronto,
+:global(:root[data-theme='dark']) .resultado {
+  color: #edf7f1 !important;
+}
+
+/* Botão adicionar/editar resultado */
+
+:global(:root[data-theme='dark']) .adicionarResultado {
+  background: #193b30;
+  border-color: #426653;
+  color: #a7edce;
+}
+
+:global(:root[data-theme='dark']) .adicionarResultado:hover {
+  background: #28513f;
+  border-color: #72cda4;
+}
+
+:global(:root[data-theme='dark']) .adicionarResultado:focus-visible {
+  outline-color: #83e3b6;
+}
+
+/* Status */
+
+:global(:root[data-theme='dark']) .analisada {
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .analise {
+  color: #f4c76a;
+}
+
+:global(:root[data-theme='dark']) .pendente {
+  color: #ff8da8;
+}
+
+/* Estados vazios */
+
+:global(:root[data-theme='dark']) .empty {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .empty h3 {
+  color: #edf7f1;
+}
+
+/* Modal */
+
+:global(:root[data-theme='dark']) .modalOverlay {
+  background: rgba(2, 15, 11, 0.82);
+}
+
+:global(:root[data-theme='dark']) .modal {
+  background: #142e24;
+  border-color: #365447;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.42);
+}
+
+:global(:root[data-theme='dark']) .modalHeader {
+  border-bottom-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .modalHeader h3 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .closeButton {
+  color: #b6cabe;
+}
+
+:global(:root[data-theme='dark']) .closeButton:hover {
+  background: #29483a;
+  border-color: #426653;
+  color: #ffffff;
+}
+
+/* Campos do formulário */
+
+:global(:root[data-theme='dark']) .formGroup label {
+  color: #c9ddd1;
+}
+
+:global(:root[data-theme='dark']) .formGroup input,
+:global(:root[data-theme='dark']) .formGroup select {
+  background: #10271e;
+  border-color: #426653;
+  color: #edf7f1;
+  color-scheme: dark;
+}
+
+:global(:root[data-theme='dark']) .formGroup input::placeholder {
+  color: #819b8d;
+}
+
+:global(:root[data-theme='dark']) .formGroup input:focus,
+:global(:root[data-theme='dark']) .formGroup select:focus {
+  border-color: #42c994;
+  box-shadow: 0 0 0 3px rgba(66, 201, 148, 0.14);
+}
+
+:global(:root[data-theme='dark']) .formGroup input[readonly] {
+  background: #1c382c;
+  color: #a8beb3;
+}
+
+/* Botões do modal */
+
+:global(:root[data-theme='dark']) .modalActions {
+  border-top-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .cancelButton {
+  background: #19382b;
+  border-color: #426653;
+  color: #c9ddd1;
+}
+
+:global(:root[data-theme='dark']) .cancelButton:hover {
+  background: #29483a;
+}
+
+:global(:root[data-theme='dark']) .saveButton {
+  background: #087b5b;
+  border-color: #087b5b;
+  color: #ffffff;
+}
+
+:global(:root[data-theme='dark']) .saveButton:hover {
+  background: #10966d;
+  border-color: #10966d;
+}
+
+/* Seleção de atletas */
+
+:global(:root[data-theme='dark']) .athletePicker {
+  background: #17372c;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .athletePickerHeader h4 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .athletePickerHeader p {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .athleteCount {
+  background: #244d3b;
+  color: #a7edce;
+}
+
+:global(:root[data-theme='dark']) .athleteOption {
+  background: #142e24;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .athleteOption:has(input:checked) {
+  background: #204334;
+  border-color: #65bd94;
+}
+
+:global(:root[data-theme='dark']) .athleteOption input {
+  accent-color: #42c994;
+}
+
+:global(:root[data-theme='dark']) .athleteAvatar {
+  background: #244d3b;
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .athleteName {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .athleteMessage {
+  background: #19382b;
+  color: #b6cabe;
+}
+
+:global(:root[data-theme='dark']) .athleteError {
+  background: #3a2425;
+  color: #ffb5b5;
+}
+
+/* Filtros em telas menores */
+
+@media (max-width: 700px) {
+  :global(:root[data-theme='dark']) .filters {
+    background: transparent;
+    border-color: transparent;
+  }
+
+  :global(:root[data-theme='dark']) .filters select,
+  :global(:root[data-theme='dark']) .dateInput {
+    background-color: #17372c;
+    border-color: #365447 !important;
+  }
 }

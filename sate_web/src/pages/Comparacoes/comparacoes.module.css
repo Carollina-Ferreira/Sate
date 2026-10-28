@@ -1,19 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
-
-/* =========================================================
-   SATE — COMPARAÇÕES
-   Visual baseado na nova identidade de Partidas.
-========================================================= */
-
 .page {
-    --creme: #FAF5EE;
-    --creme-card: #FFFCF7;
-    --verde: #006B4F;
-    --verde-principal: #16A875;
-    --texto: #12261F;
-    --texto-suave: #6C7C77;
-    --borda: #E8DED1;
-
     width: 100%;
     min-height: 100vh;
 

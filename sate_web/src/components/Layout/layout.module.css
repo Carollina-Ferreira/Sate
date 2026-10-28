@@ -1,58 +1,35 @@
-/* =====================================
-   LAYOUT
-===================================== */
-
 .layout {
   width: 100%;
   min-height: 100vh;
-
-  background: var(--verde-dark);
+  background: transparent;
 }
-
-
-/* =====================================
-   ÁREA PRINCIPAL
-===================================== */
 
 .main {
   min-height: 100vh;
-
   margin-left: 70px;
-
   box-sizing: border-box;
-
   transition: margin-left 0.25s ease;
+  background: transparent;
 }
-
-
-/* =====================================
-   SIDEBAR EXPANDIDO
-===================================== */
 
 .mainExpanded {
   margin-left: 230px;
 }
 
-
-/* =====================================
-   CONTEÚDO
-===================================== */
-
 .content {
   min-height: calc(100vh - 48px);
-
-  padding: 40px;
-
+  padding: 32px;
   box-sizing: border-box;
+  background: transparent;
 }
 
-
-/* =====================================
-   RESPONSIVIDADE
-===================================== */
+@media (max-width: 1024px) {
+  .content {
+    padding: 24px;
+  }
+}
 
 @media (max-width: 700px) {
-
   .main {
     margin-left: 60px;
   }
@@ -62,7 +39,12 @@
   }
 
   .content {
-    padding: 30px 20px;
+    padding: 20px 16px;
   }
+}
 
+@media (max-width: 400px) {
+  .content {
+    padding: 16px 12px;
+  }
 }

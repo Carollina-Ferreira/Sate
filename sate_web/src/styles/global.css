@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
+/* =====================================
+   VARIÁVEIS GLOBAIS
+===================================== */
+
 :root {
   --verde-principal: #16A875;
   --verde-escuro: #006B4F;
@@ -8,6 +12,12 @@
   --rosa: #EF476F;
   --vermelho: #D52941;
   --branco: #FFFFFF;
+  --creme: #FAF5EE;
+  --creme-card: #FFFCF7;
+  --verde: #006B4F;
+  
+  --texto-suave: #6C7C77;
+  --borda: #E8DED1;
 
   --cinza-100: #F6F9F7;
   --cinza-200: #E9EFEC;
@@ -20,8 +30,9 @@
   --fonte-base: 'Inter', sans-serif;
 }
 
-
-
+/* =====================================
+   RESET GLOBAL
+===================================== */
 
 *,
 *::before,
@@ -30,23 +41,57 @@
 }
 
 html,
-body {
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0;
 }
 
+/* =====================================
+   FUNDO GLOBAL DO SATE
+===================================== */
+
+html {
+  background-color: #faf5ee;
+}
+
 body {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(ellipse 340px 230px at 96% 0%,
+      rgba(244, 63, 120, 0.16) 0%,
+      rgba(244, 63, 120, 0.08) 38%,
+      rgba(244, 63, 120, 0) 76%),
+    #faf5ee;
+
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+
   font-family: var(--fonte-base);
   color: var(--texto);
-  background: var(--cinza-100);
+
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+#root {
+  min-height: 100vh;
+  background: transparent;
+}
+
+/* =====================================
+   TIPOGRAFIA
+===================================== */
 
 h1,
 h2,
 h3 {
-  font-family: var(--fonte-titulo);
   margin: 0;
+  font-family: var(--fonte-titulo);
 }
 
 a {
@@ -54,11 +99,35 @@ a {
   text-decoration: none;
 }
 
-button {
+button,
+input,
+textarea,
+select {
   font-family: var(--fonte-base);
 }
+
+/* =====================================
+   INPUTS
+===================================== */
 
 input::-ms-reveal,
 input::-ms-clear {
   display: none;
+}
+
+/* =====================================
+   IMAGENS E MÍDIA
+===================================== */
+
+img,
+video {
+  max-width: 100%;
+}
+
+/* =====================================
+   SCROLL
+===================================== */
+
+html {
+  scrollbar-width: none;
 }

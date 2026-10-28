@@ -823,3 +823,167 @@
     max-width: calc(100vw - 20px);
   }
 }
+
+/* ==========================================
+   MODO ESCURO — HEADER BRANCO
+========================================== */
+
+:global(:root[data-theme='dark']) .header {
+  background: #fffdf9;
+  border-bottom-color: #f0e8de;
+}
+
+/* Título */
+:global(:root[data-theme='dark']) .title {
+  color: #006b4f;
+}
+
+/* Pesquisa */
+:global(:root[data-theme='dark']) .search {
+  background: #fffdf9;
+  border-color: #e6d8c7;
+}
+
+:global(:root[data-theme='dark']) .search:focus-within {
+  background: #ffffff;
+  border-color: #16a875;
+}
+
+:global(:root[data-theme='dark']) .search input {
+  background: transparent;
+  color: #12261f;
+}
+
+:global(:root[data-theme='dark']) .search input::placeholder {
+  color: #8b918b;
+}
+
+:global(:root[data-theme='dark']) .search > svg {
+  color: #87958d;
+}
+
+/* Notificações */
+:global(:root[data-theme='dark']) .notification {
+  color: #006b4f;
+}
+
+:global(:root[data-theme='dark']) .notification:hover {
+  background: #f0f6f1;
+}
+
+:global(:root[data-theme='dark']) .notificationBadge {
+  border-color: #fffdf9;
+}
+
+/* Perfil */
+:global(:root[data-theme='dark']) .userContainer {
+  border-left-color: #f0e8de;
+}
+
+:global(:root[data-theme='dark']) .userName {
+  color: #12261f;
+}
+
+:global(:root[data-theme='dark']) .userRole,
+:global(:root[data-theme='dark']) .userArrow {
+  color: #6c7c77;
+}
+
+/* Menus suspensos */
+:global(:root[data-theme='dark']) .searchDropdown,
+:global(:root[data-theme='dark']) .notificationsDropdown,
+:global(:root[data-theme='dark']) .userDropdown {
+  background: #fffdf9;
+  border-color: #eee4d9;
+  color: #12261f;
+}
+
+/* Resultados da pesquisa */
+:global(:root[data-theme='dark']) .searchSection {
+  border-bottom-color: #f0e8de;
+}
+
+:global(:root[data-theme='dark']) .searchSectionHeader strong {
+  color: #006b4f;
+}
+
+:global(:root[data-theme='dark']) .searchResultItem:hover {
+  background: #f5f7f1;
+}
+
+:global(:root[data-theme='dark']) .searchResultText strong {
+  color: #12261f;
+}
+
+:global(:root[data-theme='dark']) .searchResultText span,
+:global(:root[data-theme='dark']) .emptySearch {
+  color: #6c7c77;
+}
+
+/* Notificações abertas */
+:global(:root[data-theme='dark']) .notificationHeader,
+:global(:root[data-theme='dark']) .userDropdownHeader {
+  border-bottom-color: #f0e8de;
+}
+
+:global(:root[data-theme='dark']) .notificationTitleWrapper h2 {
+  color: #006b4f;
+}
+
+:global(:root[data-theme='dark']) .notificationItem {
+  border-bottom-color: #f4eee7;
+}
+
+:global(:root[data-theme='dark']) .notificationItem:hover {
+  background: #f5f7f1;
+}
+
+:global(:root[data-theme='dark']) .notificationUnread {
+  background: #fff8f8;
+}
+
+:global(:root[data-theme='dark']) .notificationTop strong,
+:global(:root[data-theme='dark']) .userDropdownHeader strong {
+  color: #12261f;
+}
+
+:global(:root[data-theme='dark']) .notificationTop span,
+:global(:root[data-theme='dark']) .notificationContent p,
+:global(:root[data-theme='dark']) .userDropdownHeader span {
+  color: #6c7c77;
+}
+
+/* Menu do perfil */
+:global(:root[data-theme='dark']) .userMenuItem {
+  color: #12261f;
+}
+
+:global(:root[data-theme='dark']) .userMenuItem svg {
+  color: #006b4f;
+}
+
+:global(:root[data-theme='dark']) .userMenuItem:hover {
+  background: #f2f6f0;
+}
+
+:global(:root[data-theme='dark']) .userMenuActive {
+  background: #eaf4ec;
+  color: #006b4f;
+}
+
+:global(:root[data-theme='dark']) .userMenuDivider {
+  background: #f0e8de;
+}
+
+/* Interruptor do tema */
+:global(:root[data-theme='dark']) .themeSwitch {
+  background: #d8e3dc;
+}
+
+:global(:root[data-theme='dark']) .themeSwitchActive {
+  background: #16a875;
+}
+
+:global(:root[data-theme='dark']) .themeSwitchKnob {
+  background: #ffffff;
+}

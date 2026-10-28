@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -94,12 +95,6 @@ export default function SelecaoEsporte() {
             return;
         }
 
-        /*
-         * Guarda temporariamente a modalidade escolhida.
-         *
-         * Esses dados serão enviados definitivamente
-         * para o backend ao finalizar o onboarding.
-         */
         sessionStorage.setItem(
             'sate-modalidade',
             esporteAtual.nome,
@@ -124,14 +119,14 @@ export default function SelecaoEsporte() {
             style={
                 esporteAtual
                     ? {
-                          backgroundImage: `
+                        backgroundImage: `
                             linear-gradient(
-                                rgba(0, 55, 42, 0.72),
-                                rgba(0, 55, 42, 0.82)
+                                rgba(72, 59, 54, 0.48),
+                                rgba(105, 62, 76, 0.56)
                             ),
-                            url(${esporteAtual.imagem})
-                          `,
-                      }
+                            url("${esporteAtual.imagem}")
+                        `,
+                    }
                     : undefined
             }
         >
@@ -140,16 +135,18 @@ export default function SelecaoEsporte() {
             )}
 
             <div className={styles.conteudo}>
-
-                {/* ===================== ETAPA ===================== */}
-
-                <div className={styles.etapa}>
+                {/* ETAPA */}
+                <div
+                    className={`${styles.etapa} ${
+                        esporteAtual
+                            ? styles.etapaSelecionada
+                            : ''
+                    }`}
+                >
                     Etapa 1 de 4 · Configuração do esporte
                 </div>
 
-
-                {/* ===================== PROGRESSO ===================== */}
-
+                {/* PROGRESSO */}
                 <div className={styles.linhaProgresso}>
                     <div className={styles.progressoAtivo} />
                     <div />
@@ -157,24 +154,33 @@ export default function SelecaoEsporte() {
                     <div />
                 </div>
 
-
-                {/* ===================== CABEÇALHO ===================== */}
-
+                {/* CABEÇALHO */}
                 <section className={styles.cabecalho}>
-                    <h1>
-                        Qual é o seu esporte?
+                    <h1
+                        className={`${styles.titulo} ${
+                            esporteAtual
+                                ? styles.tituloSelecionado
+                                : styles.tituloInicial
+                        }`}
+                    >
+                        Qual é o seu{' '}
+                        <span>esporte?</span>
                     </h1>
 
-                    <p>
+                    <p
+                        className={
+                            esporteAtual
+                                ? styles.descricaoSelecionada
+                                : styles.descricaoInicial
+                        }
+                    >
                         Selecione a modalidade que você pratica.
                         Isso ajudará o sistema a organizar as
                         informações de forma correta.
                     </p>
                 </section>
 
-
-                {/* ===================== ESPORTES ===================== */}
-
+                {/* ESPORTES */}
                 <section className={styles.gridEsportes}>
                     {esportes.map((esporte) => {
                         const selecionado =
@@ -215,20 +221,20 @@ export default function SelecaoEsporte() {
                     })}
                 </section>
 
-
-                {/* ===================== RODAPÉ ===================== */}
-
+                {/* RODAPÉ */}
                 <div className={styles.rodape}>
-
                     <button
                         type="button"
-                        className={styles.botaoVoltar}
+                        className={`${styles.botaoVoltar} ${
+                            esporteAtual
+                                ? styles.botaoVoltarSelecionado
+                                : ''
+                        }`}
                         onClick={voltar}
                     >
                         <ArrowLeft size={17} />
                         Voltar
                     </button>
-
 
                     <button
                         type="button"
@@ -239,11 +245,8 @@ export default function SelecaoEsporte() {
                         Próximo
                         <ArrowRight size={17} />
                     </button>
-
                 </div>
-
             </div>
         </main>
     );
 }
-

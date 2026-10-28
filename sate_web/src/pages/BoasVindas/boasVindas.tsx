@@ -1,9 +1,10 @@
+
 import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './boasVindas.module.css';
 
-import logoSate from '../../assets/img/logo_grande.png';
+import logoSate from '../../assets/img/logoVerde_img.png';
 import esportesImg from '../../assets/img/boas-vindas-esportes.png';
 
 export default function BoasVindas() {
@@ -15,10 +16,7 @@ export default function BoasVindas() {
 
     return (
         <main className={styles.container}>
-
-            {/* Área verde */}
             <section className={styles.leftSide}>
-
                 <img
                     src={logoSate}
                     alt="SATE"
@@ -26,7 +24,6 @@ export default function BoasVindas() {
                 />
 
                 <div className={styles.content}>
-
                     <h1>
                         Bem-vindo, <span>Treinador!</span>
                     </h1>
@@ -43,22 +40,15 @@ export default function BoasVindas() {
                         onClick={handleComecar}
                     >
                         <span>Começar</span>
-
-                        <ArrowRight
-                            size={22}
-                            strokeWidth={2}
-                        />
+                        <ArrowRight size={22} strokeWidth={2} />
                     </button>
-
                 </div>
 
                 <p className={styles.footer}>
                     Sistema de Acompanhamento e Treinamento Esportivo
                 </p>
-
             </section>
 
-            {/* Imagem */}
             <section className={styles.imageSide}>
                 <img
                     src={esportesImg}
@@ -66,10 +56,7 @@ export default function BoasVindas() {
                 />
             </section>
 
-            {/* Faixa diagonal */}
             <div className={styles.diagonal} />
-
         </main>
     );
 }
-

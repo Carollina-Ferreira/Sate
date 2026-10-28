@@ -566,12 +566,12 @@ export default function ConfiguracaoAnalise() {
         setSelecionados((atual) =>
             atual.includes(id)
                 ? atual.filter(
-                      (campoId) => campoId !== id,
-                  )
+                    (campoId) => campoId !== id,
+                )
                 : [
-                      ...atual,
-                      id,
-                  ],
+                    ...atual,
+                    id,
+                ],
         );
     };
 
@@ -708,14 +708,14 @@ export default function ConfiguracaoAnalise() {
             style={
                 imagemEsporte
                     ? {
-                          backgroundImage: `
+                        backgroundImage: `
                             linear-gradient(
-                                rgba(0, 55, 42, 0.84),
-                                rgba(0, 55, 42, 0.91)
+                                rgba(91, 57, 63, 0.38),
+rgba(91, 57, 63, 0.52)
                             ),
                             url(${imagemEsporte})
                           `,
-                      }
+                    }
                     : undefined
             }
         >
@@ -763,7 +763,8 @@ export default function ConfiguracaoAnalise() {
                     </span>
 
                     <h1>
-                        Quais campos você quer acompanhar?
+                        Quais campos você quer{' '}
+                        <span className={styles.tituloDestaque}>acompanhar?</span>
                     </h1>
 
                     <p>
@@ -792,11 +793,10 @@ export default function ConfiguracaoAnalise() {
                             <button
                                 key={campo.id}
                                 type="button"
-                                className={`${styles.fieldCard} ${
-                                    selecionado
-                                        ? styles.fieldCardSelected
-                                        : ''
-                                }`}
+                                className={`${styles.fieldCard} ${selecionado
+                                    ? styles.fieldCardSelected
+                                    : ''
+                                    }`}
                                 onClick={() =>
                                     alternarCampo(
                                         campo.id,
@@ -809,11 +809,10 @@ export default function ConfiguracaoAnalise() {
                                 {/* BOLINHA DE SELEÇÃO */}
 
                                 <span
-                                    className={`${styles.checkbox} ${
-                                        selecionado
-                                            ? styles.checkboxSelected
-                                            : ''
-                                    }`}
+                                    className={`${styles.checkbox} ${selecionado
+                                        ? styles.checkboxSelected
+                                        : ''
+                                        }`}
                                 >
                                     {selecionado && (
                                         <Check

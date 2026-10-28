@@ -1207,25 +1207,6 @@ export default function Partidas() {
                       {partida.status}
                     </span>
 
-                    <button
-                      type="button"
-                      className={styles.adicionarResultado}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        void editarResultado(partida);
-                      }}
-                      aria-label={`${
-                        partida.golsEquipe === null ||
-                        partida.golsAdversario === null
-                          ? 'Adicionar'
-                          : 'Editar'
-                      } resultado de ${partida.confronto}`}
-                    >
-                      {partida.golsEquipe === null ||
-                      partida.golsAdversario === null
-                        ? 'Adicionar resultado'
-                        : 'Editar resultado'}
-                    </button>
                   </td>
                 </tr>
               ))}
@@ -1432,12 +1413,6 @@ export default function Partidas() {
                   />
                 </div>
               </div>
-
-              <p>
-                O resultado é opcional. Se ainda não aconteceu,
-                deixe os dois campos vazios. Se preencher ambos,
-                a partida será salva como finalizada.
-              </p>
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>

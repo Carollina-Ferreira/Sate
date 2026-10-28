@@ -6,15 +6,9 @@
 ========================================================= */
 
 .page {
-  --verde: #005942;
-  --verde-profundo: #003d31;
-  --rosa: #f04470;
   --creme: #faf5ee;
   --creme-linha: #e8ddd2;
-  --texto: #172a23;
   --texto-secundario: #7a807b;
-  --branco: #ffffff;
-
   width: calc(100% + 60px);
   min-height: calc(100vh + 60px);
   margin: -30px;

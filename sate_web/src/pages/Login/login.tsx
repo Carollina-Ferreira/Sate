@@ -158,7 +158,7 @@ const Login = () => {
             if (!resposta.ok) {
                 throw new Error(
                     data.mensagem ||
-                        'Não foi possível realizar o login.'
+                    'Não foi possível realizar o login.'
                 );
             }
 
@@ -207,14 +207,7 @@ const Login = () => {
             ================================================= */
 
             if (data.usuario.tipo === 'TREINADOR') {
-                if (data.usuario.primeiroAcesso) {
-                    navigate('/boas-vindas');
-
-                    return;
-                }
-
-                navigate('/inicio');
-
+                navigate('/carregamento');
                 return;
             }
 
@@ -265,11 +258,10 @@ const Login = () => {
                     {heroSlides.map((image, index) => (
                         <div
                             key={image}
-                            className={`${styles.heroSlide} ${
-                                index === activeSlide
+                            className={`${styles.heroSlide} ${index === activeSlide
                                     ? styles.heroSlideActive
                                     : ''
-                            }`}
+                                }`}
                             style={{
                                 backgroundImage: `url(${image})`,
                             }}

@@ -2,47 +2,46 @@
 .container {
     width: 100%;
     min-height: 100vh;
-
+    min-height: 100dvh;
     display: flex;
-
     position: relative;
     overflow: hidden;
+    box-sizing: border-box;
 
-    background: #005c45;
+    background: var(--creme, #FAF5EE);
 }
-
-
-/* =========================
-   LADO VERDE
-========================= */
 
 .leftSide {
     width: 55%;
     min-height: 100vh;
-
-    background:
-        radial-gradient(
-            circle at 75% 20%,
-            rgba(22, 168, 117, 0.35),
-            transparent 38%
-        ),
-        linear-gradient(
-            135deg,
-            #005c45 0%,
-            #007c5d 100%
-        );
-
+    min-height: 100dvh;
+    box-sizing: border-box;
     position: relative;
     z-index: 2;
 
     display: flex;
     flex-direction: column;
 
-    padding: 42px 90px 42px 70px;
+    padding: clamp(24px, 4vh, 48px) clamp(24px, 6vw, 110px) clamp(24px, 4vh, 48px) clamp(24px, 5vw, 90px);
 
-    /*
-       Ponta em formato >
-    */
+    background:
+        radial-gradient(
+            ellipse at 5% 5%,
+            rgba(239, 71, 111, 0.19) 0%,
+            transparent 42%
+        ),
+        radial-gradient(
+            ellipse at 45% 100%,
+            rgba(255, 164, 190, 0.30) 0%,
+            transparent 48%
+        ),
+        linear-gradient(
+            135deg,
+            #FAF5EE 0%,
+            #FFF8F3 48%,
+            #FCE4E9 100%
+        );
+
     clip-path: polygon(
         0 0,
         83% 0,
@@ -51,38 +50,28 @@
         0 100%
     );
 
-    /*
-       Sombra bem suave,
-       sem alterar a cor do verde
-    */
     filter: drop-shadow(
-        4px 0 7px rgba(0, 0, 0, 0.18)
+        4px 0 7px rgba(0, 0, 0, 0.12)
     );
 }
 
-
-/* =========================
-   LOGO
-========================= */
+/* LOGO */
 
 .logo {
-    width: 100px;
+    width: clamp(105px, 9vw, 170px);
+    max-width: 100%;
     height: auto;
-
     object-fit: contain;
 
     position: relative;
     z-index: 5;
 }
 
-
-/* =========================
-   CONTEÚDO
-========================= */
+/* CONTEÚDO */
 
 .content {
     width: 100%;
-    max-width: 500px;
+    max-width: clamp(300px, 36vw, 620px);
 
     margin-top: auto;
     margin-bottom: auto;
@@ -94,102 +83,90 @@
 .content h1 {
     margin: 0 0 18px;
 
-    color: #ffffff;
+    color: var(--texto, #12261F);
 
-    font-family: 'Sora', sans-serif;
-
-    font-size: 40px;
+    font-family: var(--fonte-titulo, 'Sora', sans-serif);
+    font-size: clamp(30px, 3.1vw, 58px);
     font-weight: 700;
-
     line-height: 1.14;
-
     letter-spacing: -1px;
 }
 
 .content h1 span {
-    color: #63d9ad;
+    color: var(--rosa, #EF476F);
 }
 
 .content p {
     width: 100%;
-    max-width: 460px;
+    max-width: clamp(280px, 32vw, 560px);
 
-    margin: 0 0 32px;
+    margin: 0 0 clamp(22px, 3vh, 36px);
 
-    color: rgba(255, 255, 255, 0.9);
+    color: #526E65;
 
-    font-family: 'Inter', sans-serif;
-
-    font-size: 16px;
+    font-family: var(--fonte-base, 'Inter', sans-serif);
+    font-size: clamp(15px, 1.1vw, 19px);
     font-weight: 400;
-
     line-height: 1.6;
 }
 
-
-/* =========================
-   BOTÃO
-========================= */
+/* BOTÃO */
 
 .startButton {
     min-width: 155px;
     height: 50px;
-
     padding: 0 22px;
 
     border: none;
-    border-radius: 7px;
+    border-radius: 11px;
 
-    background: #ffffff;
+    background: var(--verde-escuro, #006B4F);
+    color: var(--branco, #FFFFFF);
 
     display: flex;
     align-items: center;
     justify-content: center;
-
     gap: 13px;
 
-    color: #005c45;
-
-    font-family: 'Inter', sans-serif;
-
+    font-family: var(--fonte-base, 'Inter', sans-serif);
     font-size: 15px;
     font-weight: 700;
 
     cursor: pointer;
 
+    box-shadow: 0 5px 14px rgba(0, 61, 49, 0.12);
+
     transition:
         transform 0.2s ease,
-        box-shadow 0.2s ease;
+        box-shadow 0.2s ease,
+        background 0.2s ease;
 }
 
 .startButton:hover {
+    background: var(--verde-principal, #16A875);
     transform: translateY(-2px);
 
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 10px 24px rgba(0, 61, 49, 0.18);
 }
 
 .startButton:active {
     transform: translateY(0);
 }
 
-
-/* =========================
-   FOTO
-========================= */
+/* IMAGEM */
 
 .imageSide {
     width: 55%;
-    height: 100vh;
 
     position: absolute;
-
     right: 0;
     top: 0;
+    bottom: 0;
 
     overflow: hidden;
-
     z-index: 1;
+
+    background: var(--verde-dark, #005942);
 }
 
 .imageSide img {
@@ -197,112 +174,84 @@
     height: 100%;
 
     object-fit: cover;
-
     object-position: center;
 }
 
-
-/* =========================
-   DIAGONAL
-========================= */
+/* DIAGONAL */
 
 .diagonal {
     display: none;
 }
 
-
-/* =========================
-   RODAPÉ
-========================= */
+/* RODAPÉ */
 
 .footer {
     margin: 0;
 
-    color: rgba(255, 255, 255, 0.72);
+    color: #64766F;
 
-    font-family: 'Inter', sans-serif;
-
-    font-size: 12px;
+    font-family: var(--fonte-base, 'Inter', sans-serif);
+    font-size: clamp(11px, 0.85vw, 14px);
     font-weight: 400;
-
     line-height: 1.4;
 
     position: relative;
     z-index: 5;
 }
 
+/* RESPONSIVO */
 
-/* =========================
-   RESPONSIVO
-========================= */
-
+/* Notebooks / tablets na horizontal */
 @media (max-width: 1200px) {
-
     .leftSide {
-        padding-left: 55px;
-        padding-right: 70px;
-    }
-
-    .content h1 {
-        font-size: 37px;
-    }
-
-    .content p {
-        font-size: 15px;
-    }
-
-    .logo {
-        width: 115px;
-    }
-}
-
-
-@media (max-width: 900px) {
-
-    .leftSide {
-        width: 100%;
-
-        padding: 35px 40px;
-
-        clip-path: none;
-
-        filter: none;
+        width: 58%;
+        padding-right: clamp(40px, 6vw, 70px);
     }
 
     .imageSide {
-        display: none;
+        width: 58%;
+    }
+}
+
+/* Tablets e celulares: só o painel de texto, 100% da tela */
+@media (max-width: 900px) {
+    .leftSide {
+        width: 100%;
+        padding: 32px clamp(20px, 6vw, 48px);
+
+        clip-path: none;
+        filter: none;
     }
 
+    .imageSide,
     .diagonal {
         display: none;
     }
 
     .content {
-        max-width: 600px;
-    }
-
-    .content h1 {
-        font-size: 38px;
+        max-width: 620px;
     }
 
     .content p {
-        max-width: 550px;
-    }
-}
-
-
-@media (max-width: 600px) {
-
-    .leftSide {
-        padding: 30px 25px;
-    }
-
-    .logo {
-        width: 100px;
+        max-width: 560px;
     }
 
     .content h1 {
-        font-size: 32px;
+        font-size: clamp(30px, 6vw, 42px);
+    }
+}
+
+/* Celulares */
+@media (max-width: 600px) {
+    .leftSide {
+        padding: 26px 20px;
+    }
+
+    .logo {
+        width: 110px;
+    }
+
+    .content h1 {
         letter-spacing: -0.6px;
     }
 
@@ -312,12 +261,44 @@
     }
 
     .startButton {
-        min-width: 145px;
-        height: 48px;
-        font-size: 14px;
+        width: 100%;
+        height: 50px;
     }
 
     .footer {
-        font-size: 10px;
+        font-size: 11px;
+    }
+}
+
+/* Celulares pequenos */
+@media (max-width: 360px) {
+    .leftSide {
+        padding: 22px 16px;
+    }
+
+    .content h1 {
+        font-size: 27px;
+    }
+}
+
+/* Telas baixas (celular deitado) */
+@media (max-height: 520px) and (orientation: landscape) {
+    .leftSide {
+        padding-top: 18px;
+        padding-bottom: 18px;
+    }
+
+    .content {
+        margin-top: 14px;
+        margin-bottom: 14px;
+    }
+
+    .content h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .content p {
+        margin-bottom: 16px;
     }
 }

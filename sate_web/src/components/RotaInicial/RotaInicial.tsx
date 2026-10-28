@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
+import Carregamento from '../../pages/Carregamento/carregamento';
+
 const RotaInicial = () => {
   const [carregando, setCarregando] = useState(true);
   const [temEquipe, setTemEquipe] = useState(false);
+  const [erro, setErro] = useState(false);
 
   useEffect(() => {
     const verificarEquipe = async () => {
@@ -29,28 +32,20 @@ const RotaInicial = () => {
         );
 
         if (!resposta.ok) {
-          setTemEquipe(false);
-          setCarregando(false);
+          setErro(true);
           return;
         }
 
         const dados = await resposta.json();
 
-        /*
-         * O backend retorna a lista de equipes.
-         */
         const equipes = Array.isArray(dados)
           ? dados
           : dados.equipes || [];
 
         setTemEquipe(equipes.length > 0);
       } catch (error) {
-        console.error(
-          'Erro ao verificar equipe:',
-          error
-        );
-
-        setTemEquipe(false);
+        console.error('Erro ao verificar equipe:', error);
+        setErro(true);
       } finally {
         setCarregando(false);
       }
@@ -59,26 +54,31 @@ const RotaInicial = () => {
     verificarEquipe();
   }, []);
 
-  /*
-   * Enquanto consulta o banco,
-   * não mostra nenhuma tela.
-   */
+  // Exibe a animação enquanto verifica as equipes.
   if (carregando) {
-    return null;
+    return <Carregamento />;
   }
 
-  /*
-   * Se já possui equipe,
-   * não precisa fazer onboarding novamente.
-   */
+  // Sem autenticação, volta para o login.
+  const token =
+    localStorage.getItem('token') ||
+    sessionStorage.getItem('token');
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Se já possui equipe, segue para o dashboard.
   if (temEquipe) {
     return <Navigate to="/inicio" replace />;
   }
 
-  /*
-   * Se não possui equipe,
-   * libera as telas de configuração.
-   */
+  // Se ocorreu erro na consulta, não presume que não há equipe.
+  if (erro) {
+    return <Navigate to="/inicio" replace />;
+  }
+
+  // Sem equipe: libera as telas de configuração inicial.
   return <Outlet />;
 };
 

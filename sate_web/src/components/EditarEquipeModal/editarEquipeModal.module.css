@@ -1,9 +1,3 @@
-
-/* =====================================
-   OVERLAY
-   Permite rolar até o final do modal
-===================================== */
-
 .overlay {
   position: fixed;
   inset: 0;
@@ -16,7 +10,7 @@
   padding: 24px 16px;
   box-sizing: border-box;
 
-  background: rgba(0, 35, 25, 0.64);
+  background: var(--overlay);
   backdrop-filter: blur(5px);
 
   overflow-x: hidden;
@@ -24,9 +18,8 @@
   overscroll-behavior-y: contain;
 
   scrollbar-width: thin;
-  scrollbar-color: #bdcfc4 transparent;
+  scrollbar-color: var(--borda-forte) transparent;
 }
-
 
 /* =====================================
    MODAL
@@ -45,19 +38,17 @@
   flex-direction: column;
 
   margin: auto 0;
-
   overflow: visible;
 
-  background: #f0f5f2;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: var(--bg-surface);
+  border: 1px solid var(--borda);
   border-radius: 18px;
 
-  box-shadow: 0 24px 70px rgba(0, 35, 25, 0.25);
+  box-shadow: 0 24px 70px var(--sombra);
 
-  color: #203b30;
-  font-family: 'Inter', 'Poppins', sans-serif;
+  color: var(--texto);
+  font-family: var(--fonte-base);
 }
-
 
 /* =====================================
    CABEÇALHO
@@ -73,18 +64,17 @@
 
   padding: 22px 26px 18px;
 
-  border-bottom: 1px solid #d5e2db;
+  border-bottom: 1px solid var(--borda);
   border-radius: 18px 18px 0 0;
 
-  background: #e8f0eb;
+  background: var(--bg-neutro);
 }
 
 .eyebrow {
   display: block;
-
   margin-bottom: 5px;
 
-  color: #10845d;
+  color: var(--verde-principal);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 1.2px;
@@ -93,7 +83,8 @@
 .header h2 {
   margin: 0;
 
-  color: #193b2e;
+  color: var(--texto);
+  font-family: var(--fonte-titulo);
   font-size: 25px;
   font-weight: 750;
   line-height: 1.25;
@@ -101,10 +92,9 @@
 
 .header p {
   max-width: 420px;
-
   margin: 7px 0 0;
 
-  color: #687d72;
+  color: var(--texto-suave);
   font-size: 12px;
   line-height: 1.5;
 }
@@ -124,7 +114,7 @@
   border-radius: 10px;
 
   background: transparent;
-  color: #61776b;
+  color: var(--texto-suave);
 
   cursor: pointer;
 
@@ -135,9 +125,9 @@
 }
 
 .closeButton:hover {
-  background: #d8e8df;
-  border-color: #c8ddd1;
-  color: #087b5b;
+  background: var(--bg-verde-suave);
+  border-color: var(--borda);
+  color: var(--verde-principal);
 }
 
 .closeButton:disabled {
@@ -145,10 +135,8 @@
   cursor: not-allowed;
 }
 
-
 /* =====================================
    CONTEÚDO
-   Não limita a altura do formulário
 ===================================== */
 
 .content {
@@ -162,12 +150,10 @@
   gap: 25px;
 
   padding: 22px 26px;
-
   box-sizing: border-box;
 
   overflow: visible;
 }
-
 
 /* =====================================
    COLUNA DA IMAGEM
@@ -181,7 +167,6 @@
   align-items: stretch;
   gap: 10px;
 }
-
 
 /* =====================================
    IMAGEM DA EQUIPE
@@ -202,11 +187,11 @@
   box-sizing: border-box;
   overflow: hidden;
 
-  border: 1px dashed #9bb9a9;
+  border: 1px dashed var(--borda-forte);
   border-radius: 15px;
 
-  background: #dceae1;
-  color: #4b6758;
+  background: var(--bg-verde-suave);
+  color: var(--texto-medio);
 }
 
 .imagePreview img {
@@ -230,7 +215,6 @@
   gap: 9px;
 
   padding: 15px;
-
   text-align: center;
 }
 
@@ -243,28 +227,27 @@
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #c3ddce;
+  border: 1px solid var(--borda-forte);
   border-radius: 50%;
 
-  background: #cbe2d3;
-  color: #087b5b;
+  background: var(--bg-surface-2);
+  color: var(--verde-principal);
 }
 
 .imageEmpty strong {
-  color: #365746;
+  color: var(--texto-medio);
   font-size: 12px;
   font-weight: 700;
 }
 
 .imageEmpty span {
-  color: #82978a;
+  color: var(--texto-suave);
   font-size: 10px;
 }
 
 .hiddenInput {
   display: none;
 }
-
 
 /* =====================================
    BOTÃO DE ALTERAR IMAGEM
@@ -282,11 +265,11 @@
   padding: 8px 12px;
   box-sizing: border-box;
 
-  border: 1px solid #c9dacf;
+  border: 1px solid var(--borda);
   border-radius: 9px;
 
-  background: #f8fbf9;
-  color: #426151;
+  background: var(--bg-surface);
+  color: var(--texto-medio);
 
   font-family: inherit;
   font-size: 11px;
@@ -296,19 +279,20 @@
 
   transition:
     background 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .changeImage:hover:not(:disabled) {
-  border-color: #16a875;
-  background: #e4f2e9;
+  border-color: var(--verde-principal);
+  background: var(--bg-verde-suave);
+  color: var(--verde-principal);
 }
 
 .changeImage:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
-
 
 /* =====================================
    FORMULÁRIO
@@ -331,7 +315,7 @@
 }
 
 .field label {
-  color: #40594b;
+  color: var(--texto-medio);
   font-size: 12px;
   font-weight: 700;
 }
@@ -345,13 +329,13 @@
   padding: 0 12px;
   box-sizing: border-box;
 
-  border: 1px solid #cbdad1;
+  border: 1px solid var(--borda);
   border-radius: 9px;
 
   outline: none;
 
-  background: #fbfdfb;
-  color: #2c4336;
+  background: var(--bg-surface-2);
+  color: var(--texto);
 
   font-family: inherit;
   font-size: 12px;
@@ -363,14 +347,14 @@
 }
 
 .field input::placeholder {
-  color: #9aa99f;
+  color: var(--texto-suave);
 }
 
 .field input:focus,
 .field select:focus {
-  border-color: #16a875;
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
+  border-color: var(--verde-principal);
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.14);
 }
 
 .field input:disabled,
@@ -383,6 +367,10 @@
   cursor: pointer;
 }
 
+.field select option {
+  background: var(--bg-surface);
+  color: var(--texto);
+}
 
 /* =====================================
    DUAS COLUNAS
@@ -393,7 +381,6 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 13px;
 }
-
 
 /* =====================================
    BUSCA DE ATLETAS
@@ -410,20 +397,21 @@
   padding: 0 12px;
   box-sizing: border-box;
 
-  border: 1px solid #cbdad1;
+  border: 1px solid var(--borda);
   border-radius: 10px;
 
-  background: #fbfdfb;
-  color: #758a7d;
+  background: var(--bg-surface-2);
+  color: var(--texto-suave);
 
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .searchAthlete:focus-within {
-  border-color: #16a875;
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.1);
+  border-color: var(--verde-principal);
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
 }
 
 .searchAthlete > svg {
@@ -445,10 +433,14 @@
   box-shadow: none;
 
   background: transparent;
-  color: #2c4336;
+  color: var(--texto);
 
   font-family: inherit;
   font-size: 12px;
+}
+
+.searchAthlete input::placeholder {
+  color: var(--texto-suave);
 }
 
 .searchAthlete input:focus {
@@ -472,16 +464,15 @@
   border-radius: 6px;
 
   background: transparent;
-  color: #718679;
+  color: var(--texto-suave);
 
   cursor: pointer;
 }
 
 .searchAthlete button:hover {
-  background: #e3eee7;
-  color: #087b5b;
+  background: var(--bg-verde-suave);
+  color: var(--verde-principal);
 }
-
 
 /* =====================================
    LISTA DE ATLETAS
@@ -495,13 +486,13 @@
   overflow-x: hidden;
   overflow-y: auto;
 
-  border: 1px solid #d4e1d8;
+  border: 1px solid var(--borda);
   border-radius: 11px;
 
-  background: #fbfdfb;
+  background: var(--bg-surface-2);
 
   scrollbar-width: thin;
-  scrollbar-color: #bdcfc4 transparent;
+  scrollbar-color: var(--borda-forte) transparent;
 }
 
 .athletesList::-webkit-scrollbar {
@@ -510,7 +501,7 @@
 
 .athletesList::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background: #bdcfc4;
+  background: var(--borda-forte);
 }
 
 .athleteItem {
@@ -525,10 +516,10 @@
   box-sizing: border-box;
 
   border: none;
-  border-bottom: 1px solid #e4ece7;
+  border-bottom: 1px solid var(--borda-neutra);
 
   background: transparent;
-  color: #30483a;
+  color: var(--texto-medio);
 
   text-align: left;
   font-family: inherit;
@@ -543,7 +534,7 @@
 }
 
 .athleteItem:hover {
-  background: #edf6f0;
+  background: var(--bg-verde-suave);
 }
 
 .athleteItem:disabled {
@@ -552,11 +543,11 @@
 }
 
 .athleteSelected {
-  background: #e4f3e9;
+  background: var(--bg-verde-suave);
 }
 
 .athleteSelected:hover {
-  background: #d9eddf;
+  background: var(--bg-verde-suave);
 }
 
 .athleteAvatar {
@@ -570,17 +561,16 @@
 
   overflow: hidden;
 
-  border: 1px solid #d1e2d6;
+  border: 1px solid var(--borda);
   border-radius: 50%;
 
-  background: #e1eee5;
-  color: #16835e;
+  background: var(--bg-neutro);
+  color: var(--verde-principal);
 }
 
 .athleteAvatar img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
 }
 
@@ -596,9 +586,10 @@
 .athleteInfo strong {
   overflow: hidden;
 
-  color: #2c4436;
+  color: var(--texto);
   font-size: 12px;
   font-weight: 650;
+
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -606,8 +597,9 @@
 .athleteInfo span {
   overflow: hidden;
 
-  color: #829389;
+  color: var(--texto-suave);
   font-size: 10px;
+
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -621,16 +613,17 @@
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #cbdad1;
+  border: 1px solid var(--borda);
   border-radius: 7px;
 
-  background: #ffffff;
-  color: #ffffff;
+  background: var(--bg-surface);
+  color: transparent;
 }
 
 .athleteSelected .athleteCheck {
-  border-color: #16a875;
-  background: #16a875;
+  border-color: var(--verde-principal);
+  background: var(--verde-principal);
+  color: #ffffff;
 }
 
 .emptyAthletes {
@@ -644,7 +637,7 @@
 
   padding: 15px;
 
-  color: #829389;
+  color: var(--texto-suave);
   text-align: center;
 }
 
@@ -667,10 +660,10 @@
   padding: 15px;
   box-sizing: border-box;
 
-  border: 1px solid #cbded1;
+  border: 1px solid var(--borda);
   border-radius: 13px;
 
-  background: #e3eee7;
+  background: var(--bg-verde-suave);
 }
 
 .matchSectionHeader {
@@ -688,11 +681,11 @@
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #c4ddcd;
+  border: 1px solid var(--borda);
   border-radius: 10px;
 
-  background: #d1e6d8;
-  color: #087b5b;
+  background: var(--bg-surface);
+  color: var(--verde-principal);
 }
 
 .matchSectionHeader > div:last-child {
@@ -704,17 +697,16 @@
 }
 
 .matchSectionHeader strong {
-  color: #294b38;
+  color: var(--texto);
   font-size: 12px;
   font-weight: 750;
 }
 
 .matchSectionHeader span {
-  color: #72877a;
+  color: var(--texto-suave);
   font-size: 10px;
   line-height: 1.4;
 }
-
 
 /* =====================================
    DATA E HORÁRIO
@@ -738,20 +730,21 @@
   padding: 0 10px;
   box-sizing: border-box;
 
-  border: 1px solid #cbdad1;
+  border: 1px solid var(--borda);
   border-radius: 9px;
 
-  background: #fbfdfb;
-  color: #087b5b;
+  background: var(--bg-surface-2);
+  color: var(--verde-principal);
 
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .dateInputWrapper:focus-within {
-  border-color: #16a875;
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.1);
+  border-color: var(--verde-principal);
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
 }
 
 .dateInputWrapper svg {
@@ -772,7 +765,7 @@
   box-shadow: none;
 
   background: transparent;
-  color: #30483a;
+  color: var(--texto);
 
   font-family: inherit;
   font-size: 11px;
@@ -788,7 +781,6 @@
   cursor: not-allowed;
 }
 
-
 /* =====================================
    PRÉVIA DA PARTIDA
 ===================================== */
@@ -802,11 +794,11 @@
 
   padding: 11px;
 
-  border: 1px solid #c9dfd0;
+  border: 1px solid var(--borda);
   border-radius: 9px;
 
-  background: #d6e8dc;
-  color: #087b5b;
+  background: var(--bg-surface);
+  color: var(--verde-principal);
 }
 
 .matchPreview > svg {
@@ -816,16 +808,17 @@
 .matchPreview span {
   min-width: 0;
 
-  color: #294b38;
+  color: var(--texto-medio);
   font-size: 11px;
   line-height: 1.5;
 
   overflow-wrap: anywhere;
 }
 
-
 /* =====================================
    CORES DA EQUIPE
+   As cores escolhidas pelo usuário
+   continuam sendo personalizadas.
 ===================================== */
 
 .colorsRow {
@@ -863,7 +856,7 @@
 
   cursor: pointer;
 
-  box-shadow: 0 2px 5px rgba(26, 61, 43, 0.13);
+  box-shadow: 0 2px 5px var(--sombra);
 
   transition:
     transform 0.18s ease,
@@ -880,8 +873,8 @@
 }
 
 .colorSelected {
-  border-color: #ffffff;
-  box-shadow: 0 0 0 2px #245d43;
+  border-color: var(--bg-surface);
+  box-shadow: 0 0 0 2px var(--verde-principal);
 }
 
 .selectedColorBox {
@@ -891,12 +884,12 @@
 
   padding: 7px 10px;
 
-  border: 1px solid #d0e0d5;
+  border: 1px solid var(--borda);
   border-radius: 9px;
 
-  background: #edf5ef;
+  background: var(--bg-surface);
+  color: var(--texto-medio);
 
-  color: #385544;
   font-size: 10px;
   font-weight: 750;
 }
@@ -908,12 +901,11 @@
 
   display: inline-block;
 
-  border: 2px solid #ffffff;
+  border: 2px solid var(--bg-surface);
   border-radius: 50%;
 
-  box-shadow: 0 1px 4px rgba(25, 55, 40, 0.15);
+  box-shadow: 0 1px 4px var(--sombra);
 }
-
 
 /* =====================================
    PRÉVIA DA EQUIPE
@@ -928,10 +920,10 @@
 
   padding: 12px 15px;
 
-  border: 1px solid #d0e0d5;
+  border: 1px solid var(--borda);
   border-radius: 12px;
 
-  background: #e0ece4;
+  background: var(--bg-verde-suave);
 }
 
 .previewColor {
@@ -939,10 +931,10 @@
   height: 43px;
   flex-shrink: 0;
 
-  border: 3px solid rgba(255, 255, 255, 0.8);
+  border: 3px solid var(--bg-surface);
   border-radius: 12px;
 
-  box-shadow: 0 3px 8px rgba(25, 55, 40, 0.12);
+  box-shadow: 0 3px 8px var(--sombra);
 }
 
 .preview > div:last-child {
@@ -954,7 +946,7 @@
 }
 
 .preview span {
-  color: #758a7c;
+  color: var(--texto-suave);
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.8px;
@@ -963,20 +955,20 @@
 .preview strong {
   overflow: hidden;
 
-  color: #254532;
+  color: var(--texto);
   font-size: 13px;
   font-weight: 750;
+
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .preview small {
-  color: #687e70;
+  color: var(--texto-suave);
   font-size: 10px;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
-
 
 /* =====================================
    RODAPÉ
@@ -993,10 +985,10 @@
 
   padding: 14px 26px;
 
-  border-top: 1px solid #d1ded6;
+  border-top: 1px solid var(--borda);
   border-radius: 0 0 18px 18px;
 
-  background: #e8f0eb;
+  background: var(--bg-neutro);
 }
 
 .footer > div:first-child {
@@ -1009,6 +1001,10 @@
   justify-content: flex-end;
   gap: 10px;
 }
+
+/* =====================================
+   BOTÕES DO RODAPÉ
+===================================== */
 
 .cancelButton,
 .saveButton,
@@ -1039,39 +1035,39 @@
 }
 
 .cancelButton {
-  border: 1px solid #c5d6cb;
-  background: #f6faf7;
-  color: #50695a;
+  border: 1px solid var(--borda-forte);
+  background: var(--bg-surface);
+  color: var(--texto-medio);
 }
 
 .cancelButton:hover:not(:disabled) {
-  border-color: #9fbdab;
-  background: #e5f0e8;
+  border-color: var(--verde-principal);
+  background: var(--bg-verde-suave);
 }
 
 .saveButton {
-  border: 1px solid #087b5b;
-  background: #087b5b;
+  border: 1px solid var(--verde-medio);
+  background: var(--verde-medio);
   color: #ffffff;
 
-  box-shadow: 0 3px 8px rgba(8, 123, 91, 0.15);
+  box-shadow: 0 3px 8px var(--sombra);
 }
 
 .saveButton:hover:not(:disabled) {
-  border-color: #05684c;
-  background: #05684c;
+  border-color: var(--verde-hover);
+  background: var(--verde-hover);
   transform: translateY(-1px);
 }
 
 .deleteButton {
-  border: 1px solid #edc8cc;
-  background: #fff4f4;
-  color: #c22c40;
+  border: 1px solid var(--vermelho);
+  background: var(--vermelho-claro);
+  color: var(--vermelho);
 }
 
 .deleteButton:hover:not(:disabled) {
-  border-color: #d52941;
-  background: #fde7e9;
+  border-color: var(--vermelho);
+  background: var(--vermelho-claro);
 }
 
 .cancelButton:disabled,
@@ -1081,7 +1077,6 @@
   cursor: not-allowed;
   box-shadow: none;
 }
-
 
 /* =====================================
    FOCO ACESSÍVEL
@@ -1093,11 +1088,11 @@
 .cancelButton:focus-visible,
 .saveButton:focus-visible,
 .deleteButton:focus-visible,
-.athleteItem:focus-visible {
-  outline: 3px solid rgba(22, 168, 117, 0.35);
+.athleteItem:focus-visible,
+.searchAthlete button:focus-visible {
+  outline: 3px solid var(--verde-principal);
   outline-offset: 3px;
 }
-
 
 /* =====================================
    TABLETS
@@ -1137,7 +1132,6 @@
     padding-left: 20px;
   }
 }
-
 
 /* =====================================
    CELULARES
@@ -1227,7 +1221,6 @@
   }
 }
 
-
 /* =====================================
    CELULARES PEQUENOS
 ===================================== */
@@ -1274,5 +1267,29 @@
   .deleteButton {
     padding: 0 9px;
     font-size: 11px;
+  }
+}
+
+/* =====================================
+   MOVIMENTO REDUZIDO
+===================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .closeButton,
+  .changeImage,
+  .field input,
+  .field select,
+  .searchAthlete,
+  .athleteItem,
+  .colorButton,
+  .cancelButton,
+  .saveButton,
+  .deleteButton {
+    transition: none;
+  }
+
+  .colorButton:hover:not(:disabled),
+  .saveButton:hover:not(:disabled) {
+    transform: none;
   }
 }

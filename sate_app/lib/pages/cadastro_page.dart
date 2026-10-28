@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../theme/sate_theme.dart';
 
 class CadastroPage extends StatefulWidget {
   const CadastroPage({super.key});
@@ -22,9 +23,9 @@ class _CadastroPageState extends State<CadastroPage> {
   bool termos = false;
   bool carregando = false;
 
-  static const verde = Color(0xFF00845F);
-  static const rosa = Color(0xFFE98BA8);
-  static const azul = Color(0xFF001E98);
+  static const verde = Color(0xFF005942);
+  static const rosa = Color(0xFFEF476F);
+  static const azul = Color(0xFF003D31);
 
   static const String apiUrl = 'http://localhost:3000';
 
@@ -40,7 +41,7 @@ class _CadastroPageState extends State<CadastroPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFCFCFC),
+      backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
         children: [
           Positioned.fill(
@@ -82,7 +83,7 @@ class _CadastroPageState extends State<CadastroPage> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
+            color: Color(0xFF10251F).withValues(alpha: 0.07),
             blurRadius: 40,
             offset: const Offset(0, 18),
           ),
@@ -101,12 +102,12 @@ class _CadastroPageState extends State<CadastroPage> {
 
           const SizedBox(height: 28),
 
-          const Text(
-            'Crie sua conta',
+          const Text.rich(
+            TextSpan(children: [TextSpan(text: 'Crie sua '), TextSpan(text: 'conta', style: SateEstilo.destaque)]),
             style: TextStyle(
               fontSize: 29,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF161616),
+              color: Color(0xFF10251F),
             ),
           ),
 
@@ -118,7 +119,7 @@ class _CadastroPageState extends State<CadastroPage> {
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
-              color: Colors.grey.shade600,
+              color: Color(0xFF68736F),
             ),
           ),
 
@@ -182,7 +183,7 @@ class _CadastroPageState extends State<CadastroPage> {
                   mostrarSenha
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
-                  color: Colors.grey.shade500,
+                  color: Color(0xFF8A938F),
                 ),
               ),
             ),
@@ -217,7 +218,7 @@ class _CadastroPageState extends State<CadastroPage> {
                   mostrarConfirmarSenha
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
-                  color: Colors.grey.shade500,
+                  color: Color(0xFF8A938F),
                 ),
               ),
             ),
@@ -256,7 +257,7 @@ class _CadastroPageState extends State<CadastroPage> {
                   style: TextStyle(
                     fontSize: 12,
                     height: 1.4,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF68736F),
                   ),
                 ),
               ),
@@ -293,7 +294,7 @@ class _CadastroPageState extends State<CadastroPage> {
           _socialButton(
             icon: const Icon(
               Icons.apple,
-              color: Colors.black,
+              color: Color(0xFF10251F),
               size: 22,
             ),
             text: 'Continuar com Apple',
@@ -327,7 +328,7 @@ class _CadastroPageState extends State<CadastroPage> {
       style: const TextStyle(
         fontSize: 13,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF242424),
+        color: Color(0xFF10251F),
       ),
     );
   }
@@ -339,13 +340,13 @@ class _CadastroPageState extends State<CadastroPage> {
     return InputDecoration(
       hintText: hint,
       hintStyle: TextStyle(
-        color: Colors.grey.shade400,
+        color: Color(0xFFA3ADA9),
         fontSize: 13,
       ),
       prefixIcon: Icon(
         icon,
         size: 19,
-        color: Colors.grey.shade500,
+        color: Color(0xFF8A938F),
       ),
       filled: true,
       fillColor: Colors.white,
@@ -356,13 +357,13 @@ class _CadastroPageState extends State<CadastroPage> {
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
-          color: Colors.grey.shade300,
+          color: Color(0xFFD5C9BA),
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
-          color: Colors.grey.shade300,
+          color: Color(0xFFD5C9BA),
         ),
       ),
       focusedBorder: const OutlineInputBorder(
@@ -410,7 +411,7 @@ class _CadastroPageState extends State<CadastroPage> {
       children: [
         Expanded(
           child: Divider(
-            color: Colors.grey.shade300,
+            color: Color(0xFFD5C9BA),
             thickness: 1,
           ),
         ),
@@ -419,14 +420,14 @@ class _CadastroPageState extends State<CadastroPage> {
           child: Text(
             'ou continue com',
             style: TextStyle(
-              color: Colors.grey.shade500,
+              color: Color(0xFF8A938F),
               fontSize: 11,
             ),
           ),
         ),
         Expanded(
           child: Divider(
-            color: Colors.grey.shade300,
+            color: Color(0xFFD5C9BA),
             thickness: 1,
           ),
         ),
@@ -448,9 +449,9 @@ class _CadastroPageState extends State<CadastroPage> {
           onPressed: onTap,
           style: OutlinedButton.styleFrom(
             backgroundColor: Colors.white,
-            foregroundColor: const Color(0xFF222222),
+            foregroundColor: const Color(0xFF10251F),
             side: BorderSide(
-              color: Colors.grey.shade300,
+              color: Color(0xFFD5C9BA),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -708,7 +709,7 @@ class _CadastroPageState extends State<CadastroPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(mensagem),
-        backgroundColor: erro ? Colors.red : null,
+        backgroundColor: erro ? Color(0xFFC0392B) : null,
       ),
     );
   }
@@ -777,7 +778,7 @@ class _HoverLinkState extends State<_HoverLink> {
         child: RichText(
           text: TextSpan(
             style: TextStyle(
-              color: Colors.grey.shade600,
+              color: Color(0xFF68736F),
               fontSize: 13,
             ),
             children: [
@@ -788,7 +789,7 @@ class _HoverLinkState extends State<_HoverLink> {
                 text: widget.linkText,
                 style: TextStyle(
                   color: hover
-                      ? const Color(0xFF006B4D)
+                      ? const Color(0xFF003D31)
                       : widget.verde,
                   fontWeight: FontWeight.w700,
                   decoration: hover

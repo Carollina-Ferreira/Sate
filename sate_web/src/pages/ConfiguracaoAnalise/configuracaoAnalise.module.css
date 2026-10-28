@@ -1,634 +1,538 @@
+
 .page {
-  width: 100%;
-  min-height: 100vh;
-
-  display: flex;
-  justify-content: center;
-
-  position: relative;
-
-  box-sizing: border-box;
-
-  background-color: #005942;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  font-family: 'Poppins', sans-serif;
-
-  color: #ffffff;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
+    background-color: var(--creme, #FAF5EE);
+    background-image:
+        radial-gradient(
+            circle at 88% 8%,
+            rgba(239, 71, 111, 0.15),
+            transparent 25%
+        ),
+        linear-gradient(
+            135deg,
+            #F4EAE0 0%,
+            #FAF5EE 48%,
+            #F8F0E9 100%
+        ) !important;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: var(--fonte-base, 'Poppins', sans-serif);
+    color: var(--texto, #12261F);
 }
 
-
-/* =====================================
-   CAMADA SOBRE A FOTO
-===================================== */
-
+/* CAMADA SUAVE DO FUNDO */
 .page::before {
-  content: '';
-
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(
-      rgba(0, 66, 49, 0.82),
-      rgba(0, 66, 49, 0.9)
-    );
-
-  pointer-events: none;
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            circle at 85% 10%,
+            rgba(239, 71, 111, 0.05),
+            transparent 30%
+        );
+    pointer-events: none;
 }
 
-
-/* =====================================
-   CONTAINER
-===================================== */
-
+/* CONTAINER */
 .container {
-  width: min(1050px, 100%);
-  min-height: 100vh;
-
-  display: flex;
-  flex-direction: column;
-
-  position: relative;
-
-  z-index: 1;
-
-  padding: 40px 42px 32px;
-
-  box-sizing: border-box;
+    width: 100%;
+    max-width: 1280px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    padding: clamp(20px, 4vh, 44px) clamp(16px, 4vw, 56px) clamp(20px, 3vh, 36px);
+    box-sizing: border-box;
 }
 
+/* PROGRESSO */
 
-/* =====================================
-   PROGRESSO
-===================================== */
+/* ÁREA DAS ETAPAS — PADRÃO DA CONFIGURAÇÃO DA EQUIPE */
+/* PROGRESSO — PADRÃO DA CONFIGURAÇÃO DA EQUIPE */
+
+/* PROGRESSO — CONFIGURAÇÃO DA ANÁLISE */
 
 .progressArea {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 18px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
 }
 
 .stepBadge {
-  padding: 8px 19px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 7px 18px;
+    box-sizing: border-box;
 
-  border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid #F3C5CE;
+    border-radius: 999px;
+    background: #F8E1E5;
+    color: #FF3158;
 
-  border-radius: 999px;
-
-  background: rgba(255, 255, 255, 0.12);
-
-  color: #ffffff;
-
-  font-size: 12px;
-
-  font-weight: 500;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
 }
-
 .progressSteps {
-  width: min(520px, 100%);
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  gap: 8px;
+    width: min(clamp(300px, 40vw, 620px), 100%);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
 }
 
 .progressComplete,
 .progressActive,
 .progressInactive {
-  height: 4px;
-
-  border-radius: 20px;
+    display: block;
+    width: 100%;
+    height: 4px;
+    border: 0;
+    border-radius: 20px;
 }
 
-.progressComplete,
+.progressComplete {
+    background: #006B4F;
+}
+
 .progressActive {
-  background: #59dcb0;
+    background: #EF476F;
 }
 
 .progressInactive {
-  background: rgba(255, 255, 255, 0.27);
+    background: #E6DDD2;
 }
-
-
-/* =====================================
-   CABEÇALHO
-===================================== */
-
+/* CABEÇALHO */
 .header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  margin-top: 29px;
-  margin-bottom: 27px;
-
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 29px;
+    margin-bottom: 27px;
+    text-align: center;
 }
 
 .sportBadge {
-  margin-bottom: 7px;
-
-  color: #76e8c1;
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 1px;
-
-  text-transform: uppercase;
+    margin-bottom: 7px;
+    color: var(--rosa, #EF476F);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .header h1 {
-  margin: 0;
+    margin: 0;
+    color: var(--texto, #12261F);
+    font-family: var(--fonte-titulo, 'Poppins', sans-serif);
+    font-size: clamp(24px, 2.4vw, 40px);
+    font-weight: 700;
+    line-height: 1.2;
+}
 
-  color: #ffffff;
-
-  font-size: 30px;
-
-  font-weight: 700;
-
-  line-height: 1.2;
+.header h1 span {
+    color: var(--rosa, #EF476F);
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
 }
 
 .header p {
-  max-width: 690px;
-
-  margin: 10px 0 0;
-
-  color: #d3e4de;
-
-  font-size: 13px;
-
-  line-height: 1.55;
+    max-width: 760px;
+    margin: 10px 0 0;
+    color: var(--texto-suave, #6C7C77);
+    font-size: clamp(13px, 1vw, 16px);
+    line-height: 1.55;
 }
 
 .header strong {
-  color: #ffffff;
+    color: var(--verde-escuro, #006B4F);
+    font-weight: 700;
 }
 
-
-/* =====================================
-   GRID
-===================================== */
-
+/* GRID */
 .fieldsGrid {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      2,
-      minmax(0, 1fr)
-    );
-
-  gap: 14px 17px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 1.2vw, 20px);
 }
 
-
-/* =====================================
-   CARD DO CAMPO
-===================================== */
-
+/* CARD DO CAMPO */
 .fieldCard {
-  min-height: 72px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 14px;
-
-  position: relative;
-
-  padding: 10px 17px;
-
-  box-sizing: border-box;
-
-  border: 1px solid #dde5e1;
-
-  border-radius: 15px;
-
-  background: #f7f9f8;
-
-  color: #23382f;
-
-  font-family: inherit;
-
-  text-align: left;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 4px 12px rgba(0, 32, 23, 0.12);
-
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease;
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    padding: 10px 17px;
+    box-sizing: border-box;
+    border: 1px solid #E9DED3;
+    border-radius: 15px;
+    background: var(--branco, #FFFFFF);
+    color: var(--texto, #12261F);
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(18, 38, 31, 0.035);
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
 }
 
 .fieldCard:hover {
-  transform: translateY(-2px);
-
-  border-color: #94cfb9;
-
-  background: #ffffff;
-
-  box-shadow:
-    0 8px 18px rgba(0, 32, 23, 0.16);
+    transform: translateY(-2px);
+    border-color: #E9A6B7;
+    background: #FFFCF7;
+    box-shadow: 0 8px 18px rgba(18, 38, 31, 0.07);
 }
 
-
-/* =====================================
-   CARD SELECIONADO
-===================================== */
-
+/* CARD SELECIONADO */
 .fieldCardSelected {
-  border-color: #39cfa0;
-
-  background: #ffffff;
-
-  box-shadow:
-    0 7px 18px rgba(0, 72, 52, 0.17);
+    border-color: var(--rosa, #EF476F);
+    background: #FFFCFB;
+    box-shadow: 0 5px 16px rgba(239, 71, 111, 0.08);
 }
 
-
-/* =====================================
-   BOLINHA DE SELEÇÃO
-===================================== */
-
+/* BOLINHA DE SELEÇÃO */
 .checkbox {
-  width: 31px;
-  height: 31px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  box-sizing: border-box;
-
-  border: 2px solid #b8c7c0;
-
-  border-radius: 50%;
-
-  background: #ffffff;
-
-  color: transparent;
-
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
+    width: 31px;
+    height: 31px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid #DCCFC2;
+    border-radius: 50%;
+    background: #FFFFFF;
+    color: transparent;
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
 .fieldCard:hover .checkbox {
-  border-color: #85bca8;
+    border-color: #D98DA2;
 }
 
 .checkboxSelected {
-  border-color: #39cfa0;
-
-  background: #39cfa0;
-
-  color: #ffffff;
-
-  transform: scale(1.04);
-
-  box-shadow:
-    0 5px 12px rgba(18, 170, 120, 0.24);
+    border-color: var(--rosa, #EF476F);
+    background: var(--rosa, #EF476F);
+    color: #FFFFFF;
+    transform: scale(1.04);
+    box-shadow: 0 4px 10px rgba(239, 71, 111, 0.18);
 }
 
-
-/* =====================================
-   TEXTO
-===================================== */
-
+/* TEXTO DO CAMPO */
 .fieldName {
-  flex: 1;
-
-  color: #263b32;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  line-height: 1.2;
+    flex: 1;
+    color: var(--texto, #12261F);
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: clamp(14px, 1.05vw, 17px);
+    font-weight: 600;
+    line-height: 1.2;
 }
 
-
-/* =====================================
-   ÍCONE À DIREITA
-===================================== */
-
+/* ÍCONE À DIREITA */
 .fieldIcon {
-  width: 40px;
-  height: 40px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-left: auto;
-
-  border-radius: 11px;
-
-  background: #e4f2ed;
-
-  color: #147456;
-
-  transition:
-    background 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    border-radius: 11px;
+    background: #DDF4EB;
+    color: var(--verde-escuro, #006B4F);
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
 }
 
 .fieldCard:hover .fieldIcon {
-  transform: scale(1.04);
-
-  background: #dcefe8;
+    transform: scale(1.04);
+    background: #CDEBDD;
 }
 
 .fieldCardSelected .fieldIcon {
-  background: #d7f2e8;
-
-  color: #0d8b62;
+    background: #FCE3E9;
+    color: #C5365B;
 }
 
-
-/* =====================================
-   ADICIONAR CAMPO
-===================================== */
-
+/* ADICIONAR CAMPO */
 .addField {
-  min-height: 72px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 14px;
-
-  padding: 10px 17px;
-
-  box-sizing: border-box;
-
-  border: 2px dashed #87cbb2;
-
-  border-radius: 15px;
-
-  background: #f4f8f6;
-
-  color: #263b32;
-
-  font-family: inherit;
-
-  text-align: left;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 4px 12px rgba(0, 32, 23, 0.08);
-
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    background 0.18s ease,
-    box-shadow 0.18s ease;
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 17px;
+    box-sizing: border-box;
+    border: 1px dashed #D8B9AE;
+    border-radius: 15px;
+    background: transparent;
+    color: var(--texto, #12261F);
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(18, 38, 31, 0.02);
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
 .addField:hover {
-  transform: translateY(-2px);
-
-  border-color: #20b982;
-
-  background: #ffffff;
-
-  box-shadow:
-    0 7px 17px rgba(0, 32, 23, 0.13);
+    transform: translateY(-2px);
+    border-color: var(--rosa, #EF476F);
+    background: #FFFCF7;
+    box-shadow: 0 7px 17px rgba(18, 38, 31, 0.06);
 }
 
 .addIcon {
-  width: 40px;
-  height: 40px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #20b982;
-
-  color: #ffffff;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--verde-escuro, #006B4F);
+    color: #FFFFFF;
 }
 
 .addText {
-  display: flex;
-  flex-direction: column;
-
-  flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
 }
 
 .addText strong {
-  color: #263b32;
-
-  font-size: 14px;
-
-  font-weight: 600;
+    color: var(--texto, #12261F);
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .addText span {
-  margin-top: 2px;
-
-  color: #75867e;
-
-  font-size: 10px;
+    margin-top: 2px;
+    color: var(--texto-suave, #6C7C77);
+    font-size: 11px;
 }
 
-
-/* =====================================
-   FOOTER
-===================================== */
-
+/* RODAPÉ */
 .footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  margin-top: auto;
-
-  padding-top: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 31px;
 }
 
+/* VOLTAR */
 .backButton {
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  padding: 9px 3px;
-
-  border: none;
-
-  background: transparent;
-
-  color: #ffffff;
-
-  font-family: inherit;
-
-  font-size: 14px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition:
-    color 0.18s ease,
-    transform 0.18s ease;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 3px;
+    border: none;
+    background: transparent;
+    color: var(--verde-escuro, #006B4F);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        color 0.18s ease,
+        transform 0.18s ease;
 }
 
 .backButton:hover {
-  color: #76e8c1;
-
-  transform: translateX(-2px);
+    color: var(--verde-dark, #005942);
+    transform: translateX(-2px);
 }
 
+/* ÁREA DO BOTÃO PRÓXIMO */
 .footerRight {
-  display: flex;
-  align-items: center;
-
-  gap: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
 .selectedCounter {
-  color: #c7dcd4;
-
-  font-size: 11px;
+    color: var(--texto-suave, #6C7C77);
+    font-size: 11px;
 }
 
+/* PRÓXIMO */
 .nextButton {
-  min-width: 135px;
-  height: 43px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  padding: 0 18px;
-
-  border: none;
-
-  border-radius: 9px;
-
-  background: #20b982;
-
-  color: #ffffff;
-
-  font-family: inherit;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 5px 12px rgba(0, 40, 28, 0.15);
-
-  transition:
-    background 0.18s ease,
-    transform 0.18s ease,
-    opacity 0.18s ease;
+    min-width: 135px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 9px;
+    background: var(--verde-escuro, #006B4F);
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 5px 12px rgba(0, 40, 28, 0.10);
+    transition:
+        background 0.18s ease,
+        transform 0.18s ease,
+        opacity 0.18s ease;
 }
 
 .nextButton:hover:not(:disabled) {
-  background: #169d6e;
-
-  transform: translateY(-1px);
+    background: var(--verde-dark, #005942);
+    transform: translateY(-1px);
 }
 
 .nextButton:disabled {
-  opacity: 0.38;
-
-  cursor: not-allowed;
-
-  box-shadow: none;
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
+.tituloDestaque {
+    color: var(--rosa, #EF476F);
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-weight: 400;
+}
 
-/* =====================================
-   RESPONSIVO
-===================================== */
+/* RESPONSIVO */
 
+/* Telas muito grandes */
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1440px;
+    }
+
+    .fieldCard,
+    .addField {
+        min-height: 84px;
+    }
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+    .fieldCard,
+    .addField {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+}
+
+/* Celulares: 1 coluna */
 @media (max-width: 760px) {
-  .container {
-    padding: 30px 22px 25px;
-  }
+    .fieldsGrid {
+        grid-template-columns: 1fr;
+    }
 
-  .fieldsGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .header h1 {
-    font-size: 26px;
-  }
+    .header {
+        margin-top: 24px;
+        margin-bottom: 22px;
+    }
 }
 
 @media (max-width: 500px) {
-  .container {
-    padding: 23px 15px;
-  }
+    .container {
+        padding: 22px 15px 20px;
+    }
 
-  .header {
-    margin-top: 24px;
-  }
+    .progressArea {
+        gap: 14px;
+    }
 
-  .header h1 {
-    font-size: 24px;
-  }
+    .stepBadge {
+        font-size: 11px;
+        padding: 6px 14px;
+    }
 
-  .fieldCard,
-  .addField {
-    min-height: 67px;
+    .fieldCard,
+    .addField {
+        min-height: 67px;
+        padding-left: 12px;
+        padding-right: 12px;
+        gap: 11px;
+    }
 
-    padding-left: 14px;
-    padding-right: 14px;
-  }
+    .checkbox {
+        width: 28px;
+        height: 28px;
+    }
 
-  .checkbox {
-    width: 29px;
-    height: 29px;
-  }
+    .fieldIcon,
+    .addIcon {
+        width: 36px;
+        height: 36px;
+    }
 
-  .fieldIcon {
-    width: 37px;
-    height: 37px;
-  }
+    .selectedCounter {
+        display: none;
+    }
 
-  .fieldName {
-    font-size: 14px;
-  }
+    .footer {
+        padding-top: 24px;
+    }
 
-  .selectedCounter {
-    display: none;
-  }
+    .nextButton {
+        min-width: 120px;
+    }
+}
+
+/* Celulares pequenos */
+@media (max-width: 360px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .fieldName {
+        font-size: 13px;
+    }
+}
+
+/* Telas baixas (celular deitado) */
+@media (max-height: 560px) {
+    .header {
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
+
+    .footer {
+        padding-top: 18px;
+    }
 }

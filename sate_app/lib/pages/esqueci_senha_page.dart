@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'link_enviado_page.dart';
+import '../theme/sate_theme.dart';
 
 class EsqueciSenhaPage extends StatefulWidget {
   const EsqueciSenhaPage({super.key});
@@ -17,9 +18,9 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
 
   bool carregando = false;
 
-  static const verde = Color(0xFF00845F);
-  static const rosa = Color(0xFFE98BA8);
-  static const azul = Color(0xFF001E98);
+  static const verde = Color(0xFF005942);
+  static const rosa = Color(0xFFEF476F);
+  static const azul = Color(0xFF003D31);
 
   static const String apiUrl = 'http://localhost:3000';
 
@@ -32,7 +33,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFCFCFC),
+      backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
         children: [
           Positioned.fill(
@@ -79,7 +80,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
+            color: Color(0xFF10251F).withValues(alpha: 0.07),
             blurRadius: 40,
             offset: const Offset(0, 18),
           ),
@@ -102,12 +103,12 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
 
           // TÍTULO
 
-          const Text(
-            'Esqueceu sua senha?',
+          const Text.rich(
+            TextSpan(children: [TextSpan(text: 'Esqueceu sua '), TextSpan(text: 'senha?', style: SateEstilo.destaque)]),
             style: TextStyle(
               fontSize: 29,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF161616),
+              color: Color(0xFF10251F),
             ),
           ),
 
@@ -119,7 +120,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
-              color: Colors.grey.shade600,
+              color: Color(0xFF68736F),
             ),
           ),
 
@@ -132,7 +133,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF242424),
+              color: Color(0xFF10251F),
             ),
           ),
 
@@ -147,13 +148,13 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
             decoration: InputDecoration(
               hintText: 'Digite seu email',
               hintStyle: TextStyle(
-                color: Colors.grey.shade400,
+                color: Color(0xFFA3ADA9),
                 fontSize: 13,
               ),
               prefixIcon: Icon(
                 Icons.email_outlined,
                 size: 19,
-                color: Colors.grey.shade500,
+                color: Color(0xFF8A938F),
               ),
               filled: true,
               fillColor: Colors.white,
@@ -164,13 +165,13 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
-                  color: Colors.grey.shade300,
+                  color: Color(0xFFD5C9BA),
                 ),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
-                  color: Colors.grey.shade300,
+                  color: Color(0xFFD5C9BA),
                 ),
               ),
               focusedBorder: const OutlineInputBorder(
@@ -355,7 +356,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(mensagem),
-        backgroundColor: erro ? Colors.red : null,
+        backgroundColor: erro ? Color(0xFFC0392B) : null,
       ),
     );
   }
@@ -404,7 +405,7 @@ class _HoverLinkState extends State<_HoverLink> {
         child: RichText(
           text: TextSpan(
             style: TextStyle(
-              color: Colors.grey.shade600,
+              color: Color(0xFF68736F),
               fontSize: 13,
             ),
             children: [
@@ -415,7 +416,7 @@ class _HoverLinkState extends State<_HoverLink> {
                 text: widget.linkText,
                 style: TextStyle(
                   color: hover
-                      ? const Color(0xFF006B4D)
+                      ? const Color(0xFF003D31)
                       : widget.verde,
                   fontWeight: FontWeight.w700,
                   decoration: hover

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './treinador_vinculo_page.dart';
+import '../../theme/sate_theme.dart';
 
 class TreinadorEquipesPage extends StatefulWidget {
   final String nomeUsuario;
@@ -19,9 +20,9 @@ class TreinadorEquipesPage extends StatefulWidget {
 
 class _TreinadorEquipesPageState
     extends State<TreinadorEquipesPage> {
-  static const Color verde = Color(0xFF006B4F);
-  static const Color rosa = Color(0xFFE98BA8);
-  static const Color azul = Color(0xFF8FB9E8);
+  static const Color verde = Color(0xFF003D31);
+  static const Color rosa = Color(0xFFEF476F);
+  static const Color azul = Color(0xFF55CA9B);
 
   final List<Map<String, String>> equipes = [
     {
@@ -57,7 +58,7 @@ class _TreinadorEquipesPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F9F8),
+      backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
         children: [
           Positioned.fill(
@@ -89,7 +90,7 @@ class _TreinadorEquipesPageState
                         borderRadius: BorderRadius.circular(22),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
+                            color: Color(0xFF10251F).withOpacity(0.06),
                             blurRadius: 15,
                             offset: const Offset(0, 6),
                           ),
@@ -129,10 +130,10 @@ class _TreinadorEquipesPageState
 
                   const SizedBox(height: 26),
 
-                  const Text(
-                    'Escolha sua equipe.',
+                  const Text.rich(
+                    TextSpan(children: [TextSpan(text: 'Escolha sua '), TextSpan(text: 'equipe.', style: SateEstilo.destaque)]),
                     style: TextStyle(
-                      color: Color(0xFF12261F),
+                      color: Color(0xFF10251F),
                       fontSize: 29,
                       fontWeight: FontWeight.bold,
                       height: 1.15,
@@ -193,7 +194,7 @@ class _TreinadorEquipesPageState
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Color(0xFF10251F).withOpacity(0.06),
             blurRadius: 18,
             offset: const Offset(0, 7),
           ),
@@ -208,7 +209,7 @@ class _TreinadorEquipesPageState
                 width: 52,
                 height: 52,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE8F5F0),
+                  color: const Color(0xFFDFF7EE),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Icon(
@@ -226,7 +227,7 @@ class _TreinadorEquipesPageState
                     Text(
                       equipe['nome'] ?? '',
                       style: const TextStyle(
-                        color: Color(0xFF12261F),
+                        color: Color(0xFF10251F),
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -249,7 +250,7 @@ class _TreinadorEquipesPageState
 
           Container(
             height: 1,
-            color: const Color(0xFFE8EEEB),
+            color: const Color(0xFFE8DFD3),
           ),
 
           const SizedBox(height: 16),
@@ -313,7 +314,7 @@ class _TreinadorEquipesPageState
         vertical: 10,
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F9F8),
+        color: const Color(0xFFFAF5EE),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import '../../theme/sate_theme.dart';
 
 class AtletaQrCodePage extends StatefulWidget {
   const AtletaQrCodePage({super.key});
@@ -9,8 +10,8 @@ class AtletaQrCodePage extends StatefulWidget {
 }
 
 class _AtletaQrCodePageState extends State<AtletaQrCodePage> {
-  static const Color verde = Color(0xFF00845F);
-  static const Color fundo = Color(0xFFFCFCFC);
+  static const Color verde = Color(0xFF005942);
+  static const Color fundo = Color(0xFFFAF5EE);
 
   final MobileScannerController controller = MobileScannerController(
     detectionSpeed: DetectionSpeed.noDuplicates,
@@ -42,10 +43,10 @@ class _AtletaQrCodePageState extends State<AtletaQrCodePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xFF10251F),
 
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xFF10251F),
         elevation: 0,
         centerTitle: false,
         leading: IconButton(
@@ -58,8 +59,8 @@ class _AtletaQrCodePageState extends State<AtletaQrCodePage> {
             size: 28,
           ),
         ),
-        title: const Text(
-          'Escanear QR Code',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Escanear '), TextSpan(text: 'QR Code', style: SateEstilo.destaque)]),
           style: TextStyle(
             color: Colors.white,
             fontSize: 19,

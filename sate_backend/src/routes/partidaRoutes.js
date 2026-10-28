@@ -1,77 +1,54 @@
-const express = require('express');
 
+const express = require('express');
 const autenticar = require('../middleware/authMiddleware');
 
 const {
-    listarPartidas,
-    buscarPartida,
-    criarPartida,
-    atualizarPartida,
-    excluirPartida
+  listarPartidas,
+  buscarPartida,
+  criarPartida,
+  atualizarPartida,
+  excluirPartida,
+  listarAtletasDaPartida,
+  salvarAtletasDaPartida,
 } = require('../controllers/partidaController');
-
 
 const router = express.Router();
 
+// Todas as rotas deste arquivo exigem autenticação.
+router.use(autenticar);
 
 // ============================================================
-// LISTAR TODAS AS PARTIDAS
-// GET /api/partidas
+// PARTIDAS
 // ============================================================
 
-router.get(
-    '/',
-    autenticar,
-    listarPartidas
-);
+// Listar todas as partidas do treinador autenticado.
+router.get('/', listarPartidas);
 
-
-// ============================================================
-// BUSCAR PARTIDA
-// GET /api/partidas/:id
-// ============================================================
-
-router.get(
-    '/:id',
-    autenticar,
-    buscarPartida
-);
-
+// Criar uma partida.
+router.post('/', criarPartida);
 
 // ============================================================
-// CRIAR PARTIDA
-// POST /api/partidas
+// ATLETAS DA PARTIDA
+// Estas rotas devem ficar antes de /:id.
 // ============================================================
 
-router.post(
-    '/',
-    autenticar,
-    criarPartida
-);
+// Listar atletas participantes de uma partida.
+router.get('/:id/atletas', listarAtletasDaPartida);
 
-
-// ============================================================
-// ATUALIZAR PARTIDA
-// PUT /api/partidas/:id
-// ============================================================
-
-router.put(
-    '/:id',
-    autenticar,
-    atualizarPartida
-);
-
+// Salvar ou atualizar os atletas participantes.
+router.put('/:id/atletas', salvarAtletasDaPartida);
 
 // ============================================================
-// EXCLUIR PARTIDA
-// DELETE /api/partidas/:id
+// PARTIDA INDIVIDUAL
 // ============================================================
 
-router.delete(
-    '/:id',
-    autenticar,
-    excluirPartida
-);
+// Buscar os dados de uma partida.
+router.get('/:id', buscarPartida);
 
+// Atualizar os dados da partida, incluindo resultado e status.
+router.put('/:id', atualizarPartida);
+
+// Excluir uma partida.
+router.delete('/:id', excluirPartida);
 
 module.exports = router;

@@ -1,4 +1,5 @@
-﻿import {
+﻿
+import {
   Bell,
   CalendarDays,
   ChevronDown,
@@ -7,9 +8,11 @@
   ClipboardCheck,
   LogOut,
   Megaphone,
+  Moon,
   Search,
   Settings,
   Star,
+  Sun,
   UserRound,
   Users,
 } from 'lucide-react';
@@ -27,18 +30,14 @@ import styles from './header.module.css';
 
 interface HeaderProps {
   title: string;
-
   onProfile?: () => void;
   onSettings?: () => void;
   onHelp?: () => void;
   onLogout?: () => void;
-
   onViewAllNotifications?: () => void;
-
   onViewAllAthletes?: () => void;
   onViewAllTeams?: () => void;
   onViewAllMatches?: () => void;
-
   onSearchResult?: (item: SearchItem) => void;
 }
 
@@ -67,15 +66,8 @@ interface Usuario {
   avatarUrl?: string | null;
 }
 
-type OpenPanel =
-  | 'search'
-  | 'notifications'
-  | 'user'
-  | null;
-
-/* =====================================
-   API
-===================================== */
+type OpenPanel = 'search' | 'notifications' | 'user' | null;
+type Theme = 'light' | 'dark';
 
 const API_URL = 'http://localhost:3000';
 
@@ -107,22 +99,21 @@ const searchData: SearchItem[] = [
   {
     id: 4,
     type: 'partida',
-    title: 'Poli x JacareÃ­',
+    title: 'Poli x Jacareí',
     subtitle: '12/08/2026',
   },
 ];
 
 /* =====================================
-   DADOS MOCKADOS - NOTIFICAÃ‡Ã•ES
+   DADOS MOCKADOS - NOTIFICAÇÕES
 ===================================== */
 
 const initialNotifications: NotificationItem[] = [
   {
     id: 1,
     type: 'convocacao',
-    title: 'Nova ConvocaÃ§Ã£o',
-    description:
-      'VocÃª foi convocado para o jogo contra Poli Rugby',
+    title: 'Nova Convocação',
+    description: 'Você foi convocado para o jogo contra Poli Rugby',
     time: 'Hoje, 10:34',
     read: false,
   },
@@ -130,17 +121,15 @@ const initialNotifications: NotificationItem[] = [
     id: 2,
     type: 'treino',
     title: 'Treino Atualizado',
-    description:
-      'O treino de amanhÃ£ foi atualizado pela comissÃ£o tÃ©cnica',
+    description: 'O treino de amanhã foi atualizado pela comissão técnica',
     time: 'Hoje, 10:34',
     read: false,
   },
   {
     id: 3,
     type: 'avaliacao',
-    title: 'AvaliaÃ§Ã£o DisponÃ­vel',
-    description:
-      'Nova avaliaÃ§Ã£o tÃ©cnica disponÃ­vel para o time',
+    title: 'Avaliação Disponível',
+    description: 'Nova avaliação técnica disponível para o time',
     time: 'Hoje, 10:34',
     read: true,
   },
@@ -148,8 +137,7 @@ const initialNotifications: NotificationItem[] = [
     id: 4,
     type: 'convocacao',
     title: 'Partida Confirmada',
-    description:
-      'A prÃ³xima partida da equipe foi confirmada',
+    description: 'A próxima partida da equipe foi confirmada',
     time: 'Ontem, 18:20',
     read: false,
   },
@@ -157,51 +145,57 @@ const initialNotifications: NotificationItem[] = [
 
 const Header = ({
   title,
-
   onProfile,
   onSettings,
   onHelp,
   onLogout,
-
   onViewAllNotifications,
-
   onViewAllAthletes,
   onViewAllTeams,
   onViewAllMatches,
-
   onSearchResult,
 }: HeaderProps) => {
-
-  /* =====================================
-     NAVEGAÃ‡ÃƒO
-  ===================================== */
-
   const navigate = useNavigate();
-
   const headerRef = useRef<HTMLElement>(null);
 
-  const [openPanel, setOpenPanel] =
-    useState<OpenPanel>(null);
+  const [openPanel, setOpenPanel] = useState<OpenPanel>(null);
+  const [searchValue, setSearchValue] = useState('');
 
-  const [searchValue, setSearchValue] =
-    useState('');
+  const [notifications, setNotifications] =
+    useState<NotificationItem[]>(initialNotifications);
 
-  const [
-    notifications,
-    setNotifications,
-  ] = useState<NotificationItem[]>(
-    initialNotifications,
-  );
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
 
   /* =====================================
-     USUÃRIO LOGADO
+     TEMA CLARO / ESCURO
   ===================================== */
 
-  const [usuario, setUsuario] =
-    useState<Usuario | null>(null);
+  const [theme, setTheme] = useState<Theme>(() => {
+    try {
+      return localStorage.getItem('sate-theme') === 'dark'
+        ? 'dark'
+        : 'light';
+    } catch {
+      return 'light';
+    }
+  });
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+
+    try {
+      localStorage.setItem('sate-theme', theme);
+    } catch (error) {
+      console.error('Não foi possível salvar o tema:', error);
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
+  };
 
   /* =====================================
-     CARREGAR USUÃRIO
+     CARREGAR USUÁRIO
   ===================================== */
 
   useEffect(() => {
@@ -210,32 +204,19 @@ const Header = ({
         localStorage.getItem('token') ||
         sessionStorage.getItem('token');
 
-      /*
-       * Primeiro tenta pegar os dados jÃ¡
-       * salvos no navegador.
-       */
       const usuarioSalvo =
         localStorage.getItem('usuario') ||
         sessionStorage.getItem('usuario');
 
       if (usuarioSalvo) {
         try {
-          const usuarioLocal: Usuario =
-            JSON.parse(usuarioSalvo);
-
-          setUsuario(usuarioLocal);
+          setUsuario(JSON.parse(usuarioSalvo) as Usuario);
         } catch {
           setUsuario(null);
         }
       }
 
-      /*
-       * Depois busca os dados atualizados
-       * diretamente do backend.
-       */
-      if (!token) {
-        return;
-      }
+      if (!token) return;
 
       try {
         const resposta = await fetch(
@@ -248,66 +229,54 @@ const Header = ({
           },
         );
 
-        if (!resposta.ok) {
-          return;
-        }
+        if (!resposta.ok) return;
 
-        const dados =
-          await resposta.json();
+        const dados = await resposta.json();
+        const usuarioAtualizado = dados.usuario as Usuario;
 
-        const usuarioAtualizado: Usuario =
-          dados.usuario;
+        if (!usuarioAtualizado) return;
 
-        setUsuario(
-          usuarioAtualizado,
-        );
+        setUsuario(usuarioAtualizado);
 
-        /*
-         * MantÃ©m o storage sincronizado.
-         */
         const estaNoLocalStorage =
           localStorage.getItem('usuario') !== null;
 
         if (estaNoLocalStorage) {
           localStorage.setItem(
             'usuario',
-            JSON.stringify(
-              usuarioAtualizado,
-            ),
+            JSON.stringify(usuarioAtualizado),
           );
         } else {
           sessionStorage.setItem(
             'usuario',
-            JSON.stringify(
-              usuarioAtualizado,
-            ),
+            JSON.stringify(usuarioAtualizado),
           );
         }
       } catch (error) {
         console.error(
-          'Erro ao carregar usuÃ¡rio do backend:',
+          'Erro ao carregar usuário do backend:',
           error,
         );
       }
     };
 
-    carregarUsuario();
+    void carregarUsuario();
   }, []);
 
-  const nomeUsuario =
-    usuario?.nome || 'Treinador';
+  const nomeUsuario = usuario?.nome || 'Treinador';
 
-  const iniciais =
-    nomeUsuario
-      .split(' ')
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((nome) => nome[0])
-      .join('')
-      .toUpperCase();
+  const iniciais = nomeUsuario
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((nome) => nome[0])
+    .join('')
+    .toUpperCase();
 
   const avatarUrl = usuario?.avatarUrl
-    ? `${API_URL}${usuario.avatarUrl}`
+    ? usuario.avatarUrl.startsWith('http')
+      ? usuario.avatarUrl
+      : `${API_URL}${usuario.avatarUrl}`
     : null;
 
   /* =====================================
@@ -315,71 +284,43 @@ const Header = ({
   ===================================== */
 
   const handleLogout = () => {
-
-    // Remove os dados do usuÃ¡rio
     localStorage.removeItem('usuario');
     localStorage.removeItem('token');
 
     sessionStorage.removeItem('usuario');
     sessionStorage.removeItem('token');
 
-    // Fecha o menu
     setOpenPanel(null);
-
-    // MantÃ©m o callback caso outro componente
-    // esteja utilizando essa funÃ§Ã£o
     onLogout?.();
-
-    // Vai para a tela de login
     navigate('/');
   };
 
   /* =====================================
-     FECHAR AO CLICAR FORA
+     FECHAR AO CLICAR FORA / ESC
   ===================================== */
 
   useEffect(() => {
-    const handleOutsideClick = (
-      event: MouseEvent,
-    ) => {
+    const handleOutsideClick = (event: MouseEvent) => {
       if (
         headerRef.current &&
-        !headerRef.current.contains(
-          event.target as Node,
-        )
+        !headerRef.current.contains(event.target as Node)
       ) {
         setOpenPanel(null);
       }
     };
 
-    const handleEscape = (
-      event: KeyboardEvent,
-    ) => {
+    const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setOpenPanel(null);
       }
     };
 
-    document.addEventListener(
-      'mousedown',
-      handleOutsideClick,
-    );
-
-    document.addEventListener(
-      'keydown',
-      handleEscape,
-    );
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('keydown', handleEscape);
 
     return () => {
-      document.removeEventListener(
-        'mousedown',
-        handleOutsideClick,
-      );
-
-      document.removeEventListener(
-        'keydown',
-        handleEscape,
-      );
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, []);
 
@@ -388,24 +329,14 @@ const Header = ({
   ===================================== */
 
   const filteredSearch = useMemo(() => {
-    const value = searchValue
-      .trim()
-      .toLowerCase();
+    const value = searchValue.trim().toLowerCase();
 
-    if (!value) {
-      return searchData;
-    }
+    if (!value) return searchData;
 
-    return searchData.filter((item) => {
-      return (
-        item.title
-          .toLowerCase()
-          .includes(value) ||
-        item.subtitle
-          .toLowerCase()
-          .includes(value)
-      );
-    });
+    return searchData.filter((item) =>
+      item.title.toLowerCase().includes(value) ||
+      item.subtitle.toLowerCase().includes(value),
+    );
   }, [searchValue]);
 
   const athletes = filteredSearch.filter(
@@ -420,170 +351,95 @@ const Header = ({
     (item) => item.type === 'partida',
   );
 
-  const handleSearchResult = (
-    item: SearchItem,
-  ) => {
+  const handleSearchResult = (item: SearchItem) => {
     onSearchResult?.(item);
-
     setSearchValue('');
     setOpenPanel(null);
   };
 
   /* =====================================
-     NOTIFICAÃ‡Ã•ES
+     NOTIFICAÇÕES
   ===================================== */
 
-  const unreadNotifications =
-    notifications.filter(
-      (notification) =>
-        !notification.read,
-    ).length;
+  const unreadNotifications = notifications.filter(
+    (notification) => !notification.read,
+  ).length;
 
-  const handleNotificationClick = (
-    id: number,
-  ) => {
+  const handleNotificationClick = (id: number) => {
     setNotifications((current) =>
       current.map((notification) =>
         notification.id === id
-          ? {
-              ...notification,
-              read: true,
-            }
+          ? { ...notification, read: true }
           : notification,
       ),
     );
   };
 
-  /* =====================================
-     CONTROLE DOS PAINÃ‰IS
-  ===================================== */
-
-  const togglePanel = (
-    panel: OpenPanel,
-  ) => {
+  const togglePanel = (panel: OpenPanel) => {
     setOpenPanel((current) =>
       current === panel ? null : panel,
     );
   };
 
   return (
-    <header
-      ref={headerRef}
-      className={styles.header}
-    >
-
-      {/* =====================================
-          TÃTULO
-      ===================================== */}
-
-      <h1 className={styles.title}>
-        {title}
-      </h1>
-
-      {/* =====================================
-          ÃREA DIREITA
-      ===================================== */}
+    <header ref={headerRef} className={styles.header}>
+      <h1 className={styles.title}>{title}</h1>
 
       <div className={styles.right}>
+        {/* PESQUISA */}
 
-        {/* =====================================
-            PESQUISA
-        ===================================== */}
-
-        <div
-          className={
-            styles.searchContainer
-          }
-        >
+        <div className={styles.searchContainer}>
           <div
             className={styles.search}
-            onClick={() =>
-              setOpenPanel('search')
-            }
+            onClick={() => setOpenPanel('search')}
           >
-            <Search
-              size={18}
-              strokeWidth={2}
-            />
+            <Search size={18} strokeWidth={2} />
 
             <input
               type="text"
               value={searchValue}
               placeholder="Pesquisar atletas, equipes, partidas"
-              onFocus={() =>
-                setOpenPanel('search')
-              }
+              aria-label="Pesquisar atletas, equipes e partidas"
+              onFocus={() => setOpenPanel('search')}
               onChange={(event) => {
-                setSearchValue(
-                  event.target.value,
-                );
-
+                setSearchValue(event.target.value);
                 setOpenPanel('search');
               }}
             />
           </div>
 
-          {/* RESULTADOS DA PESQUISA */}
-
           {openPanel === 'search' && (
-            <div
-              className={
-                styles.searchDropdown
-              }
-            >
-              {filteredSearch.length ===
-              0 ? (
-                <div
-                  className={
-                    styles.emptySearch
-                  }
-                >
+            <div className={styles.searchDropdown}>
+              {filteredSearch.length === 0 ? (
+                <div className={styles.emptySearch}>
                   Nenhum resultado encontrado.
                 </div>
               ) : (
                 <>
-                  {/* ATLETAS */}
-
                   {athletes.length > 0 && (
                     <SearchSection
                       title="Atletas"
                       items={athletes}
-                      onViewAll={
-                        onViewAllAthletes
-                      }
-                      onItemClick={
-                        handleSearchResult
-                      }
+                      onViewAll={onViewAllAthletes}
+                      onItemClick={handleSearchResult}
                     />
                   )}
-
-                  {/* EQUIPES */}
 
                   {teams.length > 0 && (
                     <SearchSection
                       title="Equipes"
                       items={teams}
-                      onViewAll={
-                        onViewAllTeams
-                      }
-                      onItemClick={
-                        handleSearchResult
-                      }
+                      onViewAll={onViewAllTeams}
+                      onItemClick={handleSearchResult}
                     />
                   )}
-
-                  {/* PARTIDAS */}
 
                   {matches.length > 0 && (
                     <SearchSection
                       title="Partidas"
                       items={matches}
-                      onViewAll={
-                        onViewAllMatches
-                      }
-                      onItemClick={
-                        handleSearchResult
-                      }
+                      onViewAll={onViewAllMatches}
+                      onItemClick={handleSearchResult}
                     />
                   )}
                 </>
@@ -592,87 +448,41 @@ const Header = ({
           )}
         </div>
 
-        {/* =====================================
-            NOTIFICAÃ‡Ã•ES
-        ===================================== */}
+        {/* NOTIFICAÇÕES */}
 
-        <div
-          className={
-            styles.notificationContainer
-          }
-        >
+        <div className={styles.notificationContainer}>
           <button
-            className={
-              styles.notification
-            }
+            className={styles.notification}
             type="button"
-            aria-label="NotificaÃ§Ãµes"
-            aria-expanded={
-              openPanel ===
-              'notifications'
-            }
-            onClick={() =>
-              togglePanel(
-                'notifications',
-              )
-            }
+            aria-label="Notificações"
+            aria-expanded={openPanel === 'notifications'}
+            onClick={() => togglePanel('notifications')}
           >
-            <Bell
-              size={20}
-              strokeWidth={2}
-            />
+            <Bell size={20} strokeWidth={2} />
 
             {unreadNotifications > 0 && (
-              <span
-                className={
-                  styles.notificationBadge
-                }
-              >
+              <span className={styles.notificationBadge}>
                 {unreadNotifications}
               </span>
             )}
           </button>
 
-          {openPanel ===
-            'notifications' && (
-            <div
-              className={
-                styles.notificationsDropdown
-              }
-            >
-              <div
-                className={
-                  styles.notificationHeader
-                }
-              >
-                <div
-                  className={
-                    styles.notificationTitleWrapper
-                  }
-                >
-                  <h2>
-                    NotificaÃ§Ãµes
-                  </h2>
+          {openPanel === 'notifications' && (
+            <div className={styles.notificationsDropdown}>
+              <div className={styles.notificationHeader}>
+                <div className={styles.notificationTitleWrapper}>
+                  <h2>Notificações</h2>
 
-                  {unreadNotifications >
-                    0 && (
-                    <span
-                      className={
-                        styles.notificationCount
-                      }
-                    >
-                      {
-                        unreadNotifications
-                      }
+                  {unreadNotifications > 0 && (
+                    <span className={styles.notificationCount}>
+                      {unreadNotifications}
                     </span>
                   )}
                 </div>
 
                 <button
                   type="button"
-                  className={
-                    styles.viewAll
-                  }
+                  className={styles.viewAll}
                   onClick={() => {
                     onViewAllNotifications?.();
                     setOpenPanel(null);
@@ -682,100 +492,50 @@ const Header = ({
                 </button>
               </div>
 
-              <div
-                className={
-                  styles.notificationList
-                }
-              >
-                {notifications.map(
-                  (notification) => (
-                    <button
-                      type="button"
-                      key={
-                        notification.id
-                      }
-                      className={`${styles.notificationItem} ${
-                        !notification.read
-                          ? styles.notificationUnread
-                          : ''
-                      }`}
-                      onClick={() =>
-                        handleNotificationClick(
-                          notification.id,
-                        )
-                      }
-                    >
-                      <NotificationIcon
-                        type={
-                          notification.type
-                        }
-                      />
+              <div className={styles.notificationList}>
+                {notifications.map((notification) => (
+                  <button
+                    type="button"
+                    key={notification.id}
+                    className={`${styles.notificationItem} ${
+                      !notification.read
+                        ? styles.notificationUnread
+                        : ''
+                    }`}
+                    onClick={() =>
+                      handleNotificationClick(notification.id)
+                    }
+                  >
+                    <NotificationIcon type={notification.type} />
 
-                      <div
-                        className={
-                          styles.notificationContent
-                        }
-                      >
-                        <div
-                          className={
-                            styles.notificationTop
-                          }
-                        >
-                          <strong>
-                            {
-                              notification.title
-                            }
-                          </strong>
-
-                          <span>
-                            {
-                              notification.time
-                            }
-                          </span>
-                        </div>
-
-                        <p>
-                          {
-                            notification.description
-                          }
-                        </p>
+                    <div className={styles.notificationContent}>
+                      <div className={styles.notificationTop}>
+                        <strong>{notification.title}</strong>
+                        <span>{notification.time}</span>
                       </div>
 
-                      {!notification.read && (
-                        <span
-                          className={
-                            styles.unreadDot
-                          }
-                        />
-                      )}
-                    </button>
-                  ),
-                )}
+                      <p>{notification.description}</p>
+                    </div>
+
+                    {!notification.read && (
+                      <span className={styles.unreadDot} />
+                    )}
+                  </button>
+                ))}
               </div>
             </div>
           )}
         </div>
 
-        {/* =====================================
-            USUÃRIO
-        ===================================== */}
+        {/* USUÁRIO */}
 
-        <div
-          className={styles.userContainer}
-        >
+        <div className={styles.userContainer}>
           <button
             type="button"
             className={styles.user}
-            aria-expanded={
-              openPanel === 'user'
-            }
-            onClick={() =>
-              togglePanel('user')
-            }
+            aria-expanded={openPanel === 'user'}
+            onClick={() => togglePanel('user')}
           >
-
-            {/* AVATAR PRINCIPAL */}
-
             <div className={styles.avatar}>
               {avatarUrl ? (
                 <img
@@ -787,22 +547,12 @@ const Header = ({
               )}
             </div>
 
-            <div
-              className={styles.userInfo}
-            >
-              <span
-                className={
-                  styles.userName
-                }
-              >
+            <div className={styles.userInfo}>
+              <span className={styles.userName}>
                 {nomeUsuario}
               </span>
 
-              <span
-                className={
-                  styles.userRole
-                }
-              >
+              <span className={styles.userRole}>
                 Treinador
               </span>
             </div>
@@ -817,27 +567,12 @@ const Header = ({
             />
           </button>
 
-          {/* MENU DO USUÃRIO */}
+          {/* MENU DO PERFIL */}
 
           {openPanel === 'user' && (
-            <div
-              className={
-                styles.userDropdown
-              }
-            >
-              <div
-                className={
-                  styles.userDropdownHeader
-                }
-              >
-
-                {/* AVATAR DO MENU */}
-
-                <div
-                  className={
-                    styles.dropdownAvatar
-                  }
-                >
+            <div className={styles.userDropdown}>
+              <div className={styles.userDropdownHeader}>
+                <div className={styles.dropdownAvatar}>
                   {avatarUrl ? (
                     <img
                       src={avatarUrl}
@@ -849,21 +584,50 @@ const Header = ({
                 </div>
 
                 <div>
-                  <strong>
-                    {nomeUsuario}
-                  </strong>
-
-                  <span>
-                    Treinador
-                  </span>
+                  <strong>{nomeUsuario}</strong>
+                  <span>Treinador</span>
                 </div>
               </div>
 
-              <div
-                className={
-                  styles.userMenu
-                }
-              >
+              <div className={styles.userMenu}>
+                {/* ALTERNAR TEMA */}
+
+                <button
+                  type="button"
+                  className={styles.userMenuItem}
+                  onClick={toggleTheme}
+                  role="switch"
+                  aria-checked={theme === 'dark'}
+                  aria-label={
+                    theme === 'dark'
+                      ? 'Desativar modo escuro'
+                      : 'Ativar modo escuro'
+                  }
+                >
+                  {theme === 'dark' ? (
+                    <Sun size={18} />
+                  ) : (
+                    <Moon size={18} />
+                  )}
+
+                  <span className={styles.themeLabel}>
+                    {theme === 'dark'
+                      ? 'Modo claro'
+                      : 'Modo escuro'}
+                  </span>
+
+                  <span
+                    className={`${styles.themeSwitch} ${
+                      theme === 'dark'
+                        ? styles.themeSwitchActive
+                        : ''
+                    }`}
+                    aria-hidden="true"
+                  >
+                    <span className={styles.themeSwitchKnob} />
+                  </span>
+                </button>
+
                 <button
                   type="button"
                   className={`${styles.userMenuItem} ${styles.userMenuActive}`}
@@ -878,23 +642,24 @@ const Header = ({
 
                 <button
                   type="button"
-                  className={
-                    styles.userMenuItem
-                  }
+                  className={styles.userMenuItem}
                   onClick={() => {
-                    onSettings ? onSettings() : navigate('/configuracoes');
+                    if (onSettings) {
+                      onSettings();
+                    } else {
+                      navigate('/configuracoes');
+                    }
+
                     setOpenPanel(null);
                   }}
                 >
                   <Settings size={18} />
-                  ConfiguraÃ§Ãµes
+                  Configurações
                 </button>
 
                 <button
                   type="button"
-                  className={
-                    styles.userMenuItem
-                  }
+                  className={styles.userMenuItem}
                   onClick={() => {
                     onHelp?.();
                     setOpenPanel(null);
@@ -905,15 +670,7 @@ const Header = ({
                 </button>
               </div>
 
-              <div
-                className={
-                  styles.userMenuDivider
-                }
-              />
-
-              {/* =====================================
-                  SAIR
-              ===================================== */}
+              <div className={styles.userMenuDivider} />
 
               <button
                 type="button"
@@ -923,7 +680,6 @@ const Header = ({
                 <LogOut size={18} />
                 Sair
               </button>
-
             </div>
           )}
         </div>
@@ -933,16 +689,14 @@ const Header = ({
 };
 
 /* =====================================
-   SEÃ‡ÃƒO DA PESQUISA
+   SEÇÃO DA PESQUISA
 ===================================== */
 
 interface SearchSectionProps {
   title: string;
   items: SearchItem[];
   onViewAll?: () => void;
-  onItemClick: (
-    item: SearchItem,
-  ) => void;
+  onItemClick: (item: SearchItem) => void;
 }
 
 const SearchSection = ({
@@ -952,61 +706,33 @@ const SearchSection = ({
   onItemClick,
 }: SearchSectionProps) => {
   return (
-    <section
-      className={styles.searchSection}
-    >
-      <div
-        className={
-          styles.searchSectionHeader
-        }
-      >
+    <section className={styles.searchSection}>
+      <div className={styles.searchSectionHeader}>
         <strong>{title}</strong>
 
-        <button
-          type="button"
-          onClick={onViewAll}
-        >
+        <button type="button" onClick={onViewAll}>
           Ver todos
         </button>
       </div>
 
-      <div
-        className={
-          styles.searchSectionItems
-        }
-      >
+      <div className={styles.searchSectionItems}>
         {items.map((item) => (
           <button
             key={`${item.type}-${item.id}`}
             type="button"
-            className={
-              styles.searchResultItem
-            }
-            onClick={() =>
-              onItemClick(item)
-            }
+            className={styles.searchResultItem}
+            onClick={() => onItemClick(item)}
           >
             <SearchItemIcon item={item} />
 
-            <div
-              className={
-                styles.searchResultText
-              }
-            >
-              <strong>
-                {item.title}
-              </strong>
-
-              <span>
-                {item.subtitle}
-              </span>
+            <div className={styles.searchResultText}>
+              <strong>{item.title}</strong>
+              <span>{item.subtitle}</span>
             </div>
 
             <ChevronRight
               size={19}
-              className={
-                styles.searchResultArrow
-              }
+              className={styles.searchResultArrow}
             />
           </button>
         ))}
@@ -1016,23 +742,17 @@ const SearchSection = ({
 };
 
 /* =====================================
-   ÃCONE DO RESULTADO
+   ÍCONE DO RESULTADO
 ===================================== */
 
 interface SearchItemIconProps {
   item: SearchItem;
 }
 
-const SearchItemIcon = ({
-  item,
-}: SearchItemIconProps) => {
+const SearchItemIcon = ({ item }: SearchItemIconProps) => {
   if (item.type === 'atleta') {
     return (
-      <div
-        className={
-          styles.searchAvatar
-        }
-      >
+      <div className={styles.searchAvatar}>
         {item.initials}
       </div>
     );
@@ -1040,29 +760,21 @@ const SearchItemIcon = ({
 
   if (item.type === 'equipe') {
     return (
-      <div
-        className={
-          styles.searchIconCircle
-        }
-      >
+      <div className={styles.searchIconCircle}>
         <Users size={17} />
       </div>
     );
   }
 
   return (
-    <div
-      className={
-        styles.searchIconCircle
-      }
-    >
+    <div className={styles.searchIconCircle}>
       <CalendarDays size={17} />
     </div>
   );
 };
 
 /* =====================================
-   ÃCONE DA NOTIFICAÃ‡ÃƒO
+   ÍCONE DA NOTIFICAÇÃO
 ===================================== */
 
 interface NotificationIconProps {

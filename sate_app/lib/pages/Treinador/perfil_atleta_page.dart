@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/sate_theme.dart';
 
 class PerfilAtletaPage extends StatefulWidget {
   final String nome;
@@ -19,12 +20,12 @@ class PerfilAtletaPage extends StatefulWidget {
 }
 
 class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
-  static const Color verde = Color(0xFF006B4F);
-  static const Color verdeClaro = Color(0xFFE8F5F0);
-  static const Color fundo = Color(0xFFF4F8F6);
-  static const Color texto = Color(0xFF12261F);
+  static const Color verde = Color(0xFF003D31);
+  static const Color verdeClaro = Color(0xFFDFF7EE);
+  static const Color fundo = Color(0xFFFAF5EE);
+  static const Color texto = Color(0xFF10251F);
   static const Color textoSecundario = Color(0xFF68736F);
-  static const Color linha = Color(0xFFDCE7E2);
+  static const Color linha = Color(0xFFE8DFD3);
 
   final List<Map<String, String>> metas = [
     {
@@ -110,8 +111,8 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
 
                   const SizedBox(height: 22),
 
-                  const Text(
-                    'Adicionar meta',
+                  const Text.rich(
+                    TextSpan(children: [TextSpan(text: 'Adicionar '), TextSpan(text: 'meta', style: SateEstilo.destaque)]),
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -278,8 +279,8 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
 
                   const SizedBox(height: 22),
 
-                  const Text(
-                    'Enviar feedback',
+                  const Text.rich(
+                    TextSpan(children: [TextSpan(text: 'Enviar '), TextSpan(text: 'feedback', style: SateEstilo.destaque)]),
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -308,7 +309,7 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
                       hintText:
                           'Escreva seu feedback para o atleta...',
                       hintStyle: const TextStyle(
-                        color: Colors.grey,
+                        color: Color(0xFF8A938F),
                       ),
                       alignLabelWithHint: true,
                       prefixIcon: const Padding(
@@ -445,8 +446,8 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
 
                   const SizedBox(height: 22),
 
-                  const Text(
-                    'Editar feedback',
+                  const Text.rich(
+                    TextSpan(children: [TextSpan(text: 'Editar '), TextSpan(text: 'feedback', style: SateEstilo.destaque)]),
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -476,7 +477,7 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
                       hintText:
                           'Escreva seu feedback...',
                       hintStyle: const TextStyle(
-                        color: Colors.grey,
+                        color: Color(0xFF8A938F),
                       ),
                       alignLabelWithHint: true,
                       prefixIcon: const Padding(
@@ -656,7 +657,7 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
         width: 45,
         height: 5,
         decoration: BoxDecoration(
-          color: Colors.grey.shade300,
+          color: Color(0xFFD5C9BA),
           borderRadius:
               BorderRadius.circular(20),
         ),
@@ -713,14 +714,14 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
           },
           icon: const Icon(
             Icons.arrow_back_rounded,
-            color: Colors.black87,
+            color: Color(0xFF10251F),
           ),
         ),
 
-        title: const Text(
-          'Perfil do atleta',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Perfil do '), TextSpan(text: 'atleta', style: SateEstilo.destaque)]),
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -1437,7 +1438,7 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
                   children: [
                     const Icon(
                       Icons.schedule_outlined,
-                      color: Colors.grey,
+                      color: Color(0xFF8A938F),
                       size: 14,
                     ),
 
@@ -1448,7 +1449,7 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
                         feedback['data'] ?? '',
                         style:
                             const TextStyle(
-                          color: Colors.grey,
+                          color: Color(0xFF8A938F),
                           fontSize: 10.5,
                         ),
                       ),
@@ -1574,7 +1575,7 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
                             as String,
                         style:
                             const TextStyle(
-                          color: Colors.grey,
+                          color: Color(0xFF8A938F),
                           fontSize: 10.5,
                         ),
                       ),
@@ -1602,7 +1603,7 @@ class _PerfilAtletaPageState extends State<PerfilAtletaPage> {
         children: [
           Icon(
             icone,
-            color: Colors.grey.shade400,
+            color: Color(0xFFA3ADA9),
             size: 25,
           ),
 

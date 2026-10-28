@@ -1,17 +1,16 @@
 .page {
-  width: 100%;
-  min-height: 100vh;
-  position: relative;
-  padding: 30px 36px 40px;
+  /* Compensa o espaçamento do container pai para eliminar a moldura verde. */
+  width: calc(100% + 96px);
+  min-height: calc(100vh - 64px + 48px);
+  margin: -48px -48px 0;
+  padding: 42px clamp(24px, 5vw, 76px) 56px;
   box-sizing: border-box;
-  background: #005942;
+  background:
+    radial-gradient(ellipse 340px 230px at 96% 0%, rgba(244, 63, 120, 0.16) 0%, rgba(244, 63, 120, 0.08) 38%, rgba(244, 63, 120, 0) 76%),
+    #faf5ee;
+  color: #10251f;
   font-family: 'Poppins', sans-serif;
-  overflow-x: hidden;
 }
-
-/* =====================================
-   CABEÇALHO
-===================================== */
 
 .pageHeader {
   display: flex;
@@ -35,6 +34,23 @@
   margin-top: 7px;
   color: rgba(255, 255, 255, 0.72);
   font-size: 13px;
+}
+
+.titleArea h1 {
+  margin: 0;
+  color: #10251f;
+  font-size: clamp(34px, 3vw, 44px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -1.4px;
+}
+
+.titleArea h1 em {
+  color: #f04470;
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.5px;
 }
 
 .matchInfo i {
@@ -1699,4 +1715,958 @@
   flex-shrink: 0;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.58);
+}
+
+
+/* ============================================================
+   SATE — IDENTIDADE VISUAL DA PÁGINA DE ANÁLISE
+   Inspirada na página de Atletas
+============================================================ */
+
+/* =====================================
+   PÁGINA PRINCIPAL
+===================================== */
+
+.page {
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(240, 68, 112, 0.12) 0%,
+      rgba(240, 68, 112, 0.05) 42%,
+      transparent 76%
+    ),
+    #faf5ee !important;
+
+  color: #10251f;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* =====================================
+   CABEÇALHO
+===================================== */
+
+.pageHeader h1 {
+  color: #10251f;
+  letter-spacing: -0.8px;
+}
+
+.matchInfo {
+  color: #778079;
+}
+
+.matchInfo i,
+.matchDetails i {
+  background: #b5c2ba;
+}
+
+.matchDetails {
+  color: #778079;
+}
+
+.videoSelectorGroup label {
+  color: #53665c;
+}
+
+/* =====================================
+   SELETORES DE PARTIDA E VÍDEO
+===================================== */
+
+.matchSelector {
+  background: #ffffff;
+  color: #294139;
+  border-color: #ddcfc0;
+}
+
+.matchSelector:hover,
+.matchSelector:focus {
+  border-color: #087b5b;
+  box-shadow: 0 0 0 3px rgba(8, 123, 91, 0.09);
+}
+
+.matchSelector:disabled {
+  background: #f0ebe4;
+}
+
+.matchSelector option {
+  background: #ffffff;
+  color: #294139;
+}
+
+/* =====================================
+   BOTÕES DO CABEÇALHO
+===================================== */
+
+.headerActions button {
+  border-radius: 11px;
+  box-shadow: none;
+}
+
+.headerActions button:hover {
+  box-shadow: 0 5px 12px rgba(16, 37, 31, 0.1);
+}
+
+.manageCategoriesButton {
+  background: #4289c7;
+  color: #ffffff;
+}
+
+.manageCategoriesButton:hover {
+  background: #3179b6;
+}
+
+.actionButtonRed {
+  background: #f04470;
+  color: #ffffff;
+}
+
+.actionButtonRed:hover {
+  background: #d93460;
+}
+
+.actionButtonGreen {
+  background: #087b5b;
+  color: #ffffff;
+}
+
+.actionButtonGreen:hover {
+  background: #06694e;
+}
+
+/* =====================================
+   CARDS PRINCIPAIS
+===================================== */
+
+.videoCard,
+.actionTypesCard,
+.eventsCard {
+  background: #ffffff;
+  border: 1px solid #eadfd3;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(77, 44, 24, 0.045);
+}
+
+/* =====================================
+   VÍDEO
+===================================== */
+
+.videoArea {
+  background: #10251f;
+}
+
+.videoCard {
+  overflow: hidden;
+}
+
+.playButton {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.playButton:hover {
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.videoTime {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* =====================================
+   TIMELINE
+===================================== */
+
+.timelineArea {
+  background: #ffffff;
+}
+
+.videoRange {
+  accent-color: #087b5b;
+}
+
+.analysisMarker {
+  border-color: #ffffff;
+}
+
+.marker_boa,
+.goodMarker {
+  background: #16a875;
+}
+
+.marker_ruim,
+.badMarker {
+  background: #d52941;
+}
+
+.marker_neutra,
+.neutralMarker {
+  background: #8c9792;
+}
+
+.marker_destaque,
+.highlightMarker {
+  background: #4289c7;
+}
+
+.timelineLegendItem small {
+  color: #778079;
+}
+
+/* =====================================
+   TÍTULOS E DESCRIÇÕES DOS CARDS
+===================================== */
+
+.actionTypesHeader h2,
+.eventsHeader h2 {
+  color: #10251f;
+  letter-spacing: -0.3px;
+}
+
+.actionTypesHeader p,
+.eventsHeader span {
+  color: #778079;
+}
+
+/* =====================================
+   BOTÕES SECUNDÁRIOS
+===================================== */
+
+.editCategoriesSmall {
+  background: #ffffff;
+  border-color: #ddcfc0;
+  color: #087b5b;
+}
+
+.editCategoriesSmall:hover {
+  background: #f3f8f5;
+  border-color: #9dbbb0;
+}
+
+.addCategoryCard {
+  background: #f7fbf8;
+  border-color: #8fc7b4;
+  color: #087b5b;
+}
+
+.addCategoryCard:hover {
+  background: #eaf5ef;
+  border-color: #087b5b;
+}
+
+/* =====================================
+   PRÉVIAS DE CATEGORIAS
+===================================== */
+
+.categoryPreview {
+  background: #faf5ee;
+  border-color: #eadfd3;
+}
+
+.categoryPreview strong {
+  color: #24372f;
+}
+
+.timelineStatus {
+  background: #d9f1e7;
+  color: #087b5b;
+}
+
+.actionTypeIcon {
+  border-radius: 11px;
+}
+
+/* =====================================
+   LISTA DE EVENTOS
+===================================== */
+
+.eventItem {
+  background: #ffffff;
+  border-color: #eadfd3;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.eventItem:hover {
+  background: #faf7f2;
+  border-color: #c9dcd1;
+  transform: translateY(-1px);
+}
+
+.eventContent strong {
+  color: #24372f;
+}
+
+.eventContent span {
+  color: #778079;
+}
+
+.eventRight > span {
+  color: #778079;
+}
+
+.eventRight small {
+  color: #d52941;
+}
+
+/* Cores dos tipos de evento */
+
+.eventIconGood {
+  background: #e0f3e9;
+  color: #087b5b;
+}
+
+.eventIconBad {
+  background: #fbe5e8;
+  color: #d52941;
+}
+
+.eventIconNeutral {
+  background: #eeeae4;
+  color: #7d8983;
+}
+
+.eventIconHighlight {
+  background: #e2eef8;
+  color: #4289c7;
+}
+
+/* =====================================
+   MODAL DE CATEGORIAS
+===================================== */
+
+.categoryOverlay {
+  background: rgba(16, 37, 31, 0.62);
+  backdrop-filter: blur(6px);
+}
+
+.categoryModal {
+  background: #faf5ee;
+  border: 1px solid #eadfd3;
+  box-shadow: 0 24px 65px rgba(16, 37, 31, 0.2);
+}
+
+.categoryModalHeader {
+  background: #ffffff;
+  border-bottom-color: #eadfd3;
+}
+
+.categoryModalHeader > div > span {
+  color: #087b5b;
+}
+
+.categoryModalHeader h2 {
+  color: #10251f;
+}
+
+.categoryModalHeader p {
+  color: #778079;
+}
+
+.categoryModalHeader > button {
+  color: #66766f;
+}
+
+.categoryModalHeader > button:hover {
+  background: #f0ebe4;
+}
+
+.categoryModalContent {
+  background: #faf5ee;
+}
+
+/* =====================================
+   LISTA DE CATEGORIAS DO MODAL
+===================================== */
+
+.categoryListToolbar strong {
+  color: #10251f;
+}
+
+.categoryListToolbar span {
+  color: #778079;
+}
+
+.newCategoryButton {
+  background: #087b5b;
+  color: #ffffff;
+}
+
+.newCategoryButton:hover {
+  background: #06694e;
+}
+
+.categoryRow {
+  background: #ffffff;
+  border-color: #eadfd3;
+}
+
+.categoryRowInfo strong {
+  color: #24372f;
+}
+
+.categoryRowInfo span {
+  color: #778079;
+}
+
+.editCategoryButton {
+  background: #ffffff;
+  border-color: #ddcfc0;
+  color: #087b5b;
+}
+
+.editCategoryButton:hover {
+  background: #f3f8f5;
+  border-color: #9dbbb0;
+}
+
+/* =====================================
+   FORMULÁRIO DE CATEGORIA
+===================================== */
+
+.categoryField > label,
+.iconsLabel {
+  color: #42554c;
+}
+
+.categoryField > input {
+  background: #ffffff;
+  border-color: #ddcfc0;
+  color: #24372f;
+}
+
+.categoryField > input:focus {
+  border-color: #087b5b;
+  box-shadow: 0 0 0 3px rgba(8, 123, 91, 0.1);
+}
+
+.categoryColorButtonActive {
+  box-shadow: 0 0 0 2px #087b5b;
+}
+
+.paletteInner {
+  background: #087b5b;
+}
+
+/* =====================================
+   OPÇÕES DA TIMELINE E PRÉVIA
+===================================== */
+
+.timelineOption {
+  background: #f3eee7;
+  border-color: #eadfd3;
+}
+
+.timelineOption strong {
+  color: #24372f;
+}
+
+.timelineOption span {
+  color: #778079;
+}
+
+.toggleButton {
+  background: #c3ccc6;
+}
+
+.toggleButtonActive {
+  background: #087b5b;
+}
+
+.categoryPreviewForm {
+  background: #f0ebe4;
+}
+
+.categoryPreviewForm span {
+  color: #778079;
+}
+
+.categoryPreviewForm strong {
+  color: #24372f;
+}
+
+/* =====================================
+   ÍCONES DE CATEGORIAS
+===================================== */
+
+.categoryIconOption {
+  background: #ffffff;
+  border-color: #eadfd3;
+  color: #53645c;
+}
+
+.categoryIconOption:hover {
+  background: #f7fbf8;
+  border-color: #9dbbb0;
+}
+
+.categoryIconOptionActive {
+  background: #e8f5ee;
+  border-color: #087b5b;
+  color: #087b5b;
+  box-shadow: 0 0 0 2px rgba(8, 123, 91, 0.08);
+}
+
+.categoryIconCheck {
+  background: #087b5b;
+  color: #ffffff;
+}
+
+/* =====================================
+   RODAPÉ DO MODAL
+===================================== */
+
+.categoryFormFooter {
+  border-top-color: #eadfd3;
+}
+
+.cancelCategoryButton {
+  background: #ffffff;
+  border-color: #ddcfc0;
+  color: #53665c;
+}
+
+.cancelCategoryButton:hover {
+  background: #f0ebe4;
+}
+
+.saveCategoryButton {
+  background: #087b5b;
+  color: #ffffff;
+}
+
+.saveCategoryButton:hover:not(:disabled) {
+  background: #06694e;
+}
+
+.deleteCategoryButton {
+  background: #fff0f1;
+  border-color: #f0c7cd;
+  color: #d52941;
+}
+
+.deleteCategoryButton:hover {
+  background: #fbe2e6;
+}
+
+.deleteCategoryConfirm {
+  background: #d52941;
+  border-color: #d52941;
+  color: #ffffff;
+}
+
+.deleteWarning {
+  color: #b84c58;
+}
+
+/* =====================================
+   PAINEL LATERAL DE CLIPES
+===================================== */
+
+.overlay {
+  background: rgba(16, 37, 31, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.clipPanel {
+  background: #faf5ee;
+  box-shadow: -12px 0 30px rgba(16, 37, 31, 0.14);
+}
+
+.clipPanelHeader {
+  background: #ffffff;
+  border-bottom-color: #eadfd3;
+}
+
+.clipPanelHeader h2 {
+  color: #10251f;
+}
+
+.clipIcon {
+  background: #fbe5e8;
+  color: #f04470;
+}
+
+.closeButton {
+  color: #66766f;
+}
+
+.closeButton:hover {
+  background: #f0ebe4;
+}
+
+.clipPanelContent {
+  background: #faf5ee;
+}
+
+/* =====================================
+   FORMULÁRIO DE CLIPE
+===================================== */
+
+.formGroup label {
+  color: #42554c;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  background: #ffffff;
+  border-color: #ddcfc0;
+  color: #24372f;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  border-color: #087b5b;
+  box-shadow: 0 0 0 3px rgba(8, 123, 91, 0.1);
+}
+
+.searchAthlete {
+  background: #ffffff;
+  border-color: #ddcfc0;
+}
+
+.searchAthlete input {
+  background: transparent;
+}
+
+.athleteItem {
+  background: #f0ebe4;
+  color: #24372f;
+}
+
+.athleteItem:hover {
+  background: #e9f2ec;
+}
+
+.athleteSelected {
+  background: #e5f4eb;
+  border-color: #087b5b;
+}
+
+.athleteAvatar {
+  background: #087b5b;
+  color: #ffffff;
+}
+
+.athleteItem span {
+  color: #778079;
+}
+
+/* =====================================
+   CLASSIFICAÇÃO DO CLIPE
+===================================== */
+
+.ratingButton {
+  background: #ffffff;
+  border-color: #eadfd3;
+  color: #53645c;
+}
+
+.ratingButton:hover {
+  background: #faf7f2;
+  border-color: #c9dcd1;
+}
+
+.ratingButtonActive {
+  background: #e8f5ee;
+  border-color: #087b5b;
+  color: #087b5b;
+}
+
+.dotGood {
+  background: #16a875;
+}
+
+.dotBad {
+  background: #d52941;
+}
+
+.dotNeutral {
+  background: #8c9792;
+}
+
+.dotHighlight {
+  background: #4289c7;
+}
+
+/* =====================================
+   DURAÇÃO DO CLIPE
+===================================== */
+
+.durationSection h3 {
+  color: #24372f;
+}
+
+.durationInfo {
+  color: #778079;
+}
+
+.durationValue {
+  color: #f04470 !important;
+}
+
+.rangeGroup input {
+  accent-color: #087b5b;
+}
+
+/* =====================================
+   RODAPÉ DO PAINEL DE CLIPES
+===================================== */
+
+.clipPanelFooter {
+  background: #ffffff;
+  border-top-color: #eadfd3;
+}
+
+.saveClipButton {
+  background: #087b5b;
+  color: #ffffff;
+}
+
+.saveClipButton:hover:not(:disabled) {
+  background: #06694e;
+}
+
+/* ============================================================
+   MODO ESCURO
+   Mantém uma identidade visual própria sem afetar o modo claro.
+============================================================ */
+
+:global(:root[data-theme='dark']) .page {
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(22, 168, 117, 0.15) 0%,
+      transparent 76%
+    ),
+    #102a22 !important;
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .pageHeader h1,
+:global(:root[data-theme='dark']) .actionTypesHeader h2,
+:global(:root[data-theme='dark']) .eventsHeader h2 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .matchInfo,
+:global(:root[data-theme='dark']) .matchDetails,
+:global(:root[data-theme='dark']) .videoSelectorGroup label {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .matchDetails i {
+  background: #698b79;
+}
+
+:global(:root[data-theme='dark']) .matchSelector {
+  background: #17372c;
+  border-color: #365447;
+  color: #edf7f1;
+  color-scheme: dark;
+}
+
+:global(:root[data-theme='dark']) .matchSelector option {
+  background: #17372c;
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .videoCard,
+:global(:root[data-theme='dark']) .actionTypesCard,
+:global(:root[data-theme='dark']) .eventsCard {
+  background: #17372c;
+  border-color: #365447;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+}
+
+:global(:root[data-theme='dark']) .timelineArea {
+  background: #17372c;
+}
+
+:global(:root[data-theme='dark']) .timelineLegendItem small,
+:global(:root[data-theme='dark']) .actionTypesHeader p,
+:global(:root[data-theme='dark']) .eventsHeader span,
+:global(:root[data-theme='dark']) .eventContent span,
+:global(:root[data-theme='dark']) .eventRight > span {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .editCategoriesSmall,
+:global(:root[data-theme='dark']) .eventItem {
+  background: #193b30;
+  border-color: #365447;
+  color: #a7edce;
+}
+
+:global(:root[data-theme='dark']) .eventItem:hover {
+  background: #224638;
+  border-color: #507b63;
+}
+
+:global(:root[data-theme='dark']) .categoryPreview {
+  background: #142e24;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .categoryPreview strong,
+:global(:root[data-theme='dark']) .eventContent strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .addCategoryCard {
+  background: #193b30;
+  border-color: #426653;
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .categoryOverlay,
+:global(:root[data-theme='dark']) .overlay {
+  background: rgba(2, 15, 11, 0.78);
+}
+
+:global(:root[data-theme='dark']) .categoryModal,
+:global(:root[data-theme='dark']) .categoryModalContent {
+  background: #142e24;
+}
+
+:global(:root[data-theme='dark']) .categoryModalHeader {
+  background: #19382b;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .categoryModalHeader h2,
+:global(:root[data-theme='dark']) .categoryListToolbar strong,
+:global(:root[data-theme='dark']) .categoryRowInfo strong,
+:global(:root[data-theme='dark']) .categoryField > label,
+:global(:root[data-theme='dark']) .iconsLabel,
+:global(:root[data-theme='dark']) .categoryPreviewForm strong,
+:global(:root[data-theme='dark']) .timelineOption strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .categoryModalHeader p,
+:global(:root[data-theme='dark']) .categoryListToolbar span,
+:global(:root[data-theme='dark']) .categoryRowInfo span,
+:global(:root[data-theme='dark']) .timelineOption span {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .categoryRow,
+:global(:root[data-theme='dark']) .categoryField > input,
+:global(:root[data-theme='dark']) .categoryIconOption,
+:global(:root[data-theme='dark']) .editCategoryButton {
+  background: #19382b;
+  border-color: #365447;
+  color: #c9ddd1;
+}
+
+:global(:root[data-theme='dark']) .categoryField > input {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .categoryIconOptionActive {
+  background: #244d3b;
+  border-color: #42c994;
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .timelineOption,
+:global(:root[data-theme='dark']) .categoryPreviewForm {
+  background: #19382b;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .categoryFormFooter {
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .cancelCategoryButton {
+  background: transparent;
+  border-color: #426653;
+  color: #c6dbce;
+}
+
+:global(:root[data-theme='dark']) .cancelCategoryButton:hover {
+  background: #29483a;
+}
+
+:global(:root[data-theme='dark']) .clipPanel {
+  background: #142e24;
+}
+
+:global(:root[data-theme='dark']) .clipPanelHeader,
+:global(:root[data-theme='dark']) .clipPanelFooter {
+  background: #19382b;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .clipPanelHeader h2 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .clipPanelContent {
+  background: #142e24;
+}
+
+:global(:root[data-theme='dark']) .formGroup label {
+  color: #c9ddd1;
+}
+
+:global(:root[data-theme='dark']) .formGroup input,
+:global(:root[data-theme='dark']) .formGroup select,
+:global(:root[data-theme='dark']) .formGroup textarea,
+:global(:root[data-theme='dark']) .searchAthlete {
+  background: #10271e;
+  border-color: #426653;
+  color: #edf7f1;
+  color-scheme: dark;
+}
+
+:global(:root[data-theme='dark']) .athleteItem {
+  background: #19382b;
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .athleteItem span {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .athleteSelected {
+  background: #244d3b;
+  border-color: #42c994;
+}
+
+:global(:root[data-theme='dark']) .ratingButton {
+  background: #19382b;
+  border-color: #365447;
+  color: #c9ddd1;
+}
+
+:global(:root[data-theme='dark']) .ratingButtonActive {
+  background: #244d3b;
+  border-color: #42c994;
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .durationSection h3 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .durationInfo {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .saveClipButton {
+  background: #087b5b;
+}
+
+:global(:root[data-theme='dark']) .saveClipButton:hover:not(:disabled) {
+  background: #10966d;
+}
+
+/* H1 verde-claro no modo escuro */
+:global(:root[data-theme='dark']) .pageHeader h1 em {
+  color: #7BE0A8;
 }

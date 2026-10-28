@@ -1,9 +1,7 @@
-
 import {
   ArrowLeft,
   Check,
   Clock3,
-  Edit3,
   Flag,
   Pause,
   Play,
@@ -196,6 +194,9 @@ function obterNomeVideo(video: VideoPartida): string {
   );
 }
 
+/**
+ * Converte a categoria recebida do backend para o tipo utilizado na interface.
+ */
 function converterTipo(categoria: string): TipoEvento {
   const valor = categoria.toLowerCase().trim();
 
@@ -215,14 +216,26 @@ function converterTipo(categoria: string): TipoEvento {
     return 'ruim';
   }
 
-  if (
-    valor === 'destaque' ||
-    valor.includes('destaque')
-  ) {
+  if (valor === 'destaque' || valor.includes('destaque')) {
     return 'destaque';
   }
 
   return 'neutra';
+}
+
+/**
+ * Converte o tipo da interface para o padrão usado pelo backend.
+ * O campo categoria da API precisa aceitar essas strings.
+ */
+function converterTipoParaBackend(tipo: TipoEvento): string {
+  const tipos: Record<TipoEvento, string> = {
+    boa: 'POSITIVA',
+    ruim: 'NEGATIVA',
+    neutra: 'NEUTRA',
+    destaque: 'DESTAQUE',
+  };
+
+  return tipos[tipo];
 }
 
 function converterEvento(registro: EventoBackend): Evento {
@@ -364,6 +377,7 @@ export default function AnaliseVideos() {
   const carregarEventos = useCallback(async (videoId: number) => {
     if (!videoId) {
       setEventos([]);
+      setClipes([]);
       return;
     }
 
@@ -402,7 +416,6 @@ export default function AnaliseVideos() {
           ? dados.marcacoes
           : [];
 
-      // Clipe é um registro separado e não deve aparecer como evento.
       setEventos(
         lista
           .filter(
@@ -430,6 +443,8 @@ export default function AnaliseVideos() {
       if (numeroRequisicao !== requisicaoEventosRef.current) return;
 
       setEventos([]);
+      setClipes([]);
+
       setMensagemErro(
         erro instanceof Error
           ? erro.message
@@ -486,6 +501,11 @@ export default function AnaliseVideos() {
       } catch (erro) {
         console.error('Erro ao carregar campos de análise:', erro);
         setCategorias([]);
+        setMensagemErro(
+          erro instanceof Error
+            ? erro.message
+            : 'Erro ao carregar os campos de análise.',
+        );
       }
     }
 
@@ -832,7 +852,7 @@ export default function AnaliseVideos() {
           },
           body: JSON.stringify({
             nome,
-            tipo: novoCampo.tipo,
+            tipo: converterTipoParaBackend(novoCampo.tipo),
           }),
         },
       );
@@ -908,7 +928,7 @@ export default function AnaliseVideos() {
           },
           body: JSON.stringify({
             titulo: novoEvento.nome.trim(),
-            categoria: novoEvento.tipo,
+            categoria: converterTipoParaBackend(novoEvento.tipo),
             tempoInicio: inicio,
             tempoFim: fim,
             observacao: novoEvento.descricao.trim(),
@@ -1054,11 +1074,12 @@ export default function AnaliseVideos() {
               padding: 0,
             }}
           >
-            <ArrowLeft size={17} />
-            Voltar
           </button>
-
-          <h1>Análise de <em> vídeo</em></h1>
+             <div className={styles.titleArea}>
+          <h1>
+            Análise de <em>vídeo</em>
+          </h1>
+          </div>
 
           <div className={styles.videoSelectors}>
             <div className={styles.videoSelectorGroup}>
@@ -1261,6 +1282,7 @@ export default function AnaliseVideos() {
                   }}
                   onPlay={() => {
                     setVideoExecutando(true);
+
                     if (videoRef.current) {
                       videoRef.current.playbackRate = velocidade;
                     }

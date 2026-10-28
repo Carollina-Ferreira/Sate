@@ -1,257 +1,199 @@
+
 .page {
   width: 100%;
   min-height: 100vh;
-
+  min-height: 100dvh;
+  overflow-x: hidden;
   display: flex;
   justify-content: center;
-
-  background-color: #005942;
+  background-color: var(--creme, #FAF5EE);
+  background-image:
+    radial-gradient(circle at 91% 8%, rgba(239, 71, 111, 0.13), transparent 22%);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-
-  color: #ffffff;
-
+  color: var(--texto, #12261F);
   font-family: 'Poppins', sans-serif;
 }
 
 .container {
-  width: min(1000px, 100%);
+  width: 100%;
+  max-width: 1280px;
   min-height: 100vh;
-
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
-
-  padding: 34px 40px 28px;
-
+  padding: clamp(20px, 4vh, 40px) clamp(16px, 4vw, 56px) clamp(20px, 3vh, 34px);
   box-sizing: border-box;
 }
 
-
-/* =========================================================
-   PROGRESSO
-========================================================= */
+/* PROGRESSO */
 
 .progressArea {
-  width: min(760px, 100%);
-
-  margin: 0 auto;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
 }
 
+
+   
 .stepBadge {
-  width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 7px 19px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    border: 1px solid rgba(239, 71, 111, 0.16);
+    border-radius: 999px;
 
-  padding: 7px 20px;
+    background: rgba(239, 71, 111, 0.08);
 
-  border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--rosa, #EF476F);
 
-  border-radius: 999px;
-
-  background: rgba(255, 255, 255, 0.12);
-
-  color: #ffffff;
-
-  font-size: 11px;
-  font-weight: 500;
-
-  line-height: 1.2;
-
-  white-space: nowrap;
-
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+    font-family: var(--fonte-base, 'Poppins', sans-serif);
+    font-size: 11px;
+    font-weight: 500;
 }
+
 
 .progressSteps {
-  width: 100%;
-
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-
-  gap: 9px;
+    width: min(clamp(300px, 45vw, 700px), 100%);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
 }
 
 .progressSteps > div {
-  height: 4px;
-
-  border-radius: 999px;
-
-  background: #58deb2;
+    height: 4px;
+    border-radius: 20px;
+    background: var(--verde-escuro, #006B4F);
 }
 
-
-/* =========================================================
-   HEADER
-========================================================= */
+/* Terceira barrinha rosa */
+.progressSteps > div:nth-child(4) {
+    background: var(--rosa, #EF476F);
+}
+/* CABEÇALHO */
 
 .header {
-  width: min(760px, 100%);
-
+  width: min(900px, 100%);
   margin: 27px auto 0;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   text-align: center;
 }
 
 .completeIcon {
   width: 54px;
   height: 54px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin-bottom: 13px;
-
   border-radius: 50%;
-
-  background: #3bcf9c;
-
-  color: #ffffff;
-
-  box-shadow:
-    0 8px 20px rgba(0, 45, 32, 0.18);
+  background: var(--rosa, #EF476F);
+  color: var(--branco, #FFFFFF);
+  box-shadow: 0 8px 20px rgba(239, 71, 111, 0.16);
 }
 
 .header h1 {
   margin: 0;
-
-  color: #ffffff;
-
-  font-size: 32px;
+  color: var(--texto, #12261F);
+  font-size: clamp(25px, 2.6vw, 44px);
   font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+}
 
-  line-height: 1.1;
+.header h1 em {
+  color: var(--rosa, #EF476F);
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  font-style: italic;
 }
 
 .header p {
-  max-width: 600px;
-
+  max-width: 680px;
   margin: 9px 0 0;
-
-  color: #d6e8e1;
-
-  font-size: 13px;
-
-  line-height: 1.45;
+  color: var(--texto-suave, #6C7C77);
+  font-size: clamp(12px, 1vw, 15px);
+  line-height: 1.5;
 }
 
-
-/* =========================================================
-   ÁREA DOS CARDS
-========================================================= */
+/* ÁREA DOS CARDS */
 
 .summaryArea {
-  width: min(760px, 100%);
-
+  width: min(900px, 100%);
   margin: 27px auto 0;
-
   display: grid;
-  grid-template-columns: 1fr 1fr;
-
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
 
-
-/* =========================================================
-   CARD DOS CAMPOS
-========================================================= */
+/* CARD DOS CAMPOS */
 
 .fieldsCard {
   min-height: 205px;
-
   padding: 18px;
-
   box-sizing: border-box;
-
+  border: 1px solid var(--borda, #E1E8E4);
   border-radius: 16px;
-
-  background: #f7faf8;
-
-  color: #263930;
-
-  box-shadow:
-    0 12px 28px rgba(0, 30, 22, 0.16);
+  background: var(--branco, #FFFFFF);
+  color: var(--texto, #12261F);
+  box-shadow: 0 5px 16px rgba(18, 38, 31, 0.025);
 }
 
 .sportHeader {
   display: flex;
   align-items: center;
-
   gap: 10px;
 }
 
 .sportCircle {
   width: 38px;
   height: 38px;
-
   flex-shrink: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
-  background: #e4f4ee;
-
-  color: #1ca577;
-
+  background: rgba(22, 168, 117, 0.12);
+  color: var(--verde-principal, #16A875);
   font-size: 18px;
 }
 
 .sportHeader > div:last-child {
   display: flex;
   flex-direction: column;
-
   gap: 1px;
 }
 
 .sportHeader strong {
-  color: #21372e;
-
+  color: var(--texto, #12261F);
   font-size: 14px;
   font-weight: 700;
 }
 
 .sportHeader span {
-  color: #7d8d86;
-
+  color: var(--texto-suave, #6C7C77);
   font-size: 8px;
   font-weight: 700;
-
   letter-spacing: 0.5px;
 }
 
 .divider {
   width: 100%;
   height: 1px;
-
   margin: 14px 0;
-
-  background: #dce7e2;
+  background: var(--borda, #E1E8E4);
 }
 
 .fieldsTitle {
   display: block;
-
   margin-bottom: 10px;
-
-  color: #43574e;
-
+  color: var(--texto, #12261F);
   font-size: 10px;
   font-weight: 600;
 }
@@ -259,106 +201,77 @@
 .fieldsCard ul {
   margin: 0;
   padding: 0;
-
   display: flex;
   flex-wrap: wrap;
-
   gap: 7px;
-
   list-style: none;
 }
 
 .fieldsCard li {
   display: flex;
   align-items: center;
-
   gap: 5px;
-
   padding: 6px 9px;
-
+  border: 1px solid rgba(22, 168, 117, 0.08);
   border-radius: 999px;
-
-  background: #eaf4ef;
-
-  color: #35483f;
-
+  background: #E4F5EE;
+  color: var(--verde-escuro, #006B4F);
   font-size: 9px;
   font-weight: 500;
 }
 
 .fieldsCard li svg {
   flex-shrink: 0;
-
-  color: #18a875;
+  color: var(--verde-principal, #16A875);
 }
 
 .emptyFields {
   margin: 10px 0 0;
-
-  color: #87958f;
-
+  color: var(--texto-suave, #6C7C77);
   font-size: 9px;
 }
 
 .moreFields {
   display: block;
-
   margin-top: 10px;
-
-  color: #159c6e;
-
+  color: var(--verde-principal, #16A875);
   font-size: 9px;
   font-weight: 600;
 }
 
-
-/* =========================================================
-   CARD DA EQUIPE
-========================================================= */
+/* CARD DA EQUIPE */
 
 .teamCard {
   min-height: 205px;
-
   overflow: hidden;
-
+  border: 1px solid var(--borda, #E1E8E4);
   border-radius: 16px;
-
-  background: #ffffff;
-
-  color: #263930;
-
-  box-shadow:
-    0 12px 28px rgba(0, 30, 22, 0.16);
+  background: var(--branco, #FFFFFF);
+  color: var(--texto, #12261F);
+  box-shadow: 0 5px 16px rgba(18, 38, 31, 0.025);
 }
 
 .teamImage {
-  height: 128px;
-
+  height: 108px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background-color: #dbe8e2;
+  overflow: hidden;
+  background-color: var(--verde-escuro, #006B4F);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-
-  color: #ffffff;
-
-  font-size: 40px;
+  color: var(--branco, #FFFFFF);
+  font-size: 36px;
 }
 
 .teamInfo {
-  min-height: 77px;
-
+  min-height: 95px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 12px;
-
   padding: 13px 16px;
-
   box-sizing: border-box;
 }
 
@@ -368,247 +281,162 @@
 
 .teamInfo span {
   display: block;
-
-  margin-bottom: 2px;
-
-  color: #159c6e;
-
+  margin-bottom: 3px;
+  color: var(--rosa, #EF476F);
   font-size: 8px;
   font-weight: 700;
-
-  letter-spacing: 0.5px;
+  letter-spacing: 0.7px;
 }
 
 .teamInfo h2 {
   overflow: hidden;
-
   margin: 0;
-
-  color: #24372f;
-
+  color: var(--texto, #12261F);
   font-size: 16px;
   font-weight: 700;
-
   white-space: nowrap;
-
   text-overflow: ellipsis;
 }
 
 .teamInfo p {
   margin: 3px 0 0;
-
-  color: #7a8982;
-
+  color: var(--texto-suave, #6C7C77);
   font-size: 9px;
 }
 
 .sportEmoji {
   width: 34px;
   height: 34px;
-
   flex-shrink: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
-  background: #e4f4ee;
-
-  color: #1ca577;
-
+  background: rgba(22, 168, 117, 0.12);
+  color: var(--verde-principal, #16A875);
   font-size: 16px;
 }
 
-
-/* =========================================================
-   MENSAGEM FINAL
-========================================================= */
+/* MENSAGEM FINAL */
 
 .finalMessage {
-  width: min(760px, 100%);
-
+  width: min(900px, 100%);
   margin: 14px auto 0;
-
   padding: 10px 13px;
-
   box-sizing: border-box;
-
   display: flex;
   align-items: center;
-
   gap: 10px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.1);
-
+  border: 1px solid rgba(22, 168, 117, 0.14);
   border-radius: 11px;
-
-  background: rgba(255, 255, 255, 0.08);
-
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: #E1F5ED;
 }
 
 .finalMessageIcon {
   width: 28px;
   height: 28px;
-
   flex-shrink: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
-  background: #3bcf9c;
-
-  color: #ffffff;
+  background: var(--verde-escuro, #006B4F);
+  color: var(--branco, #FFFFFF);
 }
 
 .finalMessage > div:last-child {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-
   gap: 1px;
 }
 
 .finalMessage strong {
-  color: #ffffff;
-
+  color: var(--texto, #12261F);
   font-size: 10px;
   font-weight: 700;
 }
 
 .finalMessage span {
-  color: #c9ddd5;
-
+  color: var(--texto-suave, #6C7C77);
   font-size: 8px;
-
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
-
-/* =========================================================
-   FOOTER
-========================================================= */
+/* RODAPÉ */
 
 .footer {
-  width: min(760px, 100%);
-
+  width: min(900px, 100%);
   margin: auto auto 0;
-
   padding-top: 18px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 14px;
 }
 
 .backButton {
   display: flex;
   align-items: center;
-
   gap: 7px;
-
   padding: 0;
-
   border: none;
-
   background: transparent;
-
-  color: #ffffff;
-
+  color: var(--verde-escuro, #006B4F);
   font-family: inherit;
-
   font-size: 11px;
   font-weight: 600;
-
   cursor: pointer;
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .backButton:hover:not(:disabled) {
-  opacity: 0.8;
-
+  opacity: 0.75;
   transform: translateX(-2px);
 }
 
 .backButton:disabled {
   opacity: 0.5;
-
   cursor: not-allowed;
 }
 
 .nextButton {
-  min-width: 150px;
-  height: 38px;
-
+  min-width: 135px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 7px;
-
-  padding: 0 15px;
-
+  padding: 0 16px;
   border: none;
-
-  border-radius: 8px;
-
-  background: #21b983;
-
-  color: #ffffff;
-
+  border-radius: 9px;
+  background: var(--rosa, #EF476F);
+  color: var(--branco, #FFFFFF);
   font-family: inherit;
-
   font-size: 11px;
   font-weight: 700;
-
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .nextButton:hover:not(:disabled) {
-  background: #169d70;
-
+  background: #D93660;
   transform: translateY(-1px);
 }
 
 .nextButton:disabled {
   opacity: 0.7;
-
   cursor: not-allowed;
 }
 
-
-/* =========================================================
-   LOADING
-========================================================= */
+/* LOADING */
 
 .spinner {
   width: 13px;
   height: 13px;
-
-  border:
-    2px solid
-    rgba(255, 255, 255, 0.35);
-
-  border-top-color: #ffffff;
-
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #FFFFFF;
   border-radius: 50%;
-
   animation: girar 0.7s linear infinite;
 }
 
@@ -618,18 +446,34 @@
   }
 }
 
+/* RESPONSIVO */
 
-/* =========================================================
-   RESPONSIVO
-========================================================= */
+/* Telas muito grandes */
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1440px;
+  }
 
+  .summaryArea,
+  .header,
+  .finalMessage,
+  .footer {
+    width: min(1000px, 100%);
+  }
+
+  .fieldsCard li {
+    font-size: 11px;
+  }
+}
+
+/* Tablets e celulares: cards empilhados */
 @media (max-width: 800px) {
   .container {
     padding: 28px 20px 24px;
   }
 
   .summaryArea {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .fieldsCard,
@@ -637,11 +481,12 @@
     min-height: auto;
   }
 
-  .header h1 {
-    font-size: 28px;
+  .teamImage {
+    height: clamp(110px, 24vw, 170px);
   }
 }
 
+/* Celulares */
 @media (max-width: 500px) {
   .container {
     padding: 22px 15px;
@@ -649,8 +494,7 @@
 
   .stepBadge {
     padding: 6px 15px;
-
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .progressSteps {
@@ -664,21 +508,15 @@
   .completeIcon {
     width: 48px;
     height: 48px;
-
     margin-bottom: 12px;
   }
 
-  .header h1 {
-    font-size: 25px;
-  }
-
   .header p {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .summaryArea {
     margin-top: 24px;
-
     gap: 14px;
   }
 
@@ -686,8 +524,22 @@
     padding: 16px;
   }
 
-  .teamImage {
-    height: 115px;
+  .fieldsCard li,
+  .moreFields,
+  .emptyFields,
+  .teamInfo p {
+    font-size: 10px;
+  }
+
+  .sportHeader span,
+  .teamInfo span,
+  .finalMessage span {
+    font-size: 10px;
+  }
+
+  .fieldsTitle,
+  .finalMessage strong {
+    font-size: 11px;
   }
 
   .teamInfo {
@@ -701,15 +553,44 @@
   .footer {
     flex-direction: column-reverse;
     align-items: stretch;
-
     padding-top: 18px;
   }
 
   .backButton {
     justify-content: center;
+    min-height: 40px;
+    font-size: 12px;
   }
 
   .nextButton {
     width: 100%;
+    font-size: 12px;
+  }
+}
+
+/* Celulares pequenos */
+@media (max-width: 360px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .teamInfo h2 {
+    font-size: 14px;
+  }
+}
+
+/* Telas baixas (celular deitado) */
+@media (max-height: 560px) {
+  .header {
+    margin-top: 14px;
+  }
+
+  .summaryArea {
+    margin-top: 14px;
+  }
+
+  .footer {
+    padding-top: 14px;
   }
 }

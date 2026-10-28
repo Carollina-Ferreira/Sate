@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'perfil_atleta_page.dart';
+import '../../theme/sate_theme.dart';
 
 class AtletasPage extends StatefulWidget {
   const AtletasPage({super.key});
@@ -10,10 +11,10 @@ class AtletasPage extends StatefulWidget {
 }
 
 class _AtletasPageState extends State<AtletasPage> {
-  static const Color verde = Color(0xFF00845F);
-  static const Color verdeEscuro = Color(0xFF006B4F);
-  static const Color verdeClaro = Color(0xFFE8F5F0);
-  static const Color fundo = Color(0xFFF7F7F7);
+  static const Color verde = Color(0xFF005942);
+  static const Color verdeEscuro = Color(0xFF003D31);
+  static const Color verdeClaro = Color(0xFFDFF7EE);
+  static const Color fundo = Color(0xFFFAF5EE);
 
   final TextEditingController pesquisaController =
       TextEditingController();
@@ -134,10 +135,10 @@ class _AtletasPageState extends State<AtletasPage> {
 
         automaticallyImplyLeading: false,
         
-        title: const Text(
-          'Atletas',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Atletas', style: SateEstilo.destaque)]),
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -168,7 +169,7 @@ class _AtletasPageState extends State<AtletasPage> {
                         child: Text(
                           'Meus atletas',
                           style: TextStyle(
-                            color: Color(0xFF12261F),
+                            color: Color(0xFF10251F),
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -178,7 +179,7 @@ class _AtletasPageState extends State<AtletasPage> {
                       Text(
                         '${lista.length} atletas',
                         style: TextStyle(
-                          color: Colors.grey.shade600,
+                          color: Color(0xFF68736F),
                           fontSize: 11,
                         ),
                       ),
@@ -220,7 +221,7 @@ class _AtletasPageState extends State<AtletasPage> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
       ),
       child: TextField(
@@ -231,12 +232,12 @@ class _AtletasPageState extends State<AtletasPage> {
         decoration: InputDecoration(
           hintText: 'Pesquisar atleta...',
           hintStyle: TextStyle(
-            color: Colors.grey.shade500,
+            color: Color(0xFF8A938F),
             fontSize: 12,
           ),
           prefixIcon: Icon(
             Icons.search_rounded,
-            color: Colors.grey.shade600,
+            color: Color(0xFF68736F),
             size: 21,
           ),
           suffixIcon:
@@ -248,7 +249,7 @@ class _AtletasPageState extends State<AtletasPage> {
                       },
                       icon: Icon(
                         Icons.close_rounded,
-                        color: Colors.grey.shade600,
+                        color: Color(0xFF68736F),
                         size: 19,
                       ),
                     )
@@ -277,11 +278,11 @@ class _AtletasPageState extends State<AtletasPage> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: Colors.grey.shade200,
+            color: Color(0xFFE8DFD3),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(
+              color: Color(0xFF10251F).withValues(
                 alpha: 0.025,
               ),
               blurRadius: 8,
@@ -332,7 +333,7 @@ class _AtletasPageState extends State<AtletasPage> {
                     overflow:
                         TextOverflow.ellipsis,
                     style: const TextStyle(
-                      color: Color(0xFF12261F),
+                      color: Color(0xFF10251F),
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
                     ),
@@ -343,7 +344,7 @@ class _AtletasPageState extends State<AtletasPage> {
                   Text(
                     atleta['modalidade'],
                     style: TextStyle(
-                      color: Colors.grey.shade600,
+                      color: Color(0xFF68736F),
                       fontSize: 12,
                     ),
                   ),
@@ -399,7 +400,7 @@ class _AtletasPageState extends State<AtletasPage> {
                 Text(
                   'frequência',
                   style: TextStyle(
-                    color: Colors.grey.shade500,
+                    color: Color(0xFF8A938F),
                     fontSize: 9,
                   ),
                 ),
@@ -408,7 +409,7 @@ class _AtletasPageState extends State<AtletasPage> {
 
                 const Icon(
                   Icons.chevron_right_rounded,
-                  color: Colors.grey,
+                  color: Color(0xFF8A938F),
                   size: 21,
                 ),
               ],
@@ -430,7 +431,7 @@ class _AtletasPageState extends State<AtletasPage> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
       ),
       child: Column(
@@ -455,7 +456,7 @@ class _AtletasPageState extends State<AtletasPage> {
           const Text(
             'Nenhum atleta encontrado',
             style: TextStyle(
-              color: Color(0xFF12261F),
+              color: Color(0xFF10251F),
               fontSize: 15,
               fontWeight: FontWeight.bold,
             ),
@@ -466,7 +467,7 @@ class _AtletasPageState extends State<AtletasPage> {
           Text(
             'Tente pesquisar por outro nome.',
             style: TextStyle(
-              color: Colors.grey.shade600,
+              color: Color(0xFF68736F),
               fontSize: 11,
             ),
           ),

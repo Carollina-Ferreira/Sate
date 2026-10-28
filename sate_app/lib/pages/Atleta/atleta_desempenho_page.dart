@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'atleta_notificacao_page.dart';
+import '../../theme/sate_theme.dart';
 
 class AtletaDesempenhoPage extends StatefulWidget {
   const AtletaDesempenhoPage({super.key});
@@ -12,9 +13,9 @@ class AtletaDesempenhoPage extends StatefulWidget {
 
 class _AtletaDesempenhoPageState
     extends State<AtletaDesempenhoPage> {
-  static const Color verde = Color(0xFF00845F);
-  static const Color verdeClaro = Color(0xFFE7F5F0);
-  static const Color fundo = Color(0xFFFCFCFC);
+  static const Color verde = Color(0xFF005942);
+  static const Color verdeClaro = Color(0xFFDFF7EE);
+  static const Color fundo = Color(0xFFFAF5EE);
 
   int periodoSelecionado = 0;
   int relatorioSelecionado = 1;
@@ -40,10 +41,10 @@ class _AtletaDesempenhoPageState
         backgroundColor: fundo,
         elevation: 0,
         centerTitle: false,
-        title: const Text(
-          'Minha evolução',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Minha '), TextSpan(text: 'evolução', style: SateEstilo.destaque)]),
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 19,
             fontWeight: FontWeight.bold,
           ),
@@ -61,7 +62,7 @@ class _AtletaDesempenhoPageState
             },
             icon: const Icon(
               Icons.notifications_none_rounded,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
               size: 26,
             ),
           ),
@@ -93,7 +94,7 @@ class _AtletaDesempenhoPageState
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Color(0xFF10251F),
                 ),
               ),
 
@@ -108,7 +109,7 @@ class _AtletaDesempenhoPageState
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Color(0xFF10251F),
                 ),
               ),
 
@@ -149,7 +150,7 @@ class _AtletaDesempenhoPageState
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Color(0xFF10251F),
                       ),
                     ),
                   ),
@@ -178,7 +179,7 @@ class _AtletaDesempenhoPageState
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Color(0xFF10251F),
                 ),
               ),
 
@@ -193,7 +194,7 @@ class _AtletaDesempenhoPageState
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Color(0xFF10251F),
                 ),
               ),
 
@@ -208,7 +209,7 @@ class _AtletaDesempenhoPageState
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Color(0xFF10251F),
                 ),
               ),
 
@@ -320,7 +321,7 @@ class _AtletaDesempenhoPageState
                 border: Border.all(
                   color: selecionado
                       ? verde
-                      : Colors.grey.shade200,
+                      : Color(0xFFE8DFD3),
                 ),
               ),
               alignment: Alignment.center,
@@ -333,7 +334,7 @@ class _AtletaDesempenhoPageState
                       : FontWeight.w400,
                   color: selecionado
                       ? Colors.white
-                      : Colors.grey.shade700,
+                      : Color(0xFF4F5A56),
                 ),
               ),
             ),
@@ -358,11 +359,11 @@ class _AtletaDesempenhoPageState
         borderRadius:
             BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(
+            color: Color(0xFF10251F).withValues(
               alpha: 0.035,
             ),
             blurRadius: 10,
@@ -424,11 +425,11 @@ class _AtletaDesempenhoPageState
         borderRadius:
             BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(
+            color: Color(0xFF10251F).withValues(
               alpha: 0.035,
             ),
             blurRadius: 10,
@@ -473,7 +474,7 @@ class _AtletaDesempenhoPageState
                   style: TextStyle(
                     fontSize: 10,
                     color:
-                        Colors.grey.shade600,
+                        Color(0xFF68736F),
                   ),
                 ),
               ],
@@ -496,11 +497,11 @@ class _AtletaDesempenhoPageState
         borderRadius:
             BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(
+            color: Color(0xFF10251F).withValues(
               alpha: 0.035,
             ),
             blurRadius: 10,
@@ -532,7 +533,7 @@ class _AtletaDesempenhoPageState
             maxLines: 2,
             style: TextStyle(
               fontSize: 10,
-              color: Colors.grey.shade600,
+              color: Color(0xFF68736F),
             ),
           ),
           const SizedBox(height: 3),
@@ -557,11 +558,11 @@ class _AtletaDesempenhoPageState
         borderRadius:
             BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(
+            color: Color(0xFF10251F).withValues(
               alpha: 0.035,
             ),
             blurRadius: 10,
@@ -579,7 +580,7 @@ class _AtletaDesempenhoPageState
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                    color: Color(0xFF10251F),
                   ),
                 ),
               ),
@@ -607,7 +608,7 @@ class _AtletaDesempenhoPageState
 
           Divider(
             height: 25,
-            color: Colors.grey.shade200,
+            color: Color(0xFFE8DFD3),
           ),
 
           Row(
@@ -654,7 +655,7 @@ class _AtletaDesempenhoPageState
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 9,
-            color: Colors.grey.shade600,
+            color: Color(0xFF68736F),
           ),
         ),
         const SizedBox(height: 7),
@@ -663,7 +664,7 @@ class _AtletaDesempenhoPageState
           style: const TextStyle(
             fontSize: 19,
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Color(0xFF10251F),
           ),
         ),
         const SizedBox(height: 3),
@@ -675,7 +676,7 @@ class _AtletaDesempenhoPageState
             color: legenda == 'Ideal' ||
                     legenda == 'Normal'
                 ? verde
-                : Colors.grey.shade500,
+                : Color(0xFF8A938F),
           ),
         ),
       ],
@@ -686,7 +687,7 @@ class _AtletaDesempenhoPageState
     return Container(
       width: 1,
       height: 65,
-      color: Colors.grey.shade200,
+      color: Color(0xFFE8DFD3),
     );
   }
 
@@ -703,11 +704,11 @@ class _AtletaDesempenhoPageState
         borderRadius:
             BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(
+            color: Color(0xFF10251F).withValues(
               alpha: 0.035,
             ),
             blurRadius: 10,
@@ -734,7 +735,7 @@ class _AtletaDesempenhoPageState
                     ? Border(
                         bottom: BorderSide(
                           color:
-                              Colors.grey.shade200,
+                              Color(0xFFE8DFD3),
                         ),
                       )
                     : null,
@@ -766,7 +767,7 @@ class _AtletaDesempenhoPageState
                         fontSize: 11,
                         fontWeight:
                             FontWeight.w500,
-                        color: Colors.black87,
+                        color: Color(0xFF10251F),
                       ),
                     ),
                   ),
@@ -833,11 +834,11 @@ class _AtletaDesempenhoPageState
         borderRadius:
             BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(
+            color: Color(0xFF10251F).withValues(
               alpha: 0.035,
             ),
             blurRadius: 10,
@@ -874,7 +875,7 @@ class _AtletaDesempenhoPageState
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                    color: Color(0xFF10251F),
                   ),
                 ),
                 const SizedBox(height: 3),
@@ -882,7 +883,7 @@ class _AtletaDesempenhoPageState
                   data,
                   style: TextStyle(
                     fontSize: 10,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF68736F),
                   ),
                 ),
               ],
@@ -892,7 +893,7 @@ class _AtletaDesempenhoPageState
           const Icon(
             Icons.chevron_right_rounded,
             size: 20,
-            color: Colors.grey,
+            color: Color(0xFF8A938F),
           ),
         ],
       ),
@@ -932,7 +933,7 @@ class _AtletaDesempenhoPageState
                 border: Border.all(
                   color: selecionado
                       ? verde
-                      : Colors.grey.shade200,
+                      : Color(0xFFE8DFD3),
                 ),
               ),
               alignment: Alignment.center,
@@ -945,7 +946,7 @@ class _AtletaDesempenhoPageState
                       : FontWeight.w400,
                   color: selecionado
                       ? Colors.white
-                      : Colors.grey.shade700,
+                      : Color(0xFF4F5A56),
                 ),
               ),
             ),
@@ -964,11 +965,11 @@ class _AtletaDesempenhoPageState
         borderRadius:
             BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(
+            color: Color(0xFF10251F).withValues(
               alpha: 0.035,
             ),
             blurRadius: 10,
@@ -989,7 +990,7 @@ class _AtletaDesempenhoPageState
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
             ),
           ),
 
@@ -1041,7 +1042,7 @@ class _AtletaDesempenhoPageState
   TextStyle _labelStyle() {
     return TextStyle(
       fontSize: 8,
-      color: Colors.grey.shade600,
+      color: Color(0xFF68736F),
     );
   }
 
@@ -1098,7 +1099,7 @@ class _LegendaGrafico extends StatelessWidget {
       texto,
       style: TextStyle(
         fontSize: 8,
-        color: Colors.grey.shade600,
+        color: Color(0xFF68736F),
       ),
     );
   }
@@ -1109,12 +1110,12 @@ class _GraficoLinhaPainter
   @override
   void paint(Canvas canvas, Size size) {
     final paintLinha = Paint()
-      ..color = const Color(0xFF16B86F)
+      ..color = const Color(0xFF16A875)
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
     final paintArea = Paint()
-      ..color = const Color(0xFF16B86F)
+      ..color = const Color(0xFF16A875)
           .withValues(alpha: 0.12)
       ..style = PaintingStyle.fill;
 
@@ -1194,7 +1195,7 @@ class _GraficoLinhaPainter
       ..style = PaintingStyle.fill;
 
     final paintBorda = Paint()
-      ..color = const Color(0xFF16B86F)
+      ..color = const Color(0xFF16A875)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 
@@ -1261,7 +1262,7 @@ class _GraficoAvaliacaoPainter
     ];
 
     final linha = Paint()
-      ..color = const Color(0xFF00845F)
+      ..color = const Color(0xFF005942)
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
@@ -1287,7 +1288,7 @@ class _GraficoAvaliacaoPainter
     );
 
     final barras = Paint()
-      ..color = const Color(0xFF00845F)
+      ..color = const Color(0xFF005942)
           .withValues(alpha: 0.28)
       ..style = PaintingStyle.fill;
 
@@ -1306,7 +1307,7 @@ class _GraficoAvaliacaoPainter
     }
 
     final pontosPaint = Paint()
-      ..color = const Color(0xFF00845F)
+      ..color = const Color(0xFF005942)
       ..style = PaintingStyle.fill;
 
     for (final ponto in pontos) {
@@ -1338,7 +1339,7 @@ class _GraficoBarrasPainter
     ];
 
     final paint = Paint()
-      ..color = const Color(0xFF00845F)
+      ..color = const Color(0xFF005942)
       ..style = PaintingStyle.fill;
 
     const largura = 28.0;

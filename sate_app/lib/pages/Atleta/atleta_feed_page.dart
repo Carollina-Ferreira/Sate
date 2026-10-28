@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'atleta_notificacao_page.dart';
+import '../../theme/sate_theme.dart';
 
 class AtletaFeedPage extends StatefulWidget {
   const AtletaFeedPage({super.key});
@@ -10,10 +11,10 @@ class AtletaFeedPage extends StatefulWidget {
 }
 
 class _AtletaFeedPageState extends State<AtletaFeedPage> {
-  static const Color verde = Color(0xFF00845F);
-  static const Color verdeEscuro = Color(0xFF006B4F);
-  static const Color rosa = Color(0xFFE86BA5);
-  static const Color fundo = Color(0xFFF7F7F7);
+  static const Color verde = Color(0xFF005942);
+  static const Color verdeEscuro = Color(0xFF003D31);
+  static const Color rosa = Color(0xFFEF476F);
+  static const Color fundo = Color(0xFFFAF5EE);
 
   int filtroSelecionado = 0;
 
@@ -90,10 +91,10 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
         elevation: 0,
         centerTitle: false,
         
-        title: const Text(
-          'Feed',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Feed', style: SateEstilo.destaque)]),
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -111,7 +112,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
             },
             icon: const Icon(
               Icons.notifications_none_rounded,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
               size: 26,
             ),
           ),
@@ -171,7 +172,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
       ),
       child: Row(
@@ -207,7 +208,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                           : FontWeight.w400,
                       color: selecionado
                           ? Colors.white
-                          : Colors.grey.shade700,
+                          : Color(0xFF4F5A56),
                     ),
                   ),
                 ),
@@ -235,11 +236,11 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
+            color: Color(0xFF10251F).withValues(alpha: 0.025),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -275,7 +276,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: Color(0xFF10251F),
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -283,7 +284,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                         publicacao['tempo'],
                         style: TextStyle(
                           fontSize: 10,
-                          color: Colors.grey.shade600,
+                          color: Color(0xFF68736F),
                         ),
                       ),
                     ],
@@ -299,7 +300,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                   padding: const EdgeInsets.all(5),
                   icon: Icon(
                     Icons.more_horiz_rounded,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF68736F),
                     size: 21,
                   ),
                 ),
@@ -312,7 +313,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
               publicacao['texto'],
               style: const TextStyle(
                 fontSize: 12,
-                color: Colors.black87,
+                color: Color(0xFF10251F),
                 height: 1.35,
               ),
             ),
@@ -326,7 +327,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                   vertical: 7,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEAF5F1),
+                  color: const Color(0xFFDFF7EE),
                   borderRadius:
                       BorderRadius.circular(10),
                 ),
@@ -381,15 +382,15 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                             : Icons.favorite_border_rounded,
                         size: 18,
                         color: publicacao['curtido']
-                            ? Colors.red.shade600
-                            : Colors.grey.shade600,
+                            ? Color(0xFFC0392B)
+                            : Color(0xFF68736F),
                       ),
                       const SizedBox(width: 5),
                       Text(
                         '${publicacao['curtidas']}',
                         style: TextStyle(
                           fontSize: 10,
-                          color: Colors.grey.shade700,
+                          color: Color(0xFF4F5A56),
                         ),
                       ),
                     ],
@@ -408,14 +409,14 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                         Icons
                             .chat_bubble_outline_rounded,
                         size: 17,
-                        color: Colors.grey.shade600,
+                        color: Color(0xFF68736F),
                       ),
                       const SizedBox(width: 5),
                       Text(
                         '${comentarios.length} comentários',
                         style: TextStyle(
                           fontSize: 10,
-                          color: Colors.grey.shade700,
+                          color: Color(0xFF4F5A56),
                         ),
                       ),
                     ],
@@ -446,10 +447,10 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: [
-          const Color(0xFFE5EEF7),
+          const Color(0xFFDFF7EE),
           const Color(0xFFF4E7DD),
-          const Color(0xFFE5F1E9),
-          const Color(0xFFF2E5F0),
+          const Color(0xFFDFF7EE),
+          const Color(0xFFFDE6EC),
         ][index % 4],
       ),
       child: Icon(
@@ -465,7 +466,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
       width: double.infinity,
       height: 175,
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: Color(0xFFE8DFD3),
         borderRadius:
             BorderRadius.circular(12),
       ),
@@ -476,14 +477,14 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
             Icon(
               Icons.image_outlined,
               size: 35,
-              color: Colors.grey.shade400,
+              color: Color(0xFFA3ADA9),
             ),
             const SizedBox(height: 5),
             Text(
               'Imagem da publicação',
               style: TextStyle(
                 fontSize: 10,
-                color: Colors.grey.shade500,
+                color: Color(0xFF8A938F),
               ),
             ),
           ],
@@ -549,7 +550,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
+                        color: Color(0xFFD5C9BA),
                         borderRadius:
                             BorderRadius.circular(4),
                       ),
@@ -578,7 +579,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                                 style: TextStyle(
                                   fontSize: 12,
                                   color:
-                                      Colors.grey.shade600,
+                                      Color(0xFF68736F),
                                 ),
                               ),
                             )
@@ -610,7 +611,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                                         decoration:
                                             const BoxDecoration(
                                           color:
-                                              Color(0xFFE5F1E9),
+                                              Color(0xFFDFF7EE),
                                           shape:
                                               BoxShape.circle,
                                         ),
@@ -618,7 +619,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                                           Icons
                                               .person_rounded,
                                           color:
-                                              Color(0xFF006B4F),
+                                              Color(0xFF003D31),
                                           size: 20,
                                         ),
                                       ),
@@ -694,7 +695,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                         border: Border(
                           top: BorderSide(
                             color:
-                                Colors.grey.shade200,
+                                Color(0xFFE8DFD3),
                           ),
                         ),
                       ),
@@ -720,11 +721,11 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                                 hintStyle: TextStyle(
                                   fontSize: 12,
                                   color:
-                                      Colors.grey.shade500,
+                                      Color(0xFF8A938F),
                                 ),
                                 filled: true,
                                 fillColor:
-                                    Colors.grey.shade100,
+                                    Color(0xFFEFE6DA),
                                 contentPadding:
                                     const EdgeInsets
                                         .symmetric(
@@ -759,7 +760,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                               height: 42,
                               decoration:
                                   const BoxDecoration(
-                                color: Color(0xFF00845F),
+                                color: Color(0xFF005942),
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(
@@ -872,7 +873,7 @@ class AtletaNovaPublicacaoPage
 class _AtletaNovaPublicacaoPageState
     extends State<AtletaNovaPublicacaoPage> {
   static const Color verde =
-      Color(0xFF00845F);
+      Color(0xFF005942);
 
   final TextEditingController
       legendaController =
@@ -898,11 +899,11 @@ class _AtletaNovaPublicacaoPageState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          const Color(0xFFF4F4F4),
+          const Color(0xFFEFE6DA),
 
       appBar: AppBar(
         backgroundColor:
-            const Color(0xFFF4F4F4),
+            const Color(0xFFEFE6DA),
         elevation: 0,
         leading: IconButton(
           onPressed: () {
@@ -910,13 +911,13 @@ class _AtletaNovaPublicacaoPageState
           },
           icon: const Icon(
             Icons.arrow_back_rounded,
-            color: Colors.black87,
+            color: Color(0xFF10251F),
           ),
         ),
         title: const Text(
           'Nova publicação',
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -937,7 +938,7 @@ class _AtletaNovaPublicacaoPageState
                 borderRadius:
                     BorderRadius.circular(14),
                 border: Border.all(
-                  color: Colors.grey.shade200,
+                  color: Color(0xFFE8DFD3),
                 ),
               ),
               child: Column(
@@ -953,7 +954,7 @@ class _AtletaNovaPublicacaoPageState
                   const Text(
                     'Adicionar imagem',
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Color(0xFF10251F),
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                     ),
@@ -962,7 +963,7 @@ class _AtletaNovaPublicacaoPageState
                   Text(
                     'Adicione uma imagem à publicação',
                     style: TextStyle(
-                      color: Colors.grey.shade500,
+                      color: Color(0xFF8A938F),
                       fontSize: 10,
                     ),
                   ),
@@ -999,7 +1000,7 @@ class _AtletaNovaPublicacaoPageState
               style: TextStyle(
                 fontSize: 12,
                 fontStyle: FontStyle.italic,
-                color: Colors.black87,
+                color: Color(0xFF10251F),
               ),
             ),
 
@@ -1033,7 +1034,7 @@ class _AtletaNovaPublicacaoPageState
               style: TextStyle(
                 fontSize: 12,
                 fontStyle: FontStyle.italic,
-                color: Colors.black87,
+                color: Color(0xFF10251F),
               ),
             ),
 
@@ -1138,7 +1139,7 @@ class _AtletaNovaPublicacaoPageState
           border: Border.all(
             color: selecionado
                 ? verde
-                : Colors.grey.shade200,
+                : Color(0xFFE8DFD3),
           ),
         ),
         child: Text(
@@ -1147,7 +1148,7 @@ class _AtletaNovaPublicacaoPageState
             fontSize: 10,
             color: selecionado
                 ? Colors.white
-                : Colors.grey.shade700,
+                : Color(0xFF4F5A56),
             fontWeight: selecionado
                 ? FontWeight.w600
                 : FontWeight.w400,

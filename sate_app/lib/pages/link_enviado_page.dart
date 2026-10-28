@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import '../theme/sate_theme.dart';
 
 class LinkEnviadoPage extends StatelessWidget {
   final String email;
 
   const LinkEnviadoPage({super.key, required this.email});
 
-  static const verde = Color(0xFF00845F);
-  static const rosa = Color(0xFFE98BA8);
-  static const azul = Color(0xFF001E98);
+  static const verde = Color(0xFF005942);
+  static const rosa = Color(0xFFEF476F);
+  static const azul = Color(0xFF003D31);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFCFCFC),
+      backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
         children: [
           // ================================================================
@@ -60,7 +61,7 @@ class LinkEnviadoPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
+            color: Color(0xFF10251F).withValues(alpha: 0.07),
             blurRadius: 40,
             offset: const Offset(0, 18),
           ),
@@ -90,13 +91,13 @@ class LinkEnviadoPage extends StatelessWidget {
           // ================================================================
           // TÍTULO
           // ================================================================
-          const Text(
-            'Link enviado!',
+          const Text.rich(
+            TextSpan(children: [TextSpan(text: 'Link '), TextSpan(text: 'enviado!', style: SateEstilo.destaque)]),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF161616),
+              color: Color(0xFF10251F),
             ),
           ),
 
@@ -112,7 +113,7 @@ class LinkEnviadoPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
-              color: Colors.grey.shade600,
+              color: Color(0xFF68736F),
             ),
           ),
 
@@ -151,7 +152,7 @@ class LinkEnviadoPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               height: 1.5,
-              color: Colors.grey.shade500,
+              color: Color(0xFF8A938F),
             ),
           ),
 

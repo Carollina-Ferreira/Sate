@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'atleta_treino_page.dart';
 import 'atleta_desempenho_page.dart';
 import 'atleta_notificacao_page.dart';
+import '../../theme/sate_theme.dart';
 
 class AtletaHomePage extends StatefulWidget {
   const AtletaHomePage({super.key});
@@ -12,20 +13,20 @@ class AtletaHomePage extends StatefulWidget {
 }
 
 class _AtletaHomePageState extends State<AtletaHomePage> {
-  static const Color verde = Color(0xFF006B4F);
-  static const Color verdeClaro = Color(0xFFE8F5F0);
-  static const Color rosa = Color(0xFFE98BA8);
-  static const Color azul = Color(0xFF001E98);
+  static const Color verde = Color(0xFF003D31);
+  static const Color verdeClaro = Color(0xFFDFF7EE);
+  static const Color rosa = Color(0xFFEF476F);
+  static const Color azul = Color(0xFF003D31);
 
-  static const Color fundo = Color(0xFFF4F8F6);
-  static const Color texto = Color(0xFF12261F);
+  static const Color fundo = Color(0xFFFAF5EE);
+  static const Color texto = Color(0xFF10251F);
   static const Color textoSecundario = Color(0xFF68736F);
-  static const Color linha = Color(0xFFDCE7E2);
+  static const Color linha = Color(0xFFE8DFD3);
 
   // Cor padrão usada nas telas internas (perfil, feedbacks etc.)
-  static const Color verdePadrao = Color(0xFF00845F);
-  static const Color fundoPadrao = Color(0xFFF7F7F7);
-  static const Color bordaPadrao = Color(0xFFE0E7E4);
+  static const Color verdePadrao = Color(0xFF005942);
+  static const Color fundoPadrao = Color(0xFFFAF5EE);
+  static const Color bordaPadrao = Color(0xFFE8DFD3);
 
   bool _visualizandoFeedbacks = false;
 
@@ -163,8 +164,8 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Olá, atleta! 👋',
+              Text.rich(
+                TextSpan(children: [TextSpan(text: 'Olá, '), TextSpan(text: 'atleta!', style: SateEstilo.destaque), TextSpan(text: ' 👋')]),
                 style: TextStyle(
                   fontSize: 21,
                   fontWeight: FontWeight.w700,
@@ -526,7 +527,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
           },
           icon: const Icon(
             Icons.arrow_back_rounded,
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             size: 28,
           ),
         ),
@@ -534,7 +535,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
         title: const Text(
           'Feedbacks',
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -553,7 +554,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Color(0xFF10251F),
                 ),
               ),
 
@@ -614,7 +615,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
         border: Border.all(color: bordaPadrao),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
+            color: Color(0xFF10251F).withValues(alpha: 0.025),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -629,7 +630,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE8F5F0),
+                  color: const Color(0xFFDFF7EE),
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: const Icon(
@@ -656,7 +657,7 @@ class _AtletaHomePageState extends State<AtletaHomePage> {
                 data,
                 style: const TextStyle(
                   fontSize: 10,
-                  color: Color(0xFF777777),
+                  color: Color(0xFF68736F),
                 ),
               ),
             ],

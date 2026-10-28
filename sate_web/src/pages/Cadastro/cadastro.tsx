@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 
 import styles from './cadastro.module.css';
+import TermosUso from '../TermosUso/termosUso';
 
 import logoVerdeImg from '../../assets/img/logoVerde_img.png';
 
@@ -89,6 +90,8 @@ const Cadastro = () => {
 
   const [loading, setLoading] =
     useState(false);
+
+  const [mostrarTermos, setMostrarTermos] = useState(false);
 
   const [erro, setErro] =
     useState('');
@@ -701,7 +704,15 @@ const Cadastro = () => {
               />
 
               <span>
-                Li e concordo com os termos de uso.
+                Li e concordo com os{' '}
+                <button
+                  type="button"
+                  className={styles.termsLink}
+                  onClick={() => setMostrarTermos(true)}
+                >
+                  Termos de Uso
+                </button>
+                .
               </span>
 
             </label>
@@ -733,7 +744,7 @@ const Cadastro = () => {
 
           {/* LOGIN */}
 
-          <div className={styles.loginArea}>
+          <div className={styles.backArea}>
 
             <span>
               Já possui uma conta?
@@ -751,6 +762,10 @@ const Cadastro = () => {
         </div>
 
       </section>
+
+      {mostrarTermos && (
+        <TermosUso onFechar={() => setMostrarTermos(false)} />
+      )}
 
     </main>
   );

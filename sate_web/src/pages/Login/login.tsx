@@ -259,8 +259,8 @@ const Login = () => {
                         <div
                             key={image}
                             className={`${styles.heroSlide} ${index === activeSlide
-                                    ? styles.heroSlideActive
-                                    : ''
+                                ? styles.heroSlideActive
+                                : ''
                                 }`}
                             style={{
                                 backgroundImage: `url(${image})`,
@@ -326,19 +326,12 @@ const Login = () => {
                 {/* TEXTO */}
 
                 <div className={styles.heroContent}>
-
                     <h1>
+                        <span>Dados que revelam</span>
                         <span>
-                            Dados que revelam
+                            o verdadeiro{' '}
+                            <em>desempenho.</em>
                         </span>
-
-                        <span>
-                            o verdadeiro
-                        </span>
-
-                        <em>
-                            desempenho.
-                        </em>
                     </h1>
 
                     <p>
@@ -346,7 +339,6 @@ const Login = () => {
                         estatísticas de qualquer modalidade esportiva
                         em um único painel.
                     </p>
-
                 </div>
 
 
@@ -681,29 +673,16 @@ const Login = () => {
                     {/* DIVISOR */}
 
                     <div className={styles.signupDivider}>
+                        <p>Ainda não possui uma conta?</p>
 
-                        <span />
-
-                        <p>
-                            Ainda não possui uma conta?
-                        </p>
-
-                        <span />
-
+                        <Link
+                            to="/cadastro"
+                            className={styles.createAccount}
+                        >
+                            Criar conta
+                        </Link>
                     </div>
-
-
-                    {/* CADASTRO */}
-
-                    <Link
-                        to="/cadastro"
-                        className={styles.createAccount}
-                    >
-                        Criar conta
-                    </Link>
-
                 </div>
-
             </section>
 
         </main>

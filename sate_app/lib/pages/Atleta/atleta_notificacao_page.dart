@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import '../../theme/sate_theme.dart';
 
 class AtletaNotificacaoPage extends StatelessWidget {
   const AtletaNotificacaoPage({super.key});
 
-  static const Color verde = Color(0xFF00845F);
-  static const Color fundo = Color(0xFFF7F7F7);
-  static const Color cinza = Color(0xFF777777);
+  static const Color verde = Color(0xFF005942);
+  static const Color fundo = Color(0xFFFAF5EE);
+  static const Color cinza = Color(0xFF68736F);
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +24,14 @@ class AtletaNotificacaoPage extends StatelessWidget {
           },
           icon: const Icon(
             Icons.arrow_back_rounded,
-            color: Colors.black87,
+            color: Color(0xFF10251F),
           ),
         ),
 
-        title: const Text(
-          'Notificações',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Notificações', style: SateEstilo.destaque)]),
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -43,7 +44,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
             },
             icon: const Icon(
               Icons.more_horiz_rounded,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
               size: 25,
             ),
           ),
@@ -62,8 +63,8 @@ class AtletaNotificacaoPage extends StatelessWidget {
         children: [
           _notificacao(
             icone: Icons.calendar_month_outlined,
-            corIcone: const Color(0xFFB45A8B),
-            fundoIcone: const Color(0xFFF7E6F0),
+            corIcone: const Color(0xFFC9305A),
+            fundoIcone: const Color(0xFFFDE6EC),
             titulo: 'Novo treino agendado',
             descricao: 'Treino de força hoje às 18:00',
             tempo: 'Agora',
@@ -72,8 +73,8 @@ class AtletaNotificacaoPage extends StatelessWidget {
 
           _notificacao(
             icone: Icons.check_box_outlined,
-            corIcone: const Color(0xFF70A85C),
-            fundoIcone: const Color(0xFFE8F3E4),
+            corIcone: const Color(0xFF16A875),
+            fundoIcone: const Color(0xFFDFF7EE),
             titulo: 'Meta concluída',
             descricao:
                 'Parabéns! Você concluiu a meta\n'
@@ -84,8 +85,8 @@ class AtletaNotificacaoPage extends StatelessWidget {
 
           _notificacao(
             icone: Icons.notifications_none_rounded,
-            corIcone: const Color(0xFFC47A9F),
-            fundoIcone: const Color(0xFFF7E6F0),
+            corIcone: const Color(0xFFC9305A),
+            fundoIcone: const Color(0xFFFDE6EC),
             titulo: 'Lembrete de treino',
             descricao:
                 'Seu treino começa em 30 minutos.',
@@ -95,8 +96,8 @@ class AtletaNotificacaoPage extends StatelessWidget {
 
           _notificacao(
             icone: Icons.sports_handball_outlined,
-            corIcone: const Color(0xFF76A85F),
-            fundoIcone: const Color(0xFFE8F3E4),
+            corIcone: const Color(0xFF16A875),
+            fundoIcone: const Color(0xFFDFF7EE),
             titulo: 'Novo desafio',
             descricao:
                 'Participe do desafio\n'
@@ -107,8 +108,8 @@ class AtletaNotificacaoPage extends StatelessWidget {
 
           _notificacao(
             icone: Icons.bar_chart_rounded,
-            corIcone: const Color(0xFF8270B7),
-            fundoIcone: const Color(0xFFEDE9F8),
+            corIcone: const Color(0xFF003D31),
+            fundoIcone: const Color(0xFFDFF7EE),
             titulo: 'Avaliação disponível',
             descricao:
                 'Sua avaliação física está disponível.',
@@ -136,11 +137,11 @@ class AtletaNotificacaoPage extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(
+            color: Color(0xFF10251F).withValues(
               alpha: 0.025,
             ),
             blurRadius: 8,
@@ -187,7 +188,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
                             fontSize: 13,
                             fontWeight:
                                 FontWeight.bold,
-                            color: Colors.black87,
+                            color: Color(0xFF10251F),
                           ),
                         ),
                       ),
@@ -211,7 +212,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 11,
                       height: 1.35,
-                      color: Color(0xFF777777),
+                      color: Color(0xFF68736F),
                     ),
                   ),
 
@@ -281,7 +282,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
               ListTile(
                 leading: const Icon(
                   Icons.delete_outline_rounded,
-                  color: Colors.redAccent,
+                  color: Color(0xFFC0392B),
                 ),
                 title: const Text(
                   'Limpar notificações',

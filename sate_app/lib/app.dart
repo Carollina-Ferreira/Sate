@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/inicial_page.dart';
+import 'theme/sate_theme.dart';
 
 class SateApp extends StatelessWidget {
   const SateApp({super.key});
@@ -10,14 +11,7 @@ class SateApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SATE',
 
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: 'Arial',
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF00845F),
-          primary: const Color(0xFF00845F),
-        ),
-      ),
+      theme: SateTema.claro,
 
       // Força formato 24h em qualquer TimePicker do app
       builder: (context, child) {

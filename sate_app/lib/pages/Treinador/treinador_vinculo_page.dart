@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import './treinador_navigation.dart';
+import '../../theme/sate_theme.dart';
 
 class TreinadorVinculoPage extends StatefulWidget {
   final String nomeUsuario;
@@ -27,9 +28,9 @@ class TreinadorVinculoPage extends StatefulWidget {
 }
 
 class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
-  static const Color verde = Color(0xFF006B4F);
-  static const Color rosa = Color(0xFFE98BA8);
-  static const Color azul = Color(0xFF8FB9E8);
+  static const Color verde = Color(0xFF003D31);
+  static const Color rosa = Color(0xFFEF476F);
+  static const Color azul = Color(0xFF55CA9B);
 
   String get codigo => widget.codigoEquipe;
 
@@ -61,7 +62,7 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F9F8),
+      backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
         children: [
           Positioned.fill(
@@ -84,7 +85,7 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
                         borderRadius: BorderRadius.circular(22),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
+                            color: Color(0xFF10251F).withOpacity(0.06),
                             blurRadius: 15,
                             offset: const Offset(0, 6),
                           ),
@@ -124,10 +125,10 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
 
                   const SizedBox(height: 26),
 
-                  const Text(
-                    'Sua equipe está pronta.',
+                  const Text.rich(
+                    TextSpan(children: [TextSpan(text: 'Sua equipe está '), TextSpan(text: 'pronta.', style: SateEstilo.destaque)]),
                     style: TextStyle(
-                      color: Color(0xFF12261F),
+                      color: Color(0xFF10251F),
                       fontSize: 29,
                       fontWeight: FontWeight.bold,
                       height: 1.15,
@@ -156,7 +157,7 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
+                          color: Color(0xFF10251F).withOpacity(0.06),
                           blurRadius: 18,
                           offset: const Offset(0, 7),
                         ),
@@ -185,7 +186,7 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
                             vertical: 17,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE8F5F0),
+                            color: const Color(0xFFDFF7EE),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Center(
@@ -238,7 +239,7 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(18),
-                            border: Border.all(color: const Color(0xFFDCE7E2)),
+                            border: Border.all(color: const Color(0xFFE8DFD3)),
                           ),
                           child: QrImageView(
                             data: codigo,
@@ -284,7 +285,7 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(22),
-                      border: Border.all(color: const Color(0xFFDCE7E2)),
+                      border: Border.all(color: const Color(0xFFE8DFD3)),
                     ),
                     child: Row(
                       children: [
@@ -292,7 +293,7 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE8F5F0),
+                            color: const Color(0xFFDFF7EE),
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: const Icon(Icons.groups_rounded, color: verde),
@@ -313,7 +314,7 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
                               Text(
                                 widget.nomeEquipe,
                                 style: const TextStyle(
-                                  color: Color(0xFF12261F),
+                                  color: Color(0xFF10251F),
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),

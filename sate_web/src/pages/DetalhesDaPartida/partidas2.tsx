@@ -1347,11 +1347,8 @@ export default function DetalhesPartida() {
 
         <header className={styles.pageHeader}>
           <div>
-            <span className={styles.eyebrow}>
-              SATE · ACOMPANHAMENTO ESPORTIVO
-            </span>
 
-            <h1>Detalhes da partida</h1>
+            <h1>Detalhes da <em>partida</em></h1>
 
             <p>
               Consulte o resultado, os atletas, os vídeos e as marcações

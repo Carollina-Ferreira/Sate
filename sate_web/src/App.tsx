@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // ==========================================
@@ -9,6 +10,7 @@ import LandingPage from "./pages/LandingPage/landingPage";
 // PÁGINAS DE ACESSO
 // ==========================================
 import Login from "./pages/Login/login";
+import Carregamento from "./pages/Carregamento/carregamento";
 import Cadastro from "./pages/Cadastro/cadastro";
 import EsqueciSenha from "./pages/EsqueciSenha/esqueciSenha";
 
@@ -25,6 +27,7 @@ import ConfiguracaoConcluida from "./pages/ConfiguracaoConcluida/configuracaoCon
 // LAYOUT
 // ==========================================
 import Layout from "./components/Layout/layout";
+import { ThemeProvider } from "./components/Context/ThemeContext";
 
 // ==========================================
 // ROTAS DE PROTEÇÃO
@@ -48,132 +51,140 @@ import DetalhesDaPartida from "./pages/DetalhesDaPartida/partidas2";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* ========================================
-            PÁGINAS PÚBLICAS
-        ======================================== */}
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* ========================================
+              PÁGINAS PÚBLICAS
+          ======================================== */}
 
-        {/* Landing Page */}
-        <Route path="/" element={<LandingPage />} />
+          {/* Landing Page */}
+          <Route path="/" element={<LandingPage />} />
 
-        {/* Login */}
-        <Route path="/login" element={<Login />} />
+          {/* Login */}
+          <Route path="/login" element={<Login />} />
 
-        {/* Cadastro */}
-        <Route path="/cadastro" element={<Cadastro />} />
-
-        {/* Recuperação de senha */}
-        <Route path="/esqueci-senha" element={<EsqueciSenha />} />
-
-        {/* ========================================
-            ONBOARDING / CONFIGURAÇÃO INICIAL
-        ======================================== */}
-
-        <Route element={<RotaInicial />}>
+          {/* Carregamento */}
           <Route
-            path="/boas-vindas"
-            element={<BoasVindas />}
+            path="/carregamento"
+            element={<Carregamento />}
           />
 
-          <Route
-            path="/selecao-esporte"
-            element={<SelecaoEsporte />}
-          />
+          {/* Cadastro */}
+          <Route path="/cadastro" element={<Cadastro />} />
 
-          <Route
-            path="/configuracao-analise"
-            element={<ConfiguracaoAnalise />}
-          />
+          {/* Recuperação de senha */}
+          <Route path="/esqueci-senha" element={<EsqueciSenha />} />
 
-          <Route
-            path="/configuracao-equipe"
-            element={<ConfiguracaoEquipe />}
-          />
+          {/* ========================================
+              ONBOARDING / CONFIGURAÇÃO INICIAL
+          ======================================== */}
 
-          <Route
-            path="/configuracao-concluida"
-            element={<ConfiguracaoConcluida />}
-          />
-        </Route>
-
-        {/* ========================================
-            ÁREA PRIVADA
-        ======================================== */}
-
-        <Route element={<RotaPrivada />}>
-          <Route element={<Layout />}>
-
-            {/* DASHBOARD */}
+          <Route element={<RotaInicial />}>
             <Route
-              path="/inicio"
-              element={<Dashboard />}
+              path="/boas-vindas"
+              element={<BoasVindas />}
             />
 
-            {/* Compatibilidade com rota antiga */}
             <Route
-              path="/dashboard"
-              element={<Dashboard />}
+              path="/selecao-esporte"
+              element={<SelecaoEsporte />}
             />
 
-            {/* EQUIPES */}
             <Route
-              path="/equipes"
-              element={<Equipes />}
+              path="/configuracao-analise"
+              element={<ConfiguracaoAnalise />}
             />
 
-            {/* ATLETAS */}
             <Route
-              path="/atletas"
-              element={<Atletas />}
+              path="/configuracao-equipe"
+              element={<ConfiguracaoEquipe />}
             />
 
-            {/* CADASTRO DE ATLETA */}
             <Route
-              path="/cadastro-atleta"
-              element={<CadastroAtleta />}
+              path="/configuracao-concluida"
+              element={<ConfiguracaoConcluida />}
             />
-
-            {/* ANÁLISE DE VÍDEO */}
-            <Route
-              path="/videos"
-              element={<AnaliseVideo />}
-            />
-
-            {/* PARTIDAS */}
-            <Route
-              path="/partidas"
-              element={<Partidas />}
-            />
-
-            {/* DETALHES DA PARTIDA */}
-            <Route
-              path="/detalhes-partida"
-              element={<DetalhesDaPartida />}
-            />
-
-            {/* ESTATÍSTICAS */}
-            <Route
-              path="/estatisticas"
-              element={<Estatisticas />}
-            />
-
-            {/* COMPARAÇÕES */}
-            <Route
-              path="/comparacoes"
-              element={<Comparacoes />}
-            />
-
-            {/* CONFIGURAÇÕES */}
-            <Route
-              path="/configuracoes"
-              element={<Configuracoes />}
-            />
-
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+
+          {/* ========================================
+              ÁREA PRIVADA
+          ======================================== */}
+
+          <Route element={<RotaPrivada />}>
+            <Route element={<Layout />}>
+
+              {/* DASHBOARD */}
+              <Route
+                path="/inicio"
+                element={<Dashboard />}
+              />
+
+              {/* Compatibilidade com rota antiga */}
+              <Route
+                path="/dashboard"
+                element={<Dashboard />}
+              />
+
+              {/* EQUIPES */}
+              <Route
+                path="/equipes"
+                element={<Equipes />}
+              />
+
+              {/* ATLETAS */}
+              <Route
+                path="/atletas"
+                element={<Atletas />}
+              />
+
+              {/* CADASTRO DE ATLETA */}
+              <Route
+                path="/cadastro-atleta"
+                element={<CadastroAtleta />}
+              />
+
+              {/* ANÁLISE DE VÍDEO */}
+              <Route
+                path="/videos"
+                element={<AnaliseVideo />}
+              />
+
+              {/* PARTIDAS */}
+              <Route
+                path="/partidas"
+                element={<Partidas />}
+              />
+
+              {/* DETALHES DA PARTIDA */}
+              <Route
+                path="/detalhes-partida"
+                element={<DetalhesDaPartida />}
+              />
+
+              {/* ESTATÍSTICAS */}
+              <Route
+                path="/estatisticas"
+                element={<Estatisticas />}
+              />
+
+              {/* COMPARAÇÕES */}
+              <Route
+                path="/comparacoes"
+                element={<Comparacoes />}
+              />
+
+              {/* CONFIGURAÇÕES */}
+              <Route
+                path="/configuracoes"
+                element={<Configuracoes />}
+              />
+
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

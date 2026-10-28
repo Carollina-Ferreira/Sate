@@ -1,33 +1,184 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 /* =====================================
-   VARIÁVEIS GLOBAIS
+   VARIÁVEIS GLOBAIS — TEMA CLARO
 ===================================== */
 
 :root {
-  --verde-principal: #16A875;
-  --verde-escuro: #006B4F;
-  --verde-dark: #005942;
-  --azul: #4EA5D9;
-  --rosa: #EF476F;
-  --vermelho: #D52941;
-  --branco: #FFFFFF;
-  --creme: #FAF5EE;
-  --creme-card: #FFFCF7;
-  --verde: #006B4F;
-  
-  --texto-suave: #6C7C77;
-  --borda: #E8DED1;
+  color-scheme: light;
 
-  --cinza-100: #F6F9F7;
-  --cinza-200: #E9EFEC;
-  --borda: #E1E8E4;
-
-  --texto: #12261F;
-  --texto-suave: #6C7C77;
-
+  /* ===== TIPOGRAFIA ===== */
   --fonte-titulo: 'Sora', sans-serif;
   --fonte-base: 'Inter', sans-serif;
+
+  /* ===== FUNDOS ===== */
+  --bg-page: #faf5ee;
+  --bg-surface: #ffffff;
+  --bg-surface-2: #fffaf4;
+  --bg-neutro: #f6f9f7;
+  --bg-verde-suave: #edf7f1;
+
+  /* ===== BORDAS ===== */
+  --borda: #e8ddd2;
+  --borda-forte: #ddcfc0;
+  --borda-neutra: #e7efeb;
+
+  /* ===== TEXTO ===== */
+  --texto: #12261f;
+  --texto-medio: #365447;
+  --texto-suave: #6c7c77;
+  --texto-claro: #93a19a;
+  --texto-sobre-verde: #ffffff;
+  --texto-inverso: #ffffff;
+
+  /* ===== MARCA — VERDES ===== */
+  --verde-profundo: #005444;
+  --verde: #005942;
+  --verde-medio: #006b4f;
+  --verde-hover: #087b5b;
+  --verde-principal: #16a875;
+  --verde-claro: #83e3b6;
+  --verde-escuro: #003d31;
+  --verde-dark: #005942;
+  --branco: #ffffff;
+
+  /* ===== ROSA / VERMELHO ===== */
+  --rosa: #ef476f;
+  --rosa-suave: #ff9db8;
+  --rosa-claro: #ffe4ec;
+  --vermelho: #d52941;
+  --vermelho-escuro: #b5283d;
+  --vermelho-claro: #fff0f1;
+
+  /* ===== ALERTAS / AUXILIARES ===== */
+  --azul: #4ea5d9;
+  --azul-claro: #eaf5fc;
+  --amarelo: #f4c76a;
+  --amarelo-escuro: #8a6810;
+  --amarelo-claro: #fff6dc;
+
+  /* ===== GRÁFICOS / ESPORTES ===== */
+  --graf-1: #d9822b;
+  --graf-2: #b6b51a;
+  --graf-3: #1674b8;
+  --graf-4: #7c5ce5;
+  --graf-5: #d652a2;
+
+  /* ===== SOMBRAS / OVERLAYS ===== */
+  --sombra: rgba(0, 0, 0, 0.15);
+  --sombra-foco: rgba(22, 168, 117, 0.18);
+  --overlay: rgba(0, 35, 25, 0.68);
+  --branco-translucido: rgba(255, 255, 255, 0.72);
+
+  /* ===== SIDEBAR ===== */
+  --sidebar-fundo: var(--verde-escuro);
+  --sidebar-texto: rgba(255, 255, 255, 0.75);
+  --sidebar-hover: rgba(255, 255, 255, 0.08);
+  --sidebar-ativo: var(--verde);
+  --sidebar-borda: rgba(255, 255, 255, 0.2);
+  --sidebar-texto-ativo: var(--texto-inverso);
+
+  /* ===== ESTADOS DE INTERFACE ===== */
+  --bg-rosa-suave: var(--rosa-claro);
+  --bg-azul-suave: var(--azul-claro);
+  --menu-hover-bg: var(--bg-neutro);
+  --menu-active-bg: var(--bg-verde-suave);
+  --notification-unread-bg: var(--bg-verde-suave);
+  --notification-red-bg: var(--vermelho-claro);
+  --notification-blue-bg: var(--azul-claro);
+  --notification-pink-bg: var(--rosa-claro);
+  --avatar-fundo: var(--bg-verde-suave);
+  --avatar-borda: var(--borda-neutra);
+  --scrollbar-thumb: var(--borda-forte);
+}
+
+/* =====================================
+   VARIÁVEIS GLOBAIS — TEMA ESCURO
+===================================== */
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* ===== FUNDOS ===== */
+  --bg-page: #102a22;
+  --bg-surface: #17372c;
+  --bg-surface-2: #1d3d30;
+  --bg-neutro: #153027;
+  --bg-verde-suave: #224638;
+
+  /* ===== BORDAS ===== */
+  --borda: #2b493b;
+  --borda-forte: #365447;
+  --borda-neutra: #2b493b;
+
+  /* ===== TEXTO ===== */
+  --texto: #edf7f1;
+  --texto-medio: #b5cec2;
+  --texto-suave: #a8beb3;
+  --texto-claro: #819b8d;
+  --texto-sobre-verde: #ffffff;
+  --texto-inverso: #102a22;
+
+  /* ===== MARCA — VERDES ===== */
+  --verde-profundo: #a7edce;
+  --verde: #83e3b6;
+  --verde-medio: #65ddb0;
+  --verde-hover: #20b982;
+  --verde-principal: #42c994;
+  --verde-claro: #83e3b6;
+  --verde-escuro: #09251e;
+  --verde-dark: #164c3c;
+  --branco: #ffffff;
+
+  /* ===== ROSA / VERMELHO ===== */
+  --rosa: #ff8eae;
+  --rosa-suave: #ff9db8;
+  --rosa-claro: #3a2425;
+  --vermelho: #ff7c8b;
+  --vermelho-escuro: #ffabb4;
+  --vermelho-claro: #3a2425;
+
+  /* ===== ALERTAS / AUXILIARES ===== */
+  --azul: #8bcdf5;
+  --azul-claro: #1d3442;
+  --amarelo: #f5d77d;
+  --amarelo-escuro: #f4c76a;
+  --amarelo-claro: #3b3320;
+
+  /* ===== GRÁFICOS / ESPORTES ===== */
+  --graf-1: #f0a85e;
+  --graf-2: #d7d65c;
+  --graf-3: #66b9f0;
+  --graf-4: #b2a0ff;
+  --graf-5: #f08acb;
+
+  /* ===== SOMBRAS / OVERLAYS ===== */
+  --sombra: rgba(0, 0, 0, 0.4);
+  --sombra-foco: rgba(66, 201, 148, 0.2);
+  --overlay: rgba(0, 20, 15, 0.8);
+  --branco-translucido: rgba(255, 255, 255, 0.12);
+
+  /* ===== SIDEBAR ===== */
+  --sidebar-fundo: #09251e;
+  --sidebar-texto: rgba(255, 255, 255, 0.75);
+  --sidebar-hover: rgba(255, 255, 255, 0.08);
+  --sidebar-ativo: #164c3c;
+  --sidebar-borda: rgba(255, 255, 255, 0.2);
+  --sidebar-texto-ativo: #ffffff;
+
+  /* ===== ESTADOS DE INTERFACE ===== */
+  --bg-rosa-suave: #3a2425;
+  --bg-azul-suave: #1d3442;
+  --menu-hover-bg: #1d3d30;
+  --menu-active-bg: #224638;
+  --notification-unread-bg: #224638;
+  --notification-red-bg: #3a2425;
+  --notification-blue-bg: #1d3442;
+  --notification-pink-bg: #3a2425;
+  --avatar-fundo: #224638;
+  --avatar-borda: #2b493b;
+  --scrollbar-thumb: #365447;
 }
 
 /* =====================================
@@ -49,23 +200,22 @@ body,
   padding: 0;
 }
 
-/* =====================================
-   FUNDO GLOBAL DO SATE
-===================================== */
-
 html {
-  background-color: #faf5ee;
+  background-color: var(--bg-page);
+  scrollbar-width: none;
 }
 
 body {
   min-height: 100vh;
 
   background:
-    radial-gradient(ellipse 340px 230px at 96% 0%,
-      rgba(244, 63, 120, 0.16) 0%,
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      var(--fundo-brilho-rosa, rgba(244, 63, 120, 0.16)) 0%,
       rgba(244, 63, 120, 0.08) 38%,
-      rgba(244, 63, 120, 0) 76%),
-    #faf5ee;
+      rgba(244, 63, 120, 0) 76%
+    ),
+    var(--bg-page);
 
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -76,6 +226,20 @@ body {
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+:root[data-theme='dark'] body {
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(66, 201, 148, 0.1) 0%,
+      rgba(66, 201, 148, 0) 76%
+    ),
+    var(--bg-page);
 }
 
 #root {

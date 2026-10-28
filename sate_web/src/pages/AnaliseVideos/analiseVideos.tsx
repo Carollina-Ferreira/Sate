@@ -1,4 +1,3 @@
-
 import {
   ArrowLeft,
   Check,
@@ -1075,13 +1074,12 @@ export default function AnaliseVideos() {
               padding: 0,
             }}
           >
-            <ArrowLeft size={17} />
-            Voltar
           </button>
-
+             <div className={styles.titleArea}>
           <h1>
             Análise de <em>vídeo</em>
           </h1>
+          </div>
 
           <div className={styles.videoSelectors}>
             <div className={styles.videoSelectorGroup}>

@@ -1,1383 +1,822 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-
-/* ============================================================
-   PÁGINA
-============================================================ */
-
-.page {
-  width: 100%;
-  min-height: 100vh;
-
-  display: grid;
-
-  grid-template-columns:
-    56% 44%;
-
-  overflow: hidden;
-
-  background: #f6f8f7;
-
-  font-family:
-    'Poppins',
-    sans-serif;
+:global(*) {
+  box-sizing: border-box;
 }
 
-
-/* ============================================================
-   ESQUERDA
-============================================================ */
-
-.left {
-  position: relative;
-
-  min-width: 0;
-  min-height: 100vh;
-
-  overflow: hidden;
-
-  background: #002f26;
-
-  isolation: isolate;
+:global(html),
+:global(body),
+:global(#root) {
+  margin: 0;
+  min-height: 100%;
 }
 
-
-/* ============================================================
-   IMAGENS
-============================================================ */
-
-.heroImages {
-  position: absolute;
-
-  inset: 0;
-
-  z-index: -5;
-
-  overflow: hidden;
+:global(body) {
+  color: #12261f;
+  background: #f6f9f7;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-
-.heroSlide {
-  position: absolute;
-
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  background-size: cover;
-
-  background-position:
-    72% center;
-
-  background-repeat:
-    no-repeat;
-
-  opacity: 0;
-
-  filter:
-    saturate(1.03)
-    contrast(1.02)
-    brightness(1);
-
-  transition:
-    opacity 8s ease-in-out;
-
-  will-change:
-    opacity;
+:global(button),
+:global(input) {
+  font: inherit;
 }
 
-
-.heroSlideActive {
-  opacity: 1;
-}
-
-
-/* ============================================================
-   OVERLAY
-============================================================ */
-
-.leftOverlay {
-  position: absolute;
-
-  inset: 0;
-
-  z-index: -4;
-
-  pointer-events: none;
-
-  background:
-
-    linear-gradient(
-      90deg,
-      rgba(0, 25, 20, 0.84) 0%,
-      rgba(0, 27, 21, 0.63) 25%,
-      rgba(0, 28, 22, 0.35) 47%,
-      rgba(0, 28, 22, 0.10) 70%,
-      transparent 100%
-    ),
-
-    linear-gradient(
-      0deg,
-      rgba(0, 22, 17, 0.90) 0%,
-      rgba(0, 23, 18, 0.80) 8%,
-      rgba(0, 24, 19, 0.61) 19%,
-      rgba(0, 25, 20, 0.39) 32%,
-      rgba(0, 25, 20, 0.19) 45%,
-      rgba(0, 25, 20, 0.06) 58%,
-      transparent 71%
-    );
-}
-
-
-.left::after {
-  content: '';
-
-  position: absolute;
-
-  inset: 0;
-
-  z-index: -3;
-
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      ellipse at 15% 58%,
-      rgba(0, 18, 14, 0.23) 0%,
-      rgba(0, 18, 14, 0.09) 34%,
-      transparent 63%
-    );
-}
-
-
-/* ============================================================
-   CURVAS
-============================================================ */
-
-.topCurves {
-  position: absolute;
-
-  top: -2px;
-  left: -20px;
-
-  z-index: 2;
-
-  width: 465px;
-  height: 250px;
-
-  pointer-events: none;
-
-  opacity: 0.42;
-}
-
-
-.topCurves path {
-  fill: none;
-
-  stroke:
-    rgba(33, 207, 155, 0.32);
-
-  stroke-width: 1;
-}
-
-
-.topCurves path:nth-child(2) {
-  stroke:
-    rgba(33, 207, 155, 0.18);
-
-  stroke-dasharray:
-    3 8;
-}
-
-
-.topCurves path:nth-child(3) {
-  stroke:
-    rgba(33, 207, 155, 0.17);
-}
-
-
-.pinkAccent {
-  position: absolute;
-
-  right: -55px;
-  bottom: 185px;
-
-  z-index: 2;
-
-  width: 230px;
-  height: 1px;
-
-  transform:
-    rotate(43deg);
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 52, 105, 0.34)
-    );
-}
-
-
-/* ============================================================
-   LOGO HERO
-============================================================ */
-
-.heroLogoLink {
-  position: absolute;
-
-  top: 47px;
-  left: 66px;
-
-  z-index: 10;
-
-  display: inline-flex;
-
+:global(a) {
+  color: inherit;
   text-decoration: none;
 }
 
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  background: #FAF5EE;
+  color: #12261f;
+  font-family: 'Poppins', sans-serif;
+}
+
+.hero,
+.left {
+  position: relative;
+  min-width: 0;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 56px 52px;
+  isolation: isolate;
+  background: linear-gradient(160deg, #0b2e22 0%, #005942 55%, #0b2e22 100%);
+  color: #fff;
+}
+
+.heroImages {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.heroSlide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  filter: saturate(.8) contrast(1.02);
+  transition: opacity 1.8s ease-in-out;
+}
+
+.heroSlideActive {
+  opacity: .55;
+}
+
+.heroOverlay,
+.leftOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 78% 22%, rgba(239, 71, 111, .24), transparent 42%), linear-gradient(180deg, rgba(11, 46, 34, .30), rgba(11, 46, 34, .55) 45%, rgba(11, 46, 34, .93));
+}
+
+.heroLogoLink {
+  position: absolute;
+  top: 30px;
+  left: 42px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+}
 
 .heroLogo {
-  width: 88px;
-
-  height: auto;
-
+  width: 118px;
+  max-height: 48px;
   object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
-
-/* ============================================================
-   CONTEÚDO
-============================================================ */
-
+.heroContent,
 .leftContent {
-  position: absolute;
-
-  left: 68px;
-  bottom: 230px;
-
-  z-index: 10;
-
-  width: 560px;
-
-  max-width:
-    calc(100% - 110px);
-
-  color: #ffffff;
+  position: relative;
+  z-index: 2;
+  max-width: 440px;
+  margin-bottom: 28px;
 }
 
-
-.leftContent::before {
-  content: '';
-
-  position: absolute;
-
-  z-index: -1;
-
-  top: -55px;
-  left: -60px;
-
-  width: 590px;
-  height: 330px;
-
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(0, 16, 13, 0.34) 0%,
-      rgba(0, 17, 14, 0.10) 48%,
-      transparent 73%
-    );
-
-  filter:
-    blur(8px);
-}
-
-
+.heroContent h1,
 .leftContent h1 {
-  margin: 0;
-
-  display: flex;
-
-  flex-direction: column;
-
-  font-size:
-    clamp(
-      34px,
-      2.75vw,
-      46px
-    );
-
-  line-height: 1.07;
-
-  font-weight: 600;
-
-  letter-spacing:
-    -0.035em;
+  margin: 0 0 14px;
+  font-size: clamp(29px, 3vw, 42px);
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -.045em;
 }
 
-
+.heroContent h1 span,
 .leftContent h1 span {
   display: block;
-
-  white-space: nowrap;
 }
 
-
+.heroContent h1 em,
 .leftContent h1 em {
-  color: #20cf99;
-
-  font-family:
-    'DM Serif Display',
-    serif;
-
-  font-style: italic;
-
+  color: #ff7a98;
+  font-family: 'DM Serif Display', serif;
   font-weight: 400;
-
-  letter-spacing:
-    -0.025em;
+  font-style: italic;
+  letter-spacing: -.02em;
 }
 
-
+.heroContent p,
 .leftContent p {
-  max-width: 445px;
-
-  margin:
-    21px
-    0
-    0;
-
-  color:
-    rgba(255, 255, 255, 0.88);
-
-  font-size: 13px;
-
-  line-height: 1.62;
+  max-width: 430px;
+  margin: 0;
+  color: #ffffffbd;
+  font-size: 14px;
+  line-height: 1.7;
 }
 
-
-/* ============================================================
-   ESTATÍSTICAS
-============================================================ */
-
+.heroStats,
 .leftFooter {
-  position: absolute;
-
-  left: 68px;
-  bottom: 62px;
-
-  z-index: 10;
-
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
-
-  gap: 29px;
+  flex-wrap: wrap;
+  gap: 22px;
+  padding-top: 22px;
+  border-top: 1px solid #ffffff30;
 }
 
-
+.heroStat,
 .stat {
-  min-width: 88px;
-
   display: flex;
   flex-direction: column;
-
-  gap: 5px;
+  gap: 3px;
 }
 
-
+.heroStat strong,
 .stat strong {
-  color: #ffffff;
-
-  font-size: 26px;
-
-  line-height: 1;
-
-  font-weight: 600;
+  color: #5fe0b0;
+  font-size: 21px;
+  line-height: 1.2;
 }
 
-
+.heroStat span,
 .stat span {
-  color:
-    rgba(255, 255, 255, 0.84);
-
-  font-size: 10px;
+  color: #ffffffbd;
+  font-size: 11px;
 }
-
 
 .statDivider {
   width: 1px;
-  height: 44px;
-
-  background:
-    rgba(33, 211, 157, 0.73);
+  height: 30px;
+  background: #ffffff38;
 }
 
-
-/* ============================================================
-   DIREITA
-============================================================ */
-
+.loginArea,
 .right {
   position: relative;
-
-  min-width: 0;
-  min-height: 100vh;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
-  box-sizing: border-box;
-
-  padding:
-    32px
-    48px;
-
+  min-width: 0;
+  min-height: 100vh;
+  padding: 40px;
   overflow: hidden;
-
-  background:
-    linear-gradient(
-      145deg,
-      #fbfdfc 0%,
-      #f5faf7 47%,
-      #f1f8f4 100%
-    );
+  background: radial-gradient(120% 120% at 100% 0%, #f3e8da 0%, #FAF5EE 55%);
 }
-
-
-/* ============================================================
-   FUNDO ANIMADO
-============================================================ */
 
 .backgroundDecor {
   position: absolute;
-
   inset: 0;
-
   overflow: hidden;
-
   pointer-events: none;
 }
 
-
 .gradientOrb {
   position: absolute;
-
-  border-radius:
-    52% 48% 62% 38% /
-    45% 58% 42% 55%;
-
-  filter:
-    blur(22px);
-
-  animation:
-    morphOrb
-    16s
-    ease-in-out
-    infinite alternate;
+  display: block;
+  border-radius: 50%;
+  filter: blur(42px);
 }
 
-
-.orbTop {
-  width: 390px;
-  height: 390px;
-
-  top: -190px;
-  right: -110px;
-
-  background:
-    radial-gradient(
-      circle at 38% 42%,
-      rgba(37, 223, 166, 0.54),
-      rgba(81, 229, 183, 0.31) 35%,
-      transparent 75%
-    );
-
-  opacity: 0.9;
-}
-
-
+.orbTop,
 .orbRight {
-  width: 330px;
-  height: 410px;
-
-  top: 30%;
-  right: -180px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(0, 132, 96, 0.28),
-      rgba(35, 213, 158, 0.18) 45%,
-      transparent 76%
-    );
-
-  opacity: 0.76;
-
-  animation-delay: -8s;
+  width: 290px;
+  height: 290px;
+  top: -130px;
+  right: -150px;
+  background: #ef476f;
+  opacity: 0.09;
 }
-
 
 .orbBottom {
-  width: 430px;
-  height: 430px;
-
-  right: -130px;
-  bottom: -210px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(32, 216, 160, 0.58),
-      rgba(71, 226, 178, 0.28) 40%,
-      transparent 76%
-    );
-
-  opacity: 0.9;
-
-  animation-delay: -5s;
+  width: 260px;
+  height: 260px;
+  bottom: -130px;
+  left: -120px;
+  background: #16a875;
+  opacity: 0.18;
 }
-
 
 .orbLeft {
-  width: 310px;
-  height: 390px;
-
-  left: -180px;
-  top: 34%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(112, 232, 196, 0.34),
-      rgba(89, 220, 181, 0.17) 45%,
-      transparent 78%
-    );
-
-  opacity: 0.76;
-
-  animation-delay: -11s;
+  width: 180px;
+  height: 180px;
+  left: -120px;
+  top: 35%;
+  background: #16a875;
+  opacity: 0.10;
 }
-
 
 .orbCenter {
-  width: 470px;
-  height: 470px;
-
-  top: 24%;
-  left: 11%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(212, 247, 235, 0.66),
-      rgba(194, 241, 225, 0.28) 40%,
-      transparent 76%
-    );
-
-  filter:
-    blur(40px);
-
-  opacity: 0.72;
-
-  animation-delay: -14s;
+  width: 170px;
+  height: 170px;
+  bottom: 5%;
+  right: -90px;
+  background: #16a875;
+  opacity: 0.10;
 }
-
 
 .orbSmallOne {
-  width: 185px;
-  height: 185px;
-
-  top: 7%;
-  left: -65px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(97, 226, 187, 0.38),
-      transparent 75%
-    );
-
-  opacity: 0.66;
+  width: 90px;
+  height: 90px;
+  top: 12%;
+  left: 8%;
+  background: #ef476f;
+  opacity: 0.05;
 }
-
 
 .orbSmallTwo {
-  width: 190px;
-  height: 190px;
-
-  bottom: 7%;
-  left: 15%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(78, 220, 177, 0.31),
-      transparent 76%
-    );
-
-  opacity: 0.66;
-
-  animation-delay: -9s;
+  width: 110px;
+  height: 110px;
+  bottom: 8%;
+  right: 5%;
+  background: #4ea5d9;
+  opacity: 0.07;
 }
-
 
 .auroraTop {
-  position: absolute;
-
-  width: 660px;
-  height: 260px;
-
-  top: -150px;
-  left: -80px;
-
-  border-radius: 50%;
-
-  background:
-    linear-gradient(
-      100deg,
-      transparent,
-      rgba(58, 218, 168, 0.24),
-      rgba(112, 235, 198, 0.15),
-      transparent
-    );
-
-  filter:
-    blur(30px);
-
-  animation:
-    auroraTopMove
-    20s
-    ease-in-out
-    infinite alternate;
+  top: 3%;
+  right: -12%;
+  background: #ef476f;
+  opacity: 0.07;
 }
-
 
 .auroraBottom {
-  position: absolute;
-
-  width: 650px;
-  height: 270px;
-
-  right: -170px;
-  bottom: -135px;
-
-  border-radius: 50%;
-
-  background:
-    linear-gradient(
-      100deg,
-      transparent,
-      rgba(31, 205, 151, 0.25),
-      rgba(113, 233, 198, 0.12),
-      transparent
-    );
-
-  filter:
-    blur(32px);
-
-  animation:
-    auroraBottomMove
-    22s
-    ease-in-out
-    infinite alternate;
+  bottom: -5%;
+  left: -10%;
+  background: #16a875;
+  opacity: 0.12;
 }
 
-
-@keyframes morphOrb {
-
-  0% {
-    transform:
-      translate3d(0, 0, 0)
-      scale(1);
-
-    border-radius:
-      52% 48% 62% 38% /
-      45% 58% 42% 55%;
-  }
-
-
-  50% {
-    transform:
-      translate3d(-13px, 24px, 0)
-      rotate(-4deg)
-      scale(0.97);
-
-    border-radius:
-      61% 39% 52% 48% /
-      40% 62% 38% 60%;
-  }
-
-
-  100% {
-    transform:
-      translate3d(18px, 11px, 0)
-      rotate(5deg)
-      scale(1.05);
-
-    border-radius:
-      39% 61% 58% 42% /
-      59% 41% 55% 45%;
-  }
-
-}
-
-
-@keyframes auroraTopMove {
-
-  from {
-    transform:
-      translateX(-30px)
-      rotate(-10deg);
-  }
-
-  to {
-    transform:
-      translate(55px, 28px)
-      rotate(-5deg);
-  }
-
-}
-
-
-@keyframes auroraBottomMove {
-
-  from {
-    transform:
-      translate(30px, 18px)
-      rotate(10deg);
-  }
-
-  to {
-    transform:
-      translate(-55px, -20px)
-      rotate(5deg);
-  }
-
-}
-
-
-/* ============================================================
-   CARD CADASTRO
-============================================================ */
-
+.loginCard,
 .formContainer {
   position: relative;
-
-  z-index: 5;
-
+  z-index: 2;
   width: 100%;
-  max-width: 465px;
-
-  box-sizing: border-box;
-
-  padding:
-    32px
-    40px;
-
-  border:
-    1px solid
-    rgba(222, 231, 226, 0.78);
-
-  border-radius: 25px;
-
-  background:
-    rgba(255, 255, 255, 0.92);
-
-  box-shadow:
-    0 8px 20px
-      rgba(0, 48, 35, 0.025),
-    0 30px 70px
-      rgba(0, 48, 35, 0.07);
-
-  backdrop-filter:
-    blur(18px);
-
-  animation:
-    cardEnter
-    0.55s
-    ease
-    both;
+  max-width: 410px;
+  padding: 38px 36px 32px;
+  border: 1px solid #E8DFD3;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 2px 6px #12261f0a, 0 28px 56px #12261f17;
+  animation: cardEnter .45s ease both;
 }
 
+.cardLogo {
+  display: block;
+  width: 82px;
+  height: 42px;
+  object-fit: contain;
+  object-position: left center;
+  margin: 0 0 20px;
+}
+
+.cardHeader h2 {
+  margin: 0 0 7px;
+  color: #12261f;
+  font-family: 'Poppins', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.18;
+}
+
+.cardHeader h2 em,
+.formContainer h2 em {
+  color: #EF476F;
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+}
+
+.cardHeader p,
+.subtitle {
+  margin: 0 0 24px;
+  color: #6C7C77;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.field,
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label,
+.inputGroup label {
+  color: #6C7C77;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWrapper input,
+.inputGroup input {
+  width: 100%;
+  height: 46px;
+  min-width: 0;
+  padding: 0 14px 0 42px;
+  border: 1.5px solid #E8DFD3;
+  border-radius: 12px;
+  outline: none;
+  background: #F6F9F7;
+  color: #12261f;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+}
+
+.inputGroup input {
+  padding-left: 42px;
+}
+
+.inputWrapper input::placeholder,
+.inputGroup input::placeholder {
+  color: #a3aea9;
+}
+
+.inputWrapper input:hover,
+.inputGroup input:hover {
+  border-color: #d3c8ba;
+}
+
+.inputWrapper input:focus,
+.inputGroup input:focus {
+  border-color: #16A875;
+  background: #fff;
+  box-shadow: 0 0 0 4px #ef476f24;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  z-index: 1;
+  color: #8a9a93;
+  pointer-events: none;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #6C7C77;
+  cursor: pointer;
+}
+
+.passwordToggle:hover {
+  color: #C9305A;
+  background: #FDE6EC;
+}
+
+.passwordToggle~input {
+  padding-right: 44px;
+}
+
+.options,
+.remember,
+.signupDivider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #6C7C77;
+  font-size: 12.5px;
+}
+
+.remember {
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.remember input,
+.terms input {
+  width: 16px;
+  height: 16px;
+  accent-color: #EF476F;
+}
+
+.forgotPassword,
+.createAccount,
+.link {
+  color: #C9305A;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.forgotPassword:hover,
+.createAccount:hover,
+.link:hover {
+  color: #005942;
+  text-decoration: underline;
+}
+
+.submitButton,
+.confirmationButton {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #005942, #08795d);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s, opacity .15s;
+}
+
+.submitButton:hover:not(:disabled),
+.confirmationButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px #0059424d;
+}
+
+.submitButton:disabled {
+  opacity: .7;
+  cursor: progress;
+}
+
+.errorMessage,
+.successMessage {
+  padding: 11px 13px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.errorMessage {
+  background: #FDE6EC;
+  border: 1px solid #f8c6d3;
+  color: #C9305A;
+}
+
+.successMessage {
+  background: #DFF7EE;
+  border: 1px solid #bfe5d8;
+  color: #005942;
+}
+
+.terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #6C7C77;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.terms input {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.subtitle {
+  margin-top: 0;
+}
+
+.backArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 22px;
+  color: #6C7C77;
+  font-size: 12.5px;
+}
+
+.link {
+  font-size: inherit;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #0b2e228c;
+  backdrop-filter: blur(4px);
+  animation: fadeIn .2s ease both;
+}
+
+.confirmationCard {
+  width: 100%;
+  max-width: 400px;
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #E8DFD3;
+  border-radius: 24px;
+  box-shadow: 0 30px 70px #0b2e224d;
+  animation: cardEnter .28s ease both;
+}
+
+.successIcon {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: #FDE6EC;
+  color: #EF476F;
+}
+
+.successIcon:after {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1.5px dashed #ef476f66;
+}
+
+.confirmationCard h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  letter-spacing: -.04em;
+}
+
+.confirmationCard p {
+  margin: 0 0 14px;
+  color: #6C7C77;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.emailText {
+  max-width: 100%;
+  margin-bottom: 20px;
+  padding: 6px 14px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #DFF7EE;
+  color: #005942;
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resendButton {
+  margin-top: 14px;
+  padding: 6px 10px;
+  border: 0;
+  background: transparent;
+  color: #C9305A;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.resendButton:disabled {
+  color: #6C7C77;
+  cursor: default;
+}
+
+.resendMessage {
+  margin: 4px 0 0 !important;
+  color: #005942 !important;
+  font-size: 12.5px !important;
+}
+
+.confirmationLink {
+  margin-top: 8px;
+  color: #6C7C77;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.confirmationLink:hover {
+  color: #C9305A;
+}
 
 @keyframes cardEnter {
-
   from {
     opacity: 0;
-
-    transform:
-      translateY(14px);
+    transform: translateY(14px) scale(.985);
   }
 
   to {
     opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
-    transform:
-      translateY(0);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
 
-}
-
-
-/* ============================================================
-   LOGO CARD
-============================================================ */
-
-.cardLogo {
-  display: block;
-
-  width: 74px;
-
-  height: auto;
-
-  margin:
-    0
-    0
-    17px;
-}
-
-
-/* ============================================================
-   HEADER
-============================================================ */
-
-.cardHeader {
-  margin-bottom: 19px;
-}
-
-
-.cardHeader h2 {
-  margin: 0;
-
-  color: #10251f;
-
-  font-size: 27px;
-
-  line-height: 1.15;
-
-  font-weight: 600;
-
-  letter-spacing:
-    -0.035em;
-}
-
-
-.subtitle {
-  max-width: 330px;
-
-  margin:
-    7px
-    0
-    0;
-
-  color: #66756f;
-
-  font-size: 12px;
-
-  line-height: 1.5;
-}
-
-
-/* ============================================================
-   FORM
-============================================================ */
-
-.form {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 12px;
-}
-
-
-.inputGroup {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 5px;
-}
-
-
-.inputGroup label {
-  color: #10251f;
-
-  font-size: 11px;
-
-  font-weight: 600;
-}
-
-
-/* ============================================================
-   INPUT
-============================================================ */
-
-.inputWrapper {
-  position: relative;
-
-  width: 100%;
-}
-
-
-.inputWrapper input {
-  width: 100%;
-  height: 47px;
-
-  box-sizing: border-box;
-
-  padding:
-    0
-    43px
-    0
-    43px;
-
-  border:
-    1px solid #c4d2cb;
-
-  border-radius: 10px;
-
-  outline: none;
-
-  background: #ffffff;
-
-  color: #10251f;
-
-  font-family:
-    'Poppins',
-    sans-serif;
-
-  font-size: 12px;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-
-.inputWrapper input::placeholder {
-  color: #9aa8a3;
-}
-
-
-.inputWrapper input:focus {
-  border-color: #005942;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(0, 89, 66, 0.10);
-}
-
-
-.inputIcon {
-  position: absolute;
-
-  top: 50%;
-  left: 14px;
-
-  transform:
-    translateY(-50%);
-
-  color: #64766f;
-}
-
-
-/* ============================================================
-   SENHA
-============================================================ */
-
-.passwordToggle {
-  position: absolute;
-
-  top: 50%;
-  right: 9px;
-
-  transform:
-    translateY(-50%);
-
-  width: 31px;
-  height: 31px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-
-  border: none;
-
-  border-radius: 50%;
-
-  background: transparent;
-
-  color: #61736c;
-
-  cursor: pointer;
-}
-
-
-.passwordToggle:hover {
-  background: #eef5f2;
-
-  color: #005942;
-}
-
-
-/* ============================================================
-   MENSAGENS
-============================================================ */
-
-.errorMessage,
-.successMessage {
-  padding:
-    9px
-    11px;
-
-  border-radius: 9px;
-
-  font-size: 10px;
-
-  line-height: 1.45;
-}
-
-
-.errorMessage {
-  border:
-    1px solid #f0c9ce;
-
-  background: #fff5f6;
-
-  color: #b5283d;
-}
-
-
-.successMessage {
-  border:
-    1px solid #bfe5d8;
-
-  background: #eaf7f2;
-
-  color: #005942;
-}
-
-
-/* ============================================================
-   TERMOS
-============================================================ */
-
-.terms {
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-
-  margin-top: 2px;
-
-  color: #40564e;
-
-  font-size: 10px;
-
-  cursor: pointer;
-}
-
-
-.terms input {
-  width: 15px;
-  height: 15px;
-
-  margin: 0;
-
-  accent-color: #005942;
-}
-
-
-/* ============================================================
-   BOTÃO
-============================================================ */
-
-.submitButton {
-  width: 100%;
-  height: 50px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 14px;
-
-  margin-top: 2px;
-
-  border: none;
-
-  border-radius: 999px;
-
-  background:
-    linear-gradient(
-      100deg,
-      #007154 0%,
-      #005942 52%,
-      #003f33 100%
-    );
-
-  color: #ffffff;
-
-  font-family:
-    'Poppins',
-    sans-serif;
-
-  font-size: 13px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 10px 22px
-    rgba(0, 89, 66, 0.14);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-
-.submitButton:hover:not(:disabled) {
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 14px 27px
-    rgba(0, 89, 66, 0.20);
-}
-
-
-.submitButton svg {
-  transition:
-    transform 0.2s ease;
-}
-
-
-.submitButton:hover svg {
-  transform:
-    translateX(3px);
-}
-
-
-.submitButton:disabled {
-  opacity: 0.65;
-
-  cursor: not-allowed;
-}
-
-
-/* ============================================================
-   LOGIN
-============================================================ */
-
-.loginArea {
-  margin-top: 18px;
-
-  padding-top: 17px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  gap: 5px;
-
-  border-top:
-    1px solid #e1e8e4;
-
-  color: #74837d;
-
-  font-size: 10px;
-}
-
-
-.link {
-  color: #005942;
-
-  font-size: 10px;
-
-  font-weight: 600;
-
-  text-decoration: none;
-}
-
-
-.link:hover {
-  text-decoration: underline;
-}
-
-
-/* ============================================================
-   NOTEBOOK
-============================================================ */
-
-@media (max-width: 1250px) {
-
-  .page {
-    grid-template-columns:
-      54% 46%;
+  to {
+    opacity: 1;
   }
-
-
-  .leftContent {
-    left: 45px;
-  }
-
-
-  .leftFooter {
-    left: 45px;
-  }
-
-
-  .heroLogoLink {
-    left: 45px;
-  }
-
-
-  .right {
-    padding:
-      25px
-      32px;
-  }
-
-
-  .formContainer {
-    max-width: 430px;
-
-    padding:
-      28px
-      34px;
-  }
-
 }
-
-
-/* ============================================================
-   TABLET
-============================================================ */
 
 @media (max-width: 900px) {
-
   .page {
-    grid-template-columns:
-      50% 50%;
+    grid-template-columns: 1fr;
   }
 
-
-  .leftContent h1 {
-    font-size: 32px;
-  }
-
-
-  .right {
-    padding:
-      28px
-      20px;
-  }
-
-
-  .formContainer {
-    padding:
-      27px
-      25px;
-  }
-
-}
-
-
-/* ============================================================
-   MOBILE
-============================================================ */
-
-@media (max-width: 720px) {
-
-  .page {
-    display: block;
-
-    overflow: visible;
-  }
-
-
+  .hero,
   .left {
-    min-height: 650px;
+    min-height: 290px;
+    padding: 32px;
   }
-
-
-  .leftContent {
-    left: 24px;
-
-    bottom: 175px;
-
-    width:
-      calc(100% - 48px);
-  }
-
-
-  .leftContent h1 span {
-    white-space: normal;
-  }
-
-
-  .leftFooter {
-    left: 24px;
-    right: 24px;
-
-    bottom: 37px;
-
-    justify-content:
-      space-between;
-  }
-
 
   .heroLogoLink {
+    top: 20px;
     left: 24px;
   }
 
+  .heroLogo {
+    width: 94px;
+  }
 
+  .heroContent,
+  .leftContent {
+    margin-top: 100px;
+    margin-bottom: 12px;
+  }
+
+  .heroStats,
+  .leftFooter {
+    gap: 13px;
+    padding-top: 14px;
+  }
+
+  .heroStat strong,
+  .stat strong {
+    font-size: 17px;
+  }
+
+  .loginArea,
   .right {
-    min-height: 760px;
-
-    padding:
-      45px
-      18px;
+    min-height: auto;
+    padding: 34px 18px 48px;
   }
 
-
+  .loginCard,
   .formContainer {
-    max-width: 470px;
+    max-width: 460px;
+  }
+}
 
-    padding:
-      30px
-      25px;
+@media (max-width: 480px) {
+
+  .hero,
+  .left {
+    padding: 28px 22px;
   }
 
+  .heroContent h1,
+  .leftContent h1 {
+    font-size: 29px;
+  }
+
+  .heroStats,
+  .leftFooter {
+    gap: 10px;
+  }
+
+  .statDivider {
+    height: 24px;
+  }
+
+  .heroStat span,
+  .stat span {
+    font-size: 10px;
+  }
+
+  .loginCard,
+  .formContainer {
+    padding: 30px 22px 26px;
+    border-radius: 20px;
+  }
+
+  .cardHeader h2,
+  .formContainer h2 {
+    font-size: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
 }
 
 
-/* ============================================================
-   REDUZIR MOVIMENTO
-============================================================ */
+/* Correção definitiva: o rodapé deve ficar logo após o formulário. */
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start !important;
+  align-self: center;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none;
+  flex: 0 0 auto;
+}
 
-@media (
-  prefers-reduced-motion:
-  reduce
-) {
+.formContainer>.form {
+  flex: 0 0 auto;
+  height: auto !important;
+  min-height: 0 !important;
+}
 
-  .heroSlide,
-  .gradientOrb,
-  .auroraTop,
-  .auroraBottom {
-    transition: none;
+.formContainer>.backArea {
+  flex: 0 0 auto;
+  margin-top: 22px;
+}
 
-    animation: none;
+@media (max-width: 900px) {
+  .right {
+    align-items: flex-start;
+    min-height: 0 !important;
+    height: auto !important;
+    padding-top: 28px;
+    padding-bottom: 28px;
   }
+}
 
+/* Link para abrir os Termos de Uso no cadastro. */
+.termsLink {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #C9305A;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.termsLink:hover {
+  color: #005942;
 }

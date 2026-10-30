@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'atleta_notificacao_page.dart';
 import '../login_page.dart';
+import '../../theme/sate_theme.dart';
 
 class AtletaPerfilPage extends StatefulWidget {
   final String nomeUsuario;
@@ -18,11 +19,11 @@ class AtletaPerfilPage extends StatefulWidget {
 }
 
 class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
-  static const Color verde = Color(0xFF00845F);
-  static const Color verdeEscuro = Color(0xFF006B4F);
-  static const Color verdeClaro = Color(0xFFE8F5F0);
-  static const Color fundo = Color(0xFFF7F7F7);
-  static const Color cinza = Color(0xFF777777);
+  static const Color verde = Color(0xFF005942);
+  static const Color verdeEscuro = Color(0xFF003D31);
+  static const Color verdeClaro = Color(0xFFDFF7EE);
+  static const Color fundo = Color(0xFFFAF5EE);
+  static const Color cinza = Color(0xFF68736F);
 
   bool _visualizandoPerfil = false;
 
@@ -46,16 +47,16 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
                 },
                 icon: const Icon(
                   Icons.arrow_back_rounded,
-                  color: Colors.black87,
+                  color: Color(0xFF10251F),
                   size: 28,
                 ),
               )
             : null,
 
-        title: const Text(
-          'Perfil',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Perfil', style: SateEstilo.destaque)]),
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -73,7 +74,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             },
             icon: const Icon(
               Icons.notifications_none_rounded,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
               size: 27,
             ),
           ),
@@ -100,7 +101,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
             ),
           ),
 
@@ -154,7 +155,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
             ),
           ),
 
@@ -193,10 +194,10 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
+            color: Color(0xFF10251F).withValues(alpha: 0.025),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -277,7 +278,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
             ),
           ),
 
@@ -321,10 +322,10 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
+            color: Color(0xFF10251F).withValues(alpha: 0.025),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -376,7 +377,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
           const Text(
             'Meio-campista, apaixonado por futebol desde os 8 anos.\n'
             'Foco em evoluir a cada treino.',
-            style: TextStyle(fontSize: 12, height: 1.4, color: Colors.black87),
+            style: TextStyle(fontSize: 12, height: 1.4, color: Color(0xFF10251F)),
           ),
 
           const SizedBox(height: 16),
@@ -424,7 +425,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
                 child: _buildEstatistica(
                   titulo: 'Número',
                   valor: '#10',
-                  cor: Colors.blue,
+                  cor: const Color(0xFFC9305A),
                 ),
               ),
 
@@ -434,7 +435,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
                 child: _buildEstatistica(
                   titulo: 'Publicações',
                   valor: '3',
-                  cor: Colors.pinkAccent,
+                  cor: Color(0xFFEF476F),
                 ),
               ),
             ],
@@ -521,7 +522,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.grey.shade800,
+              color: Color(0xFF10251F),
             ),
           ),
 
@@ -544,13 +545,13 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
   Widget _buildEstatistica({
     required String titulo,
     required String valor,
-    Color cor = Colors.black87,
+    Color cor = const Color(0xFF10251F),
   }) {
     return Container(
       height: 65,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F5F4),
+        color: const Color(0xFFEFE6DA),
         borderRadius: BorderRadius.circular(13),
       ),
       child: Column(
@@ -606,10 +607,10 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
     return Container(
       height: 82,
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F1F1),
+        color: const Color(0xFFEFE6DA),
         borderRadius: BorderRadius.circular(14),
       ),
-      child: Icon(Icons.image_outlined, color: Colors.grey.shade400, size: 26),
+      child: Icon(Icons.image_outlined, color: Color(0xFFA3ADA9), size: 26),
     );
   }
 
@@ -624,7 +625,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: ListTile(
         onTap: onTap,
@@ -644,12 +645,12 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
         ),
         subtitle: Text(
           subtitulo,
-          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+          style: TextStyle(fontSize: 11, color: Color(0xFF68736F)),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,
           size: 15,
-          color: Colors.grey.shade500,
+          color: Color(0xFF8A938F),
         ),
       ),
     );
@@ -666,7 +667,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: ListTile(
         onTap: onTap,
@@ -686,12 +687,12 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
         ),
         subtitle: Text(
           subtitulo,
-          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+          style: TextStyle(fontSize: 11, color: Color(0xFF68736F)),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,
           size: 15,
-          color: Colors.grey.shade500,
+          color: Color(0xFF8A938F),
         ),
       ),
     );
@@ -705,16 +706,16 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
         onPressed: () {
           _confirmarSaida(context);
         },
-        icon: const Icon(Icons.logout_rounded, color: Colors.redAccent),
+        icon: const Icon(Icons.logout_rounded, color: Color(0xFFC0392B)),
         label: const Text(
           'Sair da conta',
           style: TextStyle(
-            color: Colors.redAccent,
+            color: Color(0xFFC0392B),
             fontWeight: FontWeight.w600,
           ),
         ),
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Color(0xFFFFD6DD)),
+          side: const BorderSide(color: Color(0xFFFDE6EC)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -743,7 +744,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
               },
               child: const Text(
                 'CANCELAR',
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: Color(0xFF8A938F)),
               ),
             ),
             TextButton(
@@ -756,7 +757,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
               },
               child: const Text(
                 'SAIR',
-                style: TextStyle(color: Colors.redAccent),
+                style: TextStyle(color: Color(0xFFC0392B)),
               ),
             ),
           ],
@@ -1110,7 +1111,7 @@ class SobreSatePage extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFE0E7E4)),
+              border: Border.all(color: const Color(0xFFE8DFD3)),
             ),
             child: const Column(
               children: [
@@ -1128,7 +1129,7 @@ class SobreSatePage extends StatelessWidget {
                 Text(
                   'Sistema de Acompanhamento e Treinamento Esportivo',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: Color(0xFF8A938F)),
                 ),
                 SizedBox(height: 15),
                 Text(
@@ -1203,7 +1204,7 @@ class EditarPerfilPage extends StatelessWidget {
   }
 }
 
-const Color verdeAtleta = Color(0xFF00845F);
+const Color verdeAtleta = Color(0xFF005942);
 
 class _TelaInterna extends StatelessWidget {
   final String titulo;
@@ -1214,9 +1215,9 @@ class _TelaInterna extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
+      backgroundColor: const Color(0xFFFAF5EE),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF7F7F7),
+        backgroundColor: const Color(0xFFFAF5EE),
         elevation: 0,
         centerTitle: false,
         leading: IconButton(
@@ -1225,14 +1226,14 @@ class _TelaInterna extends StatelessWidget {
           },
           icon: const Icon(
             Icons.arrow_back_rounded,
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             size: 28,
           ),
         ),
         title: Text(
           titulo,
           style: const TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -1265,7 +1266,7 @@ class _CampoInformacao extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: Row(
         children: [
@@ -1277,7 +1278,7 @@ class _CampoInformacao extends StatelessWidget {
               children: [
                 Text(
                   titulo,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  style: const TextStyle(fontSize: 11, color: Color(0xFF8A938F)),
                 ),
                 const SizedBox(height: 3),
                 Text(
@@ -1317,7 +1318,7 @@ class _SwitchItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: Row(
         children: [
@@ -1332,7 +1333,7 @@ class _SwitchItem extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   subtitulo,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  style: const TextStyle(fontSize: 11, color: Color(0xFF8A938F)),
                 ),
               ],
             ),
@@ -1364,7 +1365,7 @@ class _ItemInterno extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: ListTile(
         onTap: onTap,
@@ -1372,7 +1373,7 @@ class _ItemInterno extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: const Color(0xFFE8F5F0),
+            color: const Color(0xFFDFF7EE),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icone, color: verdeAtleta),
@@ -1402,12 +1403,12 @@ class _MembroEquipe extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: Row(
         children: [
           const CircleAvatar(
-            backgroundColor: Color(0xFFE8F5F0),
+            backgroundColor: Color(0xFFDFF7EE),
             child: Icon(Icons.person_rounded, color: verdeAtleta),
           ),
           const SizedBox(width: 12),
@@ -1419,7 +1420,7 @@ class _MembroEquipe extends StatelessWidget {
           ),
           Text(
             funcao,
-            style: const TextStyle(fontSize: 11, color: Colors.grey),
+            style: const TextStyle(fontSize: 11, color: Color(0xFF8A938F)),
           ),
         ],
       ),
@@ -1447,7 +1448,7 @@ class _Meta extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: Column(
         children: [
@@ -1473,7 +1474,7 @@ class _Meta extends StatelessWidget {
             value: progresso,
             minHeight: 7,
             borderRadius: BorderRadius.circular(10),
-            backgroundColor: const Color(0xFFE8F5F0),
+            backgroundColor: const Color(0xFFDFF7EE),
             valueColor: const AlwaysStoppedAnimation<Color>(verdeAtleta),
           ),
         ],
@@ -1497,7 +1498,7 @@ class _Feedback extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1541,11 +1542,11 @@ class _CampoEditar extends StatelessWidget {
           fillColor: Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xFFE0E7E4)),
+            borderSide: const BorderSide(color: Color(0xFFE8DFD3)),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xFFE0E7E4)),
+            borderSide: const BorderSide(color: Color(0xFFE8DFD3)),
           ),
         ),
       ),
@@ -1565,7 +1566,7 @@ class _Pergunta extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: ExpansionTile(
         title: Text(
@@ -1577,7 +1578,7 @@ class _Pergunta extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Text(
               'Essa informação estará disponível em uma próxima atualização do aplicativo.',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+              style: TextStyle(fontSize: 12, color: Color(0xFF8A938F)),
             ),
           ),
         ],

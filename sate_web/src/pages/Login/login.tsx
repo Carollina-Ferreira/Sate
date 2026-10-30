@@ -207,14 +207,7 @@ const Login = () => {
             ================================================= */
 
             if (data.usuario.tipo === 'TREINADOR') {
-                if (data.usuario.primeiroAcesso) {
-                    navigate('/boas-vindas');
-
-                    return;
-                }
-
-                navigate('/inicio');
-
+                navigate('/carregamento');
                 return;
             }
 

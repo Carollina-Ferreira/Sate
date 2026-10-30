@@ -10,8 +10,9 @@ class MenuInferiorTreinador extends StatelessWidget {
     required this.onItemSelecionado,
   });
 
-  static const Color verde = Color(0xFF006B4F);
-  static const Color cinza = Color(0xFF8A8A8A);
+  static const Color verde = Color(0xFF005942);
+  static const Color rosa = Color(0xFFEF476F);
+  static const Color cinza = Color(0xFF68736F);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class MenuInferiorTreinador extends StatelessWidget {
         color: Colors.white,
         border: Border(
           top: BorderSide(
-            color: Color(0xFFE5E5E5),
+            color: Color(0xFFE8DFD3),
             width: 1,
           ),
         ),
@@ -90,7 +91,7 @@ class MenuInferiorTreinador extends StatelessWidget {
     return Expanded(
       child: InkWell(
         onTap: () => onItemSelecionado(indice),
-        splashColor: verde.withValues(alpha: 0.08),
+        splashColor: rosa.withValues(alpha: 0.10),
         highlightColor: Colors.transparent,
         child: Center(
           child: Column(
@@ -99,7 +100,7 @@ class MenuInferiorTreinador extends StatelessWidget {
               Icon(
                 selecionado ? iconeSelecionado : icone,
                 size: 22,
-                color: selecionado ? verde : cinza,
+                color: selecionado ? rosa : cinza,
               ),
 
               const SizedBox(height: 4),

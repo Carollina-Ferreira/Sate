@@ -1,277 +1,198 @@
-@import url(
-  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap'
-);
 
-/* =====================================
+/* =========================================================
    PÁGINA
-===================================== */
+========================================================= */
+
 
 .page {
-  --verde-dark: #005942;
-  --verde-profundo: #003d31;
-  --verde-claro: #dff7ee;
-  --card: #f8fbf9;
-  --texto: #10251f;
-  --texto-secundario: #66756f;
-  --linha: #dce5e0;
-
-  width: 100%;
-  min-height: 100vh;
-
-  padding: 38px 42px 54px;
-
+  /* Compensa o espaçamento do container pai para eliminar a moldura verde. */
+  width: calc(100% + 96px);
+  min-height: calc(100vh - 64px + 48px);
+  margin: -48px -48px 0;
+  padding: 42px clamp(24px, 5vw, 76px) 56px;
   box-sizing: border-box;
-
-  background: var(--verde-dark);
-
+  background:
+    radial-gradient(ellipse 340px 230px at 96% 0%, rgba(244, 63, 120, 0.16) 0%, rgba(244, 63, 120, 0.08) 38%, rgba(244, 63, 120, 0) 76%),
+    #faf5ee;
+  color: #10251f;
   font-family: 'Poppins', sans-serif;
 }
 
+.page *,
+.page *::before,
+.page *::after {
+  box-sizing: border-box;
+}
 
-/* =====================================
+
+.page *,
+.page *::before,
+.page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
    CABEÇALHO
-===================================== */
+========================================================= */
 
 .pageHeader {
-  width: 100%;
-  max-width: 1180px;
-
-  margin: 0 auto 30px;
+  width: min(100%, 1235px);
+  margin: 0 auto 54px;
 }
 
 .pageHeader h1 {
   margin: 0;
-
-  color: #ffffff;
-
-  font-size: clamp(34px, 3.1vw, 46px);
-
+  color: var(--texto);
+  font-family: var(--fonte-titulo);
+  font-size: clamp(36px, 3.4vw, 50px);
+  line-height: 1.04;
   font-weight: 700;
-
-  line-height: 1.05;
-
-  letter-spacing: -1.4px;
+  letter-spacing: -1.8px;
 }
 
 .pageHeader h1 em {
-  color: var(--verde-claro);
-
-  font-family: 'DM Serif Display', serif;
-
+  color: var(--rosa);
+  font-family: var(--fonte-titulo);
   font-style: italic;
-
-  font-weight: 400;
-
+  font-weight: 600;
   letter-spacing: -0.5px;
 }
 
 .pageHeader p {
-  margin: 10px 0 0;
-
-  color: rgba(255, 255, 255, 0.74);
-
+  margin: 11px 0 0;
+  color: var(--texto-suave);
   font-size: 13px;
-
-  font-weight: 400;
-
   line-height: 1.6;
 }
 
-
-/* =====================================
+/* =========================================================
    ESTADOS
-===================================== */
+========================================================= */
 
 .stateCard {
-  width: 100%;
-  max-width: 1180px;
-
+  width: min(100%, 1235px);
   margin: 0 auto;
-
-  padding: 34px;
-
-  box-sizing: border-box;
-
-  border: 1px solid rgba(16, 37, 31, 0.08);
-
-  border-radius: 20px;
-
-  background: var(--card);
-
+  padding: 42px 24px;
+  border: 1px solid var(--borda);
+  border-radius: 15px;
+  background: var(--branco-translucido);
   color: var(--texto);
-
   text-align: center;
-
-  box-shadow:
-    0 14px 34px
-    rgba(0, 35, 26, 0.11);
 }
 
 .stateCard h2 {
   margin: 0;
-
-  font-size: 18px;
-
+  font-size: 16px;
   font-weight: 700;
 }
 
 .stateCard p {
   margin: 7px 0 0;
-
-  color: var(--texto-secundario);
-
-  font-size: 12px;
+  color: var(--texto-suave);
+  font-size: 11px;
 }
 
-
-/* =====================================
-   CARD DE SELEÇÃO
-===================================== */
+/* =========================================================
+   SELEÇÃO DAS EQUIPES
+========================================================= */
 
 .selectionCard {
-  width: 100%;
-  max-width: 1180px;
-
+  width: min(100%, 1235px);
   display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    48px
-    minmax(0, 1fr);
-
+  grid-template-columns: minmax(0, 1fr) 54px minmax(0, 1fr);
   align-items: end;
-
   gap: 14px;
-
-  padding: 22px;
-
-  box-sizing: border-box;
-
-  margin: 0 auto 20px;
-
-  background: var(--card);
-
-  border: 1px solid rgba(16, 37, 31, 0.08);
-
-  border-radius: 20px;
-
-  box-shadow:
-    0 14px 34px
-    rgba(0, 35, 26, 0.1);
+  margin: 0 auto 48px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
-
-
-/* =====================================
-   SELECT
-===================================== */
 
 .selectGroup {
   display: flex;
-
   flex-direction: column;
-
   gap: 8px;
+  min-width: 0;
 }
 
 .selectGroup label {
-  color: #30453d;
-
-  font-size: 11px;
-
+  color: var(--texto-medio);
+  font-size: 10px;
   font-weight: 600;
 }
 
 .selectGroup select {
   width: 100%;
   height: 52px;
-
-  padding:
-    0 42px
-    0 15px;
-
-  box-sizing: border-box;
-
-  border: 1px solid #cbd8d2;
-
-  border-radius: 11px;
-
+  padding: 0 42px 0 15px;
+  border: 1px solid var(--borda-forte);
+  border-radius: 12px;
   outline: none;
-
-  background: #ffffff;
-
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--bg-surface);
   color: var(--texto);
-
-  font-family: inherit;
-
+  font-family: var(--fonte-base);
   font-size: 12px;
-
   font-weight: 500;
-
   cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--texto-medio) 50%),
+    linear-gradient(135deg, var(--texto-medio) 50%, transparent 50%);
+
+  background-position:
+    calc(100% - 21px) calc(50% - 2px),
+    calc(100% - 16px) calc(50% - 2px);
+
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.selectGroup select option {
+  background: var(--bg-surface);
+  color: var(--texto);
 }
 
 .selectGroup select:hover:not(:disabled) {
-  border-color: #9eb5aa;
+  border-color: var(--verde-principal);
 }
 
 .selectGroup select:focus {
-  background: #ffffff;
-
-  border-color: var(--verde-dark);
-
-  box-shadow:
-    0 0 0 4px
-    rgba(0, 89, 66, 0.08);
+  border-color: var(--verde-principal);
+  box-shadow: 0 0 0 3px var(--sombra-foco);
 }
 
 .selectGroup select:disabled {
-  opacity: 0.6;
-
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-
-/* =====================================
+/* =========================================================
    TROCAR EQUIPES
-===================================== */
+========================================================= */
 
 .switchButton {
-  width: 48px;
+  width: 54px;
   height: 52px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   padding: 0;
-
-  border: 1px solid #cbd8d2;
-
-  border-radius: 11px;
-
-  background: #ffffff;
-
-  color: var(--verde-dark);
-
+  border: 1px solid var(--borda-forte);
+  border-radius: 12px;
+  background: var(--bg-surface);
+  color: var(--verde-principal);
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
 .switchButton:hover:not(:disabled) {
-  background: #edf6f2;
-
-  border-color: #8daaa0;
+  background: var(--bg-verde-suave);
+  border-color: var(--verde-principal);
 }
 
 .switchButton:active:not(:disabled) {
@@ -280,50 +201,33 @@
 
 .switchButton:disabled {
   opacity: 0.4;
-
   cursor: not-allowed;
 }
 
-
-/* =====================================
-   CARD PRINCIPAL
-===================================== */
+/* =========================================================
+   ÁREA PRINCIPAL DA COMPARAÇÃO
+========================================================= */
 
 .comparison {
-  width: 100%;
-  max-width: 1180px;
-
+  width: min(100%, 1235px);
   margin: 0 auto;
-
-  padding: 30px;
-
-  box-sizing: border-box;
-
-  background: var(--card);
-
-  border: 1px solid rgba(16, 37, 31, 0.08);
-
-  border-radius: 20px;
-
-  box-shadow:
-    0 14px 34px
-    rgba(0, 35, 26, 0.1);
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-
-/* =====================================
-   CABEÇALHO DAS EQUIPES
-===================================== */
+/* =========================================================
+   EQUIPES
+========================================================= */
 
 .matchHeader {
   width: 100%;
-
   display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 40px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 80px;
+  margin-bottom: 36px;
 }
 
 .matchLeft,
@@ -335,68 +239,37 @@
   text-align: right;
 }
 
-
-/* =====================================
-   LABEL
-===================================== */
-
 .matchLabel {
-  display: inline-block;
-
-  margin-bottom: 7px;
-
-  color: #75847d;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  text-transform: uppercase;
-
-  letter-spacing: 1.4px;
+  display: none;
 }
-
-
-/* =====================================
-   NOMES
-===================================== */
 
 .matchHeader h2 {
   margin: 0;
-
-  color: var(--texto);
-
-  font-size: 22px;
-
+  font-family: var(--fonte-titulo);
+  font-size: 23px;
+  line-height: 1.2;
   font-weight: 700;
-
-  line-height: 1.25;
-
   letter-spacing: -0.5px;
+  overflow-wrap: anywhere;
 }
 
 .matchLeft h2 {
-  color: var(--verde-dark);
+  color: var(--verde-principal);
 }
 
 .matchRight h2 {
-  color: #455851;
+  color: var(--rosa);
 }
 
-
-/* =====================================
-   RESUMO
-===================================== */
+/* =========================================================
+   RESUMO DA EQUIPE
+========================================================= */
 
 .teamSummary {
   display: flex;
-
   align-items: baseline;
-
-  gap: 7px;
-
+  gap: 6px;
   margin-top: 10px;
-
   color: var(--texto);
 }
 
@@ -405,36 +278,19 @@
 }
 
 .teamSummary strong {
-  color: var(--verde-dark);
-
-  font-size: 18px;
-
-  font-weight: 700;
-}
-
-.matchRight .teamSummary strong {
-  color: #52635c;
+  display: none;
 }
 
 .teamSummary span {
-  color: #7a8982;
-
-  font-size: 10px;
+  color: var(--texto-suave);
+  font-size: 11px;
 }
-
-
-/* =====================================
-   META
-===================================== */
 
 .matchMeta {
   display: flex;
-
   flex-wrap: wrap;
-
-  gap: 7px;
-
-  margin-top: 10px;
+  gap: 6px;
+  margin-top: 11px;
 }
 
 .matchRight .matchMeta {
@@ -442,209 +298,162 @@
 }
 
 .matchMeta span {
-  padding: 5px 9px;
-
-  border: 1px solid #dce5e0;
-
+  padding: 5px 10px;
+  border: none;
   border-radius: 999px;
-
-  background: #f2f6f4;
-
-  color: #5f7068;
-
+  background: var(--bg-verde-suave);
+  color: var(--verde-medio);
   font-size: 9px;
-
-  font-weight: 500;
+  font-weight: 600;
 }
 
+.matchRight .matchMeta span {
+  background: var(--rosa-claro);
+  color: var(--rosa);
+}
 
-/* =====================================
+/* =========================================================
    DIVISOR
-===================================== */
+========================================================= */
 
 .divider {
-  width: 100%;
-  height: 1px;
-
-  margin: 26px 0;
-
-  background: var(--linha);
+  display: none;
 }
 
-
-/* =====================================
+/* =========================================================
    ESTATÍSTICAS
-===================================== */
+========================================================= */
 
 .stats {
   display: flex;
-
   flex-direction: column;
-
   gap: 22px;
 }
 
 .statRow {
   width: 100%;
+  min-width: 0;
 }
 
-
-/* =====================================
-   VALORES
-===================================== */
+/* =========================================================
+   VALORES E NOME
+========================================================= */
 
 .statValues {
   display: grid;
-
-  grid-template-columns:
-    minmax(60px, 1fr)
-    auto
-    minmax(60px, 1fr);
-
+  grid-template-columns: minmax(50px, 1fr) auto minmax(50px, 1fr);
   align-items: center;
-
-  gap: 14px;
-
-  margin-bottom: 9px;
+  gap: 18px;
+  margin-bottom: 8px;
 }
 
 .valueA,
 .valueB {
   font-size: 14px;
-
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .valueA {
-  color: var(--verde-dark);
-
+  color: var(--verde-principal);
   text-align: left;
 }
 
 .valueB {
-  color: #52635c;
-
+  color: var(--rosa);
   text-align: right;
 }
 
 .statName {
-  min-width: 190px;
-
-  color: #65756e;
-
+  min-width: 0;
+  color: var(--texto-suave);
   font-size: 10px;
-
   font-weight: 500;
-
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
-
-/* =====================================
+/* =========================================================
    BARRAS
-===================================== */
+========================================================= */
 
 .barArea {
   width: 100%;
-  height: 9px;
-
+  height: 7px;
   display: grid;
-
-  grid-template-columns:
-    1fr
-    2px
-    1fr;
-
-  gap: 6px;
-
+  grid-template-columns: minmax(0, 1fr) 6px minmax(0, 1fr);
+  gap: 0;
   align-items: center;
 }
 
 .barSideLeft,
 .barSideRight {
-  height: 9px;
-
   position: relative;
-
+  height: 7px;
   overflow: hidden;
-
-  border-radius: 999px;
-
-  background: #e8eeeb;
+  background: var(--borda);
 }
 
 .barSideLeft {
   display: flex;
-
   justify-content: flex-end;
+  border-radius: 999px 0 0 999px;
 }
 
 .barSideRight {
   display: flex;
-
   justify-content: flex-start;
+  border-radius: 0 999px 999px 0;
+}
+
+.barA,
+.barB {
+  height: 100%;
+  transition: width 0.3s ease;
 }
 
 .barA {
-  height: 100%;
-
-  background: var(--verde-dark);
-
+  background: var(--verde-principal);
   border-radius: 999px;
-
-  transition: width 0.3s ease;
 }
 
 .barB {
-  height: 100%;
-
-  background: #9eada6;
-
+  background: var(--rosa);
   border-radius: 999px;
-
-  transition: width 0.3s ease;
 }
 
 .barCenter {
-  width: 2px;
-  height: 13px;
-
-  border-radius: 4px;
-
-  background: #c3cec8;
+  width: 6px;
+  height: 7px;
+  background: var(--bg-page);
 }
 
-
-/* =====================================
-   RESPONSIVO
-===================================== */
+/* =========================================================
+   RESPONSIVIDADE — NOTEBOOKS E TABLETS
+========================================================= */
 
 @media (max-width: 900px) {
   .page {
-    padding:
-      30px 24px
-      42px;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 38px 24px 50px;
   }
 
   .pageHeader h1 {
-    font-size: 34px;
+    font-size: clamp(32px, 4vw, 38px);
   }
 
-  .comparison {
-    padding: 24px;
-  }
-
-  .matchHeader h2 {
-    font-size: 20px;
+  .matchHeader {
+    gap: 40px;
   }
 }
 
-
-@media (max-width: 800px) {
+@media (max-width: 760px) {
   .selectionCard {
-    grid-template-columns: 1fr;
-
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 11px;
+    margin-bottom: 36px;
   }
 
   .switchButton {
@@ -652,38 +461,47 @@
   }
 
   .matchHeader {
-    gap: 24px;
+    gap: 26px;
+  }
+
+  .statValues {
+    gap: 12px;
   }
 }
 
+/* =========================================================
+   RESPONSIVIDADE — CELULARES
+========================================================= */
 
 @media (max-width: 600px) {
   .page {
-    padding:
-      24px 14px
-      32px;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 28px 15px 40px;
   }
 
   .pageHeader {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
 
   .pageHeader h1 {
-    font-size: 30px;
+    font-size: clamp(28px, 7vw, 31px);
+    letter-spacing: -1.2px;
   }
 
-  .comparison {
-    padding: 20px 16px;
+  .pageHeader p {
+    font-size: 11px;
   }
 
-  .selectionCard {
-    padding: 17px;
+  .stateCard {
+    padding: 32px 16px;
   }
 
   .matchHeader {
-    grid-template-columns: 1fr;
-
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    margin-bottom: 30px;
   }
 
   .matchRight {
@@ -696,17 +514,11 @@
   }
 
   .statValues {
-    grid-template-columns:
-      52px
-      1fr
-      52px;
-
+    grid-template-columns: minmax(40px, 56px) minmax(0, 1fr) minmax(40px, 56px);
     gap: 8px;
   }
 
   .statName {
-    min-width: 0;
-
     font-size: 9px;
   }
 
@@ -716,29 +528,33 @@
   }
 }
 
-
 @media (max-width: 420px) {
   .page {
-    padding:
-      20px 10px
-      28px;
+    padding: 24px 11px 34px;
+  }
+
+  .matchHeader h2 {
+    font-size: 20px;
+  }
+
+  .stats {
+    gap: 19px;
   }
 
   .selectionCard {
-    padding: 14px;
-
-    border-radius: 16px;
+    gap: 9px;
   }
 
-  .comparison {
-    padding: 18px 13px;
-
-    border-radius: 16px;
+  .selectGroup select {
+    height: 48px;
   }
 
-  .stateCard {
-    padding: 24px 16px;
-
-    border-radius: 16px;
+  .switchButton {
+    height: 46px;
   }
+}
+
+/* H1 verde-claro no modo escuro */
+:global(:root[data-theme='dark']) .pageHeader h1 em {
+  color: #7BE0A8;
 }

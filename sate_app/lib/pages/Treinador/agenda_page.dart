@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/sate_theme.dart';
 
 class AgendaPage extends StatefulWidget {
   const AgendaPage({super.key});
@@ -8,10 +9,10 @@ class AgendaPage extends StatefulWidget {
 }
 
 class _AgendaPageState extends State<AgendaPage> {
-  static const Color verde = Color(0xFF00845F);
-  static const Color verdeEscuro = Color(0xFF006B4F);
-  static const Color verdeClaro = Color(0xFFE8F5F0);
-  static const Color fundo = Color(0xFFF7F7F7);
+  static const Color verde = Color(0xFF005942);
+  static const Color verdeEscuro = Color(0xFF003D31);
+  static const Color verdeClaro = Color(0xFFDFF7EE);
+  static const Color fundo = Color(0xFFFAF5EE);
 
   DateTime mesAtual = DateTime(2026, 8);
   DateTime diaSelecionado = DateTime(2026, 8, 27);
@@ -79,10 +80,10 @@ class _AgendaPageState extends State<AgendaPage> {
 
         automaticallyImplyLeading: false,
 
-        title: const Text(
-          'Agenda',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Agenda', style: SateEstilo.destaque)]),
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -213,7 +214,7 @@ class _AgendaPageState extends State<AgendaPage> {
                 Text(
                   '$dia',
                   style: TextStyle(
-                    color: selecionado ? Colors.white : Colors.black87,
+                    color: selecionado ? Colors.white : Color(0xFF10251F),
                     fontSize: 13,
                     fontWeight: selecionado || hoje
                         ? FontWeight.bold
@@ -245,10 +246,10 @@ class _AgendaPageState extends State<AgendaPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Color(0xFFE8DFD3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
+            color: Color(0xFF10251F).withValues(alpha: 0.025),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -271,7 +272,7 @@ class _AgendaPageState extends State<AgendaPage> {
                   child: Text(
                     _nomeMes(mesAtual),
                     style: const TextStyle(
-                      color: Colors.black87,
+                      color: Color(0xFF10251F),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -336,7 +337,7 @@ class _AgendaPageState extends State<AgendaPage> {
         child: Text(
           texto,
           style: TextStyle(
-            color: Colors.grey.shade600,
+            color: Color(0xFF68736F),
             fontSize: 9,
             fontWeight: FontWeight.bold,
           ),
@@ -372,7 +373,7 @@ class _AgendaPageState extends State<AgendaPage> {
             const Text(
               'Eventos do dia',
               style: TextStyle(
-                color: Colors.black87,
+                color: Color(0xFF10251F),
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -380,7 +381,7 @@ class _AgendaPageState extends State<AgendaPage> {
             const SizedBox(height: 3),
             Text(
               _diaSemanaCompleto(diaSelecionado),
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+              style: TextStyle(color: Color(0xFF68736F), fontSize: 11),
             ),
           ],
         ),
@@ -401,7 +402,7 @@ class _AgendaPageState extends State<AgendaPage> {
         border: Border.all(color: cor.withValues(alpha: 0.30)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
+            color: Color(0xFF10251F).withValues(alpha: 0.025),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -432,7 +433,7 @@ class _AgendaPageState extends State<AgendaPage> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          color: Colors.black87,
+                          color: Color(0xFF10251F),
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
@@ -458,13 +459,13 @@ class _AgendaPageState extends State<AgendaPage> {
                             children: [
                               Icon(
                                 Icons.delete_outline,
-                                color: Color(0xFF00845F),
+                                color: Color(0xFF005942),
                                 size: 20,
                               ),
                               SizedBox(width: 10),
                               Text(
                                 'Excluir evento',
-                                style: TextStyle(color: Color(0xFF00845F)),
+                                style: TextStyle(color: Color(0xFF005942)),
                               ),
                             ],
                           ),
@@ -498,13 +499,13 @@ class _AgendaPageState extends State<AgendaPage> {
                     Icon(
                       Icons.access_time_outlined,
                       size: 15,
-                      color: Colors.grey.shade600,
+                      color: Color(0xFF68736F),
                     ),
                     const SizedBox(width: 5),
                     Text(
                       '${evento.horarioInicio} - ${evento.horarioFim}',
                       style: TextStyle(
-                        color: Colors.grey.shade700,
+                        color: Color(0xFF4F5A56),
                         fontSize: 11,
                       ),
                     ),
@@ -516,7 +517,7 @@ class _AgendaPageState extends State<AgendaPage> {
                     Icon(
                       Icons.location_on_outlined,
                       size: 15,
-                      color: Colors.grey.shade600,
+                      color: Color(0xFF68736F),
                     ),
                     const SizedBox(width: 5),
                     Expanded(
@@ -524,7 +525,7 @@ class _AgendaPageState extends State<AgendaPage> {
                         evento.local,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: Colors.grey.shade700,
+                          color: Color(0xFF4F5A56),
                           fontSize: 11,
                         ),
                       ),
@@ -546,7 +547,7 @@ class _AgendaPageState extends State<AgendaPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Color(0xFFE8DFD3)),
       ),
       child: Column(
         children: [
@@ -567,7 +568,7 @@ class _AgendaPageState extends State<AgendaPage> {
           const Text(
             'Nenhum evento',
             style: TextStyle(
-              color: Colors.black87,
+              color: Color(0xFF10251F),
               fontSize: 15,
               fontWeight: FontWeight.bold,
             ),
@@ -576,7 +577,7 @@ class _AgendaPageState extends State<AgendaPage> {
           Text(
             'Não há eventos programados para este dia.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+            style: TextStyle(color: Color(0xFF68736F), fontSize: 11),
           ),
         ],
       ),
@@ -617,7 +618,7 @@ class _AgendaPageState extends State<AgendaPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Color(0xFFE8DFD3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -625,7 +626,7 @@ class _AgendaPageState extends State<AgendaPage> {
           const Text(
             'Legenda',
             style: TextStyle(
-              color: Colors.black87,
+              color: Color(0xFF10251F),
               fontSize: 13,
               fontWeight: FontWeight.bold,
             ),
@@ -658,7 +659,7 @@ class _AgendaPageState extends State<AgendaPage> {
         const SizedBox(width: 6),
         Text(
           textoLegenda,
-          style: TextStyle(color: Colors.grey.shade700, fontSize: 10),
+          style: TextStyle(color: Color(0xFF4F5A56), fontSize: 10),
         ),
       ],
     );
@@ -702,16 +703,16 @@ class _AgendaPageState extends State<AgendaPage> {
                           width: 42,
                           height: 4,
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
+                            color: Color(0xFFD5C9BA),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const Text(
-                        'Novo evento',
+                      const Text.rich(
+                        TextSpan(children: [TextSpan(text: 'Novo '), TextSpan(text: 'evento', style: SateEstilo.destaque)]),
                         style: TextStyle(
-                          color: Colors.black87,
+                          color: Color(0xFF10251F),
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -778,7 +779,7 @@ class _AgendaPageState extends State<AgendaPage> {
                       const Text(
                         'Tipo de evento',
                         style: TextStyle(
-                          color: Colors.black87,
+                          color: Color(0xFF10251F),
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
                         ),
@@ -953,20 +954,20 @@ class _AgendaPageState extends State<AgendaPage> {
         decoration: BoxDecoration(
           color: fundo,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: Color(0xFFE8DFD3)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               label,
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+              style: TextStyle(color: Color(0xFF68736F), fontSize: 11),
             ),
             const SizedBox(height: 6),
             Text(
               texto,
               style: TextStyle(
-                color: horario == null ? Colors.grey.shade500 : Colors.black87,
+                color: horario == null ? Color(0xFF8A938F) : Color(0xFF10251F),
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
@@ -988,16 +989,16 @@ class _AgendaPageState extends State<AgendaPage> {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        prefixIcon: Icon(icone, size: 20, color: Colors.grey.shade600),
+        prefixIcon: Icon(icone, size: 20, color: Color(0xFF68736F)),
         filled: true,
         fillColor: fundo,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.grey.shade200),
+          borderSide: BorderSide(color: Color(0xFFE8DFD3)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.grey.shade200),
+          borderSide: BorderSide(color: Color(0xFFE8DFD3)),
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(14)),
@@ -1022,12 +1023,12 @@ class _AgendaPageState extends State<AgendaPage> {
         decoration: BoxDecoration(
           color: ativo ? verde : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: ativo ? verde : Colors.grey.shade200),
+          border: Border.all(color: ativo ? verde : Color(0xFFE8DFD3)),
         ),
         child: Text(
           textoChip,
           style: TextStyle(
-            color: ativo ? Colors.white : Colors.grey.shade700,
+            color: ativo ? Colors.white : Color(0xFF4F5A56),
             fontSize: 11,
             fontWeight: FontWeight.w600,
           ),
@@ -1049,7 +1050,7 @@ class _AgendaPageState extends State<AgendaPage> {
             'Excluir evento?',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Color(0xFF12261F),
+              color: Color(0xFF10251F),
             ),
           ),
           content: Text(
@@ -1082,7 +1083,7 @@ class _AgendaPageState extends State<AgendaPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF00845F),
+                backgroundColor: Color(0xFF005942),
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -1178,11 +1179,11 @@ class _AgendaPageState extends State<AgendaPage> {
       case TipoEvento.jogo:
         return const Color(0xFFE39B18);
       case TipoEvento.avaliacao:
-        return const Color(0xFFE86BA5);
+        return const Color(0xFFEF476F);
       case TipoEvento.reuniao:
-        return const Color(0xFF001E98);
+        return const Color(0xFF003D31);
       case TipoEvento.lembrete:
-        return Colors.grey;
+        return Color(0xFF8A938F);
     }
   }
 

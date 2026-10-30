@@ -52,7 +52,7 @@ class _AtletaNavigationState extends State<AtletaNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFCFCFC),
+      backgroundColor: const Color(0xFFFAF5EE),
 
       body: IndexedStack(
         index: indiceSelecionado,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/sate_theme.dart';
 
 class TreinosPage extends StatefulWidget {
   const TreinosPage({super.key});
@@ -8,9 +9,9 @@ class TreinosPage extends StatefulWidget {
 }
 
 class _TreinosPageState extends State<TreinosPage> {
-  static const Color verde = Color(0xFF00845F);
-  static const Color verdeClaro = Color(0xFFE8F5F0);
-  static const Color fundo = Color(0xFFF7F7F7);
+  static const Color verde = Color(0xFF005942);
+  static const Color verdeClaro = Color(0xFFDFF7EE);
+  static const Color fundo = Color(0xFFFAF5EE);
 
   final List<Treino> treinos = [
     Treino(
@@ -90,10 +91,10 @@ class _TreinosPageState extends State<TreinosPage> {
 
         automaticallyImplyLeading: false,
 
-        title: const Text(
-          'Treinos',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Treinos', style: SateEstilo.destaque)]),
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -117,7 +118,7 @@ class _TreinosPageState extends State<TreinosPage> {
                   const Text(
                     'Meus treinos',
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Color(0xFF10251F),
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
                     ),
@@ -240,12 +241,12 @@ class _TreinosPageState extends State<TreinosPage> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: destaque ? verde : Colors.grey.shade200,
+          color: destaque ? verde : Color(0xFFE8DFD3),
           width: destaque ? 1.2 : 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
+            color: Color(0xFF10251F).withValues(alpha: 0.025),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -281,7 +282,7 @@ class _TreinosPageState extends State<TreinosPage> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: Colors.black87,
+                        color: Color(0xFF10251F),
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -291,7 +292,7 @@ class _TreinosPageState extends State<TreinosPage> {
 
                     const Text(
                       'Treino programado',
-                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                      style: TextStyle(color: Color(0xFF8A938F), fontSize: 10),
                     ),
                   ],
                 ),
@@ -333,13 +334,13 @@ class _TreinosPageState extends State<TreinosPage> {
                       children: [
                         Icon(
                           Icons.delete_outline,
-                          color: Color(0xFF00845F),
+                          color: Color(0xFF005942),
                           size: 20,
                         ),
                         SizedBox(width: 10),
                         Text(
                           'Excluir treino',
-                          style: TextStyle(color: Color(0xFF00845F)),
+                          style: TextStyle(color: Color(0xFF005942)),
                         ),
                       ],
                     ),
@@ -381,7 +382,7 @@ class _TreinosPageState extends State<TreinosPage> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icone, size: 15, color: Colors.grey.shade600),
+        Icon(icone, size: 15, color: Color(0xFF68736F)),
 
         const SizedBox(width: 5),
 
@@ -390,7 +391,7 @@ class _TreinosPageState extends State<TreinosPage> {
             valor,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: Colors.grey.shade700,
+              color: Color(0xFF4F5A56),
               fontSize: 10,
               fontWeight: FontWeight.w500,
             ),
@@ -407,7 +408,7 @@ class _TreinosPageState extends State<TreinosPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Color(0xFFE8DFD3)),
       ),
       child: Column(
         children: [
@@ -430,7 +431,7 @@ class _TreinosPageState extends State<TreinosPage> {
           const Text(
             'Nenhum treino cadastrado',
             style: TextStyle(
-              color: Colors.black87,
+              color: Color(0xFF10251F),
               fontSize: 15,
               fontWeight: FontWeight.bold,
             ),
@@ -441,7 +442,7 @@ class _TreinosPageState extends State<TreinosPage> {
           Text(
             'Clique no + para adicionar um novo treino.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+            style: TextStyle(color: Color(0xFF68736F), fontSize: 11),
           ),
         ],
       ),
@@ -467,7 +468,7 @@ class _TreinosPageState extends State<TreinosPage> {
             'Excluir treino?',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Color(0xFF12261F),
+              color: Color(0xFF10251F),
             ),
           ),
           content: Text(
@@ -500,7 +501,7 @@ class _TreinosPageState extends State<TreinosPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF00845F),
+                backgroundColor: Color(0xFF005942),
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -569,7 +570,7 @@ class _TreinosPageState extends State<TreinosPage> {
                           width: 42,
                           height: 4,
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
+                            color: Color(0xFFD5C9BA),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
@@ -577,10 +578,10 @@ class _TreinosPageState extends State<TreinosPage> {
 
                       const SizedBox(height: 20),
 
-                      const Text(
-                        'Novo treino',
+                      const Text.rich(
+                        TextSpan(children: [TextSpan(text: 'Novo '), TextSpan(text: 'treino', style: SateEstilo.destaque)]),
                         style: TextStyle(
-                          color: Colors.black87,
+                          color: Color(0xFF10251F),
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -591,7 +592,7 @@ class _TreinosPageState extends State<TreinosPage> {
                       Text(
                         'Preencha os detalhes do treino.',
                         style: TextStyle(
-                          color: Colors.grey.shade600,
+                          color: Color(0xFF68736F),
                           fontSize: 13,
                         ),
                       ),
@@ -610,7 +611,7 @@ class _TreinosPageState extends State<TreinosPage> {
                       const Text(
                         'Categoria',
                         style: TextStyle(
-                          color: Colors.black87,
+                          color: Color(0xFF10251F),
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
                         ),
@@ -723,11 +724,11 @@ class _TreinosPageState extends State<TreinosPage> {
                           fillColor: fundo,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(color: Colors.grey.shade200),
+                            borderSide: BorderSide(color: Color(0xFFE8DFD3)),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide(color: Colors.grey.shade200),
+                            borderSide: BorderSide(color: Color(0xFFE8DFD3)),
                           ),
                           focusedBorder: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(14)),
@@ -741,7 +742,7 @@ class _TreinosPageState extends State<TreinosPage> {
                       const Text(
                         'Status',
                         style: TextStyle(
-                          color: Colors.black87,
+                          color: Color(0xFF10251F),
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
                         ),
@@ -779,7 +780,7 @@ class _TreinosPageState extends State<TreinosPage> {
                             child: Text(
                               'Exercícios',
                               style: TextStyle(
-                                color: Colors.black87,
+                                color: Color(0xFF10251F),
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -836,20 +837,20 @@ class _TreinosPageState extends State<TreinosPage> {
                           decoration: BoxDecoration(
                             color: fundo,
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: Colors.grey.shade200),
+                            border: Border.all(color: Color(0xFFE8DFD3)),
                           ),
                           child: Column(
                             children: [
                               Icon(
                                 Icons.fitness_center_rounded,
-                                color: Colors.grey.shade400,
+                                color: Color(0xFFA3ADA9),
                                 size: 30,
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 'Nenhum exercício adicionado',
                                 style: TextStyle(
-                                  color: Colors.grey.shade600,
+                                  color: Color(0xFF68736F),
                                   fontSize: 12,
                                 ),
                               ),
@@ -987,20 +988,20 @@ class _TreinosPageState extends State<TreinosPage> {
         decoration: BoxDecoration(
           color: fundo,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: Color(0xFFE8DFD3)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               label,
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+              style: TextStyle(color: Color(0xFF68736F), fontSize: 11),
             ),
             const SizedBox(height: 6),
             Text(
               _formatarData(data),
               style: const TextStyle(
-                color: Colors.black87,
+                color: Color(0xFF10251F),
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
@@ -1027,20 +1028,20 @@ class _TreinosPageState extends State<TreinosPage> {
         decoration: BoxDecoration(
           color: fundo,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: Color(0xFFE8DFD3)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               label,
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+              style: TextStyle(color: Color(0xFF68736F), fontSize: 11),
             ),
             const SizedBox(height: 6),
             Text(
               texto,
               style: TextStyle(
-                color: horario == null ? Colors.grey.shade500 : Colors.black87,
+                color: horario == null ? Color(0xFF8A938F) : Color(0xFF10251F),
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
@@ -1062,16 +1063,16 @@ class _TreinosPageState extends State<TreinosPage> {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        prefixIcon: Icon(icone, size: 20, color: Colors.grey.shade600),
+        prefixIcon: Icon(icone, size: 20, color: Color(0xFF68736F)),
         filled: true,
         fillColor: fundo,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.grey.shade200),
+          borderSide: BorderSide(color: Color(0xFFE8DFD3)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.grey.shade200),
+          borderSide: BorderSide(color: Color(0xFFE8DFD3)),
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(14)),
@@ -1090,7 +1091,7 @@ class _TreinosPageState extends State<TreinosPage> {
       style: const TextStyle(fontSize: 13),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+        hintStyle: TextStyle(color: Color(0xFFA3ADA9), fontSize: 12),
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.symmetric(
@@ -1099,11 +1100,11 @@ class _TreinosPageState extends State<TreinosPage> {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey.shade200),
+          borderSide: BorderSide(color: Color(0xFFE8DFD3)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey.shade200),
+          borderSide: BorderSide(color: Color(0xFFE8DFD3)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -1123,12 +1124,12 @@ class _TreinosPageState extends State<TreinosPage> {
         decoration: BoxDecoration(
           color: ativo ? verde : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: ativo ? verde : Colors.grey.shade200),
+          border: Border.all(color: ativo ? verde : Color(0xFFE8DFD3)),
         ),
         child: Text(
           valor,
           style: TextStyle(
-            color: ativo ? Colors.white : Colors.grey.shade700,
+            color: ativo ? Colors.white : Color(0xFF4F5A56),
             fontSize: 11,
             fontWeight: FontWeight.w600,
           ),
@@ -1147,12 +1148,12 @@ class _TreinosPageState extends State<TreinosPage> {
         decoration: BoxDecoration(
           color: ativo ? verde : Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: ativo ? verde : Colors.grey.shade200),
+          border: Border.all(color: ativo ? verde : Color(0xFFE8DFD3)),
         ),
         child: Text(
           valor,
           style: TextStyle(
-            color: ativo ? Colors.white : Colors.grey.shade700,
+            color: ativo ? Colors.white : Color(0xFF4F5A56),
             fontSize: 11,
             fontWeight: FontWeight.w600,
           ),
@@ -1169,9 +1170,9 @@ class _TreinosPageState extends State<TreinosPage> {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: const Color(0xFFEFE6DA),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Color(0xFFE8DFD3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1200,7 +1201,7 @@ class _TreinosPageState extends State<TreinosPage> {
                 child: Text(
                   'Exercício',
                   style: TextStyle(
-                    color: Colors.black87,
+                    color: Color(0xFF10251F),
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
@@ -1212,12 +1213,12 @@ class _TreinosPageState extends State<TreinosPage> {
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFEEEE),
+                    color: const Color(0xFFFDE6EC),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(
                     Icons.delete_outline_rounded,
-                    color: Colors.redAccent,
+                    color: Color(0xFFC0392B),
                     size: 18,
                   ),
                 ),

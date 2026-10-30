@@ -17,6 +17,33 @@ const PASTA_VIDEOS = path.resolve(
 
 fs.mkdirSync(PASTA_VIDEOS, { recursive: true });
 
+// Validar os imports para identificar erros de configuração.
+if (typeof autenticar !== 'function') {
+  throw new TypeError(
+    'authMiddleware deve exportar uma função middleware. ' +
+    'Verifique src/middleware/authMiddleware.js.'
+  );
+}
+
+const metodosObrigatorios = [
+  'listarVideos',
+  'adicionarVideo',
+  'excluirVideo',
+  'listarMarcacoes',
+  'adicionarMarcacao',
+  'editarMarcacao',
+  'excluirMarcacao',
+];
+
+for (const metodo of metodosObrigatorios) {
+  if (typeof videoController?.[metodo] !== 'function') {
+    throw new TypeError(
+      `videoController.${metodo} não é uma função. ` +
+      'Verifique src/controllers/videoController.js e seus exports.'
+    );
+  }
+}
+
 const extensoesPermitidas = new Set([
   '.mp4',
   '.webm',
@@ -38,10 +65,7 @@ const upload = multer({
         .extname(arquivo.originalname)
         .toLowerCase();
 
-      callback(
-        null,
-        `${randomUUID()}${extensao}`
-      );
+      callback(null, `${randomUUID()}${extensao}`);
     },
   }),
 
@@ -70,14 +94,14 @@ const upload = multer({
   },
 });
 
-// Listar vídeos de uma partida
+// Listar vídeos de uma partida.
 router.get(
   '/partidas/:partidaId/videos',
   autenticar,
   videoController.listarVideos
 );
 
-// Cadastrar vídeo de uma partida
+// Cadastrar vídeo de uma partida.
 router.post(
   '/partidas/:partidaId/videos',
   autenticar,
@@ -85,35 +109,35 @@ router.post(
   videoController.adicionarVideo
 );
 
-// Excluir vídeo
+// Excluir vídeo.
 router.delete(
   '/videos/:id',
   autenticar,
   videoController.excluirVideo
 );
 
-// Listar marcações de um vídeo
+// Listar marcações de um vídeo.
 router.get(
   '/videos/:videoId/marcacoes',
   autenticar,
   videoController.listarMarcacoes
 );
 
-// Criar marcação em um vídeo
+// Criar marcação em um vídeo.
 router.post(
   '/videos/:videoId/marcacoes',
   autenticar,
   videoController.adicionarMarcacao
 );
 
-// Editar marcação
+// Editar marcação.
 router.put(
   '/marcacoes/:id',
   autenticar,
   videoController.editarMarcacao
 );
 
-// Excluir marcação
+// Excluir marcação.
 router.delete(
   '/marcacoes/:id',
   autenticar,

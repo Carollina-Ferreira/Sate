@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'atleta_notificacao_page.dart';
+import '../../theme/sate_theme.dart';
 
 class AtletaTreinoPage extends StatefulWidget {
   const AtletaTreinoPage({super.key});
@@ -10,11 +11,11 @@ class AtletaTreinoPage extends StatefulWidget {
 }
 
 class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
-  static const Color verde = Color(0xFF00845F);
-  static const Color rosa = Color(0xFFE98BA8);
-  static const Color azul = Color(0xFF001E98);
+  static const Color verde = Color(0xFF005942);
+  static const Color rosa = Color(0xFFEF476F);
+  static const Color azul = Color(0xFF003D31);
   static const Color amarelo = Color(0xFFE39B18);
-  static const Color fundo = Color(0xFFFCFCFC);
+  static const Color fundo = Color(0xFFFAF5EE);
 
   int filtroSelecionado = 0;
 
@@ -164,10 +165,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
         backgroundColor: fundo,
         elevation: 0,
         centerTitle: false,
-        title: const Text(
-          'Agenda',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Agenda', style: SateEstilo.destaque)]),
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 19,
             fontWeight: FontWeight.bold,
           ),
@@ -184,7 +185,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             },
             icon: const Icon(
               Icons.notifications_none_rounded,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
               size: 26,
             ),
           ),
@@ -299,7 +300,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 color: selecionado ? verde : Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: selecionado ? verde : Colors.grey.shade200,
+                  color: selecionado ? verde : Color(0xFFE8DFD3),
                 ),
               ),
               alignment: Alignment.center,
@@ -309,7 +310,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   fontSize: 12,
                   fontWeight:
                       selecionado ? FontWeight.w600 : FontWeight.w400,
-                  color: selecionado ? Colors.white : Colors.grey.shade700,
+                  color: selecionado ? Colors.white : Color(0xFF4F5A56),
                 ),
               ),
             ),
@@ -343,10 +344,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Color(0xFFE8DFD3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.035),
+            color: Color(0xFF10251F).withValues(alpha: 0.035),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -388,7 +389,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: Color(0xFF10251F),
                     ),
                   ),
                 ),
@@ -482,7 +483,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           texto,
           style: TextStyle(
             fontSize: 10,
-            color: Colors.grey.shade600,
+            color: Color(0xFF68736F),
           ),
         ),
       ],
@@ -524,7 +525,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 fontSize: 12,
                 fontWeight:
                     selecionado || hoje ? FontWeight.bold : FontWeight.w500,
-                color: selecionado ? Colors.white : Colors.black87,
+                color: selecionado ? Colors.white : Color(0xFF10251F),
               ),
             ),
             const SizedBox(height: 5),
@@ -554,7 +555,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           style: TextStyle(
             fontSize: 9,
             fontWeight: FontWeight.w600,
-            color: Colors.grey.shade500,
+            color: Color(0xFF8A938F),
           ),
         ),
       ),
@@ -569,7 +570,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: Color(0xFFE8DFD3)),
         ),
         child: Column(
           children: [
@@ -577,12 +578,12 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: Colors.grey.shade100,
+                color: Color(0xFFEFE6DA),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(
                 Icons.event_available_rounded,
-                color: Colors.grey.shade500,
+                color: Color(0xFF8A938F),
                 size: 27,
               ),
             ),
@@ -592,7 +593,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: Color(0xFF10251F),
               ),
             ),
             const SizedBox(height: 5),
@@ -601,7 +602,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey.shade600,
+                color: Color(0xFF68736F),
               ),
             ),
           ],
@@ -621,7 +622,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
         border: Border.all(color: cor.withValues(alpha: 0.22)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.035),
+            color: Color(0xFF10251F).withValues(alpha: 0.035),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -654,7 +655,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                       _textoDataSelecionada(),
                       style: TextStyle(
                         fontSize: 11,
-                        color: Colors.grey.shade600,
+                        color: Color(0xFF68736F),
                       ),
                     ),
                     const SizedBox(height: 3),
@@ -663,7 +664,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Color(0xFF10251F),
                       ),
                     ),
                   ],
@@ -674,7 +675,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
 
           const SizedBox(height: 17),
 
-          Divider(color: Colors.grey.shade200, height: 1),
+          Divider(color: Color(0xFFE8DFD3), height: 1),
 
           const SizedBox(height: 16),
 
@@ -722,7 +723,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Color(0xFF10251F),
                       ),
                     ),
                   ],
@@ -735,8 +736,8 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 ),
                 decoration: BoxDecoration(
                   color: concluido
-                      ? Colors.green.withValues(alpha: 0.10)
-                      : Colors.orange.withValues(alpha: 0.10),
+                      ? Color(0xFF16A875).withValues(alpha: 0.10)
+                      : Color(0xFFE39B18).withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -745,8 +746,8 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                     fontSize: 9,
                     fontWeight: FontWeight.w600,
                     color: concluido
-                        ? Colors.green.shade700
-                        : Colors.orange.shade700,
+                        ? Color(0xFF005942)
+                        : Color(0xFFC9830F),
                   ),
                 ),
               ),
@@ -760,28 +761,28 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               Icon(
                 Icons.access_time_rounded,
                 size: 15,
-                color: Colors.grey.shade600,
+                color: Color(0xFF68736F),
               ),
               const SizedBox(width: 5),
               Text(
                 evento['horario'],
                 style: TextStyle(
                   fontSize: 11,
-                  color: Colors.grey.shade600,
+                  color: Color(0xFF68736F),
                 ),
               ),
               const SizedBox(width: 14),
               Icon(
                 Icons.timelapse_rounded,
                 size: 15,
-                color: Colors.grey.shade600,
+                color: Color(0xFF68736F),
               ),
               const SizedBox(width: 5),
               Text(
                 evento['duracao'],
                 style: TextStyle(
                   fontSize: 11,
-                  color: Colors.grey.shade600,
+                  color: Color(0xFF68736F),
                 ),
               ),
             ],
@@ -843,10 +844,10 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Color(0xFFE8DFD3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.035),
+            color: Color(0xFF10251F).withValues(alpha: 0.035),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -865,7 +866,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                       'Evento selecionado',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey.shade600,
+                        color: Color(0xFF68736F),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -874,7 +875,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                       style: const TextStyle(
                         fontSize: 19,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Color(0xFF10251F),
                       ),
                     ),
                   ],
@@ -887,8 +888,8 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 ),
                 decoration: BoxDecoration(
                   color: concluido
-                      ? Colors.green.withValues(alpha: 0.10)
-                      : Colors.orange.withValues(alpha: 0.10),
+                      ? Color(0xFF16A875).withValues(alpha: 0.10)
+                      : Color(0xFFE39B18).withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -897,8 +898,8 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     color: concluido
-                        ? Colors.green.shade700
-                        : Colors.orange.shade700,
+                        ? Color(0xFF005942)
+                        : Color(0xFFC9830F),
                   ),
                 ),
               ),
@@ -955,7 +956,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
             ),
           ),
 
@@ -965,7 +966,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             evento['objetivo'],
             style: TextStyle(
               fontSize: 12,
-              color: Colors.grey.shade600,
+              color: Color(0xFF68736F),
               height: 1.4,
             ),
           ),
@@ -980,7 +981,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: Color(0xFF10251F),
                     ),
                   ),
                 ),
@@ -988,7 +989,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   '${exercicios.length} exercícios',
                   style: TextStyle(
                     fontSize: 11,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF68736F),
                   ),
                 ),
               ],
@@ -1033,7 +1034,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 backgroundColor: verde,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                disabledBackgroundColor: Colors.grey.shade300,
+                disabledBackgroundColor: Color(0xFFD5C9BA),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
@@ -1068,7 +1069,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           titulo,
           style: TextStyle(
             fontSize: 10,
-            color: Colors.grey.shade500,
+            color: Color(0xFF8A938F),
           ),
         ),
         const SizedBox(height: 2),
@@ -1077,7 +1078,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: Colors.black87,
+            color: Color(0xFF10251F),
           ),
         ),
       ],
@@ -1091,9 +1092,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
     return Container(
       padding: const EdgeInsets.all(11),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: const Color(0xFFEFE6DA),
         borderRadius: BorderRadius.circular(13),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Color(0xFFE8DFD3)),
       ),
       child: Row(
         children: [
@@ -1125,7 +1126,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             child: Icon(
               exercicio['icone'],
               size: 18,
-              color: Colors.black54,
+              color: Color(0xFF68736F),
             ),
           ),
           const SizedBox(width: 10),
@@ -1138,7 +1139,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                    color: Color(0xFF10251F),
                   ),
                 ),
                 const SizedBox(height: 3),
@@ -1146,7 +1147,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                   '${exercicio['series']} • ${exercicio['descricao']}',
                   style: TextStyle(
                     fontSize: 10,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF68736F),
                   ),
                 ),
               ],
@@ -1155,7 +1156,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
           const Icon(
             Icons.chevron_right_rounded,
             size: 20,
-            color: Colors.grey,
+            color: Color(0xFF8A938F),
           ),
         ],
       ),

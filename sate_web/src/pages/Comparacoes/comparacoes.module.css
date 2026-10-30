@@ -3,27 +3,25 @@
    PÁGINA
 ========================================================= */
 
-
 .page {
-  /* Compensa o espaçamento do container pai para eliminar a moldura verde. */
   width: calc(100% + 96px);
   min-height: calc(100vh - 64px + 48px);
   margin: -48px -48px 0;
   padding: 42px clamp(24px, 5vw, 76px) 56px;
   box-sizing: border-box;
+
   background:
-    radial-gradient(ellipse 340px 230px at 96% 0%, rgba(244, 63, 120, 0.16) 0%, rgba(244, 63, 120, 0.08) 38%, rgba(244, 63, 120, 0) 76%),
-    #faf5ee;
-  color: #10251f;
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(244, 63, 120, 0.16) 0%,
+      rgba(244, 63, 120, 0.08) 38%,
+      transparent 76%
+    ),
+    var(--bg-page);
+
+  color: var(--texto);
   font-family: 'Poppins', sans-serif;
 }
-
-.page *,
-.page *::before,
-.page *::after {
-  box-sizing: border-box;
-}
-
 
 .page *,
 .page *::before,
@@ -75,7 +73,7 @@
   padding: 42px 24px;
   border: 1px solid var(--borda);
   border-radius: 15px;
-  background: var(--branco-translucido);
+  background: var(--bg-surface);
   color: var(--texto);
   text-align: center;
 }
@@ -429,6 +427,30 @@
 }
 
 /* =========================================================
+   MODO ESCURO
+========================================================= */
+
+:global(:root[data-theme='dark']) .page {
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(244, 63, 120, 0.09) 0%,
+      transparent 76%
+    ),
+    var(--bg-page);
+  color: var(--texto);
+}
+
+:global(:root[data-theme='dark']) .stateCard {
+  background: var(--bg-surface);
+  border-color: var(--borda);
+}
+
+:global(:root[data-theme='dark']) .pageHeader h1 em {
+  color: #7BE0A8;
+}
+
+/* =========================================================
    RESPONSIVIDADE — NOTEBOOKS E TABLETS
 ========================================================= */
 
@@ -552,9 +574,4 @@
   .switchButton {
     height: 46px;
   }
-}
-
-/* H1 verde-claro no modo escuro */
-:global(:root[data-theme='dark']) .pageHeader h1 em {
-  color: #7BE0A8;
 }

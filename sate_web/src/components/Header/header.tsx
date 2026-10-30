@@ -1,5 +1,4 @@
-﻿
-import {
+﻿import {
   Bell,
   CalendarDays,
   ChevronDown,
@@ -28,6 +27,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './header.module.css';
 
+
 interface HeaderProps {
   title: string;
   onProfile?: () => void;
@@ -38,8 +38,8 @@ interface HeaderProps {
   onViewAllAthletes?: () => void;
   onViewAllTeams?: () => void;
   onViewAllMatches?: () => void;
-  onSearchResult?: (item: SearchItem) => void;
 }
+
 
 export interface SearchItem {
   id: number;
@@ -48,6 +48,7 @@ export interface SearchItem {
   subtitle: string;
   initials?: string;
 }
+
 
 interface NotificationItem {
   id: number;
@@ -58,6 +59,7 @@ interface NotificationItem {
   read: boolean;
 }
 
+
 interface Usuario {
   id?: number;
   nome?: string;
@@ -66,47 +68,57 @@ interface Usuario {
   avatarUrl?: string | null;
 }
 
+
+interface AtletaAPI {
+  id: number;
+  nome?: string | null;
+  categoria?: string | null;
+  usuario?: {
+    nome?: string | null;
+    avatarUrl?: string | null;
+  } | null;
+  equipe?: {
+    nome?: string | null;
+  } | null;
+}
+
+
+interface EquipeAPI {
+  id: number;
+  nome?: string | null;
+  modalidade?: string | null;
+  categoria?: string | null;
+  numeroAtletas?: number;
+  _count?: {
+    atletas?: number;
+  };
+  atletas?: unknown[];
+}
+
+
+interface PartidaAPI {
+  id: number;
+  adversario?: string | null;
+  data?: string | null;
+  status?: string | null;
+  golsEquipe?: number | null;
+  golsAdversario?: number | null;
+  equipe?: {
+    id?: number;
+    nome?: string | null;
+    modalidade?: string | null;
+    categoria?: string | null;
+  } | null;
+}
+
+
 type OpenPanel = 'search' | 'notifications' | 'user' | null;
 type Theme = 'light' | 'dark';
 
+
 const API_URL = 'http://localhost:3000';
+const LIMITE_RESULTADOS = 3;
 
-/* =====================================
-   DADOS MOCKADOS - PESQUISA
-===================================== */
-
-const searchData: SearchItem[] = [
-  {
-    id: 1,
-    type: 'atleta',
-    title: 'Marcelo Ferreira',
-    subtitle: 'Poli Rugby',
-    initials: 'MF',
-  },
-  {
-    id: 2,
-    type: 'atleta',
-    title: 'Marcelo Ferreira',
-    subtitle: 'Poli Rugby',
-    initials: 'MF',
-  },
-  {
-    id: 3,
-    type: 'equipe',
-    title: 'Poli Rugby',
-    subtitle: 'Rugby Sub-17',
-  },
-  {
-    id: 4,
-    type: 'partida',
-    title: 'Poli x Jacareí',
-    subtitle: '12/08/2026',
-  },
-];
-
-/* =====================================
-   DADOS MOCKADOS - NOTIFICAÇÕES
-===================================== */
 
 const initialNotifications: NotificationItem[] = [
   {
@@ -143,6 +155,169 @@ const initialNotifications: NotificationItem[] = [
   },
 ];
 
+
+/* ============================================================
+   FUNÇÕES AUXILIARES
+============================================================ */
+
+function obterToken() {
+  return (
+    localStorage.getItem('token') ||
+    sessionStorage.getItem('token') ||
+    localStorage.getItem('accessToken') ||
+    sessionStorage.getItem('accessToken')
+  );
+}
+
+
+function normalizarTexto(texto: string) {
+  return texto
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLocaleLowerCase('pt-BR')
+    .trim();
+}
+
+
+function obterIniciais(nome: string) {
+  return nome
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((parte) => parte[0])
+    .join('')
+    .toUpperCase();
+}
+
+
+function formatarDataPartida(data?: string | null) {
+  if (!data) return 'Data não informada';
+
+  const dataConvertida = new Date(data);
+
+  if (Number.isNaN(dataConvertida.getTime())) {
+    return 'Data não informada';
+  }
+
+  return dataConvertida.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+}
+
+
+function formatarStatus(status?: string | null) {
+  if (!status) return 'Status não informado';
+
+  const statusMap: Record<string, string> = {
+    AGENDADA: 'Agendada',
+    EM_ANDAMENTO: 'Em andamento',
+    FINALIZADA: 'Finalizada',
+    CANCELADA: 'Cancelada',
+  };
+
+  return statusMap[status] || status;
+}
+
+
+/* ============================================================
+   EXTRAIR LISTAS DA API
+============================================================ */
+
+function extrairLista<T>(
+  dados: unknown,
+  chaves: string[],
+): T[] {
+  if (Array.isArray(dados)) {
+    return dados as T[];
+  }
+
+  if (!dados || typeof dados !== 'object') {
+    return [];
+  }
+
+  const objeto = dados as Record<string, unknown>;
+
+  for (const chave of chaves) {
+    const valor = objeto[chave];
+
+    if (Array.isArray(valor)) {
+      return valor as T[];
+    }
+
+    if (valor && typeof valor === 'object') {
+      const lista = extrairLista<T>(valor, chaves);
+
+      if (lista.length > 0) {
+        return lista;
+      }
+    }
+  }
+
+  return [];
+}
+
+
+/* ============================================================
+   BUSCAR ENDPOINT
+============================================================ */
+
+async function buscarEndpoint<T>(
+  endpoint: string,
+  token: string,
+  chaves: string[],
+): Promise<T[]> {
+  const resposta = await fetch(`${API_URL}${endpoint}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const texto = await resposta.text();
+
+  console.log(
+    `[SATE] ${endpoint} - Status:`,
+    resposta.status,
+  );
+
+  console.log(
+    `[SATE] ${endpoint} - Resposta:`,
+    texto,
+  );
+
+  if (!resposta.ok) {
+    throw new Error(
+      `Erro ${resposta.status} em ${endpoint}: ${texto}`,
+    );
+  }
+
+  let dados: unknown;
+
+  try {
+    dados = JSON.parse(texto);
+  } catch {
+    throw new Error(`Resposta inválida em ${endpoint}.`);
+  }
+
+  const lista = extrairLista<T>(dados, chaves);
+
+  console.log(
+    `[SATE] ${endpoint} - Quantidade encontrada:`,
+    lista.length,
+  );
+
+  return lista;
+}
+
+
+/* ============================================================
+   HEADER
+============================================================ */
+
 const Header = ({
   title,
   onProfile,
@@ -153,7 +328,6 @@ const Header = ({
   onViewAllAthletes,
   onViewAllTeams,
   onViewAllMatches,
-  onSearchResult,
 }: HeaderProps) => {
   const navigate = useNavigate();
   const headerRef = useRef<HTMLElement>(null);
@@ -161,14 +335,19 @@ const Header = ({
   const [openPanel, setOpenPanel] = useState<OpenPanel>(null);
   const [searchValue, setSearchValue] = useState('');
 
+  const [searchData, setSearchData] = useState<SearchItem[]>([]);
+  const [loadingSearch, setLoadingSearch] = useState(false);
+  const [searchError, setSearchError] = useState('');
+
   const [notifications, setNotifications] =
     useState<NotificationItem[]>(initialNotifications);
 
   const [usuario, setUsuario] = useState<Usuario | null>(null);
 
-  /* =====================================
-     TEMA CLARO / ESCURO
-  ===================================== */
+
+  /* ============================================================
+     TEMA
+  ============================================================ */
 
   const [theme, setTheme] = useState<Theme>(() => {
     try {
@@ -180,29 +359,34 @@ const Header = ({
     }
   });
 
+
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
 
     try {
       localStorage.setItem('sate-theme', theme);
     } catch (error) {
-      console.error('Não foi possível salvar o tema:', error);
+      console.error('Erro ao salvar tema:', error);
     }
   }, [theme]);
 
+
   const toggleTheme = () => {
-    setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
+    setTheme((current) =>
+      current === 'dark' ? 'light' : 'dark',
+    );
   };
 
-  /* =====================================
+
+  /* ============================================================
      CARREGAR USUÁRIO
-  ===================================== */
+  ============================================================ */
 
   useEffect(() => {
+    let ativo = true;
+
     const carregarUsuario = async () => {
-      const token =
-        localStorage.getItem('token') ||
-        sessionStorage.getItem('token');
+      const token = obterToken();
 
       const usuarioSalvo =
         localStorage.getItem('usuario') ||
@@ -210,9 +394,11 @@ const Header = ({
 
       if (usuarioSalvo) {
         try {
-          setUsuario(JSON.parse(usuarioSalvo) as Usuario);
+          if (ativo) {
+            setUsuario(JSON.parse(usuarioSalvo) as Usuario);
+          }
         } catch {
-          setUsuario(null);
+          if (ativo) setUsuario(null);
         }
       }
 
@@ -222,7 +408,6 @@ const Header = ({
         const resposta = await fetch(
           `${API_URL}/api/usuarios/perfil`,
           {
-            method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -232,9 +417,12 @@ const Header = ({
         if (!resposta.ok) return;
 
         const dados = await resposta.json();
-        const usuarioAtualizado = dados.usuario as Usuario;
 
-        if (!usuarioAtualizado) return;
+        const usuarioAtualizado = (
+          dados.usuario || dados
+        ) as Usuario;
+
+        if (!usuarioAtualizado || !ativo) return;
 
         setUsuario(usuarioAtualizado);
 
@@ -253,25 +441,20 @@ const Header = ({
           );
         }
       } catch (error) {
-        console.error(
-          'Erro ao carregar usuário do backend:',
-          error,
-        );
+        console.error('Erro ao carregar usuário:', error);
       }
     };
 
     void carregarUsuario();
+
+    return () => {
+      ativo = false;
+    };
   }, []);
 
-  const nomeUsuario = usuario?.nome || 'Treinador';
 
-  const iniciais = nomeUsuario
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((nome) => nome[0])
-    .join('')
-    .toUpperCase();
+  const nomeUsuario = usuario?.nome || 'Treinador';
+  const iniciais = obterIniciais(nomeUsuario);
 
   const avatarUrl = usuario?.avatarUrl
     ? usuario.avatarUrl.startsWith('http')
@@ -279,25 +462,284 @@ const Header = ({
       : `${API_URL}${usuario.avatarUrl}`
     : null;
 
-  /* =====================================
+
+  /* ============================================================
+     CARREGAR DADOS DA PESQUISA
+  ============================================================ */
+
+  useEffect(() => {
+    let ativo = true;
+
+    const carregarDadosPesquisa = async () => {
+      const token = obterToken();
+
+      if (!token) {
+        setSearchData([]);
+        setSearchError('Faça login para pesquisar.');
+        return;
+      }
+
+      setLoadingSearch(true);
+      setSearchError('');
+
+      const resultados = await Promise.allSettled([
+        buscarEndpoint<AtletaAPI>(
+          '/api/atletas',
+          token,
+          ['atletas', 'data', 'resultados', 'items'],
+        ),
+
+        buscarEndpoint<EquipeAPI>(
+          '/api/equipes',
+          token,
+          ['equipes', 'data', 'resultados', 'items'],
+        ),
+
+        buscarEndpoint<PartidaAPI>(
+          '/api/partidas',
+          token,
+          ['partidas', 'data', 'resultados', 'items'],
+        ),
+      ]);
+
+      if (!ativo) return;
+
+      const dadosPesquisa: SearchItem[] = [];
+      const falhas: string[] = [];
+
+
+      // ATLETAS
+
+      const resultadoAtletas = resultados[0];
+
+      if (resultadoAtletas.status === 'fulfilled') {
+        resultadoAtletas.value.forEach((atleta) => {
+          const nome =
+            atleta.nome ||
+            atleta.usuario?.nome ||
+            'Atleta sem nome';
+
+          dadosPesquisa.push({
+            id: Number(atleta.id),
+            type: 'atleta',
+            title: nome,
+
+            subtitle:
+              atleta.equipe?.nome ||
+              atleta.categoria ||
+              'Sem equipe cadastrada',
+
+            initials: obterIniciais(nome),
+          });
+        });
+      } else {
+        console.error(
+          'Erro ao carregar atletas:',
+          resultadoAtletas.reason,
+        );
+
+        falhas.push('atletas');
+      }
+
+
+      // EQUIPES
+
+      const resultadoEquipes = resultados[1];
+
+      if (resultadoEquipes.status === 'fulfilled') {
+        resultadoEquipes.value.forEach((equipe) => {
+          const nome = equipe.nome || 'Equipe sem nome';
+
+          const detalhes = [
+            equipe.modalidade,
+            equipe.categoria,
+          ].filter(Boolean);
+
+          const quantidade =
+            equipe.numeroAtletas ??
+            equipe._count?.atletas ??
+            equipe.atletas?.length ??
+            0;
+
+          dadosPesquisa.push({
+            id: Number(equipe.id),
+            type: 'equipe',
+            title: nome,
+
+            subtitle:
+              detalhes.join(' • ') ||
+              `${quantidade} atletas`,
+          });
+        });
+      } else {
+        console.error(
+          'Erro ao carregar equipes:',
+          resultadoEquipes.reason,
+        );
+
+        falhas.push('equipes');
+      }
+
+
+      // PARTIDAS
+
+      const resultadoPartidas = resultados[2];
+
+      if (resultadoPartidas.status === 'fulfilled') {
+        resultadoPartidas.value.forEach((partida) => {
+          const nomeEquipe =
+            partida.equipe?.nome || 'Equipe';
+
+          const adversario =
+            partida.adversario || 'Adversário não informado';
+
+          dadosPesquisa.push({
+            id: Number(partida.id),
+            type: 'partida',
+            title: `${nomeEquipe} x ${adversario}`,
+
+            subtitle: [
+              formatarDataPartida(partida.data),
+              formatarStatus(partida.status),
+            ].join(' • '),
+          });
+        });
+      } else {
+        console.error(
+          'Erro ao carregar partidas:',
+          resultadoPartidas.reason,
+        );
+
+        falhas.push('partidas');
+      }
+
+      if (!ativo) return;
+
+      setSearchData(dadosPesquisa);
+
+      if (falhas.length === 3) {
+        setSearchError(
+          'Não foi possível carregar os dados. Verifique a conexão com o servidor.',
+        );
+      } else if (falhas.length > 0) {
+        setSearchError(
+          `Não foi possível carregar: ${falhas.join(', ')}.`,
+        );
+      } else {
+        setSearchError('');
+      }
+
+      setLoadingSearch(false);
+    };
+
+    void carregarDadosPesquisa();
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
+
+
+  /* ============================================================
+     NAVEGAÇÃO DOS RESULTADOS
+  ============================================================ */
+
+  const handleSearchResult = (item: SearchItem) => {
+    setOpenPanel(null);
+    setSearchValue('');
+
+    // ATLETA
+
+    if (item.type === 'atleta') {
+      navigate(
+        `/atletas?tela=perfil&id=${item.id}`,
+      );
+
+      return;
+    }
+
+
+    // EQUIPE
+    // A página Equipes lê os parâmetros tela e id
+    // e abre os detalhes da equipe correspondente.
+
+    if (item.type === 'equipe') {
+      navigate({
+        pathname: '/equipes',
+        search: `?tela=perfil&id=${encodeURIComponent(
+          String(item.id),
+        )}`,
+      });
+
+      return;
+    }
+
+
+    // PARTIDA
+
+    if (item.type === 'partida') {
+      navigate('/detalhes-partida', {
+        state: {
+          partidaId: item.id,
+        },
+      });
+    }
+  };
+
+
+  /* ============================================================
+     VER TODOS
+  ============================================================ */
+
+  const handleViewAll = (tipo: SearchItem['type']) => {
+    const callbacks = {
+      atleta: onViewAllAthletes,
+      equipe: onViewAllTeams,
+      partida: onViewAllMatches,
+    };
+
+    const callback = callbacks[tipo];
+
+    setOpenPanel(null);
+    setSearchValue('');
+
+    if (callback) {
+      callback();
+      return;
+    }
+
+    const caminhos: Record<SearchItem['type'], string> = {
+      atleta: '/atletas',
+      equipe: '/equipes',
+      partida: '/partidas',
+    };
+
+    navigate(caminhos[tipo]);
+  };
+
+
+  /* ============================================================
      SAIR
-  ===================================== */
+  ============================================================ */
 
   const handleLogout = () => {
     localStorage.removeItem('usuario');
     localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
 
     sessionStorage.removeItem('usuario');
     sessionStorage.removeItem('token');
+    sessionStorage.removeItem('accessToken');
 
     setOpenPanel(null);
     onLogout?.();
     navigate('/');
   };
 
-  /* =====================================
-     FECHAR AO CLICAR FORA / ESC
-  ===================================== */
+
+  /* ============================================================
+     FECHAR PAINÉIS
+  ============================================================ */
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -319,25 +761,39 @@ const Header = ({
     document.addEventListener('keydown', handleEscape);
 
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener(
+        'mousedown',
+        handleOutsideClick,
+      );
+
+      document.removeEventListener(
+        'keydown',
+        handleEscape,
+      );
     };
   }, []);
 
-  /* =====================================
-     PESQUISA
-  ===================================== */
+
+  /* ============================================================
+     FILTRAR PESQUISA
+  ============================================================ */
 
   const filteredSearch = useMemo(() => {
-    const value = searchValue.trim().toLowerCase();
+    const value = normalizarTexto(searchValue);
 
     if (!value) return searchData;
 
-    return searchData.filter((item) =>
-      item.title.toLowerCase().includes(value) ||
-      item.subtitle.toLowerCase().includes(value),
-    );
-  }, [searchValue]);
+    return searchData.filter((item) => {
+      const titulo = normalizarTexto(item.title);
+      const subtitulo = normalizarTexto(item.subtitle);
+
+      return (
+        titulo.includes(value) ||
+        subtitulo.includes(value)
+      );
+    });
+  }, [searchValue, searchData]);
+
 
   const athletes = filteredSearch.filter(
     (item) => item.type === 'atleta',
@@ -351,19 +807,15 @@ const Header = ({
     (item) => item.type === 'partida',
   );
 
-  const handleSearchResult = (item: SearchItem) => {
-    onSearchResult?.(item);
-    setSearchValue('');
-    setOpenPanel(null);
-  };
 
-  /* =====================================
+  /* ============================================================
      NOTIFICAÇÕES
-  ===================================== */
+  ============================================================ */
 
   const unreadNotifications = notifications.filter(
     (notification) => !notification.read,
   ).length;
+
 
   const handleNotificationClick = (id: number) => {
     setNotifications((current) =>
@@ -375,17 +827,24 @@ const Header = ({
     );
   };
 
+
   const togglePanel = (panel: OpenPanel) => {
     setOpenPanel((current) =>
       current === panel ? null : panel,
     );
   };
 
+
+  /* ============================================================
+     RENDERIZAÇÃO
+  ============================================================ */
+
   return (
     <header ref={headerRef} className={styles.header}>
       <h1 className={styles.title}>{title}</h1>
 
       <div className={styles.right}>
+
         {/* PESQUISA */}
 
         <div className={styles.searchContainer}>
@@ -400,6 +859,7 @@ const Header = ({
               value={searchValue}
               placeholder="Pesquisar atletas, equipes, partidas"
               aria-label="Pesquisar atletas, equipes e partidas"
+              aria-expanded={openPanel === 'search'}
               onFocus={() => setOpenPanel('search')}
               onChange={(event) => {
                 setSearchValue(event.target.value);
@@ -410,43 +870,47 @@ const Header = ({
 
           {openPanel === 'search' && (
             <div className={styles.searchDropdown}>
-              {filteredSearch.length === 0 ? (
+              {loadingSearch ? (
                 <div className={styles.emptySearch}>
-                  Nenhum resultado encontrado.
+                  Carregando resultados...
                 </div>
               ) : (
                 <>
-                  {athletes.length > 0 && (
-                    <SearchSection
-                      title="Atletas"
-                      items={athletes}
-                      onViewAll={onViewAllAthletes}
-                      onItemClick={handleSearchResult}
-                    />
+                  {searchError && (
+                    <div className={styles.emptySearch}>
+                      {searchError}
+                    </div>
                   )}
 
-                  {teams.length > 0 && (
-                    <SearchSection
-                      title="Equipes"
-                      items={teams}
-                      onViewAll={onViewAllTeams}
-                      onItemClick={handleSearchResult}
-                    />
-                  )}
+                  <SearchSection
+                    title="Atletas"
+                    items={athletes.slice(0, LIMITE_RESULTADOS)}
+                    emptyMessage="Nenhum atleta encontrado."
+                    onViewAll={() => handleViewAll('atleta')}
+                    onItemClick={handleSearchResult}
+                  />
 
-                  {matches.length > 0 && (
-                    <SearchSection
-                      title="Partidas"
-                      items={matches}
-                      onViewAll={onViewAllMatches}
-                      onItemClick={handleSearchResult}
-                    />
-                  )}
+                  <SearchSection
+                    title="Equipes"
+                    items={teams.slice(0, LIMITE_RESULTADOS)}
+                    emptyMessage="Nenhuma equipe encontrada."
+                    onViewAll={() => handleViewAll('equipe')}
+                    onItemClick={handleSearchResult}
+                  />
+
+                  <SearchSection
+                    title="Partidas"
+                    items={matches.slice(0, LIMITE_RESULTADOS)}
+                    emptyMessage="Nenhuma partida encontrada."
+                    onViewAll={() => handleViewAll('partida')}
+                    onItemClick={handleSearchResult}
+                  />
                 </>
               )}
             </div>
           )}
         </div>
+
 
         {/* NOTIFICAÇÕES */}
 
@@ -527,6 +991,7 @@ const Header = ({
           )}
         </div>
 
+
         {/* USUÁRIO */}
 
         <div className={styles.userContainer}>
@@ -567,8 +1032,6 @@ const Header = ({
             />
           </button>
 
-          {/* MENU DO PERFIL */}
-
           {openPanel === 'user' && (
             <div className={styles.userDropdown}>
               <div className={styles.userDropdownHeader}>
@@ -590,8 +1053,6 @@ const Header = ({
               </div>
 
               <div className={styles.userMenu}>
-                {/* ALTERNAR TEMA */}
-
                 <button
                   type="button"
                   className={styles.userMenuItem}
@@ -688,20 +1149,24 @@ const Header = ({
   );
 };
 
-/* =====================================
+
+/* ============================================================
    SEÇÃO DA PESQUISA
-===================================== */
+============================================================ */
 
 interface SearchSectionProps {
   title: string;
   items: SearchItem[];
-  onViewAll?: () => void;
+  emptyMessage: string;
+  onViewAll: () => void;
   onItemClick: (item: SearchItem) => void;
 }
+
 
 const SearchSection = ({
   title,
   items,
+  emptyMessage,
   onViewAll,
   onItemClick,
 }: SearchSectionProps) => {
@@ -710,44 +1175,55 @@ const SearchSection = ({
       <div className={styles.searchSectionHeader}>
         <strong>{title}</strong>
 
-        <button type="button" onClick={onViewAll}>
+        <button
+          type="button"
+          onClick={onViewAll}
+        >
           Ver todos
         </button>
       </div>
 
       <div className={styles.searchSectionItems}>
-        {items.map((item) => (
-          <button
-            key={`${item.type}-${item.id}`}
-            type="button"
-            className={styles.searchResultItem}
-            onClick={() => onItemClick(item)}
-          >
-            <SearchItemIcon item={item} />
+        {items.length > 0 ? (
+          items.map((item) => (
+            <button
+              key={`${item.type}-${item.id}`}
+              type="button"
+              className={styles.searchResultItem}
+              onClick={() => onItemClick(item)}
+            >
+              <SearchItemIcon item={item} />
 
-            <div className={styles.searchResultText}>
-              <strong>{item.title}</strong>
-              <span>{item.subtitle}</span>
-            </div>
+              <div className={styles.searchResultText}>
+                <strong>{item.title}</strong>
+                <span>{item.subtitle}</span>
+              </div>
 
-            <ChevronRight
-              size={19}
-              className={styles.searchResultArrow}
-            />
-          </button>
-        ))}
+              <ChevronRight
+                size={19}
+                className={styles.searchResultArrow}
+              />
+            </button>
+          ))
+        ) : (
+          <div className={styles.emptySearch}>
+            {emptyMessage}
+          </div>
+        )}
       </div>
     </section>
   );
 };
 
-/* =====================================
+
+/* ============================================================
    ÍCONE DO RESULTADO
-===================================== */
+============================================================ */
 
 interface SearchItemIconProps {
   item: SearchItem;
 }
+
 
 const SearchItemIcon = ({ item }: SearchItemIconProps) => {
   if (item.type === 'atleta') {
@@ -773,13 +1249,15 @@ const SearchItemIcon = ({ item }: SearchItemIconProps) => {
   );
 };
 
-/* =====================================
+
+/* ============================================================
    ÍCONE DA NOTIFICAÇÃO
-===================================== */
+============================================================ */
 
 interface NotificationIconProps {
   type: NotificationItem['type'];
 }
+
 
 const NotificationIcon = ({
   type,
@@ -812,5 +1290,6 @@ const NotificationIcon = ({
     </div>
   );
 };
+
 
 export default Header;

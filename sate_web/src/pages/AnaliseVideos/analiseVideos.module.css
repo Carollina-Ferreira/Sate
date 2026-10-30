@@ -1,12 +1,22 @@
+
+/* ============================================================
+   SATE — ANÁLISE DE VÍDEOS
+   PARTE 1/2
+============================================================ */
+
 .page {
-  /* Compensa o espaçamento do container pai para eliminar a moldura verde. */
   width: calc(100% + 96px);
   min-height: calc(100vh - 64px + 48px);
   margin: -48px -48px 0;
   padding: 42px clamp(24px, 5vw, 76px) 56px;
   box-sizing: border-box;
   background:
-    radial-gradient(ellipse 340px 230px at 96% 0%, rgba(244, 63, 120, 0.16) 0%, rgba(244, 63, 120, 0.08) 38%, rgba(244, 63, 120, 0) 76%),
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(240, 68, 112, 0.12) 0%,
+      rgba(240, 68, 112, 0.05) 42%,
+      transparent 76%
+    ),
     #faf5ee;
   color: #10251f;
   font-family: 'Poppins', sans-serif;
@@ -22,18 +32,10 @@
 
 .pageHeader h1 {
   margin: 0;
-  color: #ffffff;
+  color: #10251f;
   font-size: 29px;
   font-weight: 700;
-}
-
-.matchInfo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 7px;
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 13px;
+  letter-spacing: -0.8px;
 }
 
 .titleArea h1 {
@@ -45,7 +47,8 @@
   letter-spacing: -1.4px;
 }
 
-.titleArea h1 em {
+.titleArea h1 em,
+.pageHeader h1 em {
   color: #f04470;
   font-family: 'DM Serif Display', serif;
   font-style: italic;
@@ -53,62 +56,98 @@
   letter-spacing: -0.5px;
 }
 
-.matchInfo i {
+.matchInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 7px;
+  color: #778079;
+  font-size: 13px;
+}
+
+.matchInfo i,
+.matchDetails i {
   width: 4px;
   height: 4px;
+  flex-shrink: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.72);
+  background: #b5c2ba;
 }
 
 /* =====================================
-   BOTÕES CABEÇALHO
+   BOTÕES DO CABEÇALHO
 ===================================== */
 
 .headerActions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .headerActions button {
+  min-height: 42px;
   height: 42px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 0 16px;
+  box-sizing: border-box;
   border: none;
-  border-radius: 10px;
+  border-radius: 11px;
   color: #ffffff;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
   transition:
+    background 0.2s ease,
     transform 0.2s ease,
-    opacity 0.2s ease,
     box-shadow 0.2s ease;
 }
 
 .headerActions button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 12px rgba(16, 37, 31, 0.1);
+}
+
+.headerActions button:active {
+  transform: translateY(0);
 }
 
 .manageCategoriesButton {
-  background: #2f91c7;
+  background: #087b5b;
+  color: #ffffff;
+}
+
+.manageCategoriesButton:hover {
+  background: #06694e;
 }
 
 .actionButtonRed {
-  background: #dc6969;
+  background: #f04470;
+  color: #ffffff;
+}
+
+.actionButtonRed:hover {
+  background: #d93460;
 }
 
 .actionButtonGreen {
-  background: #35a964;
+  background: #087b5b;
+  color: #ffffff;
+}
+
+.actionButtonGreen:hover {
+  background: #06694e;
 }
 
 /* =====================================
-   GRID
+   GRID PRINCIPAL
 ===================================== */
 
 .analysisGrid {
@@ -125,15 +164,25 @@
 }
 
 /* =====================================
-   VÍDEO
+   CARDS PRINCIPAIS
 ===================================== */
+
+.videoCard,
+.actionTypesCard,
+.eventsCard {
+  background: #ffffff;
+  border: 1px solid #eadfd3;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(77, 44, 24, 0.045);
+}
 
 .videoCard {
   overflow: hidden;
-  background: #e7efeb;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.13);
 }
+
+/* =====================================
+   VÍDEO
+===================================== */
 
 .videoArea {
   height: 430px;
@@ -142,12 +191,8 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #050505;
+  background: #10251f;
 }
-
-/* =====================================
-   BOTÃO PLAY
-===================================== */
 
 .playButton {
   width: 76px;
@@ -156,28 +201,19 @@
   top: 50%;
   left: 50%;
   z-index: 10;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin: 0;
   padding: 0;
-
   box-sizing: border-box;
-
-  border: 7px solid rgba(255, 255, 255, 0.35);
+  border: 7px solid rgba(255, 255, 255, 0.4);
   border-radius: 50%;
-
   outline: none;
-
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.09);
   color: #ffffff;
-
   cursor: pointer;
-
   transform: translate(-50%, -50%);
-
   transition:
     transform 0.2s ease,
     border-color 0.2s ease,
@@ -186,8 +222,8 @@
 
 .playButton:hover {
   transform: translate(-50%, -50%) scale(1.06);
-  border-color: rgba(255, 255, 255, 0.65);
-  background: rgba(255, 255, 255, 0.13);
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .playButton:active {
@@ -198,26 +234,18 @@
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.22);
 }
 
-/* ÍCONE DENTRO DO PLAY */
-
 .playButton svg {
   width: 30px;
   height: 30px;
   min-width: 30px;
   min-height: 30px;
-
   display: block;
-
   margin: 0;
   padding: 0;
-
   flex-shrink: 0;
-
   color: #ffffff;
   stroke: currentColor;
 }
-
-/* ÍCONE DE PAUSE */
 
 .pauseIcon {
   font-size: 25px;
@@ -225,15 +253,12 @@
   font-weight: 700;
 }
 
-/* TEMPO DO VÍDEO */
-
 .videoTime {
   position: absolute;
   bottom: 12px;
   left: 14px;
   z-index: 6;
-
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 12px;
 }
 
@@ -244,6 +269,7 @@
 .timelineArea {
   padding: 20px 24px 22px;
   box-sizing: border-box;
+  background: #ffffff;
 }
 
 .timelineTrackWrapper {
@@ -257,7 +283,7 @@
   position: relative;
   z-index: 2;
   margin: 0;
-  accent-color: #087d60;
+  accent-color: #087b5b;
   cursor: pointer;
 }
 
@@ -276,7 +302,7 @@
   position: absolute;
   top: 3px;
   padding: 0;
-  border: 2px solid #e7efeb;
+  border: 2px solid #ffffff;
   border-radius: 50%;
   cursor: pointer;
   pointer-events: auto;
@@ -284,24 +310,28 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
 }
 
-.marker_boa {
+.marker_boa,
+.goodMarker {
   background: #16a875;
 }
 
-.marker_ruim {
-  background: #c92f35;
+.marker_ruim,
+.badMarker {
+  background: #d52941;
 }
 
-.marker_neutra {
+.marker_neutra,
+.neutralMarker {
   background: #8c9792;
 }
 
-.marker_destaque {
-  background: #258bc2;
+.marker_destaque,
+.highlightMarker {
+  background: #4289c7;
 }
 
 /* =====================================
-   LEGENDA
+   LEGENDA DA TIMELINE
 ===================================== */
 
 .timelineLegend {
@@ -326,24 +356,8 @@
 }
 
 .timelineLegendItem small {
-  color: #67766f;
+  color: #778079;
   font-size: 11px;
-}
-
-.goodMarker {
-  background: #16a875;
-}
-
-.badMarker {
-  background: #c92f35;
-}
-
-.neutralMarker {
-  background: #8c9792;
-}
-
-.highlightMarker {
-  background: #258bc2;
 }
 
 /* =====================================
@@ -353,9 +367,6 @@
 .actionTypesCard {
   padding: 20px;
   box-sizing: border-box;
-  border-radius: 16px;
-  background: #e7efeb;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.13);
 }
 
 .actionTypesHeader {
@@ -366,34 +377,44 @@
   margin-bottom: 16px;
 }
 
-.actionTypesHeader h2 {
+.actionTypesHeader h2,
+.eventsHeader h2 {
   margin: 0;
-  color: #20332c;
+  color: #10251f;
   font-size: 20px;
   font-weight: 700;
+  letter-spacing: -0.3px;
 }
 
-.actionTypesHeader p {
+.actionTypesHeader p,
+.eventsHeader span {
   margin: 4px 0 0;
-  color: #728079;
+  color: #778079;
   font-size: 13px;
 }
 
 .editCategoriesSmall {
   height: 36px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   padding: 0 14px;
-  border: 1px solid #c8d5cf;
+  box-sizing: border-box;
+  border: 1px solid #ddcfc0;
   border-radius: 10px;
   background: #ffffff;
   color: #087b5b;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
+}
+
+.editCategoriesSmall:hover {
+  background: #f3f8f5;
+  border-color: #9dbbb0;
 }
 
 .actionTypesGrid {
@@ -410,14 +431,14 @@
   position: relative;
   padding: 14px;
   box-sizing: border-box;
-  border: 1px solid #d0dad5;
+  border: 1px solid #eadfd3;
   border-radius: 12px;
-  background: #f8faf9;
+  background: #faf5ee;
 }
 
 .categoryPreview strong {
   flex: 1;
-  color: #2c3d35;
+  color: #24372f;
   font-size: 14px;
   font-weight: 600;
 }
@@ -429,7 +450,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: 11px;
 }
 
 .timelineStatus {
@@ -443,7 +464,7 @@
   justify-content: center;
   border-radius: 50%;
   background: #d9f1e7;
-  color: #118560;
+  color: #087b5b;
 }
 
 /* =====================================
@@ -458,12 +479,18 @@
   gap: 8px;
   border: 1px dashed #8fc7b4;
   border-radius: 12px;
-  background: #f5f9f7;
+  background: #f7fbf8;
   color: #087b5b;
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.addCategoryCard:hover {
+  background: #eaf5ef;
+  border-color: #087b5b;
 }
 
 /* =====================================
@@ -474,9 +501,6 @@
   min-height: 550px;
   padding: 20px;
   box-sizing: border-box;
-  border-radius: 16px;
-  background: #e7efeb;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.13);
 }
 
 .eventsHeader {
@@ -484,20 +508,6 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 17px;
-}
-
-.eventsHeader h2 {
-  margin: 0;
-  color: #20332c;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.eventsHeader span {
-  display: block;
-  margin-top: 4px;
-  color: #788780;
-  font-size: 13px;
 }
 
 .eventsHeader svg {
@@ -518,12 +528,22 @@
   gap: 11px;
   padding: 12px;
   box-sizing: border-box;
-  border: 1px solid #ced9d4;
+  border: 1px solid #eadfd3;
   border-radius: 12px;
-  background: #f4f8f6;
+  background: #ffffff;
   font-family: inherit;
   text-align: left;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.eventItem:hover {
+  background: #faf7f2;
+  border-color: #c9dcd1;
+  transform: translateY(-1px);
 }
 
 .eventIcon {
@@ -537,23 +557,23 @@
 }
 
 .eventIconGood {
-  background: #d3f0df;
-  color: #16a875;
+  background: #e0f3e9;
+  color: #087b5b;
 }
 
 .eventIconBad {
-  background: #f5d7d7;
-  color: #c94d4d;
+  background: #fbe5e8;
+  color: #d52941;
 }
 
 .eventIconNeutral {
-  background: #e0e5e2;
+  background: #eeeae4;
   color: #7d8983;
 }
 
 .eventIconHighlight {
-  background: #d9eaf4;
-  color: #2689c4;
+  background: #e2eef8;
+  color: #4289c7;
 }
 
 .eventContent {
@@ -564,13 +584,13 @@
 }
 
 .eventContent strong {
-  color: #23342d;
+  color: #24372f;
   font-size: 15px;
 }
 
 .eventContent span {
   margin-top: 2px;
-  color: #6c7b74;
+  color: #778079;
   font-size: 13px;
 }
 
@@ -582,7 +602,7 @@
 }
 
 .eventRight > span {
-  color: #68766f;
+  color: #778079;
   font-size: 12px;
 }
 
@@ -590,12 +610,86 @@
   display: flex;
   align-items: center;
   gap: 3px;
-  color: #de6666;
+  color: #d52941;
   font-size: 11px;
 }
 
 /* =====================================
-   OVERLAY MODAL CATEGORIAS
+   SELEÇÃO DE PARTIDA E VÍDEO
+===================================== */
+
+.videoSelectors {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.videoSelectorGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.videoSelectorGroup label {
+  margin-left: 2px;
+  color: #53665c;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.matchSelector {
+  min-width: 220px;
+  height: 42px;
+  padding: 0 38px 0 13px;
+  border: 1px solid #ddcfc0;
+  border-radius: 10px;
+  outline: none;
+  appearance: auto;
+  background: #ffffff;
+  color: #294139;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.matchSelector:hover,
+.matchSelector:focus {
+  border-color: #087b5b;
+  box-shadow: 0 0 0 3px rgba(8, 123, 91, 0.09);
+}
+
+.matchSelector:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: #f0ebe4;
+}
+
+.matchSelector option {
+  padding: 10px;
+  background: #ffffff;
+  color: #294139;
+  font-family: 'Poppins', sans-serif;
+}
+
+.matchDetails {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  color: #778079;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* =====================================
+   MODAL DE CATEGORIAS
 ===================================== */
 
 .categoryOverlay {
@@ -608,22 +702,19 @@
   padding: 18px;
   box-sizing: border-box;
   overflow: hidden;
-  background: rgba(0, 35, 26, 0.68);
-  backdrop-filter: blur(5px);
+  background: rgba(16, 37, 31, 0.62);
+  backdrop-filter: blur(6px);
 }
-
-/* =====================================
-   MODAL CATEGORIAS
-===================================== */
 
 .categoryModal {
   width: min(980px, 100%);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border: 1px solid #eadfd3;
   border-radius: 22px;
-  background: #e7efeb;
-  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.28);
+  background: #faf5ee;
+  box-shadow: 0 24px 65px rgba(16, 37, 31, 0.2);
 }
 
 .categoryModalHeader {
@@ -632,7 +723,8 @@
   justify-content: space-between;
   gap: 20px;
   padding: 24px 28px 18px;
-  border-bottom: 1px solid #cbd8d2;
+  border-bottom: 1px solid #eadfd3;
+  background: #ffffff;
 }
 
 .categoryModalHeader > div {
@@ -641,7 +733,7 @@
 }
 
 .categoryModalHeader > div > span {
-  color: #0d8661;
+  color: #087b5b;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -649,14 +741,14 @@
 
 .categoryModalHeader h2 {
   margin: 4px 0 0;
-  color: #24372f;
+  color: #10251f;
   font-size: 30px;
   font-weight: 700;
 }
 
 .categoryModalHeader p {
   margin: 6px 0 0;
-  color: #6e7d76;
+  color: #778079;
   font-size: 15px;
   line-height: 1.4;
 }
@@ -675,17 +767,18 @@
 }
 
 .categoryModalHeader > button:hover {
-  background: #dbe5e0;
+  background: #f0ebe4;
 }
 
 .categoryModalContent {
   padding: 22px 28px 26px;
   box-sizing: border-box;
   overflow: visible;
+  background: #faf5ee;
 }
 
 /* =====================================
-   TOOLBAR CATEGORIAS
+   LISTA DE CATEGORIAS
 ===================================== */
 
 .categoryListToolbar {
@@ -702,23 +795,24 @@
 }
 
 .categoryListToolbar strong {
-  color: #2b3d35;
+  color: #10251f;
   font-size: 18px;
 }
 
 .categoryListToolbar span {
   margin-top: 4px;
-  color: #78857f;
+  color: #778079;
   font-size: 13px;
 }
 
 .newCategoryButton {
   height: 42px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
   padding: 0 16px;
+  box-sizing: border-box;
   border: none;
   border-radius: 10px;
   background: #087b5b;
@@ -726,12 +820,13 @@
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
 }
 
-/* =====================================
-   LISTA CATEGORIAS
-===================================== */
+.newCategoryButton:hover {
+  background: #06694e;
+}
 
 .categoriesList {
   display: grid;
@@ -746,9 +841,9 @@
   gap: 12px;
   padding: 12px;
   box-sizing: border-box;
-  border: 1px solid #cfdad4;
+  border: 1px solid #eadfd3;
   border-radius: 12px;
-  background: #f6f9f7;
+  background: #ffffff;
 }
 
 .categoryRowIcon {
@@ -775,19 +870,20 @@
 
 .categoryRowInfo span {
   margin-top: 4px;
-  color: #78867f;
+  color: #778079;
   font-size: 12px;
 }
 
 .editCategoryButton {
   height: 34px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
   padding: 0 12px;
+  box-sizing: border-box;
   flex-shrink: 0;
-  border: 1px solid #cbd6d0;
+  border: 1px solid #ddcfc0;
   border-radius: 8px;
   background: #ffffff;
   color: #087b5b;
@@ -797,8 +893,13 @@
   cursor: pointer;
 }
 
+.editCategoryButton:hover {
+  background: #f3f8f5;
+  border-color: #9dbbb0;
+}
+
 /* =====================================
-   FORM CATEGORIA
+   FORMULÁRIO DE CATEGORIA
 ===================================== */
 
 .categoryForm {
@@ -819,10 +920,6 @@
   gap: 16px;
 }
 
-/* =====================================
-   INPUT
-===================================== */
-
 .categoryField {
   display: flex;
   flex-direction: column;
@@ -841,22 +938,22 @@
   height: 48px;
   padding: 0 14px;
   box-sizing: border-box;
-  border: 1px solid #c8d5cf;
+  border: 1px solid #ddcfc0;
   border-radius: 10px;
   outline: none;
   background: #ffffff;
-  color: #2c3c34;
+  color: #24372f;
   font-family: inherit;
   font-size: 15px;
 }
 
 .categoryField > input:focus {
-  border-color: #16a875;
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.09);
+  border-color: #087b5b;
+  box-shadow: 0 0 0 3px rgba(8, 123, 91, 0.1);
 }
 
 /* =====================================
-   CORES
+   CORES DAS CATEGORIAS
 ===================================== */
 
 .categoryColorArea {
@@ -881,12 +978,8 @@
 
 .categoryColorButtonActive {
   border-color: #ffffff;
-  box-shadow: 0 0 0 2px #294f41;
+  box-shadow: 0 0 0 2px #087b5b;
 }
-
-/* =====================================
-   PALETINHA RGB
-===================================== */
 
 .paletteColorButton {
   width: 42px;
@@ -936,12 +1029,12 @@
   justify-content: center;
   border: 2px solid #ffffff;
   border-radius: 50%;
-  background: #005942;
+  background: #087b5b;
   color: #ffffff;
 }
 
 /* =====================================
-   TIMELINE OPTION
+   OPÇÃO DA TIMELINE
 ===================================== */
 
 .timelineOption {
@@ -950,9 +1043,9 @@
   justify-content: space-between;
   gap: 15px;
   padding: 14px;
-  border: 1px solid #cad7d0;
+  border: 1px solid #eadfd3;
   border-radius: 10px;
-  background: #dce7e2;
+  background: #f3eee7;
 }
 
 .timelineOption > div {
@@ -961,21 +1054,17 @@
 }
 
 .timelineOption strong {
-  color: #2e4037;
+  color: #24372f;
   font-size: 15px;
 }
 
 .timelineOption span {
   max-width: 420px;
   margin-top: 4px;
-  color: #73817a;
+  color: #778079;
   font-size: 13px;
   line-height: 1.45;
 }
-
-/* =====================================
-   SWITCH
-===================================== */
 
 .toggleButton {
   width: 46px;
@@ -985,7 +1074,7 @@
   padding: 0;
   border: none;
   border-radius: 999px;
-  background: #aebbb5;
+  background: #c3ccc6;
   cursor: pointer;
 }
 
@@ -1003,7 +1092,7 @@
 }
 
 .toggleButtonActive {
-  background: #16a875;
+  background: #087b5b;
 }
 
 .toggleButtonActive > span {
@@ -1011,7 +1100,7 @@
 }
 
 /* =====================================
-   PRÉVIA
+   PRÉVIA DA CATEGORIA
 ===================================== */
 
 .categoryPreviewForm {
@@ -1020,7 +1109,7 @@
   gap: 12px;
   padding: 14px;
   border-radius: 10px;
-  background: #dbe6e1;
+  background: #f0ebe4;
 }
 
 .categoryPreviewFormIcon {
@@ -1038,19 +1127,19 @@
 }
 
 .categoryPreviewForm span {
-  color: #85928c;
+  color: #778079;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.6px;
 }
 
 .categoryPreviewForm strong {
-  color: #2a3b33;
+  color: #24372f;
   font-size: 16px;
 }
 
 /* =====================================
-   ÁREA ÍCONES
+   ÍCONES DAS CATEGORIAS
 ===================================== */
 
 .categoryIconsSide {
@@ -1074,7 +1163,7 @@
   justify-content: center;
   gap: 6px;
   padding: 8px;
-  border: 1px solid #d0dad5;
+  border: 1px solid #eadfd3;
   border-radius: 10px;
   background: #ffffff;
   color: #53645c;
@@ -1083,11 +1172,16 @@
   cursor: pointer;
 }
 
+.categoryIconOption:hover {
+  background: #f7fbf8;
+  border-color: #9dbbb0;
+}
+
 .categoryIconOptionActive {
-  border-color: #16a875;
-  background: #eaf7f1;
+  border-color: #087b5b;
+  background: #e8f5ee;
   color: #087b5b;
-  box-shadow: 0 0 0 2px rgba(22, 168, 117, 0.08);
+  box-shadow: 0 0 0 2px rgba(8, 123, 91, 0.08);
 }
 
 .categoryIconCheck {
@@ -1100,12 +1194,12 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #16a875;
+  background: #087b5b;
   color: #ffffff;
 }
 
 /* =====================================
-   FOOTER CATEGORIA
+   RODAPÉ DO FORMULÁRIO
 ===================================== */
 
 .categoryFormFooter {
@@ -1114,7 +1208,7 @@
   justify-content: space-between;
   gap: 18px;
   padding-top: 14px;
-  border-top: 1px solid #cdd8d2;
+  border-top: 1px solid #eadfd3;
 }
 
 .categoryFormActions {
@@ -1127,28 +1221,38 @@
 .saveCategoryButton,
 .deleteCategoryButton {
   height: 40px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   padding: 0 16px;
+  box-sizing: border-box;
   border-radius: 10px;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
 }
 
 .cancelCategoryButton {
-  border: 1px solid #c1cec7;
-  background: transparent;
-  color: #5d6d65;
+  border: 1px solid #ddcfc0;
+  background: #ffffff;
+  color: #53665c;
+}
+
+.cancelCategoryButton:hover {
+  background: #f0ebe4;
 }
 
 .saveCategoryButton {
   border: none;
   background: #087b5b;
   color: #ffffff;
+}
+
+.saveCategoryButton:hover:not(:disabled) {
+  background: #06694e;
 }
 
 .saveCategoryButton:disabled {
@@ -1163,49 +1267,57 @@
 }
 
 .deleteCategoryButton {
-  border: 1px solid #e4bcbc;
-  background: #fff4f4;
-  color: #bd4848;
+  border: 1px solid #f0c7cd;
+  background: #fff0f1;
+  color: #d52941;
 }
 
 .deleteCategoryButton:hover {
-  background: #fbe5e5;
+  background: #fbe2e6;
 }
 
 .deleteCategoryConfirm {
-  border-color: #c84646;
-  background: #c84646;
+  border-color: #d52941;
+  background: #d52941;
   color: #ffffff;
 }
 
 .deleteWarning {
-  color: #a85757;
+  color: #b84c58;
   font-size: 12px;
 }
 
+
+/* ============================================================
+   SATE — ANÁLISE DE VÍDEOS
+   PARTE 2/2
+============================================================ */
+
 /* =====================================
-   CLIPE
+   PAINEL LATERAL DE CLIPES
 ===================================== */
 
 .overlay {
   position: fixed;
   inset: 0;
   z-index: 998;
-  background: rgba(0, 0, 0, 0.58);
+  background: rgba(16, 37, 31, 0.55);
+  backdrop-filter: blur(3px);
 }
 
 .clipPanel {
   width: 430px;
-  height: 100vh;
+  height: 100%;
   position: fixed;
   top: 0;
   right: -450px;
   z-index: 999;
   display: flex;
   flex-direction: column;
-  background: #f8faf9;
-  box-shadow: -12px 0 30px rgba(0, 0, 0, 0.18);
-  transition: right 0.28s ease;
+  overflow-y: auto;
+  background: #ffffff;
+  box-shadow: -10px 0 35px rgba(16, 37, 31, 0.15);
+  transition: right 0.3s ease;
 }
 
 .clipPanelOpen {
@@ -1213,189 +1325,238 @@
 }
 
 .clipPanelHeader {
-  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  border-bottom: 1px solid #e0e5e2;
+  gap: 14px;
+  padding: 22px;
+  border-bottom: 1px solid #eadfd3;
+  background: #ffffff;
 }
 
 .clipPanelHeader > div {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .clipPanelHeader h2 {
   margin: 0;
-  color: #1e2e27;
-  font-size: 19px;
+  color: #10251f;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.clipPanelHeader p {
+  margin: 4px 0 0;
+  color: #778079;
+  font-size: 12px;
 }
 
 .clipIcon {
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9px;
-  background: #f7dddd;
-  color: #dc6969;
+  border-radius: 11px;
+  background: #e8f5ee;
+  color: #087b5b;
 }
 
 .closeButton {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 8px;
+  border-radius: 9px;
   background: transparent;
-  color: #66736d;
+  color: #778079;
   cursor: pointer;
+}
+
+.closeButton:hover {
+  background: #f0ebe4;
+  color: #10251f;
 }
 
 .clipPanelContent {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 22px;
   overflow-y: auto;
-  padding: 22px 20px;
-  box-sizing: border-box;
+  background: #faf5ee;
 }
 
 /* =====================================
-   FORM CLIPE
+   FORMULÁRIOS DO CLIPE
 ===================================== */
 
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  margin-bottom: 18px;
+  gap: 8px;
 }
 
 .formGroup label {
-  color: #293a32;
-  font-size: 11px;
-  font-weight: 700;
+  color: #42554c;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .formGroup input,
 .formGroup select,
 .formGroup textarea {
   width: 100%;
+  min-height: 44px;
+  padding: 11px 13px;
   box-sizing: border-box;
-  border: 1px solid #ced7d3;
-  border-radius: 8px;
+  border: 1px solid #ddcfc0;
+  border-radius: 10px;
   outline: none;
   background: #ffffff;
-  color: #2b3933;
-  font-family: inherit;
-  font-size: 10px;
-}
-
-.formGroup input,
-.formGroup select {
-  height: 42px;
-  padding: 0 12px;
+  color: #24372f;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .formGroup textarea {
-  min-height: 72px;
-  padding: 11px 12px;
+  min-height: 90px;
   resize: vertical;
 }
 
 .formGroup input:focus,
 .formGroup select:focus,
 .formGroup textarea:focus {
-  border-color: #16a875;
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.09);
+  border-color: #087b5b;
+  box-shadow: 0 0 0 3px rgba(8, 123, 91, 0.09);
 }
 
-.searchAthlete {
-  height: 42px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 11px;
-  border: 1px solid #ced7d3;
-  border-radius: 8px;
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: #a0aaa4;
+}
+
+.formGroup select option {
   background: #ffffff;
+  color: #24372f;
+}
+
+/* =====================================
+   BUSCA DE ATLETAS
+===================================== */
+
+.searchAthlete {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .searchAthlete input {
-  height: auto;
-  padding: 0;
-  border: none;
-  box-shadow: none;
+  width: 100%;
+  height: 44px;
+  padding: 0 13px;
+  box-sizing: border-box;
+  border: 1px solid #ddcfc0;
+  border-radius: 10px;
+  outline: none;
+  background: #ffffff;
+  color: #24372f;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.searchAthlete input:focus {
+  border-color: #087b5b;
+  box-shadow: 0 0 0 3px rgba(8, 123, 91, 0.09);
 }
 
 .athletesList {
-  max-height: 165px;
+  max-height: 190px;
   display: flex;
   flex-direction: column;
   gap: 7px;
   overflow-y: auto;
+  padding: 3px;
 }
 
 .athleteItem {
-  min-height: 47px;
+  width: 100%;
+  min-height: 54px;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 7px 9px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  background: #eef1f0;
-  color: #27372f;
+  gap: 10px;
+  padding: 8px 11px;
+  box-sizing: border-box;
+  border: 1px solid #eadfd3;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #24372f;
   font-family: inherit;
   text-align: left;
   cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.athleteItem:hover {
+  border-color: #9dbbb0;
+  background: #f7fbf8;
 }
 
 .athleteSelected {
-  border-color: #16a875;
-  background: #e1f2eb;
+  border-color: #087b5b;
+  background: #e8f5ee;
 }
 
 .athleteAvatar {
-  width: 29px;
-  height: 29px;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  overflow: hidden;
   border-radius: 50%;
-  background: #78cfb0;
-  color: #ffffff;
-  font-size: 8px;
+  background: #d9eee3;
+  color: #087b5b;
+  font-size: 12px;
   font-weight: 700;
 }
 
-.athleteItem > div:nth-child(2) {
+.athleteItem > div:last-child {
+  min-width: 0;
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 3px;
 }
 
 .athleteItem strong {
-  font-size: 9px;
+  overflow: hidden;
+  color: #24372f;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .athleteItem span {
-  color: #75837d;
-  font-size: 8px;
+  color: #778079;
+  font-size: 11px;
 }
 
 /* =====================================
-   RATING
+   AVALIAÇÃO DO EVENTO
 ===================================== */
 
 .ratingGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -1406,62 +1567,79 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border: 1px solid #d0d8d4;
-  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid #eadfd3;
+  border-radius: 10px;
   background: #ffffff;
-  color: #4e5d56;
+  color: #53645c;
   font-family: inherit;
-  font-size: 9px;
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ratingButton:hover {
+  border-color: #9dbbb0;
+  background: #f7fbf8;
 }
 
 .ratingButtonActive {
-  border-color: #16a875;
-  background: #edf8f3;
+  border-color: #087b5b;
+  background: #e8f5ee;
+  color: #087b5b;
+  box-shadow: 0 0 0 2px rgba(8, 123, 91, 0.07);
 }
 
 .ratingDot {
-  width: 6px;
-  height: 6px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
 }
 
-.dotGood {
+.ratingDotGood {
   background: #16a875;
 }
 
-.dotBad {
-  background: #c22d2d;
+.ratingDotBad {
+  background: #d52941;
 }
 
-.dotNeutral {
-  background: #878f8b;
+.ratingDotNeutral {
+  background: #8c9792;
 }
 
-.dotHighlight {
-  background: #2689c4;
+.ratingDotHighlight {
+  background: #4289c7;
 }
 
 /* =====================================
-   DURAÇÃO
+   DURAÇÃO DO CLIPE
 ===================================== */
 
-.durationSection h3 {
-  color: #293a32;
-  font-size: 11px;
+.durationSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .durationInfo {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 12px;
-  color: #78847f;
-  font-size: 8px;
+}
+
+.durationInfo span {
+  color: #778079;
+  font-size: 12px;
 }
 
 .durationValue {
-  color: #df6666 !important;
+  color: #087b5b;
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .rangeGroup {
@@ -1470,69 +1648,102 @@
   gap: 8px;
 }
 
-.rangeGroup input {
+.rangeGroup input[type='range'] {
   width: 100%;
-  accent-color: #087b5d;
+  margin: 0;
+  accent-color: #087b5b;
+  cursor: pointer;
 }
 
+/* =====================================
+   RODAPÉ DO PAINEL DE CLIPE
+===================================== */
+
 .clipPanelFooter {
-  padding: 16px 20px;
-  border-top: 1px solid #e1e6e3;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 17px 22px;
+  border-top: 1px solid #eadfd3;
   background: #ffffff;
 }
 
 .saveClipButton {
-  width: 100%;
-  height: 44px;
-  display: flex;
+  min-height: 46px;
+  flex: 1;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  padding: 0 18px;
   border: none;
-  border-radius: 8px;
-  background: #db6666;
+  border-radius: 10px;
+  background: #087b5b;
   color: #ffffff;
   font-family: inherit;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.saveClipButton:hover:not(:disabled) {
+  background: #06694e;
+  transform: translateY(-1px);
 }
 
 .saveClipButton:disabled {
-  opacity: 0.45;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 /* =====================================
-   RESPONSIVO
+   RESPONSIVIDADE — TABLETS
 ===================================== */
 
 @media (max-width: 1050px) {
   .analysisGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .categoryFormGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .actionTypesGrid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .eventsCard {
+    min-height: auto;
+  }
+
+  .eventsList {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
+/* =====================================
+   RESPONSIVIDADE — NOTEBOOKS E TABLETS
+===================================== */
+
 @media (max-width: 800px) {
   .page {
-    padding: 24px 18px;
+    width: calc(100% + 36px);
+    margin: -24px -18px 0;
+    padding: 24px 18px 36px;
   }
 
   .pageHeader {
-    flex-direction: column;
     align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
   }
 
   .headerActions {
-    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .videoArea {
@@ -1540,65 +1751,24 @@
   }
 
   .categoriesList {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .categoryIconsGrid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .videoArea {
-    height: 280px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  .actionTypesGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .categoryModalHeader,
+  .categoryModalContent {
+    padding-right: 20px;
+    padding-left: 20px;
   }
 
-  .categoryModal {
-    width: 100%;
-  }
-
-  .categoryIconsGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .categoryFormFooter {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .deleteArea {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .categoryFormActions {
-    width: 100%;
-  }
-
-  .cancelCategoryButton,
-  .saveCategoryButton {
-    flex: 1;
-  }
-
-  .clipPanel {
-    width: 100%;
-    right: -100%;
-  }
-
-  .clipPanelOpen {
-    right: 0;
-  }
-
-  .ratingGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .eventsList {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .videoSelectors {
-    width: 100%;
     align-items: stretch;
     flex-direction: column;
   }
@@ -1621,851 +1791,428 @@
 }
 
 /* =====================================
-   SELEÇÃO DE PARTIDA E VÍDEO
+   RESPONSIVIDADE — CELULARES
 ===================================== */
 
-.videoSelectors {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  margin-top: 14px;
-  flex-wrap: wrap;
-}
+@media (max-width: 600px) {
+  .page {
+    width: calc(100% + 24px);
+    margin: -16px -12px 0;
+    padding: 22px 12px 30px;
+  }
 
-.videoSelectorGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+  .titleArea h1 {
+    font-size: 32px;
+  }
 
-.videoSelectorGroup label {
-  margin-left: 2px;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.2px;
-}
+  .pageHeader h1 {
+    font-size: 27px;
+  }
 
-.matchSelector {
-  min-width: 220px;
-  height: 42px;
-  padding: 0 38px 0 13px;
-  border: 1px solid rgba(255, 255, 255, 0.20);
-  border-radius: 10px;
-  outline: none;
-  appearance: auto;
-  background: #ffffff;
-  color: #294139;
-  font-family: 'Poppins', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
+  .headerActions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
 
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
-}
+  .headerActions button {
+    width: 100%;
+    min-width: 0;
+    padding: 0 9px;
+    font-size: 11px;
+  }
 
-.matchSelector:hover {
-  border-color: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
+  .videoArea {
+    height: 280px;
+  }
 
-.matchSelector:focus {
-  border-color: #ffffff;
-  box-shadow:
-    0 0 0 3px rgba(255, 255, 255, 0.16),
-    0 4px 12px rgba(0, 0, 0, 0.10);
-}
+  .playButton {
+    width: 64px;
+    height: 64px;
+  }
 
-.matchSelector:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  background: #e8eeeb;
-}
+  .playButton svg {
+    width: 25px;
+    height: 25px;
+  }
 
-.matchSelector option {
-  padding: 10px;
-  background: #ffffff;
-  color: #294139;
-  font-family: 'Poppins', sans-serif;
+  .timelineArea {
+    padding: 16px 14px 18px;
+  }
+
+  .timelineLegend {
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .timelineLegendItem small {
+    font-size: 9px;
+  }
+
+  .actionTypesCard,
+  .eventsCard {
+    padding: 15px;
+  }
+
+  .actionTypesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .categoryPreview {
+    min-height: 70px;
+    padding: 10px;
+  }
+
+  .categoryPreview strong {
+    font-size: 12px;
+  }
+
+  .actionTypeIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .actionTypesHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .editCategoriesSmall {
+    width: 100%;
+  }
+
+  .categoryOverlay {
+    align-items: flex-start;
+    padding: 10px;
+    overflow-y: auto;
+  }
+
+  .categoryModal {
+    width: 100%;
+    max-height: none;
+    margin: auto 0;
+    border-radius: 16px;
+  }
+
+  .categoryModalHeader {
+    padding: 17px;
+  }
+
+  .categoryModalHeader h2 {
+    font-size: 23px;
+  }
+
+  .categoryModalHeader p {
+    font-size: 12px;
+  }
+
+  .categoryModalContent {
+    padding: 16px;
+  }
+
+  .categoryListToolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .newCategoryButton {
+    width: 100%;
+  }
+
+  .categoryFormGrid {
+    gap: 18px;
+  }
+
+  .categoryIconsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .categoryFormFooter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .deleteArea {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .categoryFormActions {
+    width: 100%;
+  }
+
+  .cancelCategoryButton,
+  .saveCategoryButton {
+    flex: 1;
+  }
+
+  .clipPanel {
+    width: 100%;
+    right: -100%;
+  }
+
+  .clipPanelOpen {
+    right: 0;
+  }
+
+  .clipPanelHeader,
+  .clipPanelContent {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .clipPanelFooter {
+    padding: 14px 16px;
+  }
+
+  .ratingGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .eventItem {
+    padding: 10px;
+  }
+
+  .eventContent strong {
+    font-size: 13px;
+  }
+
+  .eventContent span {
+    font-size: 11px;
+  }
+
+  .categoryRow {
+    gap: 8px;
+    padding: 9px;
+  }
+
+  .editCategoryButton {
+    padding: 0 8px;
+    font-size: 11px;
+  }
 }
 
 /* =====================================
-   INFORMAÇÕES DA PARTIDA
+   TELAS MUITO PEQUENAS
 ===================================== */
 
-.matchDetails {
-  min-height: 42px;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 4px;
-  box-sizing: border-box;
+@media (max-width: 380px) {
+  .page {
+    padding-right: 9px;
+    padding-left: 9px;
+  }
 
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 12px;
-  font-weight: 500;
-}
+  .headerActions {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-.matchDetails i {
-  width: 4px;
-  height: 4px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.58);
-}
+  .actionTypesGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
+  .categoryIconsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 
-/* ============================================================
-   SATE — IDENTIDADE VISUAL DA PÁGINA DE ANÁLISE
-   Inspirada na página de Atletas
-============================================================ */
+  .categoryPreview {
+    min-height: 62px;
+  }
 
-/* =====================================
-   PÁGINA PRINCIPAL
-===================================== */
+  .timelineLegend {
+    gap: 5px;
+  }
 
-.page {
-  background:
-    radial-gradient(
-      ellipse 340px 230px at 96% 0%,
-      rgba(240, 68, 112, 0.12) 0%,
-      rgba(240, 68, 112, 0.05) 42%,
-      transparent 76%
-    ),
-    #faf5ee !important;
-
-  color: #10251f;
-  font-family: 'Poppins', sans-serif;
+  .timelineLegendItem small {
+    font-size: 8px;
+  }
 }
 
 /* =====================================
-   CABEÇALHO
+   MODO ESCURO — SATE
 ===================================== */
-
-.pageHeader h1 {
-  color: #10251f;
-  letter-spacing: -0.8px;
-}
-
-.matchInfo {
-  color: #778079;
-}
-
-.matchInfo i,
-.matchDetails i {
-  background: #b5c2ba;
-}
-
-.matchDetails {
-  color: #778079;
-}
-
-.videoSelectorGroup label {
-  color: #53665c;
-}
-
-/* =====================================
-   SELETORES DE PARTIDA E VÍDEO
-===================================== */
-
-.matchSelector {
-  background: #ffffff;
-  color: #294139;
-  border-color: #ddcfc0;
-}
-
-.matchSelector:hover,
-.matchSelector:focus {
-  border-color: #087b5b;
-  box-shadow: 0 0 0 3px rgba(8, 123, 91, 0.09);
-}
-
-.matchSelector:disabled {
-  background: #f0ebe4;
-}
-
-.matchSelector option {
-  background: #ffffff;
-  color: #294139;
-}
-
-/* =====================================
-   BOTÕES DO CABEÇALHO
-===================================== */
-
-.headerActions button {
-  border-radius: 11px;
-  box-shadow: none;
-}
-
-.headerActions button:hover {
-  box-shadow: 0 5px 12px rgba(16, 37, 31, 0.1);
-}
-
-.manageCategoriesButton {
-  background: #4289c7;
-  color: #ffffff;
-}
-
-.manageCategoriesButton:hover {
-  background: #3179b6;
-}
-
-.actionButtonRed {
-  background: #f04470;
-  color: #ffffff;
-}
-
-.actionButtonRed:hover {
-  background: #d93460;
-}
-
-.actionButtonGreen {
-  background: #087b5b;
-  color: #ffffff;
-}
-
-.actionButtonGreen:hover {
-  background: #06694e;
-}
-
-/* =====================================
-   CARDS PRINCIPAIS
-===================================== */
-
-.videoCard,
-.actionTypesCard,
-.eventsCard {
-  background: #ffffff;
-  border: 1px solid #eadfd3;
-  border-radius: 16px;
-  box-shadow: 0 5px 18px rgba(77, 44, 24, 0.045);
-}
-
-/* =====================================
-   VÍDEO
-===================================== */
-
-.videoArea {
-  background: #10251f;
-}
-
-.videoCard {
-  overflow: hidden;
-}
-
-.playButton {
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.09);
-}
-
-.playButton:hover {
-  border-color: #ffffff;
-  background: rgba(255, 255, 255, 0.16);
-}
-
-.videoTime {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-/* =====================================
-   TIMELINE
-===================================== */
-
-.timelineArea {
-  background: #ffffff;
-}
-
-.videoRange {
-  accent-color: #087b5b;
-}
-
-.analysisMarker {
-  border-color: #ffffff;
-}
-
-.marker_boa,
-.goodMarker {
-  background: #16a875;
-}
-
-.marker_ruim,
-.badMarker {
-  background: #d52941;
-}
-
-.marker_neutra,
-.neutralMarker {
-  background: #8c9792;
-}
-
-.marker_destaque,
-.highlightMarker {
-  background: #4289c7;
-}
-
-.timelineLegendItem small {
-  color: #778079;
-}
-
-/* =====================================
-   TÍTULOS E DESCRIÇÕES DOS CARDS
-===================================== */
-
-.actionTypesHeader h2,
-.eventsHeader h2 {
-  color: #10251f;
-  letter-spacing: -0.3px;
-}
-
-.actionTypesHeader p,
-.eventsHeader span {
-  color: #778079;
-}
-
-/* =====================================
-   BOTÕES SECUNDÁRIOS
-===================================== */
-
-.editCategoriesSmall {
-  background: #ffffff;
-  border-color: #ddcfc0;
-  color: #087b5b;
-}
-
-.editCategoriesSmall:hover {
-  background: #f3f8f5;
-  border-color: #9dbbb0;
-}
-
-.addCategoryCard {
-  background: #f7fbf8;
-  border-color: #8fc7b4;
-  color: #087b5b;
-}
-
-.addCategoryCard:hover {
-  background: #eaf5ef;
-  border-color: #087b5b;
-}
-
-/* =====================================
-   PRÉVIAS DE CATEGORIAS
-===================================== */
-
-.categoryPreview {
-  background: #faf5ee;
-  border-color: #eadfd3;
-}
-
-.categoryPreview strong {
-  color: #24372f;
-}
-
-.timelineStatus {
-  background: #d9f1e7;
-  color: #087b5b;
-}
-
-.actionTypeIcon {
-  border-radius: 11px;
-}
-
-/* =====================================
-   LISTA DE EVENTOS
-===================================== */
-
-.eventItem {
-  background: #ffffff;
-  border-color: #eadfd3;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.eventItem:hover {
-  background: #faf7f2;
-  border-color: #c9dcd1;
-  transform: translateY(-1px);
-}
-
-.eventContent strong {
-  color: #24372f;
-}
-
-.eventContent span {
-  color: #778079;
-}
-
-.eventRight > span {
-  color: #778079;
-}
-
-.eventRight small {
-  color: #d52941;
-}
-
-/* Cores dos tipos de evento */
-
-.eventIconGood {
-  background: #e0f3e9;
-  color: #087b5b;
-}
-
-.eventIconBad {
-  background: #fbe5e8;
-  color: #d52941;
-}
-
-.eventIconNeutral {
-  background: #eeeae4;
-  color: #7d8983;
-}
-
-.eventIconHighlight {
-  background: #e2eef8;
-  color: #4289c7;
-}
-
-/* =====================================
-   MODAL DE CATEGORIAS
-===================================== */
-
-.categoryOverlay {
-  background: rgba(16, 37, 31, 0.62);
-  backdrop-filter: blur(6px);
-}
-
-.categoryModal {
-  background: #faf5ee;
-  border: 1px solid #eadfd3;
-  box-shadow: 0 24px 65px rgba(16, 37, 31, 0.2);
-}
-
-.categoryModalHeader {
-  background: #ffffff;
-  border-bottom-color: #eadfd3;
-}
-
-.categoryModalHeader > div > span {
-  color: #087b5b;
-}
-
-.categoryModalHeader h2 {
-  color: #10251f;
-}
-
-.categoryModalHeader p {
-  color: #778079;
-}
-
-.categoryModalHeader > button {
-  color: #66766f;
-}
-
-.categoryModalHeader > button:hover {
-  background: #f0ebe4;
-}
-
-.categoryModalContent {
-  background: #faf5ee;
-}
-
-/* =====================================
-   LISTA DE CATEGORIAS DO MODAL
-===================================== */
-
-.categoryListToolbar strong {
-  color: #10251f;
-}
-
-.categoryListToolbar span {
-  color: #778079;
-}
-
-.newCategoryButton {
-  background: #087b5b;
-  color: #ffffff;
-}
-
-.newCategoryButton:hover {
-  background: #06694e;
-}
-
-.categoryRow {
-  background: #ffffff;
-  border-color: #eadfd3;
-}
-
-.categoryRowInfo strong {
-  color: #24372f;
-}
-
-.categoryRowInfo span {
-  color: #778079;
-}
-
-.editCategoryButton {
-  background: #ffffff;
-  border-color: #ddcfc0;
-  color: #087b5b;
-}
-
-.editCategoryButton:hover {
-  background: #f3f8f5;
-  border-color: #9dbbb0;
-}
-
-/* =====================================
-   FORMULÁRIO DE CATEGORIA
-===================================== */
-
-.categoryField > label,
-.iconsLabel {
-  color: #42554c;
-}
-
-.categoryField > input {
-  background: #ffffff;
-  border-color: #ddcfc0;
-  color: #24372f;
-}
-
-.categoryField > input:focus {
-  border-color: #087b5b;
-  box-shadow: 0 0 0 3px rgba(8, 123, 91, 0.1);
-}
-
-.categoryColorButtonActive {
-  box-shadow: 0 0 0 2px #087b5b;
-}
-
-.paletteInner {
-  background: #087b5b;
-}
-
-/* =====================================
-   OPÇÕES DA TIMELINE E PRÉVIA
-===================================== */
-
-.timelineOption {
-  background: #f3eee7;
-  border-color: #eadfd3;
-}
-
-.timelineOption strong {
-  color: #24372f;
-}
-
-.timelineOption span {
-  color: #778079;
-}
-
-.toggleButton {
-  background: #c3ccc6;
-}
-
-.toggleButtonActive {
-  background: #087b5b;
-}
-
-.categoryPreviewForm {
-  background: #f0ebe4;
-}
-
-.categoryPreviewForm span {
-  color: #778079;
-}
-
-.categoryPreviewForm strong {
-  color: #24372f;
-}
-
-/* =====================================
-   ÍCONES DE CATEGORIAS
-===================================== */
-
-.categoryIconOption {
-  background: #ffffff;
-  border-color: #eadfd3;
-  color: #53645c;
-}
-
-.categoryIconOption:hover {
-  background: #f7fbf8;
-  border-color: #9dbbb0;
-}
-
-.categoryIconOptionActive {
-  background: #e8f5ee;
-  border-color: #087b5b;
-  color: #087b5b;
-  box-shadow: 0 0 0 2px rgba(8, 123, 91, 0.08);
-}
-
-.categoryIconCheck {
-  background: #087b5b;
-  color: #ffffff;
-}
-
-/* =====================================
-   RODAPÉ DO MODAL
-===================================== */
-
-.categoryFormFooter {
-  border-top-color: #eadfd3;
-}
-
-.cancelCategoryButton {
-  background: #ffffff;
-  border-color: #ddcfc0;
-  color: #53665c;
-}
-
-.cancelCategoryButton:hover {
-  background: #f0ebe4;
-}
-
-.saveCategoryButton {
-  background: #087b5b;
-  color: #ffffff;
-}
-
-.saveCategoryButton:hover:not(:disabled) {
-  background: #06694e;
-}
-
-.deleteCategoryButton {
-  background: #fff0f1;
-  border-color: #f0c7cd;
-  color: #d52941;
-}
-
-.deleteCategoryButton:hover {
-  background: #fbe2e6;
-}
-
-.deleteCategoryConfirm {
-  background: #d52941;
-  border-color: #d52941;
-  color: #ffffff;
-}
-
-.deleteWarning {
-  color: #b84c58;
-}
-
-/* =====================================
-   PAINEL LATERAL DE CLIPES
-===================================== */
-
-.overlay {
-  background: rgba(16, 37, 31, 0.58);
-  backdrop-filter: blur(3px);
-}
-
-.clipPanel {
-  background: #faf5ee;
-  box-shadow: -12px 0 30px rgba(16, 37, 31, 0.14);
-}
-
-.clipPanelHeader {
-  background: #ffffff;
-  border-bottom-color: #eadfd3;
-}
-
-.clipPanelHeader h2 {
-  color: #10251f;
-}
-
-.clipIcon {
-  background: #fbe5e8;
-  color: #f04470;
-}
-
-.closeButton {
-  color: #66766f;
-}
-
-.closeButton:hover {
-  background: #f0ebe4;
-}
-
-.clipPanelContent {
-  background: #faf5ee;
-}
-
-/* =====================================
-   FORMULÁRIO DE CLIPE
-===================================== */
-
-.formGroup label {
-  color: #42554c;
-}
-
-.formGroup input,
-.formGroup select,
-.formGroup textarea {
-  background: #ffffff;
-  border-color: #ddcfc0;
-  color: #24372f;
-}
-
-.formGroup input:focus,
-.formGroup select:focus,
-.formGroup textarea:focus {
-  border-color: #087b5b;
-  box-shadow: 0 0 0 3px rgba(8, 123, 91, 0.1);
-}
-
-.searchAthlete {
-  background: #ffffff;
-  border-color: #ddcfc0;
-}
-
-.searchAthlete input {
-  background: transparent;
-}
-
-.athleteItem {
-  background: #f0ebe4;
-  color: #24372f;
-}
-
-.athleteItem:hover {
-  background: #e9f2ec;
-}
-
-.athleteSelected {
-  background: #e5f4eb;
-  border-color: #087b5b;
-}
-
-.athleteAvatar {
-  background: #087b5b;
-  color: #ffffff;
-}
-
-.athleteItem span {
-  color: #778079;
-}
-
-/* =====================================
-   CLASSIFICAÇÃO DO CLIPE
-===================================== */
-
-.ratingButton {
-  background: #ffffff;
-  border-color: #eadfd3;
-  color: #53645c;
-}
-
-.ratingButton:hover {
-  background: #faf7f2;
-  border-color: #c9dcd1;
-}
-
-.ratingButtonActive {
-  background: #e8f5ee;
-  border-color: #087b5b;
-  color: #087b5b;
-}
-
-.dotGood {
-  background: #16a875;
-}
-
-.dotBad {
-  background: #d52941;
-}
-
-.dotNeutral {
-  background: #8c9792;
-}
-
-.dotHighlight {
-  background: #4289c7;
-}
-
-/* =====================================
-   DURAÇÃO DO CLIPE
-===================================== */
-
-.durationSection h3 {
-  color: #24372f;
-}
-
-.durationInfo {
-  color: #778079;
-}
-
-.durationValue {
-  color: #f04470 !important;
-}
-
-.rangeGroup input {
-  accent-color: #087b5b;
-}
-
-/* =====================================
-   RODAPÉ DO PAINEL DE CLIPES
-===================================== */
-
-.clipPanelFooter {
-  background: #ffffff;
-  border-top-color: #eadfd3;
-}
-
-.saveClipButton {
-  background: #087b5b;
-  color: #ffffff;
-}
-
-.saveClipButton:hover:not(:disabled) {
-  background: #06694e;
-}
-
-/* ============================================================
-   MODO ESCURO
-   Mantém uma identidade visual própria sem afetar o modo claro.
-============================================================ */
 
 :global(:root[data-theme='dark']) .page {
   background:
     radial-gradient(
       ellipse 340px 230px at 96% 0%,
-      rgba(22, 168, 117, 0.15) 0%,
+      rgba(22, 168, 117, 0.12) 0%,
       transparent 76%
     ),
-    #102a22 !important;
+    #10251f !important;
   color: #edf7f1;
 }
 
 :global(:root[data-theme='dark']) .pageHeader h1,
+:global(:root[data-theme='dark']) .titleArea h1 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .titleArea h1 em,
+:global(:root[data-theme='dark']) .pageHeader h1 em {
+  color: #7be0a8;
+}
+
+:global(:root[data-theme='dark']) .matchInfo,
+:global(:root[data-theme='dark']) .matchDetails {
+  color: #b2c5ba;
+}
+
+:global(:root[data-theme='dark']) .matchInfo i,
+:global(:root[data-theme='dark']) .matchDetails i {
+  background: #668276;
+}
+
+/* Botões do cabeçalho */
+
+:global(:root[data-theme='dark']) .manageCategoriesButton,
+:global(:root[data-theme='dark']) .actionButtonGreen {
+  background: #16a875;
+  color: #10251f;
+}
+
+:global(:root[data-theme='dark']) .manageCategoriesButton:hover,
+:global(:root[data-theme='dark']) .actionButtonGreen:hover {
+  background: #35c18d;
+}
+
+:global(:root[data-theme='dark']) .actionButtonRed {
+  background: #d52941;
+}
+
+:global(:root[data-theme='dark']) .actionButtonRed:hover {
+  background: #ed4058;
+}
+
+/* Cards */
+
+:global(:root[data-theme='dark']) .videoCard,
+:global(:root[data-theme='dark']) .actionTypesCard,
+:global(:root[data-theme='dark']) .eventsCard {
+  border-color: #365447;
+  background: #17372c;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+:global(:root[data-theme='dark']) .videoArea {
+  background: #071b14;
+}
+
+:global(:root[data-theme='dark']) .timelineArea {
+  background: #17372c;
+}
+
+:global(:root[data-theme='dark']) .videoRange {
+  accent-color: #16a875;
+}
+
+/* Textos */
+
 :global(:root[data-theme='dark']) .actionTypesHeader h2,
 :global(:root[data-theme='dark']) .eventsHeader h2 {
   color: #edf7f1;
 }
 
-:global(:root[data-theme='dark']) .matchInfo,
-:global(:root[data-theme='dark']) .matchDetails,
-:global(:root[data-theme='dark']) .videoSelectorGroup label {
-  color: #a8beb3;
+:global(:root[data-theme='dark']) .actionTypesHeader p,
+:global(:root[data-theme='dark']) .eventsHeader span,
+:global(:root[data-theme='dark']) .timelineLegendItem small {
+  color: #a9beb3;
 }
 
-:global(:root[data-theme='dark']) .matchDetails i {
-  background: #698b79;
+/* Categorias */
+
+:global(:root[data-theme='dark']) .categoryPreview {
+  border-color: #365447;
+  background: #214638;
+}
+
+:global(:root[data-theme='dark']) .categoryPreview strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .addCategoryCard {
+  border-color: #387c61;
+  background: #17372c;
+  color: #7be0a8;
+}
+
+:global(:root[data-theme='dark']) .addCategoryCard:hover {
+  background: #214638;
+}
+
+:global(:root[data-theme='dark']) .editCategoriesSmall,
+:global(:root[data-theme='dark']) .editCategoryButton {
+  border-color: #456b59;
+  background: #214638;
+  color: #7be0a8;
+}
+
+:global(:root[data-theme='dark']) .editCategoriesSmall:hover,
+:global(:root[data-theme='dark']) .editCategoryButton:hover {
+  background: #2b5543;
+}
+
+/* Eventos */
+
+:global(:root[data-theme='dark']) .eventItem {
+  border-color: #365447;
+  background: #214638;
+}
+
+:global(:root[data-theme='dark']) .eventItem:hover {
+  border-color: #5b9476;
+  background: #28513f;
+}
+
+:global(:root[data-theme='dark']) .eventContent strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .eventContent span,
+:global(:root[data-theme='dark']) .eventRight > span {
+  color: #b2c5ba;
+}
+
+:global(:root[data-theme='dark']) .eventIconGood {
+  background: rgba(22, 168, 117, 0.18);
+  color: #7be0a8;
+}
+
+:global(:root[data-theme='dark']) .eventIconBad {
+  background: rgba(213, 41, 65, 0.18);
+  color: #ff8796;
+}
+
+:global(:root[data-theme='dark']) .eventIconNeutral {
+  background: #365447;
+  color: #c0d0c7;
+}
+
+:global(:root[data-theme='dark']) .eventIconHighlight {
+  background: rgba(66, 137, 199, 0.18);
+  color: #82b9ed;
+}
+
+/* Seletores de partida */
+
+:global(:root[data-theme='dark']) .videoSelectorGroup label {
+  color: #b2c5ba;
 }
 
 :global(:root[data-theme='dark']) .matchSelector {
+  border-color: #456b59;
   background: #17372c;
-  border-color: #365447;
   color: #edf7f1;
-  color-scheme: dark;
+}
+
+:global(:root[data-theme='dark']) .matchSelector:hover,
+:global(:root[data-theme='dark']) .matchSelector:focus {
+  border-color: #16a875;
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.13);
+}
+
+:global(:root[data-theme='dark']) .matchSelector:disabled {
+  background: #214638;
 }
 
 :global(:root[data-theme='dark']) .matchSelector option {
@@ -2473,200 +2220,341 @@
   color: #edf7f1;
 }
 
-:global(:root[data-theme='dark']) .videoCard,
-:global(:root[data-theme='dark']) .actionTypesCard,
-:global(:root[data-theme='dark']) .eventsCard {
+/* Modal */
+
+:global(:root[data-theme='dark']) .categoryModal {
+  border-color: #365447;
   background: #17372c;
-  border-color: #365447;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
-}
-
-:global(:root[data-theme='dark']) .timelineArea {
-  background: #17372c;
-}
-
-:global(:root[data-theme='dark']) .timelineLegendItem small,
-:global(:root[data-theme='dark']) .actionTypesHeader p,
-:global(:root[data-theme='dark']) .eventsHeader span,
-:global(:root[data-theme='dark']) .eventContent span,
-:global(:root[data-theme='dark']) .eventRight > span {
-  color: #a8beb3;
-}
-
-:global(:root[data-theme='dark']) .editCategoriesSmall,
-:global(:root[data-theme='dark']) .eventItem {
-  background: #193b30;
-  border-color: #365447;
-  color: #a7edce;
-}
-
-:global(:root[data-theme='dark']) .eventItem:hover {
-  background: #224638;
-  border-color: #507b63;
-}
-
-:global(:root[data-theme='dark']) .categoryPreview {
-  background: #142e24;
-  border-color: #365447;
-}
-
-:global(:root[data-theme='dark']) .categoryPreview strong,
-:global(:root[data-theme='dark']) .eventContent strong {
-  color: #edf7f1;
-}
-
-:global(:root[data-theme='dark']) .addCategoryCard {
-  background: #193b30;
-  border-color: #426653;
-  color: #83e3b6;
-}
-
-:global(:root[data-theme='dark']) .categoryOverlay,
-:global(:root[data-theme='dark']) .overlay {
-  background: rgba(2, 15, 11, 0.78);
-}
-
-:global(:root[data-theme='dark']) .categoryModal,
-:global(:root[data-theme='dark']) .categoryModalContent {
-  background: #142e24;
 }
 
 :global(:root[data-theme='dark']) .categoryModalHeader {
-  background: #19382b;
   border-color: #365447;
+  background: #17372c;
 }
 
-:global(:root[data-theme='dark']) .categoryModalHeader h2,
-:global(:root[data-theme='dark']) .categoryListToolbar strong,
-:global(:root[data-theme='dark']) .categoryRowInfo strong,
+:global(:root[data-theme='dark']) .categoryModalHeader h2 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .categoryModalHeader p {
+  color: #b2c5ba;
+}
+
+:global(:root[data-theme='dark']) .categoryModalHeader > button {
+  color: #b2c5ba;
+}
+
+:global(:root[data-theme='dark']) .categoryModalHeader > button:hover {
+  background: #28513f;
+}
+
+:global(:root[data-theme='dark']) .categoryModalContent {
+  background: #10251f;
+}
+
+:global(:root[data-theme='dark']) .categoryListToolbar strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .categoryListToolbar span {
+  color: #b2c5ba;
+}
+
+:global(:root[data-theme='dark']) .newCategoryButton {
+  background: #16a875;
+  color: #10251f;
+}
+
+:global(:root[data-theme='dark']) .newCategoryButton:hover {
+  background: #35c18d;
+}
+
+:global(:root[data-theme='dark']) .categoryRow {
+  border-color: #365447;
+  background: #17372c;
+}
+
+:global(:root[data-theme='dark']) .categoryRowInfo strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .categoryRowInfo span {
+  color: #b2c5ba;
+}
+
+/* Formulário de categoria */
+
 :global(:root[data-theme='dark']) .categoryField > label,
-:global(:root[data-theme='dark']) .iconsLabel,
-:global(:root[data-theme='dark']) .categoryPreviewForm strong,
+:global(:root[data-theme='dark']) .iconsLabel {
+  color: #c4d8cc;
+}
+
+:global(:root[data-theme='dark']) .categoryField > input {
+  border-color: #456b59;
+  background: #10251f;
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .categoryField > input:focus {
+  border-color: #16a875;
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
+}
+
+:global(:root[data-theme='dark']) .timelineOption {
+  border-color: #365447;
+  background: #214638;
+}
+
 :global(:root[data-theme='dark']) .timelineOption strong {
   color: #edf7f1;
 }
 
-:global(:root[data-theme='dark']) .categoryModalHeader p,
-:global(:root[data-theme='dark']) .categoryListToolbar span,
-:global(:root[data-theme='dark']) .categoryRowInfo span,
 :global(:root[data-theme='dark']) .timelineOption span {
-  color: #a8beb3;
+  color: #b2c5ba;
 }
 
-:global(:root[data-theme='dark']) .categoryRow,
-:global(:root[data-theme='dark']) .categoryField > input,
-:global(:root[data-theme='dark']) .categoryIconOption,
-:global(:root[data-theme='dark']) .editCategoryButton {
-  background: #19382b;
-  border-color: #365447;
-  color: #c9ddd1;
+:global(:root[data-theme='dark']) .toggleButton {
+  background: #668276;
 }
 
-:global(:root[data-theme='dark']) .categoryField > input {
+:global(:root[data-theme='dark']) .toggleButtonActive {
+  background: #16a875;
+}
+
+:global(:root[data-theme='dark']) .categoryPreviewForm {
+  background: #214638;
+}
+
+:global(:root[data-theme='dark']) .categoryPreviewForm span {
+  color: #b2c5ba;
+}
+
+:global(:root[data-theme='dark']) .categoryPreviewForm strong {
   color: #edf7f1;
 }
 
-:global(:root[data-theme='dark']) .categoryIconOptionActive {
-  background: #244d3b;
-  border-color: #42c994;
-  color: #83e3b6;
+:global(:root[data-theme='dark']) .categoryIconOption {
+  border-color: #365447;
+  background: #17372c;
+  color: #c4d8cc;
 }
 
-:global(:root[data-theme='dark']) .timelineOption,
-:global(:root[data-theme='dark']) .categoryPreviewForm {
-  background: #19382b;
-  border-color: #365447;
+:global(:root[data-theme='dark']) .categoryIconOption:hover {
+  border-color: #5b9476;
+  background: #214638;
 }
+
+:global(:root[data-theme='dark']) .categoryIconOptionActive {
+  border-color: #16a875;
+  background: #214638;
+  color: #7be0a8;
+}
+
+/* Rodapé do formulário */
 
 :global(:root[data-theme='dark']) .categoryFormFooter {
   border-color: #365447;
 }
 
 :global(:root[data-theme='dark']) .cancelCategoryButton {
-  background: transparent;
-  border-color: #426653;
-  color: #c6dbce;
+  border-color: #456b59;
+  background: #214638;
+  color: #c4d8cc;
 }
 
 :global(:root[data-theme='dark']) .cancelCategoryButton:hover {
-  background: #29483a;
+  background: #28513f;
 }
+
+:global(:root[data-theme='dark']) .saveCategoryButton {
+  background: #16a875;
+  color: #10251f;
+}
+
+:global(:root[data-theme='dark']) .saveCategoryButton:hover:not(:disabled) {
+  background: #35c18d;
+}
+
+:global(:root[data-theme='dark']) .deleteCategoryButton {
+  border-color: #82434b;
+  background: rgba(213, 41, 65, 0.15);
+  color: #ff8796;
+}
+
+:global(:root[data-theme='dark']) .deleteCategoryButton:hover {
+  background: rgba(213, 41, 65, 0.25);
+}
+
+:global(:root[data-theme='dark']) .deleteCategoryConfirm {
+  border-color: #d52941;
+  background: #d52941;
+  color: #ffffff;
+}
+
+:global(:root[data-theme='dark']) .deleteWarning {
+  color: #ff8796;
+}
+
+/* Painel de clipes */
 
 :global(:root[data-theme='dark']) .clipPanel {
-  background: #142e24;
+  background: #17372c;
 }
 
-:global(:root[data-theme='dark']) .clipPanelHeader,
-:global(:root[data-theme='dark']) .clipPanelFooter {
-  background: #19382b;
+:global(:root[data-theme='dark']) .clipPanelHeader {
   border-color: #365447;
+  background: #17372c;
 }
 
 :global(:root[data-theme='dark']) .clipPanelHeader h2 {
   color: #edf7f1;
 }
 
-:global(:root[data-theme='dark']) .clipPanelContent {
-  background: #142e24;
+:global(:root[data-theme='dark']) .clipPanelHeader p {
+  color: #b2c5ba;
 }
 
+:global(:root[data-theme='dark']) .clipIcon {
+  background: rgba(22, 168, 117, 0.18);
+  color: #7be0a8;
+}
+
+:global(:root[data-theme='dark']) .closeButton {
+  color: #b2c5ba;
+}
+
+:global(:root[data-theme='dark']) .closeButton:hover {
+  background: #28513f;
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .clipPanelContent {
+  background: #10251f;
+}
+
+/* Formulários do painel */
+
 :global(:root[data-theme='dark']) .formGroup label {
-  color: #c9ddd1;
+  color: #c4d8cc;
 }
 
 :global(:root[data-theme='dark']) .formGroup input,
 :global(:root[data-theme='dark']) .formGroup select,
 :global(:root[data-theme='dark']) .formGroup textarea,
-:global(:root[data-theme='dark']) .searchAthlete {
-  background: #10271e;
-  border-color: #426653;
+:global(:root[data-theme='dark']) .searchAthlete input {
+  border-color: #456b59;
+  background: #17372c;
   color: #edf7f1;
-  color-scheme: dark;
 }
 
+:global(:root[data-theme='dark']) .formGroup input:focus,
+:global(:root[data-theme='dark']) .formGroup select:focus,
+:global(:root[data-theme='dark']) .formGroup textarea:focus,
+:global(:root[data-theme='dark']) .searchAthlete input:focus {
+  border-color: #16a875;
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
+}
+
+:global(:root[data-theme='dark']) .formGroup input::placeholder,
+:global(:root[data-theme='dark']) .formGroup textarea::placeholder {
+  color: #82998d;
+}
+
+:global(:root[data-theme='dark']) .formGroup select option {
+  background: #17372c;
+  color: #edf7f1;
+}
+
+/* Atletas */
+
 :global(:root[data-theme='dark']) .athleteItem {
-  background: #19382b;
+  border-color: #365447;
+  background: #17372c;
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .athleteItem:hover {
+  border-color: #5b9476;
+  background: #214638;
+}
+
+:global(:root[data-theme='dark']) .athleteSelected {
+  border-color: #16a875;
+  background: #214638;
+}
+
+:global(:root[data-theme='dark']) .athleteItem strong {
   color: #edf7f1;
 }
 
 :global(:root[data-theme='dark']) .athleteItem span {
-  color: #a8beb3;
+  color: #b2c5ba;
 }
 
-:global(:root[data-theme='dark']) .athleteSelected {
-  background: #244d3b;
-  border-color: #42c994;
+:global(:root[data-theme='dark']) .athleteAvatar {
+  background: #28513f;
+  color: #7be0a8;
 }
+
+/* Avaliação */
 
 :global(:root[data-theme='dark']) .ratingButton {
-  background: #19382b;
   border-color: #365447;
-  color: #c9ddd1;
+  background: #17372c;
+  color: #c4d8cc;
+}
+
+:global(:root[data-theme='dark']) .ratingButton:hover {
+  border-color: #5b9476;
+  background: #214638;
 }
 
 :global(:root[data-theme='dark']) .ratingButtonActive {
-  background: #244d3b;
-  border-color: #42c994;
-  color: #83e3b6;
+  border-color: #16a875;
+  background: #214638;
+  color: #7be0a8;
 }
 
-:global(:root[data-theme='dark']) .durationSection h3 {
-  color: #edf7f1;
+/* Duração */
+
+:global(:root[data-theme='dark']) .durationInfo span {
+  color: #b2c5ba;
 }
 
-:global(:root[data-theme='dark']) .durationInfo {
-  color: #a8beb3;
+:global(:root[data-theme='dark']) .durationValue {
+  color: #7be0a8;
+}
+
+:global(:root[data-theme='dark']) .rangeGroup input[type='range'] {
+  accent-color: #16a875;
+}
+
+/* Rodapé do painel */
+
+:global(:root[data-theme='dark']) .clipPanelFooter {
+  border-color: #365447;
+  background: #17372c;
 }
 
 :global(:root[data-theme='dark']) .saveClipButton {
-  background: #087b5b;
+  background: #16a875;
+  color: #10251f;
 }
 
 :global(:root[data-theme='dark']) .saveClipButton:hover:not(:disabled) {
-  background: #10966d;
+  background: #35c18d;
 }
 
-/* H1 verde-claro no modo escuro */
-:global(:root[data-theme='dark']) .pageHeader h1 em {
-  color: #7BE0A8;
+/* =====================================
+   AJUSTES DE RESPONSIVIDADE NO MODO ESCURO
+===================================== */
+
+@media (max-width: 600px) {
+  :global(:root[data-theme='dark']) .categoryModal {
+    background: #17372c;
+  }
+
+  :global(:root[data-theme='dark']) .categoryModalContent {
+    background: #10251f;
+  }
 }

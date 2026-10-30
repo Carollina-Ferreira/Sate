@@ -686,3 +686,159 @@
     justify-content: stretch;
   }
 }
+
+
+/* =========================================================
+   MODO ESCURO — CONFIGURAÇÕES SATE
+========================================================= */
+
+:global(:root[data-theme='dark']) .page {
+  --creme: #101b17;
+  --creme-card: #192820;
+  --creme-linha: #30443a;
+
+  --texto: #edf5f0;
+  --texto-secundario: #a6b7ad;
+
+  --verde: #36bd8b;
+  --verde-profundo: #248765;
+  --verde-suave: #193d30;
+
+  --rosa: #ff7397;
+  --rosa-claro: #482532;
+
+  background:
+    radial-gradient(
+      ellipse 380px 280px at 97% 0%,
+      rgba(239, 63, 111, 0.10) 0%,
+      rgba(239, 63, 111, 0.04) 43%,
+      transparent 76%
+    ),
+    var(--creme);
+
+  color: var(--texto);
+}
+
+/* Cartões */
+:global(:root[data-theme='dark']) .card {
+  background: var(--creme-card);
+  border-color: var(--creme-linha);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+:global(:root[data-theme='dark']) .cardHeader h2,
+:global(:root[data-theme='dark']) .passwordTitle h3,
+:global(:root[data-theme='dark']) .preferenceText strong {
+  color: var(--texto);
+}
+
+/* Botão de alterar foto */
+:global(:root[data-theme='dark']) .photoButton {
+  background: #20372c;
+  border-color: #3b5949;
+  color: #8ce2bd;
+}
+
+:global(:root[data-theme='dark']) .photoButton:hover {
+  background: #294638;
+  border-color: #5c9879;
+}
+
+/* Campos do formulário */
+:global(:root[data-theme='dark']) .field label {
+  color: #c0d0c6;
+}
+
+:global(:root[data-theme='dark']) .field input {
+  background: #111e18;
+  border-color: #3a5044;
+  color: #edf5f0;
+}
+
+:global(:root[data-theme='dark']) .field input::placeholder {
+  color: #819389;
+}
+
+:global(:root[data-theme='dark']) .field input:hover {
+  border-color: #5c9278;
+}
+
+:global(:root[data-theme='dark']) .field input:focus {
+  border-color: #36bd8b;
+  box-shadow: 0 0 0 3px rgba(54, 189, 139, 0.12);
+}
+
+/* Divisórias */
+:global(:root[data-theme='dark']) .cardDivider,
+:global(:root[data-theme='dark']) .passwordSection,
+:global(:root[data-theme='dark']) .saveArea,
+:global(:root[data-theme='dark']) .preferenceRow {
+  border-color: var(--creme-linha);
+}
+
+/* Ícone de senha */
+:global(:root[data-theme='dark']) .passwordIcon {
+  background: #482532;
+  color: #ff86a5;
+}
+
+/* Botão mostrar/ocultar senha */
+:global(:root[data-theme='dark']) .eyeButton {
+  color: #a6b7ad;
+}
+
+:global(:root[data-theme='dark']) .eyeButton:hover {
+  background: #294638;
+  color: #8ce2bd;
+}
+
+/* Mensagem de erro da senha */
+:global(:root[data-theme='dark']) .passwordError {
+  background: #3b202b;
+  border-color: #71384b;
+  color: #ff9bb4;
+}
+
+/* Botão salvar */
+:global(:root[data-theme='dark']) .saveButton {
+  background: #087b59;
+  border-color: #087b59;
+  color: #ffffff;
+  box-shadow: 0 7px 17px rgba(0, 0, 0, 0.2);
+}
+
+:global(:root[data-theme='dark']) .saveButton:hover {
+  background: #096747;
+}
+
+/* Preferências */
+:global(:root[data-theme='dark']) .preferenceText strong {
+  color: #edf5f0;
+}
+
+:global(:root[data-theme='dark']) .preferenceText span {
+  color: #a6b7ad;
+}
+
+/* Interruptor */
+:global(:root[data-theme='dark']) .switch {
+  background: #52645a;
+}
+
+:global(:root[data-theme='dark']) .switchActive {
+  background: #159b70;
+}
+
+:global(:root[data-theme='dark']) .switch > span {
+  background: #f4fff8;
+}
+
+/* Avatar */
+:global(:root[data-theme='dark']) .avatar {
+  background: #087b59;
+}
+
+/* Título destacado */
+:global(:root[data-theme='dark']) .pageHeader h1 em {
+  color: #7be0a8;
+}

@@ -2243,615 +2243,325 @@ button {
 
 
 .excelSection {
-
   width: min(
-
     1380px,
-
     calc(100% - 90px)
-
   );
-
-
 
   display: grid;
 
-
-
   grid-template-columns:
-
     0.72fr 1.28fr;
 
-
-
   align-items: center;
-
-
 
   gap: 65px;
 
-
-
   margin: auto;
 
-
-
   padding:
-
     90px 0
-
     105px;
-
 }
 
-
-
 .excelText p {
-
   max-width: 440px;
 
-
-
   margin:
-
     20px 0
-
     25px;
-
-
 
   color: var(--muted);
 
-
-
   font-size: 13px;
 
-
-
   line-height: 1.7;
-
 }
 
-
-
 .greenButton {
-
   border: none;
-
-
 
   background: #05785b;
 
-
-
   color: white;
-
 }
-
-
 
 .greenButton:hover {
-
   background: #005942;
-
 }
 
-
-
 .excelBenefits {
-
   display: flex;
-
-
 
   gap: 18px;
 
-
-
   flex-wrap: wrap;
 
-
-
   margin-top: 27px;
-
 }
 
-
-
 .excelBenefits span {
-
   display: flex;
-
-
 
   align-items: center;
 
-
-
   gap: 6px;
-
-
 
   color: #65706c;
 
-
-
   font-size: 8px;
-
 }
-
-
 
 .excelBenefits svg {
-
   color: #08795d;
-
 }
 
-
-
 .excelVisual {
-
   display: flex;
-
-
 
   align-items: center;
 
-
-
   justify-content: center;
 
-
-
   gap: 19px;
-
 }
 
-
-
 .excelFile {
-
   width: 150px;
-
-
 
   min-height: 165px;
 
-
-
   display: flex;
-
-
 
   flex-direction: column;
 
-
-
   align-items: center;
 
-
-
   justify-content: center;
-
-
 
   gap: 8px;
 
-
-
   border:
-
     1px solid
-
     #e7ebe8;
-
-
 
   border-radius: 18px;
 
-
-
   background: white;
 
-
-
   box-shadow:
-
     0 18px 45px
-
     rgba(
-
       20,
-
       64,
-
       49,
-
       0.07
-
     );
 
-
-
   transform:
-
     rotate(-4deg);
-
 }
 
-
-
 .excelLogo {
-
-  width: 65px;
-
-  height: 65px;
-
-
+  width: 80px;
+  height: 80px;
 
   display: flex;
 
-
-
   align-items: center;
-
-
 
   justify-content: center;
 
-
-
-  border-radius: 15px;
-
-
+  border-radius: 18px;
 
   background: #107c41;
 
-
-
   color: white;
 
-
-
   box-shadow:
-
     -8px 7px 0
-
     #21a366;
-
 }
 
-
+.excelLogo svg {
+  width: 46px;
+  height: 46px;
+}
 
 .excelFile strong {
-
   margin-top: 7px;
 
-
-
-  font-size: 10px;
-
+  font-size: 13px;
 }
-
-
 
 .excelFile > span {
-
   color: #929b97;
 
-
-
-  font-size: 7px;
-
+  font-size: 9px;
 }
-
-
 
 .excelArrow {
-
   color: #19a776;
-
 }
 
-
-
 .excelTable {
-
   width: min(
-
     530px,
-
     66%
-
   );
-
-
 
   min-width: 430px;
 
-
-
   position: relative;
-
-
-
-  padding: 10px;
-
-
-
-  border:
-
-    1px solid
-
-    #e7ebe8;
-
-
-
-  border-radius: 15px;
-
-
-
-  background: white;
-
-
-
-  box-shadow:
-
-    0 20px 50px
-
-    rgba(
-
-      20,
-
-      64,
-
-      49,
-
-      0.08
-
-    );
-
-}
-
-
-
-.excelHeader,
-
-.excelRow {
-
-  min-height: 34px;
-
-
-
-  display: grid;
-
-
-
-  grid-template-columns:
-
-    1.2fr 1fr
-
-    1fr 0.8fr;
-
-
-
-  align-items: center;
-
-
-
-  gap: 9px;
-
-
-
-  padding: 0 10px;
-
-
-
-  border-bottom:
-
-    1px solid
-
-    #eef1ef;
-
-
-
-  color: #6d7672;
-
-
-
-  font-size: 7px;
-
-}
-
-
-
-.excelHeader {
-
-  background: #f7f9f8;
-
-
-
-  color: #929a97;
-
-
-
-  font-weight: 600;
-
-}
-
-
-
-.importBadge {
-
-  width: fit-content;
-
-
-
-  padding:
-
-    4px 7px;
-
-
-
-  border-radius: 999px;
-
-
-
-  background: #e4f6ed;
-
-
-
-  color: #119b69;
-
-
-
-  font-size: 6px;
-
-
-
-  font-weight: 700;
-
-}
-
-
-
-.progressCard {
-
-  width: 240px;
-
-
-
-  position: absolute;
-
-
-
-  left: 35px;
-
-
-
-  bottom: -49px;
-
-
 
   padding: 12px;
 
-
-
   border:
-
     1px solid
-
     #e7ebe8;
 
-
-
-  border-radius: 11px;
-
-
+  border-radius: 15px;
 
   background: white;
 
-
-
   box-shadow:
-
-    0 14px 38px
-
+    0 20px 50px
     rgba(
-
       20,
-
       64,
-
       49,
-
-      0.11
-
+      0.08
     );
-
 }
 
+.excelHeader,
+.excelRow {
+  min-height: 43px;
 
+  display: grid;
 
-.progressCard > div:first-child {
-
-  display: inline-flex;
-
-
+  grid-template-columns:
+    1.2fr 1fr
+    1fr 0.8fr;
 
   align-items: center;
 
+  gap: 12px;
 
+  padding: 0 13px;
 
-  gap: 6px;
+  border-bottom:
+    1px solid
+    #eef1ef;
 
+  color: #6d7672;
 
+  font-size: 9px;
+}
 
-  font-size: 7px;
+.excelHeader {
+  min-height: 43px;
 
+  background: #f7f9f8;
 
+  color: #929a97;
 
   font-weight: 600;
 
+  font-size: 9px;
 }
 
+.importBadge {
+  width: fit-content;
 
-
-.progressCard > span {
-
-  float: right;
-
-
-
-  color: #7a8580;
-
-
-
-  font-size: 7px;
-
-}
-
-
-
-.progressBar {
-
-  height: 5px;
-
-
-
-  overflow: hidden;
-
-
-
-  margin-top: 8px;
-
-
+  padding:
+    5px 9px;
 
   border-radius: 999px;
 
+  background: #e4f6ed;
 
+  color: #119b69;
 
-  background: #edf1ef;
+  font-size: 8px;
 
+  font-weight: 700;
 }
 
+.progressCard {
+  width: 240px;
 
+  position: absolute;
+
+  left: 35px;
+
+  bottom: -49px;
+
+  padding: 12px;
+
+  border:
+    1px solid
+    #e7ebe8;
+
+  border-radius: 11px;
+
+  background: white;
+
+  box-shadow:
+    0 14px 38px
+    rgba(
+      20,
+      64,
+      49,
+      0.11
+    );
+}
+
+.progressCard > div:first-child {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.progressCard > div:first-child svg {
+  width: 19px;
+  height: 19px;
+}
+
+.progressCard > span {
+  float: right;
+
+  color: #7a8580;
+
+  font-size: 9px;
+}
+
+.progressBar {
+  height: 7px;
+
+  overflow: hidden;
+
+  margin-top: 12px;
+
+  border-radius: 999px;
+
+  background: #edf1ef;
+}
 
 .progressBar i {
-
   width: 78%;
 
   height: 100%;
 
-
-
   display: block;
 
-
-
   background: #16a875;
-
 }
 
 

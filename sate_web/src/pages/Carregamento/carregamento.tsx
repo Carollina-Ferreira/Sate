@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './carregamento.module.css';
@@ -25,7 +24,9 @@ export default function Carregamento() {
 
   useEffect(() => {
     const intervalo = window.setInterval(() => {
-      setEtapa((atual) => Math.min(atual + 1, mensagens.length - 1));
+      setEtapa((atual) =>
+        Math.min(atual + 1, mensagens.length - 1)
+      );
     }, DURACAO / mensagens.length);
 
     const timer = window.setTimeout(() => {
@@ -51,7 +52,9 @@ export default function Carregamento() {
       role="status"
       aria-live="polite"
       aria-label="Carregando"
-      style={{ '--duracao': `${DURACAO}ms` } as React.CSSProperties}
+      style={
+        { '--duracao': `${DURACAO}ms` } as React.CSSProperties
+      }
     >
       <div className={styles.rings} aria-hidden="true">
         <span />

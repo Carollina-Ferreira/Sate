@@ -262,12 +262,13 @@ const Login = () => {
                     className={styles.heroImages}
                     aria-hidden="true"
                 >
+
                     {heroSlides.map((image, index) => (
                         <div
                             key={image}
                             className={`${styles.heroSlide} ${index === activeSlide
-                                ? styles.heroSlideActive
-                                : ''
+                                    ? styles.heroSlideActive
+                                    : ''
                                 }`}
                             style={{
                                 backgroundImage: `url(${image})`,

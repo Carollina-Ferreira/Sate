@@ -13,6 +13,7 @@ import Login from "./pages/Login/login";
 import Carregamento from "./pages/Carregamento/carregamento";
 import Cadastro from "./pages/Cadastro/cadastro";
 import EsqueciSenha from "./pages/EsqueciSenha/esqueciSenha";
+import RedefinirSenha from "./pages/RedefinirSenha/redefinirSenha";
 
 // ==========================================
 // PÁGINAS DE BOAS-VINDAS / CONFIGURAÇÃO
@@ -75,6 +76,9 @@ function App() {
 
           {/* Recuperação de senha */}
           <Route path="/esqueci-senha" element={<EsqueciSenha />} />
+
+          {/* Redefinição de senha via link enviado por e-mail */}
+          <Route path="/redefinir-senha" element={<RedefinirSenha />} />
 
           {/* ========================================
               ONBOARDING / CONFIGURAÇÃO INICIAL

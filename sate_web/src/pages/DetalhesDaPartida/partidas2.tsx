@@ -1356,15 +1356,26 @@ export default function DetalhesPartida() {
             </p>
           </div>
 
-          <button
-            type="button"
-            className={styles.outlineButton}
-            onClick={() => void recarregarTudo()}
-            disabled={carregando}
-          >
-            <RefreshCw size={16} />
-            Atualizar
-          </button>
+          <div className={styles.headerActions}>
+            <button
+              type="button"
+              className={styles.outlineButton}
+              onClick={() => void recarregarTudo()}
+              disabled={carregando}
+            >
+              <RefreshCw size={16} />
+              Atualizar
+            </button>
+
+            <button
+              type="button"
+              className={styles.dangerButton}
+              onClick={() => setModalExcluir(true)}
+            >
+              <Trash2 size={15} />
+              Excluir partida
+            </button>
+          </div>
         </header>
 
         {erro && (
@@ -2065,28 +2076,6 @@ export default function DetalhesPartida() {
           </section>
         )}
 
-        <section className={styles.dangerZone}>
-          <div className={styles.dangerIcon}>
-            <ShieldAlert size={19} />
-          </div>
-
-          <div className={styles.dangerText}>
-            <h2>Zona de perigo</h2>
-            <p>
-              Excluir a partida remove seu registro do sistema. Essa ação
-              pode ser irreversível.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            className={styles.dangerButton}
-            onClick={() => setModalExcluir(true)}
-          >
-            <Trash2 size={15} />
-            Excluir partida
-          </button>
-        </section>
       </div>
 
       {/* MODAL DE ATLETAS */}

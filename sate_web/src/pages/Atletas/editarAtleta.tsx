@@ -1,3 +1,4 @@
+
 import {
     useEffect,
     useRef,
@@ -37,7 +38,6 @@ interface Documento {
 
 interface Atleta {
     id: number;
-
     nome: string | null;
 
     cpf?: string | null;
@@ -164,6 +164,8 @@ const EditarAtleta = ({
     const [cidade, setCidade] = useState('');
     const [estado, setEstado] = useState('');
 
+    const [consultandoCep, setConsultandoCep] = useState(false);
+
 
     // ========================================================
     // FOTO
@@ -202,109 +204,65 @@ const EditarAtleta = ({
 
 
     // ========================================================
-    // CARREGAR DADOS
+    // FUNÇÕES DE FORMATAÇÃO
     // ========================================================
 
-    useEffect(() => {
-
-        setNome(
-            atleta.nome || ''
-        );
-
-        setDataNascimento(
-            formatarDataParaInput(
-                atleta.dataNascimento
-            )
-        );
-
-        setSexo(
-            normalizarSexo(
-                atleta.sexo
-            )
-        );
-
-        setCategoria(
-            atleta.categoria || ''
-        );
-
-        setRg(
-            atleta.rg || ''
-        );
-
-        setCpf(
-            atleta.cpf || ''
-        );
-
-        setEmail(
-            atleta.usuario?.email || ''
-        );
-
-        setTelefone(
-            atleta.telefone || ''
-        );
+    function somenteNumeros(valor: string) {
+        return valor.replace(/\D/g, '');
+    }
 
 
-        // FOTO ATUAL
+    function formatarCEP(valor: string) {
+        const numeros = somenteNumeros(valor).slice(0, 8);
 
-        setFotoPreview(
-            atleta.usuario?.avatarUrl || null
-        );
-
-        setFotoArquivo(null);
+        return numeros.replace(/^(\d{5})(\d)/, '$1-$2');
+    }
 
 
-        // RESPONSÁVEL
+    function formatarRG(valor: string) {
+        const numeros =
+            somenteNumeros(valor).slice(0, 9);
 
-        setResponsavelNome(
-            atleta.responsavel?.nome || ''
-        );
-
-        setResponsavelGrau(
-            normalizarGrauParentesco(
-                atleta.responsavel?.grauParentesco
-            )
-        );
-
-        setResponsavelTelefone(
-            atleta.responsavel?.telefone || ''
-        );
+        return numeros
+            .replace(/^(\d{2})(\d)/, '$1.$2')
+            .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/\.(\d{3})(\d)/, '.$1-$2');
+    }
 
 
-        // ENDEREÇO
+    function formatarCPF(valor: string) {
+        const numeros =
+            somenteNumeros(valor).slice(0, 11);
 
-        setCep(
-            atleta.endereco?.cep || ''
-        );
+        return numeros
+            .replace(/^(\d{3})(\d)/, '$1.$2')
+            .replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/\.(\d{3})(\d)/, '.$1-$2');
+    }
 
-        setLogradouro(
-            atleta.endereco?.logradouro || ''
-        );
 
-        setNumero(
-            atleta.endereco?.numero || ''
-        );
+    function formatarTelefone(valor: string) {
+        const numeros =
+            somenteNumeros(valor).slice(0, 11);
 
-        setBairro(
-            atleta.endereco?.bairro || ''
-        );
+        if (numeros.length <= 2) {
+            return numeros;
+        }
 
-        setComplemento(
-            atleta.endereco?.complemento || ''
-        );
+        if (numeros.length <= 6) {
+            return `(${numeros.slice(0, 2)}) ${numeros.slice(2)}`;
+        }
 
-        setCidade(
-            atleta.endereco?.cidade || ''
-        );
+        if (numeros.length <= 10) {
+            return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 6)}-${numeros.slice(6)}`;
+        }
 
-        setEstado(
-            atleta.endereco?.estado || ''
-        );
-
-    }, [atleta]);
+        return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 7)}-${numeros.slice(7)}`;
+    }
 
 
     // ========================================================
-    // FUNÇÕES AUXILIARES
+    // OUTRAS FUNÇÕES AUXILIARES
     // ========================================================
 
     function formatarDataParaInput(
@@ -346,15 +304,11 @@ const EditarAtleta = ({
             return 'FEMININO';
         }
 
-        if (
-            valorNormalizado === 'OUTRO'
-        ) {
+        if (valorNormalizado === 'OUTRO') {
             return 'OUTRO';
         }
 
-        if (
-            valorNormalizado === 'NAO_INFORMADO'
-        ) {
+        if (valorNormalizado === 'NAO_INFORMADO') {
             return 'NAO_INFORMADO';
         }
 
@@ -387,8 +341,7 @@ const EditarAtleta = ({
         }
 
         if (
-            valorNormalizado ===
-            'responsavel legal'
+            valorNormalizado === 'responsavel legal'
         ) {
             return 'responsavel';
         }
@@ -466,6 +419,173 @@ const EditarAtleta = ({
 
 
     // ========================================================
+    // CARREGAR DADOS
+    // ========================================================
+
+    useEffect(() => {
+
+        setNome(
+            atleta.nome || ''
+        );
+
+        setDataNascimento(
+            formatarDataParaInput(
+                atleta.dataNascimento
+            )
+        );
+
+        setSexo(
+            normalizarSexo(
+                atleta.sexo
+            )
+        );
+
+        setCategoria(
+            atleta.categoria || ''
+        );
+
+        setRg(
+            formatarRG(atleta.rg || '')
+        );
+
+        setCpf(
+            formatarCPF(atleta.cpf || '')
+        );
+
+        setEmail(
+            atleta.usuario?.email || ''
+        );
+
+        setTelefone(
+            formatarTelefone(atleta.telefone || '')
+        );
+
+
+        // FOTO ATUAL
+
+        setFotoPreview(
+            atleta.usuario?.avatarUrl || null
+        );
+
+        setFotoArquivo(null);
+
+
+        // RESPONSÁVEL
+
+        setResponsavelNome(
+            atleta.responsavel?.nome || ''
+        );
+
+        setResponsavelGrau(
+            normalizarGrauParentesco(
+                atleta.responsavel?.grauParentesco
+            )
+        );
+
+        setResponsavelTelefone(
+            formatarTelefone(
+                atleta.responsavel?.telefone || ''
+            )
+        );
+
+
+        // ENDEREÇO
+
+        setCep(
+            formatarCEP(atleta.endereco?.cep || '')
+        );
+
+        setLogradouro(
+            atleta.endereco?.logradouro || ''
+        );
+
+        setNumero(
+            atleta.endereco?.numero || ''
+        );
+
+        setBairro(
+            atleta.endereco?.bairro || ''
+        );
+
+        setComplemento(
+            atleta.endereco?.complemento || ''
+        );
+
+        setCidade(
+            atleta.endereco?.cidade || ''
+        );
+
+        setEstado(
+            atleta.endereco?.estado || ''
+        );
+
+    }, [atleta]);
+
+
+    // ========================================================
+    // BUSCAR ENDEREÇO PELO CEP
+    // ========================================================
+
+    useEffect(() => {
+        const cepNumerico = somenteNumeros(cep);
+
+        if (cepNumerico.length !== 8) {
+            setConsultandoCep(false);
+            return;
+        }
+
+        let cancelado = false;
+
+        const buscarCEP = async () => {
+            try {
+                setConsultandoCep(true);
+
+                const resposta = await fetch(
+                    `https://viacep.com.br/ws/${cepNumerico}/json/`
+                );
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        'Não foi possível consultar o CEP.'
+                    );
+                }
+
+                const dados = await resposta.json();
+
+                if (cancelado) {
+                    return;
+                }
+
+                setLogradouro(dados.logradouro || '');
+                setBairro(dados.bairro || '');
+                setCidade(dados.localidade || '');
+                setEstado(dados.uf || '');
+
+            } catch (error) {
+                if (!cancelado) {
+                    console.error(
+                        'Erro ao buscar CEP:',
+                        error
+                    );
+                }
+
+            } finally {
+                if (!cancelado) {
+                    setConsultandoCep(false);
+                }
+            }
+        };
+
+        buscarCEP();
+
+        return () => {
+            cancelado = true;
+        };
+
+    }, [cep]);
+
+
+    // ========================================================
     // FOTO
     // ========================================================
 
@@ -480,8 +600,6 @@ const EditarAtleta = ({
             return;
         }
 
-
-        // VALIDAR TIPO
 
         const tiposPermitidos = [
             'image/jpeg',
@@ -504,8 +622,6 @@ const EditarAtleta = ({
         }
 
 
-        // VALIDAR TAMANHO
-
         if (
             arquivo.size >
             5 * 1024 * 1024
@@ -526,22 +642,17 @@ const EditarAtleta = ({
         setFotoArquivo(arquivo);
 
 
-        // PREVIEW
-
         const reader =
             new FileReader();
 
         reader.onload = () => {
 
             if (
-                typeof reader.result ===
-                'string'
+                typeof reader.result === 'string'
             ) {
-
                 setFotoPreview(
                     reader.result
                 );
-
             }
         };
 
@@ -587,9 +698,7 @@ const EditarAtleta = ({
             setSucesso('');
 
 
-            // ==================================================
             // VALIDAÇÕES
-            // ==================================================
 
             if (!nome.trim()) {
 
@@ -611,9 +720,7 @@ const EditarAtleta = ({
             }
 
 
-            // ==================================================
             // DADOS
-            // ==================================================
 
             const dados: Record<string, unknown> = {
 
@@ -621,45 +728,34 @@ const EditarAtleta = ({
                     nome.trim(),
 
                 dataNascimento:
-                    dataNascimento ||
-                    null,
+                    dataNascimento || null,
 
                 sexo:
-                    sexo ||
-                    null,
+                    sexo || null,
 
                 categoria:
-                    categoria.trim() ||
-                    null,
+                    categoria.trim() || null,
 
                 rg:
-                    rg.trim() ||
-                    null,
+                    somenteNumeros(rg) || null,
 
                 cpf:
-                    cpf.trim() ||
-                    null,
+                    somenteNumeros(cpf) || null,
 
                 email:
                     email.trim(),
 
                 telefone:
-                    telefone.trim() ||
-                    null,
+                    somenteNumeros(telefone) || null,
 
 
-                // ==============================================
                 // FOTO
-                // ==============================================
 
                 avatarUrl:
-                    fotoPreview ||
-                    null,
+                    fotoPreview || null,
 
 
-                // ==============================================
                 // RESPONSÁVEL
-                // ==============================================
 
                 responsavel:
                     responsavelNome.trim()
@@ -671,23 +767,23 @@ const EditarAtleta = ({
                                 responsavelGrau,
 
                             telefone:
-                                responsavelTelefone.trim(),
+                                somenteNumeros(
+                                    responsavelTelefone
+                                ),
                         }
                         : null,
 
 
-                // ==============================================
                 // ENDEREÇO
-                // ==============================================
 
                 endereco:
-                    cep.trim() ||
+                    somenteNumeros(cep) ||
                     logradouro.trim() ||
                     numero.trim() ||
                     bairro.trim()
                         ? {
                             cep:
-                                cep.trim(),
+                                somenteNumeros(cep) || null,
 
                             logradouro:
                                 logradouro.trim(),
@@ -699,16 +795,13 @@ const EditarAtleta = ({
                                 bairro.trim(),
 
                             complemento:
-                                complemento.trim() ||
-                                null,
+                                complemento.trim() || null,
 
                             cidade:
-                                cidade.trim() ||
-                                null,
+                                cidade.trim() || null,
 
                             estado:
-                                estado.trim() ||
-                                null,
+                                estado.trim() || null,
                         }
                         : null,
             };
@@ -725,15 +818,11 @@ const EditarAtleta = ({
             );
 
 
-            // ==================================================
             // SALVAR
-            // ==================================================
 
             if (onSave) {
 
-                await onSave(
-                    dados
-                );
+                await onSave(dados);
 
             } else {
 
@@ -744,9 +833,7 @@ const EditarAtleta = ({
             }
 
 
-            // ==================================================
             // FINALIZADO
-            // ==================================================
 
             setFotoArquivo(null);
 
@@ -761,7 +848,6 @@ const EditarAtleta = ({
                 error
             );
 
-
             setErro(
                 error instanceof Error
                     ? error.message
@@ -773,6 +859,35 @@ const EditarAtleta = ({
             setSalvando(false);
         }
     };
+
+
+    // ========================================================
+    // EXIBIÇÃO
+    // ========================================================
+
+    const nomeExibicao =
+        nome ||
+        atleta.nome ||
+        'Atleta';
+
+    const categoriaExibicao =
+        categoria ||
+        'Sem categoria';
+
+    const idade =
+        calcularIdade(
+            dataNascimento ||
+            atleta.dataNascimento
+        );
+
+    const cpfExibicao =
+        cpf ||
+        'Não informado';
+
+    const inicial =
+        nomeExibicao
+            .charAt(0)
+            .toUpperCase();
 
 
     // ========================================================
@@ -824,48 +939,13 @@ const EditarAtleta = ({
 
 
     // ========================================================
-    // EXIBIÇÃO
-    // ========================================================
-
-    const nomeExibicao =
-        nome ||
-        atleta.nome ||
-        'Atleta';
-
-
-    const categoriaExibicao =
-        categoria ||
-        'Sem categoria';
-
-
-    const idade =
-        calcularIdade(
-            dataNascimento ||
-            atleta.dataNascimento
-        );
-
-
-    const cpfExibicao =
-        cpf ||
-        'Não informado';
-
-
-    const inicial =
-        nomeExibicao
-            .charAt(0)
-            .toUpperCase();
-
-
-    // ========================================================
     // RENDER
     // ========================================================
 
     return (
         <div className={styles.page}>
 
-            {/* =================================================
-                VOLTAR
-            ================================================= */}
+            {/* VOLTAR */}
 
             <button
                 type="button"
@@ -882,55 +962,31 @@ const EditarAtleta = ({
             </button>
 
 
-            {/* =================================================
-                CARD DO PERFIL
-            ================================================= */}
+            {/* CARD DO PERFIL */}
 
             <div className={styles.profileCard}>
 
                 <div className={styles.profileTop}>
 
-                    <div
-                        className={
-                            styles.profileHeaderLeft
-                        }
-                    >
+                    <div className={styles.profileHeaderLeft}>
 
-                        {/* =================================================
-                            FOTO
-                        ================================================= */}
+                        {/* FOTO */}
 
-                        <div
-                            className={
-                                styles.photoContainer
-                            }
-                        >
+                        <div className={styles.photoContainer}>
 
-                            <div
-                                className={
-                                    styles.photoWrapper
-                                }
-                            >
+                            <div className={styles.photoWrapper}>
 
                                 {fotoPreview ? (
 
                                     <img
                                         src={fotoPreview}
-                                        alt={
-                                            `Foto de ${nomeExibicao}`
-                                        }
-                                        className={
-                                            styles.photo
-                                        }
+                                        alt={`Foto de ${nomeExibicao}`}
+                                        className={styles.photo}
                                     />
 
                                 ) : (
 
-                                    <div
-                                        className={
-                                            styles.photoFallback
-                                        }
-                                    >
+                                    <div className={styles.photoFallback}>
                                         {inicial}
                                     </div>
 
@@ -939,53 +995,31 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.photoCheck
-                                }
-                            >
+                            <div className={styles.photoCheck}>
                                 <Check size={14} />
                             </div>
 
                         </div>
 
 
-                        {/* =================================================
-                            INFORMAÇÕES
-                        ================================================= */}
+                        {/* INFORMAÇÕES */}
 
-                        <div
-                            className={
-                                styles.profileHeaderInfo
-                            }
-                        >
+                        <div className={styles.profileHeaderInfo}>
 
-                            <div
-                                className={
-                                    styles.nameRow
-                                }
-                            >
+                            <div className={styles.nameRow}>
 
                                 <h1>
                                     {nomeExibicao}
                                 </h1>
 
-                                <span
-                                    className={
-                                        styles.categoryTag
-                                    }
-                                >
+                                <span className={styles.categoryTag}>
                                     {categoriaExibicao}
                                 </span>
 
                             </div>
 
 
-                            <p
-                                className={
-                                    styles.photoHint
-                                }
-                            >
+                            <p className={styles.photoHint}>
                                 Foto de perfil JPG ou PNG
                             </p>
 
@@ -1003,9 +1037,7 @@ const EditarAtleta = ({
                                     ref={inputFotoRef}
                                     type="file"
                                     accept="image/jpeg,image/jpg,image/png"
-                                    onChange={
-                                        selecionarFoto
-                                    }
+                                    onChange={selecionarFoto}
                                     style={{
                                         display: 'none',
                                     }}
@@ -1014,9 +1046,7 @@ const EditarAtleta = ({
 
                                 <button
                                     type="button"
-                                    onClick={
-                                        abrirSeletorFoto
-                                    }
+                                    onClick={abrirSeletorFoto}
                                     disabled={
                                         salvando ||
                                         excluindo
@@ -1048,17 +1078,9 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.badgesRow
-                                }
-                            >
+                            <div className={styles.badgesRow}>
 
-                                <span
-                                    className={
-                                        styles.badge
-                                    }
-                                >
+                                <span className={styles.badge}>
 
                                     <FileText size={14} />
 
@@ -1076,11 +1098,7 @@ const EditarAtleta = ({
                                 </span>
 
 
-                                <span
-                                    className={
-                                        styles.badge
-                                    }
-                                >
+                                <span className={styles.badge}>
 
                                     <FileText size={14} />
 
@@ -1091,17 +1109,9 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.statusRow
-                                }
-                            >
+                            <div className={styles.statusRow}>
 
-                                <span
-                                    className={
-                                        styles.statusBadge
-                                    }
-                                >
+                                <span className={styles.statusBadge}>
 
                                     <Check size={14} />
 
@@ -1125,21 +1135,13 @@ const EditarAtleta = ({
                     </div>
 
 
-                    {/* =================================================
-                        BOTÕES
-                    ================================================= */}
+                    {/* BOTÕES */}
 
-                    <div
-                        className={
-                            styles.profileHeaderActions
-                        }
-                    >
+                    <div className={styles.profileHeaderActions}>
 
                         <button
                             type="button"
-                            className={
-                                styles.discardButton
-                            }
+                            className={styles.discardButton}
                             onClick={onBack}
                             disabled={
                                 salvando ||
@@ -1154,12 +1156,8 @@ const EditarAtleta = ({
 
                         <button
                             type="button"
-                            className={
-                                styles.saveButton
-                            }
-                            onClick={
-                                salvarAlteracoes
-                            }
+                            className={styles.saveButton}
+                            onClick={salvarAlteracoes}
                             disabled={
                                 salvando ||
                                 excluindo
@@ -1178,9 +1176,7 @@ const EditarAtleta = ({
 
                         <button
                             type="button"
-                            onClick={
-                                excluirAtleta
-                            }
+                            onClick={excluirAtleta}
                             disabled={
                                 salvando ||
                                 excluindo
@@ -1214,26 +1210,14 @@ const EditarAtleta = ({
                 </div>
 
 
-                <div
-                    className={styles.divider}
-                />
+                <div className={styles.divider} />
 
 
-                {/* =================================================
-                    ABAS
-                ================================================= */}
+                {/* ABAS */}
 
-                <div
-                    className={
-                        styles.tabsContainer
-                    }
-                >
+                <div className={styles.tabsContainer}>
 
-                    <span
-                        className={
-                            styles.tabsLabel
-                        }
-                    >
+                    <span className={styles.tabsLabel}>
                         Filtrar:
                     </span>
 
@@ -1302,9 +1286,7 @@ const EditarAtleta = ({
             </div>
 
 
-            {/* =================================================
-                MENSAGENS
-            ================================================= */}
+            {/* MENSAGENS */}
 
             {erro && (
 
@@ -1342,50 +1324,30 @@ const EditarAtleta = ({
             )}
 
 
-            {/* =================================================
-                CONTEÚDO
-            ================================================= */}
+            {/* CONTEÚDO */}
 
-            <div
-                className={styles.formCard}
-            >
+            <div className={styles.formCard}>
 
-                {/* =================================================
-                    DADOS PESSOAIS
-                ================================================= */}
+
+                {/* DADOS PESSOAIS */}
 
                 {abaAtiva === 'pessoais' && (
 
                     <>
-                        <h2
-                            className={
-                                styles.formTitle
-                            }
-                        >
+
+                        <h2 className={styles.formTitle}>
                             Dados pessoais
                         </h2>
 
 
-                        <div
-                            className={
-                                styles.formGrid
-                            }
-                        >
+                        <div className={styles.formGrid}>
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Nome completo do atleta
 
-                                    <span
-                                        className={
-                                            styles.required
-                                        }
-                                    >
+                                    <span className={styles.required}>
                                         *
                                     </span>
                                 </label>
@@ -1395,9 +1357,7 @@ const EditarAtleta = ({
                                     type="text"
                                     value={nome}
                                     onChange={(event) =>
-                                        setNome(
-                                            event.target.value
-                                        )
+                                        setNome(event.target.value)
                                     }
                                 />
 
@@ -1406,26 +1366,14 @@ const EditarAtleta = ({
                         </div>
 
 
-                        <div
-                            className={
-                                styles.formGrid3
-                            }
-                        >
+                        <div className={styles.formGrid3}>
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Data de Nascimento
 
-                                    <span
-                                        className={
-                                            styles.required
-                                        }
-                                    >
+                                    <span className={styles.required}>
                                         *
                                     </span>
                                 </label>
@@ -1433,9 +1381,7 @@ const EditarAtleta = ({
 
                                 <input
                                     type="date"
-                                    value={
-                                        dataNascimento
-                                    }
+                                    value={dataNascimento}
                                     onChange={(event) =>
                                         setDataNascimento(
                                             event.target.value
@@ -1446,11 +1392,7 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Sexo
@@ -1460,9 +1402,7 @@ const EditarAtleta = ({
                                 <select
                                     value={sexo}
                                     onChange={(event) =>
-                                        setSexo(
-                                            event.target.value
-                                        )
+                                        setSexo(event.target.value)
                                     }
                                 >
 
@@ -1491,11 +1431,7 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Categoria
@@ -1506,9 +1442,7 @@ const EditarAtleta = ({
                                     type="text"
                                     value={categoria}
                                     onChange={(event) =>
-                                        setCategoria(
-                                            event.target.value
-                                        )
+                                        setCategoria(event.target.value)
                                     }
                                 />
 
@@ -1517,17 +1451,9 @@ const EditarAtleta = ({
                         </div>
 
 
-                        <div
-                            className={
-                                styles.formGrid2
-                            }
-                        >
+                        <div className={styles.formGrid2}>
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Registro Geral (RG)
@@ -1536,23 +1462,22 @@ const EditarAtleta = ({
 
                                 <input
                                     type="text"
+                                    inputMode="numeric"
                                     value={rg}
                                     onChange={(event) =>
                                         setRg(
-                                            event.target.value
+                                            formatarRG(
+                                                event.target.value
+                                            )
                                         )
                                     }
-                                    placeholder="Digite o RG..."
+                                    placeholder="00.000.000-0"
                                 />
 
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Cadastro de Pessoa Física (CPF)
@@ -1561,12 +1486,16 @@ const EditarAtleta = ({
 
                                 <input
                                     type="text"
+                                    inputMode="numeric"
                                     value={cpf}
                                     onChange={(event) =>
                                         setCpf(
-                                            event.target.value
+                                            formatarCPF(
+                                                event.target.value
+                                            )
                                         )
                                     }
+                                    placeholder="000.000.000-00"
                                 />
 
                             </div>
@@ -1574,17 +1503,9 @@ const EditarAtleta = ({
                         </div>
 
 
-                        <div
-                            className={
-                                styles.formGrid2
-                            }
-                        >
+                        <div className={styles.formGrid2}>
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     E-mail
@@ -1595,9 +1516,7 @@ const EditarAtleta = ({
                                     type="email"
                                     value={email}
                                     onChange={(event) =>
-                                        setEmail(
-                                            event.target.value
-                                        )
+                                        setEmail(event.target.value)
                                     }
                                     placeholder="Digite o e-mail..."
                                 />
@@ -1605,11 +1524,7 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Telefone
@@ -1617,50 +1532,41 @@ const EditarAtleta = ({
 
 
                                 <input
-                                    type="tel"
+                                    type="text"
+                                    inputMode="numeric"
                                     value={telefone}
                                     onChange={(event) =>
                                         setTelefone(
-                                            event.target.value
+                                            formatarTelefone(
+                                                event.target.value
+                                            )
                                         )
                                     }
-                                    placeholder="Digite o telefone..."
+                                    placeholder="(11) 99999-9999"
                                 />
 
                             </div>
 
                         </div>
+
                     </>
                 )}
 
 
-                {/* =================================================
-                    CONTATO
-                ================================================= */}
+                {/* CONTATO */}
 
                 {abaAtiva === 'contato' && (
 
                     <>
-                        <h2
-                            className={
-                                styles.formTitle
-                            }
-                        >
+
+                        <h2 className={styles.formTitle}>
                             Dados do Responsável
                         </h2>
 
 
-                        <div
-                            className={
-                                styles.formGrid3
-                            }
-                        >
+                        <div className={styles.formGrid3}>
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Nome do Responsável
@@ -1669,9 +1575,7 @@ const EditarAtleta = ({
 
                                 <input
                                     type="text"
-                                    value={
-                                        responsavelNome
-                                    }
+                                    value={responsavelNome}
                                     onChange={(event) =>
                                         setResponsavelNome(
                                             event.target.value
@@ -1683,11 +1587,7 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Grau de Parentesco
@@ -1695,9 +1595,7 @@ const EditarAtleta = ({
 
 
                                 <select
-                                    value={
-                                        responsavelGrau
-                                    }
+                                    value={responsavelGrau}
                                     onChange={(event) =>
                                         setResponsavelGrau(
                                             event.target.value
@@ -1730,11 +1628,7 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Telefone
@@ -1742,16 +1636,17 @@ const EditarAtleta = ({
 
 
                                 <input
-                                    type="tel"
-                                    value={
-                                        responsavelTelefone
-                                    }
+                                    type="text"
+                                    inputMode="numeric"
+                                    value={responsavelTelefone}
                                     onChange={(event) =>
                                         setResponsavelTelefone(
-                                            event.target.value
+                                            formatarTelefone(
+                                                event.target.value
+                                            )
                                         )
                                     }
-                                    placeholder="Digite o telefone..."
+                                    placeholder="(11) 99999-9999"
                                 />
 
                             </div>
@@ -1759,26 +1654,14 @@ const EditarAtleta = ({
                         </div>
 
 
-                        <h2
-                            className={
-                                styles.sectionTitle
-                            }
-                        >
+                        <h2 className={styles.sectionTitle}>
                             Endereço
                         </h2>
 
 
-                        <div
-                            className={
-                                styles.formGridAddress
-                            }
-                        >
+                        <div className={styles.formGridAddress}>
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     CEP
@@ -1787,23 +1670,34 @@ const EditarAtleta = ({
 
                                 <input
                                     type="text"
+                                    inputMode="numeric"
+                                    maxLength={9}
                                     value={cep}
                                     onChange={(event) =>
                                         setCep(
-                                            event.target.value
+                                            formatarCEP(
+                                                event.target.value
+                                            )
                                         )
                                     }
                                     placeholder="00000-000"
                                 />
 
+                                {consultandoCep && (
+                                    <small
+                                        style={{
+                                            color: '#6B7D76',
+                                            marginTop: '5px',
+                                        }}
+                                    >
+                                        Buscando CEP...
+                                    </small>
+                                )}
+
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Endereço
@@ -1824,11 +1718,7 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.formGroupSmall
-                                }
-                            >
+                            <div className={styles.formGroupSmall}>
 
                                 <label>
                                     Nº
@@ -1839,9 +1729,7 @@ const EditarAtleta = ({
                                     type="text"
                                     value={numero}
                                     onChange={(event) =>
-                                        setNumero(
-                                            event.target.value
-                                        )
+                                        setNumero(event.target.value)
                                     }
                                     placeholder="Nº"
                                 />
@@ -1849,11 +1737,7 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Bairro
@@ -1864,9 +1748,7 @@ const EditarAtleta = ({
                                     type="text"
                                     value={bairro}
                                     onChange={(event) =>
-                                        setBairro(
-                                            event.target.value
-                                        )
+                                        setBairro(event.target.value)
                                     }
                                     placeholder="Digite o bairro..."
                                 />
@@ -1876,17 +1758,9 @@ const EditarAtleta = ({
                         </div>
 
 
-                        <div
-                            className={
-                                styles.formGrid2
-                            }
-                        >
+                        <div className={styles.formGrid2}>
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Complemento
@@ -1907,11 +1781,7 @@ const EditarAtleta = ({
                             </div>
 
 
-                            <div
-                                className={
-                                    styles.formGroup
-                                }
-                            >
+                            <div className={styles.formGroup}>
 
                                 <label>
                                     Cidade
@@ -1922,9 +1792,7 @@ const EditarAtleta = ({
                                     type="text"
                                     value={cidade}
                                     onChange={(event) =>
-                                        setCidade(
-                                            event.target.value
-                                        )
+                                        setCidade(event.target.value)
                                     }
                                     placeholder="Digite a cidade..."
                                 />
@@ -1937,34 +1805,21 @@ const EditarAtleta = ({
                 )}
 
 
-                {/* =================================================
-                    DOCUMENTOS
-                ================================================= */}
+                {/* DOCUMENTOS */}
 
                 {abaAtiva === 'documentos' && (
 
                     <>
-                        <div
-                            className={
-                                styles.docsHeader
-                            }
-                        >
+
+                        <div className={styles.docsHeader}>
 
                             <div>
 
-                                <h2
-                                    className={
-                                        styles.formTitle
-                                    }
-                                >
+                                <h2 className={styles.formTitle}>
                                     Repositório de Documentos e Termos
                                 </h2>
 
-                                <p
-                                    className={
-                                        styles.docsSubtitle
-                                    }
-                                >
+                                <p className={styles.docsSubtitle}>
                                     Gerenciamento de autorizações
                                     e termos de viagem.
                                 </p>
@@ -1974,15 +1829,12 @@ const EditarAtleta = ({
 
                             <button
                                 type="button"
-                                className={
-                                    styles.uploadButton
-                                }
+                                className={styles.uploadButton}
                             >
                                 <Upload size={18} />
 
                                 Upload de novo documento
                             </button>
-
                         </div>
 
 
@@ -2012,132 +1864,92 @@ const EditarAtleta = ({
 
                         ) : (
 
-                            <div
-                                className={
-                                    styles.docsGrid
-                                }
-                            >
+                            <div className={styles.docsGrid}>
 
-                                {documentos.map(
-                                    (doc) => (
+                                {documentos.map((doc) => (
 
-                                        <div
-                                            key={doc.id}
-                                            className={
-                                                styles.docCard
-                                            }
-                                        >
+                                    <div
+                                        key={doc.id}
+                                        className={styles.docCard}
+                                    >
 
-                                            <div
-                                                className={
-                                                    styles.docCardHeader
-                                                }
-                                            >
+                                        <div className={styles.docCardHeader}>
 
-                                                <span
-                                                    className={
-                                                        styles.docStatus
-                                                    }
-                                                >
+                                            <span className={styles.docStatus}>
 
-                                                    <Check size={12} />
+                                                <Check size={12} />
 
-                                                    Válido
+                                                Válido
 
-                                                </span>
-
-
-                                                <span
-                                                    className={
-                                                        styles.docMeta
-                                                    }
-                                                >
-                                                    {doc.tipo}
-                                                </span>
-
-                                            </div>
-
-
-                                            <h4
-                                                className={
-                                                    styles.docTitle
-                                                }
-                                            >
-                                                {doc.nome}
-                                            </h4>
-
-
-                                            <span
-                                                className={
-                                                    styles.docValidity
-                                                }
-                                            >
-                                                Documento cadastrado
                                             </span>
 
 
-                                            <div
-                                                className={
-                                                    styles.docCardFooter
-                                                }
-                                            >
-
-                                                <button
-                                                    type="button"
-                                                    className={
-                                                        styles.docAction
-                                                    }
-                                                    onClick={() =>
-                                                        window.open(
-                                                            doc.url,
-                                                            '_blank'
-                                                        )
-                                                    }
-                                                >
-
-                                                    <Eye size={14} />
-
-                                                    Visualizar
-
-                                                </button>
-
-
-                                                <a
-                                                    href={doc.url}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    className={
-                                                        styles.docAction
-                                                    }
-                                                >
-
-                                                    <Download size={14} />
-
-                                                    PDF
-
-                                                </a>
-
-
-                                                <button
-                                                    type="button"
-                                                    className={
-                                                        styles.docActionIcon
-                                                    }
-                                                    title="Atualizar"
-                                                >
-
-                                                    <RefreshCw
-                                                        size={16}
-                                                    />
-
-                                                </button>
-
-                                            </div>
+                                            <span className={styles.docMeta}>
+                                                {doc.tipo}
+                                            </span>
 
                                         </div>
 
-                                    )
-                                )}
+
+                                        <h4 className={styles.docTitle}>
+                                            {doc.nome}
+                                        </h4>
+
+
+                                        <span className={styles.docValidity}>
+                                            Documento cadastrado
+                                        </span>
+
+
+                                        <div className={styles.docCardFooter}>
+
+                                            <button
+                                                type="button"
+                                                className={styles.docAction}
+                                                onClick={() =>
+                                                    window.open(
+                                                        doc.url,
+                                                        '_blank'
+                                                    )
+                                                }
+                                            >
+
+                                                <Eye size={14} />
+
+                                                Visualizar
+
+                                            </button>
+
+
+                                            <a
+                                                href={doc.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className={styles.docAction}
+                                            >
+
+                                                <Download size={14} />
+
+                                                PDF
+
+                                            </a>
+
+
+                                            <button
+                                                type="button"
+                                                className={styles.docActionIcon}
+                                                title="Atualizar"
+                                            >
+
+                                                <RefreshCw size={16} />
+
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                ))}
 
                             </div>
 

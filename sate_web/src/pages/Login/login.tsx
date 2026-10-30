@@ -14,6 +14,7 @@ import {
 import styles from './login.module.css';
 
 import logoVerdeImg from '../../assets/img/logoVerde_img.png';
+import logo from '../../assets/img/logo.png';
 
 import futebolHero from '../../assets/img/hero/futebol.png.png';
 import basqueteHero from '../../assets/img/hero/basquete.png.png';
@@ -317,7 +318,7 @@ const Login = () => {
                     aria-label="Página inicial do SATE"
                 >
                     <img
-                        src={logoVerdeImg}
+                        src={logo}
                         alt="SATE"
                         className={styles.heroLogo}
                     />

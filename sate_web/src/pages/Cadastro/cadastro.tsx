@@ -22,6 +22,7 @@ import styles from './cadastro.module.css';
 import TermosUso from '../TermosUso/termosUso';
 
 import logoVerdeImg from '../../assets/img/logoVerde_img.png';
+import logo from '../../assets/img/logo.png';
 
 import futebolHero from '../../assets/img/hero/futebol.png.png';
 import basqueteHero from '../../assets/img/hero/basquete.png.png';
@@ -326,7 +327,7 @@ const Cadastro = () => {
           aria-label="Página inicial do SATE"
         >
           <img
-            src={logoVerdeImg}
+            src={logo}
             alt="SATE"
             className={styles.heroLogo}
           />

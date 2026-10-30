@@ -12,17 +12,30 @@
   --stats-muted: var(--texto-suave);
   --stats-border: var(--borda-neutra);
 
+  position: relative;
+  isolation: isolate;
   width: calc(100% + 96px);
   min-height: calc(100vh - 64px + 48px);
   margin: -48px -48px 0;
   padding: 42px clamp(24px, 5vw, 76px) 56px;
   box-sizing: border-box;
+
   background:
-    radial-gradient(ellipse 340px 230px at 96% 0%, rgba(244, 63, 120, 0.16) 0%, rgba(244, 63, 120, 0.08) 38%, rgba(244, 63, 120, 0) 76%),
-    #faf5ee;
-  color: #10251f;
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(244, 63, 120, 0.13) 0%,
+      rgba(244, 63, 120, 0.06) 38%,
+      transparent 76%
+    ),
+    var(--stats-bg);
+
+  color: var(--stats-text);
   font-family: 'Poppins', sans-serif;
 }
+
+/* =====================================
+   EFEITO DE FUNDO
+===================================== */
 
 .page::before {
   content: '';
@@ -33,6 +46,7 @@
   width: 440px;
   height: 340px;
   pointer-events: none;
+
   background: radial-gradient(
     ellipse at center,
     var(--brilho-pagina-inicio) 0%,
@@ -40,6 +54,10 @@
     var(--brilho-pagina-fim) 72%
   );
 }
+
+/* =====================================
+   CONTEÚDO
+===================================== */
 
 .content {
   width: min(100%, 1232px);
@@ -60,7 +78,7 @@
 
 .pageHeader h1 {
   margin: 0;
-  color: var(--texto);
+  color: var(--stats-text);
   font-family: var(--fonte-titulo);
   font-size: clamp(30px, 2.55vw, 44px);
   font-weight: 800;
@@ -69,7 +87,7 @@
 }
 
 .pageHeader h1 em {
-  color: var(--rosa);
+  color: var(--stats-pink);
   font-family: var(--fonte-titulo);
   font-weight: 600;
   letter-spacing: -0.6px;
@@ -120,14 +138,14 @@
   border: 0;
   outline: 0;
   background: transparent;
-  color: var(--texto);
+  color: var(--stats-text);
   font: 400 13px var(--fonte-base);
   cursor: pointer;
 }
 
 .filterSelect select option {
   background: var(--bg-surface);
-  color: var(--texto);
+  color: var(--stats-text);
 }
 
 .filterSelect:focus-within {
@@ -191,7 +209,7 @@
 }
 
 .summaryItem strong {
-  color: var(--texto);
+  color: var(--stats-text);
   font-family: var(--fonte-titulo);
   font-size: 35px;
   font-weight: 700;
@@ -234,7 +252,7 @@
 
 .chartHeader h2 {
   margin: 0;
-  color: var(--texto);
+  color: var(--stats-text);
   font-family: var(--fonte-titulo);
   font-size: 18px;
   font-weight: 700;
@@ -329,7 +347,7 @@
 }
 
 .actionLabel strong {
-  color: var(--texto);
+  color: var(--stats-text);
   font-size: 12px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -388,6 +406,32 @@
   fill: var(--stats-bg);
   stroke: var(--stats-green);
   stroke-width: 2;
+}
+
+/* =====================================
+   MODO ESCURO
+===================================== */
+
+:global(:root[data-theme='dark']) .page {
+  --stats-bg: var(--bg-page);
+  --stats-text: var(--texto);
+  --stats-muted: var(--texto-suave);
+  --stats-border: var(--borda-neutra);
+
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(244, 63, 120, 0.10) 0%,
+      rgba(244, 63, 120, 0.04) 38%,
+      transparent 76%
+    ),
+    var(--bg-page);
+
+  color: var(--texto);
+}
+
+:global(:root[data-theme='dark']) .pageHeader h1 em {
+  color: #7BE0A8;
 }
 
 /* =====================================
@@ -539,9 +583,4 @@
   .lineSvg {
     min-height: 150px;
   }
-}
-
-/* H1 verde-claro no modo escuro */
-:global(:root[data-theme='dark']) .pageHeader h1 em {
-  color: #7BE0A8;
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'atleta_navigation.dart';
 import 'atleta_qrcode_page.dart';
+import '../../theme/sate_theme.dart';
 
 class AtletaVinculoPage extends StatefulWidget {
   final String nomeUsuario;
@@ -22,10 +23,10 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
 
   bool carregando = false;
 
-  static const Color verde = Color(0xFF00845F);
-  static const Color rosa = Color(0xFFE98BA8);
-  static const Color azul = Color(0xFF001E98);
-  static const Color fundo = Color(0xFFFCFCFC);
+  static const Color verde = Color(0xFF005942);
+  static const Color rosa = Color(0xFFEF476F);
+  static const Color azul = Color(0xFF003D31);
+  static const Color fundo = Color(0xFFFAF5EE);
 
   @override
   void dispose() {
@@ -122,7 +123,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                   width: 42,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: Color(0xFFD5C9BA),
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
@@ -145,13 +146,13 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
 
                 const SizedBox(height: 18),
 
-                const Text(
-                  'Equipe encontrada!',
+                const Text.rich(
+                  TextSpan(children: [TextSpan(text: 'Equipe '), TextSpan(text: 'encontrada!', style: SateEstilo.destaque)]),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Color(0xFF10251F),
                   ),
                 ),
 
@@ -163,7 +164,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                   style: TextStyle(
                     fontSize: 14,
                     height: 1.4,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF68736F),
                   ),
                 ),
 
@@ -176,7 +177,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                     color: fundo,
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
-                      color: Colors.grey.shade200,
+                      color: Color(0xFFE8DFD3),
                     ),
                   ),
                   child: Column(
@@ -212,7 +213,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                                   'Equipe esportiva',
                                   style: TextStyle(
                                     fontSize: 13,
-                                    color: Colors.grey,
+                                    color: Color(0xFF8A938F),
                                   ),
                                 ),
                               ],
@@ -224,7 +225,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                       const SizedBox(height: 16),
 
                       Divider(
-                        color: Colors.grey.shade200,
+                        color: Color(0xFFE8DFD3),
                       ),
 
                       const SizedBox(height: 12),
@@ -233,7 +234,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                         children: [
                           Icon(
                             Icons.person_outline_rounded,
-                            color: Colors.grey.shade600,
+                            color: Color(0xFF68736F),
                             size: 21,
                           ),
                           const SizedBox(width: 10),
@@ -241,7 +242,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                             'Treinador: ',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey,
+                              color: Color(0xFF8A938F),
                             ),
                           ),
                           const Text(
@@ -347,13 +348,13 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
 
               // TÍTULO
               const Center(
-                child: Text(
-                  'Entre na sua equipe',
+                child: Text.rich(
+                  TextSpan(children: [TextSpan(text: 'Entre na sua '), TextSpan(text: 'equipe', style: SateEstilo.destaque)]),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 27,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Color(0xFF10251F),
                   ),
                 ),
               ),
@@ -368,7 +369,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                   style: TextStyle(
                     fontSize: 14,
                     height: 1.5,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF68736F),
                   ),
                 ),
               ),
@@ -381,7 +382,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: Color(0xFF10251F),
                 ),
               ),
 
@@ -400,7 +401,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                 decoration: InputDecoration(
                   hintText: 'EX: TRN-4829',
                   hintStyle: TextStyle(
-                    color: Colors.grey.shade400,
+                    color: Color(0xFFA3ADA9),
                     fontSize: 15,
                     letterSpacing: 1,
                   ),
@@ -417,13 +418,13 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(
-                      color: Colors.grey.shade200,
+                      color: Color(0xFFE8DFD3),
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(
-                      color: Colors.grey.shade200,
+                      color: Color(0xFFE8DFD3),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -446,7 +447,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                   onPressed: carregando ? null : vincular,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: verde,
-                    disabledBackgroundColor: Colors.grey.shade300,
+                    disabledBackgroundColor: Color(0xFFD5C9BA),
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -489,19 +490,19 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
               // DIVISOR "OU"
               Row(
                 children: [
-                  Expanded(child: Divider(color: Colors.grey.shade300)),
+                  Expanded(child: Divider(color: Color(0xFFD5C9BA))),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       'ou',
                       style: TextStyle(
-                        color: Colors.grey.shade500,
+                        color: Color(0xFF8A938F),
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  Expanded(child: Divider(color: Colors.grey.shade300)),
+                  Expanded(child: Divider(color: Color(0xFFD5C9BA))),
                 ],
               ),
 
@@ -537,12 +538,12 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
               const SizedBox(height: 32),
 
               // COMO FUNCIONA
-              const Text(
-                'Como funciona?',
+              const Text.rich(
+                TextSpan(children: [TextSpan(text: 'Como '), TextSpan(text: 'funciona?', style: SateEstilo.destaque)]),
                 style: TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Color(0xFF10251F),
                 ),
               ),
 
@@ -599,7 +600,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                         style: TextStyle(
                           fontSize: 12.5,
                           height: 1.4,
-                          color: Colors.grey.shade700,
+                          color: Color(0xFF4F5A56),
                         ),
                       ),
                     ),
@@ -630,7 +631,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: Color(0xFFE8DFD3),
         ),
       ),
       child: Row(
@@ -665,7 +666,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                   style: const TextStyle(
                     fontSize: 14.5,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Color(0xFF10251F),
                   ),
                 ),
                 const SizedBox(height: 3),
@@ -674,7 +675,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
                   style: TextStyle(
                     fontSize: 12.5,
                     height: 1.3,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF68736F),
                   ),
                 ),
               ],

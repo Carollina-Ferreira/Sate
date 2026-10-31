@@ -1,128 +1,68 @@
-@import url(
-  'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap'
-);
-
-
-/* =========================================================
-   PÁGINA
-========================================================= */
-
 .page {
-  --verde-dark: #005942;
-  --verde-profundo: #003d31;
-  --verde-mais-escuro: #002f26;
-  --verde-claro: #dff7ee;
-
-  --verde-botao: #007d62;
-  --verde-botao-hover: #009875;
-
-  width: 100%;
-  min-height: 100vh;
-
-  padding: 38px 42px 54px;
-
+  width: calc(100% + 96px);
+  min-height: calc(100vh - 64px + 48px);
+  margin: -48px -48px 0;
+  padding: 42px clamp(24px, 5vw, 76px) 56px;
   box-sizing: border-box;
+  overflow-x: clip;
 
-  background: var(--verde-dark);
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(244, 63, 120, 0.16) 0%,
+      rgba(244, 63, 120, 0.08) 38%,
+      rgba(244, 63, 120, 0) 76%
+    ),
+    #faf5ee;
 
-  font-family:
-    'Poppins',
-    sans-serif;
+  color: #10251f;
+  font-family: 'Poppins', sans-serif;
 }
-
 
 /* =========================================================
    CABEÇALHO
 ========================================================= */
 
 .header {
-  width: 100%;
-
+  width: min(100%, 1200px);
+  margin: 0 auto 36px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-
-  gap: 30px;
-
-  margin-bottom: 24px;
+  gap: 28px;
 }
 
 .headerText {
+  min-width: 0;
   max-width: 700px;
 }
-
-
-/* =========================================================
-   TÍTULO
-========================================================= */
 
 .title {
   margin: 0;
-
-  color: #ffffff;
-
-  font-family:
-    'Poppins',
-    sans-serif;
-
-  font-size:
-    clamp(
-      34px,
-      3.1vw,
-      46px
-    );
-
+  color: #10251f;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(34px, 3vw, 44px);
   font-weight: 700;
-
-  line-height: 1.05;
-
+  line-height: 1.08;
   letter-spacing: -1.4px;
 }
 
-
-/* =========================================================
-   PARTE ITÁLICA
-========================================================= */
-
 .title em {
-  color: var(--verde-claro);
-
-  font-family:
-    'DM Serif Display',
-    serif;
-
+  color: #f04470;
+  font-family: 'DM Serif Display', serif;
   font-style: italic;
-
   font-weight: 400;
-
   letter-spacing: -0.5px;
 }
 
-
-/* =========================================================
-   DESCRIÇÃO
-========================================================= */
-
 .description {
   max-width: 700px;
-
-  margin: 10px 0 0;
-
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.74
-    );
-
+  margin: 14px 0 0;
+  color: #778079;
   font-size: 13px;
-
   font-weight: 400;
-
   line-height: 1.6;
 }
-
 
 /* =========================================================
    AÇÕES DO CABEÇALHO
@@ -131,244 +71,119 @@
 .headerActions {
   display: flex;
   align-items: center;
-
-  gap: 10px;
-
+  gap: 12px;
   flex-shrink: 0;
 }
-
-
-/* =========================================================
-   BOTÕES GERAIS
-========================================================= */
 
 .newTeamButton,
 .editTeamButton {
   min-width: 148px;
   height: 46px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  gap: 8px;
-
-  padding: 0 18px;
-
+  gap: 9px;
+  padding: 0 20px;
   box-sizing: border-box;
-
-  border-radius: 11px;
-
-  font-family:
-    'Poppins',
-    sans-serif;
-
+  border-radius: 12px;
+  font-family: inherit;
   font-size: 12px;
-
   font-weight: 600;
-
   white-space: nowrap;
-
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
-
-/* =========================================================
-   NOVA EQUIPE
-========================================================= */
-
+/* Nova equipe — ação principal (verde) */
 .newTeamButton {
-  border: none;
-
-  background:
-    var(--verde-botao);
-
+  border: 1px solid #005942;
+  background: #005942;
   color: #ffffff;
-
-  box-shadow:
-    0
-    8px
-    18px
-    rgba(
-      0,
-      35,
-      26,
-      0.16
-    );
 }
 
 .newTeamButton:hover:not(:disabled) {
-  background:
-    var(--verde-botao-hover);
-
-  transform:
-    translateY(-1px);
-
-  box-shadow:
-    0
-    11px
-    22px
-    rgba(
-      0,
-      35,
-      26,
-      0.22
-    );
+  border-color: #007d62;
+  background: #007d62;
+  transform: translateY(-1px);
 }
 
 .newTeamButton:disabled {
-  opacity: 0.6;
-
+  opacity: 0.5;
   cursor: not-allowed;
-
   transform: none;
 }
 
-
-/* =========================================================
-   EDITAR EQUIPE
-========================================================= */
-
+/* Editar equipe — ação secundária */
 .editTeamButton {
-  border:
-    1px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.5
-    );
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.06
-    );
-
-  color: #ffffff;
+  border: 1px solid #ddcfc0;
+  background: #ffffff;
+  color: #00634d;
 }
 
 .editTeamButton:hover {
-  border-color: #ffffff;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.12
-    );
-
-  transform:
-    translateY(-1px);
+  border-color: #9dbbb0;
+  background: #f6fbf8;
+  transform: translateY(-1px);
 }
 
-.editTeamButtonActive {
-  border-color: #ffffff;
-
-  background: #ffffff;
-
-  color:
-    var(--verde-dark);
+/* Modo de edição ativo — destaque em rosa */
+.editTeamButtonActive,
+.editTeamButtonActive:hover {
+  border-color: #f04470;
+  background: #fde6ec;
+  color: #b82a55;
 }
-
-
-/* =========================================================
-   SINAL +
-========================================================= */
 
 .plus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   font-size: 17px;
-
   font-weight: 700;
-
   line-height: 1;
 }
 
+.newTeamButton:focus-visible,
+.editTeamButton:focus-visible,
+.filterButton:focus-visible,
+.teamCard:focus-visible {
+  outline: 2px solid #f04470;
+  outline-offset: 3px;
+}
 
 /* =========================================================
    AVISO DE EDIÇÃO
 ========================================================= */
 
 .editNotice {
-  width: fit-content;
-
+  width: min(100%, 1200px);
   display: flex;
   align-items: center;
-
   gap: 8px;
-
-  margin:
-    -2px
-    0
-    18px;
-
-  padding:
-    9px
-    13px;
-
-  border:
-    1px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.16
-    );
-
-  border-radius: 10px;
-
-  background:
-    rgba(
-      0,
-      47,
-      38,
-      0.28
-    );
-
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.9
-    );
-
-  font-size: 11px;
-
+  margin: -10px auto 22px;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  border: 1px solid #f6c3d1;
+  border-radius: 11px;
+  background: #fde6ec;
+  color: #a02a4f;
+  font-size: 12px;
   font-weight: 500;
 }
-
 
 /* =========================================================
    FILTROS
 ========================================================= */
 
 .filters {
-  width: 100%;
-
+  width: min(100%, 1200px);
   display: flex;
   align-items: center;
-
   gap: 9px;
-
-  margin-bottom: 28px;
-
+  margin: 0 auto 30px;
+  padding: 4px 2px 8px;
+  box-sizing: border-box;
   overflow-x: auto;
-
   scrollbar-width: none;
 }
 
@@ -376,155 +191,68 @@
   display: none;
 }
 
-
-/* =========================================================
-   BOTÃO DE FILTRO
-========================================================= */
-
 .filterButton {
-  height: 38px;
-
+  height: 40px;
   flex-shrink: 0;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  gap: 7px;
-
-  padding:
-    0
-    15px;
-
-  border:
-    1px solid
-    #cad8d2;
-
+  gap: 8px;
+  padding: 0 16px;
+  border: 1px solid #ddcfc0;
   border-radius: 999px;
-
-  background:
-    #ffffff;
-
-  color:
-    #172b23;
-
-  font-family:
-    'Poppins',
-    sans-serif;
-
-  font-size: 11px;
-
+  background: #ffffff;
+  color: #263930;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
   font-weight: 500;
-
   white-space: nowrap;
-
   cursor: pointer;
-
-  box-shadow:
-    0
-    2px
-    7px
-    rgba(
-      0,
-      35,
-      26,
-      0.05
-    );
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
 .filterButton:hover {
-  background:
-    #f5f8f6;
-
-  border-color:
-    #aebfb7;
-
-  transform:
-    translateY(-1px);
+  border-color: #9dbbb0;
+  background: #f6fbf8;
+  transform: translateY(-1px);
 }
-
-
-/* =========================================================
-   FILTRO ATIVO
-========================================================= */
 
 .filterButton.active,
 .active {
-  border-color:
-    var(--verde-profundo);
-
-  background:
-    var(--verde-profundo);
-
+  border-color: #005942;
+  background: #005942;
   color: #ffffff;
-
-  box-shadow:
-    0
-    4px
-    10px
-    rgba(
-      0,
-      35,
-      26,
-      0.18
-    );
 }
 
 .filterButton.active:hover,
 .active:hover {
-  background:
-    var(--verde-mais-escuro);
-
-  border-color:
-    var(--verde-mais-escuro);
+  border-color: #007d62;
+  background: #007d62;
 }
-
-
-/* =========================================================
-   EMOJI DO ESPORTE
-========================================================= */
 
 .filterIcon {
   width: 18px;
   height: 18px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   flex-shrink: 0;
-
   font-size: 14px;
-
   line-height: 1;
 }
-
 
 /* =========================================================
    GRID DE EQUIPES
 ========================================================= */
 
 .teamsGrid {
-  width: 100%;
-
+  width: min(100%, 1200px);
+  margin: 0 auto;
   display: grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(280px, 1fr)
-    );
-
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 22px;
+  justify-content: start;
 }
-
 
 /* =========================================================
    CARD
@@ -532,73 +260,32 @@
 
 .teamCard {
   width: 100%;
-
-  overflow: hidden;
-
   position: relative;
-
-  border-radius: 20px;
-
-  background: #f7f8f7;
-
+  overflow: hidden;
+  border: 1px solid #ece2d6;
+  border-radius: 18px;
+  background: #ffffff;
   color: #20352d;
-
   cursor: pointer;
-
-  box-shadow:
-    0
-    8px
-    20px
-    rgba(
-      0,
-      0,
-      0,
-      0.12
-    );
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  box-shadow: 0 6px 18px rgba(77, 44, 24, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .teamCard:hover {
-  transform:
-    translateY(-4px);
-
-  box-shadow:
-    0
-    14px
-    28px
-    rgba(
-      0,
-      0,
-      0,
-      0.16
-    );
+  transform: translateY(-4px);
+  border-color: #e0cfbd;
+  box-shadow: 0 14px 30px rgba(77, 44, 24, 0.1);
 }
 
-
-/* =========================================================
-   CARD EDITÁVEL
-========================================================= */
-
+/* Cards no modo de edição */
 .teamEditable {
-  outline:
-    2px dashed
-    rgba(
-      255,
-      255,
-      255,
-      0.45
-    );
-
+  outline: 2px dashed rgba(240, 68, 112, 0.5);
   outline-offset: 4px;
 }
 
 .teamEditable:hover {
-  outline-color: #66ddb7;
+  outline-color: #f04470;
 }
-
 
 /* =========================================================
    IMAGEM
@@ -606,74 +293,39 @@
 
 .teamImageArea {
   height: 165px;
-
   position: relative;
-
   overflow: hidden;
-
-  background: #d8e2dd;
+  background: #efe6da;
 }
 
 .teamImage {
   width: 100%;
   height: 100%;
-
   display: block;
-
   object-fit: cover;
-
-  transition:
-    transform 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .teamCard:hover .teamImage {
-  transform:
-    scale(1.025);
+  transform: scale(1.025);
 }
-
-
-/* =========================================================
-   BADGE DA MODALIDADE
-========================================================= */
 
 .teamSportBadge {
   position: absolute;
-
   top: 14px;
   left: 14px;
-
-  min-height: 27px;
-
+  min-height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 6px;
-
-  padding:
-    0
-    11px;
-
+  padding: 0 12px;
   border-radius: 999px;
-
   color: #ffffff;
-
-  font-size: 10px;
-
+  font-size: 11px;
   font-weight: 600;
-
-  box-shadow:
-    0
-    4px
-    10px
-    rgba(
-      0,
-      0,
-      0,
-      0.12
-    );
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
 }
-
 
 /* =========================================================
    TENDÊNCIA
@@ -681,46 +333,29 @@
 
 .trendIcon {
   position: absolute;
-
   top: 13px;
   right: 13px;
-
-  width: 33px;
-  height: 33px;
-
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
-  background:
-    #ffffff;
-
-  box-shadow:
-    0
-    4px
-    10px
-    rgba(
-      0,
-      0,
-      0,
-      0.15
-    );
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .trendUp {
-  color: #0aaa71;
+  color: #0aa16c;
 }
 
 .trendDown {
-  color: #df4646;
+  color: #d52941;
 }
 
 .trendStable {
-  color: #68756f;
+  color: #7c827d;
 }
-
 
 /* =========================================================
    CONTEÚDO
@@ -728,87 +363,40 @@
 
 .teamContent {
   position: relative;
-
-  padding:
-    24px
-    16px
-    15px;
+  padding: 26px 18px 16px;
 }
-
-
-/* =========================================================
-   ÍCONE FLUTUANTE
-========================================================= */
 
 .teamFloatingIcon {
   width: 48px;
   height: 48px;
-
   position: absolute;
-
   top: -31px;
-  left: 16px;
-
+  left: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border:
-    5px solid
-    #ffffff;
-
+  border: 5px solid #ffffff;
   border-radius: 13px;
-
   background: #ffffff;
-
-  box-shadow:
-    0
-    4px
-    11px
-    rgba(
-      0,
-      0,
-      0,
-      0.12
-    );
+  box-shadow: 0 4px 11px rgba(77, 44, 24, 0.12);
 }
-
-
-/* =========================================================
-   NOME
-========================================================= */
 
 .teamName {
-  margin:
-    0
-    0
-    3px;
-
-  color: #172b23;
-
+  margin: 0 0 4px;
+  color: #152b23;
   font-size: 17px;
-
   font-weight: 700;
+  letter-spacing: -0.3px;
 }
-
-
-/* =========================================================
-   META
-========================================================= */
 
 .teamMeta {
   display: flex;
   align-items: center;
-
   gap: 7px;
-
-  margin-bottom: 14px;
-
-  color: #728079;
-
-  font-size: 9px;
+  margin-bottom: 16px;
+  color: #7c827d;
+  font-size: 11px;
 }
-
 
 /* =========================================================
    ESTATÍSTICAS
@@ -816,52 +404,36 @@
 
 .teamStats {
   display: grid;
-
-  grid-template-columns:
-    repeat(
-      3,
-      minmax(0, 1fr)
-    );
-
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 9px;
 }
 
 .statBox {
-  min-height: 64px;
-
+  min-height: 66px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  border:
-    1px solid
-    #e0e6e3;
-
+  border: 1px solid #efe5d9;
   border-radius: 12px;
-
-  background:
-    #f0f3f1;
+  background: #faf5ee;
 }
 
 .statBox span {
   margin-bottom: 4px;
-
-  color: #75837c;
-
-  font-size: 7px;
-
+  color: #8a8378;
+  font-size: 9px;
   font-weight: 700;
+  letter-spacing: 0.6px;
 }
 
 .statBox strong {
   font-size: 20px;
-
   font-weight: 700;
 }
 
 .statWin {
-  color: #13ad69;
+  color: #0aa16c;
 }
 
 .statDraw {
@@ -869,101 +441,74 @@
 }
 
 .statLoss {
-  color: #d73939;
+  color: #d52941;
 }
-
 
 /* =========================================================
    PRÓXIMA PARTIDA
 ========================================================= */
 
 .nextMatch {
-  min-height: 57px;
-
+  min-height: 60px;
   display: flex;
   align-items: center;
-
-  gap: 9px;
-
-  padding:
-    0
-    14px;
-
-  border-top:
-    1px solid
-    #e2e8e5;
-
-  background:
-    #edf2ef;
+  gap: 10px;
+  padding: 0 16px;
+  border-top: 1px solid #efe5d9;
+  background: #fbf7f1;
 }
 
 .nextMatchIcon {
-  width: 31px;
-  height: 31px;
-
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 9px;
-
-  background:
-    #d9edf5;
-
-  color:
-    #1685be;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #fde6ec;
+  color: #f04470;
 }
 
 .nextMatch > div:last-child {
   min-width: 0;
-
   display: flex;
   flex-direction: column;
 }
 
 .nextMatch span {
-  color: #74837b;
-
-  font-size: 6.5px;
-
+  color: #8a8378;
+  font-size: 9px;
   font-weight: 700;
+  letter-spacing: 0.6px;
 }
 
 .nextMatch strong {
   overflow: hidden;
-
   margin-top: 2px;
-
-  color:
-    #263b32;
-
-  font-size: 8px;
-
+  color: #263b32;
+  font-size: 11px;
   font-weight: 600;
-
   white-space: nowrap;
-
   text-overflow: ellipsis;
 }
-
 
 /* =========================================================
    RESPONSIVO
 ========================================================= */
 
-@media (max-width: 800px) {
+@media (max-width: 1180px) {
   .page {
-    padding:
-      30px
-      24px
-      42px;
+    width: calc(100% + 56px);
+    margin: -28px -28px 0;
+    padding: 34px 28px 48px;
   }
+}
 
+@media (max-width: 800px) {
   .header {
     align-items: flex-start;
-
     flex-direction: column;
-
     gap: 20px;
   }
 
@@ -977,17 +522,15 @@
   }
 }
 
-
 @media (max-width: 650px) {
   .page {
-    padding:
-      24px
-      14px
-      36px;
+    width: calc(100% + 28px);
+    margin: -28px -14px 0;
+    padding: 28px 14px 36px;
   }
 
   .title {
-    font-size: 31px;
+    font-size: 30px;
   }
 
   .description {
@@ -1001,24 +544,18 @@
   .newTeamButton,
   .editTeamButton {
     width: 100%;
-
+    min-width: 0;
     flex: none;
   }
 
   .filters {
     gap: 8px;
-
     margin-bottom: 22px;
   }
 
   .filterButton {
     height: 38px;
-
-    padding:
-      0
-      13px;
-
-    font-size: 11px;
+    padding: 0 13px;
   }
 
   .filterIcon {
@@ -1028,4 +565,136 @@
   .teamsGrid {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* =========================================
+   EQUIPES — AJUSTE DE TEMA
+========================================= */
+
+/* Evita a faixa branca abaixo da página */
+:global(html),
+:global(body),
+:global(#root) {
+  min-height: 100%;
+}
+
+/* Modo escuro: fundo da página */
+:global(:root[data-theme='dark']) .page {
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(101, 221, 176, 0.10),
+      transparent 76%
+    ),
+    #082f25;
+  color: #f1f8f4;
+}
+
+/* Título */
+:global(:root[data-theme='dark']) .title {
+  color: #f1f8f4;
+}
+
+:global(:root[data-theme='dark']) .title em {
+  color: #65ddb0;
+}
+
+/* Descrição */
+:global(:root[data-theme='dark']) .description,
+:global(:root[data-theme='dark']) .teamMeta {
+  color: #b5cec2;
+}
+
+/* Cards: mantém estrutura e sombras originais */
+:global(:root[data-theme='dark']) .teamCard {
+  background: #104334;
+  border-color: #285b49;
+  color: #f1f8f4;
+}
+
+:global(:root[data-theme='dark']) .teamName,
+:global(:root[data-theme='dark']) .nextMatch strong {
+  color: #f1f8f4;
+}
+
+/* Estatísticas */
+:global(:root[data-theme='dark']) .statBox {
+  background: #082f25;
+  border-color: #285b49;
+}
+
+:global(:root[data-theme='dark']) .statBox span,
+:global(:root[data-theme='dark']) .nextMatch span {
+  color: #b5cec2;
+}
+
+:global(:root[data-theme='dark']) .statDraw {
+  color: #f1f8f4;
+}
+
+/* Próxima partida */
+:global(:root[data-theme='dark']) .nextMatch {
+  background: #0b382b;
+  border-color: #285b49;
+}
+
+:global(:root[data-theme='dark']) .nextMatchIcon {
+  background: #164d3d;
+  color: #65ddb0;
+}
+
+/* Filtros */
+:global(:root[data-theme='dark']) .filterButton,
+:global(:root[data-theme='dark']) .editTeamButton {
+  background: #104334;
+  border-color: #285b49;
+  color: #f1f8f4;
+}
+
+:global(:root[data-theme='dark']) .filterButton.active,
+:global(:root[data-theme='dark']) .filterButton.active:hover {
+  background: #006b50;
+  border-color: #65ddb0;
+  color: #ffffff;
+}
+
+/* Edição */
+:global(:root[data-theme='dark']) .editTeamButtonActive,
+:global(:root[data-theme='dark']) .editTeamButtonActive:hover {
+  background: #164d3d;
+  border-color: #65ddb0;
+  color: #65ddb0;
+}
+
+/* Ícones flutuantes */
+:global(:root[data-theme='dark']) .trendIcon {
+  background: #104334;
+}
+
+:global(:root[data-theme='dark']) .teamFloatingIcon {
+  border-color: #104334;
+  background: #104334;
+}
+
+/* Corrige o espaço que aparece abaixo da página */
+:global(html),
+:global(body),
+:global(#root) {
+  min-height: 100vh;
+  margin-bottom: 0;
+}
+
+:global(body) {
+  background: #faf5ee;
+}
+
+:global(:root[data-theme='dark'] body) {
+  background: #082f25;
+}
+
+/* Garante que o fundo cubra toda a altura visível */
+.page {
+  min-height: 100vh;
+  padding-bottom: 56px;
 }

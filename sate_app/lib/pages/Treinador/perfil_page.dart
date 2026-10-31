@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../login_page.dart';
+import '../../theme/sate_theme.dart';
 
 class PerfilPage extends StatelessWidget {
   final String nomeUsuario;
@@ -12,11 +13,11 @@ class PerfilPage extends StatelessWidget {
     required this.emailUsuario,
   });
 
-  static const Color verde = Color(0xFF00845F);
-  static const Color verdeEscuro = Color(0xFF006B4F);
-  static const Color verdeClaro = Color(0xFFE8F5F0);
-  static const Color fundo = Color(0xFFF7F7F7);
-  static const Color cinza = Color(0xFF777777);
+  static const Color verde = Color(0xFF005942);
+  static const Color verdeEscuro = Color(0xFF003D31);
+  static const Color verdeClaro = Color(0xFFDFF7EE);
+  static const Color fundo = Color(0xFFFAF5EE);
+  static const Color cinza = Color(0xFF68736F);
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +31,10 @@ class PerfilPage extends StatelessWidget {
 
         automaticallyImplyLeading: false,
 
-        title: const Text(
-          'Perfil',
+        title: const Text.rich(
+          TextSpan(children: [TextSpan(text: 'Perfil', style: SateEstilo.destaque)]),
           style: TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -51,7 +52,7 @@ class PerfilPage extends StatelessWidget {
             },
             icon: const Icon(
               Icons.notifications_none_rounded,
-              color: Colors.black87,
+              color: Color(0xFF10251F),
               size: 27,
             ),
           ),
@@ -73,7 +74,7 @@ class PerfilPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: Color(0xFF10251F),
               ),
             ),
 
@@ -137,7 +138,7 @@ class PerfilPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: Color(0xFF10251F),
               ),
             ),
 
@@ -180,10 +181,10 @@ class PerfilPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
+            color: Color(0xFF10251F).withValues(alpha: 0.025),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -246,7 +247,7 @@ class PerfilPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: ListTile(
         onTap: onTap,
@@ -266,12 +267,12 @@ class PerfilPage extends StatelessWidget {
         ),
         subtitle: Text(
           subtitulo,
-          style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+          style: TextStyle(fontSize: 11, color: Color(0xFF68736F)),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,
           size: 15,
-          color: Colors.grey.shade500,
+          color: Color(0xFF8A938F),
         ),
       ),
     );
@@ -288,16 +289,16 @@ class PerfilPage extends StatelessWidget {
         onPressed: () {
           _confirmarSaida(context);
         },
-        icon: const Icon(Icons.logout_rounded, color: Colors.redAccent),
+        icon: const Icon(Icons.logout_rounded, color: Color(0xFFC0392B)),
         label: const Text(
           'Sair da conta',
           style: TextStyle(
-            color: Colors.redAccent,
+            color: Color(0xFFC0392B),
             fontWeight: FontWeight.w600,
           ),
         ),
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Color(0xFFFFD6DD)),
+          side: const BorderSide(color: Color(0xFFFDE6EC)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -329,7 +330,7 @@ class PerfilPage extends StatelessWidget {
               },
               child: const Text(
                 'CANCELAR',
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: Color(0xFF8A938F)),
               ),
             ),
             TextButton(
@@ -342,7 +343,7 @@ class PerfilPage extends StatelessWidget {
               },
               child: const Text(
                 'SAIR',
-                style: TextStyle(color: Colors.redAccent),
+                style: TextStyle(color: Color(0xFFC0392B)),
               ),
             ),
           ],
@@ -356,7 +357,7 @@ class PerfilPage extends StatelessWidget {
 // TELA INTERNA PADRÃO (usada por todas as subtelas)
 // ===================================================================
 
-const Color verdeAtleta = Color(0xFF00845F);
+const Color verdeAtleta = Color(0xFF005942);
 
 class _TelaInterna extends StatelessWidget {
   final String titulo;
@@ -367,9 +368,9 @@ class _TelaInterna extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
+      backgroundColor: const Color(0xFFFAF5EE),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF7F7F7),
+        backgroundColor: const Color(0xFFFAF5EE),
         elevation: 0,
         centerTitle: false,
         leading: IconButton(
@@ -378,14 +379,14 @@ class _TelaInterna extends StatelessWidget {
           },
           icon: const Icon(
             Icons.arrow_back_rounded,
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             size: 28,
           ),
         ),
         title: Text(
           titulo,
           style: const TextStyle(
-            color: Colors.black87,
+            color: Color(0xFF10251F),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -709,7 +710,7 @@ class SobreSatePage extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFE0E7E4)),
+              border: Border.all(color: const Color(0xFFE8DFD3)),
             ),
             child: const Column(
               children: [
@@ -727,7 +728,7 @@ class SobreSatePage extends StatelessWidget {
                 Text(
                   'Sistema de Acompanhamento e Treinamento Esportivo',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: Color(0xFF8A938F)),
                 ),
                 SizedBox(height: 15),
                 Text(
@@ -809,7 +810,7 @@ class _CampoInformacao extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: Row(
         children: [
@@ -821,7 +822,7 @@ class _CampoInformacao extends StatelessWidget {
               children: [
                 Text(
                   titulo,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  style: const TextStyle(fontSize: 11, color: Color(0xFF8A938F)),
                 ),
                 const SizedBox(height: 3),
                 Text(
@@ -861,7 +862,7 @@ class _SwitchItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: Row(
         children: [
@@ -876,7 +877,7 @@ class _SwitchItem extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   subtitulo,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  style: const TextStyle(fontSize: 11, color: Color(0xFF8A938F)),
                 ),
               ],
             ),
@@ -908,7 +909,7 @@ class _ItemInterno extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: ListTile(
         onTap: onTap,
@@ -916,7 +917,7 @@ class _ItemInterno extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: const Color(0xFFE8F5F0),
+            color: const Color(0xFFDFF7EE),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icone, color: verdeAtleta),
@@ -946,12 +947,12 @@ class _MembroEquipe extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: Row(
         children: [
           const CircleAvatar(
-            backgroundColor: Color(0xFFE8F5F0),
+            backgroundColor: Color(0xFFDFF7EE),
             child: Icon(Icons.person_rounded, color: verdeAtleta),
           ),
           const SizedBox(width: 12),
@@ -963,7 +964,7 @@ class _MembroEquipe extends StatelessWidget {
           ),
           Text(
             funcao,
-            style: const TextStyle(fontSize: 11, color: Colors.grey),
+            style: const TextStyle(fontSize: 11, color: Color(0xFF8A938F)),
           ),
         ],
       ),
@@ -983,7 +984,7 @@ class _Pergunta extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
       ),
       child: ExpansionTile(
         title: Text(
@@ -995,7 +996,7 @@ class _Pergunta extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Text(
               'Essa informação estará disponível em uma próxima atualização do aplicativo.',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+              style: TextStyle(fontSize: 12, color: Color(0xFF8A938F)),
             ),
           ),
         ],
@@ -1025,10 +1026,10 @@ class _Notificacao extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(17),
-        border: Border.all(color: const Color(0xFFE0E7E4)),
+        border: Border.all(color: const Color(0xFFE8DFD3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
+            color: Color(0xFF10251F).withValues(alpha: 0.025),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -1041,7 +1042,7 @@ class _Notificacao extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: const Color(0xFFEAF5F1),
+              color: const Color(0xFFDFF7EE),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icone, color: verdeAtleta, size: 21),
@@ -1063,7 +1064,7 @@ class _Notificacao extends StatelessWidget {
                   descricao,
                   style: TextStyle(
                     fontSize: 10,
-                    color: Colors.grey.shade600,
+                    color: Color(0xFF68736F),
                     height: 1.3,
                   ),
                 ),
@@ -1073,7 +1074,7 @@ class _Notificacao extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             tempo,
-            style: TextStyle(fontSize: 9, color: Colors.grey.shade500),
+            style: TextStyle(fontSize: 9, color: Color(0xFF8A938F)),
           ),
         ],
       ),

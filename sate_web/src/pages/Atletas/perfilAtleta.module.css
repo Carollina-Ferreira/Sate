@@ -1,30 +1,20 @@
+
 /* =========================================
    SATE — PERFIL DO ATLETA
-   FUNDO CREME / VERDE / ROSA
+   PADRÃO VISUAL GLOBAL
+========================================= */
+
+/* =========================================
+   PÁGINA
 ========================================= */
 
 .page {
-    --creme: #FAF5EE;
-    --creme-card: #FFFCF7;
-    --creme-borda: #E8DED1;
-
-    --verde-principal: #16A875;
-    --verde-escuro: #006B4F;
-    --verde-dark: #005942;
-
-    --rosa: #EF476F;
-    --vermelho: #D52941;
-
-    --texto: #12261F;
-    --texto-suave: #6C7C77;
-    --texto-claro: #93A19A;
-
     width: 100%;
     min-height: 100vh;
     margin: 0;
     padding: 0;
 
-    background: var(--creme);
+    background: transparent;
     color: var(--texto);
 
     font-family: var(--fonte-base, 'Inter'), sans-serif;
@@ -69,12 +59,11 @@
     font-weight: 500;
 
     cursor: pointer;
-
     transition: color 0.2s ease;
 }
 
 .backButton:hover {
-    color: var(--verde-escuro);
+    color: var(--verde);
 }
 
 .backButton svg {
@@ -84,6 +73,7 @@
 
 /* =========================================
    CABEÇALHO DO PERFIL
+   SEM CARD OU BORDA EXTERNA
 ========================================= */
 
 .profileCard {
@@ -126,7 +116,7 @@
     border-radius: 50%;
 
     background: var(--rosa);
-    color: #FFFFFF;
+    color: var(--texto-sobre-verde);
 
     font-family: var(--fonte-titulo, 'Sora'), sans-serif;
     font-size: 25px;
@@ -189,7 +179,7 @@
 }
 
 .profilePerformance strong {
-    color: var(--verde-escuro);
+    color: var(--verde);
 
     font-family: var(--fonte-titulo, 'Sora'), sans-serif;
     font-size: 38px;
@@ -226,10 +216,10 @@
     gap: 9px;
     padding: 0 20px;
 
-    background: var(--creme-card);
-    color: var(--verde-escuro);
+    background: var(--bg-surface-2);
+    color: var(--verde);
 
-    border: 1px solid #DCCDBB;
+    border: 1px solid var(--borda-forte);
     border-radius: 12px;
 
     font-family: inherit;
@@ -255,15 +245,15 @@
 }
 
 .actionButton:hover:not(:disabled) {
-    background: #F0E9DE;
+    background: var(--menu-hover-bg);
     border-color: var(--verde-principal);
-    color: var(--verde-dark);
+    color: var(--verde);
 
     transform: translateY(-1px);
 }
 
 .actionButton:focus-visible {
-    outline: 3px solid rgba(22, 168, 117, 0.25);
+    outline: 3px solid var(--sombra-foco);
     outline-offset: 3px;
 }
 
@@ -274,7 +264,7 @@
 
 /* =========================================
    ESTATÍSTICAS
-   FAIXA COM DIVISÓRIAS VERTICAIS
+   FAIXA COM DIVISÓRIAS INTERNAS
 ========================================= */
 
 .statsGrid {
@@ -287,8 +277,8 @@
 
     background: transparent;
 
-    border-top: 1px solid var(--creme-borda);
-    border-bottom: 1px solid var(--creme-borda);
+    border-top: 1px solid var(--borda);
+    border-bottom: 1px solid var(--borda);
     border-radius: 0;
 
     overflow: hidden;
@@ -309,7 +299,7 @@
     background: transparent;
 
     border: none;
-    border-right: 1px solid var(--creme-borda);
+    border-right: 1px solid var(--borda);
     border-radius: 0;
     box-shadow: none;
 }
@@ -345,7 +335,7 @@
 }
 
 .good {
-    color: var(--verde-escuro);
+    color: var(--verde-principal);
 }
 
 .bad {
@@ -353,7 +343,7 @@
 }
 
 .neutral {
-    color: #737A75;
+    color: var(--texto-suave);
 }
 
 .highlight {
@@ -375,8 +365,8 @@
 }
 
 /* =========================================
-   CARDS DOS GRÁFICOS
-   FUNDO CREME CONTÍNUO, SEM BORDA EXTERNA
+   GRÁFICOS
+   SEM CARDS, BORDAS OU SOMBRAS EXTERNAS
 ========================================= */
 
 .chartCard {
@@ -463,34 +453,34 @@
 }
 
 .gridLine {
-    stroke: #E8DED1;
+    stroke: var(--borda);
     stroke-width: 1;
     stroke-dasharray: 3 5;
 }
 
 .axisLabel {
-    fill: #89968F;
+    fill: var(--texto-claro);
 
     font-family: var(--fonte-base, 'Inter'), sans-serif;
     font-size: 11px;
 }
 
 .dataLine {
-    stroke: var(--verde-escuro);
+    stroke: var(--verde);
     stroke-width: 2.5;
     stroke-linecap: round;
     stroke-linejoin: round;
 }
 
 .dataPoint {
-    fill: var(--creme);
-    stroke: var(--verde-escuro);
+    fill: var(--bg-page);
+    stroke: var(--verde);
     stroke-width: 2;
 }
 
 .lastDataPoint {
     fill: var(--rosa);
-    stroke: var(--verde-escuro);
+    stroke: var(--verde);
     stroke-width: 1.5;
 }
 
@@ -523,19 +513,19 @@
 
 .radarGrid {
     fill: none;
-    stroke: #E8DED1;
+    stroke: var(--borda);
     stroke-width: 1.2;
 }
 
 .radarAxis {
-    stroke: #E8DED1;
+    stroke: var(--borda);
     stroke-width: 1;
 }
 
 .radarArea {
-    fill: rgba(22, 168, 117, 0.16);
+    fill: color-mix(in srgb, var(--verde-principal) 16%, transparent);
 
-    stroke: var(--verde-escuro);
+    stroke: var(--verde);
     stroke-width: 2.5;
     stroke-linejoin: round;
 }
@@ -547,7 +537,7 @@
 }
 
 .radarLabel {
-    fill: #89968F;
+    fill: var(--texto-claro);
 
     font-family: var(--fonte-base, 'Inter'), sans-serif;
     font-size: 12px;
@@ -760,7 +750,7 @@
     .statItem {
         min-height: 90px;
         padding: 17px 12px;
-        border-bottom: 1px solid var(--creme-borda);
+        border-bottom: 1px solid var(--borda);
     }
 
     .statItem:first-child {

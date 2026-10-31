@@ -1495,3 +1495,177 @@
     font-size: 20px;
   }
 }
+
+/* ==========================================
+   DASHBOARD — MODO ESCURO
+   Títulos em destaque ficam verde-claro
+========================================== */
+
+:global(:root[data-theme='dark']) .page {
+  --verde: #65ddb0;
+  --verde-profundo: #003d31;
+  --verde-suave: #164d3d;
+
+  --creme: #082f25;
+  --creme-card: #104334;
+  --linha: #285b49;
+
+  --texto: #f1f8f4;
+  --texto-secundario: #b5cec2;
+
+  background:
+    radial-gradient(
+      ellipse 420px 300px at 97% 0%,
+      rgba(239, 63, 111, 0.09) 0%,
+      rgba(239, 63, 111, 0.03) 44%,
+      transparent 77%
+    ),
+    var(--creme);
+
+  color: var(--texto);
+}
+
+/* Título principal: destaque verde-claro */
+:global(:root[data-theme='dark']) .heroHeader h1 em {
+  color: #65ddb0;
+}
+
+/* Títulos destacados dos cards */
+:global(:root[data-theme='dark']) .cardHeading h2 em {
+  color: #65ddb0;
+}
+
+/* Fundo dos indicadores e cards */
+:global(:root[data-theme='dark']) .scoreboard,
+:global(:root[data-theme='dark']) .card,
+:global(:root[data-theme='dark']) .feedback {
+  background: #104334;
+  border-color: #285b49;
+  color: #f1f8f4;
+}
+
+/* Indicadores */
+:global(:root[data-theme='dark']) .scoreItem:hover {
+  background: #175440;
+}
+
+:global(:root[data-theme='dark']) .scoreTop {
+  color: #b5cec2;
+}
+
+/* Campos de seleção */
+:global(:root[data-theme='dark']) .periodSelect select {
+  background: #082f25;
+  color: #f1f8f4;
+  border-color: #386b58;
+}
+
+/* Gráfico */
+:global(:root[data-theme='dark']) .gridLine {
+  stroke: #38604f;
+}
+
+:global(:root[data-theme='dark']) .areaFill {
+  fill: #1d634b;
+  opacity: 0.65;
+}
+
+:global(:root[data-theme='dark']) .chartAxis,
+:global(:root[data-theme='dark']) .chartLabels,
+:global(:root[data-theme='dark']) .chartLegend span {
+  color: #b5cec2;
+}
+
+/* Calendário */
+:global(:root[data-theme='dark']) .calendarNavigation strong {
+  color: #f1f8f4;
+}
+
+:global(:root[data-theme='dark']) .calendarNavigation button {
+  background: #082f25;
+  color: #65ddb0;
+  border-color: #386b58;
+}
+
+:global(:root[data-theme='dark']) .calendarWeek span {
+  color: #b5cec2;
+}
+
+:global(:root[data-theme='dark']) .calendarDay {
+  color: #f1f8f4;
+}
+
+:global(:root[data-theme='dark']) .calendarDay:hover {
+  background: #175440;
+}
+
+:global(:root[data-theme='dark']) .calendarDay.hasMatch {
+  background: #49313b;
+  color: #ff91aa;
+}
+
+:global(:root[data-theme='dark']) .calendarDay.selectedDay {
+  background: #16845f;
+  color: #ffffff;
+}
+
+:global(:root[data-theme='dark']) .calendarEmpty {
+  border-color: #386b58;
+  color: #b5cec2;
+}
+
+/* Partidas e tabela */
+:global(:root[data-theme='dark']) .calendarMatch {
+  background: #082f25;
+  border-color: #285b49;
+}
+
+:global(:root[data-theme='dark']) .calendarMatch strong,
+:global(:root[data-theme='dark']) .tableScroll td,
+:global(:root[data-theme='dark']) .tableScroll td:first-child strong,
+:global(:root[data-theme='dark']) .teamInfo strong {
+  color: #f1f8f4;
+}
+
+:global(:root[data-theme='dark']) .tableScroll th,
+:global(:root[data-theme='dark']) .tableScroll td:first-child small,
+:global(:root[data-theme='dark']) .teamInfo small {
+  color: #b5cec2;
+}
+
+:global(:root[data-theme='dark']) .tableScroll tbody tr:hover {
+  background: #175440;
+}
+
+/* Atividades */
+:global(:root[data-theme='dark']) .activityIcon {
+  background: #082f25;
+  border-color: #386b58;
+}
+
+:global(:root[data-theme='dark']) .activityText strong {
+  color: #f1f8f4;
+}
+
+:global(:root[data-theme='dark']) .activityText small {
+  color: #b5cec2;
+}
+
+/* Equipes */
+:global(:root[data-theme='dark']) .teamRow {
+  border-bottom-color: #285b49;
+}
+
+:global(:root[data-theme='dark']) .teamRank {
+  color: #b5cec2;
+}
+
+:global(:root[data-theme='dark']) .progress {
+  background: #285b49;
+}
+
+/* Estados vazios */
+:global(:root[data-theme='dark']) .empty,
+:global(:root[data-theme='dark']) .emptyWide {
+  color: #b5cec2;
+}

@@ -14,6 +14,7 @@ import {
 import styles from './login.module.css';
 
 import logoVerdeImg from '../../assets/img/logoVerde_img.png';
+import logo from '../../assets/img/logo.png';
 
 import futebolHero from '../../assets/img/hero/futebol.png.png';
 import basqueteHero from '../../assets/img/hero/basquete.png.png';
@@ -158,7 +159,7 @@ const Login = () => {
             if (!resposta.ok) {
                 throw new Error(
                     data.mensagem ||
-                        'Não foi possível realizar o login.'
+                    'Não foi possível realizar o login.'
                 );
             }
 
@@ -207,14 +208,7 @@ const Login = () => {
             ================================================= */
 
             if (data.usuario.tipo === 'TREINADOR') {
-                if (data.usuario.primeiroAcesso) {
-                    navigate('/boas-vindas');
-
-                    return;
-                }
-
-                navigate('/inicio');
-
+                navigate('/carregamento');
                 return;
             }
 
@@ -262,14 +256,14 @@ const Login = () => {
                     className={styles.heroImages}
                     aria-hidden="true"
                 >
+
                     {heroSlides.map((image, index) => (
                         <div
                             key={image}
-                            className={`${styles.heroSlide} ${
-                                index === activeSlide
+                            className={`${styles.heroSlide} ${index === activeSlide
                                     ? styles.heroSlideActive
                                     : ''
-                            }`}
+                                }`}
                             style={{
                                 backgroundImage: `url(${image})`,
                             }}
@@ -324,7 +318,7 @@ const Login = () => {
                     aria-label="Página inicial do SATE"
                 >
                     <img
-                        src={logoVerdeImg}
+                        src={logo}
                         alt="SATE"
                         className={styles.heroLogo}
                     />
@@ -334,19 +328,12 @@ const Login = () => {
                 {/* TEXTO */}
 
                 <div className={styles.heroContent}>
-
                     <h1>
+                        <span>Dados que revelam</span>
                         <span>
-                            Dados que revelam
+                            o verdadeiro{' '}
+                            <em>desempenho.</em>
                         </span>
-
-                        <span>
-                            o verdadeiro
-                        </span>
-
-                        <em>
-                            desempenho.
-                        </em>
                     </h1>
 
                     <p>
@@ -354,7 +341,6 @@ const Login = () => {
                         estatísticas de qualquer modalidade esportiva
                         em um único painel.
                     </p>
-
                 </div>
 
 
@@ -689,29 +675,16 @@ const Login = () => {
                     {/* DIVISOR */}
 
                     <div className={styles.signupDivider}>
+                        <p>Ainda não possui uma conta?</p>
 
-                        <span />
-
-                        <p>
-                            Ainda não possui uma conta?
-                        </p>
-
-                        <span />
-
+                        <Link
+                            to="/cadastro"
+                            className={styles.createAccount}
+                        >
+                            Criar conta
+                        </Link>
                     </div>
-
-
-                    {/* CADASTRO */}
-
-                    <Link
-                        to="/cadastro"
-                        className={styles.createAccount}
-                    >
-                        Criar conta
-                    </Link>
-
                 </div>
-
             </section>
 
         </main>

@@ -1,37 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* =========================================================
-   SATE — COMPARAÇÕES
-   Visual baseado na nova identidade de Partidas.
+   PÁGINA
 ========================================================= */
 
 .page {
-    --creme: #FAF5EE;
-    --creme-card: #FFFCF7;
-    --verde: #006B4F;
-    --verde-principal: #16A875;
-    --texto: #12261F;
-    --texto-suave: #6C7C77;
-    --borda: #E8DED1;
+  width: calc(100% + 96px);
+  min-height: calc(100vh - 64px + 48px);
+  margin: -48px -48px 0;
+  padding: 42px clamp(24px, 5vw, 76px) 56px;
+  box-sizing: border-box;
 
-    width: 100%;
-    min-height: 100vh;
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(244, 63, 120, 0.16) 0%,
+      rgba(244, 63, 120, 0.08) 38%,
+      transparent 76%
+    ),
+    var(--bg-page);
 
-    background: var(--creme);
-    color: var(--texto);
-
-    font-family: var(--fonte-base), sans-serif;
-    box-sizing: border-box;
+  color: var(--texto);
+  font-family: 'Poppins', sans-serif;
 }
 
 .page *,
 .page *::before,
 .page *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
-
-
-
 
 /* =========================================================
    CABEÇALHO
@@ -39,42 +35,33 @@
 
 .pageHeader {
   width: min(100%, 1235px);
-
   margin: 0 auto 54px;
 }
 
 .pageHeader h1 {
   margin: 0;
-
   color: var(--texto);
-
+  font-family: var(--fonte-titulo);
   font-size: clamp(36px, 3.4vw, 50px);
   line-height: 1.04;
-
   font-weight: 700;
-
   letter-spacing: -1.8px;
 }
 
 .pageHeader h1 em {
   color: var(--rosa);
-
-  font-family: 'DM Serif Display', serif;
+  font-family: var(--fonte-titulo);
   font-style: italic;
-  font-weight: 400;
-
+  font-weight: 600;
   letter-spacing: -0.5px;
 }
 
 .pageHeader p {
   margin: 11px 0 0;
-
-  color: var(--texto-secundario);
-
+  color: var(--texto-suave);
   font-size: 13px;
   line-height: 1.6;
 }
-
 
 /* =========================================================
    ESTADOS
@@ -82,36 +69,26 @@
 
 .stateCard {
   width: min(100%, 1235px);
-
   margin: 0 auto;
-
   padding: 42px 24px;
-
-  border: 1px solid var(--creme-linha);
+  border: 1px solid var(--borda);
   border-radius: 15px;
-
-  background: rgba(255, 255, 255, 0.42);
-
+  background: var(--bg-surface);
   color: var(--texto);
-
   text-align: center;
 }
 
 .stateCard h2 {
   margin: 0;
-
   font-size: 16px;
   font-weight: 700;
 }
 
 .stateCard p {
   margin: 7px 0 0;
-
-  color: var(--texto-secundario);
-
+  color: var(--texto-suave);
   font-size: 11px;
 }
-
 
 /* =========================================================
    SELEÇÃO DAS EQUIPES
@@ -119,39 +96,27 @@
 
 .selectionCard {
   width: min(100%, 1235px);
-
   display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    54px
-    minmax(0, 1fr);
-
+  grid-template-columns: minmax(0, 1fr) 54px minmax(0, 1fr);
   align-items: end;
-
   gap: 14px;
-
   margin: 0 auto 48px;
   padding: 0;
-
   background: transparent;
-
   border: none;
   border-radius: 0;
-
   box-shadow: none;
 }
 
 .selectGroup {
   display: flex;
   flex-direction: column;
-
   gap: 8px;
+  min-width: 0;
 }
 
 .selectGroup label {
-  color: #263a31;
-
+  color: var(--texto-medio);
   font-size: 10px;
   font-weight: 600;
 }
@@ -159,65 +124,50 @@
 .selectGroup select {
   width: 100%;
   height: 52px;
-
-  padding: 0 46px 0 15px;
-
-  border: 1px solid #d7c9bb;
+  padding: 0 42px 0 15px;
+  border: 1px solid var(--borda-forte);
   border-radius: 12px;
-
   outline: none;
-
   appearance: none;
   -webkit-appearance: none;
+  background-color: var(--bg-surface);
+  color: var(--texto);
+  font-family: var(--fonte-base);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 
-  background:
-    linear-gradient(45deg, transparent 50%, #20352d 50%),
-    linear-gradient(135deg, #20352d 50%, transparent 50%),
-    #ffffff;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--texto-medio) 50%),
+    linear-gradient(135deg, var(--texto-medio) 50%, transparent 50%);
 
   background-position:
     calc(100% - 21px) calc(50% - 2px),
-    calc(100% - 16px) calc(50% - 2px),
-    0 0;
+    calc(100% - 16px) calc(50% - 2px);
 
-  background-size:
-    5px 5px,
-    5px 5px,
-    auto;
-
+  background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
+}
 
-  color: #243830;
-
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 500;
-
-  cursor: pointer;
-
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
+.selectGroup select option {
+  background: var(--bg-surface);
+  color: var(--texto);
 }
 
 .selectGroup select:hover:not(:disabled) {
-  border-color: #bcae9f;
+  border-color: var(--verde-principal);
 }
 
 .selectGroup select:focus {
-  border-color: #9ab5aa;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(0, 89, 66, 0.07);
+  border-color: var(--verde-principal);
+  box-shadow: 0 0 0 3px var(--sombra-foco);
 }
 
 .selectGroup select:disabled {
   opacity: 0.55;
-
   cursor: not-allowed;
 }
-
 
 /* =========================================================
    TROCAR EQUIPES
@@ -226,32 +176,21 @@
 .switchButton {
   width: 54px;
   height: 52px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
-  border: 1px solid #d7c9bb;
+  border: 1px solid var(--borda-forte);
   border-radius: 12px;
-
-  background: #ffffff;
-
-  color: var(--verde);
-
+  background: var(--bg-surface);
+  color: var(--verde-principal);
   cursor: pointer;
-
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
 .switchButton:hover:not(:disabled) {
-  background: #f2f7f4;
-
-  border-color: #a8bdb4;
+  background: var(--bg-verde-suave);
+  border-color: var(--verde-principal);
 }
 
 .switchButton:active:not(:disabled) {
@@ -260,10 +199,8 @@
 
 .switchButton:disabled {
   opacity: 0.4;
-
   cursor: not-allowed;
 }
-
 
 /* =========================================================
    ÁREA PRINCIPAL DA COMPARAÇÃO
@@ -271,19 +208,13 @@
 
 .comparison {
   width: min(100%, 1235px);
-
   margin: 0 auto;
-
   padding: 0;
-
   background: transparent;
-
   border: none;
   border-radius: 0;
-
   box-shadow: none;
 }
-
 
 /* =========================================================
    EQUIPES
@@ -291,14 +222,9 @@
 
 .matchHeader {
   width: 100%;
-
   display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 80px;
-
   margin-bottom: 36px;
 }
 
@@ -317,23 +243,21 @@
 
 .matchHeader h2 {
   margin: 0;
-
+  font-family: var(--fonte-titulo);
   font-size: 23px;
   line-height: 1.2;
-
   font-weight: 700;
-
   letter-spacing: -0.5px;
+  overflow-wrap: anywhere;
 }
 
 .matchLeft h2 {
-  color: var(--verde);
+  color: var(--verde-principal);
 }
 
 .matchRight h2 {
   color: var(--rosa);
 }
-
 
 /* =========================================================
    RESUMO DA EQUIPE
@@ -342,11 +266,8 @@
 .teamSummary {
   display: flex;
   align-items: baseline;
-
   gap: 6px;
-
   margin-top: 10px;
-
   color: var(--texto);
 }
 
@@ -359,17 +280,14 @@
 }
 
 .teamSummary span {
-  color: var(--texto-secundario);
-
+  color: var(--texto-suave);
   font-size: 11px;
 }
 
 .matchMeta {
   display: flex;
   flex-wrap: wrap;
-
   gap: 6px;
-
   margin-top: 11px;
 }
 
@@ -379,24 +297,18 @@
 
 .matchMeta span {
   padding: 5px 10px;
-
   border: none;
   border-radius: 999px;
-
-  background: #dff3eb;
-
-  color: #007057;
-
+  background: var(--bg-verde-suave);
+  color: var(--verde-medio);
   font-size: 9px;
   font-weight: 600;
 }
 
 .matchRight .matchMeta span {
   background: var(--rosa-claro);
-
   color: var(--rosa);
 }
-
 
 /* =========================================================
    DIVISOR
@@ -406,7 +318,6 @@
   display: none;
 }
 
-
 /* =========================================================
    ESTATÍSTICAS
 ========================================================= */
@@ -414,14 +325,13 @@
 .stats {
   display: flex;
   flex-direction: column;
-
   gap: 22px;
 }
 
 .statRow {
   width: 100%;
+  min-width: 0;
 }
-
 
 /* =========================================================
    VALORES E NOME
@@ -429,16 +339,9 @@
 
 .statValues {
   display: grid;
-
-  grid-template-columns:
-    minmax(70px, 1fr)
-    auto
-    minmax(70px, 1fr);
-
+  grid-template-columns: minmax(50px, 1fr) auto minmax(50px, 1fr);
   align-items: center;
-
   gap: 18px;
-
   margin-bottom: 8px;
 }
 
@@ -446,31 +349,27 @@
 .valueB {
   font-size: 14px;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .valueA {
-  color: var(--verde);
-
+  color: var(--verde-principal);
   text-align: left;
 }
 
 .valueB {
   color: var(--rosa);
-
   text-align: right;
 }
 
 .statName {
-  min-width: 180px;
-
-  color: #737a75;
-
+  min-width: 0;
+  color: var(--texto-suave);
   font-size: 10px;
   font-weight: 500;
-
   text-align: center;
+  overflow-wrap: anywhere;
 }
-
 
 /* =========================================================
    BARRAS
@@ -479,109 +378,103 @@
 .barArea {
   width: 100%;
   height: 7px;
-
   display: grid;
-
-  grid-template-columns:
-    1fr
-    6px
-    1fr;
-
+  grid-template-columns: minmax(0, 1fr) 6px minmax(0, 1fr);
   gap: 0;
-
   align-items: center;
 }
 
 .barSideLeft,
 .barSideRight {
-  height: 7px;
-
   position: relative;
-
+  height: 7px;
   overflow: hidden;
-
-  border-radius: 999px;
-
-  background: var(--trilho);
+  background: var(--borda);
 }
 
 .barSideLeft {
   display: flex;
-
   justify-content: flex-end;
-
   border-radius: 999px 0 0 999px;
 }
 
 .barSideRight {
   display: flex;
-
   justify-content: flex-start;
-
   border-radius: 0 999px 999px 0;
 }
 
-.barA {
+.barA,
+.barB {
   height: 100%;
-
-  background: var(--verde);
-
-  border-radius: 999px;
-
   transition: width 0.3s ease;
 }
 
-.barB {
-  height: 100%;
-
-  background: var(--rosa);
-
+.barA {
+  background: var(--verde-principal);
   border-radius: 999px;
+}
 
-  transition: width 0.3s ease;
+.barB {
+  background: var(--rosa);
+  border-radius: 999px;
 }
 
 .barCenter {
   width: 6px;
   height: 7px;
-
-  background: var(--creme);
+  background: var(--bg-page);
 }
 
+/* =========================================================
+   MODO ESCURO
+========================================================= */
+
+:global(:root[data-theme='dark']) .page {
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(244, 63, 120, 0.09) 0%,
+      transparent 76%
+    ),
+    var(--bg-page);
+  color: var(--texto);
+}
+
+:global(:root[data-theme='dark']) .stateCard {
+  background: var(--bg-surface);
+  border-color: var(--borda);
+}
+
+:global(:root[data-theme='dark']) .pageHeader h1 em {
+  color: #7BE0A8;
+}
 
 /* =========================================================
-   RESPONSIVO
+   RESPONSIVIDADE — NOTEBOOKS E TABLETS
 ========================================================= */
 
 @media (max-width: 900px) {
   .page {
-    width: calc(100% + 48px);
-    min-height: calc(100vh + 48px);
-
-    margin: -24px;
-
-    padding:
-      38px
-      24px
-      50px;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 38px 24px 50px;
   }
 
   .pageHeader h1 {
-    font-size: 38px;
+    font-size: clamp(32px, 4vw, 38px);
   }
 
   .matchHeader {
-    gap: 50px;
+    gap: 40px;
   }
 }
 
-
 @media (max-width: 760px) {
   .selectionCard {
-    grid-template-columns: 1fr;
-
+    grid-template-columns: minmax(0, 1fr);
     gap: 11px;
-
     margin-bottom: 36px;
   }
 
@@ -592,20 +485,22 @@
   .matchHeader {
     gap: 26px;
   }
+
+  .statValues {
+    gap: 12px;
+  }
 }
 
+/* =========================================================
+   RESPONSIVIDADE — CELULARES
+========================================================= */
 
 @media (max-width: 600px) {
   .page {
-    width: calc(100% + 28px);
-    min-height: calc(100vh + 28px);
-
-    margin: -14px;
-
-    padding:
-      28px
-      15px
-      40px;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 28px 15px 40px;
   }
 
   .pageHeader {
@@ -613,18 +508,21 @@
   }
 
   .pageHeader h1 {
-    font-size: 31px;
+    font-size: clamp(28px, 7vw, 31px);
+    letter-spacing: -1.2px;
   }
 
   .pageHeader p {
     font-size: 11px;
   }
 
+  .stateCard {
+    padding: 32px 16px;
+  }
+
   .matchHeader {
-    grid-template-columns: 1fr;
-
+    grid-template-columns: minmax(0, 1fr);
     gap: 18px;
-
     margin-bottom: 30px;
   }
 
@@ -638,17 +536,11 @@
   }
 
   .statValues {
-    grid-template-columns:
-      56px
-      1fr
-      56px;
-
+    grid-template-columns: minmax(40px, 56px) minmax(0, 1fr) minmax(40px, 56px);
     gap: 8px;
   }
 
   .statName {
-    min-width: 0;
-
     font-size: 9px;
   }
 
@@ -658,13 +550,9 @@
   }
 }
 
-
 @media (max-width: 420px) {
   .page {
-    padding:
-      24px
-      11px
-      34px;
+    padding: 24px 11px 34px;
   }
 
   .matchHeader h2 {
@@ -673,5 +561,17 @@
 
   .stats {
     gap: 19px;
+  }
+
+  .selectionCard {
+    gap: 9px;
+  }
+
+  .selectGroup select {
+    height: 48px;
+  }
+
+  .switchButton {
+    height: 46px;
   }
 }

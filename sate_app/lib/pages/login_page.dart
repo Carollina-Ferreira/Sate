@@ -7,6 +7,7 @@ import 'cadastro_page.dart';
 import 'esqueci_senha_page.dart';
 import 'Atleta/atleta_vinculo_page.dart';
 import 'Treinador/treinador_equipes_page.dart';
+import '../theme/sate_theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,9 +25,9 @@ class _LoginPageState extends State<LoginPage> {
 
   String tipoUsuario = 'Atleta';
 
-  static const verde = Color(0xFF00845F);
-  static const rosa = Color(0xFFE98BA8);
-  static const azul = Color(0xFF001E98);
+  static const verde = Color(0xFF005942);
+  static const rosa = Color(0xFFEF476F);
+  static const azul = Color(0xFF003D31);
 
   static const String apiUrl = 'http://localhost:3000';
 
@@ -40,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFCFCFC),
+      backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
         children: [
           Positioned.fill(
@@ -76,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
+            color: Color(0xFF10251F).withValues(alpha: 0.07),
             blurRadius: 40,
             offset: const Offset(0, 18),
           ),
@@ -93,12 +94,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           const SizedBox(height: 28),
-          const Text(
-            'Bem-vindo de volta!',
+          const Text.rich(
+            TextSpan(children: [TextSpan(text: 'Bem-vindo de '), TextSpan(text: 'volta!', style: SateEstilo.destaque)]),
             style: TextStyle(
               fontSize: 29,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF161616),
+              color: Color(0xFF10251F),
             ),
           ),
           const SizedBox(height: 10),
@@ -108,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
-              color: Colors.grey.shade600,
+              color: Color(0xFF68736F),
             ),
           ),
           const SizedBox(height: 28),
@@ -123,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.shade300),
+                border: Border.all(color: Color(0xFFD5C9BA)),
               ),
               child: Row(
                 children: [
@@ -144,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  Icon(Icons.keyboard_arrow_down, color: Colors.grey.shade500),
+                  Icon(Icons.keyboard_arrow_down, color: Color(0xFF8A938F)),
                 ],
               ),
             ),
@@ -185,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                       mostrarSenha
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
-                      color: Colors.grey.shade500,
+                      color: Color(0xFF8A938F),
                     ),
                   ),
                 ),
@@ -229,7 +230,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           const SizedBox(height: 12),
           _socialButton(
-            icon: const Icon(Icons.apple, color: Colors.black, size: 22),
+            icon: const Icon(Icons.apple, color: Color(0xFF10251F), size: 22),
             text: 'Continuar com Apple',
             onTap: carregando ? () {} : _entrarComApple,
           ),
@@ -268,14 +269,14 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Como você vai entrar?',
+              const Text.rich(
+                TextSpan(children: [TextSpan(text: 'Como você vai '), TextSpan(text: 'entrar?', style: SateEstilo.destaque)]),
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 8),
               Text(
                 'Selecione o tipo de perfil que deseja acessar.',
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                style: TextStyle(color: Color(0xFF68736F), fontSize: 13),
               ),
               const SizedBox(height: 20),
               _perfilOption(
@@ -313,7 +314,7 @@ class _LoginPageState extends State<LoginPage> {
         decoration: BoxDecoration(
           color: selecionado ? verde.withValues(alpha: 0.06) : Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: selecionado ? verde : Colors.grey.shade300),
+          border: Border.all(color: selecionado ? verde : Color(0xFFD5C9BA)),
         ),
         child: Row(
           children: [
@@ -321,12 +322,12 @@ class _LoginPageState extends State<LoginPage> {
               width: 45,
               height: 45,
               decoration: BoxDecoration(
-                color: selecionado ? verde : Colors.grey.shade100,
+                color: selecionado ? verde : Color(0xFFEFE6DA),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 icon,
-                color: selecionado ? Colors.white : Colors.grey.shade700,
+                color: selecionado ? Colors.white : Color(0xFF4F5A56),
               ),
             ),
             const SizedBox(width: 14),
@@ -344,7 +345,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 4),
                   Text(
                     descricao,
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                    style: TextStyle(fontSize: 12, color: Color(0xFF68736F)),
                   ),
                 ],
               ),
@@ -477,7 +478,7 @@ class _LoginPageState extends State<LoginPage> {
       style: const TextStyle(
         fontSize: 13,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF242424),
+        color: Color(0xFF10251F),
       ),
     );
   }
@@ -485,18 +486,18 @@ class _LoginPageState extends State<LoginPage> {
   InputDecoration _inputDecoration(String hint, IconData icon) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
-      prefixIcon: Icon(icon, size: 19, color: Colors.grey.shade500),
+      hintStyle: TextStyle(color: Color(0xFFA3ADA9), fontSize: 13),
+      prefixIcon: Icon(icon, size: 19, color: Color(0xFF8A938F)),
       filled: true,
       fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: BorderSide(color: Color(0xFFD5C9BA)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.grey.shade300),
+        borderSide: BorderSide(color: Color(0xFFD5C9BA)),
       ),
       focusedBorder: const OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -530,15 +531,15 @@ class _LoginPageState extends State<LoginPage> {
   Widget _divider() {
     return Row(
       children: [
-        Expanded(child: Divider(color: Colors.grey.shade300)),
+        Expanded(child: Divider(color: Color(0xFFD5C9BA))),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
             'ou continue com',
-            style: TextStyle(color: Colors.grey.shade500, fontSize: 11),
+            style: TextStyle(color: Color(0xFF8A938F), fontSize: 11),
           ),
         ),
-        Expanded(child: Divider(color: Colors.grey.shade300)),
+        Expanded(child: Divider(color: Color(0xFFD5C9BA))),
       ],
     );
   }
@@ -555,8 +556,8 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: onTap,
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.white,
-          foregroundColor: const Color(0xFF222222),
-          side: BorderSide(color: Colors.grey.shade300),
+          foregroundColor: const Color(0xFF10251F),
+          side: BorderSide(color: Color(0xFFD5C9BA)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -599,7 +600,7 @@ class _LoginPageState extends State<LoginPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(mensagem),
-        backgroundColor: erro ? Colors.red : null,
+        backgroundColor: erro ? Color(0xFFC0392B) : null,
       ),
     );
   }
@@ -643,13 +644,13 @@ class _HoverLinkState extends State<_HoverLink> {
         onTap: widget.onTap,
         child: RichText(
           text: TextSpan(
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+            style: TextStyle(color: Color(0xFF68736F), fontSize: 13),
             children: [
               TextSpan(text: widget.normalText),
               TextSpan(
                 text: widget.linkText,
                 style: TextStyle(
-                  color: hover ? const Color(0xFF006B4D) : widget.verde,
+                  color: hover ? const Color(0xFF003D31) : widget.verde,
                   fontWeight: FontWeight.w700,
                   decoration: hover
                       ? TextDecoration.underline

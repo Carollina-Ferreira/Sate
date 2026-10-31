@@ -1,25 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* ============================================================
    SATE — INFORMAÇÕES DO ATLETA
-   Nova identidade visual creme + rosa
+   Identidade visual global
 ============================================================ */
 
 .page {
-    --verde: #005942;
-    --verde-profundo: #003d31;
-    --verde-claro: #dff3eb;
-
-    --rosa: #ef3f6f;
-    --rosa-claro: #ffe4ec;
-
-    --creme: #faf5ee;
-    --creme-card: #fffaf4;
-    --creme-linha: #e8ddd2;
-
-    --texto: #172a23;
-    --texto-secundario: #777e79;
-
     width: calc(100% + 60px);
     min-height: calc(100vh + 60px);
 
@@ -28,24 +13,17 @@
 
     box-sizing: border-box;
 
-    background:
-        radial-gradient(
-            ellipse 380px 280px at 97% 0%,
-            rgba(239, 63, 111, 0.14) 0%,
-            rgba(239, 63, 111, 0.06) 43%,
-            rgba(239, 63, 111, 0) 76%
-        ),
-        var(--creme);
-
+    background: transparent;
     color: var(--texto);
 
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fonte-base, 'Inter'), sans-serif;
 }
 
-.page * {
+.page *,
+.page *::before,
+.page *::after {
     box-sizing: border-box;
 }
-
 
 /* ============================================================
    VOLTAR
@@ -56,17 +34,15 @@
 
     display: flex;
     align-items: center;
-
     gap: 7px;
 
     margin: 0 auto 24px;
     padding: 0;
 
     border: none;
-
     background: transparent;
 
-    color: #777e79;
+    color: var(--texto-suave);
 
     font-family: inherit;
     font-size: 12px;
@@ -81,10 +57,8 @@
 
 .backButton:hover {
     color: var(--verde);
-
     transform: translateX(-2px);
 }
-
 
 /* ============================================================
    CABEÇALHO DA PÁGINA
@@ -92,7 +66,6 @@
 
 .pageHeader {
     width: min(100%, 1180px);
-
     margin: 0 auto 30px;
 }
 
@@ -101,35 +74,31 @@
 
     color: var(--texto);
 
+    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
     font-size: clamp(34px, 3.2vw, 46px);
     line-height: 1.04;
-
     font-weight: 700;
-
     letter-spacing: -1.6px;
 }
 
 .pageHeader h1 em {
     color: var(--rosa);
 
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
     font-style: italic;
     font-weight: 400;
-
     letter-spacing: -0.4px;
 }
 
 .pageHeader p {
     max-width: 680px;
-
     margin: 10px 0 0;
 
-    color: var(--texto-secundario);
+    color: var(--texto-suave);
 
     font-size: 12px;
     line-height: 1.6;
 }
-
 
 /* ============================================================
    PERFIL
@@ -137,18 +106,16 @@
 
 .profileCard {
     width: min(100%, 1180px);
-
     margin: 0 auto;
 
     overflow: hidden;
 
-    border: 1px solid var(--creme-linha);
+    border: 1px solid var(--borda);
     border-radius: 18px;
 
-    background: rgba(255, 250, 244, 0.9);
+    background: var(--bg-surface);
 
-    box-shadow:
-        0 12px 28px rgba(75, 53, 39, 0.06);
+    box-shadow: var(--sombra);
 }
 
 .profileTop {
@@ -158,7 +125,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     gap: 30px;
 
     padding: 26px 28px 24px;
@@ -169,10 +135,8 @@
 
     display: flex;
     align-items: center;
-
     gap: 20px;
 }
-
 
 /* ============================================================
    FOTO
@@ -183,7 +147,6 @@
     height: 82px;
 
     position: relative;
-
     flex-shrink: 0;
 }
 
@@ -193,20 +156,17 @@
 
     overflow: hidden;
 
-    border: 3px solid #ffffff;
+    border: 3px solid var(--bg-surface);
     border-radius: 50%;
 
-    background: var(--rosa-claro);
-
-    box-shadow:
-        0 6px 18px rgba(239, 63, 111, 0.14);
+    background: var(--rosa-suave);
+    box-shadow: var(--sombra-foco);
 }
 
 .photo,
 .photoFallback {
     width: 100%;
     height: 100%;
-
     border-radius: 50%;
 }
 
@@ -223,8 +183,7 @@
     justify-content: center;
 
     background: var(--rosa);
-
-    color: #ffffff;
+    color: var(--texto-sobre-verde);
 
     font-size: 27px;
     font-weight: 700;
@@ -235,7 +194,6 @@
     height: 24px;
 
     position: absolute;
-
     right: -2px;
     bottom: -2px;
 
@@ -243,14 +201,12 @@
     align-items: center;
     justify-content: center;
 
-    border: 3px solid #ffffff;
+    border: 3px solid var(--bg-surface);
     border-radius: 50%;
 
     background: var(--verde);
-
-    color: #ffffff;
+    color: var(--texto-sobre-verde);
 }
-
 
 /* ============================================================
    INFORMAÇÕES DO TOPO
@@ -261,16 +217,13 @@
 
     display: flex;
     flex-direction: column;
-
     gap: 7px;
 }
 
 .nameRow {
     display: flex;
     align-items: center;
-
     gap: 10px;
-
     flex-wrap: wrap;
 }
 
@@ -279,14 +232,13 @@
 
     color: var(--texto);
 
-    font-family: 'Poppins', sans-serif;
-
+    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
     font-size: clamp(24px, 2.3vw, 32px);
     line-height: 1.1;
-
     font-weight: 700;
-
     letter-spacing: -0.8px;
+
+    overflow-wrap: anywhere;
 }
 
 .categoryTag {
@@ -294,13 +246,11 @@
     align-items: center;
 
     min-height: 25px;
-
     padding: 0 10px;
 
     border-radius: 999px;
 
-    background: var(--rosa-claro);
-
+    background: var(--rosa-suave);
     color: var(--rosa);
 
     font-size: 9px;
@@ -310,17 +260,14 @@
 .photoHint {
     margin: 0;
 
-    color: var(--texto-secundario);
-
+    color: var(--texto-suave);
     font-size: 11px;
 }
 
 .badgesRow {
     display: flex;
     align-items: center;
-
     gap: 8px;
-
     flex-wrap: wrap;
 }
 
@@ -329,17 +276,15 @@
 
     display: inline-flex;
     align-items: center;
-
     gap: 6px;
 
     padding: 0 10px;
 
-    border: 1px solid var(--creme-linha);
+    border: 1px solid var(--borda);
     border-radius: 999px;
 
-    background: #ffffff;
-
-    color: #53645c;
+    background: var(--bg-surface-2);
+    color: var(--texto-medio);
 
     font-size: 9px;
     font-weight: 500;
@@ -354,7 +299,6 @@
 
     display: inline-flex;
     align-items: center;
-
     gap: 6px;
 
     padding: 0 10px;
@@ -362,13 +306,11 @@
     border-radius: 999px;
 
     background: var(--verde-claro);
-
     color: var(--verde);
 
     font-size: 9px;
     font-weight: 600;
 }
-
 
 /* ============================================================
    DIVISOR
@@ -380,9 +322,8 @@
 
     margin: 0 auto;
 
-    background: var(--creme-linha);
+    background: var(--borda);
 }
-
 
 /* ============================================================
    ABAS
@@ -393,13 +334,11 @@
 
     display: flex;
     align-items: center;
-
     gap: 28px;
 
     padding: 0 28px;
 
     overflow-x: auto;
-
     scrollbar-width: none;
 }
 
@@ -413,32 +352,26 @@
 
 .tabButton {
     min-height: 62px;
-
     position: relative;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     gap: 7px;
 
     flex-shrink: 0;
-
     padding: 0 1px;
 
     border: none;
-
     background: transparent;
 
-    color: #81837f;
+    color: var(--texto-suave);
 
     font-family: inherit;
-
     font-size: 11px;
     font-weight: 600;
 
     white-space: nowrap;
-
     cursor: pointer;
 
     transition: color 0.18s ease;
@@ -456,20 +389,19 @@
     content: '';
 
     position: absolute;
-
     right: 0;
     bottom: -1px;
     left: 0;
 
     height: 2px;
 
+    border-radius: 999px;
     background: var(--rosa);
 }
 
 .tabActive:hover {
     color: var(--texto);
 }
-
 
 /* ============================================================
    CONTEÚDO DOS DADOS
@@ -479,16 +411,14 @@
     width: min(100%, 1180px);
 
     margin: 18px auto 0;
-
     padding: 30px 30px 34px;
 
-    border: 1px solid var(--creme-linha);
+    border: 1px solid var(--borda);
     border-radius: 18px;
 
-    background: rgba(255, 250, 244, 0.9);
+    background: var(--bg-surface);
 
-    box-shadow:
-        0 12px 28px rgba(75, 53, 39, 0.05);
+    box-shadow: var(--sombra);
 }
 
 .formTitle {
@@ -496,13 +426,10 @@
 
     color: var(--texto);
 
-    font-family: 'Poppins', sans-serif;
-
+    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
     font-size: 20px;
     line-height: 1.25;
-
     font-weight: 700;
-
     letter-spacing: -0.35px;
 }
 
@@ -511,14 +438,11 @@
 
     color: var(--texto);
 
-    font-family: 'Poppins', sans-serif;
-
+    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
     font-size: 17px;
     font-weight: 700;
-
     letter-spacing: -0.25px;
 }
-
 
 /* ============================================================
    GRIDS
@@ -531,7 +455,6 @@
     width: 100%;
 
     display: grid;
-
     gap: 16px;
 
     margin-bottom: 16px;
@@ -542,21 +465,15 @@
 }
 
 .formGrid2 {
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .formGrid3 {
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .formGridAddress {
-    grid-template-columns:
-        0.8fr
-        2fr
-        0.5fr
-        1.5fr;
+    grid-template-columns: 0.8fr 2fr 0.5fr 1.5fr;
 }
 
 .formGroup,
@@ -565,13 +482,12 @@
 
     display: flex;
     flex-direction: column;
-
     gap: 7px;
 }
 
 .formGroup label,
 .formGroupSmall label {
-    color: #344b41;
+    color: var(--texto-medio);
 
     font-size: 10px;
     font-weight: 600;
@@ -579,10 +495,8 @@
 
 .required {
     margin-left: 3px;
-
     color: var(--rosa);
 }
-
 
 /* ============================================================
    CAMPOS SOMENTE LEITURA
@@ -597,63 +511,78 @@
 
     padding: 10px 14px;
 
-    border: 1px solid #d9cdbf;
+    border: 1px solid var(--borda-forte);
     border-radius: 10px;
 
-    background: #ffffff;
+    background: var(--bg-surface-2);
+    color: var(--texto);
 
-    color: #263930;
-
-    font-family: 'Poppins', sans-serif;
-
+    font-family: inherit;
     font-size: 12px;
     font-weight: 500;
 
     line-height: 1.45;
-
-    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
-
 /* ============================================================
-   INPUTS ANTIGOS — caso ainda existam
+   INPUTS ANTIGOS — CASO AINDA EXISTAM
 ============================================================ */
 
 .formGroup input,
 .formGroup select,
 .formGroupSmall input {
     width: 100%;
+    min-width: 0;
     height: 48px;
 
     padding: 0 14px;
 
-    border: 1px solid #d9cdbf;
+    border: 1px solid var(--borda-forte);
     border-radius: 10px;
 
     outline: none;
 
-    background: #ffffff;
-
-    color: #263930;
+    background: var(--bg-surface-2);
+    color: var(--texto);
 
     font-family: inherit;
-
     font-size: 12px;
 
     transition:
         border-color 0.18s ease,
-        box-shadow 0.18s ease;
+        box-shadow 0.18s ease,
+        background 0.18s ease;
+}
+
+.formGroup input::placeholder,
+.formGroupSmall input::placeholder {
+    color: var(--texto-claro);
+}
+
+.formGroup input:hover,
+.formGroup select:hover,
+.formGroupSmall input:hover {
+    border-color: var(--verde);
 }
 
 .formGroup input:focus,
 .formGroup select:focus,
 .formGroupSmall input:focus {
-    border-color: #9ab5aa;
+    border-color: var(--verde);
 
-    box-shadow:
-        0 0 0 3px rgba(0, 89, 66, 0.07);
+    background: var(--bg-surface);
+
+    box-shadow: 0 0 0 3px var(--sombra-foco);
 }
 
+.formGroup input:disabled,
+.formGroup select:disabled,
+.formGroupSmall input:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: var(--bg-neutro);
+}
 
 /* ============================================================
    DOCUMENTOS
@@ -667,25 +596,22 @@
     justify-content: space-between;
 
     gap: 20px;
-
     margin-bottom: 24px;
 }
 
 .docsSubtitle {
     margin: -12px 0 0;
 
-    color: var(--texto-secundario);
-
+    color: var(--texto-suave);
     font-size: 11px;
 }
 
 .uploadButton {
-    height: 42px;
+    min-height: 42px;
 
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-
     gap: 8px;
 
     padding: 0 17px;
@@ -693,44 +619,53 @@
     border: none;
     border-radius: 10px;
 
-    background: var(--verde);
-
-    color: #ffffff;
+    background: var(--verde-principal);
+    color: var(--texto-sobre-verde);
 
     font-family: inherit;
-
     font-size: 11px;
     font-weight: 600;
 
     white-space: nowrap;
-
     cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        transform 0.18s ease;
 }
 
 .uploadButton:hover {
-    background: var(--verde-profundo);
+    background: var(--verde-escuro);
+    transform: translateY(-1px);
 }
 
 .docsGrid {
     width: 100%;
 
     display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
 }
 
 .docCard {
     min-width: 0;
-
     padding: 17px;
 
-    border: 1px solid var(--creme-linha);
+    border: 1px solid var(--borda);
     border-radius: 13px;
 
-    background: #ffffff;
+    background: var(--bg-surface-2);
+
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        transform 0.18s ease;
+}
+
+.docCard:hover {
+    border-color: var(--borda-forte);
+    box-shadow: var(--sombra-foco);
+    transform: translateY(-2px);
 }
 
 .docCardHeader {
@@ -739,14 +674,12 @@
     justify-content: space-between;
 
     gap: 10px;
-
     margin-bottom: 13px;
 }
 
 .docStatus {
     display: inline-flex;
     align-items: center;
-
     gap: 4px;
 
     padding: 4px 9px;
@@ -754,7 +687,6 @@
     border-radius: 999px;
 
     background: var(--verde-claro);
-
     color: var(--verde);
 
     font-size: 9px;
@@ -762,8 +694,7 @@
 }
 
 .docMeta {
-    color: #9a9b97;
-
+    color: var(--texto-claro);
     font-size: 9px;
 }
 
@@ -774,44 +705,40 @@
 
     font-size: 13px;
     font-weight: 700;
-
     line-height: 1.4;
+
+    overflow-wrap: anywhere;
 }
 
 .docValidity {
-    color: var(--texto-secundario);
-
+    color: var(--texto-suave);
     font-size: 10px;
 }
 
 .docCardFooter {
     display: flex;
     align-items: center;
-
     gap: 13px;
 
     margin-top: 16px;
     padding-top: 13px;
 
-    border-top: 1px solid var(--creme-linha);
+    border-top: 1px solid var(--borda);
 }
 
 .docAction {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-
     gap: 5px;
 
     padding: 0;
 
     border: none;
-
     background: transparent;
 
-    color: #53635c;
+    color: var(--texto-medio);
 
     font-family: inherit;
-
     font-size: 10px;
     font-weight: 600;
 
@@ -828,7 +755,7 @@
 
     margin-left: auto;
 
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 
@@ -838,18 +765,19 @@
     border-radius: 7px;
 
     background: transparent;
-
-    color: #737a76;
+    color: var(--texto-suave);
 
     cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease;
 }
 
 .docActionIcon:hover {
-    background: #f5eee7;
-
+    background: var(--rosa-suave);
     color: var(--rosa);
 }
-
 
 /* ============================================================
    ELEMENTOS ANTIGOS QUE PODEM EXISTIR
@@ -858,7 +786,6 @@
 .profileHeaderActions {
     display: flex;
     align-items: center;
-
     gap: 10px;
 
     flex-shrink: 0;
@@ -866,12 +793,11 @@
 
 .discardButton,
 .saveButton {
-    height: 42px;
+    min-height: 42px;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     gap: 7px;
 
     padding: 0 16px;
@@ -879,40 +805,38 @@
     border-radius: 10px;
 
     font-family: inherit;
-
     font-size: 11px;
     font-weight: 600;
 
     cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease;
 }
 
 .discardButton {
-    border: 1px solid #d9cdbf;
-
-    background: #ffffff;
-
-    color: var(--verde);
+    border: 1px solid var(--borda-forte);
+    background: var(--bg-surface-2);
+    color: var(--texto);
 }
 
 .discardButton:hover {
-    background: #f4f8f6;
+    background: var(--menu-hover-bg);
 }
 
 .saveButton {
-    border: 1px solid var(--verde);
-
-    background: var(--verde);
-
-    color: #ffffff;
+    border: 1px solid var(--verde-principal);
+    background: var(--verde-principal);
+    color: var(--texto-sobre-verde);
 }
 
 .saveButton:hover {
-    background: var(--verde-profundo);
+    background: var(--verde-escuro);
 }
 
-
 /* ============================================================
-   RESPONSIVIDADE
+   RESPONSIVIDADE — NOTEBOOKS
 ============================================================ */
 
 @media (max-width: 1200px) {
@@ -922,21 +846,21 @@
     }
 
     .formGrid3 {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .formGridAddress {
-        grid-template-columns:
-            1fr 2fr;
+        grid-template-columns: 1fr 2fr;
     }
 
     .docsGrid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
+/* ============================================================
+   RESPONSIVIDADE — TABLETS
+============================================================ */
 
 @media (max-width: 900px) {
     .page {
@@ -944,11 +868,7 @@
         min-height: calc(100vh + 48px);
 
         margin: -24px;
-
-        padding:
-            28px
-            24px
-            48px;
+        padding: 28px 24px 48px;
     }
 
     .profileHeaderActions {
@@ -961,6 +881,9 @@
     }
 }
 
+/* ============================================================
+   RESPONSIVIDADE — CELULARES
+============================================================ */
 
 @media (max-width: 700px) {
     .page {
@@ -968,11 +891,7 @@
         min-height: calc(100vh + 32px);
 
         margin: -16px;
-
-        padding:
-            24px
-            16px
-            40px;
+        padding: 24px 16px 40px;
     }
 
     .pageHeader h1 {
@@ -990,22 +909,17 @@
 
     .tabsContainer {
         gap: 22px;
-
-        padding:
-            0
-            20px;
+        padding: 0 20px;
     }
 
     .formCard {
-        padding:
-            24px
-            20px;
+        padding: 24px 20px;
     }
 
     .formGrid2,
     .formGrid3,
     .formGridAddress {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .docsHeader {
@@ -1017,10 +931,9 @@
     }
 
     .docsGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
-
 
 @media (max-width: 500px) {
     .page {
@@ -1028,11 +941,7 @@
         min-height: calc(100vh + 28px);
 
         margin: -14px;
-
-        padding:
-            20px
-            14px
-            34px;
+        padding: 20px 14px 34px;
     }
 
     .profileHeaderActions {
@@ -1042,7 +951,6 @@
     .discardButton,
     .saveButton {
         width: 100%;
-
         flex: none;
     }
 
@@ -1058,5 +966,18 @@
 
     .formTitle {
         font-size: 18px;
+    }
+}
+
+/* ============================================================
+   ACESSIBILIDADE
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .page *,
+    .page *::before,
+    .page *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
     }
 }

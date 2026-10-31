@@ -273,14 +273,14 @@ export default function ConfiguracaoEquipe() {
             style={
                 imagemEsporte
                     ? {
-                          backgroundImage: `
+                        backgroundImage: `
                             linear-gradient(
                                 rgba(0, 65, 48, 0.88),
                                 rgba(0, 65, 48, 0.93)
                             ),
                             url(${imagemEsporte})
                           `,
-                      }
+                    }
                     : undefined
             }
         >
@@ -341,8 +341,7 @@ export default function ConfiguracaoEquipe() {
                     }
                 >
                     <h1>
-                        Finalize a configuração
-                        do seu registro
+                        Finalize a configuração do <span>seu registro</span>
                     </h1>
 
                     <p>
@@ -380,19 +379,18 @@ export default function ConfiguracaoEquipe() {
                             }
                             style={
                                 imagemEquipe ||
-                                imagemEsporte
+                                    imagemEsporte
                                     ? {
-                                          backgroundImage: `
+                                        backgroundImage: `
                                             linear-gradient(
                                                 rgba(0, 35, 26, 0.42),
                                                 rgba(0, 35, 26, 0.6)
                                             ),
-                                            url(${
-                                                imagemEquipe ||
-                                                imagemEsporte
+                                            url(${imagemEquipe ||
+                                            imagemEsporte
                                             })
                                           `,
-                                      }
+                                    }
                                     : undefined
                             }
                         >
@@ -599,10 +597,10 @@ export default function ConfiguracaoEquipe() {
                                 style={
                                     imagemEquipe
                                         ? {
-                                              backgroundImage: `
+                                            backgroundImage: `
                                                 url(${imagemEquipe})
                                               `,
-                                          }
+                                        }
                                         : undefined
                                 }
                             >

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
 import 'treinador_notificacao_page.dart';
+import '../../theme/sate_theme.dart';
 
 class TreinadorHomePage extends StatelessWidget {
   const TreinadorHomePage({super.key});
 
-  static const Color verde = Color(0xFF006B4F);
-  static const Color verdeClaro = Color(0xFFE8F5F0);
-  static const Color rosa = Color(0xFFE98BA8);
+  static const Color verde = Color(0xFF003D31);
+  static const Color verdeClaro = Color(0xFFDFF7EE);
+  static const Color rosa = Color(0xFFEF476F);
 
-  static const Color fundo = Color(0xFFF4F8F6);
-  static const Color texto = Color(0xFF12261F);
+  static const Color fundo = Color(0xFFFAF5EE);
+  static const Color texto = Color(0xFF10251F);
   static const Color textoSecundario = Color(0xFF68736F);
-  static const Color linha = Color(0xFFDCE7E2);
+  static const Color linha = Color(0xFFE8DFD3);
 
   @override
   Widget build(BuildContext context) {
@@ -121,8 +122,8 @@ class TreinadorHomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Olá, Professor! 👋',
+              Text.rich(
+                TextSpan(children: [TextSpan(text: 'Olá, '), TextSpan(text: 'Professor!', style: SateEstilo.destaque), TextSpan(text: ' 👋')]),
                 style: TextStyle(
                   fontSize: 21,
                   fontWeight: FontWeight.w700,
@@ -375,13 +376,13 @@ class TreinadorHomePage extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF8EAF0),
+                  color: const Color(0xFFFDE6EC),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Text(
                   'Agendado',
                   style: TextStyle(
-                    color: Color(0xFF9B5377),
+                    color: Color(0xFFC9305A),
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                   ),
@@ -569,7 +570,7 @@ class TreinadorHomePage extends StatelessWidget {
                           6,
                           (index) {
                             return const Divider(
-                              color: Color(0xFFE3EBE7),
+                              color: Color(0xFFE8DFD3),
                               height: 1,
                               thickness: 1,
                             );
@@ -639,7 +640,7 @@ class TreinadorHomePage extends StatelessWidget {
               end: Alignment.bottomCenter,
               colors: [
                 Color(0xFF16A875),
-                Color(0xFF006B4F),
+                Color(0xFF003D31),
               ],
             ),
             borderRadius: const BorderRadius.vertical(

@@ -1127,6 +1127,7 @@
 .cadastroOpcaoPlanilha .cadastroOpcaoLink { color: #b04d68; }
 
 .uploadArea {
+  margin-top: 18px;
   min-height: 190px;
   display: flex;
   flex-direction: column;
@@ -1220,4 +1221,399 @@
   .modalError { grid-template-columns: 1fr; margin-left: 15px; margin-right: 15px; }
   .cadastroOpcao { min-height: 165px; }
 }
+
+
+/* ============================================================
+   SATE — MODO ESCURO
+   O modo claro permanece inalterado.
+   O header global continua branco.
+============================================================ */
+
+:global(:root[data-theme='dark']) .page {
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(22, 168, 117, 0.16) 0%,
+      rgba(22, 168, 117, 0.07) 38%,
+      transparent 76%
+    ),
+    #102a22;
+  color: #edf7f1;
+}
+
+/* Título e textos principais */
+
+:global(:root[data-theme='dark']) .titleArea h1 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .titleArea h1 em {
+  color: #72dfb0;
+}
+
+:global(:root[data-theme='dark']) .titleArea p,
+:global(:root[data-theme='dark']) .athleteCount {
+  color: #a8beb3;
+}
+
+/* Botões do cabeçalho */
+
+:global(:root[data-theme='dark']) .exportButton {
+  background: #193b30;
+  border-color: #36594a;
+  color: #a7edce;
+}
+
+:global(:root[data-theme='dark']) .exportButton:hover:not(:disabled) {
+  background: #224a3b;
+  border-color: #62bd96;
+}
+
+:global(:root[data-theme='dark']) .newAthleteButton {
+  background: #087b5b;
+  border-color: #087b5b;
+  color: #ffffff;
+}
+
+:global(:root[data-theme='dark']) .newAthleteButton:hover:not(:disabled) {
+  background: #10966d;
+  border-color: #10966d;
+}
+
+/* Busca e filtros */
+
+:global(:root[data-theme='dark']) .filters {
+  background: #17372c;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .searchBox,
+:global(:root[data-theme='dark']) .selectBox {
+  background: #17372c;
+}
+
+:global(:root[data-theme='dark']) .searchBox input,
+:global(:root[data-theme='dark']) .selectBox select {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .searchBox input::placeholder {
+  color: #91a99c;
+}
+
+:global(:root[data-theme='dark']) .selectBox {
+  border-left-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .selectBox > svg {
+  color: #b6d5c5;
+}
+
+:global(:root[data-theme='dark']) .filterButton {
+  background: #17372c;
+  border-left-color: #365447;
+  color: #8ee2ba;
+}
+
+:global(:root[data-theme='dark']) .filterButton:hover {
+  background: #224638;
+}
+
+:global(:root[data-theme='dark']) .clearSearchButton {
+  color: #a8c0b3;
+}
+
+:global(:root[data-theme='dark']) .clearSearchButton:hover {
+  background: #2a4d3e;
+  color: #ffffff;
+}
+
+:global(:root[data-theme='dark']) .clearFiltersButton {
+  color: #b4c9bd;
+}
+
+:global(:root[data-theme='dark']) .clearFiltersButton:hover {
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .teamFilter .selectBox {
+  background: #17372c;
+  border-color: #365447;
+}
+
+/* Lista de atletas */
+
+:global(:root[data-theme='dark']) .athleteCard {
+  border-bottom-color: #2b493b;
+}
+
+:global(:root[data-theme='dark']) .athleteCard:hover {
+  background: #193b2f;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+}
+
+:global(:root[data-theme='dark']) .athleteName h2 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .team,
+:global(:root[data-theme='dark']) .category {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .frequency {
+  color: #83e3b6;
+}
+
+/* Cores dos avatares */
+
+:global(:root[data-theme='dark']) .verde {
+  background: #087b5b;
+}
+
+:global(:root[data-theme='dark']) .rosa {
+  background: #15966d;
+}
+
+/* Ações que aparecem nos cards */
+
+:global(:root[data-theme='dark']) .cardHover button {
+  background: #17372c;
+  border-color: #426653;
+  color: #a7edce;
+}
+
+:global(:root[data-theme='dark']) .cardHover button:hover {
+  background: #28513f;
+  border-color: #72cda4;
+  color: #ffffff;
+}
+
+/* Mensagens, carregamento e lista vazia */
+
+:global(:root[data-theme='dark']) .message,
+:global(:root[data-theme='dark']) .empty {
+  background: #17372c;
+  border-color: #365447;
+  color: #b2c7bb;
+}
+
+:global(:root[data-theme='dark']) .message strong,
+:global(:root[data-theme='dark']) .empty strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .message button {
+  background: #087b5b;
+  color: #ffffff;
+}
+
+/* Fundo do modal */
+
+:global(:root[data-theme='dark']) .modalOverlay {
+  background: rgba(2, 15, 11, 0.82);
+}
+
+:global(:root[data-theme='dark']) .newAthleteModal {
+  background: #142e24;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.42);
+}
+
+:global(:root[data-theme='dark']) .modalHeader,
+:global(:root[data-theme='dark']) .modalFooter {
+  background: #19382b;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .modalHeader > div > span {
+  color: #78dfb1;
+}
+
+:global(:root[data-theme='dark']) .modalHeader h2,
+:global(:root[data-theme='dark']) .sectionHeader h3 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .modalHeader p,
+:global(:root[data-theme='dark']) .sectionHeader span {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .closeModalButton {
+  background: #29483a;
+  color: #d2e6da;
+}
+
+:global(:root[data-theme='dark']) .closeModalButton:hover {
+  background: #365b48;
+}
+
+/* Seções e divisórias */
+
+:global(:root[data-theme='dark']) .formSection {
+  border-bottom-color: #365447;
+}
+
+/* Campos do formulário */
+
+:global(:root[data-theme='dark']) .formField label {
+  color: #c9ddd1;
+}
+
+:global(:root[data-theme='dark']) .formField input,
+:global(:root[data-theme='dark']) .formField select {
+  background: #10271e;
+  border-color: #426653;
+  color: #edf7f1;
+  color-scheme: dark;
+}
+
+:global(:root[data-theme='dark']) .formField input::placeholder {
+  color: #819b8d;
+}
+
+:global(:root[data-theme='dark']) .formField input:focus,
+:global(:root[data-theme='dark']) .formField select:focus {
+  border-color: #42c994;
+  box-shadow: 0 0 0 3px rgba(66, 201, 148, 0.14);
+}
+
+/* Erros */
+
+:global(:root[data-theme='dark']) .formError,
+:global(:root[data-theme='dark']) .modalError {
+  background: #3a2425;
+  border-color: #754143;
+  color: #ffb5b5;
+}
+
+:global(:root[data-theme='dark']) .modalError button {
+  color: #ffb5b5;
+}
+
+/* Rodapé do modal */
+
+:global(:root[data-theme='dark']) .cancelButton,
+:global(:root[data-theme='dark']) .backToOptionsButton {
+  background: transparent;
+  border-color: #426653;
+  color: #c6dbce;
+}
+
+:global(:root[data-theme='dark']) .cancelButton:hover,
+:global(:root[data-theme='dark']) .backToOptionsButton:hover {
+  background: #29483a;
+}
+
+:global(:root[data-theme='dark']) .submitButton {
+  background: #087b5b;
+  color: #ffffff;
+}
+
+:global(:root[data-theme='dark']) .submitButton:hover {
+  background: #10966d;
+}
+
+/* Opções de cadastro manual e planilha */
+
+:global(:root[data-theme='dark']) .cadastroOpcao {
+  background: #19382b;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .cadastroOpcao:hover {
+  background: #204334;
+  border-color: #65bd94;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+:global(:root[data-theme='dark']) .cadastroOpcaoPlanilha:hover {
+  border-color: #65bd94;
+}
+
+:global(:root[data-theme='dark']) .cadastroOpcaoIconeVerde {
+  background: #244d3b;
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .cadastroOpcaoIconeRosa {
+  background: #244d3b;
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .cadastroOpcao > strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .cadastroOpcaoDescricao {
+  color: #b0c5b8;
+}
+
+:global(:root[data-theme='dark']) .cadastroOpcaoLink,
+:global(:root[data-theme='dark']) .cadastroOpcaoPlanilha .cadastroOpcaoLink {
+  color: #83e3b6;
+}
+
+/* Importação de planilha */
+
+:global(:root[data-theme='dark']) .uploadArea {
+  background: #10271e;
+  border-color: #426653;
+}
+
+:global(:root[data-theme='dark']) .uploadArea:hover {
+  background: #19382b;
+  border-color: #42c994;
+}
+
+:global(:root[data-theme='dark']) .uploadArea > strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .helpText {
+  color: #a8beb3;
+}
+
+:global(:root[data-theme='dark']) .previewTitle svg {
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .tableWrapper {
+  background: #142e24;
+  border-color: #365447;
+}
+
+:global(:root[data-theme='dark']) .previewTable th {
+  background: #244638;
+  border-bottom-color: #365447;
+  color: #d4e7dc;
+}
+
+:global(:root[data-theme='dark']) .previewTable td {
+  background: #142e24;
+  border-bottom-color: #2b493b;
+  color: #c9ddd1;
+}
+
+:global(:root[data-theme='dark']) .importResult {
+  background: #193d2e;
+  border-color: #386e51;
+  color: #91e6ba;
+}
+
+/* Ajustes para os filtros em telas menores */
+
+@media (max-width: 920px) {
+  :global(:root[data-theme='dark']) .filters {
+    background: transparent;
+    border-color: transparent;
+  }
+
+  :global(:root[data-theme='dark']) .searchBox,
+  :global(:root[data-theme='dark']) .selectBox {
+    background: #17372c;
+    border-color: #365447;
+  }
+}
+
 

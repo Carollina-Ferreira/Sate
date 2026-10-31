@@ -1,11 +1,7 @@
+
 import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-} from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 
 import {
   FaBasketballBall,
@@ -41,8 +37,7 @@ export default function ConfiguracaoConcluida() {
 
   const [salvando, setSalvando] = useState(false);
 
-  const state =
-    location.state as EstadoNavegacao | null;
+  const state = location.state as EstadoNavegacao | null;
 
   const modalidade =
     state?.modalidade ||
@@ -67,10 +62,7 @@ export default function ConfiguracaoConcluida() {
     '';
 
   const camposSelecionados = useMemo(() => {
-    const campos =
-      sessionStorage.getItem(
-        'sate-campos-analise',
-      );
+    const campos = sessionStorage.getItem('sate-campos-analise');
 
     if (!campos) {
       return [];
@@ -89,25 +81,15 @@ export default function ConfiguracaoConcluida() {
             return campo;
           }
 
-          if (
-            campo &&
-            typeof campo.nome === 'string'
-          ) {
+          if (campo && typeof campo.nome === 'string') {
             return campo.nome;
           }
 
           return null;
         })
-        .filter(
-          (campo): campo is string =>
-            Boolean(campo),
-        );
+        .filter((campo): campo is string => Boolean(campo));
     } catch (error) {
-      console.error(
-        'Erro ao carregar campos:',
-        error,
-      );
-
+      console.error('Erro ao carregar campos:', error);
       return [];
     }
   }, []);
@@ -129,14 +111,10 @@ export default function ConfiguracaoConcluida() {
     try {
       setSalvando(true);
 
-      const token =
-        localStorage.getItem('token');
+      const token = localStorage.getItem('token');
 
       if (!token) {
-        alert(
-          'Sessão não encontrada. Faça login novamente.',
-        );
-
+        alert('Sessão não encontrada. Faça login novamente.');
         navigate('/login');
         return;
       }
@@ -145,72 +123,43 @@ export default function ConfiguracaoConcluida() {
         'http://localhost:3000/api/equipes',
         {
           method: 'POST',
-
           headers: {
-            'Content-Type':
-              'application/json',
-
-            Authorization:
-              `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
-
           body: JSON.stringify({
             nome: nomeEquipe,
             modalidade,
             categoria,
-
             imagem: null,
-
             corEquipe: '#16A875',
             proximaPartida: null,
           }),
         },
       );
 
-      const dados = await resposta
-        .json()
-        .catch(() => ({}));
+      const dados = await resposta.json().catch(() => ({}));
 
       if (!resposta.ok) {
         console.error('Erro retornado pelo backend:', dados);
 
         throw new Error(
           dados.erro ||
-          dados.mensagem ||
-          'Não foi possível salvar a equipe.',
+            dados.mensagem ||
+            'Não foi possível salvar a equipe.',
         );
       }
 
-      sessionStorage.removeItem(
-        'sate-nome-equipe',
-      );
-
-      sessionStorage.removeItem(
-        'sate-categoria-equipe',
-      );
-
-      sessionStorage.removeItem(
-        'sate-imagem-equipe',
-      );
-
-      sessionStorage.removeItem(
-        'sate-imagem-esporte',
-      );
-
-      sessionStorage.removeItem(
-        'sate-campos-analise',
-      );
-
-      sessionStorage.removeItem(
-        'sate-modalidade',
-      );
+      sessionStorage.removeItem('sate-nome-equipe');
+      sessionStorage.removeItem('sate-categoria-equipe');
+      sessionStorage.removeItem('sate-imagem-equipe');
+      sessionStorage.removeItem('sate-imagem-esporte');
+      sessionStorage.removeItem('sate-campos-analise');
+      sessionStorage.removeItem('sate-modalidade');
 
       navigate('/inicio');
     } catch (error) {
-      console.error(
-        'Erro ao salvar equipe:',
-        error,
-      );
+      console.error('Erro ao salvar equipe:', error);
 
       alert(
         error instanceof Error
@@ -223,22 +172,7 @@ export default function ConfiguracaoConcluida() {
   };
 
   return (
-    <main
-      className={styles.page}
-      style={
-        imagemEsporte
-          ? {
-            backgroundImage: `
-                linear-gradient(
-                  rgba(0, 66, 49, 0.84),
-                  rgba(0, 66, 49, 0.92)
-                ),
-                url(${imagemEsporte})
-              `,
-          }
-          : undefined
-      }
-    >
+    <main className={styles.page}>
       <div className={styles.container}>
         <div className={styles.progressArea}>
           <div className={styles.stepBadge}>
@@ -255,19 +189,16 @@ export default function ConfiguracaoConcluida() {
 
         <header className={styles.header}>
           <div className={styles.completeIcon}>
-            <Check
-              size={27}
-              strokeWidth={3}
-            />
+            <Check size={27} strokeWidth={3} />
           </div>
 
           <h1>
-            Tudo pronto!
+            Tudo <em>pronto!</em>
           </h1>
 
           <p>
-            Sua equipe foi configurada.
-            Confira as informações antes de começar.
+            Sua equipe foi configurada. Confira as informações antes de
+            começar.
           </p>
         </header>
 
@@ -275,54 +206,29 @@ export default function ConfiguracaoConcluida() {
           <div className={styles.fieldsCard}>
             <div className={styles.sportHeader}>
               <div className={styles.sportCircle}>
-                {
-                  iconePorEsporte[
-                  modalidade
-                  ] || <FaRunning />
-                }
+                {iconePorEsporte[modalidade] || <FaRunning />}
               </div>
 
               <div>
-                <strong>
-                  {modalidade}
-                </strong>
-
-                <span>
-                  CAMPOS DE ANÁLISE
-                </span>
+                <strong>{modalidade}</strong>
+                <span>CAMPOS DE ANÁLISE</span>
               </div>
             </div>
 
             <div className={styles.divider} />
 
-            <span
-              className={
-                styles.fieldsTitle
-              }
-            >
+            <span className={styles.fieldsTitle}>
               Informações selecionadas
             </span>
 
             {camposSelecionados.length > 0 ? (
               <ul>
-                {camposSelecionados
-                  .slice(0, 6)
-                  .map(
-                    (
-                      campo,
-                      index,
-                    ) => (
-                      <li
-                        key={`${campo}-${index}`}
-                      >
-                        <Check
-                          size={13}
-                        />
-
-                        {campo}
-                      </li>
-                    ),
-                  )}
+                {camposSelecionados.slice(0, 6).map((campo, index) => (
+                  <li key={`${campo}-${index}`}>
+                    <Check size={13} />
+                    {campo}
+                  </li>
+                ))}
               </ul>
             ) : (
               <p className={styles.emptyFields}>
@@ -332,9 +238,7 @@ export default function ConfiguracaoConcluida() {
 
             {camposSelecionados.length > 6 && (
               <span className={styles.moreFields}>
-                +
-                {camposSelecionados.length - 6}{' '}
-                campos selecionados
+                +{camposSelecionados.length - 6} campos selecionados
               </span>
             )}
           </div>
@@ -343,66 +247,44 @@ export default function ConfiguracaoConcluida() {
             <div
               className={styles.teamImage}
               style={
-                imagemEquipe ||
-                  imagemEsporte
+                imagemEquipe
                   ? {
-                    backgroundImage: `url(${imagemEquipe ||
-                      imagemEsporte
-                      })`,
-                  }
+                      backgroundImage: `url("${imagemEquipe}")`,
+                    }
                   : undefined
               }
             >
               {!imagemEquipe &&
-                !imagemEsporte &&
-                (iconePorEsporte[
-                  modalidade
-                ] || <FaRunning />)}
+                (iconePorEsporte[modalidade] || <FaRunning />)}
             </div>
 
             <div className={styles.teamInfo}>
               <div>
-                <span>
-                  {modalidade.toUpperCase()}
-                </span>
+                <span>{modalidade.toUpperCase()}</span>
 
-                <h2>
-                  {nomeEquipe}
-                </h2>
+                <h2>{nomeEquipe}</h2>
 
-                <p>
-                  Categoria: {categoria}
-                </p>
+                <p>Categoria: {categoria}</p>
               </div>
 
               <div className={styles.sportEmoji}>
-                {
-                  iconePorEsporte[
-                  modalidade
-                  ] || <FaRunning />
-                }
+                {iconePorEsporte[modalidade] || <FaRunning />}
               </div>
             </div>
           </div>
         </div>
 
         <div className={styles.finalMessage}>
-          <div
-            className={
-              styles.finalMessageIcon
-            }
-          >
-            <Check size={17} />
+          <div className={styles.finalMessageIcon}>
+            <Check size={17} strokeWidth={2.5} />
           </div>
 
           <div>
-            <strong>
-              Sua equipe está pronta!
-            </strong>
+            <strong>Sua equipe está pronta!</strong>
 
             <span>
-              Agora você pode começar a acompanhar
-              seus atletas e treinamentos.
+              Agora você pode começar a acompanhar seus atletas e
+              treinamentos.
             </span>
           </div>
         </div>
@@ -414,8 +296,7 @@ export default function ConfiguracaoConcluida() {
             onClick={voltar}
             disabled={salvando}
           >
-            <ArrowLeft size={18} />
-
+            <ArrowLeft size={16} />
             Voltar
           </button>
 
@@ -427,21 +308,13 @@ export default function ConfiguracaoConcluida() {
           >
             {salvando ? (
               <>
-                <span
-                  className={
-                    styles.spinner
-                  }
-                />
-
+                <span className={styles.spinner} />
                 Salvando...
               </>
             ) : (
               <>
                 Ir para o início
-
-                <ArrowRight
-                  size={18}
-                />
+                <ArrowRight size={16} />
               </>
             )}
           </button>

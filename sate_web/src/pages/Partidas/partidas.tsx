@@ -1,4 +1,3 @@
-
 import {
   useEffect,
   useMemo,
@@ -6,6 +5,8 @@ import {
 } from 'react';
 
 import { useNavigate } from 'react-router-dom';
+
+import NovaPartidaModal from '../../components/NovaPartidaModal/NovaPartidaModal';
 
 import styles from './partidas.module.css';
 
@@ -72,6 +73,7 @@ type NovaPartida = {
   equipeId: string;
   equipeVisitante: string;
   data: string;
+  local: string;
   resultadoCasa: string;
   resultadoVisitante: string;
 };
@@ -264,14 +266,6 @@ function extrairAtletas(dados: unknown): Atleta[] {
   return [];
 }
 
-function nomeDoAtleta(atleta: Atleta) {
-  return (
-    atleta.nome ||
-    atleta.usuario?.nome ||
-    `Atleta #${atleta.id}`
-  );
-}
-
 function equipeDoAtleta(atleta: Atleta) {
   return atleta.equipeId ?? atleta.equipe?.id ?? null;
 }
@@ -336,6 +330,7 @@ export default function Partidas() {
     equipeId: '',
     equipeVisitante: '',
     data: '',
+    local: '',
     resultadoCasa: '',
     resultadoVisitante: '',
   });
@@ -774,6 +769,7 @@ export default function Partidas() {
           equipeId: Number(novaPartida.equipeId),
           adversario: novaPartida.equipeVisitante.trim(),
           data: `${novaPartida.data}T12:00:00.000Z`,
+          local: novaPartida.local.trim() || null,
           golsEquipe,
           golsAdversario,
           status: statusNovaPartida,
@@ -858,6 +854,7 @@ export default function Partidas() {
             : '',
         equipeVisitante: '',
         data: '',
+        local: '',
         resultadoCasa: '',
         resultadoVisitante: '',
       });
@@ -1206,7 +1203,6 @@ export default function Partidas() {
                       <i aria-hidden="true" />
                       {partida.status}
                     </span>
-
                   </td>
                 </tr>
               ))}
@@ -1240,247 +1236,43 @@ export default function Partidas() {
         </div>
       </div>
 
-      {/* ========================================================
-          MODAL DE NOVA PARTIDA
-      ======================================================== */}
-
-      {mostrarModal && (
-        <div
-          className={styles.modalOverlay}
-          onClick={fecharModal}
-        >
-          <div
-            className={styles.modal}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className={styles.modalHeader}>
-              <h3>Nova Partida</h3>
-
-              <button
-                type="button"
-                className={styles.closeButton}
-                onClick={fecharModal}
-                disabled={salvando}
-              >
-                ×
-              </button>
-            </div>
-
-            <div className={styles.form}>
-              <div className={styles.formGroup}>
-                <label htmlFor="equipePartida">
-                  Sua equipe
-                </label>
-
-                <select
-                  id="equipePartida"
-                  value={novaPartida.equipeId}
-                  onChange={(event) =>
-                    atualizarNovaPartida(
-                      'equipeId',
-                      event.target.value,
-                    )
-                  }
-                >
-                  <option value="">Selecione</option>
-
-                  {equipes.map((equipe) => (
-                    <option
-                      key={equipe.id}
-                      value={String(equipe.id)}
-                    >
-                      {equipe.nome}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <section
-                className={styles.athletePicker}
-                aria-labelledby="athletes-heading"
-              >
-                <div className={styles.athletePickerHeader}>
-                  <div>
-                    <h4 id="athletes-heading">
-                      Atletas que vão jogar
-                    </h4>
-                    <p>
-                      Selecione os participantes desta partida.
-                    </p>
-                  </div>
-
-                  <span className={styles.athleteCount}>
-                    {atletasSelecionados.length} selecionado(s)
-                  </span>
-                </div>
-
-                {carregandoAtletas ? (
-                  <p className={styles.athleteMessage}>
-                    Carregando atletas...
-                  </p>
-                ) : erroAtletas ? (
-                  <p className={styles.athleteError}>
-                    {erroAtletas}
-                  </p>
-                ) : atletasEquipe.length > 0 ? (
-                  <div className={styles.athleteList}>
-                    {atletasEquipe.map((atleta) => (
-                      <label
-                        className={styles.athleteOption}
-                        key={atleta.id}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={atletasSelecionados.includes(
-                            atleta.id,
-                          )}
-                          onChange={() =>
-                            alternarAtleta(atleta.id)
-                          }
-                        />
-
-                        <span
-                          className={styles.athleteAvatar}
-                          aria-hidden="true"
-                        >
-                          {nomeDoAtleta(atleta)
-                            .trim()
-                            .charAt(0)
-                            .toUpperCase()}
-                        </span>
-
-                        <span className={styles.athleteName}>
-                          {nomeDoAtleta(atleta)}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                ) : (
-                  <p className={styles.athleteMessage}>
-                    Selecione uma equipe para carregar os atletas.
-                  </p>
-                )}
-              </section>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="adversarioPartida">
-                  Equipe adversária
-                </label>
-
-                <input
-                  id="adversarioPartida"
-                  type="text"
-                  placeholder="Ex.: Tigres FC"
-                  value={novaPartida.equipeVisitante}
-                  onChange={(event) =>
-                    atualizarNovaPartida(
-                      'equipeVisitante',
-                      event.target.value,
-                    )
-                  }
-                />
-              </div>
-
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="modalidadePartida">
-                    Modalidade
-                  </label>
-
-                  <input
-                    id="modalidadePartida"
-                    type="text"
-                    readOnly
-                    value={equipeSelecionada?.modalidade || ''}
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="dataPartida">
-                    Data
-                  </label>
-
-                  <input
-                    id="dataPartida"
-                    type="date"
-                    value={novaPartida.data}
-                    onChange={(event) =>
-                      atualizarNovaPartida(
-                        'data',
-                        event.target.value,
-                      )
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="golsEquipe">
-                    Placar da sua equipe
-                  </label>
-
-                  <input
-                    id="golsEquipe"
-                    type="number"
-                    min="0"
-                    step="1"
-                    placeholder="Ex.: 3"
-                    value={novaPartida.resultadoCasa}
-                    onChange={(event) =>
-                      atualizarNovaPartida(
-                        'resultadoCasa',
-                        event.target.value,
-                      )
-                    }
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label htmlFor="golsAdversario">
-                    Placar adversário
-                  </label>
-
-                  <input
-                    id="golsAdversario"
-                    type="number"
-                    min="0"
-                    step="1"
-                    placeholder="Ex.: 1"
-                    value={novaPartida.resultadoVisitante}
-                    onChange={(event) =>
-                      atualizarNovaPartida(
-                        'resultadoVisitante',
-                        event.target.value,
-                      )
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.modalActions}>
-              <button
-                type="button"
-                className={styles.cancelButton}
-                onClick={fecharModal}
-                disabled={salvando}
-              >
-                Cancelar
-              </button>
-
-              <button
-                type="button"
-                className={styles.saveButton}
-                onClick={() => void criarPartida()}
-                disabled={salvando}
-              >
-                {salvando ? 'Salvando...' : 'Criar partida'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <NovaPartidaModal
+        aberto={mostrarModal}
+        salvando={salvando}
+        equipes={equipes}
+        equipeId={novaPartida.equipeId}
+        onEquipeChange={(valor) =>
+          atualizarNovaPartida('equipeId', valor)
+        }
+        modalidade={equipeSelecionada?.modalidade || ''}
+        atletas={atletasEquipe}
+        atletasSelecionados={atletasSelecionados}
+        carregandoAtletas={carregandoAtletas}
+        erroAtletas={erroAtletas}
+        onAlternarAtleta={alternarAtleta}
+        adversario={novaPartida.equipeVisitante}
+        onAdversarioChange={(valor) =>
+          atualizarNovaPartida('equipeVisitante', valor)
+        }
+        data={novaPartida.data}
+        onDataChange={(valor) =>
+          atualizarNovaPartida('data', valor)
+        }
+        local={novaPartida.local}
+        onLocalChange={(valor) =>
+          atualizarNovaPartida('local', valor)
+        }
+        resultadoCasa={novaPartida.resultadoCasa}
+        onResultadoCasaChange={(valor) =>
+          atualizarNovaPartida('resultadoCasa', valor)
+        }
+        resultadoVisitante={novaPartida.resultadoVisitante}
+        onResultadoVisitanteChange={(valor) =>
+          atualizarNovaPartida('resultadoVisitante', valor)
+        }
+        onClose={fecharModal}
+        onSubmit={() => void criarPartida()}
+      />
     </div>
   );
 }

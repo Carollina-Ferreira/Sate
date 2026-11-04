@@ -1,11 +1,13 @@
 ﻿import {
   Bell,
+  CalendarClock,
   CalendarDays,
   ChevronDown,
   ChevronRight,
   CircleHelp,
   ClipboardCheck,
   LogOut,
+  MapPin,
   Megaphone,
   Moon,
   Search,
@@ -16,7 +18,10 @@
   Users,
 } from 'lucide-react';
 
+import type { ReactNode } from 'react';
+
 import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -24,9 +29,11 @@ import {
 } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-
 import styles from './header.module.css';
 
+// ============================================================
+// INTERFACES
+// ============================================================
 
 interface HeaderProps {
   title: string;
@@ -34,12 +41,10 @@ interface HeaderProps {
   onSettings?: () => void;
   onHelp?: () => void;
   onLogout?: () => void;
-  onViewAllNotifications?: () => void;
   onViewAllAthletes?: () => void;
   onViewAllTeams?: () => void;
   onViewAllMatches?: () => void;
 }
-
 
 export interface SearchItem {
   id: number;
@@ -49,16 +54,15 @@ export interface SearchItem {
   initials?: string;
 }
 
-
 interface NotificationItem {
   id: number;
-  type: 'convocacao' | 'treino' | 'avaliacao';
+  type: string;
   title: string;
   description: string;
   time: string;
   read: boolean;
+  link?: string | null;
 }
-
 
 interface Usuario {
   id?: number;
@@ -67,7 +71,6 @@ interface Usuario {
   tipo?: string;
   avatarUrl?: string | null;
 }
-
 
 interface AtletaAPI {
   id: number;
@@ -82,7 +85,6 @@ interface AtletaAPI {
   } | null;
 }
 
-
 interface EquipeAPI {
   id: number;
   nome?: string | null;
@@ -94,7 +96,6 @@ interface EquipeAPI {
   };
   atletas?: unknown[];
 }
-
 
 interface PartidaAPI {
   id: number;
@@ -111,54 +112,22 @@ interface PartidaAPI {
   } | null;
 }
 
+interface NotificacoesResponse {
+  notificacoes?: NotificationItem[];
+  naoLidas?: number;
+  total?: number;
+  mensagem?: string;
+}
 
 type OpenPanel = 'search' | 'notifications' | 'user' | null;
 type Theme = 'light' | 'dark';
 
-
 const API_URL = 'http://localhost:3000';
 const LIMITE_RESULTADOS = 3;
 
-
-const initialNotifications: NotificationItem[] = [
-  {
-    id: 1,
-    type: 'convocacao',
-    title: 'Nova Convocação',
-    description: 'Você foi convocado para o jogo contra Poli Rugby',
-    time: 'Hoje, 10:34',
-    read: false,
-  },
-  {
-    id: 2,
-    type: 'treino',
-    title: 'Treino Atualizado',
-    description: 'O treino de amanhã foi atualizado pela comissão técnica',
-    time: 'Hoje, 10:34',
-    read: false,
-  },
-  {
-    id: 3,
-    type: 'avaliacao',
-    title: 'Avaliação Disponível',
-    description: 'Nova avaliação técnica disponível para o time',
-    time: 'Hoje, 10:34',
-    read: true,
-  },
-  {
-    id: 4,
-    type: 'convocacao',
-    title: 'Partida Confirmada',
-    description: 'A próxima partida da equipe foi confirmada',
-    time: 'Ontem, 18:20',
-    read: false,
-  },
-];
-
-
-/* ============================================================
-   FUNÇÕES AUXILIARES
-============================================================ */
+// ============================================================
+// FUNÇÕES AUXILIARES
+// ============================================================
 
 function obterToken() {
   return (
@@ -169,7 +138,6 @@ function obterToken() {
   );
 }
 
-
 function normalizarTexto(texto: string) {
   return texto
     .normalize('NFD')
@@ -177,7 +145,6 @@ function normalizarTexto(texto: string) {
     .toLocaleLowerCase('pt-BR')
     .trim();
 }
-
 
 function obterIniciais(nome: string) {
   return nome
@@ -188,7 +155,6 @@ function obterIniciais(nome: string) {
     .join('')
     .toUpperCase();
 }
-
 
 function formatarDataPartida(data?: string | null) {
   if (!data) return 'Data não informada';
@@ -207,7 +173,6 @@ function formatarDataPartida(data?: string | null) {
   });
 }
 
-
 function formatarStatus(status?: string | null) {
   if (!status) return 'Status não informado';
 
@@ -221,15 +186,79 @@ function formatarStatus(status?: string | null) {
   return statusMap[status] || status;
 }
 
+function formatarTempoNotificacao(dataString?: string | null) {
+  if (!dataString) return '';
 
-/* ============================================================
-   EXTRAIR LISTAS DA API
-============================================================ */
+  const data = new Date(dataString);
 
-function extrairLista<T>(
-  dados: unknown,
-  chaves: string[],
-): T[] {
+  if (Number.isNaN(data.getTime())) {
+    return '';
+  }
+
+  const diferenca = Date.now() - data.getTime();
+
+  if (diferenca < 60_000) {
+    return 'Agora';
+  }
+
+  if (diferenca < 3_600_000) {
+    return `Há ${Math.floor(diferenca / 60_000)} min`;
+  }
+
+  if (diferenca < 86_400_000) {
+    return `Há ${Math.floor(diferenca / 3_600_000)} h`;
+  }
+
+  return data.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+  });
+}
+
+// ============================================================
+// DESTACAR INFORMAÇÕES IMPORTANTES DAS NOTIFICAÇÕES
+// ============================================================
+
+function formatarDescricaoNotificacao(descricao: string) {
+  // Destaca confrontos, quantidades, datas e horários.
+  // matchAll permite manter o texto original entre os destaques.
+  const padraoDestaque =
+    /[A-ZÀ-ÖØ-Þ][\p{L}\p{N}'’.-]*(?:\s+(?:(?:de|da|do|das|dos)\s+)?[A-ZÀ-ÖØ-Þ][\p{L}\p{N}'’.-]*){0,3}\s+x\s+[A-ZÀ-ÖØ-Þ][\p{L}\p{N}'’.-]*(?:\s+(?:(?:de|da|do|das|dos)\s+)?[A-ZÀ-ÖØ-Þ][\p{L}\p{N}'’.-]*){0,3}|\bmais\s+\d+\s+(?:partidas?|cadastros?|atletas?|equipes?|jogos?)\b|\b\d+\s+(?:partidas?|cadastros?|atletas?|equipes?|jogos?|pendências?|notificações?)\b|\b\d{1,2}\/\d{1,2}\/\d{2,4}\b|\b\d{4}-\d{2}-\d{2}\b|\b\d{1,2}h(?:\d{2})?\b|\b\d{1,2}:\d{2}\b/gu;
+
+  const partes: ReactNode[] = [];
+  let ultimoIndice = 0;
+  let indiceDestaque = 0;
+
+  for (const correspondencia of descricao.matchAll(padraoDestaque)) {
+    const textoEncontrado = correspondencia[0];
+    const inicio = correspondencia.index ?? 0;
+
+    if (inicio > ultimoIndice) {
+      partes.push(descricao.slice(ultimoIndice, inicio));
+    }
+
+    partes.push(
+      <strong key={`destaque-${indiceDestaque}`}>
+        {textoEncontrado}
+      </strong>,
+    );
+
+    ultimoIndice = inicio + textoEncontrado.length;
+    indiceDestaque += 1;
+  }
+
+  if (ultimoIndice < descricao.length) {
+    partes.push(descricao.slice(ultimoIndice));
+  }
+
+  return partes.length > 0 ? partes : descricao;
+}
+
+// ============================================================
+// EXTRAIR LISTAS DA API
+// ============================================================
+
+function extrairLista<T>(dados: unknown, chaves: string[]): T[] {
   if (Array.isArray(dados)) {
     return dados as T[];
   }
@@ -259,10 +288,9 @@ function extrairLista<T>(
   return [];
 }
 
-
-/* ============================================================
-   BUSCAR ENDPOINT
-============================================================ */
+// ============================================================
+// BUSCAR ENDPOINT
+// ============================================================
 
 async function buscarEndpoint<T>(
   endpoint: string,
@@ -279,20 +307,11 @@ async function buscarEndpoint<T>(
 
   const texto = await resposta.text();
 
-  console.log(
-    `[SATE] ${endpoint} - Status:`,
-    resposta.status,
-  );
-
-  console.log(
-    `[SATE] ${endpoint} - Resposta:`,
-    texto,
-  );
+  console.log(`[SATE] ${endpoint} - Status:`, resposta.status);
+  console.log(`[SATE] ${endpoint} - Resposta:`, texto);
 
   if (!resposta.ok) {
-    throw new Error(
-      `Erro ${resposta.status} em ${endpoint}: ${texto}`,
-    );
+    throw new Error(`Erro ${resposta.status} em ${endpoint}: ${texto}`);
   }
 
   let dados: unknown;
@@ -304,19 +323,14 @@ async function buscarEndpoint<T>(
   }
 
   const lista = extrairLista<T>(dados, chaves);
-
-  console.log(
-    `[SATE] ${endpoint} - Quantidade encontrada:`,
-    lista.length,
-  );
+  console.log(`[SATE] ${endpoint} - Quantidade encontrada:`, lista.length);
 
   return lista;
 }
 
-
-/* ============================================================
-   HEADER
-============================================================ */
+// ============================================================
+// HEADER
+// ============================================================
 
 const Header = ({
   title,
@@ -324,7 +338,6 @@ const Header = ({
   onSettings,
   onHelp,
   onLogout,
-  onViewAllNotifications,
   onViewAllAthletes,
   onViewAllTeams,
   onViewAllMatches,
@@ -334,31 +347,29 @@ const Header = ({
 
   const [openPanel, setOpenPanel] = useState<OpenPanel>(null);
   const [searchValue, setSearchValue] = useState('');
-
   const [searchData, setSearchData] = useState<SearchItem[]>([]);
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [searchError, setSearchError] = useState('');
 
-  const [notifications, setNotifications] =
-    useState<NotificationItem[]>(initialNotifications);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [loadingNotifications, setLoadingNotifications] = useState(false);
+  const [notificationError, setNotificationError] = useState('');
+  const [processingNotificationId, setProcessingNotificationId] =
+    useState<number | null>(null);
 
   const [usuario, setUsuario] = useState<Usuario | null>(null);
 
-
-  /* ============================================================
-     TEMA
-  ============================================================ */
+  // ============================================================
+  // TEMA
+  // ============================================================
 
   const [theme, setTheme] = useState<Theme>(() => {
     try {
-      return localStorage.getItem('sate-theme') === 'dark'
-        ? 'dark'
-        : 'light';
+      return localStorage.getItem('sate-theme') === 'dark' ? 'dark' : 'light';
     } catch {
       return 'light';
     }
   });
-
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -370,27 +381,152 @@ const Header = ({
     }
   }, [theme]);
 
-
   const toggleTheme = () => {
-    setTheme((current) =>
-      current === 'dark' ? 'light' : 'dark',
-    );
+    setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
   };
 
+  // ============================================================
+  // CARREGAR NOTIFICAÇÕES DO BACKEND
+  // ============================================================
 
-  /* ============================================================
-     CARREGAR USUÁRIO
-  ============================================================ */
+  const carregarNotificacoes = useCallback(async () => {
+    const token = obterToken();
+
+    if (!token) {
+      setNotifications([]);
+      setNotificationError('Faça login para visualizar as notificações.');
+      return;
+    }
+
+    setLoadingNotifications(true);
+    setNotificationError('');
+
+    try {
+      const resposta = await fetch(`${API_URL}/api/notificacoes`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      let dados: NotificacoesResponse;
+
+      try {
+        dados = await resposta.json();
+      } catch {
+        throw new Error('O servidor retornou uma resposta inválida.');
+      }
+
+      if (!resposta.ok) {
+        throw new Error(dados.mensagem || 'Erro ao carregar notificações.');
+      }
+
+      setNotifications(
+        Array.isArray(dados.notificacoes) ? dados.notificacoes : [],
+      );
+
+      console.log(
+        '[SATE] Notificações carregadas:',
+        dados.notificacoes?.length || 0,
+      );
+    } catch (error) {
+      console.error('Erro ao carregar notificações:', error);
+      setNotificationError(
+        error instanceof Error
+          ? error.message
+          : 'Não foi possível carregar as notificações.',
+      );
+    } finally {
+      setLoadingNotifications(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void carregarNotificacoes();
+  }, [carregarNotificacoes]);
+
+  // ============================================================
+  // MARCAR NOTIFICAÇÃO COMO LIDA
+  // ============================================================
+
+  const handleNotificationClick = async (notification: NotificationItem) => {
+    const token = obterToken();
+
+    if (!token) {
+      setNotificationError('Faça login novamente.');
+      return;
+    }
+
+    if (processingNotificationId === notification.id) {
+      return;
+    }
+
+    setProcessingNotificationId(notification.id);
+    setNotificationError('');
+
+    try {
+      if (!notification.read) {
+        const resposta = await fetch(
+          `${API_URL}/api/notificacoes/${notification.id}/lida`,
+          {
+            method: 'PATCH',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        let dados: { mensagem?: string };
+
+        try {
+          dados = await resposta.json();
+        } catch {
+          throw new Error('Resposta inválida ao atualizar notificação.');
+        }
+
+        if (!resposta.ok) {
+          throw new Error(
+            dados.mensagem || 'Não foi possível marcar como lida.',
+          );
+        }
+      }
+
+      setNotifications((current) =>
+        current.map((item) =>
+          item.id === notification.id ? { ...item, read: true } : item,
+        ),
+      );
+
+      setOpenPanel(null);
+
+      if (notification.link) {
+        navigate(notification.link);
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar notificação:', error);
+      setNotificationError(
+        error instanceof Error
+          ? error.message
+          : 'Não foi possível atualizar a notificação.',
+      );
+    } finally {
+      setProcessingNotificationId(null);
+    }
+  };
+
+  // ============================================================
+  // CARREGAR USUÁRIO
+  // ============================================================
 
   useEffect(() => {
     let ativo = true;
 
     const carregarUsuario = async () => {
       const token = obterToken();
-
       const usuarioSalvo =
-        localStorage.getItem('usuario') ||
-        sessionStorage.getItem('usuario');
+        localStorage.getItem('usuario') || sessionStorage.getItem('usuario');
 
       if (usuarioSalvo) {
         try {
@@ -405,40 +541,27 @@ const Header = ({
       if (!token) return;
 
       try {
-        const resposta = await fetch(
-          `${API_URL}/api/usuarios/perfil`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const resposta = await fetch(`${API_URL}/api/usuarios/perfil`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         if (!resposta.ok) return;
 
         const dados = await resposta.json();
-
-        const usuarioAtualizado = (
-          dados.usuario || dados
-        ) as Usuario;
+        const usuarioAtualizado = (dados.usuario || dados) as Usuario;
 
         if (!usuarioAtualizado || !ativo) return;
 
         setUsuario(usuarioAtualizado);
 
-        const estaNoLocalStorage =
-          localStorage.getItem('usuario') !== null;
+        const estaNoLocalStorage = localStorage.getItem('usuario') !== null;
 
         if (estaNoLocalStorage) {
-          localStorage.setItem(
-            'usuario',
-            JSON.stringify(usuarioAtualizado),
-          );
+          localStorage.setItem('usuario', JSON.stringify(usuarioAtualizado));
         } else {
-          sessionStorage.setItem(
-            'usuario',
-            JSON.stringify(usuarioAtualizado),
-          );
+          sessionStorage.setItem('usuario', JSON.stringify(usuarioAtualizado));
         }
       } catch (error) {
         console.error('Erro ao carregar usuário:', error);
@@ -452,7 +575,6 @@ const Header = ({
     };
   }, []);
 
-
   const nomeUsuario = usuario?.nome || 'Treinador';
   const iniciais = obterIniciais(nomeUsuario);
 
@@ -462,10 +584,9 @@ const Header = ({
       : `${API_URL}${usuario.avatarUrl}`
     : null;
 
-
-  /* ============================================================
-     CARREGAR DADOS DA PESQUISA
-  ============================================================ */
+  // ============================================================
+  // CARREGAR DADOS DA PESQUISA
+  // ============================================================
 
   useEffect(() => {
     let ativo = true;
@@ -483,23 +604,24 @@ const Header = ({
       setSearchError('');
 
       const resultados = await Promise.allSettled([
-        buscarEndpoint<AtletaAPI>(
-          '/api/atletas',
-          token,
-          ['atletas', 'data', 'resultados', 'items'],
-        ),
-
-        buscarEndpoint<EquipeAPI>(
-          '/api/equipes',
-          token,
-          ['equipes', 'data', 'resultados', 'items'],
-        ),
-
-        buscarEndpoint<PartidaAPI>(
-          '/api/partidas',
-          token,
-          ['partidas', 'data', 'resultados', 'items'],
-        ),
+        buscarEndpoint<AtletaAPI>('/api/atletas', token, [
+          'atletas',
+          'data',
+          'resultados',
+          'items',
+        ]),
+        buscarEndpoint<EquipeAPI>('/api/equipes', token, [
+          'equipes',
+          'data',
+          'resultados',
+          'items',
+        ]),
+        buscarEndpoint<PartidaAPI>('/api/partidas', token, [
+          'partidas',
+          'data',
+          'resultados',
+          'items',
+        ]),
       ]);
 
       if (!ativo) return;
@@ -507,54 +629,36 @@ const Header = ({
       const dadosPesquisa: SearchItem[] = [];
       const falhas: string[] = [];
 
-
       // ATLETAS
-
       const resultadoAtletas = resultados[0];
 
       if (resultadoAtletas.status === 'fulfilled') {
         resultadoAtletas.value.forEach((atleta) => {
-          const nome =
-            atleta.nome ||
-            atleta.usuario?.nome ||
-            'Atleta sem nome';
+          const nome = atleta.nome || atleta.usuario?.nome || 'Atleta sem nome';
 
           dadosPesquisa.push({
             id: Number(atleta.id),
             type: 'atleta',
             title: nome,
-
             subtitle:
               atleta.equipe?.nome ||
               atleta.categoria ||
               'Sem equipe cadastrada',
-
             initials: obterIniciais(nome),
           });
         });
       } else {
-        console.error(
-          'Erro ao carregar atletas:',
-          resultadoAtletas.reason,
-        );
-
+        console.error('Erro ao carregar atletas:', resultadoAtletas.reason);
         falhas.push('atletas');
       }
 
-
       // EQUIPES
-
       const resultadoEquipes = resultados[1];
 
       if (resultadoEquipes.status === 'fulfilled') {
         resultadoEquipes.value.forEach((equipe) => {
           const nome = equipe.nome || 'Equipe sem nome';
-
-          const detalhes = [
-            equipe.modalidade,
-            equipe.categoria,
-          ].filter(Boolean);
-
+          const detalhes = [equipe.modalidade, equipe.categoria].filter(Boolean);
           const quantidade =
             equipe.numeroAtletas ??
             equipe._count?.atletas ??
@@ -565,39 +669,26 @@ const Header = ({
             id: Number(equipe.id),
             type: 'equipe',
             title: nome,
-
-            subtitle:
-              detalhes.join(' • ') ||
-              `${quantidade} atletas`,
+            subtitle: detalhes.join(' • ') || `${quantidade} atletas`,
           });
         });
       } else {
-        console.error(
-          'Erro ao carregar equipes:',
-          resultadoEquipes.reason,
-        );
-
+        console.error('Erro ao carregar equipes:', resultadoEquipes.reason);
         falhas.push('equipes');
       }
 
-
       // PARTIDAS
-
       const resultadoPartidas = resultados[2];
 
       if (resultadoPartidas.status === 'fulfilled') {
         resultadoPartidas.value.forEach((partida) => {
-          const nomeEquipe =
-            partida.equipe?.nome || 'Equipe';
-
-          const adversario =
-            partida.adversario || 'Adversário não informado';
+          const nomeEquipe = partida.equipe?.nome || 'Equipe';
+          const adversario = partida.adversario || 'Adversário não informado';
 
           dadosPesquisa.push({
             id: Number(partida.id),
             type: 'partida',
             title: `${nomeEquipe} x ${adversario}`,
-
             subtitle: [
               formatarDataPartida(partida.data),
               formatarStatus(partida.status),
@@ -605,11 +696,7 @@ const Header = ({
           });
         });
       } else {
-        console.error(
-          'Erro ao carregar partidas:',
-          resultadoPartidas.reason,
-        );
-
+        console.error('Erro ao carregar partidas:', resultadoPartidas.reason);
         falhas.push('partidas');
       }
 
@@ -622,9 +709,7 @@ const Header = ({
           'Não foi possível carregar os dados. Verifique a conexão com o servidor.',
         );
       } else if (falhas.length > 0) {
-        setSearchError(
-          `Não foi possível carregar: ${falhas.join(', ')}.`,
-        );
+        setSearchError(`Não foi possível carregar: ${falhas.join(', ')}.`);
       } else {
         setSearchError('');
       }
@@ -639,43 +724,26 @@ const Header = ({
     };
   }, []);
 
-
-  /* ============================================================
-     NAVEGAÇÃO DOS RESULTADOS
-  ============================================================ */
+  // ============================================================
+  // NAVEGAÇÃO DOS RESULTADOS
+  // ============================================================
 
   const handleSearchResult = (item: SearchItem) => {
     setOpenPanel(null);
     setSearchValue('');
 
-    // ATLETA
-
     if (item.type === 'atleta') {
-      navigate(
-        `/atletas?tela=perfil&id=${item.id}`,
-      );
-
+      navigate(`/atletas?tela=perfil&id=${item.id}`);
       return;
     }
-
-
-    // EQUIPE
-    // A página Equipes lê os parâmetros tela e id
-    // e abre os detalhes da equipe correspondente.
 
     if (item.type === 'equipe') {
       navigate({
         pathname: '/equipes',
-        search: `?tela=perfil&id=${encodeURIComponent(
-          String(item.id),
-        )}`,
+        search: `?tela=perfil&id=${encodeURIComponent(String(item.id))}`,
       });
-
       return;
     }
-
-
-    // PARTIDA
 
     if (item.type === 'partida') {
       navigate('/detalhes-partida', {
@@ -686,10 +754,9 @@ const Header = ({
     }
   };
 
-
-  /* ============================================================
-     VER TODOS
-  ============================================================ */
+  // ============================================================
+  // VER TODOS OS RESULTADOS DA PESQUISA
+  // ============================================================
 
   const handleViewAll = (tipo: SearchItem['type']) => {
     const callbacks = {
@@ -717,10 +784,9 @@ const Header = ({
     navigate(caminhos[tipo]);
   };
 
-
-  /* ============================================================
-     SAIR
-  ============================================================ */
+  // ============================================================
+  // SAIR
+  // ============================================================
 
   const handleLogout = () => {
     localStorage.removeItem('usuario');
@@ -731,15 +797,17 @@ const Header = ({
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('accessToken');
 
+    setNotifications([]);
+    setSearchData([]);
     setOpenPanel(null);
+
     onLogout?.();
     navigate('/');
   };
 
-
-  /* ============================================================
-     FECHAR PAINÉIS
-  ============================================================ */
+  // ============================================================
+  // FECHAR PAINÉIS
+  // ============================================================
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -761,22 +829,14 @@ const Header = ({
     document.addEventListener('keydown', handleEscape);
 
     return () => {
-      document.removeEventListener(
-        'mousedown',
-        handleOutsideClick,
-      );
-
-      document.removeEventListener(
-        'keydown',
-        handleEscape,
-      );
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, []);
 
-
-  /* ============================================================
-     FILTRAR PESQUISA
-  ============================================================ */
+  // ============================================================
+  // FILTRAR PESQUISA
+  // ============================================================
 
   const filteredSearch = useMemo(() => {
     const value = normalizarTexto(searchValue);
@@ -786,74 +846,55 @@ const Header = ({
     return searchData.filter((item) => {
       const titulo = normalizarTexto(item.title);
       const subtitulo = normalizarTexto(item.subtitle);
-
-      return (
-        titulo.includes(value) ||
-        subtitulo.includes(value)
-      );
+      return titulo.includes(value) || subtitulo.includes(value);
     });
   }, [searchValue, searchData]);
 
+  const athletes = filteredSearch.filter((item) => item.type === 'atleta');
+  const teams = filteredSearch.filter((item) => item.type === 'equipe');
+  const matches = filteredSearch.filter((item) => item.type === 'partida');
 
-  const athletes = filteredSearch.filter(
-    (item) => item.type === 'atleta',
-  );
-
-  const teams = filteredSearch.filter(
-    (item) => item.type === 'equipe',
-  );
-
-  const matches = filteredSearch.filter(
-    (item) => item.type === 'partida',
-  );
-
-
-  /* ============================================================
-     NOTIFICAÇÕES
-  ============================================================ */
+  // ============================================================
+  // CONTADOR DE NOTIFICAÇÕES NÃO LIDAS
+  // ============================================================
 
   const unreadNotifications = notifications.filter(
     (notification) => !notification.read,
   ).length;
 
-
-  const handleNotificationClick = (id: number) => {
-    setNotifications((current) =>
-      current.map((notification) =>
-        notification.id === id
-          ? { ...notification, read: true }
-          : notification,
-      ),
-    );
-  };
-
+  // ============================================================
+  // ABRIR E FECHAR PAINÉIS
+  // ============================================================
 
   const togglePanel = (panel: OpenPanel) => {
-    setOpenPanel((current) =>
-      current === panel ? null : panel,
-    );
+    setOpenPanel((current) => (current === panel ? null : panel));
   };
 
+  const handleNotificationPanel = () => {
+    const vaiAbrir = openPanel !== 'notifications';
+    setOpenPanel(vaiAbrir ? 'notifications' : null);
 
-  /* ============================================================
-     RENDERIZAÇÃO
-  ============================================================ */
+    if (vaiAbrir) {
+      void carregarNotificacoes();
+    }
+  };
+
+  // ============================================================
+  // RENDERIZAÇÃO
+  // ============================================================
 
   return (
     <header ref={headerRef} className={styles.header}>
       <h1 className={styles.title}>{title}</h1>
 
       <div className={styles.right}>
-
         {/* PESQUISA */}
-
         <div className={styles.searchContainer}>
           <div
             className={styles.search}
             onClick={() => setOpenPanel('search')}
           >
             <Search size={18} strokeWidth={2} />
-
             <input
               type="text"
               value={searchValue}
@@ -871,15 +912,11 @@ const Header = ({
           {openPanel === 'search' && (
             <div className={styles.searchDropdown}>
               {loadingSearch ? (
-                <div className={styles.emptySearch}>
-                  Carregando resultados...
-                </div>
+                <div className={styles.emptySearch}>Carregando resultados...</div>
               ) : (
                 <>
                   {searchError && (
-                    <div className={styles.emptySearch}>
-                      {searchError}
-                    </div>
+                    <div className={styles.emptySearch}>{searchError}</div>
                   )}
 
                   <SearchSection
@@ -911,22 +948,20 @@ const Header = ({
           )}
         </div>
 
-
         {/* NOTIFICAÇÕES */}
-
         <div className={styles.notificationContainer}>
           <button
             className={styles.notification}
             type="button"
             aria-label="Notificações"
             aria-expanded={openPanel === 'notifications'}
-            onClick={() => togglePanel('notifications')}
+            onClick={handleNotificationPanel}
           >
             <Bell size={20} strokeWidth={2} />
 
             {unreadNotifications > 0 && (
               <span className={styles.notificationBadge}>
-                {unreadNotifications}
+                {unreadNotifications > 99 ? '99+' : unreadNotifications}
               </span>
             )}
           </button>
@@ -936,64 +971,77 @@ const Header = ({
               <div className={styles.notificationHeader}>
                 <div className={styles.notificationTitleWrapper}>
                   <h2>Notificações</h2>
-
                   {unreadNotifications > 0 && (
                     <span className={styles.notificationCount}>
                       {unreadNotifications}
                     </span>
                   )}
                 </div>
-
-                <button
-                  type="button"
-                  className={styles.viewAll}
-                  onClick={() => {
-                    onViewAllNotifications?.();
-                    setOpenPanel(null);
-                  }}
-                >
-                  Ver todas
-                </button>
               </div>
 
               <div className={styles.notificationList}>
-                {notifications.map((notification) => (
-                  <button
-                    type="button"
-                    key={notification.id}
-                    className={`${styles.notificationItem} ${
-                      !notification.read
-                        ? styles.notificationUnread
-                        : ''
-                    }`}
-                    onClick={() =>
-                      handleNotificationClick(notification.id)
-                    }
-                  >
-                    <NotificationIcon type={notification.type} />
-
-                    <div className={styles.notificationContent}>
-                      <div className={styles.notificationTop}>
-                        <strong>{notification.title}</strong>
-                        <span>{notification.time}</span>
+                {loadingNotifications && notifications.length === 0 ? (
+                  <div className={styles.emptySearch}>
+                    Carregando notificações...
+                  </div>
+                ) : notificationError && notifications.length === 0 ? (
+                  <div className={styles.emptySearch}>{notificationError}</div>
+                ) : notifications.length === 0 ? (
+                  <div className={styles.emptySearch}>
+                    Você não tem notificações no momento.
+                  </div>
+                ) : (
+                  <>
+                    {notificationError && (
+                      <div className={styles.emptySearch}>
+                        {notificationError}
                       </div>
-
-                      <p>{notification.description}</p>
-                    </div>
-
-                    {!notification.read && (
-                      <span className={styles.unreadDot} />
                     )}
-                  </button>
-                ))}
+
+                    {notifications.map((notification) => (
+                      <button
+                        type="button"
+                        key={notification.id}
+                        disabled={
+                          processingNotificationId === notification.id
+                        }
+                        className={`${styles.notificationItem} ${
+                          !notification.read ? styles.notificationUnread : ''
+                        }`}
+                        onClick={() =>
+                          void handleNotificationClick(notification)
+                        }
+                      >
+                        <NotificationIcon type={notification.type} />
+
+                        <div className={styles.notificationContent}>
+                          <div className={styles.notificationTop}>
+                            <strong>{notification.title}</strong>
+                            <span>
+                              {formatarTempoNotificacao(notification.time)}
+                            </span>
+                          </div>
+
+                          <p>
+                            {formatarDescricaoNotificacao(
+                              notification.description,
+                            )}
+                          </p>
+                        </div>
+
+                        {!notification.read && (
+                          <span className={styles.unreadDot} />
+                        )}
+                      </button>
+                    ))}
+                  </>
+                )}
               </div>
             </div>
           )}
         </div>
 
-
         {/* USUÁRIO */}
-
         <div className={styles.userContainer}>
           <button
             type="button"
@@ -1003,30 +1051,20 @@ const Header = ({
           >
             <div className={styles.avatar}>
               {avatarUrl ? (
-                <img
-                  src={avatarUrl}
-                  alt={`Foto de ${nomeUsuario}`}
-                />
+                <img src={avatarUrl} alt={`Foto de ${nomeUsuario}`} />
               ) : (
                 iniciais
               )}
             </div>
 
             <div className={styles.userInfo}>
-              <span className={styles.userName}>
-                {nomeUsuario}
-              </span>
-
-              <span className={styles.userRole}>
-                Treinador
-              </span>
+              <span className={styles.userName}>{nomeUsuario}</span>
+              <span className={styles.userRole}>Treinador</span>
             </div>
 
             <ChevronDown
               className={`${styles.userArrow} ${
-                openPanel === 'user'
-                  ? styles.userArrowOpen
-                  : ''
+                openPanel === 'user' ? styles.userArrowOpen : ''
               }`}
               size={19}
             />
@@ -1037,15 +1075,11 @@ const Header = ({
               <div className={styles.userDropdownHeader}>
                 <div className={styles.dropdownAvatar}>
                   {avatarUrl ? (
-                    <img
-                      src={avatarUrl}
-                      alt={`Foto de ${nomeUsuario}`}
-                    />
+                    <img src={avatarUrl} alt={`Foto de ${nomeUsuario}`} />
                   ) : (
                     iniciais
                   )}
                 </div>
-
                 <div>
                   <strong>{nomeUsuario}</strong>
                   <span>Treinador</span>
@@ -1053,6 +1087,7 @@ const Header = ({
               </div>
 
               <div className={styles.userMenu}>
+                {/* TEMA */}
                 <button
                   type="button"
                   className={styles.userMenuItem}
@@ -1072,16 +1107,12 @@ const Header = ({
                   )}
 
                   <span className={styles.themeLabel}>
-                    {theme === 'dark'
-                      ? 'Modo claro'
-                      : 'Modo escuro'}
+                    {theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
                   </span>
 
                   <span
                     className={`${styles.themeSwitch} ${
-                      theme === 'dark'
-                        ? styles.themeSwitchActive
-                        : ''
+                      theme === 'dark' ? styles.themeSwitchActive : ''
                     }`}
                     aria-hidden="true"
                   >
@@ -1089,6 +1120,7 @@ const Header = ({
                   </span>
                 </button>
 
+                {/* PERFIL */}
                 <button
                   type="button"
                   className={`${styles.userMenuItem} ${styles.userMenuActive}`}
@@ -1101,6 +1133,7 @@ const Header = ({
                   Meu Perfil
                 </button>
 
+                {/* CONFIGURAÇÕES */}
                 <button
                   type="button"
                   className={styles.userMenuItem}
@@ -1110,7 +1143,6 @@ const Header = ({
                     } else {
                       navigate('/configuracoes');
                     }
-
                     setOpenPanel(null);
                   }}
                 >
@@ -1118,6 +1150,7 @@ const Header = ({
                   Configurações
                 </button>
 
+                {/* AJUDA */}
                 <button
                   type="button"
                   className={styles.userMenuItem}
@@ -1133,6 +1166,7 @@ const Header = ({
 
               <div className={styles.userMenuDivider} />
 
+              {/* SAIR */}
               <button
                 type="button"
                 className={`${styles.userMenuItem} ${styles.logoutButton}`}
@@ -1149,10 +1183,9 @@ const Header = ({
   );
 };
 
-
-/* ============================================================
-   SEÇÃO DA PESQUISA
-============================================================ */
+// ============================================================
+// SEÇÃO DA PESQUISA
+// ============================================================
 
 interface SearchSectionProps {
   title: string;
@@ -1161,7 +1194,6 @@ interface SearchSectionProps {
   onViewAll: () => void;
   onItemClick: (item: SearchItem) => void;
 }
-
 
 const SearchSection = ({
   title,
@@ -1174,11 +1206,7 @@ const SearchSection = ({
     <section className={styles.searchSection}>
       <div className={styles.searchSectionHeader}>
         <strong>{title}</strong>
-
-        <button
-          type="button"
-          onClick={onViewAll}
-        >
+        <button type="button" onClick={onViewAll}>
           Ver todos
         </button>
       </div>
@@ -1206,32 +1234,24 @@ const SearchSection = ({
             </button>
           ))
         ) : (
-          <div className={styles.emptySearch}>
-            {emptyMessage}
-          </div>
+          <div className={styles.emptySearch}>{emptyMessage}</div>
         )}
       </div>
     </section>
   );
 };
 
-
-/* ============================================================
-   ÍCONE DO RESULTADO
-============================================================ */
+// ============================================================
+// ÍCONE DO RESULTADO DA PESQUISA
+// ============================================================
 
 interface SearchItemIconProps {
   item: SearchItem;
 }
 
-
 const SearchItemIcon = ({ item }: SearchItemIconProps) => {
   if (item.type === 'atleta') {
-    return (
-      <div className={styles.searchAvatar}>
-        {item.initials}
-      </div>
-    );
+    return <div className={styles.searchAvatar}>{item.initials}</div>;
   }
 
   if (item.type === 'equipe') {
@@ -1249,19 +1269,96 @@ const SearchItemIcon = ({ item }: SearchItemIconProps) => {
   );
 };
 
-
-/* ============================================================
-   ÍCONE DA NOTIFICAÇÃO
-============================================================ */
+// ============================================================
+// ÍCONE DA NOTIFICAÇÃO
+// ============================================================
 
 interface NotificationIconProps {
-  type: NotificationItem['type'];
+  type: string;
 }
 
+const NotificationIcon = ({ type }: NotificationIconProps) => {
+  // Cadastro geral incompleto.
+  if (
+    type === 'cadastros_incompletos' ||
+    type === 'cadastro_incompleto'
+  ) {
+    return (
+      <div
+        className={`${styles.notificationIcon} ${styles.notificationIconPink}`}
+      >
+        <Users size={16} />
+      </div>
+    );
+  }
 
-const NotificationIcon = ({
-  type,
-}: NotificationIconProps) => {
+  // Atletas que ainda não estão vinculados a uma equipe.
+  if (type === 'atletas_sem_equipe') {
+    return (
+      <div
+        className={`${styles.notificationIcon} ${styles.notificationIconPink}`}
+      >
+        <UserRound size={16} />
+      </div>
+    );
+  }
+
+  // Equipes que ainda não possuem atletas vinculados.
+  if (type === 'equipes_sem_atletas') {
+    return (
+      <div
+        className={`${styles.notificationIcon} ${styles.notificationIconBlue}`}
+      >
+        <Users size={16} />
+      </div>
+    );
+  }
+
+  // Partida próxima.
+  if (type === 'partida_proxima') {
+    return (
+      <div
+        className={`${styles.notificationIcon} ${styles.notificationIconBlue}`}
+      >
+        <CalendarDays size={16} />
+      </div>
+    );
+  }
+
+  // Partidas sem escalação.
+  if (type === 'partidas_sem_escalacao') {
+    return (
+      <div
+        className={`${styles.notificationIcon} ${styles.notificationIconBlue}`}
+      >
+        <ClipboardCheck size={16} />
+      </div>
+    );
+  }
+
+  // Partidas sem local definido.
+  if (type === 'partidas_sem_local') {
+    return (
+      <div
+        className={`${styles.notificationIcon} ${styles.notificationIconBlue}`}
+      >
+        <MapPin size={16} />
+      </div>
+    );
+  }
+
+  // Partidas com data passada ainda pendentes.
+  if (type === 'partidas_pendentes_atrasadas') {
+    return (
+      <div
+        className={`${styles.notificationIcon} ${styles.notificationIconRed}`}
+      >
+        <CalendarClock size={16} />
+      </div>
+    );
+  }
+
+  // Convocação.
   if (type === 'convocacao') {
     return (
       <div
@@ -1272,6 +1369,7 @@ const NotificationIcon = ({
     );
   }
 
+  // Treino.
   if (type === 'treino') {
     return (
       <div
@@ -1282,14 +1380,25 @@ const NotificationIcon = ({
     );
   }
 
+  // Avaliação.
+  if (type === 'avaliacao') {
+    return (
+      <div
+        className={`${styles.notificationIcon} ${styles.notificationIconPink}`}
+      >
+        <Star size={16} />
+      </div>
+    );
+  }
+
+  // Tipo padrão.
   return (
     <div
-      className={`${styles.notificationIcon} ${styles.notificationIconPink}`}
+      className={`${styles.notificationIcon} ${styles.notificationIconBlue}`}
     >
-      <Star size={16} />
+      <Bell size={16} />
     </div>
   );
 };
-
 
 export default Header;

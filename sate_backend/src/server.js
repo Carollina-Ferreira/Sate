@@ -17,6 +17,7 @@ const partidaRoutes = require('./routes/partidaRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const videoRoutes = require('./routes/videoRoutes');
 const configuracaoAnaliseRoutes = require('./routes/configuracaoAnaliseRoutes');
+const notificacaoRoutes = require('./routes/notificacaoRoutes');
 
 // ======================================================
 // VERIFICAÇÃO DAS ROTAS
@@ -55,12 +56,22 @@ const app = express();
 // ======================================================
 
 app.use(
-  cors({
-    origin: true,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
+    cors({
+        origin: true,
+        credentials: true,
+        methods: [
+            'GET',
+            'POST',
+            'PUT',
+            'PATCH',
+            'DELETE',
+            'OPTIONS',
+        ],
+        allowedHeaders: [
+            'Content-Type',
+            'Authorization',
+        ],
+    })
 );
 
 // ======================================================
@@ -70,10 +81,10 @@ app.use(
 app.use(express.json({ limit: '10mb' }));
 
 app.use(
-  express.urlencoded({
-    extended: true,
-    limit: '10mb',
-  })
+    express.urlencoded({
+        extended: true,
+        limit: '10mb',
+    })
 );
 
 // ======================================================
@@ -81,8 +92,8 @@ app.use(
 // ======================================================
 
 app.use(
-  '/uploads',
-  express.static(path.join(__dirname, '../uploads'))
+    '/uploads',
+    express.static(path.join(__dirname, '../uploads'))
 );
 
 // ======================================================
@@ -90,16 +101,16 @@ app.use(
 // ======================================================
 
 app.get('/', (req, res) => {
-  return res.status(200).json({
-    mensagem: 'API SATE funcionando!',
-  });
+    return res.status(200).json({
+        mensagem: 'API SATE funcionando!',
+    });
 });
 
 app.get('/api/health', (req, res) => {
-  return res.status(200).json({
-    status: 'ok',
-    mensagem: 'Backend SATE funcionando.',
-  });
+    return res.status(200).json({
+        status: 'ok',
+        mensagem: 'Backend SATE funcionando.',
+    });
 });
 
 // ======================================================
@@ -107,15 +118,30 @@ app.get('/api/health', (req, res) => {
 // ======================================================
 
 app.use('/api/auth', authRoutes);
-app.use('/api/atletas', atletaRoutes);
-app.use('/api/treinadores', treinadorRoutes);
-app.use('/api/password', passwordRoutes);
-app.use('/api/usuarios', usuarioRoutes);
-app.use('/api/equipes', equipeRoutes);
-app.use('/api/partidas', partidaRoutes);
-app.use('/api/dashboard', dashboardRoutes);
 
-app.use('/api/configuracao-analise', configuracaoAnaliseRoutes);
+app.use('/api/atletas', atletaRoutes);
+
+app.use('/api/treinadores', treinadorRoutes);
+
+app.use('/api/password', passwordRoutes);
+
+app.use('/api/usuarios', usuarioRoutes);
+
+app.use('/api/equipes', equipeRoutes);
+
+app.use('/api/partidas', partidaRoutes);
+
+app.use('/api/dashboard', dashboardRoutes);
+// Notificações
+app.use('/api/notificacoes', notificacaoRoutes);
+
+// Configuração dos campos de análise de vídeo
+app.use(
+    '/api/configuracao-analise',
+    configuracaoAnaliseRoutes
+);
+
+// Rotas de vídeos e marcações
 app.use('/api', videoRoutes);
 
 // ======================================================
@@ -123,11 +149,11 @@ app.use('/api', videoRoutes);
 // ======================================================
 
 app.use((req, res) => {
-  return res.status(404).json({
-    mensagem: 'Rota não encontrada.',
-    metodo: req.method,
-    rota: req.originalUrl,
-  });
+    return res.status(404).json({
+        mensagem: 'Rota não encontrada.',
+        metodo: req.method,
+        rota: req.originalUrl,
+    });
 });
 
 // ======================================================
@@ -135,27 +161,29 @@ app.use((req, res) => {
 // ======================================================
 
 app.use((err, req, res, next) => {
-  console.error('ERRO NO SERVIDOR:', err);
+    console.error('ERRO NO SERVIDOR:', err);
 
-  if (res.headersSent) {
-    return next(err);
-  }
+    if (res.headersSent) {
+        return next(err);
+    }
 
-  if (err.code === 'LIMIT_FILE_SIZE') {
-    return res.status(413).json({
-      mensagem: 'Vídeo muito grande. Limite de 500 MB por arquivo.',
+    if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).json({
+            mensagem: 'Vídeo muito grande. Limite de 500 MB por arquivo.',
+        });
+    }
+
+    if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+        return res.status(400).json({
+            mensagem: 'Campo de arquivo inválido. Use o campo "arquivo".',
+        });
+    }
+
+    return res.status(
+        err.status || err.statusCode || 500
+    ).json({
+        mensagem: err.message || 'Erro interno do servidor.',
     });
-  }
-
-  if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-    return res.status(400).json({
-      mensagem: 'Campo de arquivo inválido. Use o campo "arquivo".',
-    });
-  }
-
-  return res.status(err.status || err.statusCode || 500).json({
-    mensagem: err.message || 'Erro interno do servidor.',
-  });
 });
 
 // ======================================================
@@ -165,16 +193,17 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log('');
-  console.log('=================================');
-  console.log('          SATE BACKEND');
-  console.log('=================================');
-  console.log(`Servidor: http://localhost:${PORT}`);
-  console.log(`API: http://localhost:${PORT}/api`);
-  console.log(`Dashboard: http://localhost:${PORT}/api/dashboard`);
-  console.log(`Health: http://localhost:${PORT}/api/health`);
-  console.log(`Vídeos: http://localhost:${PORT}/api/partidas/:id/videos`);
-  console.log(`Configuração de análise: http://localhost:${PORT}/api/configuracao-analise`);
-  console.log('=================================');
-  console.log('');
+    console.log('');
+    console.log('=================================');
+    console.log('          SATE BACKEND');
+    console.log('=================================');
+    console.log(`Servidor: http://localhost:${PORT}`);
+    console.log(`API: http://localhost:${PORT}/api`);
+    console.log(`Dashboard: http://localhost:${PORT}/api/dashboard`);
+    console.log(`Health: http://localhost:${PORT}/api/health`);
+    console.log(`Vídeos: http://localhost:${PORT}/api/partidas/:id/videos`);
+    console.log(`Configuração de análise: http://localhost:${PORT}/api/configuracao-analise`);
+    console.log(`Notificações: http://localhost:${PORT}/api/notificacoes`);
+    console.log('=================================');
+    console.log('');
 });

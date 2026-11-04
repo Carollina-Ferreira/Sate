@@ -1,4 +1,3 @@
-
 const express = require('express');
 const autenticar = require('../middleware/authMiddleware');
 
@@ -45,7 +44,7 @@ router.put('/:id/atletas', salvarAtletasDaPartida);
 // Buscar os dados de uma partida.
 router.get('/:id', buscarPartida);
 
-// Atualizar os dados da partida, incluindo resultado e status.
+// Atualizar os dados da partida.
 router.put('/:id', atualizarPartida);
 
 // Excluir uma partida.

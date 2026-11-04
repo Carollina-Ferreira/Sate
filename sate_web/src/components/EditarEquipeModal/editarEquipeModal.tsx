@@ -1,12 +1,13 @@
-
 import {
   CalendarDays,
   Camera,
   Check,
   Clock3,
+  ImagePlus,
   Palette,
   Save,
   Search,
+  Shield,
   Trash2,
   UserRound,
   X,
@@ -21,6 +22,7 @@ import {
 
 import type {
   ChangeEvent,
+  MouseEvent,
 } from 'react';
 
 import styles from './editarEquipeModal.module.css';
@@ -31,9 +33,8 @@ import styles from './editarEquipeModal.module.css';
 
 export interface AtletaDisponivel {
   id: number;
-  nome: string;
+  nome: string | null;
   categoria?: string | null;
-
   usuario?: {
     email?: string;
     avatarUrl?: string | null;
@@ -71,15 +72,30 @@ interface EditarEquipeModalProps {
   atletasDisponiveis?: AtletaDisponivel[];
   salvando: boolean;
   onClose: () => void;
-  onSave: (
-    dados: EditarEquipeData
-  ) => void | Promise<void>;
+  onSave: (dados: EditarEquipeData) => void | Promise<void>;
   onDelete: () => void | Promise<void>;
 }
 
 /* =====================================
-   CORES
+   OPÇÕES
 ===================================== */
+
+const esportes = [
+  'Futebol',
+  'Basquete',
+  'Vôlei',
+  'Rugby',
+  'Tênis',
+];
+
+const categorias = [
+  'Principal',
+  'Sub-20',
+  'Sub-17',
+  'Sub-15',
+  'Feminino',
+  'Masculino',
+];
 
 const cores = [
   '#16A875',
@@ -89,10 +105,6 @@ const cores = [
   '#7C5CE5',
   '#D652A2',
 ];
-
-/* =====================================
-   DIAS DA SEMANA
-===================================== */
 
 const diasSemana = [
   'Dom',
@@ -105,13 +117,13 @@ const diasSemana = [
 ];
 
 /* =====================================
-   FORMATAR PRÓXIMA PARTIDA
+   FUNÇÕES DE FORMATAÇÃO
 ===================================== */
 
 const formatarProximaPartida = (
   adversario: string,
   data: string,
-  horario: string
+  horario: string,
 ): string => {
   if (!adversario.trim()) {
     return 'Partida ainda não definida';
@@ -121,19 +133,9 @@ const formatarProximaPartida = (
     return `vs ${adversario.trim()}`;
   }
 
-  const [ano, mes, dia] = data
-    .split('-')
-    .map(Number);
-
-  const dataPartida = new Date(
-    ano,
-    mes - 1,
-    dia
-  );
-
-  const diaSemana =
-    diasSemana[dataPartida.getDay()];
-
+  const [ano, mes, dia] = data.split('-').map(Number);
+  const dataPartida = new Date(ano, mes - 1, dia);
+  const diaSemana = diasSemana[dataPartida.getDay()];
   const [hora, minuto] = horario.split(':');
 
   const horarioFormatado =
@@ -144,82 +146,42 @@ const formatarProximaPartida = (
   return `vs ${adversario.trim()} (${diaSemana}, ${horarioFormatado})`;
 };
 
-/* =====================================
-   DATA PARA INPUT
+const formatarDataInput = (data?: string | null): string => {
+  if (!data) return '';
 
-   Evita conversões UTC que podem
-   alterar o dia exibido no formulário.
-===================================== */
-
-const formatarDataInput = (
-  data?: string | null
-): string => {
-  if (!data) {
-    return '';
-  }
-
-  const correspondencia = data.match(
-    /^(\d{4})-(\d{2})-(\d{2})/
-  );
-
+  const correspondencia = data.match(/^(\d{4})-(\d{2})-(\d{2})/);
   if (correspondencia) {
     return `${correspondencia[1]}-${correspondencia[2]}-${correspondencia[3]}`;
   }
 
   const valor = new Date(data);
-
-  if (Number.isNaN(valor.getTime())) {
-    return '';
-  }
+  if (Number.isNaN(valor.getTime())) return '';
 
   const ano = valor.getFullYear();
-  const mes = String(
-    valor.getMonth() + 1
-  ).padStart(2, '0');
-  const dia = String(
-    valor.getDate()
-  ).padStart(2, '0');
-
+  const mes = String(valor.getMonth() + 1).padStart(2, '0');
+  const dia = String(valor.getDate()).padStart(2, '0');
   return `${ano}-${mes}-${dia}`;
 };
 
-/* =====================================
-   HORÁRIO PARA INPUT
+const formatarHorarioInput = (data?: string | null): string => {
+  if (!data) return '';
 
-   Lê diretamente o horário quando
-   a API fornece uma data ISO.
-===================================== */
-
-const formatarHorarioInput = (
-  data?: string | null
-): string => {
-  if (!data) {
-    return '';
-  }
-
-  const correspondencia = data.match(
-    /T(\d{2}):(\d{2})/
-  );
-
+  const correspondencia = data.match(/T(\d{2}):(\d{2})/);
   if (correspondencia) {
     return `${correspondencia[1]}:${correspondencia[2]}`;
   }
 
   const valor = new Date(data);
+  if (Number.isNaN(valor.getTime())) return '';
 
-  if (Number.isNaN(valor.getTime())) {
-    return '';
-  }
-
-  const hora = String(
-    valor.getHours()
-  ).padStart(2, '0');
-
-  const minuto = String(
-    valor.getMinutes()
-  ).padStart(2, '0');
-
+  const hora = String(valor.getHours()).padStart(2, '0');
+  const minuto = String(valor.getMinutes()).padStart(2, '0');
   return `${hora}:${minuto}`;
+};
+
+const extrairAdversario = (texto?: string | null): string => {
+  if (!texto || texto === 'Partida ainda não definida') return '';
+  return texto.replace(/^vs\s*/i, '').split(' (')[0].trim();
 };
 
 /* =====================================
@@ -235,201 +197,113 @@ const EditarEquipeModal = ({
   onSave,
   onDelete,
 }: EditarEquipeModalProps) => {
-  /* =====================================
-     ESTADOS
-  ===================================== */
+  const inputImagemRef = useRef<HTMLInputElement>(null);
+  const inputCorRef = useRef<HTMLInputElement>(null);
 
   const [nome, setNome] = useState('');
-  const [categoria, setCategoria] = useState('');
-  const [modalidade, setModalidade] = useState('');
-
-  const [
-    atletasSelecionados,
-    setAtletasSelecionados,
-  ] = useState<number[]>([]);
-
-  const [buscaAtleta, setBuscaAtleta] =
-    useState('');
-
+  const [modalidade, setModalidade] = useState('Futebol');
+  const [categoria, setCategoria] = useState('Principal');
+  const [atletasSelecionados, setAtletasSelecionados] = useState<number[]>([]);
+  const [buscaAtleta, setBuscaAtleta] = useState('');
   const [cor, setCor] = useState('#16A875');
+  const [corPersonalizada, setCorPersonalizada] = useState('#005942');
+  const [adversario, setAdversario] = useState('');
+  const [dataPartida, setDataPartida] = useState('');
+  const [horarioPartida, setHorarioPartida] = useState('');
+  const [imagemPreview, setImagemPreview] = useState('');
+  const [erroImagem, setErroImagem] = useState('');
+  const [erroFormulario, setErroFormulario] = useState('');
+  const [confirmandoExclusao, setConfirmandoExclusao] = useState(false);
 
-  const [
-    corPersonalizada,
-    setCorPersonalizada,
-  ] = useState('');
+  const corEhPersonalizada = !cores.includes(cor);
 
-  const [adversario, setAdversario] =
-    useState('');
-
-  const [dataPartida, setDataPartida] =
-    useState('');
-
-  const [horarioPartida, setHorarioPartida] =
-    useState('');
-
-  const [imagemPreview, setImagemPreview] =
-    useState('');
-
-  const [
-    confirmandoExclusao,
-    setConfirmandoExclusao,
-  ] = useState(false);
-
-  const [erroImagem, setErroImagem] =
-    useState('');
-
-  const inputImagemRef =
-    useRef<HTMLInputElement>(null);
-
-  const inputCorRef =
-    useRef<HTMLInputElement>(null);
-
-  /* =====================================
-     CARREGAR DADOS DA EQUIPE
-  ===================================== */
-
+  /* Carregar os dados atuais sempre que o modal abrir ou a equipe mudar. */
   useEffect(() => {
-    if (!open || !equipe) {
-      return;
-    }
+    if (!open || !equipe) return;
 
     setNome(equipe.nome || '');
-    setCategoria(equipe.categoria || '');
-    setModalidade(equipe.modalidade || '');
+    setModalidade(equipe.modalidade || 'Futebol');
+    setCategoria(equipe.categoria || 'Principal');
 
     let ids: number[] = [];
 
     if (Array.isArray(equipe.atletasIds)) {
       ids = equipe.atletasIds
         .map(Number)
-        .filter(
-          (id) =>
-            Number.isInteger(id) && id > 0
-        );
-    } else if (
-      Array.isArray(equipe.atletasDetalhes)
-    ) {
+        .filter((id) => Number.isInteger(id) && id > 0);
+    } else if (Array.isArray(equipe.atletasDetalhes)) {
       ids = equipe.atletasDetalhes
         .map((atleta) => Number(atleta.id))
-        .filter(
-          (id) =>
-            Number.isInteger(id) && id > 0
-        );
+        .filter((id) => Number.isInteger(id) && id > 0);
     }
 
-    setAtletasSelecionados([
-      ...new Set(ids),
-    ]);
+    setAtletasSelecionados([...new Set(ids)]);
 
-    const corInicial =
-      equipe.cor || '#16A875';
-
+    const corInicial = equipe.cor || '#16A875';
     setCor(corInicial);
-
-    setCorPersonalizada(
-      cores.includes(corInicial)
-        ? ''
-        : corInicial
-    );
+    setCorPersonalizada(cores.includes(corInicial) ? '#005942' : corInicial);
 
     setImagemPreview(equipe.imagem || '');
     setErroImagem('');
+    setErroFormulario('');
 
-    const partidaOriginal =
-      equipe.proximaPartidaRaw || null;
-
-    setDataPartida(
-      formatarDataInput(partidaOriginal)
-    );
-
-    setHorarioPartida(
-      formatarHorarioInput(partidaOriginal)
-    );
-
-    if (
-      equipe.proximaPartida &&
-      equipe.proximaPartida !==
-        'Partida ainda não definida'
-    ) {
-      const partida = equipe.proximaPartida
-        .replace(/^vs\s*/i, '')
-        .split(' (')[0];
-
-      setAdversario(partida);
-    } else {
-      setAdversario('');
-    }
+    const partidaOriginal = equipe.proximaPartidaRaw || null;
+    setDataPartida(formatarDataInput(partidaOriginal));
+    setHorarioPartida(formatarHorarioInput(partidaOriginal));
+    setAdversario(extrairAdversario(equipe.proximaPartida));
 
     setBuscaAtleta('');
     setConfirmandoExclusao(false);
   }, [open, equipe]);
 
-  /* =====================================
-     TODOS OS ATLETAS
+  /* Impedir rolagem do fundo e permitir fechar com ESC. */
+  useEffect(() => {
+    if (!open) return;
 
-     Combina os atletas já associados à
-     equipe com os disponíveis para seleção.
-  ===================================== */
+    const overflowAnterior = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !salvando) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = overflowAnterior;
+    };
+  }, [open, salvando, onClose]);
+
+  /* Inclui os atletas atuais da equipe mesmo que não estejam na lista disponível. */
   const todosAtletas = useMemo(() => {
-    const mapa = new Map<
-      number,
-      AtletaDisponivel
-    >();
+    const mapa = new Map<number, AtletaDisponivel>();
 
-    if (Array.isArray(equipe?.atletasDetalhes)) {
-      equipe.atletasDetalhes.forEach(
-        (atleta) => {
-          if (
-            atleta &&
-            Number.isInteger(Number(atleta.id)) &&
-            Number(atleta.id) > 0
-          ) {
-            mapa.set(Number(atleta.id), atleta);
-          }
-        }
-      );
-    }
+    equipe?.atletasDetalhes?.forEach((atleta) => {
+      if (atleta && Number.isInteger(Number(atleta.id)) && Number(atleta.id) > 0) {
+        mapa.set(Number(atleta.id), atleta);
+      }
+    });
 
     atletasDisponiveis.forEach((atleta) => {
-      if (
-        atleta &&
-        Number.isInteger(Number(atleta.id)) &&
-        Number(atleta.id) > 0
-      ) {
+      if (atleta && Number.isInteger(Number(atleta.id)) && Number(atleta.id) > 0) {
         mapa.set(Number(atleta.id), atleta);
       }
     });
 
     return Array.from(mapa.values());
-  }, [
-    equipe?.atletasDetalhes,
-    atletasDisponiveis,
-  ]);
-
-  /* =====================================
-     FILTRAR ATLETAS
-  ===================================== */
+  }, [equipe?.atletasDetalhes, atletasDisponiveis]);
 
   const atletasFiltrados = useMemo(() => {
-    const termo = buscaAtleta
-      .trim()
-      .toLowerCase();
-
-    if (!termo) {
-      return todosAtletas;
-    }
+    const termo = buscaAtleta.trim().toLowerCase();
+    if (!termo) return todosAtletas;
 
     return todosAtletas.filter((atleta) => {
-      const nomeAtleta =
-        atleta.nome?.toLowerCase() || '';
-
-      const categoriaAtleta =
-        atleta.categoria?.toLowerCase() || '';
-
-      const email =
-        atleta.usuario?.email?.toLowerCase() ||
-        '';
+      const nomeAtleta = atleta.nome?.toLowerCase() || '';
+      const categoriaAtleta = atleta.categoria?.toLowerCase() || '';
+      const email = atleta.usuario?.email?.toLowerCase() || '';
 
       return (
         nomeAtleta.includes(termo) ||
@@ -439,55 +313,35 @@ const EditarEquipeModal = ({
     });
   }, [todosAtletas, buscaAtleta]);
 
-  /* =====================================
-     ALTERNAR SELEÇÃO DE ATLETA
-  ===================================== */
+  const proximaPartidaPreview = useMemo(
+    () => formatarProximaPartida(adversario, dataPartida, horarioPartida),
+    [adversario, dataPartida, horarioPartida],
+  );
+
+  const formularioValido = nome.trim().length >= 2 && modalidade.trim() !== '' && categoria.trim() !== '';
 
   const alternarAtleta = (atletaId: number) => {
-    setAtletasSelecionados((anteriores) => {
-      if (anteriores.includes(atletaId)) {
-        return anteriores.filter(
-          (id) => id !== atletaId
-        );
-      }
-
-      return [...anteriores, atletaId];
-    });
+    setAtletasSelecionados((atuais) =>
+      atuais.includes(atletaId)
+        ? atuais.filter((id) => id !== atletaId)
+        : [...atuais, atletaId],
+    );
   };
 
-  /* =====================================
-     SELECIONAR IMAGEM
-
-     Limita a imagem a 5 MB e aceita
-     somente PNG ou JPG/JPEG.
-  ===================================== */
-
-  const handleImagemChange = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleImagem = (event: ChangeEvent<HTMLInputElement>) => {
     const arquivo = event.target.files?.[0];
+    if (!arquivo) return;
 
-    if (!arquivo) {
-      return;
-    }
-
-    const tiposPermitidos = [
-      'image/png',
-      'image/jpeg',
-    ];
+    const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp'];
 
     if (!tiposPermitidos.includes(arquivo.type)) {
-      setErroImagem(
-        'Selecione uma imagem PNG ou JPG.'
-      );
+      setErroImagem('Escolha uma imagem JPG, PNG ou WEBP.');
       event.target.value = '';
       return;
     }
 
     if (arquivo.size > 5 * 1024 * 1024) {
-      setErroImagem(
-        'A imagem deve ter no máximo 5 MB.'
-      );
+      setErroImagem('A imagem deve ter no máximo 5 MB.');
       event.target.value = '';
       return;
     }
@@ -495,64 +349,47 @@ const EditarEquipeModal = ({
     setErroImagem('');
 
     const leitor = new FileReader();
-
     leitor.onload = () => {
       if (typeof leitor.result === 'string') {
         setImagemPreview(leitor.result);
       }
     };
-
-    leitor.onerror = () => {
-      setErroImagem(
-        'Não foi possível carregar a imagem.'
-      );
-    };
-
+    leitor.onerror = () => setErroImagem('Não foi possível carregar a imagem.');
     leitor.readAsDataURL(arquivo);
   };
 
-  /* =====================================
-     COR PERSONALIZADA
-  ===================================== */
+  const removerImagem = () => {
+    setImagemPreview('');
+    setErroImagem('');
+    if (inputImagemRef.current) inputImagemRef.current.value = '';
+  };
 
-  const handleCorPersonalizada = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleCorPersonalizada = (event: ChangeEvent<HTMLInputElement>) => {
     const novaCor = event.target.value;
-
     setCorPersonalizada(novaCor);
     setCor(novaCor);
   };
 
-  /* =====================================
-     SALVAR EQUIPE
-  ===================================== */
-
   const handleSalvar = async () => {
-    if (!equipe || salvando) {
+    if (!equipe || salvando) return;
+
+    if (!formularioValido) {
+      setErroFormulario('Preencha o nome, o esporte e a categoria da equipe.');
       return;
     }
 
-    if (!nome.trim()) {
-      return;
-    }
+    setErroFormulario('');
 
-    let proximaPartida = '';
-
-    if (dataPartida && horarioPartida) {
-      proximaPartida =
-        `${dataPartida}T${horarioPartida}:00`;
-    }
+    const proximaPartida = dataPartida && horarioPartida
+      ? `${dataPartida}T${horarioPartida}:00`
+      : '';
 
     const idsAtletas = Array.from(
       new Set(
         atletasSelecionados
           .map(Number)
-          .filter(
-            (id) =>
-              Number.isInteger(id) && id > 0
-          )
-      )
+          .filter((id) => Number.isInteger(id) && id > 0),
+      ),
     );
 
     const dados: EditarEquipeData = {
@@ -566,113 +403,52 @@ const EditarEquipeModal = ({
       imagem: imagemPreview || '',
     };
 
-    console.log('Salvando equipe:', {
-      id: dados.id,
-      nome: dados.nome,
-      modalidade: dados.modalidade,
-      categoria: dados.categoria,
-      atletasIds: dados.atletasIds,
-      temImagem: Boolean(dados.imagem),
-      proximaPartida: dados.proximaPartida,
-    });
-
     try {
       await onSave(dados);
     } catch (erro) {
-      console.error(
-        'Erro ao salvar equipe:',
-        erro
+      console.error('Erro ao salvar equipe:', erro);
+      setErroFormulario(
+        erro instanceof Error ? erro.message : 'Não foi possível salvar as alterações.',
       );
     }
   };
 
-  /* =====================================
-     EXCLUIR EQUIPE
-  ===================================== */
-
   const handleExcluir = async () => {
-    if (salvando) {
-      return;
-    }
+    if (salvando) return;
 
     try {
       await onDelete();
       setConfirmandoExclusao(false);
     } catch (erro) {
-      console.error(
-        'Erro ao excluir equipe:',
-        erro
+      console.error('Erro ao excluir equipe:', erro);
+      setErroFormulario(
+        erro instanceof Error ? erro.message : 'Não foi possível excluir a equipe.',
       );
     }
   };
 
-  /* =====================================
-     FECHAR AO CLICAR NO FUNDO
-  ===================================== */
-
-  const handleOverlayMouseDown = (
-    event: React.MouseEvent<HTMLDivElement>
-  ) => {
-    if (
-      event.target === event.currentTarget &&
-      !salvando
-    ) {
+  const handleOverlayMouseDown = (event: MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget && !salvando) {
       onClose();
     }
   };
 
-  /* =====================================
-     NÃO RENDERIZAR
-  ===================================== */
-
-  if (!open || !equipe) {
-    return null;
-  }
-
-  /* =====================================
-     PRÉVIA DA PARTIDA
-  ===================================== */
-
-  const previewPartida = formatarProximaPartida(
-    adversario,
-    dataPartida,
-    horarioPartida
-  );
-
-  /* =====================================
-     RENDERIZAÇÃO
-  ===================================== */
+  if (!open || !equipe) return null;
 
   return (
-    <div
-      className={styles.overlay}
-      onMouseDown={handleOverlayMouseDown}
-    >
-      <div
+    <div className={styles.overlay} onMouseDown={handleOverlayMouseDown}>
+      <section
         className={styles.modal}
-        onMouseDown={(event) =>
-          event.stopPropagation()
-        }
         role="dialog"
         aria-modal="true"
         aria-labelledby="editar-equipe-titulo"
+        onMouseDown={(event) => event.stopPropagation()}
       >
-        {/* HEADER */}
-
-        <div className={styles.header}>
+        {/* CABEÇALHO */}
+        <header className={styles.modalHeader}>
           <div>
-            <span className={styles.eyebrow}>
-              EDITAR EQUIPE
-            </span>
-
-            <h2 id="editar-equipe-titulo">
-              Editar equipe
-            </h2>
-
-            <p>
-              Atualize as informações, atletas e
-              configurações da sua equipe.
-            </p>
+            <h2 id="editar-equipe-titulo">Editar equipe</h2>
+            <p>Atualize as informações, os atletas e a identidade do seu time.</p>
           </div>
 
           <button
@@ -680,172 +456,148 @@ const EditarEquipeModal = ({
             className={styles.closeButton}
             onClick={onClose}
             disabled={salvando}
-            aria-label="Fechar"
+            aria-label="Fechar modal"
           >
             <X size={20} />
           </button>
-        </div>
+        </header>
 
         {/* CONTEÚDO */}
-
         <div className={styles.content}>
-          {/* IMAGEM */}
-
-          <div className={styles.imageColumn}>
+          {/* IMAGEM E IDENTIDADE */}
+          <aside className={styles.imageArea}>
             <div className={styles.imagePreview}>
               {imagemPreview ? (
-                <img
-                  src={imagemPreview}
-                  alt={`Imagem da equipe ${nome}`}
-                  onError={() => {
-                    console.error(
-                      'Erro ao carregar imagem da equipe.'
-                    );
-                  }}
-                />
+                <img src={imagemPreview} alt={`Imagem da equipe ${nome}`} />
               ) : (
-                <div className={styles.imageEmpty}>
+                <div className={styles.imagePlaceholder}>
                   <div className={styles.cameraCircle}>
-                    <Camera size={24} />
+                    <ImagePlus size={23} />
                   </div>
-
-                  <strong>
-                    Adicionar imagem
-                  </strong>
-
-                  <span>PNG ou JPG</span>
+                  <strong>Imagem da equipe</strong>
+                  <span>JPG, PNG ou WEBP</span>
                 </div>
               )}
-
-              <input
-                ref={inputImagemRef}
-                type="file"
-                accept="image/png,image/jpeg"
-                className={styles.hiddenInput}
-                onChange={handleImagemChange}
-              />
             </div>
+
+            <input
+              ref={inputImagemRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className={styles.hiddenInput}
+              onChange={handleImagem}
+            />
 
             <button
               type="button"
-              className={styles.changeImage}
-              onClick={() =>
-                inputImagemRef.current?.click()
-              }
+              className={styles.changeImageButton}
+              onClick={() => inputImagemRef.current?.click()}
               disabled={salvando}
             >
-              <Camera size={16} />
-
-              {imagemPreview
-                ? 'Alterar imagem'
-                : 'Adicionar imagem'}
+              <Camera size={15} />
+              {imagemPreview ? 'Alterar imagem' : 'Adicionar imagem'}
             </button>
 
-            {erroImagem && (
-              <span
-                role="alert"
-                style={{
-                  display: 'block',
-                  marginTop: '8px',
-                  color: '#D52941',
-                  fontSize: '12px',
-                }}
+            {imagemPreview && (
+              <button
+                type="button"
+                className={styles.removeImageButton}
+                onClick={removerImagem}
+                disabled={salvando}
               >
-                {erroImagem}
-              </span>
+                Remover imagem
+              </button>
             )}
-          </div>
+
+            {erroImagem && <p className={styles.imageError}>{erroImagem}</p>}
+          </aside>
 
           {/* FORMULÁRIO */}
-
           <div className={styles.form}>
-            {/* NOME */}
-
-            <div className={styles.field}>
-              <label htmlFor="editar-equipe-nome">
-                Nome da equipe
-              </label>
-
-              <input
-                id="editar-equipe-nome"
-                type="text"
-                value={nome}
-                onChange={(event) =>
-                  setNome(event.target.value)
-                }
-                placeholder="Ex.: Falcões FC"
-                maxLength={100}
-                disabled={salvando}
-              />
-            </div>
-
-            {/* CATEGORIA E QUANTIDADE */}
-
-            <div className={styles.twoColumns}>
-              <div className={styles.field}>
-                <label htmlFor="editar-equipe-categoria">
-                  Categoria
-                </label>
-
-                <input
-                  id="editar-equipe-categoria"
-                  type="text"
-                  value={categoria}
-                  onChange={(event) =>
-                    setCategoria(event.target.value)
-                  }
-                  placeholder="Ex.: Sub-18"
-                  maxLength={50}
-                  disabled={salvando}
-                />
-              </div>
-
-              <div className={styles.field}>
-                <label>Atletas selecionados</label>
-
-                <div
-                  style={{
-                    height: '44px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '0 14px',
-                    borderRadius: '12px',
-                    border: '1px solid #DDE7E2',
-                    background: '#F8FBF9',
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    color: '#12261F',
-                  }}
-                >
-                  {atletasSelecionados.length}{' '}
-                  {atletasSelecionados.length === 1
-                    ? 'atleta'
-                    : 'atletas'}
+            {/* INFORMAÇÕES */}
+            <section className={styles.formSection}>
+              <div className={styles.sectionHeading}>
+                <span className={styles.sectionNumber}>01</span>
+                <div>
+                  <h3>Informações da equipe</h3>
+                  <p>Edite o nome, o esporte e a categoria.</p>
                 </div>
               </div>
-            </div>
 
-            {/* SELEÇÃO DE ATLETAS */}
-
-            <div className={styles.field}>
-              <label htmlFor="editar-equipe-busca-atleta">
-                Atletas da equipe
-              </label>
-
-              <div className={styles.searchAthlete}>
-                <Search size={17} />
-
+              <div className={styles.field}>
+                <label htmlFor="editar-equipe-nome">Nome da equipe <span>*</span></label>
                 <input
-                  id="editar-equipe-busca-atleta"
+                  id="editar-equipe-nome"
                   type="text"
-                  value={buscaAtleta}
-                  onChange={(event) =>
-                    setBuscaAtleta(event.target.value)
-                  }
-                  placeholder="Buscar atleta..."
+                  value={nome}
+                  onChange={(event) => setNome(event.target.value)}
+                  placeholder="Ex.: Falcões FC"
+                  maxLength={60}
                   disabled={salvando}
                 />
+                <small className={styles.fieldHint}>{nome.length}/60 caracteres</small>
+              </div>
 
+              <div className={styles.formGrid}>
+                <div className={styles.field}>
+                  <label htmlFor="editar-equipe-modalidade">Esporte <span>*</span></label>
+                  <select
+                    id="editar-equipe-modalidade"
+                    value={modalidade}
+                    onChange={(event) => setModalidade(event.target.value)}
+                    disabled={salvando}
+                  >
+                    {!esportes.includes(modalidade) && modalidade && (
+                      <option value={modalidade}>{modalidade}</option>
+                    )}
+                    {esportes.map((esporte) => (
+                      <option key={esporte} value={esporte}>{esporte}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.field}>
+                  <label htmlFor="editar-equipe-categoria">Categoria <span>*</span></label>
+                  <select
+                    id="editar-equipe-categoria"
+                    value={categoria}
+                    onChange={(event) => setCategoria(event.target.value)}
+                    disabled={salvando}
+                  >
+                    {!categorias.includes(categoria) && categoria && (
+                      <option value={categoria}>{categoria}</option>
+                    )}
+                    {categorias.map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            {/* ATLETAS */}
+            <section className={styles.formSection}>
+              <div className={styles.sectionHeading}>
+                <span className={styles.sectionNumber}>02</span>
+                <div>
+                  <h3>Atletas</h3>
+                  <p>Gerencie quem faz parte desta equipe.</p>
+                </div>
+                <span className={styles.selectionCount}>
+                  {atletasSelecionados.length} selecionados
+                </span>
+              </div>
+
+              <div className={styles.athleteSearch}>
+                <Search size={17} />
+                <input
+                  type="text"
+                  placeholder="Buscar por nome ou e-mail..."
+                  aria-label="Buscar atletas"
+                  value={buscaAtleta}
+                  onChange={(event) => setBuscaAtleta(event.target.value)}
+                  disabled={salvando}
+                />
                 {buscaAtleta && (
                   <button
                     type="button"
@@ -860,315 +612,226 @@ const EditarEquipeModal = ({
               <div className={styles.athletesList}>
                 {atletasFiltrados.length === 0 ? (
                   <div className={styles.emptyAthletes}>
-                    <UserRound size={20} />
-
-                    <span>
-                      Nenhum atleta encontrado.
-                    </span>
+                    <UserRound size={25} />
+                    <strong>Nenhum atleta encontrado</strong>
+                    <span>Tente outro nome ou e-mail.</span>
                   </div>
                 ) : (
                   atletasFiltrados.map((atleta) => {
-                    const selecionado =
-                      atletasSelecionados.includes(
-                        atleta.id
-                      );
+                    const selecionado = atletasSelecionados.includes(atleta.id);
 
                     return (
                       <button
                         key={atleta.id}
                         type="button"
-                        className={[
-                          styles.athleteItem,
-                          selecionado
-                            ? styles.athleteSelected
-                            : '',
-                        ]
-                          .filter(Boolean)
-                          .join(' ')}
-                        onClick={() =>
-                          alternarAtleta(atleta.id)
-                        }
+                        className={`${styles.athleteItem} ${selecionado ? styles.athleteSelected : ''}`}
+                        onClick={() => alternarAtleta(atleta.id)}
                         disabled={salvando}
                         aria-pressed={selecionado}
                       >
-                        <div className={styles.athleteAvatar}>
+                        <span className={styles.athleteAvatar}>
                           {atleta.usuario?.avatarUrl ? (
-                            <img
-                              src={atleta.usuario.avatarUrl}
-                              alt=""
-                              onError={(event) => {
-                                event.currentTarget.style.display =
-                                  'none';
-                              }}
-                            />
+                            <img src={atleta.usuario.avatarUrl} alt="" />
                           ) : (
                             <UserRound size={18} />
                           )}
-                        </div>
+                        </span>
 
-                        <div className={styles.athleteInfo}>
-                          <strong>{atleta.nome}</strong>
+                        <span className={styles.athleteInfo}>
+                          <strong>{atleta.nome || 'Atleta sem nome'}</strong>
+                          <small>
+                            {atleta.categoria || atleta.usuario?.email || 'Atleta cadastrado'}
+                          </small>
+                        </span>
 
-                          <span>
-                            {atleta.categoria ||
-                              'Sem categoria'}
-                          </span>
-                        </div>
-
-                        <div className={styles.athleteCheck}>
-                          {selecionado && (
-                            <Check size={16} />
-                          )}
-                        </div>
+                        <span className={styles.athleteCheck}>
+                          {selecionado && <Check size={15} />}
+                        </span>
                       </button>
                     );
                   })
                 )}
               </div>
-
-              <span
-                style={{
-                  display: 'block',
-                  marginTop: '7px',
-                  fontSize: '12px',
-                  color: '#71817A',
-                }}
-              >
-                {atletasSelecionados.length}{' '}
-                {atletasSelecionados.length === 1
-                  ? 'atleta selecionado'
-                  : 'atletas selecionados'}
-              </span>
-            </div>
+            </section>
 
             {/* PRÓXIMA PARTIDA */}
-
-            <div className={styles.matchSection}>
-              <div className={styles.matchSectionHeader}>
-                <div className={styles.matchSectionIcon}>
-                  <CalendarDays size={18} />
-                </div>
-
+            <section className={styles.formSection}>
+              <div className={styles.sectionHeading}>
+                <span className={styles.sectionNumber}>03</span>
                 <div>
-                  <strong>Próxima partida</strong>
-
-                  <span>
-                    Configure o próximo compromisso
-                    da equipe.
-                  </span>
+                  <h3>Próxima partida</h3>
+                  <p>Atualize o próximo compromisso da equipe.</p>
                 </div>
               </div>
 
               <div className={styles.field}>
-                <label htmlFor="editar-equipe-adversario">
-                  Adversário
-                </label>
-
+                <label htmlFor="editar-equipe-adversario">Nome do adversário</label>
                 <input
                   id="editar-equipe-adversario"
                   type="text"
                   value={adversario}
-                  onChange={(event) =>
-                    setAdversario(event.target.value)
-                  }
-                  placeholder="Ex.: Tigres FC"
-                  maxLength={100}
+                  onChange={(event) => setAdversario(event.target.value)}
+                  placeholder="Ex.: Tigres do Vale"
+                  maxLength={60}
                   disabled={salvando}
                 />
               </div>
 
               <div className={styles.dateTimeGrid}>
-                <div className={styles.dateInputWrapper}>
-                  <CalendarDays size={16} />
-
-                  <input
-                    aria-label="Data da partida"
-                    type="date"
-                    value={dataPartida}
-                    onChange={(event) =>
-                      setDataPartida(event.target.value)
-                    }
-                    disabled={salvando}
-                  />
+                <div className={styles.field}>
+                  <label htmlFor="editar-equipe-data">Data</label>
+                  <div className={styles.dateInputWrapper}>
+                    <CalendarDays size={16} />
+                    <input
+                      id="editar-equipe-data"
+                      type="date"
+                      value={dataPartida}
+                      onChange={(event) => setDataPartida(event.target.value)}
+                      disabled={salvando}
+                    />
+                  </div>
                 </div>
 
-                <div className={styles.dateInputWrapper}>
-                  <Clock3 size={16} />
-
-                  <input
-                    aria-label="Horário da partida"
-                    type="time"
-                    value={horarioPartida}
-                    onChange={(event) =>
-                      setHorarioPartida(event.target.value)
-                    }
-                    disabled={salvando}
-                  />
+                <div className={styles.field}>
+                  <label htmlFor="editar-equipe-horario">Horário</label>
+                  <div className={styles.dateInputWrapper}>
+                    <Clock3 size={16} />
+                    <input
+                      id="editar-equipe-horario"
+                      type="time"
+                      value={horarioPartida}
+                      onChange={(event) => setHorarioPartida(event.target.value)}
+                      disabled={salvando}
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className={styles.matchPreview}>
-                <CalendarDays size={17} />
+              {(adversario.trim() || dataPartida || horarioPartida) && (
+                <div className={styles.matchPreview}>
+                  <CalendarDays size={17} />
+                  <div>
+                    <span>Prévia da partida</span>
+                    <strong>{proximaPartidaPreview}</strong>
+                    {dataPartida && (
+                      <small>
+                        {new Date(`${dataPartida}T12:00:00`).toLocaleDateString('pt-BR')}
+                        {horarioPartida ? ` • ${horarioPartida}` : ''}
+                      </small>
+                    )}
+                  </div>
+                </div>
+              )}
+            </section>
 
-                <span>{previewPartida}</span>
+            {/* IDENTIDADE VISUAL */}
+            <section className={styles.formSection}>
+              <div className={styles.sectionHeading}>
+                <span className={styles.sectionNumber}>04</span>
+                <div>
+                  <h3>Identidade visual</h3>
+                  <p>Escolha a cor principal da equipe.</p>
+                </div>
               </div>
-            </div>
 
-            {/* COR DA EQUIPE */}
-
-            <div className={styles.field}>
-              <label>Cor da equipe</label>
-
-              <div className={styles.colorsRow}>
-                <div className={styles.colorOptions}>
-                  {cores.map((corOpcao) => {
-                    const selecionada =
-                      cor === corOpcao;
+              <div className={styles.colorsArea}>
+                <div className={styles.colors}>
+                  {cores.map((item) => {
+                    const selecionada = cor === item;
 
                     return (
                       <button
-                        key={corOpcao}
+                        key={item}
                         type="button"
-                        className={[
-                          styles.colorButton,
-                          selecionada
-                            ? styles.colorSelected
-                            : '',
-                        ]
-                          .filter(Boolean)
-                          .join(' ')}
-                        style={{
-                          backgroundColor: corOpcao,
-                        }}
-                        onClick={() => {
-                          setCor(corOpcao);
-                          setCorPersonalizada('');
-                        }}
-                        disabled={salvando}
-                        aria-label={`Selecionar cor ${corOpcao}`}
+                        className={`${styles.colorButton} ${selecionada ? styles.colorSelected : ''}`}
+                        style={{ backgroundColor: item }}
+                        onClick={() => setCor(item)}
+                        title={item}
+                        aria-label={`Selecionar cor ${item}`}
                         aria-pressed={selecionada}
+                        disabled={salvando}
                       >
-                        {selecionada && (
-                          <Check
-                            size={15}
-                            color="#FFFFFF"
-                          />
-                        )}
+                        {selecionada && <Check size={16} />}
                       </button>
                     );
                   })}
 
                   <button
                     type="button"
-                    className={[
-                      styles.colorButton,
-                      !cores.includes(cor)
-                        ? styles.colorSelected
-                        : '',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                    onClick={() =>
-                      inputCorRef.current?.click()
-                    }
-                    disabled={salvando}
+                    className={`${styles.customColorButton} ${corEhPersonalizada ? styles.customColorSelected : ''}`}
+                    onClick={() => inputCorRef.current?.click()}
                     aria-label="Escolher cor personalizada"
+                    title="Cor personalizada"
+                    disabled={salvando}
                   >
-                    <Palette size={17} />
+                    <span className={styles.rgbCircle} style={{ backgroundColor: corPersonalizada }}>
+                      <Palette size={16} />
+                    </span>
                   </button>
 
                   <input
                     ref={inputCorRef}
                     type="color"
-                    value={corPersonalizada || cor}
+                    value={corPersonalizada}
                     onChange={handleCorPersonalizada}
+                    className={styles.hiddenColorInput}
+                    aria-label="Selecionar cor personalizada"
                     disabled={salvando}
-                    aria-label="Seletor de cor personalizada"
-                    style={{
-                      position: 'absolute',
-                      width: '1px',
-                      height: '1px',
-                      opacity: 0,
-                      pointerEvents: 'none',
-                    }}
                   />
                 </div>
 
-                <div className={styles.selectedColorBox}>
-                  <span
-                    className={styles.selectedColorPreview}
-                    style={{
-                      backgroundColor: cor,
-                    }}
-                  />
-
-                  <span>{cor.toUpperCase()}</span>
+                <div className={styles.selectedColorInfo}>
+                  <div className={styles.selectedColorPreview} style={{ backgroundColor: cor }} />
+                  <div>
+                    <span>Cor selecionada</span>
+                    <strong>{cor.toUpperCase()}</strong>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* PRÉVIA DA EQUIPE */}
-
-            <div className={styles.preview}>
-              <div
-                className={styles.previewColor}
-                style={{
-                  backgroundColor: cor,
-                }}
-              />
-
-              <div>
-                <span>PRÉVIA DA EQUIPE</span>
-
-                <strong>
-                  {nome || 'Nome da equipe'}
-                </strong>
-
-                <small>
-                  {modalidade || 'Modalidade'}
-                  {' • '}
-                  {categoria || 'Categoria'}
-                </small>
-              </div>
-            </div>
+            </section>
           </div>
         </div>
 
-        {/* RODAPÉ */}
+        {/* PRÉVIA DA EQUIPE */}
+        <div className={styles.teamPreview}>
+          <div className={styles.previewAvatar} style={{ backgroundColor: cor }}>
+            {nome.trim().slice(0, 2).toUpperCase() || <Shield size={22} />}
+          </div>
 
-        <div className={styles.footer}>
-          <div>
+          <div className={styles.previewInfo}>
+            <span>PRÉVIA DA EQUIPE</span>
+            <strong>{nome.trim() || 'Nome da equipe'}</strong>
+            <small>
+              {modalidade} · {categoria} · {atletasSelecionados.length}{' '}
+              {atletasSelecionados.length === 1 ? 'atleta' : 'atletas'}
+            </small>
+          </div>
+
+          {imagemPreview && (
+            <img className={styles.previewImage} src={imagemPreview} alt="" />
+          )}
+        </div>
+
+        {erroFormulario && (
+          <p className={styles.formError} role="alert">{erroFormulario}</p>
+        )}
+
+        {/* RODAPÉ */}
+        <footer className={styles.footer}>
+          <div className={styles.footerLeft}>
             {!confirmandoExclusao ? (
               <button
                 type="button"
                 className={styles.deleteButton}
-                onClick={() =>
-                  setConfirmandoExclusao(true)
-                }
+                onClick={() => setConfirmandoExclusao(true)}
                 disabled={salvando}
               >
-                <Trash2 size={17} />
+                <Trash2 size={16} />
                 Excluir equipe
               </button>
             ) : (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
-                  gap: '8px',
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: '#D52941',
-                  }}
-                >
-                  Confirmar exclusão?
-                </span>
-
+              <div className={styles.deleteConfirmation}>
+                <span>Confirmar exclusão?</span>
                 <button
                   type="button"
                   className={styles.deleteButton}
@@ -1177,13 +840,10 @@ const EditarEquipeModal = ({
                 >
                   {salvando ? 'Aguarde...' : 'Sim, excluir'}
                 </button>
-
                 <button
                   type="button"
                   className={styles.cancelButton}
-                  onClick={() =>
-                    setConfirmandoExclusao(false)
-                  }
+                  onClick={() => setConfirmandoExclusao(false)}
                   disabled={salvando}
                 >
                   Não
@@ -1201,25 +861,20 @@ const EditarEquipeModal = ({
             >
               Cancelar
             </button>
-
             <button
               type="button"
               className={styles.saveButton}
               onClick={handleSalvar}
-              disabled={salvando || !nome.trim()}
+              disabled={salvando || !formularioValido}
             >
               <Save size={17} />
-
-              {salvando
-                ? 'Salvando...'
-                : 'Salvar alterações'}
+              {salvando ? 'Salvando...' : 'Salvar alterações'}
             </button>
           </div>
-        </div>
-      </div>
+        </footer>
+      </section>
     </div>
   );
 };
 
 export default EditarEquipeModal;
-

@@ -1,4 +1,3 @@
-
 import {
   ArrowLeft,
   PlayCircle,
@@ -6,7 +5,16 @@ import {
   Users,
 } from 'lucide-react';
 
+import type {
+  ReactNode,
+} from 'react';
+
 import styles from './detalhesEquipe.module.css';
+
+
+/* ============================================================
+   TIPOS
+============================================================ */
 
 interface AtletaAPI {
   id: number | string;
@@ -15,6 +23,7 @@ interface AtletaAPI {
   posicao?: string | null;
   idade?: number | null;
   desempenho?: number | null;
+
   usuario?: {
     nome?: string | null;
     email?: string | null;
@@ -22,25 +31,34 @@ interface AtletaAPI {
   } | null;
 }
 
+
 interface EquipeCompat {
   id: number | string;
   nome: string;
   sigla?: string;
   modalidade?: string;
   categoria?: string;
+
   cor?: string | null;
   corEquipe?: string | null;
+
   vitorias?: number;
   derrotas?: number;
-  empates?: number;
+
+  // Aceita tanto número quanto texto.
+  empates?: number | string;
+
   videos?: number;
   desempenho?: number;
+
   atletas?: number | AtletaAPI[];
   atletasDetalhes?: AtletaAPI[];
   elenco?: AtletaAPI[];
+
   numeroAtletas?: number;
   evolucao?: number[];
 }
+
 
 interface AtletaElenco {
   id: number | string;
@@ -50,26 +68,35 @@ interface AtletaElenco {
   desempenho: number;
 }
 
+
 interface DetalhesEquipeProps {
   equipe: EquipeCompat;
   onBack: () => void;
 }
 
+
 interface SummaryCardProps {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: string;
 }
+
 
 interface StatRowProps {
   label: string;
   value: string;
 }
 
+
 interface PerformanceChartProps {
   values: number[];
   color: string;
 }
+
+
+/* ============================================================
+   COMPONENTE PRINCIPAL
+============================================================ */
 
 const DetalhesEquipe = ({
   equipe,
@@ -77,77 +104,147 @@ const DetalhesEquipe = ({
 }: DetalhesEquipeProps) => {
   const dados = equipe;
 
-  // Aceita a lista de atletas retornada pelo backend.
-  const atletasRecebidos: AtletaAPI[] = Array.isArray(dados.atletas)
-    ? dados.atletas
-    : Array.isArray(dados.atletasDetalhes)
-      ? dados.atletasDetalhes
-      : Array.isArray(dados.elenco)
-        ? dados.elenco
-        : [];
 
-  const elenco: AtletaElenco[] = atletasRecebidos.map(
-    (atleta, index) => ({
-      id: atleta.id ?? index,
-      nome:
-        atleta.nome?.trim() ||
-        atleta.usuario?.nome?.trim() ||
-        atleta.usuario?.email?.trim() ||
-        `Atleta ${index + 1}`,
-      posicao:
-        atleta.posicao?.trim() ||
-        atleta.categoria?.trim() ||
-        'Não informada',
-      idade:
-        typeof atleta.idade === 'number'
-          ? atleta.idade
-          : null,
-      desempenho: Math.min(
-        100,
-        Math.max(0, Number(atleta.desempenho ?? 0) || 0),
-      ),
-    }),
-  );
+  /* ============================================================
+     ATLETAS
+  ============================================================ */
 
-  const totalInformado = Array.isArray(dados.atletas)
-    ? dados.atletas.length
-    : Number(dados.atletas ?? 0) || 0;
+  const atletasRecebidos: AtletaAPI[] =
+    Array.isArray(dados.atletas)
+      ? dados.atletas
+      : Array.isArray(dados.atletasDetalhes)
+        ? dados.atletasDetalhes
+        : Array.isArray(dados.elenco)
+          ? dados.elenco
+          : [];
+
+
+  const elenco: AtletaElenco[] =
+    atletasRecebidos.map(
+      (atleta, index) => ({
+        id: atleta.id ?? index,
+
+        nome:
+          atleta.nome?.trim() ||
+          atleta.usuario?.nome?.trim() ||
+          atleta.usuario?.email?.trim() ||
+          `Atleta ${index + 1}`,
+
+        posicao:
+          atleta.posicao?.trim() ||
+          atleta.categoria?.trim() ||
+          'Não informada',
+
+        idade:
+          typeof atleta.idade === 'number'
+            ? atleta.idade
+            : null,
+
+        desempenho: Math.min(
+          100,
+          Math.max(
+            0,
+            Number(atleta.desempenho ?? 0) || 0
+          )
+        ),
+      })
+    );
+
+
+  /* ============================================================
+     QUANTIDADE DE ATLETAS
+  ============================================================ */
+
+  const totalInformado =
+    Array.isArray(dados.atletas)
+      ? dados.atletas.length
+      : Number(dados.atletas ?? 0) || 0;
+
 
   const totalAtletas = Math.max(
     elenco.length,
+
     Number(dados.numeroAtletas ?? 0) || 0,
+
     totalInformado,
+
     Array.isArray(dados.atletasDetalhes)
       ? dados.atletasDetalhes.length
       : 0,
-    Array.isArray(dados.elenco) ? dados.elenco.length : 0,
+
+    Array.isArray(dados.elenco)
+      ? dados.elenco.length
+      : 0
   );
 
-  const cor = dados.corEquipe || dados.cor || '#16A875';
 
-  const vitorias = Number(dados.vitorias ?? 0);
-  const derrotas = Number(dados.derrotas ?? 0);
-  const empates = dados.empates;
-  const videos = Number(dados.videos ?? 0);
+  /* ============================================================
+     ESTATÍSTICAS
+  ============================================================ */
+
+  const cor =
+    dados.corEquipe ||
+    dados.cor ||
+    '#16A875';
+
+
+  const vitorias =
+    Number(dados.vitorias ?? 0);
+
+
+  const derrotas =
+    Number(dados.derrotas ?? 0);
+
+
+  const empatesNumero =
+    Number(dados.empates ?? 0);
+
+
+  const empatesValidos =
+    Number.isFinite(empatesNumero)
+      ? empatesNumero
+      : 0;
+
+
+  const videos =
+    Number(dados.videos ?? 0);
+
 
   const desempenho = Math.min(
     100,
-    Math.max(0, Number(dados.desempenho ?? 0) || 0),
+    Math.max(
+      0,
+      Number(dados.desempenho ?? 0) || 0
+    )
   );
 
-  const evolucao = Array.isArray(dados.evolucao)
-    ? dados.evolucao
-        .map((valor) => Number(valor) || 0)
-        .map((valor) => Math.min(100, Math.max(0, valor)))
-    : [];
+
+  const evolucao =
+    Array.isArray(dados.evolucao)
+      ? dados.evolucao
+          .map((valor) => Number(valor) || 0)
+          .map((valor) =>
+            Math.min(
+              100,
+              Math.max(0, valor)
+            )
+          )
+      : [];
+
 
   const recorde =
-    typeof empates === 'number'
-      ? `${vitorias}V • ${derrotas}D • ${empates}E`
-      : `${vitorias}V • ${derrotas}D`;
+    `${vitorias}V • ${derrotas}D • ${empatesValidos}E`;
+
+
+  /* ============================================================
+     RENDERIZAÇÃO
+  ============================================================ */
 
   return (
     <main className={styles.page}>
+
+      {/* VOLTAR */}
+
       <button
         type="button"
         className={styles.backButton}
@@ -157,50 +254,69 @@ const DetalhesEquipe = ({
         Voltar para equipes
       </button>
 
+
       {/* CABEÇALHO DA EQUIPE */}
+
       <section className={styles.teamHero}>
         <div className={styles.teamIdentity}>
           <div
             className={styles.avatar}
-            style={{ background: cor }}
+            style={{
+              background: cor,
+            }}
           >
             {dados.sigla ||
               dados.nome.slice(0, 2).toUpperCase()}
           </div>
 
           <div className={styles.teamInformation}>
-            <span className={styles.heroLabel}>EQUIPE</span>
+            <span className={styles.heroLabel}>
+              EQUIPE
+            </span>
 
-            <h1>{dados.nome}</h1>
+            <h1>
+              {dados.nome}
+            </h1>
 
             <div className={styles.teamMeta}>
               <span>
-                {dados.modalidade || 'Modalidade não informada'}
+                {dados.modalidade ||
+                  'Modalidade não informada'}
               </span>
 
               <i />
 
               <span>
-                {dados.categoria || 'Categoria não informada'}
+                {dados.categoria ||
+                  'Categoria não informada'}
               </span>
 
               <i />
 
               <span>
                 {totalAtletas}{' '}
-                {totalAtletas === 1 ? 'atleta' : 'atletas'}
+                {totalAtletas === 1
+                  ? 'atleta'
+                  : 'atletas'}
               </span>
             </div>
           </div>
         </div>
 
         <div className={styles.performance}>
-          <strong>{desempenho}%</strong>
-          <span>desempenho geral</span>
+          <strong>
+            {desempenho}%
+          </strong>
+
+          <span>
+            desempenho geral
+          </span>
         </div>
       </section>
 
+
       {/* RESUMO */}
+
       <section className={styles.summaryGrid}>
         <SummaryCard
           icon={<Trophy size={18} />}
@@ -221,16 +337,25 @@ const DetalhesEquipe = ({
         />
       </section>
 
+
       {/* DESEMPENHO E ESTATÍSTICAS */}
+
       <section className={styles.infoGrid}>
         <article className={styles.card}>
           <div className={styles.cardHeader}>
             <div>
-              <span>ÚLTIMAS PARTIDAS</span>
-              <h2>Desempenho recente</h2>
+              <span>
+                ÚLTIMAS PARTIDAS
+              </span>
+
+              <h2>
+                Desempenho recente
+              </h2>
             </div>
 
-            <strong>{desempenho}%</strong>
+            <strong>
+              {desempenho}%
+            </strong>
           </div>
 
           {evolucao.length > 0 ? (
@@ -245,11 +370,17 @@ const DetalhesEquipe = ({
           )}
         </article>
 
+
         <article className={styles.card}>
           <div className={styles.cardHeader}>
             <div>
-              <span>RESUMO</span>
-              <h2>Estatísticas gerais</h2>
+              <span>
+                RESUMO
+              </span>
+
+              <h2>
+                Estatísticas gerais
+              </h2>
             </div>
           </div>
 
@@ -277,28 +408,52 @@ const DetalhesEquipe = ({
         </article>
       </section>
 
+
       {/* ELENCO */}
-      <section className={`${styles.card} ${styles.squadCard}`}>
+
+      <section
+        className={`${styles.card} ${styles.squadCard}`}
+      >
         <div className={styles.cardHeader}>
           <div>
-            <span>JOGADORES</span>
-            <h2>Elenco</h2>
+            <span>
+              JOGADORES
+            </span>
+
+            <h2>
+              Elenco
+            </h2>
           </div>
 
           <span className={styles.playerCount}>
             {elenco.length}{' '}
-            {elenco.length === 1 ? 'atleta listado' : 'atletas listados'}
+            {elenco.length === 1
+              ? 'atleta listado'
+              : 'atletas listados'}
           </span>
         </div>
+
 
         {elenco.length > 0 ? (
           <div className={styles.table}>
             <div className={styles.tableHeader}>
-              <span>ATLETA</span>
-              <span>POSIÇÃO</span>
-              <span>IDADE</span>
-              <span>DESEMPENHO</span>
+              <span>
+                ATLETA
+              </span>
+
+              <span>
+                POSIÇÃO
+              </span>
+
+              <span>
+                IDADE
+              </span>
+
+              <span>
+                DESEMPENHO
+              </span>
             </div>
+
 
             {elenco.map((atleta) => (
               <div
@@ -308,15 +463,23 @@ const DetalhesEquipe = ({
                 <div className={styles.player}>
                   <div
                     className={styles.playerAvatar}
-                    style={{ background: cor }}
+                    style={{
+                      background: cor,
+                    }}
                   >
                     {getInitials(atleta.nome)}
                   </div>
 
-                  <strong>{atleta.nome}</strong>
+                  <strong>
+                    {atleta.nome}
+                  </strong>
                 </div>
 
-                <span>{atleta.posicao}</span>
+
+                <span>
+                  {atleta.posicao}
+                </span>
+
 
                 <span>
                   {atleta.idade !== null
@@ -324,8 +487,11 @@ const DetalhesEquipe = ({
                     : 'Não informada'}
                 </span>
 
+
                 <div className={styles.performanceCell}>
-                  <strong>{atleta.desempenho}%</strong>
+                  <strong>
+                    {atleta.desempenho}%
+                  </strong>
 
                   <div className={styles.miniProgress}>
                     <div
@@ -343,7 +509,9 @@ const DetalhesEquipe = ({
           <div className={styles.emptySquad}>
             <Users size={32} />
 
-            <h3>Nenhum atleta encontrado</h3>
+            <h3>
+              Nenhum atleta encontrado
+            </h3>
 
             <p>
               {totalAtletas > 0
@@ -357,6 +525,11 @@ const DetalhesEquipe = ({
   );
 };
 
+
+/* ============================================================
+   CARD DE RESUMO
+============================================================ */
+
 const SummaryCard = ({
   icon,
   label,
@@ -368,21 +541,41 @@ const SummaryCard = ({
     </div>
 
     <div>
-      <span>{label}</span>
-      <strong>{value}</strong>
+      <span>
+        {label}
+      </span>
+
+      <strong>
+        {value}
+      </strong>
     </div>
   </article>
 );
+
+
+/* ============================================================
+   LINHA DE ESTATÍSTICA
+============================================================ */
 
 const StatRow = ({
   label,
   value,
 }: StatRowProps) => (
   <div className={styles.statRow}>
-    <span>{label}</span>
-    <strong>{value}</strong>
+    <span>
+      {label}
+    </span>
+
+    <strong>
+      {value}
+    </strong>
   </div>
 );
+
+
+/* ============================================================
+   GRÁFICO DE DESEMPENHO
+============================================================ */
 
 const PerformanceChart = ({
   values,
@@ -396,21 +589,32 @@ const PerformanceChart = ({
   const paddingTop = 20;
   const paddingBottom = 35;
 
-  const chartWidth = width - paddingLeft - paddingRight;
-  const chartHeight = height - paddingTop - paddingBottom;
+  const chartWidth =
+    width - paddingLeft - paddingRight;
+
+  const chartHeight =
+    height - paddingTop - paddingBottom;
+
 
   const x = (index: number) =>
     paddingLeft +
-    (index / Math.max(values.length - 1, 1)) * chartWidth;
+    (index / Math.max(values.length - 1, 1)) *
+      chartWidth;
+
 
   const y = (value: number) =>
     paddingTop +
     chartHeight -
     (value / 100) * chartHeight;
 
+
   const points = values
-    .map((value, index) => `${x(index)},${y(value)}`)
+    .map(
+      (value, index) =>
+        `${x(index)},${y(value)}`
+    )
     .join(' ');
+
 
   return (
     <div className={styles.chartWrapper}>
@@ -441,6 +645,7 @@ const PerformanceChart = ({
           </g>
         ))}
 
+
         {values.length > 1 && (
           <polyline
             points={points}
@@ -451,6 +656,7 @@ const PerformanceChart = ({
             strokeLinejoin="round"
           />
         )}
+
 
         {values.map((value, index) => (
           <g key={index}>
@@ -478,15 +684,27 @@ const PerformanceChart = ({
   );
 };
 
-const getInitials = (nome: string): string => {
-  const partes = nome.trim().split(/\s+/).filter(Boolean);
+
+/* ============================================================
+   INICIAIS DO ATLETA
+============================================================ */
+
+const getInitials = (
+  nome: string
+): string => {
+  const partes = nome
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
 
   if (partes.length === 0) {
     return 'AT';
   }
 
   if (partes.length === 1) {
-    return partes[0].slice(0, 2).toUpperCase();
+    return partes[0]
+      .slice(0, 2)
+      .toUpperCase();
   }
 
   return (
@@ -494,5 +712,6 @@ const getInitials = (nome: string): string => {
     partes[partes.length - 1][0]
   ).toUpperCase();
 };
+
 
 export default DetalhesEquipe;

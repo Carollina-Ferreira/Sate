@@ -1,6 +1,12 @@
 
 const prisma = require('../lib/prisma');
 
+const {
+    sincronizarNotificacaoPartida,
+    resolverNotificacaoPartida,
+    sincronizarNotificacoesEscalacaoTreinador,
+} = require('../services/notificacaoService');
+
 // ============================================================
 // TREINADOR LOGADO
 // ============================================================
@@ -15,6 +21,46 @@ async function obterTreinadorLogado(req) {
             usuarioId: Number(usuarioId)
         }
     });
+}
+
+// ============================================================
+// SINCRONIZAR NOTIFICAÇÃO GERAL DE ESCALAÇÃO
+// ============================================================
+
+async function atualizarNotificacaoEscalacao(treinadorId) {
+    try {
+        await sincronizarNotificacoesEscalacaoTreinador(
+            prisma,
+            treinadorId
+        );
+    } catch (error) {
+        console.error(
+            'ERRO AO ATUALIZAR NOTIFICAÇÃO DE ESCALAÇÃO:',
+            error
+        );
+    }
+}
+
+// ============================================================
+// SINCRONIZAR NOTIFICAÇÃO DE PARTIDA PRÓXIMA
+// ============================================================
+
+async function atualizarNotificacaoPartida(
+    treinadorId,
+    partida
+) {
+    try {
+        await sincronizarNotificacaoPartida(
+            prisma,
+            treinadorId,
+            partida
+        );
+    } catch (error) {
+        console.error(
+            'ERRO AO ATUALIZAR NOTIFICAÇÃO DA PARTIDA:',
+            error
+        );
+    }
 }
 
 // ============================================================
@@ -34,7 +80,6 @@ function validarStatus(status) {
 
 // ============================================================
 // CONVERTER GOLS
-// Aceita números, strings numéricas e valores vazios.
 // ============================================================
 
 function converterGols(valor) {
@@ -181,9 +226,6 @@ async function buscarPartida(req, res) {
 // ============================================================
 // CRIAR PARTIDA
 // POST /api/partidas
-//
-// Se os dois gols forem informados, a partida será FINALIZADA.
-// Se não houver placar completo, ficará AGENDADA.
 // ============================================================
 
 async function criarPartida(req, res) {
@@ -244,7 +286,6 @@ async function criarPartida(req, res) {
             });
         }
 
-        // O placar precisa estar completo: não aceitar apenas um lado.
         const casaPreenchida = golsCasa !== null;
         const foraPreenchida = golsFora !== null;
 
@@ -309,6 +350,15 @@ async function criarPartida(req, res) {
             }
         });
 
+        // Atualiza o lembrete de partida próxima.
+        await atualizarNotificacaoPartida(
+            treinador.id,
+            partida
+        );
+
+        // Uma partida recém-criada começa sem escalação.
+        await atualizarNotificacaoEscalacao(treinador.id);
+
         return res.status(201).json({
             mensagem: 'Partida criada com sucesso.',
             partida
@@ -328,7 +378,6 @@ async function criarPartida(req, res) {
 // ATUALIZAR PARTIDA, STATUS OU RESULTADO
 // PUT /api/partidas/:id
 // ============================================================
-
 
 async function atualizarPartida(req, res) {
     try {
@@ -448,7 +497,6 @@ async function atualizarPartida(req, res) {
                 });
             }
 
-            // Respeita o status escolhido, mesmo que exista placar.
             dadosPartida.status = status;
         }
 
@@ -480,8 +528,6 @@ async function atualizarPartida(req, res) {
             dadosPartida.golsAdversario = golsFora;
         }
 
-        // Só define FINALIZADA automaticamente quando o placar
-        // é alterado e não foi enviado um status explícito.
         const placarFoiAlterado =
             golsEquipe !== undefined ||
             golsAdversario !== undefined;
@@ -497,6 +543,7 @@ async function atualizarPartida(req, res) {
         const partidaAtualizada = await prisma.partida.update({
             where: { id },
             data: dadosPartida,
+
             include: {
                 equipe: {
                     select: {
@@ -510,6 +557,14 @@ async function atualizarPartida(req, res) {
                 }
             }
         });
+
+        // Atualiza os avisos conforme a nova data e status.
+        await atualizarNotificacaoPartida(
+            treinador.id,
+            partidaAtualizada
+        );
+
+        await atualizarNotificacaoEscalacao(treinador.id);
 
         return res.status(200).json({
             mensagem: 'Partida atualizada com sucesso.',
@@ -525,7 +580,6 @@ async function atualizarPartida(req, res) {
         });
     }
 }
-
 
 // ============================================================
 // EXCLUIR PARTIDA
@@ -569,6 +623,23 @@ async function excluirPartida(req, res) {
             where: { id }
         });
 
+        // Resolve o lembrete individual da partida excluída.
+        try {
+            await resolverNotificacaoPartida(
+                prisma,
+                treinador.id,
+                id
+            );
+        } catch (erroNotificacao) {
+            console.error(
+                'Erro ao resolver notificação da partida:',
+                erroNotificacao
+            );
+        }
+
+        // Atualiza a quantidade de partidas sem escalação.
+        await atualizarNotificacaoEscalacao(treinador.id);
+
         return res.status(200).json({
             mensagem: 'Partida excluída com sucesso.'
         });
@@ -583,6 +654,10 @@ async function excluirPartida(req, res) {
     }
 }
 
+// ============================================================
+// LISTAR ATLETAS DA PARTIDA
+// GET /api/partidas/:id/atletas
+// ============================================================
 
 async function listarAtletasDaPartida(req, res) {
     try {
@@ -609,6 +684,7 @@ async function listarAtletasDaPartida(req, res) {
                     treinadorId: treinador.id
                 }
             },
+
             include: {
                 atletas: {
                     include: {
@@ -625,8 +701,12 @@ async function listarAtletasDaPartida(req, res) {
         }
 
         return res.status(200).json(partida.atletas);
+
     } catch (error) {
-        console.error('ERRO AO LISTAR ATLETAS DA PARTIDA:', error);
+        console.error(
+            'ERRO AO LISTAR ATLETAS DA PARTIDA:',
+            error
+        );
 
         return res.status(500).json({
             mensagem: 'Erro ao listar atletas da partida.',
@@ -634,6 +714,11 @@ async function listarAtletasDaPartida(req, res) {
         });
     }
 }
+
+// ============================================================
+// SALVAR ATLETAS DA PARTIDA
+// PUT /api/partidas/:id/atletas
+// ============================================================
 
 async function salvarAtletasDaPartida(req, res) {
     try {
@@ -673,6 +758,7 @@ async function salvarAtletasDaPartida(req, res) {
                     treinadorId: treinador.id
                 }
             },
+
             include: {
                 equipe: true
             }
@@ -686,7 +772,6 @@ async function salvarAtletasDaPartida(req, res) {
 
         const ids = [...new Set(atletasIds.map(Number))];
 
-        
         const atletasValidos = ids.length === 0
             ? []
             : await prisma.atleta.findMany({
@@ -705,10 +790,11 @@ async function salvarAtletasDaPartida(req, res) {
             });
         }
 
-
         await prisma.$transaction(async (tx) => {
             await tx.partidaAtleta.deleteMany({
-                where: { partidaId: id }
+                where: {
+                    partidaId: id
+                }
             });
 
             if (ids.length > 0) {
@@ -721,12 +807,19 @@ async function salvarAtletasDaPartida(req, res) {
             }
         });
 
+        // Atualiza a notificação geral após salvar a escalação.
+        await atualizarNotificacaoEscalacao(treinador.id);
+
         return res.status(200).json({
             mensagem: 'Atletas da partida salvos com sucesso.',
             atletasIds: ids
         });
+
     } catch (error) {
-        console.error('ERRO AO SALVAR ATLETAS DA PARTIDA:', error);
+        console.error(
+            'ERRO AO SALVAR ATLETAS DA PARTIDA:',
+            error
+        );
 
         return res.status(500).json({
             mensagem: 'Erro ao salvar atletas da partida.',
@@ -734,6 +827,10 @@ async function salvarAtletasDaPartida(req, res) {
         });
     }
 }
+
+// ============================================================
+// EXPORTAÇÕES
+// ============================================================
 
 module.exports = {
     listarPartidas,
@@ -744,4 +841,3 @@ module.exports = {
     listarAtletasDaPartida,
     salvarAtletasDaPartida
 };
-

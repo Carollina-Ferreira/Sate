@@ -736,7 +736,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 ),
                 decoration: BoxDecoration(
                   color: concluido
-                      ? Color(0xFF16A875).withValues(alpha: 0.10)
+                      ? Color(0xFF005942).withValues(alpha: 0.10)
                       : Color(0xFFE39B18).withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -888,7 +888,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 ),
                 decoration: BoxDecoration(
                   color: concluido
-                      ? Color(0xFF16A875).withValues(alpha: 0.10)
+                      ? Color(0xFF005942).withValues(alpha: 0.10)
                       : Color(0xFFE39B18).withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(20),
                 ),

@@ -289,11 +289,11 @@ class PerfilPage extends StatelessWidget {
         onPressed: () {
           _confirmarSaida(context);
         },
-        icon: const Icon(Icons.logout_rounded, color: Color(0xFFC0392B)),
+        icon: const Icon(Icons.logout_rounded, color: Color(0xFFC9305A)),
         label: const Text(
           'Sair da conta',
           style: TextStyle(
-            color: Color(0xFFC0392B),
+            color: Color(0xFFC9305A),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -343,7 +343,7 @@ class PerfilPage extends StatelessWidget {
               },
               child: const Text(
                 'SAIR',
-                style: TextStyle(color: Color(0xFFC0392B)),
+                style: TextStyle(color: Color(0xFFC9305A)),
               ),
             ),
           ],

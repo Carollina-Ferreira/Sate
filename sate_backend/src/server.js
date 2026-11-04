@@ -3,6 +3,10 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
+// ======================================================
+// IMPORTAÇÃO DAS ROTAS
+// ======================================================
+
 const authRoutes = require('./routes/authRoutes');
 const atletaRoutes = require('./routes/atletaRoutes');
 const treinadorRoutes = require('./routes/treinadorRoutes');
@@ -14,6 +18,36 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const videoRoutes = require('./routes/videoRoutes');
 const configuracaoAnaliseRoutes = require('./routes/configuracaoAnaliseRoutes');
 const notificacaoRoutes = require('./routes/notificacaoRoutes');
+
+// ======================================================
+// VERIFICAÇÃO DAS ROTAS
+// ======================================================
+
+const rotas = {
+  authRoutes,
+  atletaRoutes,
+  treinadorRoutes,
+  passwordRoutes,
+  usuarioRoutes,
+  equipeRoutes,
+  partidaRoutes,
+  dashboardRoutes,
+  videoRoutes,
+  configuracaoAnaliseRoutes,
+};
+
+for (const [nome, rota] of Object.entries(rotas)) {
+  if (typeof rota !== 'function') {
+    console.error(`ERRO: ${nome} não exporta um Router válido.`);
+    process.exit(1);
+  }
+}
+
+console.log('Todas as rotas foram carregadas corretamente!');
+
+// ======================================================
+// APLICAÇÃO
+// ======================================================
 
 const app = express();
 
@@ -98,7 +132,6 @@ app.use('/api/equipes', equipeRoutes);
 app.use('/api/partidas', partidaRoutes);
 
 app.use('/api/dashboard', dashboardRoutes);
-
 // Notificações
 app.use('/api/notificacoes', notificacaoRoutes);
 

@@ -639,7 +639,7 @@ class TreinadorHomePage extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFF16A875),
+                Color(0xFF005942),
                 Color(0xFF003D31),
               ],
             ),

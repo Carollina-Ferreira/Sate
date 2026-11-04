@@ -1,571 +1,604 @@
+/* ============================================================
+   OVERLAY E CARD PRINCIPAL
+============================================================ */
+
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
-
+  z-index: 9999;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-
-  padding: 24px 16px;
+  overflow: auto;
+  padding: 18px;
   box-sizing: border-box;
-
-  background: var(--overlay);
-  backdrop-filter: blur(5px);
-
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-
-  scrollbar-width: thin;
-  scrollbar-color: var(--borda-forte) transparent;
+  background: rgba(9, 35, 26, 0.62);
+  backdrop-filter: blur(6px);
 }
-
-/* =====================================
-   MODAL
-===================================== */
 
 .modal {
-  position: relative;
-
-  width: min(100%, 1040px);
-  height: auto;
-  max-height: none;
-  min-height: 0;
-  flex-shrink: 0;
-
+  width: min(1000px, 100%);
+  height: min(850px, calc(100dvh - 36px));
+  min-height: min(560px, calc(100dvh - 36px));
+  min-width: 0;
   display: flex;
   flex-direction: column;
-
-  margin: auto 0;
-  overflow: visible;
-
-  background: var(--bg-surface);
-  border: 1px solid var(--borda);
-  border-radius: 18px;
-
-  box-shadow: 0 24px 70px var(--sombra);
-
-  color: var(--texto);
-  font-family: var(--fonte-base);
+  overflow: hidden;
+  margin: auto;
+  border: 1px solid rgba(22, 168, 117, 0.15);
+  border-radius: 22px;
+  color: #12261F;
+  background: #F6F9F7;
+  box-shadow: 0 26px 80px rgba(5, 35, 24, 0.28);
+  box-sizing: border-box;
 }
 
-/* =====================================
+/* ============================================================
    CABEÇALHO
-===================================== */
+============================================================ */
 
-.header {
-  flex-shrink: 0;
-
+.modalHeader {
+  flex: 0 0 auto;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 20px;
-
-  padding: 22px 26px 18px;
-
-  border-bottom: 1px solid var(--borda);
-  border-radius: 18px 18px 0 0;
-
-  background: var(--bg-neutro);
+  gap: 18px;
+  padding: 21px 27px 18px;
+  border-bottom: 1px solid #E2ECE5;
+  background: linear-gradient(115deg, #FFFFFF, #F0F8F3);
 }
 
 .eyebrow {
-  display: block;
-  margin-bottom: 5px;
-
-  color: var(--verde-principal);
+  display: inline-block;
+  margin-bottom: 6px;
+  color: #16A875;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 1.2px;
 }
 
-.header h2 {
+.modalHeader h2 {
   margin: 0;
-
-  color: var(--texto);
-  font-family: var(--fonte-titulo);
-  font-size: 25px;
-  font-weight: 750;
-  line-height: 1.25;
+  color: #12261F;
+  font-size: 23px;
+  line-height: 1.2;
+  font-weight: 800;
 }
 
-.header p {
-  max-width: 420px;
-  margin: 7px 0 0;
-
-  color: var(--texto-suave);
+.modalHeader p {
+  margin: 6px 0 0;
+  color: #74847B;
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 .closeButton {
-  width: 38px;
-  height: 38px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-
-  border: 1px solid transparent;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid #DDE8E1;
   border-radius: 10px;
-
-  background: transparent;
-  color: var(--texto-suave);
-
+  color: #53675C;
+  background: #FFFFFF;
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
+  transition: 150ms ease;
 }
 
-.closeButton:hover {
-  background: var(--bg-verde-suave);
-  border-color: var(--borda);
-  color: var(--verde-principal);
+.closeButton:hover:not(:disabled) {
+  color: #C83247;
+  border-color: #F0C8CF;
+  background: #FFF5F6;
 }
 
-.closeButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* =====================================
-   CONTEÚDO
-===================================== */
+/* ============================================================
+   CONTEÚDO PRINCIPAL
+============================================================ */
 
 .content {
-  flex: initial;
+  flex: 1 1 0;
   min-height: 0;
   min-width: 0;
-
   display: grid;
-  grid-template-columns: 190px minmax(0, 1fr);
-  align-items: start;
-  gap: 25px;
-
-  padding: 22px 26px;
+  grid-template-columns: 205px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 23px;
+  padding: 19px 26px 16px;
+  overflow: hidden;
   box-sizing: border-box;
-
-  overflow: visible;
 }
 
-/* =====================================
-   COLUNA DA IMAGEM
-===================================== */
+/* ============================================================
+   COLUNA ESQUERDA — IMAGEM
+============================================================ */
 
-.imageColumn {
+.imageArea {
+  width: 100%;
   min-width: 0;
-
+  height: fit-content;
+  align-self: start;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 10px;
+  padding: 12px;
+  border: 1px solid #E0EBE3;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #FFFFFF, #F2F8F4);
+  box-sizing: border-box;
 }
 
-/* =====================================
-   IMAGEM DA EQUIPE
-===================================== */
+/* QUADRADO DA IMAGEM */
 
 .imagePreview {
-  position: relative;
-
   width: 100%;
-  height: 190px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-  box-sizing: border-box;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
   overflow: hidden;
-
-  border: 1px dashed var(--borda-forte);
-  border-radius: 15px;
-
-  background: var(--bg-verde-suave);
-  color: var(--texto-medio);
+  border: 1px dashed #BFD8CA;
+  border-radius: 13px;
+  background: #EDF6F0;
+  box-sizing: border-box;
 }
 
-.imagePreview img {
-  position: absolute;
-  inset: 0;
+/* FOTO OCUPA TODO O QUADRADO */
 
-  display: block;
-
+.imagePreview > img {
   width: 100%;
   height: 100%;
-
+  display: block;
   object-fit: cover;
   object-position: center;
 }
 
-.imageEmpty {
+/* PLACEHOLDER QUANDO NÃO EXISTE FOTO */
+
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 9px;
-
-  padding: 15px;
+  padding: 12px;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .cameraCircle {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid var(--borda-forte);
-  border-radius: 50%;
-
-  background: var(--bg-surface-2);
-  color: var(--verde-principal);
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: #16A875;
+  background: #DDF3E7;
 }
 
-.imageEmpty strong {
-  color: var(--texto-medio);
+.imagePlaceholder strong {
+  color: #29483A;
   font-size: 12px;
-  font-weight: 700;
+  line-height: 1.3;
 }
 
-.imageEmpty span {
-  color: var(--texto-suave);
+.imagePlaceholder span {
+  color: #829188;
   font-size: 10px;
 }
 
-.hiddenInput {
+.hiddenInput,
+.hiddenColorInput {
   display: none;
 }
 
-/* =====================================
-   BOTÃO DE ALTERAR IMAGEM
-===================================== */
+/* ============================================================
+   BOTÃO ALTERAR IMAGEM
+   FICA FORA DO QUADRADO
+============================================================ */
 
-.changeImage {
+.changeImageButton {
   width: 100%;
   min-height: 38px;
-
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-
-  padding: 8px 12px;
-  box-sizing: border-box;
-
-  border: 1px solid var(--borda);
+  margin-top: 12px;
+  padding: 8px 10px;
+  border: 1px solid #BFE5D1;
   border-radius: 9px;
-
-  background: var(--bg-surface);
-  color: var(--texto-medio);
-
+  color: #087C52;
+  background: #E8F7EE;
   font-family: inherit;
   font-size: 11px;
-  font-weight: 600;
-
+  font-weight: 750;
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
+  transition: 150ms ease;
+  box-sizing: border-box;
 }
 
-.changeImage:hover:not(:disabled) {
-  border-color: var(--verde-principal);
-  background: var(--bg-verde-suave);
-  color: var(--verde-principal);
+.changeImageButton:hover:not(:disabled) {
+  border-color: #8ED2AE;
+  background: #DDF2E5;
+  transform: translateY(-1px);
 }
 
-.changeImage:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
+/* ============================================================
+   BOTÃO REMOVER IMAGEM
+   TAMBÉM FICA FORA DO QUADRADO
+============================================================ */
+
+.removeImageButton {
+  width: 100%;
+  min-height: 34px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+  padding: 7px;
+  border: 1px solid #F0D0D4;
+  border-radius: 9px;
+  color: #C13C4D;
+  background: #FFF8F9;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 150ms ease;
+  box-sizing: border-box;
 }
 
-/* =====================================
-   FORMULÁRIO
-===================================== */
+.removeImageButton:hover:not(:disabled) {
+  border-color: #E9AEB7;
+  background: #FFF0F2;
+}
+
+.imageError {
+  width: 100%;
+  margin: 7px 0 0;
+  color: #D52941;
+  font-size: 10px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+/* ============================================================
+   TEXTO DE IDENTIDADE VISUAL
+============================================================ */
+
+.identityHint {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  color: #547565;
+  background: #EAF5EE;
+  font-size: 10px;
+  line-height: 1.45;
+  box-sizing: border-box;
+}
+
+.identityHint svg {
+  flex: 0 0 auto;
+  color: #16A875;
+}
+
+.identityHint span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ============================================================
+   COLUNA DIREITA — SCROLL
+============================================================ */
 
 .form {
+  width: 100%;
+  height: 100%;
   min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 17px;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 1px 11px 14px 0;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #BBD8C7 transparent;
+  box-sizing: border-box;
 }
+
+.form::-webkit-scrollbar {
+  width: 7px;
+}
+
+.form::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.form::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #C5DCCB;
+}
+
+.form::-webkit-scrollbar-thumb:hover {
+  background: #9CC8AB;
+}
+
+/* ============================================================
+   SEÇÕES
+============================================================ */
+
+.formSection {
+  min-width: 0;
+  margin: 0 0 20px;
+  padding: 0 0 19px;
+  border-bottom: 1px solid #E2EBE5;
+}
+
+.formSection:last-child {
+  margin-bottom: 0;
+  padding-bottom: 5px;
+  border-bottom: 0;
+}
+
+.sectionHeading {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.sectionNumber {
+  width: 31px;
+  height: 31px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: #087C52;
+  background: #DDF3E7;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.sectionHeading > div {
+  min-width: 0;
+}
+
+.sectionHeading h3 {
+  margin: 0;
+  color: #1D3A2D;
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.sectionHeading p {
+  margin: 4px 0 0;
+  color: #829188;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.selectionCount {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding: 6px 9px;
+  border-radius: 20px;
+  color: #087C52;
+  background: #E4F5EA;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   CAMPOS
+============================================================ */
 
 .field {
   min-width: 0;
-
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 6px;
+  margin-bottom: 13px;
 }
 
 .field label {
-  color: var(--texto-medio);
-  font-size: 12px;
-  font-weight: 700;
+  color: #334B3F;
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 750;
+}
+
+.field label span {
+  color: #D52941;
 }
 
 .field input,
 .field select {
   width: 100%;
   min-width: 0;
-  height: 43px;
-
+  height: 41px;
   padding: 0 12px;
-  box-sizing: border-box;
-
-  border: 1px solid var(--borda);
+  border: 1px solid #D9E5DE;
   border-radius: 9px;
-
   outline: none;
-
-  background: var(--bg-surface-2);
-  color: var(--texto);
-
+  color: #20392E;
+  background: #FFFFFF;
   font-family: inherit;
   font-size: 12px;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+  transition: 150ms ease;
+  box-sizing: border-box;
 }
 
 .field input::placeholder {
-  color: var(--texto-suave);
+  color: #A0ADA6;
 }
 
 .field input:focus,
 .field select:focus {
-  border-color: var(--verde-principal);
-  background: var(--bg-surface);
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.14);
+  border-color: #53BD8B;
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.09);
 }
 
 .field input:disabled,
 .field select:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  color: #849188;
+  background: #F1F5F2;
 }
 
-.field select {
-  cursor: pointer;
+.fieldHint {
+  align-self: flex-end;
+  color: #91A097;
+  font-size: 9px;
 }
 
-.field select option {
-  background: var(--bg-surface);
-  color: var(--texto);
-}
-
-/* =====================================
-   DUAS COLUNAS
-===================================== */
-
-.twoColumns {
+.formGrid,
+.dateTimeGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 13px;
 }
 
-/* =====================================
+/* ============================================================
    BUSCA DE ATLETAS
-===================================== */
+============================================================ */
 
-.searchAthlete {
+.athleteSearch {
+  width: 100%;
+  height: 41px;
   min-width: 0;
-  height: 43px;
-
   display: flex;
   align-items: center;
   gap: 9px;
-
   padding: 0 12px;
-  box-sizing: border-box;
-
-  border: 1px solid var(--borda);
+  border: 1px solid #D9E5DE;
   border-radius: 10px;
-
-  background: var(--bg-surface-2);
-  color: var(--texto-suave);
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+  color: #779086;
+  background: #FFFFFF;
+  box-sizing: border-box;
 }
 
-.searchAthlete:focus-within {
-  border-color: var(--verde-principal);
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
+.athleteSearch:focus-within {
+  border-color: #53BD8B;
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.09);
 }
 
-.searchAthlete > svg {
-  flex-shrink: 0;
+.athleteSearch > svg {
+  flex: 0 0 auto;
 }
 
-.searchAthlete input {
-  flex: 1;
-
+.athleteSearch input {
   width: 100%;
   min-width: 0;
   height: 100%;
-
+  flex: 1;
   padding: 0;
-
-  border: none;
-  border-radius: 0;
-  outline: none;
-  box-shadow: none;
-
+  border: 0;
+  outline: 0;
+  color: #20392E;
   background: transparent;
-  color: var(--texto);
-
   font-family: inherit;
-  font-size: 12px;
+  font-size: 11px;
 }
 
-.searchAthlete input::placeholder {
-  color: var(--texto-suave);
-}
-
-.searchAthlete input:focus {
-  border: none;
+.athleteSearch input:focus {
+  border: 0;
   box-shadow: none;
-  background: transparent;
 }
 
-.searchAthlete button {
+.athleteSearch button {
   width: 25px;
   height: 25px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-
-  border: none;
-  border-radius: 6px;
-
-  background: transparent;
-  color: var(--texto-suave);
-
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  color: #74857C;
+  background: #EFF5F1;
   cursor: pointer;
 }
 
-.searchAthlete button:hover {
-  background: var(--bg-verde-suave);
-  color: var(--verde-principal);
-}
-
-/* =====================================
+/* ============================================================
    LISTA DE ATLETAS
-===================================== */
+============================================================ */
 
 .athletesList {
-  width: 100%;
-  max-height: 200px;
-  min-height: 58px;
-
+  max-height: 180px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 1px 4px 2px 0;
   overflow-x: hidden;
   overflow-y: auto;
-
-  border: 1px solid var(--borda);
-  border-radius: 11px;
-
-  background: var(--bg-surface-2);
-
   scrollbar-width: thin;
-  scrollbar-color: var(--borda-forte) transparent;
+  scrollbar-color: #C5DCCB transparent;
 }
 
 .athletesList::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 .athletesList::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background: var(--borda-forte);
+  background: #C5DCCB;
 }
 
 .athleteItem {
   width: 100%;
-  min-height: 62px;
-
+  min-width: 0;
+  min-height: 54px;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
-  gap: 11px;
-
-  padding: 9px 12px;
-  box-sizing: border-box;
-
-  border: none;
-  border-bottom: 1px solid var(--borda-neutra);
-
-  background: transparent;
-  color: var(--texto-medio);
-
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid #E1EBE4;
+  border-radius: 10px;
+  color: inherit;
+  background: #FFFFFF;
   text-align: left;
-  font-family: inherit;
-
   cursor: pointer;
-
-  transition: background 0.15s ease;
+  transition: 150ms ease;
+  box-sizing: border-box;
 }
 
-.athleteItem:last-child {
-  border-bottom: none;
-}
-
-.athleteItem:hover {
-  background: var(--bg-verde-suave);
-}
-
-.athleteItem:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.athleteItem:hover:not(:disabled) {
+  border-color: #A9DCC0;
+  background: #F8FCF9;
 }
 
 .athleteSelected {
-  background: var(--bg-verde-suave);
-}
-
-.athleteSelected:hover {
-  background: var(--bg-verde-suave);
+  border-color: #65C596;
+  background: #EFF9F2;
 }
 
 .athleteAvatar {
-  width: 38px;
-  height: 38px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  width: 35px;
+  height: 35px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
   overflow: hidden;
-
-  border: 1px solid var(--borda);
   border-radius: 50%;
-
-  background: var(--bg-neutro);
-  color: var(--verde-principal);
+  color: #13865C;
+  background: #E3F2E8;
 }
 
 .athleteAvatar img {
@@ -575,9 +608,8 @@
 }
 
 .athleteInfo {
-  flex: 1;
   min-width: 0;
-
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -585,711 +617,750 @@
 
 .athleteInfo strong {
   overflow: hidden;
-
-  color: var(--texto);
-  font-size: 12px;
-  font-weight: 650;
-
+  color: #294237;
+  font-size: 11px;
+  font-weight: 750;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.athleteInfo span {
+.athleteInfo small {
   overflow: hidden;
-
-  color: var(--texto-suave);
-  font-size: 10px;
-
+  color: #84928B;
+  font-size: 9px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .athleteCheck {
-  width: 23px;
-  height: 23px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid var(--borda);
-  border-radius: 7px;
-
-  background: var(--bg-surface);
-  color: transparent;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid #D6E4DB;
+  border-radius: 6px;
+  color: #FFFFFF;
+  background: #FFFFFF;
 }
 
 .athleteSelected .athleteCheck {
-  border-color: var(--verde-principal);
-  background: var(--verde-principal);
-  color: #ffffff;
+  border-color: #16A875;
+  background: #16A875;
 }
 
 .emptyAthletes {
-  min-height: 90px;
-
+  min-height: 110px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 7px;
+  border: 1px dashed #C9DBCF;
+  border-radius: 11px;
+  color: #91A198;
+  background: #FBFDFC;
+}
 
-  padding: 15px;
-
-  color: var(--texto-suave);
-  text-align: center;
+.emptyAthletes strong {
+  color: #50665B;
+  font-size: 10px;
 }
 
 .emptyAthletes span {
-  font-size: 11px;
+  font-size: 9px;
 }
 
-
-/* =====================================
-   PRÓXIMA PARTIDA
-===================================== */
-
-.matchSection {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-
-  padding: 15px;
-  box-sizing: border-box;
-
-  border: 1px solid var(--borda);
-  border-radius: 13px;
-
-  background: var(--bg-verde-suave);
-}
-
-.matchSectionHeader {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.matchSectionIcon {
-  width: 37px;
-  height: 37px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid var(--borda);
-  border-radius: 10px;
-
-  background: var(--bg-surface);
-  color: var(--verde-principal);
-}
-
-.matchSectionHeader > div:last-child {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.matchSectionHeader strong {
-  color: var(--texto);
-  font-size: 12px;
-  font-weight: 750;
-}
-
-.matchSectionHeader span {
-  color: var(--texto-suave);
-  font-size: 10px;
-  line-height: 1.4;
-}
-
-/* =====================================
+/* ============================================================
    DATA E HORÁRIO
-===================================== */
-
-.dateTimeGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
+============================================================ */
 
 .dateInputWrapper {
   width: 100%;
   min-width: 0;
-  height: 43px;
-
+  height: 41px;
   display: flex;
   align-items: center;
   gap: 8px;
-
   padding: 0 10px;
-  box-sizing: border-box;
-
-  border: 1px solid var(--borda);
+  border: 1px solid #D9E5DE;
   border-radius: 9px;
-
-  background: var(--bg-surface-2);
-  color: var(--verde-principal);
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+  color: #6D9581;
+  background: #FFFFFF;
+  box-sizing: border-box;
 }
 
 .dateInputWrapper:focus-within {
-  border-color: var(--verde-principal);
-  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
+  border-color: #53BD8B;
+  box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.09);
 }
 
-.dateInputWrapper svg {
-  flex-shrink: 0;
+.dateInputWrapper > svg {
+  flex: 0 0 auto;
 }
 
 .dateInputWrapper input {
-  flex: 1;
-
   width: 100%;
   min-width: 0;
-  height: 100%;
-
+  height: 36px;
   padding: 0;
-
-  border: none;
-  outline: none;
-  box-shadow: none;
-
+  border: 0;
+  outline: 0;
+  color: #20392E;
   background: transparent;
-  color: var(--texto);
-
   font-family: inherit;
   font-size: 11px;
+  box-shadow: none;
 }
 
 .dateInputWrapper input:focus {
-  border: none;
+  border: 0;
   box-shadow: none;
 }
 
-.dateInputWrapper input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* =====================================
+/* ============================================================
    PRÉVIA DA PARTIDA
-===================================== */
+============================================================ */
 
 .matchPreview {
   min-width: 0;
-
   display: flex;
-  align-items: center;
-  gap: 9px;
-
-  padding: 11px;
-
-  border: 1px solid var(--borda);
-  border-radius: 9px;
-
-  background: var(--bg-surface);
-  color: var(--verde-principal);
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 2px;
+  padding: 11px 12px;
+  border: 1px solid #D9EDE0;
+  border-radius: 11px;
+  color: #16A875;
+  background: linear-gradient(100deg, #EAF7EE, #F5FAF6);
 }
 
 .matchPreview > svg {
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  margin-top: 2px;
 }
 
-.matchPreview span {
+.matchPreview > div {
   min-width: 0;
-
-  color: var(--texto-medio);
-  font-size: 11px;
-  line-height: 1.5;
-
-  overflow-wrap: anywhere;
-}
-
-/* =====================================
-   CORES DA EQUIPE
-   As cores escolhidas pelo usuário
-   continuam sendo personalizadas.
-===================================== */
-
-.colorsRow {
-  min-width: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.colorOptions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 9px;
-}
-
-.colorButton {
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-
-  border: 2px solid transparent;
-  border-radius: 50%;
-
-  color: #ffffff;
-
-  cursor: pointer;
-
-  box-shadow: 0 2px 5px var(--sombra);
-
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-.colorButton:hover:not(:disabled) {
-  transform: scale(1.08);
-}
-
-.colorButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.colorSelected {
-  border-color: var(--bg-surface);
-  box-shadow: 0 0 0 2px var(--verde-principal);
-}
-
-.selectedColorBox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  padding: 7px 10px;
-
-  border: 1px solid var(--borda);
-  border-radius: 9px;
-
-  background: var(--bg-surface);
-  color: var(--texto-medio);
-
-  font-size: 10px;
-  font-weight: 750;
-}
-
-.selectedColorPreview {
-  width: 19px;
-  height: 19px;
-  flex-shrink: 0;
-
-  display: inline-block;
-
-  border: 2px solid var(--bg-surface);
-  border-radius: 50%;
-
-  box-shadow: 0 1px 4px var(--sombra);
-}
-
-/* =====================================
-   PRÉVIA DA EQUIPE
-===================================== */
-
-.preview {
-  min-width: 0;
-
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  padding: 12px 15px;
-
-  border: 1px solid var(--borda);
-  border-radius: 12px;
-
-  background: var(--bg-verde-suave);
-}
-
-.previewColor {
-  width: 43px;
-  height: 43px;
-  flex-shrink: 0;
-
-  border: 3px solid var(--bg-surface);
-  border-radius: 12px;
-
-  box-shadow: 0 3px 8px var(--sombra);
-}
-
-.preview > div:last-child {
-  min-width: 0;
-
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.preview span {
-  color: var(--texto-suave);
+.matchPreview span {
+  color: #68907B;
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
-.preview strong {
-  overflow: hidden;
-
-  color: var(--texto);
-  font-size: 13px;
-  font-weight: 750;
-
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.preview small {
-  color: var(--texto-suave);
-  font-size: 10px;
+.matchPreview strong {
+  color: #28503D;
+  font-size: 11px;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
 
-/* =====================================
-   RODAPÉ
-===================================== */
+.matchPreview small {
+  color: #7D9386;
+  font-size: 9px;
+}
 
-.footer {
-  flex-shrink: 0;
+/* ============================================================
+   CORES
+============================================================ */
 
+.colorsArea {
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 14px;
   flex-wrap: wrap;
-  gap: 12px;
-
-  padding: 14px 26px;
-
-  border-top: 1px solid var(--borda);
-  border-radius: 0 0 18px 18px;
-
-  background: var(--bg-neutro);
 }
 
-.footer > div:first-child {
+.colors {
   min-width: 0;
-}
-
-.footerActions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
+  gap: 9px;
+  flex-wrap: wrap;
 }
 
-/* =====================================
-   BOTÕES DO RODAPÉ
-===================================== */
+.colorButton,
+.customColorButton {
+  width: 31px;
+  height: 31px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: 150ms ease;
+}
 
+.colorButton:hover:not(:disabled),
+.customColorButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.colorSelected,
+.customColorSelected {
+  outline: 2px solid #183E2E;
+  outline-offset: 2px;
+}
+
+.customColorButton {
+  border: 1px solid #D5E3DA;
+  background: #FFFFFF;
+}
+
+.rgbCircle {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(18, 38, 31, 0.12);
+  border-radius: 50%;
+  color: #FFFFFF;
+}
+
+.selectedColorInfo {
+  min-width: 130px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border: 1px solid #E0EAE3;
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-sizing: border-box;
+}
+
+.selectedColorPreview {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(18, 38, 31, 0.10);
+  border-radius: 7px;
+}
+
+.selectedColorInfo > div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.selectedColorInfo span {
+  color: #829188;
+  font-size: 9px;
+}
+
+.selectedColorInfo strong {
+  color: #30483D;
+  font-size: 10px;
+}
+
+/* ============================================================
+   PRÉVIA DA EQUIPE
+============================================================ */
+
+.teamPreview {
+  min-height: 64px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 26px 12px;
+  padding: 9px 12px;
+  border: 1px solid #DCEBE1;
+  border-radius: 13px;
+  background: linear-gradient(100deg, #EAF6EE, #F8FBF8);
+  box-sizing: border-box;
+}
+
+.previewAvatar {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.previewInfo {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.previewInfo > span {
+  color: #6B927C;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+}
+
+.previewInfo strong {
+  overflow: hidden;
+  color: #1D3B2D;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.previewInfo small {
+  overflow: hidden;
+  color: #789084;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.previewImage {
+  width: 43px;
+  height: 43px;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border: 2px solid #FFFFFF;
+  border-radius: 10px;
+}
+
+/* ============================================================
+   MENSAGEM DE ERRO
+============================================================ */
+
+.formError {
+  flex: 0 0 auto;
+  margin: 0 26px 10px;
+  padding: 9px 12px;
+  border: 1px solid #F0C8CE;
+  border-radius: 9px;
+  color: #B52D40;
+  background: #FFF2F4;
+  font-size: 10px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   RODAPÉ FIXO
+============================================================ */
+
+.footer {
+  min-height: 65px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 26px;
+  border-top: 1px solid #E0EAE3;
+  border-radius: 0 0 22px 22px;
+  background: #FFFFFF;
+  box-sizing: border-box;
+}
+
+.footerLeft,
+.footerActions,
+.deleteConfirmation {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deleteConfirmation {
+  flex-wrap: wrap;
+}
+
+.deleteConfirmation > span {
+  color: #C33B4C;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.deleteButton,
 .cancelButton,
-.saveButton,
-.deleteButton {
-  min-height: 41px;
-
+.saveButton {
+  min-height: 37px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-
-  padding: 0 16px;
-  box-sizing: border-box;
-
+  gap: 7px;
+  padding: 0 13px;
   border-radius: 9px;
-
   font-family: inherit;
-  font-size: 12px;
-  font-weight: 700;
-
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.cancelButton {
-  border: 1px solid var(--borda-forte);
-  background: var(--bg-surface);
-  color: var(--texto-medio);
-}
-
-.cancelButton:hover:not(:disabled) {
-  border-color: var(--verde-principal);
-  background: var(--bg-verde-suave);
-}
-
-.saveButton {
-  border: 1px solid var(--verde-medio);
-  background: var(--verde-medio);
-  color: #ffffff;
-
-  box-shadow: 0 3px 8px var(--sombra);
-}
-
-.saveButton:hover:not(:disabled) {
-  border-color: var(--verde-hover);
-  background: var(--verde-hover);
-  transform: translateY(-1px);
+  transition: 150ms ease;
+  box-sizing: border-box;
 }
 
 .deleteButton {
-  border: 1px solid var(--vermelho);
-  background: var(--vermelho-claro);
-  color: var(--vermelho);
+  border: 1px solid #F0D0D4;
+  color: #C13A4B;
+  background: #FFF8F9;
 }
 
 .deleteButton:hover:not(:disabled) {
-  border-color: var(--vermelho);
-  background: var(--vermelho-claro);
+  border-color: #E9AEB7;
+  background: #FFF0F2;
 }
 
-.cancelButton:disabled,
-.saveButton:disabled,
-.deleteButton:disabled {
-  opacity: 0.5;
+.cancelButton {
+  border: 1px solid #DCE7E0;
+  color: #586B61;
+  background: #FFFFFF;
+}
+
+.cancelButton:hover:not(:disabled) {
+  border-color: #B8D6C3;
+  background: #F6FAF7;
+}
+
+.saveButton {
+  border: 1px solid #0E9868;
+  color: #FFFFFF;
+  background: #16A875;
+  box-shadow: 0 3px 9px rgba(22, 168, 117, 0.15);
+}
+
+.saveButton:hover:not(:disabled) {
+  border-color: #087C52;
+  background: #0C9664;
+  transform: translateY(-1px);
+}
+
+.modal button:disabled {
+  opacity: 0.58;
   cursor: not-allowed;
-  box-shadow: none;
 }
 
-/* =====================================
-   FOCO ACESSÍVEL
-===================================== */
+/* ============================================================
+   NOTEBOOK COM POUCA ALTURA
+============================================================ */
 
-.closeButton:focus-visible,
-.changeImage:focus-visible,
-.colorButton:focus-visible,
-.cancelButton:focus-visible,
-.saveButton:focus-visible,
-.deleteButton:focus-visible,
-.athleteItem:focus-visible,
-.searchAthlete button:focus-visible {
-  outline: 3px solid var(--verde-principal);
-  outline-offset: 3px;
-}
-
-/* =====================================
-   TABLETS
-===================================== */
-
-@media (max-width: 850px) {
+@media (min-width: 761px) and (max-height: 720px) {
   .modal {
-    width: min(100%, 760px);
+    height: calc(100dvh - 24px);
+  }
+
+  .modalHeader {
+    padding-top: 13px;
+    padding-bottom: 12px;
   }
 
   .content {
-    grid-template-columns: 155px minmax(0, 1fr);
-    gap: 18px;
-    padding: 18px 20px;
+    gap: 17px;
+    padding-top: 11px;
+    padding-bottom: 10px;
   }
 
-  .imagePreview {
-    height: 155px;
+  .imageArea {
+    padding: 9px;
   }
 
-  .matchSection {
-    gap: 11px;
+  .changeImageButton {
+    min-height: 33px;
+    margin-top: 8px;
   }
 
-  .colorsRow {
-    align-items: flex-start;
-    flex-direction: column;
+  .removeImageButton {
+    min-height: 29px;
+  }
+
+  .identityHint {
+    margin-top: 7px;
+    padding: 7px;
+    font-size: 9px;
+  }
+
+  .formSection {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+  }
+
+  .teamPreview {
+    min-height: 55px;
+    margin-bottom: 8px;
   }
 
   .footer {
-    padding-right: 20px;
-    padding-left: 20px;
-  }
-
-  .header {
-    padding-right: 20px;
-    padding-left: 20px;
+    min-height: 57px;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 }
 
-/* =====================================
-   CELULARES
-===================================== */
+/* ============================================================
+   TABLETS
+============================================================ */
 
-@media (max-width: 600px) {
+@media (max-width: 760px) {
   .overlay {
-    align-items: flex-start;
-    padding: 10px;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 12px;
   }
 
   .modal {
     width: 100%;
+    height: auto;
+    min-height: 0;
     max-height: none;
-    margin: 0;
-    border-radius: 14px;
+    overflow: visible;
+    margin: 0 auto 12px;
+    border-radius: 18px;
   }
 
-  .header {
-    padding: 17px 16px;
-    gap: 12px;
-    border-radius: 14px 14px 0 0;
-  }
-
-  .header h2 {
-    font-size: 22px;
-  }
-
-  .header p {
-    font-size: 11px;
+  .modalHeader {
+    padding: 19px;
   }
 
   .content {
     flex: initial;
+    min-height: auto;
+    display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
-    padding: 16px;
+    grid-template-rows: auto auto;
+    gap: 17px;
+    padding: 17px;
     overflow: visible;
   }
 
-  .imageColumn {
+  .imageArea {
+    width: 100%;
     display: grid;
-    grid-template-columns: minmax(120px, 155px) minmax(0, 1fr);
+    grid-template-columns: 115px minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
     align-items: center;
-    gap: 12px;
+    gap: 8px 14px;
+    padding: 12px;
   }
 
   .imagePreview {
-    height: 140px;
+    width: 115px;
+    grid-column: 1;
+    grid-row: 1 / span 3;
   }
 
-  .changeImage {
-    align-self: center;
+  .changeImageButton {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
+  }
+
+  .removeImageButton {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 0;
+  }
+
+  .imageError {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .identityHint {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    margin-top: 3px;
   }
 
   .form {
-    gap: 15px;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    padding: 0;
   }
 
-  .twoColumns {
-    grid-template-columns: minmax(0, 1fr);
+  .teamPreview {
+    margin-right: 17px;
+    margin-left: 17px;
   }
 
-  .dateTimeGrid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .colorsRow {
-    flex-direction: column;
+  .formError {
+    margin-right: 17px;
+    margin-left: 17px;
   }
 
   .footer {
     align-items: stretch;
     flex-direction: column;
-    padding: 12px 16px;
-    border-radius: 0 0 14px 14px;
+    padding: 13px 17px;
+    border-radius: 0 0 18px 18px;
   }
 
+  .footerLeft,
   .footerActions {
     width: 100%;
   }
 
-  .cancelButton,
-  .saveButton {
-    flex: 1;
-    padding: 0 10px;
+  .footerActions {
+    justify-content: flex-end;
   }
 }
 
-/* =====================================
-   CELULARES PEQUENOS
-===================================== */
+/* ============================================================
+   CELULARES
+============================================================ */
 
-@media (max-width: 360px) {
+@media (max-width: 420px) {
   .overlay {
-    padding: 6px;
+    padding: 8px;
   }
 
-  .header {
-    padding: 15px 12px;
+  .modalHeader {
+    padding: 16px 14px;
+  }
+
+  .modalHeader h2 {
+    font-size: 20px;
+  }
+
+  .modalHeader p {
+    font-size: 11px;
   }
 
   .content {
-    padding: 12px;
+    padding: 13px;
+    gap: 15px;
   }
 
-  .imageColumn {
-    grid-template-columns: minmax(0, 1fr);
+  .imageArea {
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 7px 11px;
+    padding: 10px;
   }
 
   .imagePreview {
-    height: 165px;
+    width: 90px;
   }
 
-  .changeImage {
-    width: 100%;
+  .imagePlaceholder {
+    gap: 5px;
+    padding: 6px;
   }
 
-  .matchSection {
-    padding: 12px;
+  .cameraCircle {
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+  }
+
+  .imagePlaceholder strong {
+    font-size: 9px;
+  }
+
+  .imagePlaceholder span {
+    font-size: 8px;
+  }
+
+  .changeImageButton,
+  .removeImageButton {
+    min-height: 33px;
+    font-size: 9px;
+  }
+
+  .sectionHeading h3 {
+    font-size: 12px;
+  }
+
+  .sectionHeading p {
+    font-size: 9px;
+  }
+
+  .selectionCount {
+    max-width: 85px;
+    padding: 5px 7px;
+    font-size: 8px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .formGrid,
+  .dateTimeGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .colorsArea {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .teamPreview {
+    gap: 8px;
+    margin-right: 13px;
+    margin-left: 13px;
+    padding: 9px;
+  }
+
+  .previewAvatar,
+  .previewImage {
+    width: 37px;
+    height: 37px;
+  }
+
+  .formError {
+    margin-right: 13px;
+    margin-left: 13px;
   }
 
   .footer {
-    padding: 12px;
+    padding: 12px 13px;
   }
 
   .footerActions {
-    gap: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1.45fr;
+    gap: 7px;
   }
 
+  .deleteButton,
   .cancelButton,
-  .saveButton,
-  .deleteButton {
+  .saveButton {
+    min-height: 38px;
     padding: 0 9px;
-    font-size: 11px;
+    font-size: 9px;
   }
 }
 
-/* =====================================
-   MOVIMENTO REDUZIDO
-===================================== */
-
-@media (prefers-reduced-motion: reduce) {
-  .closeButton,
-  .changeImage,
-  .field input,
-  .field select,
-  .searchAthlete,
-  .athleteItem,
-  .colorButton,
-  .cancelButton,
-  .saveButton,
-  .deleteButton {
-    transition: none;
+@media (max-width: 330px) {
+  .imageArea {
+    grid-template-columns: 75px minmax(0, 1fr);
+    gap: 6px 8px;
   }
 
-  .colorButton:hover:not(:disabled),
-  .saveButton:hover:not(:disabled) {
-    transform: none;
+  .imagePreview {
+    width: 75px;
+  }
+
+  .sectionHeading {
+    flex-wrap: wrap;
+  }
+
+  .selectionCount {
+    margin-left: 39px;
+  }
+
+  .footerActions {
+    grid-template-columns: 1fr;
   }
 }

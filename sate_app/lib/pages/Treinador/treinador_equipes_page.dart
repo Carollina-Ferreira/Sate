@@ -22,7 +22,7 @@ class _TreinadorEquipesPageState
     extends State<TreinadorEquipesPage> {
   static const Color verde = Color(0xFF003D31);
   static const Color rosa = Color(0xFFEF476F);
-  static const Color azul = Color(0xFF55CA9B);
+  static const Color azul = Color(0xFF003D31);
 
   final List<Map<String, String>> equipes = [
     {

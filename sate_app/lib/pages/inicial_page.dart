@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import './login_page.dart';
+import '../theme/sate_theme.dart';
 
 class InicialPage extends StatefulWidget {
   const InicialPage({super.key});
@@ -55,10 +56,13 @@ class _InicialPageState extends State<InicialPage> {
                 const SizedBox(height: 35),
 
                 // FRASE
-                const Text(
-                  'Evolua.\n'
-                  'Acompanhe.\n'
-                  'Supere.',
+                const Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: 'Evolua.\nAcompanhe.\n'),
+                      TextSpan(text: 'Supere.', style: SateEstilo.destaque),
+                    ],
+                  ),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,

@@ -30,7 +30,7 @@ class TreinadorVinculoPage extends StatefulWidget {
 class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
   static const Color verde = Color(0xFF003D31);
   static const Color rosa = Color(0xFFEF476F);
-  static const Color azul = Color(0xFF55CA9B);
+  static const Color azul = Color(0xFF003D31);
 
   String get codigo => widget.codigoEquipe;
 

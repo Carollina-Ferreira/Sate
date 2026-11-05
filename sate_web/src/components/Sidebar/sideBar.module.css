@@ -1,11 +1,15 @@
+/* =====================================
+   SIDEBAR
+===================================== */
+
 .sidebar {
   position: fixed;
-
   top: 0;
   left: 0;
 
   width: 70px;
   height: 100vh;
+  height: 100dvh;
 
   z-index: 9999;
 
@@ -14,22 +18,18 @@
 
   box-sizing: border-box;
 
-  background: var(--verde-escuro);
+  background: var(--verde-escuro, #285b48);
 
   overflow: hidden;
 
   transition: width 0.25s ease;
 }
 
-
-/* =====================================
-   SIDEBAR EXPANDIDO
-===================================== */
+/* SIDEBAR EXPANDIDO */
 
 .sidebar:hover {
   width: 230px;
 }
-
 
 /* =====================================
    LOGO
@@ -38,6 +38,7 @@
 .logoContainer {
   width: 100%;
   height: 85px;
+  min-height: 85px;
 
   display: flex;
   align-items: center;
@@ -52,13 +53,14 @@
 
 .logo {
   width: 48px;
-  height: auto;
+  height: 48px;
 
   display: block;
 
   object-fit: contain;
-}
 
+  flex-shrink: 0;
+}
 
 /* =====================================
    MENU
@@ -77,21 +79,19 @@
   box-sizing: border-box;
 
   flex: 1;
-
   min-height: 0;
 
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-
 /* =====================================
-   ITEM DO MENU
+   ITENS DO MENU
 ===================================== */
 
 .menuItem {
   width: 100%;
   height: 52px;
-
   min-height: 52px;
 
   display: flex;
@@ -102,33 +102,40 @@
   box-sizing: border-box;
 
   padding: 0 11px;
-
   gap: 16px;
 
+  border: none;
   border-radius: 14px;
 
-  color: rgba(255, 255, 255, 0.75);
+  background: transparent;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
 
   text-decoration: none;
+  text-align: left;
 
   white-space: nowrap;
 
   overflow: hidden;
+
+  cursor: pointer;
 
   transition:
     background 0.2s ease,
     color 0.2s ease;
 }
 
-
 /* =====================================
    ÍCONES
 ===================================== */
 
-.menuItem .material-icons {
+.menuIcon {
   width: 28px;
   min-width: 28px;
-
   height: 28px;
 
   display: flex;
@@ -142,24 +149,23 @@
   color: inherit;
 }
 
-
 /* =====================================
    TEXTO
 ===================================== */
 
 .label {
-  opacity: 0;
-
-  visibility: hidden;
+  display: block;
 
   width: 0;
+
+  opacity: 0;
+  visibility: hidden;
 
   overflow: hidden;
 
   color: inherit;
 
-  font-size: 16px;
-
+  font-size: 15px;
   font-weight: 600;
 
   white-space: nowrap;
@@ -169,65 +175,216 @@
     width 0.15s ease;
 }
 
-
-/* =====================================
-   MOSTRAR TEXTO AO EXPANDIR
-===================================== */
+/* MOSTRAR TEXTO AO EXPANDIR */
 
 .sidebar:hover .label {
-  opacity: 1;
-
-  visibility: visible;
-
   width: auto;
+
+  opacity: 1;
+  visibility: visible;
 }
 
-
 /* =====================================
-   HOVER DO ITEM
+   HOVER DOS ITENS
 ===================================== */
 
 .menuItem:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.12);
 
-  color: var(--branco);
+  color: var(--branco, #ffffff);
 }
-
 
 /* =====================================
    ITEM ATIVO
 ===================================== */
 
-.menuItem.active {
-  background: var(--verde-dark);
+.active {
+  background: var(--verde-dark, #39765b);
 
-  color: var(--branco);
+  color: var(--branco, #ffffff);
 }
 
+.active:hover {
+  background: var(--verde-dark, #39765b);
+}
 
 /* =====================================
-   LINHA SEPARADORA
+   SEPARADOR
 ===================================== */
 
 .menuDivider {
   width: 100%;
-
   height: 1px;
 
   flex-shrink: 0;
 
   margin: 18px 0 10px;
 
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
 }
 
+/* =====================================
+   MODAL DE SAÍDA
+===================================== */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 100000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  background: rgba(35, 48, 39, 0.48);
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modalSair {
+  width: 100%;
+  max-width: 420px;
+
+  padding: 32px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background: var(--bg-surface, #fffaf3);
+
+  border: 1px solid rgba(80, 100, 75, 0.12);
+  border-radius: 22px;
+
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.16);
+
+  text-align: center;
+
+  animation: aparecerModal 0.2s ease;
+}
+
+.modalIcone {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 18px;
+
+  border-radius: 50%;
+
+  background: #f8e5e8;
+
+  color: #bd6575;
+}
+
+.modalIcone span {
+  font-size: 28px;
+}
+
+.modalSair h2 {
+  margin: 0 0 10px;
+
+  color: var(--texto-principal, #354b3e);
+
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.modalSair p {
+  margin: 0;
+
+  color: var(--texto-secundario, #77796f);
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.modalBotoes {
+  width: 100%;
+
+  display: flex;
+  gap: 12px;
+
+  margin-top: 28px;
+}
+
+.botaoCancelar,
+.botaoSair {
+  flex: 1;
+
+  min-height: 44px;
+
+  border: none;
+  border-radius: 12px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.botaoCancelar {
+  background: #f0eee7;
+
+  color: #526052;
+}
+
+.botaoCancelar:hover {
+  background: #e7e3d9;
+}
+
+.botaoSair {
+  background: #bd6575;
+
+  color: #ffffff;
+}
+
+.botaoSair:hover {
+  background: #a95163;
+}
+
+.botaoCancelar:active,
+.botaoSair:active {
+  transform: scale(0.97);
+}
+
+/* =====================================
+   ANIMAÇÃO DO MODAL
+===================================== */
+
+@keyframes aparecerModal {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
 /* =====================================
    RESPONSIVIDADE
 ===================================== */
 
 @media (max-width: 700px) {
-
   .sidebar {
     width: 60px;
   }
@@ -243,8 +400,11 @@
   .menuItem {
     padding: 0 10px;
   }
-
 }
+
+/* =====================================
+   TELAS COM POUCA ALTURA
+===================================== */
 
 @media (max-height: 750px) {
   .menu {
@@ -260,5 +420,23 @@
 
   .menuDivider {
     margin: 10px 0 6px;
+  }
+}
+
+/* =====================================
+   MODAL EM TELAS PEQUENAS
+===================================== */
+
+@media (max-width: 480px) {
+  .modalSair {
+    padding: 26px 20px;
+  }
+
+  .modalSair h2 {
+    font-size: 19px;
+  }
+
+  .modalBotoes {
+    flex-direction: columna;
   }
 }

@@ -1,4 +1,5 @@
-﻿import {
+﻿
+import {
   Bell,
   CalendarClock,
   CalendarDays,
@@ -29,6 +30,7 @@ import {
 } from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 import styles from './header.module.css';
 
 // ============================================================
@@ -220,8 +222,6 @@ function formatarTempoNotificacao(dataString?: string | null) {
 // ============================================================
 
 function formatarDescricaoNotificacao(descricao: string) {
-  // Destaca confrontos, quantidades, datas e horários.
-  // matchAll permite manter o texto original entre os destaques.
   const padraoDestaque =
     /[A-ZÀ-ÖØ-Þ][\p{L}\p{N}'’.-]*(?:\s+(?:(?:de|da|do|das|dos)\s+)?[A-ZÀ-ÖØ-Þ][\p{L}\p{N}'’.-]*){0,3}\s+x\s+[A-ZÀ-ÖØ-Þ][\p{L}\p{N}'’.-]*(?:\s+(?:(?:de|da|do|das|dos)\s+)?[A-ZÀ-ÖØ-Þ][\p{L}\p{N}'’.-]*){0,3}|\bmais\s+\d+\s+(?:partidas?|cadastros?|atletas?|equipes?|jogos?)\b|\b\d+\s+(?:partidas?|cadastros?|atletas?|equipes?|jogos?|pendências?|notificações?)\b|\b\d{1,2}\/\d{1,2}\/\d{2,4}\b|\b\d{4}-\d{2}-\d{2}\b|\b\d{1,2}h(?:\d{2})?\b|\b\d{1,2}:\d{2}\b/gu;
 
@@ -358,6 +358,9 @@ const Header = ({
     useState<number | null>(null);
 
   const [usuario, setUsuario] = useState<Usuario | null>(null);
+
+  // MODAL DE SAÍDA
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
   // ============================================================
   // TEMA
@@ -629,7 +632,6 @@ const Header = ({
       const dadosPesquisa: SearchItem[] = [];
       const falhas: string[] = [];
 
-      // ATLETAS
       const resultadoAtletas = resultados[0];
 
       if (resultadoAtletas.status === 'fulfilled') {
@@ -652,7 +654,6 @@ const Header = ({
         falhas.push('atletas');
       }
 
-      // EQUIPES
       const resultadoEquipes = resultados[1];
 
       if (resultadoEquipes.status === 'fulfilled') {
@@ -677,7 +678,6 @@ const Header = ({
         falhas.push('equipes');
       }
 
-      // PARTIDAS
       const resultadoPartidas = resultados[2];
 
       if (resultadoPartidas.status === 'fulfilled') {
@@ -788,7 +788,14 @@ const Header = ({
   // SAIR
   // ============================================================
 
+  // Abre a confirmação, sem encerrar a sessão imediatamente.
   const handleLogout = () => {
+    setOpenPanel(null);
+    setLogoutModalOpen(true);
+  };
+
+  // Executa a saída somente após confirmação.
+  const confirmarLogout = () => {
     localStorage.removeItem('usuario');
     localStorage.removeItem('token');
     localStorage.removeItem('accessToken');
@@ -800,9 +807,10 @@ const Header = ({
     setNotifications([]);
     setSearchData([]);
     setOpenPanel(null);
+    setLogoutModalOpen(false);
 
     onLogout?.();
-    navigate('/');
+    navigate('/', { replace: true });
   };
 
   // ============================================================
@@ -822,6 +830,7 @@ const Header = ({
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setOpenPanel(null);
+        setLogoutModalOpen(false);
       }
     };
 
@@ -884,302 +893,352 @@ const Header = ({
   // ============================================================
 
   return (
-    <header ref={headerRef} className={styles.header}>
-      <h1 className={styles.title}>{title}</h1>
+    <>
+      <header ref={headerRef} className={styles.header}>
+        <h1 className={styles.title}>{title}</h1>
 
-      <div className={styles.right}>
-        {/* PESQUISA */}
-        <div className={styles.searchContainer}>
-          <div
-            className={styles.search}
-            onClick={() => setOpenPanel('search')}
-          >
-            <Search size={18} strokeWidth={2} />
-            <input
-              type="text"
-              value={searchValue}
-              placeholder="Pesquisar atletas, equipes, partidas"
-              aria-label="Pesquisar atletas, equipes e partidas"
-              aria-expanded={openPanel === 'search'}
-              onFocus={() => setOpenPanel('search')}
-              onChange={(event) => {
-                setSearchValue(event.target.value);
-                setOpenPanel('search');
-              }}
-            />
-          </div>
-
-          {openPanel === 'search' && (
-            <div className={styles.searchDropdown}>
-              {loadingSearch ? (
-                <div className={styles.emptySearch}>Carregando resultados...</div>
-              ) : (
-                <>
-                  {searchError && (
-                    <div className={styles.emptySearch}>{searchError}</div>
-                  )}
-
-                  <SearchSection
-                    title="Atletas"
-                    items={athletes.slice(0, LIMITE_RESULTADOS)}
-                    emptyMessage="Nenhum atleta encontrado."
-                    onViewAll={() => handleViewAll('atleta')}
-                    onItemClick={handleSearchResult}
-                  />
-
-                  <SearchSection
-                    title="Equipes"
-                    items={teams.slice(0, LIMITE_RESULTADOS)}
-                    emptyMessage="Nenhuma equipe encontrada."
-                    onViewAll={() => handleViewAll('equipe')}
-                    onItemClick={handleSearchResult}
-                  />
-
-                  <SearchSection
-                    title="Partidas"
-                    items={matches.slice(0, LIMITE_RESULTADOS)}
-                    emptyMessage="Nenhuma partida encontrada."
-                    onViewAll={() => handleViewAll('partida')}
-                    onItemClick={handleSearchResult}
-                  />
-                </>
-              )}
+        <div className={styles.right}>
+          {/* PESQUISA */}
+          <div className={styles.searchContainer}>
+            <div
+              className={styles.search}
+              onClick={() => setOpenPanel('search')}
+            >
+              <Search size={18} strokeWidth={2} />
+              <input
+                type="text"
+                value={searchValue}
+                placeholder="Pesquisar atletas, equipes, partidas"
+                aria-label="Pesquisar atletas, equipes e partidas"
+                aria-expanded={openPanel === 'search'}
+                onFocus={() => setOpenPanel('search')}
+                onChange={(event) => {
+                  setSearchValue(event.target.value);
+                  setOpenPanel('search');
+                }}
+              />
             </div>
-          )}
-        </div>
 
-        {/* NOTIFICAÇÕES */}
-        <div className={styles.notificationContainer}>
-          <button
-            className={styles.notification}
-            type="button"
-            aria-label="Notificações"
-            aria-expanded={openPanel === 'notifications'}
-            onClick={handleNotificationPanel}
-          >
-            <Bell size={20} strokeWidth={2} />
-
-            {unreadNotifications > 0 && (
-              <span className={styles.notificationBadge}>
-                {unreadNotifications > 99 ? '99+' : unreadNotifications}
-              </span>
-            )}
-          </button>
-
-          {openPanel === 'notifications' && (
-            <div className={styles.notificationsDropdown}>
-              <div className={styles.notificationHeader}>
-                <div className={styles.notificationTitleWrapper}>
-                  <h2>Notificações</h2>
-                  {unreadNotifications > 0 && (
-                    <span className={styles.notificationCount}>
-                      {unreadNotifications}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className={styles.notificationList}>
-                {loadingNotifications && notifications.length === 0 ? (
-                  <div className={styles.emptySearch}>
-                    Carregando notificações...
-                  </div>
-                ) : notificationError && notifications.length === 0 ? (
-                  <div className={styles.emptySearch}>{notificationError}</div>
-                ) : notifications.length === 0 ? (
-                  <div className={styles.emptySearch}>
-                    Você não tem notificações no momento.
-                  </div>
+            {openPanel === 'search' && (
+              <div className={styles.searchDropdown}>
+                {loadingSearch ? (
+                  <div className={styles.emptySearch}>Carregando resultados...</div>
                 ) : (
                   <>
-                    {notificationError && (
-                      <div className={styles.emptySearch}>
-                        {notificationError}
-                      </div>
+                    {searchError && (
+                      <div className={styles.emptySearch}>{searchError}</div>
                     )}
 
-                    {notifications.map((notification) => (
-                      <button
-                        type="button"
-                        key={notification.id}
-                        disabled={
-                          processingNotificationId === notification.id
-                        }
-                        className={`${styles.notificationItem} ${
-                          !notification.read ? styles.notificationUnread : ''
-                        }`}
-                        onClick={() =>
-                          void handleNotificationClick(notification)
-                        }
-                      >
-                        <NotificationIcon type={notification.type} />
+                    <SearchSection
+                      title="Atletas"
+                      items={athletes.slice(0, LIMITE_RESULTADOS)}
+                      emptyMessage="Nenhum atleta encontrado."
+                      onViewAll={() => handleViewAll('atleta')}
+                      onItemClick={handleSearchResult}
+                    />
 
-                        <div className={styles.notificationContent}>
-                          <div className={styles.notificationTop}>
-                            <strong>{notification.title}</strong>
-                            <span>
-                              {formatarTempoNotificacao(notification.time)}
-                            </span>
-                          </div>
+                    <SearchSection
+                      title="Equipes"
+                      items={teams.slice(0, LIMITE_RESULTADOS)}
+                      emptyMessage="Nenhuma equipe encontrada."
+                      onViewAll={() => handleViewAll('equipe')}
+                      onItemClick={handleSearchResult}
+                    />
 
-                          <p>
-                            {formatarDescricaoNotificacao(
-                              notification.description,
-                            )}
-                          </p>
-                        </div>
-
-                        {!notification.read && (
-                          <span className={styles.unreadDot} />
-                        )}
-                      </button>
-                    ))}
+                    <SearchSection
+                      title="Partidas"
+                      items={matches.slice(0, LIMITE_RESULTADOS)}
+                      emptyMessage="Nenhuma partida encontrada."
+                      onViewAll={() => handleViewAll('partida')}
+                      onItemClick={handleSearchResult}
+                    />
                   </>
                 )}
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        {/* USUÁRIO */}
-        <div className={styles.userContainer}>
-          <button
-            type="button"
-            className={styles.user}
-            aria-expanded={openPanel === 'user'}
-            onClick={() => togglePanel('user')}
-          >
-            <div className={styles.avatar}>
-              {avatarUrl ? (
-                <img src={avatarUrl} alt={`Foto de ${nomeUsuario}`} />
-              ) : (
-                iniciais
+          {/* NOTIFICAÇÕES */}
+          <div className={styles.notificationContainer}>
+            <button
+              className={styles.notification}
+              type="button"
+              aria-label="Notificações"
+              aria-expanded={openPanel === 'notifications'}
+              onClick={handleNotificationPanel}
+            >
+              <Bell size={20} strokeWidth={2} />
+
+              {unreadNotifications > 0 && (
+                <span className={styles.notificationBadge}>
+                  {unreadNotifications > 99 ? '99+' : unreadNotifications}
+                </span>
               )}
-            </div>
+            </button>
 
-            <div className={styles.userInfo}>
-              <span className={styles.userName}>{nomeUsuario}</span>
-              <span className={styles.userRole}>Treinador</span>
-            </div>
-
-            <ChevronDown
-              className={`${styles.userArrow} ${
-                openPanel === 'user' ? styles.userArrowOpen : ''
-              }`}
-              size={19}
-            />
-          </button>
-
-          {openPanel === 'user' && (
-            <div className={styles.userDropdown}>
-              <div className={styles.userDropdownHeader}>
-                <div className={styles.dropdownAvatar}>
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt={`Foto de ${nomeUsuario}`} />
-                  ) : (
-                    iniciais
-                  )}
+            {openPanel === 'notifications' && (
+              <div className={styles.notificationsDropdown}>
+                <div className={styles.notificationHeader}>
+                  <div className={styles.notificationTitleWrapper}>
+                    <h2>Notificações</h2>
+                    {unreadNotifications > 0 && (
+                      <span className={styles.notificationCount}>
+                        {unreadNotifications}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  <strong>{nomeUsuario}</strong>
-                  <span>Treinador</span>
+
+                <div className={styles.notificationList}>
+                  {loadingNotifications && notifications.length === 0 ? (
+                    <div className={styles.emptySearch}>
+                      Carregando notificações...
+                    </div>
+                  ) : notificationError && notifications.length === 0 ? (
+                    <div className={styles.emptySearch}>{notificationError}</div>
+                  ) : notifications.length === 0 ? (
+                    <div className={styles.emptySearch}>
+                      Você não tem notificações no momento.
+                    </div>
+                  ) : (
+                    <>
+                      {notificationError && (
+                        <div className={styles.emptySearch}>
+                          {notificationError}
+                        </div>
+                      )}
+
+                      {notifications.map((notification) => (
+                        <button
+                          type="button"
+                          key={notification.id}
+                          disabled={
+                            processingNotificationId === notification.id
+                          }
+                          className={`${styles.notificationItem} ${
+                            !notification.read ? styles.notificationUnread : ''
+                          }`}
+                          onClick={() =>
+                            void handleNotificationClick(notification)
+                          }
+                        >
+                          <NotificationIcon type={notification.type} />
+
+                          <div className={styles.notificationContent}>
+                            <div className={styles.notificationTop}>
+                              <strong>{notification.title}</strong>
+                              <span>
+                                {formatarTempoNotificacao(notification.time)}
+                              </span>
+                            </div>
+
+                            <p>
+                              {formatarDescricaoNotificacao(
+                                notification.description,
+                              )}
+                            </p>
+                          </div>
+
+                          {!notification.read && (
+                            <span className={styles.unreadDot} />
+                          )}
+                        </button>
+                      ))}
+                    </>
+                  )}
                 </div>
               </div>
+            )}
+          </div>
 
-              <div className={styles.userMenu}>
-                {/* TEMA */}
-                <button
-                  type="button"
-                  className={styles.userMenuItem}
-                  onClick={toggleTheme}
-                  role="switch"
-                  aria-checked={theme === 'dark'}
-                  aria-label={
-                    theme === 'dark'
-                      ? 'Desativar modo escuro'
-                      : 'Ativar modo escuro'
-                  }
-                >
-                  {theme === 'dark' ? (
-                    <Sun size={18} />
-                  ) : (
-                    <Moon size={18} />
-                  )}
+          {/* USUÁRIO */}
+          <div className={styles.userContainer}>
+            <button
+              type="button"
+              className={styles.user}
+              aria-expanded={openPanel === 'user'}
+              onClick={() => togglePanel('user')}
+            >
+              <div className={styles.avatar}>
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt={`Foto de ${nomeUsuario}`} />
+                ) : (
+                  iniciais
+                )}
+              </div>
 
-                  <span className={styles.themeLabel}>
-                    {theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
-                  </span>
+              <div className={styles.userInfo}>
+                <span className={styles.userName}>{nomeUsuario}</span>
+                <span className={styles.userRole}>Treinador</span>
+              </div>
 
-                  <span
-                    className={`${styles.themeSwitch} ${
-                      theme === 'dark' ? styles.themeSwitchActive : ''
-                    }`}
-                    aria-hidden="true"
-                  >
-                    <span className={styles.themeSwitchKnob} />
-                  </span>
-                </button>
+              <ChevronDown
+                className={`${styles.userArrow} ${
+                  openPanel === 'user' ? styles.userArrowOpen : ''
+                }`}
+                size={19}
+              />
+            </button>
 
-                {/* PERFIL */}
-                <button
-                  type="button"
-                  className={`${styles.userMenuItem} ${styles.userMenuActive}`}
-                  onClick={() => {
-                    onProfile?.();
-                    setOpenPanel(null);
-                  }}
-                >
-                  <UserRound size={18} />
-                  Meu Perfil
-                </button>
+            {openPanel === 'user' && (
+              <div className={styles.userDropdown}>
+                <div className={styles.userDropdownHeader}>
+                  <div className={styles.dropdownAvatar}>
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt={`Foto de ${nomeUsuario}`} />
+                    ) : (
+                      iniciais
+                    )}
+                  </div>
+                  <div>
+                    <strong>{nomeUsuario}</strong>
+                    <span>Treinador</span>
+                  </div>
+                </div>
 
-                {/* CONFIGURAÇÕES */}
-                <button
-                  type="button"
-                  className={styles.userMenuItem}
-                  onClick={() => {
-                    if (onSettings) {
-                      onSettings();
-                    } else {
-                      navigate('/configuracoes');
+                <div className={styles.userMenu}>
+                  {/* TEMA */}
+                  <button
+                    type="button"
+                    className={styles.userMenuItem}
+                    onClick={toggleTheme}
+                    role="switch"
+                    aria-checked={theme === 'dark'}
+                    aria-label={
+                      theme === 'dark'
+                        ? 'Desativar modo escuro'
+                        : 'Ativar modo escuro'
                     }
-                    setOpenPanel(null);
-                  }}
-                >
-                  <Settings size={18} />
-                  Configurações
-                </button>
+                  >
+                    {theme === 'dark' ? (
+                      <Sun size={18} />
+                    ) : (
+                      <Moon size={18} />
+                    )}
 
-                {/* AJUDA */}
+                    <span className={styles.themeLabel}>
+                      {theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+                    </span>
+
+                    <span
+                      className={`${styles.themeSwitch} ${
+                        theme === 'dark' ? styles.themeSwitchActive : ''
+                      }`}
+                      aria-hidden="true"
+                    >
+                      <span className={styles.themeSwitchKnob} />
+                    </span>
+                  </button>
+
+                  {/* PERFIL */}
+                  <button
+                    type="button"
+                    className={`${styles.userMenuItem} ${styles.userMenuActive}`}
+                    onClick={() => {
+                      onProfile?.();
+                      setOpenPanel(null);
+                    }}
+                  >
+                    <UserRound size={18} />
+                    Meu Perfil
+                  </button>
+
+                  {/* CONFIGURAÇÕES */}
+                  <button
+                    type="button"
+                    className={styles.userMenuItem}
+                    onClick={() => {
+                      if (onSettings) {
+                        onSettings();
+                      } else {
+                        navigate('/configuracoes');
+                      }
+                      setOpenPanel(null);
+                    }}
+                  >
+                    <Settings size={18} />
+                    Configurações
+                  </button>
+
+                  {/* AJUDA */}
+                  <button
+                    type="button"
+                    className={styles.userMenuItem}
+                    onClick={() => {
+                      onHelp?.();
+                      setOpenPanel(null);
+                    }}
+                  >
+                    <CircleHelp size={18} />
+                    Ajuda
+                  </button>
+                </div>
+
+                <div className={styles.userMenuDivider} />
+
+                {/* SAIR */}
                 <button
                   type="button"
-                  className={styles.userMenuItem}
-                  onClick={() => {
-                    onHelp?.();
-                    setOpenPanel(null);
-                  }}
+                  className={`${styles.userMenuItem} ${styles.logoutButton}`}
+                  onClick={handleLogout}
                 >
-                  <CircleHelp size={18} />
-                  Ajuda
+                  <LogOut size={18} />
+                  Sair
                 </button>
               </div>
-
-              <div className={styles.userMenuDivider} />
-
-              {/* SAIR */}
-              <button
-                type="button"
-                className={`${styles.userMenuItem} ${styles.logoutButton}`}
-                onClick={handleLogout}
-              >
-                <LogOut size={18} />
-                Sair
-              </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* MODAL DE CONFIRMAÇÃO DE SAÍDA */}
+      {logoutModalOpen &&
+        createPortal(
+          <div
+            className={styles.logoutModalOverlay}
+            onClick={() => setLogoutModalOpen(false)}
+          >
+            <div
+              className={styles.logoutModal}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="logout-modal-title"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className={styles.logoutModalIcon}>
+                <LogOut size={24} />
+              </div>
+
+              <h2 id="logout-modal-title">
+                Você realmente deseja sair?
+              </h2>
+
+              <p>
+                Ao sair, você precisará entrar novamente para acessar sua conta.
+              </p>
+
+              <div className={styles.logoutModalButtons}>
+                <button
+                  type="button"
+                  className={styles.logoutCancel}
+                  onClick={() => setLogoutModalOpen(false)}
+                >
+                  Cancelar
+                </button>
+
+                <button
+                  type="button"
+                  className={styles.logoutConfirm}
+                  onClick={confirmarLogout}
+                >
+                  Sim, sair
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+    </>
   );
 };
 
@@ -1278,7 +1337,6 @@ interface NotificationIconProps {
 }
 
 const NotificationIcon = ({ type }: NotificationIconProps) => {
-  // Cadastro geral incompleto.
   if (
     type === 'cadastros_incompletos' ||
     type === 'cadastro_incompleto'
@@ -1292,7 +1350,6 @@ const NotificationIcon = ({ type }: NotificationIconProps) => {
     );
   }
 
-  // Atletas que ainda não estão vinculados a uma equipe.
   if (type === 'atletas_sem_equipe') {
     return (
       <div
@@ -1303,7 +1360,6 @@ const NotificationIcon = ({ type }: NotificationIconProps) => {
     );
   }
 
-  // Equipes que ainda não possuem atletas vinculados.
   if (type === 'equipes_sem_atletas') {
     return (
       <div
@@ -1314,7 +1370,6 @@ const NotificationIcon = ({ type }: NotificationIconProps) => {
     );
   }
 
-  // Partida próxima.
   if (type === 'partida_proxima') {
     return (
       <div
@@ -1325,7 +1380,6 @@ const NotificationIcon = ({ type }: NotificationIconProps) => {
     );
   }
 
-  // Partidas sem escalação.
   if (type === 'partidas_sem_escalacao') {
     return (
       <div
@@ -1336,7 +1390,6 @@ const NotificationIcon = ({ type }: NotificationIconProps) => {
     );
   }
 
-  // Partidas sem local definido.
   if (type === 'partidas_sem_local') {
     return (
       <div
@@ -1347,7 +1400,6 @@ const NotificationIcon = ({ type }: NotificationIconProps) => {
     );
   }
 
-  // Partidas com data passada ainda pendentes.
   if (type === 'partidas_pendentes_atrasadas') {
     return (
       <div
@@ -1358,7 +1410,6 @@ const NotificationIcon = ({ type }: NotificationIconProps) => {
     );
   }
 
-  // Convocação.
   if (type === 'convocacao') {
     return (
       <div
@@ -1369,7 +1420,6 @@ const NotificationIcon = ({ type }: NotificationIconProps) => {
     );
   }
 
-  // Treino.
   if (type === 'treino') {
     return (
       <div
@@ -1380,7 +1430,6 @@ const NotificationIcon = ({ type }: NotificationIconProps) => {
     );
   }
 
-  // Avaliação.
   if (type === 'avaliacao') {
     return (
       <div
@@ -1391,7 +1440,6 @@ const NotificationIcon = ({ type }: NotificationIconProps) => {
     );
   }
 
-  // Tipo padrão.
   return (
     <div
       className={`${styles.notificationIcon} ${styles.notificationIconBlue}`}

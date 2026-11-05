@@ -1,6 +1,9 @@
-import { Link, useLocation } from 'react-router-dom';
-import styles from './sidebar.module.css';
 
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
+import styles from './sidebar.module.css';
 import logo from '../../assets/img/logo.png';
 
 interface SidebarProps {
@@ -18,69 +21,112 @@ const menuItems = [
   { label: 'Comparações', icon: 'compare_arrows', path: '/comparacoes' },
 ];
 
-const Sidebar = ({
-  onExpand,
-  onCollapse,
-}: SidebarProps) => {
+const Sidebar = ({ onExpand, onCollapse }: SidebarProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const [modalSairAberto, setModalSairAberto] = useState(false);
+
+  const confirmarSaida = () => {
+    ['token', 'usuario', 'user'].forEach((chave) => {
+      localStorage.removeItem(chave);
+      sessionStorage.removeItem(chave);
+    });
+
+    navigate('/', { replace: true });
+  };
 
   return (
-    <aside
-      className={styles.sidebar}
-      onMouseEnter={onExpand}
-      onMouseLeave={onCollapse}
-    >
-      {/* LOGO */}
-      <div className={styles.logoContainer}>
-        <img
-          src={logo}
-          alt="SATE"
-          className={styles.logo}
-        />
-      </div>
+    <>
+      <aside
+        className={styles.sidebar}
+        onMouseEnter={onExpand}
+        onMouseLeave={onCollapse}
+      >
+        <div className={styles.logoContainer}>
+          <img src={logo} alt="SATE" className={styles.logo} />
+        </div>
 
-      {/* MENU */}
-      <nav className={styles.menu}>
-        {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
+        <nav className={styles.menu}>
+          {menuItems.map((item) => {
+            const isActive = location.pathname === item.path;
 
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`${styles.menuItem} ${
-                isActive ? styles.active : ''
-              }`}
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`${styles.menuItem} ${
+                  isActive ? styles.active : ''
+                }`}
+              >
+                <span className="material-icons">{item.icon}</span>
+                <span className={styles.label}>{item.label}</span>
+              </Link>
+            );
+          })}
+
+          <div className={styles.menuDivider} />
+
+          <button
+            type="button"
+            className={styles.menuItem}
+            onClick={() => setModalSairAberto(true)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              font: 'inherit',
+              textAlign: 'left',
+              cursor: 'pointer',
+            }}
+          >
+            <span className="material-icons">logout</span>
+            <span className={styles.label}>Sair</span>
+          </button>
+        </nav>
+      </aside>
+
+      {modalSairAberto &&
+        createPortal(
+          <div
+            className={styles.modalOverlay}
+            onClick={() => setModalSairAberto(false)}
+          >
+            <div
+              className={styles.modalSair}
+              onClick={(event) => event.stopPropagation()}
             >
-              <span className="material-icons">
-                {item.icon}
-              </span>
+              <div className={styles.modalIcone}>
+                <span className="material-icons">logout</span>
+              </div>
 
-              <span className={styles.label}>
-                {item.label}
-              </span>
-            </Link>
-          );
-        })}
+              <h2>Você realmente deseja sair?</h2>
 
-        {/* LINHA SEPARADORA */}
-        <div className={styles.menuDivider} />
+              <p>
+                Ao sair, você precisará entrar novamente para acessar sua conta.
+              </p>
 
-        {/* SAIR */}
-        <Link
-          to="/"
-          className={styles.menuItem}
-        >
-          <span className="material-icons">
-            logout
-          </span>
+              <div className={styles.modalBotoes}>
+                <button
+                  type="button"
+                  className={styles.botaoCancelar}
+                  onClick={() => setModalSairAberto(false)}
+                >
+                  Cancelar
+                </button>
 
-          <span className={styles.label}>
-            Sair
-          </span>
-        </Link>
-      </nav>
-    </aside>
+                <button
+                  type="button"
+                  className={styles.botaoSair}
+                  onClick={confirmarSaida}
+                >
+                  Sim, sair
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+    </>
   );
 };
 

@@ -14,6 +14,7 @@ import Carregamento from "./pages/Carregamento/carregamento";
 import Cadastro from "./pages/Cadastro/cadastro";
 import EsqueciSenha from "./pages/EsqueciSenha/esqueciSenha";
 import RedefinirSenha from "./pages/RedefinirSenha/redefinirSenha";
+import VerificarEmail from "./pages/VerificarEmail/verificarEmail";
 
 // ==========================================
 // PÁGINAS DE BOAS-VINDAS / CONFIGURAÇÃO
@@ -73,6 +74,9 @@ function App() {
 
           {/* Cadastro */}
           <Route path="/cadastro" element={<Cadastro />} />
+
+          {/* Confirmação de e-mail do cadastro */}
+          <Route path="/verificar-email" element={<VerificarEmail />} />
 
           {/* Recuperação de senha */}
           <Route path="/esqueci-senha" element={<EsqueciSenha />} />
@@ -162,7 +166,7 @@ function App() {
 
               {/* DETALHES DA PARTIDA */}
               <Route
-                path="/detalhes-partida"
+                path="/detalhes-partida/:id"
                 element={<DetalhesDaPartida />}
               />
 

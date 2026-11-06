@@ -13,6 +13,7 @@
   flex-direction: column;
   width: min(460px, 100%);
   max-height: 72vh;
+  min-height: 0;
   overflow: hidden;
   background: #fff;
   border: 1px solid #e8dfd3;
@@ -61,8 +62,11 @@
   background: #fde6ec;
 }
 .content {
+  flex: 1;
+  min-height: 0;
   padding: 14px 18px;
   overflow-y: auto;
+  overscroll-behavior: contain;
   color: #3f514a;
   font-size: 11px;
   line-height: 1.55;
@@ -106,4 +110,19 @@
   .header { padding: 14px 14px 10px; }
   .content { padding: 12px 14px; }
   .footer { padding: 9px 14px; }
+}
+.close:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.close:disabled:hover {
+  color: #6c7c77;
+  background: #f6f9f7;
+}
+.footer button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.footer button:disabled:hover {
+  background: #006b4f;
 }

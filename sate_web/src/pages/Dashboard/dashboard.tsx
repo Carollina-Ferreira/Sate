@@ -1604,7 +1604,7 @@ export default function Dashboard() {
               }
               onClick={() =>
                 navigate(
-                  '/partidas',
+                  `/detalhes-partida/${partida.id}`,
                 )
               }
             >
@@ -2060,7 +2060,7 @@ export default function Dashboard() {
                         }
                         onClick={() =>
                           navigate(
-                            '/partidas',
+                            `/detalhes-partida/${partida.id}`,
                           )
                         }
                       >

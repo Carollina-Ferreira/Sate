@@ -1,3 +1,4 @@
+
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -14,6 +15,10 @@ const {
     excluirAtleta,
 } = require('../controllers/atletaController');
 
+const {
+    listarPartidasDoAtleta,
+} = require('../controllers/partidasAtletaController');
+
 const autenticar = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -27,7 +32,6 @@ const pastaDocumentos = path.resolve(
     '../../uploads/documentos'
 );
 
-// Criar a pasta automaticamente
 if (!fs.existsSync(pastaDocumentos)) {
     fs.mkdirSync(pastaDocumentos, {
         recursive: true,
@@ -73,31 +77,49 @@ const uploadDocumento = multer({
 });
 
 // =====================================
-// ATLETAS
+// ATLETAS DISPONÍVEIS
 // =====================================
 
-// Listar atletas disponíveis para equipe
 router.get(
     '/disponiveis',
     autenticar,
     listarAtletasDisponiveis
 );
 
-// Listar todos os atletas
+// =====================================
+// LISTAR ATLETAS
+// =====================================
+
 router.get(
     '/',
     autenticar,
     listarAtletas
 );
 
-// Criar atleta
+// =====================================
+// CRIAR ATLETA
+// =====================================
+
 router.post(
     '/',
     autenticar,
     criarAtleta
 );
 
-// Adicionar documento ao atleta
+// =====================================
+// PARTIDAS DO ATLETA
+// =====================================
+
+router.get(
+    '/:id/partidas',
+    autenticar,
+    listarPartidasDoAtleta
+);
+
+// =====================================
+// DOCUMENTOS
+// =====================================
+
 router.post(
     '/:id/documentos',
     autenticar,
@@ -105,25 +127,38 @@ router.post(
     adicionarDocumento
 );
 
-// Buscar atleta por ID
+// =====================================
+// BUSCAR ATLETA
+// =====================================
+
 router.get(
     '/:id',
     autenticar,
     buscarAtleta
 );
 
-// Atualizar atleta
+// =====================================
+// ATUALIZAR ATLETA
+// =====================================
+
 router.put(
     '/:id',
     autenticar,
     atualizarAtleta
 );
 
-// Excluir atleta
+// =====================================
+// EXCLUIR ATLETA
+// =====================================
+
 router.delete(
     '/:id',
     autenticar,
     excluirAtleta
 );
+
+// =====================================
+// EXPORTAR ROTAS
+// =====================================
 
 module.exports = router;

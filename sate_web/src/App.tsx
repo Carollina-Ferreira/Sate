@@ -166,7 +166,7 @@ function App() {
 
               {/* DETALHES DA PARTIDA */}
               <Route
-                path="/detalhes-partida"
+                path="/detalhes-partida/:id"
                 element={<DetalhesDaPartida />}
               />
 

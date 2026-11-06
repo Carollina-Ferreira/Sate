@@ -94,6 +94,8 @@ const Cadastro = () => {
 
   const [mostrarTermos, setMostrarTermos] = useState(false);
 
+  const [termosLidos, setTermosLidos] = useState(false);
+
   const [erro, setErro] =
     useState('');
 
@@ -177,15 +179,10 @@ const Cadastro = () => {
       return;
     }
 
-
-    if (!form.termos) {
-      setErro(
-        'Aceite os termos para continuar.'
-      );
-
+    if (!termosLidos || !form.termos) {
+      setErro('Leia os Termos de Uso até o final e aceite para continuar.');
       return;
     }
-
 
     setLoading(true);
 
@@ -218,7 +215,7 @@ const Cadastro = () => {
       if (!resposta.ok) {
         throw new Error(
           data.mensagem ||
-            'Não foi possível criar sua conta.'
+          'Não foi possível criar sua conta.'
         );
       }
 
@@ -278,11 +275,10 @@ const Cadastro = () => {
           {heroSlides.map((image, index) => (
             <div
               key={image}
-              className={`${styles.heroSlide} ${
-                index === activeSlide
+              className={`${styles.heroSlide} ${index === activeSlide
                   ? styles.heroSlideActive
                   : ''
-              }`}
+                }`}
               style={{
                 backgroundImage: `url(${image})`,
               }}
@@ -701,6 +697,7 @@ const Cadastro = () => {
                 type="checkbox"
                 name="termos"
                 checked={form.termos}
+                disabled={!termosLidos}
                 onChange={handleChange}
               />
 
@@ -765,7 +762,10 @@ const Cadastro = () => {
       </section>
 
       {mostrarTermos && (
-        <TermosUso onFechar={() => setMostrarTermos(false)} />
+        <TermosUso
+          onFechar={() => setMostrarTermos(false)}
+          onLeuTermos={() => setTermosLidos(true)}
+        />
       )}
 
     </main>

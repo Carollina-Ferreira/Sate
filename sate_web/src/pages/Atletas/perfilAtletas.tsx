@@ -1,3 +1,6 @@
+
+import type { MouseEvent } from 'react';
+
 import {
     ArrowLeft,
     Edit3,
@@ -61,7 +64,10 @@ interface PerfilAtletaProps {
     onBack: () => void;
     onEdit: () => void;
     onInformacoes: () => void;
-    onClipes: () => void;
+
+    // Agora envia os dados do atleta para a tela de clipes.
+    onClipes: (atleta: AtletaPerfil) => void;
+
     onPartidas?: () => void;
 }
 
@@ -84,26 +90,27 @@ const PerfilAtleta = ({
     onClipes,
     onPartidas,
 }: PerfilAtletaProps) => {
+
     const iniciais = atleta.nome
         ? atleta.nome
-              .trim()
-              .split(/\s+/)
-              .filter(Boolean)
-              .slice(0, 2)
-              .map((nome) => nome.charAt(0))
-              .join('')
-              .toUpperCase()
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((nome) => nome.charAt(0))
+            .join('')
+            .toUpperCase()
         : 'AT';
 
     const calcularIdade = (): number | null => {
         if (!atleta.dataNascimento) return null;
 
         const apenasData = atleta.dataNascimento.split('T')[0];
+
         let ano: number;
         let mes: number;
         let dia: number;
 
-        // Aceita datas no formato ISO (AAAA-MM-DD).
         const partesISO = apenasData.split('-');
 
         if (partesISO.length === 3) {
@@ -130,7 +137,10 @@ const PerfilAtleta = ({
 
         if (
             hoje.getMonth() < mes - 1 ||
-            (hoje.getMonth() === mes - 1 && hoje.getDate() < dia)
+            (
+                hoje.getMonth() === mes - 1 &&
+                hoje.getDate() < dia
+            )
         ) {
             idade--;
         }
@@ -141,12 +151,15 @@ const PerfilAtleta = ({
     const idade = calcularIdade();
 
     const equipe = atleta.equipe?.nome || 'Sem equipe';
+
     const categoria =
         atleta.categoria ||
         atleta.equipe?.categoria ||
         'Categoria não informada';
+
     const modalidade =
-        atleta.equipe?.modalidade || 'Modalidade não informada';
+        atleta.equipe?.modalidade ||
+        'Modalidade não informada';
 
     const fotoUrl = atleta.usuario?.avatarUrl || null;
 
@@ -206,7 +219,9 @@ const PerfilAtleta = ({
         index: number,
         porcentagem: number
     ) => {
-        const angulo = (Math.PI * 2 * index) / 6 - Math.PI / 2;
+        const angulo =
+            (Math.PI * 2 * index) / 6 - Math.PI / 2;
+
         const raio = 90 * (porcentagem / 100);
 
         return {
@@ -218,29 +233,54 @@ const PerfilAtleta = ({
     const criarPoligono = (porcentagem: number) =>
         dadosAtributos
             .map((_, index) => {
-                const ponto = coordenadaRadar(index, porcentagem);
+                const ponto = coordenadaRadar(
+                    index,
+                    porcentagem
+                );
+
                 return `${ponto.x},${ponto.y}`;
             })
             .join(' ');
 
     const pontosRadar = dadosAtributos
         .map((atributo, index) => {
-            const ponto = coordenadaRadar(index, atributo.valor);
+            const ponto = coordenadaRadar(
+                index,
+                atributo.valor
+            );
+
             return `${ponto.x},${ponto.y}`;
         })
         .join(' ');
 
     const handleEditar = (
-        event: React.MouseEvent<HTMLButtonElement>
+        event: MouseEvent<HTMLButtonElement>
     ) => {
         event.preventDefault();
         event.stopPropagation();
+
         onEdit();
+    };
+
+    /**
+     * Abre os clipes enviando os dados do atleta selecionado.
+     */
+    const handleAbrirClipes = () => {
+        if (!atleta.id) {
+            console.error(
+                'Não foi possível abrir os clipes: ID do atleta não encontrado.'
+            );
+
+            return;
+        }
+
+        onClipes(atleta);
     };
 
     return (
         <div className={styles.page}>
             <main className={styles.main}>
+
                 <button
                     className={styles.backButton}
                     onClick={onBack}
@@ -257,7 +297,9 @@ const PerfilAtleta = ({
 
                 {/* PERFIL DO ATLETA */}
                 <section className={styles.profileCard}>
+
                     <div className={styles.profileLeft}>
+
                         <div className={styles.avatar}>
                             {fotoUrl ? (
                                 <img
@@ -270,18 +312,22 @@ const PerfilAtleta = ({
                         </div>
 
                         <div className={styles.nameGroup}>
-                            <h1>{atleta.nome || 'Atleta sem nome'}</h1>
+                            <h1>
+                                {atleta.nome || 'Atleta sem nome'}
+                            </h1>
 
                             <p className={styles.metaInfo}>
                                 {metaLinha}
                             </p>
                         </div>
+
                     </div>
 
                     <div className={styles.profilePerformance}>
                         <strong>{desempenho}%</strong>
                         <span>Índice de desempenho</span>
                     </div>
+
                 </section>
 
                 {/* NAVEGAÇÃO */}
@@ -293,6 +339,7 @@ const PerfilAtleta = ({
                         zIndex: 10,
                     }}
                 >
+
                     <button
                         type="button"
                         className={styles.actionButton}
@@ -329,11 +376,12 @@ const PerfilAtleta = ({
                     <button
                         type="button"
                         className={styles.actionButton}
-                        onClick={onClipes}
+                        onClick={handleAbrirClipes}
                     >
                         <Video size={17} />
                         Clipes
                     </button>
+
                 </nav>
 
                 {/* ESTATÍSTICAS */}
@@ -341,6 +389,7 @@ const PerfilAtleta = ({
                     className={styles.statsGrid}
                     aria-label="Estatísticas do atleta"
                 >
+
                     {estatisticas.map((estatistica) => (
                         <div
                             className={styles.statItem}
@@ -357,14 +406,21 @@ const PerfilAtleta = ({
                             </strong>
                         </div>
                     ))}
+
                 </section>
 
                 {/* GRÁFICOS */}
                 <section className={styles.chartsGrid}>
+
                     <article className={styles.chartCard}>
+
                         <div className={styles.chartHeader}>
+
                             <div>
-                                <h2>Evolução ao longo do tempo</h2>
+                                <h2>
+                                    Evolução ao longo do tempo
+                                </h2>
+
                                 <p>
                                     Índice de desempenho por partida.
                                 </p>
@@ -373,15 +429,18 @@ const PerfilAtleta = ({
                             <div className={styles.chartIcon}>
                                 <TrendingUp size={20} />
                             </div>
+
                         </div>
 
                         <div className={styles.lineChartContainer}>
+
                             <svg
                                 className={styles.lineChart}
                                 viewBox="0 0 650 270"
                                 role="img"
                                 aria-label="Evolução do desempenho nas últimas sete partidas"
                             >
+
                                 <defs>
                                     <linearGradient
                                         id="areaAtletaClaro"
@@ -395,6 +454,7 @@ const PerfilAtleta = ({
                                             stopColor="#16A875"
                                             stopOpacity="0.18"
                                         />
+
                                         <stop
                                             offset="100%"
                                             stopColor="#16A875"
@@ -408,6 +468,7 @@ const PerfilAtleta = ({
 
                                     return (
                                         <g key={valor}>
+
                                             <text
                                                 x="12"
                                                 y={y + 4}
@@ -423,6 +484,7 @@ const PerfilAtleta = ({
                                                 y2={y}
                                                 className={styles.gridLine}
                                             />
+
                                         </g>
                                     );
                                 })}
@@ -440,6 +502,7 @@ const PerfilAtleta = ({
 
                                 {pontosEvolucao.map((ponto, index) => (
                                     <g key={index}>
+
                                         <circle
                                             cx={ponto.x}
                                             cy={ponto.y}
@@ -459,14 +522,20 @@ const PerfilAtleta = ({
                                         >
                                             P{index + 1}
                                         </text>
+
                                     </g>
                                 ))}
+
                             </svg>
+
                         </div>
+
                     </article>
 
                     <article className={styles.chartCard}>
+
                         <div className={styles.chartHeader}>
+
                             <div>
                                 <h2>Perfil de atributos</h2>
                                 <p>Média das avaliações.</p>
@@ -475,15 +544,18 @@ const PerfilAtleta = ({
                             <div className={styles.chartIcon}>
                                 <Activity size={20} />
                             </div>
+
                         </div>
 
                         <div className={styles.radarContainer}>
+
                             <svg
                                 className={styles.radarChart}
                                 viewBox="0 0 320 300"
                                 role="img"
                                 aria-label="Gráfico dos atributos técnicos e físicos do atleta"
                             >
+
                                 {[25, 50, 75, 100].map((nivel) => (
                                     <polygon
                                         key={nivel}
@@ -554,10 +626,15 @@ const PerfilAtleta = ({
                                         );
                                     }
                                 )}
+
                             </svg>
+
                         </div>
+
                     </article>
+
                 </section>
+
             </main>
         </div>
     );

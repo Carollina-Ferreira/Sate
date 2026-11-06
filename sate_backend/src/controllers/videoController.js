@@ -12,6 +12,10 @@ const TAMANHO_MAXIMO_TITULO = 120;
 const TAMANHO_MAXIMO_CATEGORIA = 80;
 const TAMANHO_MAXIMO_OBSERVACAO = 5000;
 
+const TIPOS_REGISTRO = ['EVENTO', 'CLIPE'];
+const TIPOS_AVALIACAO = ['POSITIVA', 'NEGATIVA', 'NEUTRA', 'DESTAQUE'];
+const TIPOS_FORMAS = ['livre', 'linha', 'seta', 'circulo', 'retangulo', 'numero'];
+
 // ============================================================
 // FUNÇÕES AUXILIARES
 // ============================================================
@@ -322,78 +326,89 @@ async function excluirVideo(req, res) {
 // VALIDAR DADOS DE MARCAÇÃO
 // ============================================================
 
-function validarDadosMarcacao(body) {
+function validarDadosMarcacao(body, tipoRegistroPadrao = 'EVENTO') {
     const titulo = normalizarTexto(body?.titulo);
     const categoria = normalizarTexto(body?.categoria);
-
     const tempoInicio = Number(body?.tempoInicio);
     const tempoFim = Number(body?.tempoFim);
-
     const observacao = body?.observacao == null
         ? null
         : String(body.observacao).trim();
 
+    const tipoRegistro = String(
+        body?.tipoRegistro ||
+        (categoria.toLowerCase() === 'clipe' ? 'CLIPE' : tipoRegistroPadrao)
+    ).toUpperCase();
+
+    if (!TIPOS_REGISTRO.includes(tipoRegistro)) {
+        return { erro: 'Tipo de registro inválido.' };
+    }
+
     if (!titulo || titulo.length > TAMANHO_MAXIMO_TITULO) {
-        return {
-            erro: 'Informe um título de até 120 caracteres.'
-        };
+        return { erro: 'Informe um título de até 120 caracteres.' };
+    }
+
+    if (!categoria || categoria.length > TAMANHO_MAXIMO_CATEGORIA) {
+        return { erro: 'Informe uma categoria de até 80 caracteres.' };
     }
 
     if (
-        !categoria ||
-        categoria.length > TAMANHO_MAXIMO_CATEGORIA
+        body.tempoInicio === undefined || body.tempoInicio === null || body.tempoInicio === '' ||
+        body.tempoFim === undefined || body.tempoFim === null || body.tempoFim === '' ||
+        !Number.isFinite(tempoInicio) || !Number.isFinite(tempoFim) ||
+        tempoInicio < 0 || tempoFim <= tempoInicio
     ) {
-        return {
-            erro: 'Informe uma categoria de até 80 caracteres.'
-        };
+        return { erro: 'O tempo final deve ser maior que o inicial, e ambos devem ser válidos.' };
     }
 
-    if (
-        body.tempoInicio === undefined ||
-        body.tempoInicio === null ||
-        body.tempoInicio === '' ||
-        body.tempoFim === undefined ||
-        body.tempoFim === null ||
-        body.tempoFim === '' ||
-        !Number.isFinite(tempoInicio) ||
-        !Number.isFinite(tempoFim) ||
-        tempoInicio < 0 ||
-        tempoFim <= tempoInicio
-    ) {
-        return {
-            erro: 'O tempo final deve ser maior que o inicial, e ambos devem ser válidos.'
-        };
-    }
-
-    if (
-        observacao &&
-        observacao.length > TAMANHO_MAXIMO_OBSERVACAO
-    ) {
-        return {
-            erro: 'A observação deve ter no máximo 5000 caracteres.'
-        };
+    if (observacao && observacao.length > TAMANHO_MAXIMO_OBSERVACAO) {
+        return { erro: 'A observação deve ter no máximo 5000 caracteres.' };
     }
 
     let atletaId = null;
-
-    if (
-        body.atletaId !== undefined &&
-        body.atletaId !== null &&
-        body.atletaId !== ''
-    ) {
+    if (body.atletaId !== undefined && body.atletaId !== null && body.atletaId !== '') {
         atletaId = obterIdValido(body.atletaId);
+        if (!atletaId) return { erro: 'ID do atleta inválido.' };
+    }
 
-        if (!atletaId) {
-            return {
-                erro: 'ID do atleta inválido.'
-            };
-        }
+    if (tipoRegistro === 'EVENTO' && !atletaId) {
+        return { erro: 'Selecione o atleta que participou do evento.' };
+    }
+
+    let categoriaId = null;
+    if (body.categoriaId !== undefined && body.categoriaId !== null && body.categoriaId !== '') {
+        categoriaId = obterIdValido(body.categoriaId);
+        if (!categoriaId) return { erro: 'ID da categoria inválido.' };
+    }
+
+    if (tipoRegistro === 'EVENTO' && !categoriaId) {
+        return { erro: 'Selecione uma categoria para o evento.' };
+    }
+
+    const mapaAvaliacao = {
+        BOA: 'POSITIVA',
+        RUIM: 'NEGATIVA',
+        POSITIVA: 'POSITIVA',
+        NEGATIVA: 'NEGATIVA',
+        NEUTRA: 'NEUTRA',
+        DESTAQUE: 'DESTAQUE'
+    };
+    const avaliacaoInformada = normalizarTexto(
+        body.avaliacao || (tipoRegistro === 'CLIPE' ? 'NEUTRA' : categoria)
+    ).toUpperCase();
+    const avaliacao = mapaAvaliacao[avaliacaoInformada];
+
+    if (!avaliacao || !TIPOS_AVALIACAO.includes(avaliacao)) {
+        return { erro: 'Avaliação inválida.' };
     }
 
     return {
         dados: {
             titulo,
             categoria,
+            tipoRegistro,
+            categoriaId,
+            avaliacao,
             tempoInicio,
             tempoFim,
             observacao: observacao || null,
@@ -440,6 +455,41 @@ async function validarAtletaDaPartida(
 }
 
 // ============================================================
+// VALIDAR CATEGORIA DA PARTIDA
+// Aceita categoria da equipe ou categoria geral do treinador.
+// ============================================================
+
+async function validarCategoriaDaPartida(categoriaId, videoId, treinadorId) {
+    if (categoriaId === null) return true;
+
+    const video = await prisma.videoPartida.findFirst({
+        where: {
+            id: videoId,
+            partida: { equipe: { treinadorId } }
+        },
+        select: {
+            partida: { select: { equipeId: true } }
+        }
+    });
+
+    if (!video) return false;
+
+    const categoria = await prisma.configuracaoAnalise.findFirst({
+        where: {
+            id: categoriaId,
+            treinadorId,
+            OR: [
+                { equipeId: video.partida.equipeId },
+                { equipeId: null }
+            ]
+        },
+        select: { id: true }
+    });
+
+    return Boolean(categoria);
+}
+
+// ============================================================
 // LISTAR MARCAÇÕES
 // GET /api/videos/:videoId/marcacoes
 // ============================================================
@@ -447,30 +497,18 @@ async function validarAtletaDaPartida(
 async function listarMarcacoes(req, res) {
     try {
         const videoId = obterIdValido(req.params.videoId);
-
         if (!videoId) {
-            return res.status(400).json({
-                mensagem: 'ID do vídeo inválido.'
-            });
+            return res.status(400).json({ mensagem: 'ID do vídeo inválido.' });
         }
 
         const treinador = await obterTreinadorLogado(req);
-
         if (!treinador) {
-            return res.status(401).json({
-                mensagem: 'Treinador não identificado.'
-            });
+            return res.status(401).json({ mensagem: 'Treinador não identificado.' });
         }
 
-        const video = await buscarVideoDoTreinador(
-            videoId,
-            treinador.id
-        );
-
+        const video = await buscarVideoDoTreinador(videoId, treinador.id);
         if (!video) {
-            return res.status(404).json({
-                mensagem: 'Vídeo não encontrado.'
-            });
+            return res.status(404).json({ mensagem: 'Vídeo não encontrado.' });
         }
 
         const marcacoes = await prisma.marcacaoVideo.findMany({
@@ -480,11 +518,7 @@ async function listarMarcacoes(req, res) {
                     select: {
                         id: true,
                         nome: true,
-                        usuario: {
-                            select: {
-                                nome: true
-                            }
-                        }
+                        usuario: { select: { nome: true } }
                     }
                 }
             },
@@ -494,13 +528,19 @@ async function listarMarcacoes(req, res) {
             ]
         });
 
-        return res.status(200).json(marcacoes);
+        const resultado = marcacoes.map(marcacao => ({
+            ...marcacao,
+            partidaId: video.partidaId,
+            atleta: marcacao.atleta ? {
+                ...marcacao.atleta,
+                nome: marcacao.atleta.nome || marcacao.atleta.usuario?.nome || 'Atleta'
+            } : null
+        }));
+
+        return res.status(200).json(resultado);
     } catch (error) {
         console.error('ERRO AO LISTAR MARCAÇÕES:', error);
-
-        return res.status(500).json({
-            mensagem: 'Erro ao buscar marcações.'
-        });
+        return res.status(500).json({ mensagem: 'Erro ao buscar marcações.' });
     }
 }
 
@@ -512,62 +552,58 @@ async function listarMarcacoes(req, res) {
 async function adicionarMarcacao(req, res) {
     try {
         const videoId = obterIdValido(req.params.videoId);
-
         if (!videoId) {
-            return res.status(400).json({
-                mensagem: 'ID do vídeo inválido.'
-            });
-        }
-
-        const validacao = validarDadosMarcacao(req.body);
-
-        if (validacao.erro) {
-            return res.status(400).json({
-                mensagem: validacao.erro
-            });
+            return res.status(400).json({ mensagem: 'ID do vídeo inválido.' });
         }
 
         const treinador = await obterTreinadorLogado(req);
-
         if (!treinador) {
-            return res.status(401).json({
-                mensagem: 'Treinador não identificado.'
-            });
+            return res.status(401).json({ mensagem: 'Treinador não identificado.' });
         }
 
-        const video = await buscarVideoDoTreinador(
+        const video = await buscarVideoDoTreinador(videoId, treinador.id);
+        if (!video) {
+            return res.status(404).json({ mensagem: 'Vídeo não encontrado.' });
+        }
+
+        if (req.body?.partidaId && Number(req.body.partidaId) !== video.partidaId) {
+            return res.status(400).json({ mensagem: 'A partida informada não corresponde ao vídeo.' });
+        }
+
+        const validacao = validarDadosMarcacao(req.body);
+        if (validacao.erro) {
+            return res.status(400).json({ mensagem: validacao.erro });
+        }
+
+        const dados = validacao.dados;
+        const categoriaValida = await validarCategoriaDaPartida(
+            dados.categoriaId,
             videoId,
             treinador.id
         );
-
-        if (!video) {
-            return res.status(404).json({
-                mensagem: 'Vídeo não encontrado.'
-            });
+        if (!categoriaValida) {
+            return res.status(400).json({ mensagem: 'A categoria não pertence à equipe desta partida.' });
         }
 
         const atletaValido = await validarAtletaDaPartida(
-            validacao.dados.atletaId,
+            dados.atletaId,
             videoId,
             treinador.id
         );
-
         if (!atletaValido) {
             return res.status(400).json({
-                mensagem: 'O atleta informado não está escalado nesta partida ou não pertence ao treinador.'
+                mensagem: 'O atleta informado não participou desta partida ou não pertence ao treinador.'
             });
         }
 
         const marcacao = await prisma.marcacaoVideo.create({
-            data: {
-                videoId,
-                ...validacao.dados
-            },
+            data: { videoId, ...dados },
             include: {
                 atleta: {
                     select: {
                         id: true,
-                        nome: true
+                        nome: true,
+                        usuario: { select: { nome: true } }
                     }
                 }
             }
@@ -575,14 +611,18 @@ async function adicionarMarcacao(req, res) {
 
         return res.status(201).json({
             mensagem: 'Marcação criada com sucesso.',
-            marcacao
+            marcacao: {
+                ...marcacao,
+                partidaId: video.partidaId,
+                atleta: marcacao.atleta ? {
+                    ...marcacao.atleta,
+                    nome: marcacao.atleta.nome || marcacao.atleta.usuario?.nome || 'Atleta'
+                } : null
+            }
         });
     } catch (error) {
         console.error('ERRO AO CRIAR MARCAÇÃO:', error);
-
-        return res.status(500).json({
-            mensagem: 'Erro ao salvar marcação.'
-        });
+        return res.status(500).json({ mensagem: 'Erro ao salvar marcação.' });
     }
 }
 
@@ -594,72 +634,63 @@ async function adicionarMarcacao(req, res) {
 async function editarMarcacao(req, res) {
     try {
         const id = obterIdValido(req.params.id);
-
         if (!id) {
-            return res.status(400).json({
-                mensagem: 'ID da marcação inválido.'
-            });
-        }
-
-        const validacao = validarDadosMarcacao(req.body);
-
-        if (validacao.erro) {
-            return res.status(400).json({
-                mensagem: validacao.erro
-            });
+            return res.status(400).json({ mensagem: 'ID da marcação inválido.' });
         }
 
         const treinador = await obterTreinadorLogado(req);
-
         if (!treinador) {
-            return res.status(401).json({
-                mensagem: 'Treinador não identificado.'
-            });
+            return res.status(401).json({ mensagem: 'Treinador não identificado.' });
         }
 
         const existente = await prisma.marcacaoVideo.findFirst({
             where: {
                 id,
-                video: {
-                    partida: {
-                        equipe: {
-                            treinadorId: treinador.id
-                        }
-                    }
-                }
-            },
-            select: {
-                id: true,
-                videoId: true
+                video: { partida: { equipe: { treinadorId: treinador.id } } }
             }
         });
 
         if (!existente) {
-            return res.status(404).json({
-                mensagem: 'Marcação não encontrada.'
-            });
+            return res.status(404).json({ mensagem: 'Marcação não encontrada.' });
         }
 
-        const atletaValido = await validarAtletaDaPartida(
-            validacao.dados.atletaId,
+        const corpo = { ...existente, ...req.body };
+        const validacao = validarDadosMarcacao(
+            corpo,
+            existente.tipoRegistro || 'EVENTO'
+        );
+        if (validacao.erro) {
+            return res.status(400).json({ mensagem: validacao.erro });
+        }
+
+        const dados = validacao.dados;
+        const categoriaValida = await validarCategoriaDaPartida(
+            dados.categoriaId,
             existente.videoId,
             treinador.id
         );
+        if (!categoriaValida) {
+            return res.status(400).json({ mensagem: 'A categoria não pertence à equipe desta partida.' });
+        }
 
+        const atletaValido = await validarAtletaDaPartida(
+            dados.atletaId,
+            existente.videoId,
+            treinador.id
+        );
         if (!atletaValido) {
-            return res.status(400).json({
-                mensagem: 'O atleta informado não está escalado nesta partida ou não pertence ao treinador.'
-            });
+            return res.status(400).json({ mensagem: 'O atleta informado não participou desta partida.' });
         }
 
         const marcacao = await prisma.marcacaoVideo.update({
             where: { id },
-            data: validacao.dados,
+            data: dados,
             include: {
                 atleta: {
                     select: {
                         id: true,
-                        nome: true
+                        nome: true,
+                        usuario: { select: { nome: true } }
                     }
                 }
             }
@@ -667,14 +698,17 @@ async function editarMarcacao(req, res) {
 
         return res.status(200).json({
             mensagem: 'Marcação atualizada com sucesso.',
-            marcacao
+            marcacao: {
+                ...marcacao,
+                atleta: marcacao.atleta ? {
+                    ...marcacao.atleta,
+                    nome: marcacao.atleta.nome || marcacao.atleta.usuario?.nome || 'Atleta'
+                } : null
+            }
         });
     } catch (error) {
         console.error('ERRO AO EDITAR MARCAÇÃO:', error);
-
-        return res.status(500).json({
-            mensagem: 'Erro ao atualizar marcação.'
-        });
+        return res.status(500).json({ mensagem: 'Erro ao atualizar marcação.' });
     }
 }
 
@@ -740,6 +774,154 @@ async function excluirMarcacao(req, res) {
 }
 
 // ============================================================
+// DESENHOS SOBRE O VÍDEO
+// ============================================================
+
+function validarFormas(formas) {
+    if (!Array.isArray(formas) || formas.length === 0 || formas.length > 500) {
+        return false;
+    }
+
+    for (const forma of formas) {
+        if (
+            !forma ||
+            !TIPOS_FORMAS.includes(forma.tipo) ||
+            typeof forma.cor !== 'string' ||
+            !Array.isArray(forma.pontos) ||
+            forma.pontos.length === 0
+        ) {
+            return false;
+        }
+
+        for (const ponto of forma.pontos) {
+            const x = Number(ponto?.x);
+            const y = Number(ponto?.y);
+            if (!Number.isFinite(x) || !Number.isFinite(y) || x < 0 || x > 1 || y < 0 || y > 1) {
+                return false;
+            }
+        }
+
+        if (forma.tipo === 'numero' && !Number.isFinite(Number(forma.valor))) {
+            return false;
+        }
+    }
+
+    try {
+        return Buffer.byteLength(JSON.stringify(formas), 'utf8') <= 1024 * 1024;
+    } catch {
+        return false;
+    }
+}
+
+async function listarAnotacoes(req, res) {
+    try {
+        const videoId = obterIdValido(req.params.videoId);
+        if (!videoId) {
+            return res.status(400).json({ mensagem: 'ID do vídeo inválido.' });
+        }
+
+        const treinador = await obterTreinadorLogado(req);
+        if (!treinador) {
+            return res.status(401).json({ mensagem: 'Treinador não identificado.' });
+        }
+
+        const video = await buscarVideoDoTreinador(videoId, treinador.id);
+        if (!video) {
+            return res.status(404).json({ mensagem: 'Vídeo não encontrado.' });
+        }
+
+        const anotacoes = await prisma.anotacaoVideo.findMany({
+            where: { videoId },
+            orderBy: [{ tempo: 'asc' }, { id: 'asc' }]
+        });
+
+        return res.status(200).json(anotacoes);
+    } catch (error) {
+        console.error('ERRO AO LISTAR ANOTAÇÕES:', error);
+        return res.status(500).json({ mensagem: 'Erro ao buscar desenhos do vídeo.' });
+    }
+}
+
+async function adicionarAnotacao(req, res) {
+    try {
+        const videoId = obterIdValido(req.params.videoId);
+        if (!videoId) {
+            return res.status(400).json({ mensagem: 'ID do vídeo inválido.' });
+        }
+
+        const treinador = await obterTreinadorLogado(req);
+        if (!treinador) {
+            return res.status(401).json({ mensagem: 'Treinador não identificado.' });
+        }
+
+        const video = await buscarVideoDoTreinador(videoId, treinador.id);
+        if (!video) {
+            return res.status(404).json({ mensagem: 'Vídeo não encontrado.' });
+        }
+
+        if (req.body?.partidaId && Number(req.body.partidaId) !== video.partidaId) {
+            return res.status(400).json({ mensagem: 'A partida informada não corresponde ao vídeo.' });
+        }
+
+        const tempo = Number(req.body?.tempo);
+        const duracao = Number(req.body?.duracao ?? 5);
+        const formas = req.body?.formas;
+
+        if (!Number.isFinite(tempo) || tempo < 0 || !Number.isFinite(duracao) || duracao <= 0 || duracao > 3600) {
+            return res.status(400).json({ mensagem: 'O tempo ou a duração da anotação são inválidos.' });
+        }
+
+        if (!validarFormas(formas)) {
+            return res.status(400).json({ mensagem: 'Os desenhos enviados são inválidos ou excedem o limite permitido.' });
+        }
+
+        const anotacao = await prisma.anotacaoVideo.create({
+            data: { videoId, tempo, duracao, formas }
+        });
+
+        return res.status(201).json({
+            mensagem: 'Desenho salvo com sucesso.',
+            anotacao
+        });
+    } catch (error) {
+        console.error('ERRO AO SALVAR ANOTAÇÃO:', error);
+        return res.status(500).json({ mensagem: 'Erro ao salvar desenho no vídeo.' });
+    }
+}
+
+async function excluirAnotacao(req, res) {
+    try {
+        const id = obterIdValido(req.params.id);
+        if (!id) {
+            return res.status(400).json({ mensagem: 'ID da anotação inválido.' });
+        }
+
+        const treinador = await obterTreinadorLogado(req);
+        if (!treinador) {
+            return res.status(401).json({ mensagem: 'Treinador não identificado.' });
+        }
+
+        const anotacao = await prisma.anotacaoVideo.findFirst({
+            where: {
+                id,
+                video: { partida: { equipe: { treinadorId: treinador.id } } }
+            },
+            select: { id: true }
+        });
+
+        if (!anotacao) {
+            return res.status(404).json({ mensagem: 'Anotação não encontrada.' });
+        }
+
+        await prisma.anotacaoVideo.delete({ where: { id } });
+        return res.status(200).json({ mensagem: 'Anotação excluída com sucesso.' });
+    } catch (error) {
+        console.error('ERRO AO EXCLUIR ANOTAÇÃO:', error);
+        return res.status(500).json({ mensagem: 'Erro ao excluir desenho.' });
+    }
+}
+
+// ============================================================
 // EXPORTAR FUNÇÕES
 // ============================================================
 
@@ -750,5 +932,8 @@ module.exports = {
     listarMarcacoes,
     adicionarMarcacao,
     editarMarcacao,
-    excluirMarcacao
+    excluirMarcacao,
+    listarAnotacoes,
+    adicionarAnotacao,
+    excluirAnotacao
 };

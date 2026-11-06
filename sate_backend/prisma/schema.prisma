@@ -35,6 +35,7 @@ model Treinador {
   atletas              Atleta[]
   configuracoesAnalise ConfiguracaoAnalise[]
   notificacoes         Notificacao[]
+  marcacoes            MarcacaoVideo[]
 
   @@index([usuarioId])
 }
@@ -62,19 +63,27 @@ model Notificacao {
 }
 
 model ConfiguracaoAnalise {
-  id          Int               @id @default(autoincrement())
-  nome        String
-  descricao   String?
-  tipo        TipoEventoAnalise @default(POSITIVA)
-  ordem       Int               @default(0)
-  treinadorId Int
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  id                Int               @id @default(autoincrement())
+  nome              String
+  descricao         String?
+  tipo              TipoEventoAnalise @default(POSITIVA)
+  ordem             Int               @default(0)
+  treinadorId       Int
+  equipeId          Int?
+  icone             String?
+  cor               String?
+  mostrarNaTimeline Boolean           @default(true)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 
   treinador Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
+  equipe    Equipe?   @relation(fields: [equipeId], references: [id], onDelete: Cascade)
+
+  marcacoes MarcacaoVideo[]
 
   @@index([treinadorId])
   @@index([treinadorId, ordem])
+  @@index([equipeId])
 }
 
 model Atleta {
@@ -124,9 +133,10 @@ model Equipe {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  treinador Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
-  atletas   Atleta[]
-  partidas  Partida[]
+  treinador            Treinador             @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
+  atletas              Atleta[]
+  partidas             Partida[]
+  configuracoesAnalise ConfiguracaoAnalise[]
 
   @@index([treinadorId], map: "Equipe_treinadorId_fkey")
 }
@@ -181,28 +191,51 @@ model VideoPartida {
 
   partida   Partida         @relation(fields: [partidaId], references: [id], onDelete: Cascade)
   marcacoes MarcacaoVideo[]
+  anotacoes AnotacaoVideo[]
 
   @@index([partidaId], map: "VideoPartida_partidaId_fkey")
 }
 
 model MarcacaoVideo {
-  id          Int      @id @default(autoincrement())
-  videoId     Int
-  atletaId    Int?
-  titulo      String
-  categoria   String
-  tempoInicio Float
-  tempoFim    Float
-  observacao  String?  @db.Text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           Int                @id @default(autoincrement())
+  videoId      Int
+  atletaId     Int?
+  titulo       String
+  categoria    String
+  tempoInicio  Float
+  tempoFim     Float
+  observacao   String?            @db.Text
+  treinadorId  Int?
+  categoriaId  Int?
+  avaliacao    TipoEventoAnalise?
+  tipoRegistro String             @default("EVENTO")
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
 
-  video  VideoPartida @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  atleta Atleta?      @relation(fields: [atletaId], references: [id], onDelete: SetNull)
+  video        VideoPartida         @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  atleta       Atleta?              @relation(fields: [atletaId], references: [id], onDelete: SetNull)
+  treinador    Treinador?           @relation(fields: [treinadorId], references: [id], onDelete: SetNull)
+  configuracao ConfiguracaoAnalise? @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
 
   @@index([videoId])
   @@index([videoId, tempoInicio])
   @@index([atletaId])
+  @@index([treinadorId])
+  @@index([categoriaId])
+}
+
+model AnotacaoVideo {
+  id        Int      @id @default(autoincrement())
+  videoId   Int
+  tempo     Float
+  duracao   Float    @default(5)
+  formas    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  video VideoPartida @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@index([videoId, tempo])
 }
 
 model Responsavel {
@@ -281,4 +314,5 @@ enum TipoEventoAnalise {
   POSITIVA
   NEGATIVA
   NEUTRA
+  DESTAQUE
 }

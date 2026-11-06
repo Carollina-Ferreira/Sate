@@ -1,3 +1,4 @@
+
 import {
     ArrowLeft,
     CheckCircle2,
@@ -23,6 +24,7 @@ import styles from './atletas.module.css';
 import PerfilAtleta from './perfilAtletas';
 import EditarAtleta from './editarAtleta';
 import ClipesAtleta from './clipesAtleta';
+import PartidasAtleta from './partidasAtleta';
 import InformacoesAtleta from './InformacoesAtleta';
 
 // ============================================================
@@ -130,7 +132,8 @@ type TelaAtual =
     | 'perfil'
     | 'editar'
     | 'informacoes'
-    | 'clipes';
+    | 'clipes'
+    | 'partidas';
 
 type ModoCadastro = 'escolha' | 'manual' | 'planilha';
 
@@ -239,7 +242,8 @@ const Atletas = () => {
         telaDaUrl === 'perfil' ||
         telaDaUrl === 'editar' ||
         telaDaUrl === 'informacoes' ||
-        telaDaUrl === 'clipes'
+        telaDaUrl === 'clipes' ||
+        telaDaUrl === 'partidas'
             ? telaDaUrl
             : 'lista';
 
@@ -458,6 +462,7 @@ const Atletas = () => {
             'editar',
             'informacoes',
             'clipes',
+            'partidas',
         ];
 
         if (
@@ -560,20 +565,13 @@ const Atletas = () => {
         try {
             setErro('');
 
-            // Busca os dados completos do atleta.
             const atleta = await buscarAtletaPorId(id);
 
-            if (!atleta) {
-                return;
-            }
+            if (!atleta) return;
 
-            // Guarda o atleta selecionado.
             setAtletaSelecionado(atleta);
-
-            // Abre a tela de clipes.
             setTelaAtual('clipes');
 
-            // Atualiza a URL para permitir restaurar a tela.
             setSearchParams({
                 tela: 'clipes',
                 id: String(atleta.id),
@@ -592,12 +590,59 @@ const Atletas = () => {
         }
     };
 
+    // ========================================================
+    // ABRIR PARTIDAS DO ATLETA
+    // ========================================================
+
+    const abrirPartidas = async (id: number) => {
+        try {
+            setErro('');
+
+            // Busca os dados completos do atleta.
+            const atleta = await buscarAtletaPorId(id);
+
+            if (!atleta) return;
+
+            // Guarda o atleta selecionado.
+            setAtletaSelecionado(atleta);
+
+            // Abre a tela de partidas.
+            setTelaAtual('partidas');
+
+            // Atualiza a URL.
+            setSearchParams({
+                tela: 'partidas',
+                id: String(atleta.id),
+            });
+        } catch (error) {
+            console.error(
+                'Erro ao abrir partidas do atleta:',
+                error
+            );
+
+            setErro(
+                error instanceof Error
+                    ? error.message
+                    : 'Não foi possível abrir as partidas do atleta.'
+            );
+        }
+    };
+
+    // ========================================================
+    // VOLTAR PARA A LISTA
+    // ========================================================
+
     const voltarParaLista = () => {
         setAtletaSelecionado(null);
         setTelaAtual('lista');
         setErro('');
+
         setSearchParams({});
     };
+
+    // ========================================================
+    // VOLTAR PARA O PERFIL
+    // ========================================================
 
     const voltarParaPerfil = () => {
         if (!atletaSelecionado) {
@@ -614,6 +659,10 @@ const Atletas = () => {
             id: String(atletaSelecionado.id),
         });
     };
+
+    // ========================================================
+    // ABRIR EDIÇÃO
+    // ========================================================
 
     const abrirEdicao = () => {
         if (!atletaSelecionado) return;
@@ -1311,6 +1360,26 @@ const Atletas = () => {
     }
 
     // ========================================================
+    // TELA DE PARTIDAS DO ATLETA
+    // ========================================================
+
+    if (telaAtual === 'partidas') {
+        if (!atletaSelecionado) return null;
+
+        return (
+            <PartidasAtleta
+                atletaId={atletaSelecionado.id}
+                atletaNome={
+                    atletaSelecionado.nome ||
+                    atletaSelecionado.usuario?.nome ||
+                    'Atleta'
+                }
+                onBack={voltarParaPerfil}
+            />
+        );
+    }
+
+    // ========================================================
     // TELA DE CLIPES DO ATLETA
     // ========================================================
 
@@ -1347,6 +1416,9 @@ const Atletas = () => {
                 }
                 onClipes={(atleta) =>
                     abrirClipes(atleta.id)
+                }
+                onPartidas={() =>
+                    abrirPartidas(atletaSelecionado.id)
                 }
             />
         );
@@ -2291,6 +2363,7 @@ const Atletas = () => {
                                     {resultadoImportacao && (
                                         <div className={styles.importResult}>
                                             <CheckCircle2 size={20} />
+
                                             <span>
                                                 {resultadoImportacao}
                                             </span>

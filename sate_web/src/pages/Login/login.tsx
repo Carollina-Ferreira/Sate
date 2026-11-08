@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 import styles from './login.module.css';
+import TurnstileWidget from '../../components/TurnstileWidget/TurnstileWidget';
 
 import logoVerdeImg from '../../assets/img/logoVerde_img.png';
 import logo from '../../assets/img/logo.png';
@@ -34,6 +35,7 @@ interface LoginFormState {
 
 interface LoginResponse {
     mensagem: string;
+    codigo?: string;
 
     token?: string;
 
@@ -45,6 +47,9 @@ interface LoginResponse {
     };
 }
 
+
+const API_URL = (import.meta.env.VITE_API_URL as string | undefined) || 'http://localhost:3000';
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 
 const heroSlides = [
     futebolHero,
@@ -72,6 +77,11 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const [erro, setErro] = useState('');
+    const [emailPendente, setEmailPendente] = useState(false);
+    const [mensagemReenvio, setMensagemReenvio] = useState('');
+    const [reenviando, setReenviando] = useState(false);
+    const [turnstileToken, setTurnstileToken] = useState('');
+    const [turnstileKey, setTurnstileKey] = useState(0);
 
     const [activeSlide, setActiveSlide] = useState(0);
 
@@ -132,11 +142,19 @@ const Login = () => {
         e.preventDefault();
 
         setErro('');
+        setEmailPendente(false);
+        setMensagemReenvio('');
+
+        if (TURNSTILE_SITE_KEY && !turnstileToken) {
+            setErro('Conclua a verificação antirrobô antes de entrar.');
+            return;
+        }
+
         setLoading(true);
 
         try {
             const resposta = await fetch(
-                'http://localhost:3000/api/auth/login',
+                `${API_URL}/api/auth/login`,
                 {
                     method: 'POST',
 
@@ -149,6 +167,7 @@ const Login = () => {
                         email: form.email,
                         senha: form.senha,
                         tipo: 'TREINADOR',
+                        turnstileToken,
                     }),
                 }
             );
@@ -157,6 +176,10 @@ const Login = () => {
                 await resposta.json();
 
             if (!resposta.ok) {
+                if (data.codigo === 'EMAIL_NAO_VERIFICADO') {
+                    setEmailPendente(true);
+                }
+
                 throw new Error(
                     data.mensagem ||
                     'Não foi possível realizar o login.'
@@ -237,6 +260,52 @@ const Login = () => {
 
         } finally {
             setLoading(false);
+            setTurnstileToken('');
+            setTurnstileKey((atual) => atual + 1);
+        }
+    };
+
+
+    /* ============================================================
+       REENVIO DA CONFIRMAÇÃO DE E-MAIL
+    ============================================================ */
+
+    const reenviarConfirmacao = async () => {
+        setMensagemReenvio('');
+
+        if (!form.email.trim()) {
+            setMensagemReenvio('Informe o e-mail utilizado no cadastro.');
+            return;
+        }
+
+        if (TURNSTILE_SITE_KEY && !turnstileToken) {
+            setMensagemReenvio('Conclua a verificação antirrobô antes de solicitar o reenvio.');
+            return;
+        }
+
+        setReenviando(true);
+        try {
+            const resposta = await fetch(`${API_URL}/api/auth/reenviar-verificacao`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: form.email,
+                    turnstileToken,
+                }),
+            });
+
+            const data: LoginResponse = await resposta.json();
+            if (!resposta.ok) {
+                throw new Error(data.mensagem || 'Não foi possível reenviar o e-mail.');
+            }
+
+            setMensagemReenvio(data.mensagem || 'Se houver uma conta pendente, enviaremos um novo link.');
+        } catch (error) {
+            setMensagemReenvio(error instanceof Error ? error.message : 'Não foi possível reenviar o e-mail.');
+        } finally {
+            setReenviando(false);
+            setTurnstileToken('');
+            setTurnstileKey((atual) => atual + 1);
         }
     };
 
@@ -605,6 +674,15 @@ const Login = () => {
                         </div>
 
 
+                        {/* PROTEÇÃO CONTRA BOTS */}
+
+                        <TurnstileWidget
+                            key={turnstileKey}
+                            action="auth"
+                            onToken={setTurnstileToken}
+                        />
+
+
                         {/* ERRO */}
 
                         {erro && (
@@ -612,6 +690,24 @@ const Login = () => {
                                 className={styles.errorMessage}
                             >
                                 {erro}
+                            </div>
+                        )}
+
+                        {emailPendente && (
+                            <div style={{ display: 'grid', gap: 8, marginTop: 4 }}>
+                                <button
+                                    type="button"
+                                    onClick={reenviarConfirmacao}
+                                    disabled={reenviando}
+                                    style={{ border: 0, background: 'transparent', color: '#006b4f', fontWeight: 700, cursor: reenviando ? 'wait' : 'pointer', padding: '6px 0', textAlign: 'left' }}
+                                >
+                                    {reenviando ? 'Enviando confirmação...' : 'Reenviar link de confirmação'}
+                                </button>
+                                {mensagemReenvio && (
+                                    <p role="status" style={{ margin: 0, color: '#006b4f', fontSize: 13, lineHeight: 1.5 }}>
+                                        {mensagemReenvio}
+                                    </p>
+                                )}
                             </div>
                         )}
 

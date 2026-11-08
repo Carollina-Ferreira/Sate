@@ -1110,12 +1110,12 @@ class _GraficoLinhaPainter
   @override
   void paint(Canvas canvas, Size size) {
     final paintLinha = Paint()
-      ..color = const Color(0xFF16A875)
+      ..color = const Color(0xFF005942)
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
     final paintArea = Paint()
-      ..color = const Color(0xFF16A875)
+      ..color = const Color(0xFF005942)
           .withValues(alpha: 0.12)
       ..style = PaintingStyle.fill;
 
@@ -1195,7 +1195,7 @@ class _GraficoLinhaPainter
       ..style = PaintingStyle.fill;
 
     final paintBorda = Paint()
-      ..color = const Color(0xFF16A875)
+      ..color = const Color(0xFF005942)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 

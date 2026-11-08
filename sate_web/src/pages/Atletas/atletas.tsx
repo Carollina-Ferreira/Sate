@@ -24,6 +24,7 @@ import styles from './atletas.module.css';
 import PerfilAtleta from './perfilAtletas';
 import EditarAtleta from './editarAtleta';
 import ClipesAtleta from './clipesAtleta';
+import PartidasAtleta from './partidasAtleta';
 import InformacoesAtleta from './InformacoesAtleta';
 
 // ============================================================
@@ -131,7 +132,8 @@ type TelaAtual =
     | 'perfil'
     | 'editar'
     | 'informacoes'
-    | 'clipes';
+    | 'clipes'
+    | 'partidas';
 
 type ModoCadastro = 'escolha' | 'manual' | 'planilha';
 
@@ -141,8 +143,6 @@ const API_URL = 'http://localhost:3000';
 // MÁSCARAS
 // ============================================================
 
-// Formata telefone, cpf e rg
-
 const formatarTelefone = (valor: string) => {
     const numeros = valor.replace(/\D/g, '').slice(0, 11);
 
@@ -151,14 +151,20 @@ const formatarTelefone = (valor: string) => {
     }
 
     if (numeros.length <= 10) {
-        return numeros.replace(/^(\d{2})(\d{0,4})(\d{0,4}).*/, (_, ddd, parte1, parte2) => {
-            return `(${ddd}) ${parte1}${parte2 ? `-${parte2}` : ''}`;
-        });
+        return numeros.replace(
+            /^(\d{2})(\d{0,4})(\d{0,4}).*/,
+            (_, ddd, parte1, parte2) => {
+                return `(${ddd}) ${parte1}${parte2 ? `-${parte2}` : ''}`;
+            }
+        );
     }
 
-    return numeros.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, (_, ddd, parte1, parte2) => {
-        return `(${ddd}) ${parte1}${parte2 ? `-${parte2}` : ''}`;
-    });
+    return numeros.replace(
+        /^(\d{2})(\d{5})(\d{0,4}).*/,
+        (_, ddd, parte1, parte2) => {
+            return `(${ddd}) ${parte1}${parte2 ? `-${parte2}` : ''}`;
+        }
+    );
 };
 
 const formatarCPF = (valor: string) => {
@@ -185,7 +191,10 @@ const formatarRG = (valor: string) => {
     }
 
     if (caracteres.length <= 8) {
-        return caracteres.replace(/^(\d{2})(\d{3})(\d+)/, '$1.$2.$3');
+        return caracteres.replace(
+            /^(\d{2})(\d{3})(\d+)/,
+            '$1.$2.$3'
+        );
     }
 
     return caracteres.replace(
@@ -231,13 +240,15 @@ const Atletas = () => {
 
     const telaInicial: TelaAtual =
         telaDaUrl === 'perfil' ||
-            telaDaUrl === 'editar' ||
-            telaDaUrl === 'informacoes' ||
-            telaDaUrl === 'clipes'
+        telaDaUrl === 'editar' ||
+        telaDaUrl === 'informacoes' ||
+        telaDaUrl === 'clipes' ||
+        telaDaUrl === 'partidas'
             ? telaDaUrl
             : 'lista';
 
     const [atletas, setAtletas] = useState<Atleta[]>([]);
+
     const [atletaSelecionado, setAtletaSelecionado] =
         useState<AtletaBackend | null>(null);
 
@@ -251,6 +262,7 @@ const Atletas = () => {
 
     const [mostrarFiltros, setMostrarFiltros] = useState(false);
     const [mostrarCadastro, setMostrarCadastro] = useState(false);
+
     const [modoCadastro, setModoCadastro] =
         useState<ModoCadastro>('escolha');
 
@@ -263,6 +275,7 @@ const Atletas = () => {
 
     const [atletasPlanilha, setAtletasPlanilha] =
         useState<AtletaPlanilha[]>([]);
+
     const [nomeArquivo, setNomeArquivo] = useState('');
     const [importandoPlanilha, setImportandoPlanilha] = useState(false);
     const [resultadoImportacao, setResultadoImportacao] = useState('');
@@ -379,7 +392,11 @@ const Atletas = () => {
 
             const pastaTrabalho = XLSX.utils.book_new();
 
-            XLSX.utils.book_append_sheet(pastaTrabalho, planilha, 'Atletas');
+            XLSX.utils.book_append_sheet(
+                pastaTrabalho,
+                planilha,
+                'Atletas'
+            );
 
             const dataAtual = new Date()
                 .toLocaleDateString('pt-BR')
@@ -445,6 +462,7 @@ const Atletas = () => {
             'editar',
             'informacoes',
             'clipes',
+            'partidas',
         ];
 
         if (
@@ -479,6 +497,7 @@ const Atletas = () => {
         return () => {
             cancelado = true;
         };
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [telaDaUrl, idDaUrl]);
 
@@ -538,28 +557,92 @@ const Atletas = () => {
         });
     };
 
+    // ========================================================
+    // ABRIR CLIPES DO ATLETA
+    // ========================================================
+
     const abrirClipes = async (id: number) => {
-        setErro('');
+        try {
+            setErro('');
 
-        const atleta = await buscarAtletaPorId(id);
+            const atleta = await buscarAtletaPorId(id);
 
-        if (!atleta) return;
+            if (!atleta) return;
 
-        setAtletaSelecionado(atleta);
-        setTelaAtual('clipes');
+            setAtletaSelecionado(atleta);
+            setTelaAtual('clipes');
 
-        setSearchParams({
-            tela: 'clipes',
-            id: String(id),
-        });
+            setSearchParams({
+                tela: 'clipes',
+                id: String(atleta.id),
+            });
+        } catch (error) {
+            console.error(
+                'Erro ao abrir clipes do atleta:',
+                error
+            );
+
+            setErro(
+                error instanceof Error
+                    ? error.message
+                    : 'Não foi possível abrir os clipes do atleta.'
+            );
+        }
     };
+
+    // ========================================================
+    // ABRIR PARTIDAS DO ATLETA
+    // ========================================================
+
+    const abrirPartidas = async (id: number) => {
+        try {
+            setErro('');
+
+            // Busca os dados completos do atleta.
+            const atleta = await buscarAtletaPorId(id);
+
+            if (!atleta) return;
+
+            // Guarda o atleta selecionado.
+            setAtletaSelecionado(atleta);
+
+            // Abre a tela de partidas.
+            setTelaAtual('partidas');
+
+            // Atualiza a URL.
+            setSearchParams({
+                tela: 'partidas',
+                id: String(atleta.id),
+            });
+        } catch (error) {
+            console.error(
+                'Erro ao abrir partidas do atleta:',
+                error
+            );
+
+            setErro(
+                error instanceof Error
+                    ? error.message
+                    : 'Não foi possível abrir as partidas do atleta.'
+            );
+        }
+    };
+
+    // ========================================================
+    // VOLTAR PARA A LISTA
+    // ========================================================
 
     const voltarParaLista = () => {
         setAtletaSelecionado(null);
         setTelaAtual('lista');
         setErro('');
+
         setSearchParams({});
     };
+
+    // ========================================================
+    // VOLTAR PARA O PERFIL
+    // ========================================================
 
     const voltarParaPerfil = () => {
         if (!atletaSelecionado) {
@@ -576,6 +659,10 @@ const Atletas = () => {
             id: String(atletaSelecionado.id),
         });
     };
+
+    // ========================================================
+    // ABRIR EDIÇÃO
+    // ========================================================
 
     const abrirEdicao = () => {
         if (!atletaSelecionado) return;
@@ -1167,6 +1254,7 @@ const Atletas = () => {
                 setResultadoImportacao(
                     `${cadastrados} atleta(s) cadastrado(s) com sucesso!`
                 );
+
                 setAtletasPlanilha([]);
                 setNomeArquivo('');
             } else {
@@ -1226,6 +1314,7 @@ const Atletas = () => {
             }
 
             await carregarAtletas();
+
             setTelaAtual('perfil');
 
             setSearchParams({
@@ -1270,11 +1359,49 @@ const Atletas = () => {
         );
     }
 
+    // ========================================================
+    // TELA DE PARTIDAS DO ATLETA
+    // ========================================================
+
+    if (telaAtual === 'partidas') {
+        if (!atletaSelecionado) return null;
+
+        return (
+            <PartidasAtleta
+                atletaId={atletaSelecionado.id}
+                atletaNome={
+                    atletaSelecionado.nome ||
+                    atletaSelecionado.usuario?.nome ||
+                    'Atleta'
+                }
+                onBack={voltarParaPerfil}
+            />
+        );
+    }
+
+    // ========================================================
+    // TELA DE CLIPES DO ATLETA
+    // ========================================================
+
     if (telaAtual === 'clipes') {
         if (!atletaSelecionado) return null;
 
-        return <ClipesAtleta onBack={voltarParaPerfil} />;
+        return (
+            <ClipesAtleta
+                atletaId={atletaSelecionado.id}
+                atletaNome={
+                    atletaSelecionado.nome ||
+                    atletaSelecionado.usuario?.nome ||
+                    'Atleta'
+                }
+                onBack={voltarParaPerfil}
+            />
+        );
     }
+
+    // ========================================================
+    // PERFIL DO ATLETA
+    // ========================================================
 
     if (telaAtual === 'perfil') {
         if (!atletaSelecionado) return null;
@@ -1287,8 +1414,11 @@ const Atletas = () => {
                 onInformacoes={() =>
                     abrirInformacoes(atletaSelecionado.id)
                 }
-                onClipes={() =>
-                    abrirClipes(atletaSelecionado.id)
+                onClipes={(atleta) =>
+                    abrirClipes(atleta.id)
+                }
+                onPartidas={() =>
+                    abrirPartidas(atletaSelecionado.id)
                 }
             />
         );
@@ -1303,6 +1433,7 @@ const Atletas = () => {
             <div className={styles.top}>
                 <div className={styles.titleArea}>
                     <h1>Seus <em>atletas.</em></h1>
+
                     <p>
                         Acompanhe desempenho, evolução e informações individuais.
                     </p>
@@ -1320,7 +1451,10 @@ const Atletas = () => {
                         }
                     >
                         <FileSpreadsheet size={18} />
-                        {exportando ? 'Exportando...' : 'Exportar Excel'}
+
+                        {exportando
+                            ? 'Exportando...'
+                            : 'Exportar Excel'}
                     </button>
 
                     <button
@@ -1337,7 +1471,9 @@ const Atletas = () => {
             {erro && !mostrarCadastro && (
                 <div className={styles.message}>
                     <strong>Ocorreu um erro</strong>
+
                     <span>{erro}</span>
+
                     <button
                         type="button"
                         onClick={() => setErro('')}
@@ -1354,7 +1490,9 @@ const Atletas = () => {
                     <input
                         type="text"
                         value={busca}
-                        onChange={(event) => setBusca(event.target.value)}
+                        onChange={(event) =>
+                            setBusca(event.target.value)
+                        }
                         placeholder="Buscar atleta..."
                     />
 
@@ -1378,13 +1516,17 @@ const Atletas = () => {
                         }
                     >
                         {modalidades.map((modalidade) => (
-                            <option key={modalidade} value={modalidade}>
+                            <option
+                                key={modalidade}
+                                value={modalidade}
+                            >
                                 {modalidade === 'Todas'
                                     ? 'Todas as modalidades'
                                     : modalidade}
                             </option>
                         ))}
                     </select>
+
                     <ChevronDown size={17} />
                 </div>
 
@@ -1396,13 +1538,17 @@ const Atletas = () => {
                         }
                     >
                         {categorias.map((categoria) => (
-                            <option key={categoria} value={categoria}>
+                            <option
+                                key={categoria}
+                                value={categoria}
+                            >
                                 {categoria === 'Todas'
                                     ? 'Todas as categorias'
                                     : categoria}
                             </option>
                         ))}
                     </select>
+
                     <ChevronDown size={17} />
                 </div>
 
@@ -1410,14 +1556,14 @@ const Atletas = () => {
                     filtroModalidade !== 'Todas' ||
                     filtroCategoria !== 'Todas' ||
                     filtroEquipe !== 'Todas') && (
-                        <button
-                            type="button"
-                            className={styles.clearFiltersButton}
-                            onClick={limparFiltros}
-                        >
-                            Limpar filtros
-                        </button>
-                    )}
+                    <button
+                        type="button"
+                        className={styles.clearFiltersButton}
+                        onClick={limparFiltros}
+                    >
+                        Limpar filtros
+                    </button>
+                )}
             </div>
 
             {mostrarFiltros && (
@@ -1435,6 +1581,7 @@ const Atletas = () => {
                                 </option>
                             ))}
                         </select>
+
                         <ChevronDown size={17} />
                     </div>
                 </div>
@@ -1443,16 +1590,20 @@ const Atletas = () => {
             <div className={styles.athleteCount}>
                 {carregando
                     ? 'Carregando atletas...'
-                    : `${atletasFiltrados.length} ${atletasFiltrados.length === 1
-                        ? 'atleta'
-                        : 'atletas'
+                    : `${atletasFiltrados.length} ${
+                        atletasFiltrados.length === 1
+                            ? 'atleta'
+                            : 'atletas'
                     }`}
             </div>
 
             {carregando && (
                 <div className={styles.empty}>
                     <strong>Carregando atletas...</strong>
-                    <span>Aguarde enquanto buscamos os atletas.</span>
+
+                    <span>
+                        Aguarde enquanto buscamos os atletas.
+                    </span>
                 </div>
             )}
 
@@ -1464,9 +1615,9 @@ const Atletas = () => {
 
                     <span>
                         {busca ||
-                            filtroModalidade !== 'Todas' ||
-                            filtroCategoria !== 'Todas' ||
-                            filtroEquipe !== 'Todas'
+                        filtroModalidade !== 'Todas' ||
+                        filtroCategoria !== 'Todas' ||
+                        filtroEquipe !== 'Todas'
                             ? 'Tente alterar os filtros ou a busca.'
                             : 'Cadastre seu primeiro atleta para começar.'}
                     </span>
@@ -1496,8 +1647,9 @@ const Atletas = () => {
                         >
                             <div className={styles.cardContent}>
                                 <div
-                                    className={`${styles.avatar} ${styles[obterCorAvatar(atleta.id)]
-                                        }`}
+                                    className={`${styles.avatar} ${
+                                        styles[obterCorAvatar(atleta.id)]
+                                    }`}
                                 >
                                     {atleta.avatarUrl ? (
                                         <img
@@ -1506,7 +1658,9 @@ const Atletas = () => {
                                             alt={`Foto de ${atleta.nome}`}
                                         />
                                     ) : (
-                                        atleta.nome.charAt(0).toUpperCase()
+                                        atleta.nome
+                                            .charAt(0)
+                                            .toUpperCase()
                                     )}
                                 </div>
 
@@ -1535,7 +1689,9 @@ const Atletas = () => {
                             <div className={styles.cardHover}>
                                 <button
                                     type="button"
-                                    onClick={() => abrirPerfil(atleta.id)}
+                                    onClick={() =>
+                                        abrirPerfil(atleta.id)
+                                    }
                                 >
                                     <Eye size={17} />
                                     Perfil
@@ -1543,7 +1699,9 @@ const Atletas = () => {
 
                                 <button
                                     type="button"
-                                    onClick={() => abrirInformacoes(atleta.id)}
+                                    onClick={() =>
+                                        abrirInformacoes(atleta.id)
+                                    }
                                 >
                                     <UserRound size={17} />
                                     Informações
@@ -1551,7 +1709,9 @@ const Atletas = () => {
 
                                 <button
                                     type="button"
-                                    onClick={() => abrirClipes(atleta.id)}
+                                    onClick={() =>
+                                        abrirClipes(atleta.id)
+                                    }
                                 >
                                     <Scissors size={17} />
                                     Clipes
@@ -1562,7 +1722,9 @@ const Atletas = () => {
                 </div>
             )}
 
-            {/* MODAL DE CADASTRO */}
+            {/* ====================================================
+                MODAL DE CADASTRO
+            ==================================================== */}
 
             {mostrarCadastro && (
                 <div
@@ -1575,7 +1737,9 @@ const Atletas = () => {
                 >
                     <div
                         className={styles.newAthleteModal}
-                        onMouseDown={(event) => event.stopPropagation()}
+                        onMouseDown={(event) =>
+                            event.stopPropagation()
+                        }
                     >
                         <div className={styles.modalHeader}>
                             <div>
@@ -1612,7 +1776,9 @@ const Atletas = () => {
                         {erro && (
                             <div className={styles.modalError}>
                                 <strong>Ocorreu um erro</strong>
+
                                 <span>{erro}</span>
+
                                 <button
                                     type="button"
                                     onClick={() => setErro('')}
@@ -1629,7 +1795,10 @@ const Atletas = () => {
                                 <div className={styles.modalBody}>
                                     <section className={styles.formSection}>
                                         <div className={styles.sectionHeader}>
-                                            <h3>Como deseja cadastrar?</h3>
+                                            <h3>
+                                                Como deseja cadastrar?
+                                            </h3>
+
                                             <span>
                                                 Escolha uma das opções abaixo
                                                 para continuar.
@@ -1651,15 +1820,25 @@ const Atletas = () => {
                                                     <UserRound size={28} />
                                                 </span>
 
-                                                <strong>Cadastro manual</strong>
+                                                <strong>
+                                                    Cadastro manual
+                                                </strong>
 
-                                                <span className={styles.cadastroOpcaoDescricao}>
+                                                <span
+                                                    className={
+                                                        styles.cadastroOpcaoDescricao
+                                                    }
+                                                >
                                                     Cadastre um atleta por vez,
                                                     preenchendo o formulário
                                                     individual.
                                                 </span>
 
-                                                <span className={styles.cadastroOpcaoLink}>
+                                                <span
+                                                    className={
+                                                        styles.cadastroOpcaoLink
+                                                    }
+                                                >
                                                     Preencher formulário →
                                                 </span>
                                             </button>
@@ -1681,15 +1860,25 @@ const Atletas = () => {
                                                     <FileSpreadsheet size={28} />
                                                 </span>
 
-                                                <strong>Cadastro por planilha</strong>
+                                                <strong>
+                                                    Cadastro por planilha
+                                                </strong>
 
-                                                <span className={styles.cadastroOpcaoDescricao}>
+                                                <span
+                                                    className={
+                                                        styles.cadastroOpcaoDescricao
+                                                    }
+                                                >
                                                     Importe vários atletas de
                                                     uma só vez usando Excel ou
                                                     CSV.
                                                 </span>
 
-                                                <span className={styles.cadastroOpcaoLink}>
+                                                <span
+                                                    className={
+                                                        styles.cadastroOpcaoLink
+                                                    }
+                                                >
                                                     Selecionar planilha →
                                                 </span>
                                             </button>
@@ -1733,6 +1922,7 @@ const Atletas = () => {
                                     <section className={styles.formSection}>
                                         <div className={styles.sectionHeader}>
                                             <h3>Dados pessoais</h3>
+
                                             <span>
                                                 Informações principais do atleta
                                             </span>
@@ -1745,6 +1935,7 @@ const Atletas = () => {
                                                 <label>
                                                     Nome completo <b>*</b>
                                                 </label>
+
                                                 <input
                                                     type="text"
                                                     value={novoAtleta.nome}
@@ -1760,10 +1951,15 @@ const Atletas = () => {
                                             </div>
 
                                             <div className={styles.formField}>
-                                                <label>Data de nascimento</label>
+                                                <label>
+                                                    Data de nascimento
+                                                </label>
+
                                                 <input
                                                     type="date"
-                                                    value={novoAtleta.dataNascimento}
+                                                    value={
+                                                        novoAtleta.dataNascimento
+                                                    }
                                                     onChange={(event) =>
                                                         alterarNovoAtleta(
                                                             'dataNascimento',
@@ -1775,6 +1971,7 @@ const Atletas = () => {
 
                                             <div className={styles.formField}>
                                                 <label>Sexo</label>
+
                                                 <select
                                                     value={novoAtleta.sexo}
                                                     onChange={(event) =>
@@ -1784,10 +1981,22 @@ const Atletas = () => {
                                                         )
                                                     }
                                                 >
-                                                    <option value="">Selecione</option>
-                                                    <option value="MASCULINO">Masculino</option>
-                                                    <option value="FEMININO">Feminino</option>
-                                                    <option value="OUTRO">Outro</option>
+                                                    <option value="">
+                                                        Selecione
+                                                    </option>
+
+                                                    <option value="MASCULINO">
+                                                        Masculino
+                                                    </option>
+
+                                                    <option value="FEMININO">
+                                                        Feminino
+                                                    </option>
+
+                                                    <option value="OUTRO">
+                                                        Outro
+                                                    </option>
+
                                                     <option value="NAO_INFORMADO">
                                                         Não informado
                                                     </option>
@@ -1796,6 +2005,7 @@ const Atletas = () => {
 
                                             <div className={styles.formField}>
                                                 <label>Categoria</label>
+
                                                 <input
                                                     type="text"
                                                     value={novoAtleta.categoria}
@@ -1813,6 +2023,7 @@ const Atletas = () => {
                                                 <label>
                                                     CPF <b>*</b>
                                                 </label>
+
                                                 <input
                                                     type="text"
                                                     inputMode="numeric"
@@ -1820,7 +2031,10 @@ const Atletas = () => {
                                                     maxLength={14}
                                                     value={novoAtleta.cpf}
                                                     onChange={(event) =>
-                                                        alterarNovoAtleta('cpf', event.target.value)
+                                                        alterarNovoAtleta(
+                                                            'cpf',
+                                                            event.target.value
+                                                        )
                                                     }
                                                     placeholder="000.000.000-00"
                                                 />
@@ -1828,13 +2042,17 @@ const Atletas = () => {
 
                                             <div className={styles.formField}>
                                                 <label>RG</label>
+
                                                 <input
                                                     type="text"
                                                     inputMode="text"
                                                     maxLength={12}
                                                     value={novoAtleta.rg}
                                                     onChange={(event) =>
-                                                        alterarNovoAtleta('rg', event.target.value)
+                                                        alterarNovoAtleta(
+                                                            'rg',
+                                                            event.target.value
+                                                        )
                                                     }
                                                     placeholder="00.000.000-0"
                                                 />
@@ -1844,6 +2062,7 @@ const Atletas = () => {
                                                 <label>
                                                     Telefone <b>*</b>
                                                 </label>
+
                                                 <input
                                                     type="tel"
                                                     inputMode="numeric"
@@ -1851,7 +2070,10 @@ const Atletas = () => {
                                                     maxLength={15}
                                                     value={novoAtleta.telefone}
                                                     onChange={(event) =>
-                                                        alterarNovoAtleta('telefone', event.target.value)
+                                                        alterarNovoAtleta(
+                                                            'telefone',
+                                                            event.target.value
+                                                        )
                                                     }
                                                     placeholder="(11) 99999-9999"
                                                 />
@@ -1863,6 +2085,7 @@ const Atletas = () => {
                                                 <label>
                                                     E-mail <b>*</b>
                                                 </label>
+
                                                 <input
                                                     type="email"
                                                     value={novoAtleta.email}
@@ -1882,6 +2105,7 @@ const Atletas = () => {
                                     <section className={styles.formSection}>
                                         <div className={styles.sectionHeader}>
                                             <h3>Responsável</h3>
+
                                             <span>
                                                 Dados do responsável pelo atleta
                                             </span>
@@ -1889,10 +2113,15 @@ const Atletas = () => {
 
                                         <div className={styles.responsibleGrid}>
                                             <div className={styles.formField}>
-                                                <label>Nome do responsável</label>
+                                                <label>
+                                                    Nome do responsável
+                                                </label>
+
                                                 <input
                                                     type="text"
-                                                    value={novoAtleta.responsavelNome}
+                                                    value={
+                                                        novoAtleta.responsavelNome
+                                                    }
                                                     onChange={(event) =>
                                                         alterarNovoAtleta(
                                                             'responsavelNome',
@@ -1904,10 +2133,15 @@ const Atletas = () => {
                                             </div>
 
                                             <div className={styles.formField}>
-                                                <label>Grau de parentesco</label>
+                                                <label>
+                                                    Grau de parentesco
+                                                </label>
+
                                                 <input
                                                     type="text"
-                                                    value={novoAtleta.responsavelGrau}
+                                                    value={
+                                                        novoAtleta.responsavelGrau
+                                                    }
                                                     onChange={(event) =>
                                                         alterarNovoAtleta(
                                                             'responsavelGrau',
@@ -1920,13 +2154,19 @@ const Atletas = () => {
 
                                             <div className={styles.formField}>
                                                 <label>Telefone</label>
+
                                                 <input
                                                     type="tel"
                                                     inputMode="numeric"
                                                     maxLength={15}
-                                                    value={novoAtleta.responsavelTelefone}
+                                                    value={
+                                                        novoAtleta.responsavelTelefone
+                                                    }
                                                     onChange={(event) =>
-                                                        alterarNovoAtleta('responsavelTelefone', event.target.value)
+                                                        alterarNovoAtleta(
+                                                            'responsavelTelefone',
+                                                            event.target.value
+                                                        )
                                                     }
                                                     placeholder="(11) 99999-9999"
                                                 />
@@ -1979,6 +2219,7 @@ const Atletas = () => {
                                     <section className={styles.formSection}>
                                         <div className={styles.sectionHeader}>
                                             <h3>Importar atletas</h3>
+
                                             <span>
                                                 Selecione sua planilha para carregar os dados.
                                             </span>
@@ -2024,7 +2265,9 @@ const Atletas = () => {
                                                         event.target.files?.[0];
 
                                                     if (arquivo) {
-                                                        void selecionarPlanilha(arquivo);
+                                                        void selecionarPlanilha(
+                                                            arquivo
+                                                        );
                                                     }
 
                                                     event.target.value = '';
@@ -2053,10 +2296,15 @@ const Atletas = () => {
                                     {atletasPlanilha.length > 0 && (
                                         <section className={styles.formSection}>
                                             <div className={styles.sectionHeader}>
-                                                <h3 className={styles.previewTitle}>
+                                                <h3
+                                                    className={
+                                                        styles.previewTitle
+                                                    }
+                                                >
                                                     <CheckCircle2 size={18} />
                                                     Prévia dos dados
                                                 </h3>
+
                                                 <span>
                                                     {atletasPlanilha.length}{' '}
                                                     {atletasPlanilha.length === 1
@@ -2066,7 +2314,11 @@ const Atletas = () => {
                                             </div>
 
                                             <div className={styles.tableWrapper}>
-                                                <table className={styles.previewTable}>
+                                                <table
+                                                    className={
+                                                        styles.previewTable
+                                                    }
+                                                >
                                                     <thead>
                                                         <tr>
                                                             <th>Nome</th>
@@ -2074,6 +2326,7 @@ const Atletas = () => {
                                                             <th>Categoria</th>
                                                         </tr>
                                                     </thead>
+
                                                     <tbody>
                                                         {atletasPlanilha
                                                             .slice(0, 8)
@@ -2081,8 +2334,14 @@ const Atletas = () => {
                                                                 <tr
                                                                     key={`${atleta.email}-${index}`}
                                                                 >
-                                                                    <td>{atleta.nome}</td>
-                                                                    <td>{atleta.email}</td>
+                                                                    <td>
+                                                                        {atleta.nome}
+                                                                    </td>
+
+                                                                    <td>
+                                                                        {atleta.email}
+                                                                    </td>
+
                                                                     <td>
                                                                         {atleta.categoria || '—'}
                                                                     </td>
@@ -2104,7 +2363,10 @@ const Atletas = () => {
                                     {resultadoImportacao && (
                                         <div className={styles.importResult}>
                                             <CheckCircle2 size={20} />
-                                            <span>{resultadoImportacao}</span>
+
+                                            <span>
+                                                {resultadoImportacao}
+                                            </span>
                                         </div>
                                     )}
                                 </div>

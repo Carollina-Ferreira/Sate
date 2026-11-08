@@ -1,4 +1,3 @@
-
 .header {
   width: 100%;
   min-height: 56px;
@@ -15,7 +14,6 @@
 }
 
 /* TÍTULO */
-
 .title {
   margin: 0;
   color: var(--verde-escuro, #005c45);
@@ -28,7 +26,6 @@
 }
 
 /* ÁREA DIREITA */
-
 .right {
   min-height: 56px;
   display: flex;
@@ -37,7 +34,6 @@
 }
 
 /* PESQUISA */
-
 .searchContainer {
   position: relative;
   width: 300px;
@@ -92,7 +88,16 @@
   opacity: 1;
 }
 
-/* NOTIFICAÇÕES */
+/* =========================================================
+   NOTIFICAÇÕES
+========================================================= */
+.notificationContainer {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 
 .notification {
   width: 34px;
@@ -139,7 +144,6 @@
 }
 
 /* USUÁRIO */
-
 .userContainer {
   min-height: 56px;
   position: relative;
@@ -216,7 +220,6 @@
 }
 
 /* MENUS SUSPENSOS */
-
 .searchDropdown,
 .notificationsDropdown,
 .userDropdown {
@@ -239,16 +242,20 @@
   box-sizing: border-box;
 }
 
-/* CARD DE NOTIFICAÇÕES — MENOR E AFASTADO DA BORDA */
-
+/* DROPDOWN DE NOTIFICAÇÕES */
 .notificationsDropdown {
   position: absolute;
   top: calc(100% + 8px);
   right: 8px;
-  width: 320px;
+  z-index: 120;
+  width: 340px;
   max-width: calc(100vw - 24px);
+  max-height: 440px;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
+  transform-origin: top right;
 }
 
 .userDropdown {
@@ -261,7 +268,6 @@
 }
 
 /* RESULTADOS */
-
 .searchSection {
   padding: 8px 0;
   border-bottom: 1px solid #f0e8de;
@@ -372,9 +378,9 @@
 }
 
 /* CABEÇALHO DAS NOTIFICAÇÕES */
-
 .notificationHeader {
   min-height: 54px;
+  flex-shrink: 0;
   padding: 0 15px;
   display: flex;
   align-items: center;
@@ -410,31 +416,55 @@
   font-weight: 700;
 }
 
+/* LISTA — CADA NOTIFICAÇÃO TEM SEU PRÓPRIO ESPAÇO */
 .notificationList {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  min-height: 0;
   max-height: 350px;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .notificationItem {
   width: 100%;
+  min-width: 0;
   min-height: 65px;
-  padding: 11px 13px;
+  height: auto;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  padding: 12px 13px;
   position: relative;
   display: flex;
   align-items: flex-start;
   gap: 10px;
   border: none;
-  border-bottom: 1px solid #f4eee7;
+  border-bottom: 1px solid #f0e8de;
+  border-radius: 0;
   background: transparent;
   font-family: inherit;
   text-align: left;
   cursor: pointer;
+  white-space: normal;
+  transition: background 0.18s ease;
+}
+
+.notificationItem:last-child {
+  border-bottom: none;
 }
 
 .notificationItem:hover {
   background: #f5f7f1;
+}
+
+.notificationItem:disabled {
+  opacity: 0.65;
+  cursor: wait;
 }
 
 .notificationUnread {
@@ -442,9 +472,9 @@
 }
 
 .notificationIcon {
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -473,37 +503,60 @@
 
 .notificationContent {
   min-width: 0;
-  flex: 1;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 5px;
+  overflow-wrap: anywhere;
 }
 
 .notificationTop {
+  min-width: 0;
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
 }
 
 .notificationTop strong {
+  min-width: 0;
+  flex: 1;
   color: var(--texto, #12261f);
   font-size: 11px;
   font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .notificationTop span {
+  flex-shrink: 0;
   color: #929b94;
   font-size: 9px;
   white-space: nowrap;
 }
 
 .notificationContent p {
-  margin: 4px 0 0;
+  display: block;
+  margin: 0;
   color: var(--texto-suave, #6c7c77);
   font-size: 10px;
-  line-height: 1.5;
+  line-height: 1.55;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* DESTAQUE NAS INFORMAÇÕES IMPORTANTES DA DESCRIÇÃO */
+.notificationContent p strong {
+  color: var(--texto, #12261f);
+  font-weight: 700;
 }
 
 .unreadDot {
   width: 6px;
   height: 6px;
+  flex: 0 0 6px;
   position: absolute;
   top: 13px;
   right: 7px;
@@ -512,7 +565,6 @@
 }
 
 /* MENU DO USUÁRIO */
-
 .userDropdownHeader {
   display: flex;
   align-items: center;
@@ -618,7 +670,6 @@
 }
 
 /* ANIMAÇÃO */
-
 @keyframes dropdownEnter {
   from {
     opacity: 0;
@@ -632,7 +683,6 @@
 }
 
 /* SCROLL */
-
 .searchDropdown::-webkit-scrollbar,
 .notificationList::-webkit-scrollbar {
   width: 4px;
@@ -645,7 +695,6 @@
 }
 
 /* RESPONSIVIDADE */
-
 @media (max-width: 900px) {
   .header {
     padding: 0 18px;
@@ -690,7 +739,7 @@
   }
 
   .notificationsDropdown {
-    right: 8px;
+    right: 0;
   }
 }
 
@@ -766,20 +815,17 @@
 /* ==========================================
    MODO ESCURO — HEADER VERDE-ESCURO
 ========================================== */
-
 :global(:root[data-theme='dark']) .header {
   background: var(--verde-escuro, #003d30);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* Título */
-
 :global(:root[data-theme='dark']) .title {
   color: #ffffff;
 }
 
 /* Pesquisa */
-
 :global(:root[data-theme='dark']) .search {
   background: #104b3e;
   border-color: rgba(255, 255, 255, 0.18);
@@ -805,7 +851,6 @@
 }
 
 /* Notificações */
-
 :global(:root[data-theme='dark']) .notification {
   color: #ffffff;
 }
@@ -819,7 +864,6 @@
 }
 
 /* Perfil no header */
-
 :global(:root[data-theme='dark']) .userContainer {
   border-left-color: rgba(255, 255, 255, 0.18);
 }
@@ -840,7 +884,6 @@
 }
 
 /* Menus de pesquisa e notificações — fundo claro */
-
 :global(:root[data-theme='dark']) .searchDropdown,
 :global(:root[data-theme='dark']) .notificationsDropdown {
   background: #fffdf9;
@@ -849,7 +892,6 @@
 }
 
 /* Resultados da pesquisa */
-
 :global(:root[data-theme='dark']) .searchSection {
   border-bottom-color: #f0e8de;
 }
@@ -888,7 +930,6 @@
 }
 
 /* Card de notificações */
-
 :global(:root[data-theme='dark']) .notificationHeader {
   border-bottom-color: #f0e8de;
 }
@@ -903,7 +944,7 @@
 }
 
 :global(:root[data-theme='dark']) .notificationItem {
-  border-bottom-color: #f4eee7;
+  border-bottom-color: #f0e8de;
 }
 
 :global(:root[data-theme='dark']) .notificationItem:hover {
@@ -914,7 +955,8 @@
   background: #f0f7f1;
 }
 
-:global(:root[data-theme='dark']) .notificationTop strong {
+:global(:root[data-theme='dark']) .notificationTop strong,
+:global(:root[data-theme='dark']) .notificationContent p strong {
   color: #12261f;
 }
 
@@ -935,7 +977,6 @@
 }
 
 /* Card do perfil — verde-escuro */
-
 :global(:root[data-theme='dark']) .userDropdown {
   background: var(--verde-escuro, #003d30);
   border-color: rgba(255, 255, 255, 0.15);
@@ -982,7 +1023,6 @@
 }
 
 /* Sair */
-
 :global(:root[data-theme='dark']) .logoutButton {
   color: #ffb4c2;
 }
@@ -996,8 +1036,99 @@
 }
 
 /* Scroll dos menus */
-
 :global(:root[data-theme='dark']) .searchDropdown::-webkit-scrollbar-thumb,
 :global(:root[data-theme='dark']) .notificationList::-webkit-scrollbar-thumb {
   background: #dce6dc;
+}
+
+
+/* MODAL DE CONFIRMAÇÃO DE SAÍDA */
+.logoutModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(18, 38, 31, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+.logoutModal {
+  width: 100%;
+  max-width: 380px;
+  padding: 30px;
+  box-sizing: border-box;
+  border: 1px solid #eee4d9;
+  border-radius: 18px;
+  background: #fffdf9;
+  box-shadow: 0 15px 45px rgba(25, 52, 40, 0.18);
+  text-align: center;
+  animation: dropdownEnter 0.18s ease;
+}
+
+.logoutModalIcon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff0f3;
+  color: #cc3f5d;
+}
+
+.logoutModal h2 {
+  margin: 0 0 9px;
+  color: #005c45;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.logoutModal p {
+  margin: 0;
+  color: #6c7c77;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.logoutModalButtons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.logoutCancel,
+.logoutConfirm {
+  min-height: 39px;
+  padding: 0 18px;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.logoutCancel {
+  border: 1px solid #e6d8c7;
+  background: #fffdf9;
+  color: #53645b;
+}
+
+.logoutCancel:hover {
+  background: #f5f1eb;
+}
+
+.logoutConfirm {
+  border: 1px solid #cc3f5d;
+  background: #cc3f5d;
+  color: #ffffff;
+}
+
+.logoutConfirm:hover {
+  background: #b83250;
 }

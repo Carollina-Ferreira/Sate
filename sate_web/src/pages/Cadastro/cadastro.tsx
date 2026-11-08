@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 
 import styles from './cadastro.module.css';
+import TurnstileWidget from '../../components/TurnstileWidget/TurnstileWidget';
 import TermosUso from '../TermosUso/termosUso';
 
 import logoVerdeImg from '../../assets/img/logoVerde_img.png';
@@ -45,6 +46,7 @@ interface CadastroFormState {
 
 interface CadastroResponse {
   mensagem: string;
+  codigo?: string;
 
   usuario?: {
     id: number;
@@ -54,6 +56,9 @@ interface CadastroResponse {
   };
 }
 
+
+const API_URL = (import.meta.env.VITE_API_URL as string | undefined) || 'http://localhost:3000';
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 
 const heroSlides = [
   futebolHero,
@@ -93,6 +98,10 @@ const Cadastro = () => {
     useState(false);
 
   const [mostrarTermos, setMostrarTermos] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const [turnstileKey, setTurnstileKey] = useState(0);
+
+  const [termosLidos, setTermosLidos] = useState(false);
 
   const [erro, setErro] =
     useState('');
@@ -177,21 +186,21 @@ const Cadastro = () => {
       return;
     }
 
-
-    if (!form.termos) {
-      setErro(
-        'Aceite os termos para continuar.'
-      );
-
+    if (!termosLidos || !form.termos) {
+      setErro('Leia os Termos de Uso até o final e aceite para continuar.');
       return;
     }
 
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setErro('Conclua a verificação antirrobô antes de criar sua conta.');
+      return;
+    }
 
     setLoading(true);
 
     try {
       const resposta = await fetch(
-        'http://localhost:3000/api/auth/cadastro',
+        `${API_URL}/api/auth/cadastro`,
         {
           method: 'POST',
 
@@ -206,6 +215,7 @@ const Cadastro = () => {
             senha: form.senha,
 
             tipo: 'TREINADOR',
+            turnstileToken,
           }),
         }
       );
@@ -216,9 +226,14 @@ const Cadastro = () => {
 
 
       if (!resposta.ok) {
+        if (data.codigo === 'EMAIL_ENVIO_FALHOU' || data.codigo === 'EMAIL_NAO_VERIFICADO') {
+          navigate(`/verificar-email?email=${encodeURIComponent(form.email.trim())}`, { state: { mensagem: data.mensagem } });
+          return;
+        }
+
         throw new Error(
           data.mensagem ||
-            'Não foi possível criar sua conta.'
+          'Não foi possível criar sua conta.'
         );
       }
 
@@ -231,13 +246,10 @@ const Cadastro = () => {
 
 
       setSucesso(
-        'Conta de treinador criada com sucesso! Você será direcionado para o login.'
+        'Conta criada! Enviamos um link de confirmação para seu e-mail.'
       );
 
-
-      setTimeout(() => {
-        navigate('/login');
-      }, 1000);
+      navigate(`/verificar-email?email=${encodeURIComponent(data.usuario.email)}`);
 
     } catch (error) {
       console.error(
@@ -256,6 +268,8 @@ const Cadastro = () => {
 
     } finally {
       setLoading(false);
+      setTurnstileToken('');
+      setTurnstileKey((atual) => atual + 1);
     }
   };
 
@@ -278,11 +292,10 @@ const Cadastro = () => {
           {heroSlides.map((image, index) => (
             <div
               key={image}
-              className={`${styles.heroSlide} ${
-                index === activeSlide
+              className={`${styles.heroSlide} ${index === activeSlide
                   ? styles.heroSlideActive
                   : ''
-              }`}
+                }`}
               style={{
                 backgroundImage: `url(${image})`,
               }}
@@ -582,6 +595,7 @@ const Cadastro = () => {
                   onChange={handleChange}
                   autoComplete="new-password"
                   placeholder="Digite sua senha"
+                  minLength={8}
                   required
                 />
 
@@ -643,6 +657,7 @@ const Cadastro = () => {
                   onChange={handleChange}
                   autoComplete="new-password"
                   placeholder="Digite sua senha novamente"
+                  minLength={8}
                   required
                 />
 
@@ -677,6 +692,15 @@ const Cadastro = () => {
             </div>
 
 
+            {/* PROTEÇÃO CONTRA BOTS */}
+
+            <TurnstileWidget
+              key={turnstileKey}
+              action="signup"
+              onToken={setTurnstileToken}
+            />
+
+
             {/* MENSAGENS */}
 
             {erro && (
@@ -701,6 +725,7 @@ const Cadastro = () => {
                 type="checkbox"
                 name="termos"
                 checked={form.termos}
+                disabled={!termosLidos}
                 onChange={handleChange}
               />
 
@@ -765,7 +790,10 @@ const Cadastro = () => {
       </section>
 
       {mostrarTermos && (
-        <TermosUso onFechar={() => setMostrarTermos(false)} />
+        <TermosUso
+          onFechar={() => setMostrarTermos(false)}
+          onLeuTermos={() => setTermosLidos(true)}
+        />
       )}
 
     </main>

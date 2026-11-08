@@ -600,7 +600,7 @@ class _LoginPageState extends State<LoginPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(mensagem),
-        backgroundColor: erro ? Color(0xFFC0392B) : null,
+        backgroundColor: erro ? Color(0xFFC9305A) : null,
       ),
     );
   }

@@ -73,7 +73,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
 
           _notificacao(
             icone: Icons.check_box_outlined,
-            corIcone: const Color(0xFF16A875),
+            corIcone: const Color(0xFF005942),
             fundoIcone: const Color(0xFFDFF7EE),
             titulo: 'Meta concluída',
             descricao:
@@ -96,7 +96,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
 
           _notificacao(
             icone: Icons.sports_handball_outlined,
-            corIcone: const Color(0xFF16A875),
+            corIcone: const Color(0xFF005942),
             fundoIcone: const Color(0xFFDFF7EE),
             titulo: 'Novo desafio',
             descricao:
@@ -282,7 +282,7 @@ class AtletaNotificacaoPage extends StatelessWidget {
               ListTile(
                 leading: const Icon(
                   Icons.delete_outline_rounded,
-                  color: Color(0xFFC0392B),
+                  color: Color(0xFFC9305A),
                 ),
                 title: const Text(
                   'Limpar notificações',

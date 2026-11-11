@@ -1,11 +1,4 @@
 
-:global(html),
-:global(body),
-:global(#root) {
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
 .page {
   --bleed: 30px;
 
@@ -18,7 +11,7 @@
 
   background: transparent;
   color: var(--texto);
-  font-family: var(--fonte-base, 'Inter'), sans-serif;
+  font-family: var(--fonte-base);
 }
 
 .page *,
@@ -139,7 +132,7 @@
 
   color: var(--texto);
 
-  font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+  font-family: var(--fonte-titulo);
   font-size: clamp(24px, 2.3vw, 32px);
   font-weight: 700;
   line-height: 1.1;
@@ -477,7 +470,7 @@
 
   color: var(--texto);
 
-  font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+  font-family: var(--fonte-titulo);
   font-size: 20px;
   font-weight: 700;
   line-height: 1.25;
@@ -489,7 +482,7 @@
 
   color: var(--texto);
 
-  font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+  font-family: var(--fonte-titulo);
   font-size: 17px;
   font-weight: 700;
   line-height: 1.3;

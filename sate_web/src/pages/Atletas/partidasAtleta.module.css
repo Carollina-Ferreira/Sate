@@ -2,8 +2,8 @@
 .page {
     min-height: 100%;
     padding: 24px 32px 48px;
-    background: #F6F9F7;
-    color: #12261F;
+    background: var(--bg-neutro);
+    color: var(--texto);
 }
 
 /* VOLTAR */
@@ -24,7 +24,7 @@
 }
 
 .backButton:hover {
-    color: #16A875;
+    color: var(--verde-principal);
 }
 
 /* CABEÇALHO */
@@ -37,7 +37,7 @@
 }
 
 .eyebrow {
-    color: #16A875;
+    color: var(--verde-principal);
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 1.7px;
@@ -48,11 +48,11 @@
     font-weight: 800;
     letter-spacing: -1.5px;
     margin: 8px 0;
-    color: #12261F;
+    color: var(--texto);
 }
 
 .header h1 em {
-    color: #16A875;
+    color: var(--verde-principal);
     font-style: normal;
 }
 
@@ -76,7 +76,7 @@
     align-items: center;
     gap: 14px;
     padding: 20px;
-    background: #FFFFFF;
+    background: var(--bg-surface);
     border: 1px solid #E5EEE9;
     border-radius: 15px;
     min-width: 0;
@@ -90,8 +90,8 @@
     height: 43px;
     flex-shrink: 0;
     border-radius: 12px;
-    color: #16A875;
-    background: #E8F7F0;
+    color: var(--verde-principal);
+    background: var(--bg-verde-suave);
 }
 
 .statCard > div:last-child {
@@ -101,7 +101,7 @@
 }
 
 .statCard strong {
-    color: #12261F;
+    color: var(--texto);
     font-size: 25px;
     font-weight: 800;
     line-height: 1;
@@ -130,14 +130,14 @@
     min-width: 200px;
     height: 46px;
     padding: 0 14px;
-    background: #FFFFFF;
+    background: var(--bg-surface);
     border: 1px solid #E2EBE6;
     border-radius: 10px;
     color: #819188;
 }
 
 .searchBox:focus-within {
-    border-color: #16A875;
+    border-color: var(--verde-principal);
     box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.08);
 }
 
@@ -147,7 +147,7 @@
     border: none;
     outline: none;
     background: transparent;
-    color: #12261F;
+    color: var(--texto);
     font-size: 13px;
 }
 
@@ -168,7 +168,7 @@
     border: 1px solid #E2EBE6;
     border-radius: 10px;
     outline: none;
-    background: #FFFFFF;
+    background: var(--bg-surface);
     color: #52665B;
     font-size: 13px;
     cursor: pointer;
@@ -202,7 +202,7 @@
     font-size: 17px;
     font-weight: 800;
     margin: 0;
-    color: #12261F;
+    color: var(--texto);
 }
 
 .listHeader span {
@@ -220,7 +220,7 @@
 
 .matchCard {
     overflow: hidden;
-    background: #FFFFFF;
+    background: var(--bg-surface);
     border: 1px solid #E3ECE7;
     border-radius: 15px;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -259,8 +259,8 @@
     height: 48px;
     flex-shrink: 0;
     border-radius: 13px;
-    background: #EAF7F0;
-    color: #16A875;
+    background: var(--bg-verde-suave);
+    color: var(--verde-principal);
 }
 
 .matchTexts {
@@ -276,7 +276,7 @@
 
 .matchTitleRow h3 {
     margin: 0;
-    color: #12261F;
+    color: var(--texto);
     font-size: 15px;
     font-weight: 750;
 }
@@ -333,7 +333,7 @@
 }
 
 .score {
-    color: #12261F;
+    color: var(--texto);
     font-size: 23px;
     font-weight: 800;
     white-space: nowrap;
@@ -378,7 +378,7 @@
     margin: 0 0 5px;
     font-size: 14px;
     font-weight: 800;
-    color: #12261F;
+    color: var(--texto);
 }
 
 .detailsHeader span {
@@ -419,7 +419,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #16A875;
+    color: var(--verde-principal);
     font-size: 12px;
     font-weight: 750;
     white-space: nowrap;
@@ -529,9 +529,9 @@
 }
 
 .watchVideoButton:hover:not(:disabled) {
-    background: #16A875;
-    border-color: #16A875;
-    color: #FFFFFF;
+    background: var(--verde-principal);
+    border-color: var(--verde-principal);
+    color: var(--branco);
     transform: translateY(-1px);
     box-shadow: 0 5px 13px rgba(22, 168, 117, 0.14);
 }
@@ -575,11 +575,11 @@
     gap: 12px;
     min-height: 250px;
     padding: 35px;
-    background: #FFFFFF;
+    background: var(--bg-surface);
     border: 1px solid #E5EEE9;
     border-radius: 15px;
     text-align: center;
-    color: #16A875;
+    color: var(--verde-principal);
 }
 
 .stateBox strong {
@@ -599,8 +599,8 @@
     padding: 10px 17px;
     border: none;
     border-radius: 8px;
-    background: #16A875;
-    color: #FFFFFF;
+    background: var(--verde-principal);
+    color: var(--branco);
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
@@ -638,11 +638,11 @@
     width: min(900px, 100%);
     max-height: 90vh;
     overflow-y: auto;
-    background: #FFFFFF;
+    background: var(--bg-surface);
     border: 1px solid #E1EBE5;
     border-radius: 17px;
     box-shadow: 0 20px 70px rgba(0, 0, 0, 0.25);
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fonte-base);
 }
 
 .videoModalClose {
@@ -658,13 +658,13 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 9px;
     background: rgba(18, 38, 31, 0.75);
-    color: #FFFFFF;
+    color: var(--branco);
     cursor: pointer;
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .videoModalClose:hover {
-    background: #16A875;
+    background: var(--verde-principal);
     transform: scale(1.04);
 }
 
@@ -677,7 +677,7 @@
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 1.5px;
-    color: #16A875;
+    color: var(--verde-principal);
     text-transform: uppercase;
 }
 
@@ -685,7 +685,7 @@
     margin: 8px 0 5px;
     font-size: 19px;
     font-weight: 800;
-    color: #12261F;
+    color: var(--texto);
 }
 
 .videoModalHeader p {
@@ -710,7 +710,7 @@
     justify-content: space-between;
     gap: 20px;
     padding: 17px 23px 20px;
-    background: #FFFFFF;
+    background: var(--bg-surface);
     border-top: 1px solid #E1EBE5;
 }
 
@@ -722,7 +722,7 @@
 }
 
 .videoModalInfo span {
-    color: #87958D;
+    color: var(--texto-claro);
     font-size: 10px;
 }
 

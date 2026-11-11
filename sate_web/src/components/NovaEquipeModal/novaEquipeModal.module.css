@@ -54,7 +54,7 @@
 
   box-shadow: 0 24px 70px rgba(0, 35, 25, 0.3);
 
-  font-family: 'Inter', 'Poppins', sans-serif;
+  font-family: var(--fonte-base);
 }
 
 /* =========================================
@@ -71,7 +71,7 @@
 
   padding: 24px 28px 21px;
 
-  background: linear-gradient(135deg, #e8f3eb, #f0f6f1);
+  background: linear-gradient(135deg, #e8f3eb, var(--bg-verde-suave));
   border-bottom: 1px solid #d7e5db;
   border-radius: 20px 20px 0 0;
 }
@@ -131,7 +131,7 @@
 }
 
 .closeButton:hover {
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #dceee2;
   border-color: #b9d8c4;
   transform: rotate(4deg);
@@ -198,7 +198,7 @@
 }
 
 .imagePreview:hover {
-  border-color: #16a875;
+  border-color: var(--verde-principal);
   background: #d9ebdf;
 }
 
@@ -241,7 +241,7 @@
   align-items: center;
   justify-content: center;
 
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #cce5d4;
 
   border: 1px solid #bad9c5;
@@ -283,7 +283,7 @@
   box-sizing: border-box;
 
   color: #426151;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px solid #c8dacf;
   border-radius: 10px;
@@ -297,8 +297,8 @@
 }
 
 .changeImageButton:hover {
-  color: #087b5b;
-  border-color: #16a875;
+  color: var(--verde-hover);
+  border-color: var(--verde-principal);
   background: #e8f5ec;
 }
 
@@ -314,7 +314,7 @@
   padding: 7px 10px;
 
   color: #bd354b;
-  background: #fff0f1;
+  background: var(--vermelho-claro);
 
   border: 1px solid #f2cbd1;
   border-radius: 9px;
@@ -388,7 +388,7 @@
   align-items: center;
   justify-content: center;
 
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #dcefe2;
 
   border: 1px solid #c9e3d1;
@@ -452,7 +452,7 @@
   box-sizing: border-box;
 
   color: #2c4336;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px solid #cbdad1;
   border-radius: 10px;
@@ -473,8 +473,8 @@
 
 .field input:focus,
 .field select:focus {
-  border-color: #16a875;
-  background: #ffffff;
+  border-color: var(--verde-principal);
+  background: var(--bg-surface);
   box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
 }
 
@@ -503,7 +503,7 @@
   padding: 2px 8px;
   box-sizing: border-box;
 
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #dcefe2;
 
   border: 1px solid #c9e3d1;
@@ -527,7 +527,7 @@
   box-sizing: border-box;
 
   color: #2c4336;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px solid #cbdad1;
   border-radius: 10px;
@@ -538,7 +538,7 @@
 }
 
 .athleteSearch input:focus {
-  border-color: #16a875;
+  border-color: var(--verde-principal);
   box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.1);
 }
 
@@ -582,7 +582,7 @@
   box-sizing: border-box;
 
   color: #30483a;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px solid #d8e4dc;
   border-radius: 11px;
@@ -614,7 +614,7 @@
 
   overflow: hidden;
 
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #dcefe2;
 
   border-radius: 10px;
@@ -674,16 +674,16 @@
 }
 
 .athleteSelected .athleteCheck {
-  color: #ffffff;
-  background: #16a875;
-  border-color: #16a875;
+  color: var(--branco);
+  background: var(--verde-principal);
+  border-color: var(--verde-principal);
 }
 
 .emptyAthletes {
   padding: 20px 12px;
 
   color: #819086;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px dashed #d0ded5;
   border-radius: 11px;
@@ -715,8 +715,8 @@
   padding: 0 10px;
   box-sizing: border-box;
 
-  color: #087b5b;
-  background: #ffffff;
+  color: var(--verde-hover);
+  background: var(--bg-surface);
 
   border: 1px solid #cbdad1;
   border-radius: 10px;
@@ -725,7 +725,7 @@
 }
 
 .dateInputWrapper:focus-within {
-  border-color: #16a875;
+  border-color: var(--verde-principal);
   box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.1);
 }
 
@@ -771,7 +771,7 @@
 
   padding: 12px;
 
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #e4f2e8;
 
   border: 1px solid #c9dfd0;
@@ -844,7 +844,7 @@
   border: 2px solid transparent;
   border-radius: 50%;
 
-  color: #ffffff;
+  color: var(--branco);
 
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(26, 61, 43, 0.13);
@@ -857,7 +857,7 @@
 }
 
 .colorSelected {
-  border-color: #ffffff;
+  border-color: var(--branco);
   box-shadow: 0 0 0 2px #245d43;
 }
 
@@ -872,7 +872,7 @@
 
   padding: 0;
 
-  background: #ffffff;
+  background: var(--bg-surface);
   border: 2px solid transparent;
   border-radius: 50%;
 
@@ -900,14 +900,14 @@
   box-sizing: border-box;
 
   background: conic-gradient(
-    #ef476f,
+    var(--rosa),
     #d9822b,
     #b6b51a,
-    #16a875,
-    #1674b8,
+    var(--verde-principal),
+    var(--azul),
     #7c5ce5,
     #d652a2,
-    #ef476f
+    var(--rosa)
   );
 
   border-radius: 50%;
@@ -921,10 +921,10 @@
   align-items: center;
   justify-content: center;
 
-  color: #ffffff;
+  color: var(--branco);
   background: rgba(255, 255, 255, 0.12);
 
-  border: 2px solid #ffffff;
+  border: 2px solid var(--branco);
   border-radius: 50%;
 }
 
@@ -973,7 +973,7 @@
 
   margin-left: auto;
 
-  border: 2px solid #ffffff;
+  border: 2px solid var(--branco);
   border-radius: 50%;
 
   box-shadow: 0 1px 5px rgba(25, 55, 40, 0.15);
@@ -995,7 +995,7 @@
 
   box-sizing: border-box;
 
-  background: linear-gradient(135deg, #e8f3eb, #f0f6f1);
+  background: linear-gradient(135deg, #e8f3eb, var(--bg-verde-suave));
   border: 1px solid #cfdfd5;
   border-radius: 13px;
 }
@@ -1013,7 +1013,7 @@
 
   overflow: hidden;
 
-  color: #ffffff;
+  color: var(--branco);
 
   border: 3px solid rgba(255, 255, 255, 0.85);
   border-radius: 13px;
@@ -1122,7 +1122,7 @@
 
 .cancelButton {
   color: #50695a;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px solid #c5d6cb;
 }
@@ -1133,10 +1133,10 @@
 }
 
 .createButton {
-  color: #ffffff;
-  background: #087b5b;
+  color: var(--branco);
+  background: var(--verde-hover);
 
-  border: 1px solid #087b5b;
+  border: 1px solid var(--verde-hover);
   box-shadow: 0 3px 8px rgba(8, 123, 91, 0.15);
 }
 

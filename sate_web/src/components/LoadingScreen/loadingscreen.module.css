@@ -28,11 +28,9 @@
 
   overflow: hidden;
 
-  background: #005942;
+  background: var(--verde);
 
-  font-family:
-    'Poppins',
-    sans-serif;
+  font-family: var(--fonte-base);
 }
 
 
@@ -132,7 +130,7 @@
 
   margin-bottom: 42px;
 
-  color: #ffffff;
+  color: var(--branco);
 }
 
 
@@ -164,12 +162,12 @@
       0.09
     );
 
-  color: #ffffff;
+  color: var(--branco);
 }
 
 
 .brand span {
-  color: #ffffff;
+  color: var(--branco);
 
   font-size: 20px;
 
@@ -236,7 +234,7 @@
     transparent;
 
   border-top-color:
-    #ffffff;
+    var(--branco);
 
   border-right-color:
     rgba(
@@ -288,7 +286,7 @@
       0.08
     );
 
-  color: #ffffff;
+  color: var(--branco);
 
   animation:
     pulse
@@ -319,7 +317,7 @@
     0
     8px;
 
-  color: #ffffff;
+  color: var(--branco);
 
   font-size: 27px;
 
@@ -384,7 +382,7 @@
 
   border-radius: inherit;
 
-  background: #ffffff;
+  background: var(--bg-surface);
 
   animation:
     loadingLine

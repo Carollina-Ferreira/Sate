@@ -1,3 +1,8 @@
+/* ============================================================
+   SATE — CONFIGURAÇÃO DA ANÁLISE
+   Modo claro e escuro conforme identidade do Dashboard.
+   Cores semânticas centralizadas no global.css.
+============================================================ */
 
 .page {
     width: 100%;
@@ -8,39 +13,14 @@
     justify-content: center;
     position: relative;
     box-sizing: border-box;
-    background-color: var(--creme, #FAF5EE);
-    background-image:
-        radial-gradient(
-            circle at 88% 8%,
-            rgba(239, 71, 111, 0.15),
-            transparent 25%
-        ),
-        linear-gradient(
-            135deg,
-            #F4EAE0 0%,
-            #FAF5EE 48%,
-            #F8F0E9 100%
-        ) !important;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    font-family: var(--fonte-base, 'Poppins', sans-serif);
-    color: var(--texto, #12261F);
+    background: radial-gradient(ellipse 420px 300px at 97% 0%,
+        color-mix(in srgb, var(--rosa) 11%, transparent), transparent 77%),
+        var(--bg-page);
+    font-family: var(--fonte-base);
+    color: var(--texto);
 }
 
-/* CAMADA SUAVE DO FUNDO */
-.page::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(
-            circle at 85% 10%,
-            rgba(239, 71, 111, 0.05),
-            transparent 30%
-        );
-    pointer-events: none;
-}
+.page * { box-sizing: border-box; }
 
 /* CONTAINER */
 .container {
@@ -56,68 +36,6 @@
     box-sizing: border-box;
 }
 
-/* PROGRESSO */
-
-/* ÁREA DAS ETAPAS — PADRÃO DA CONFIGURAÇÃO DA EQUIPE */
-/* PROGRESSO — PADRÃO DA CONFIGURAÇÃO DA EQUIPE */
-
-/* PROGRESSO — CONFIGURAÇÃO DA ANÁLISE */
-
-.progressArea {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 18px;
-}
-
-.stepBadge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 32px;
-    padding: 7px 18px;
-    box-sizing: border-box;
-
-    border: 1px solid #F3C5CE;
-    border-radius: 999px;
-    background: #F8E1E5;
-    color: #FF3158;
-
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1.2;
-    text-align: center;
-}
-.progressSteps {
-    width: min(clamp(300px, 40vw, 620px), 100%);
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-}
-
-.progressComplete,
-.progressActive,
-.progressInactive {
-    display: block;
-    width: 100%;
-    height: 4px;
-    border: 0;
-    border-radius: 20px;
-}
-
-.progressComplete {
-    background: #006B4F;
-}
-
-.progressActive {
-    background: #EF476F;
-}
-
-.progressInactive {
-    background: #E6DDD2;
-}
 /* CABEÇALHO */
 .header {
     display: flex;
@@ -130,7 +48,7 @@
 
 .sportBadge {
     margin-bottom: 7px;
-    color: var(--rosa, #EF476F);
+    color: var(--rosa);
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
@@ -139,16 +57,16 @@
 
 .header h1 {
     margin: 0;
-    color: var(--texto, #12261F);
-    font-family: var(--fonte-titulo, 'Poppins', sans-serif);
+    color: var(--texto);
+    font-family: var(--fonte-titulo);
     font-size: clamp(24px, 2.4vw, 40px);
     font-weight: 700;
     line-height: 1.2;
 }
 
 .header h1 span {
-    color: var(--rosa, #EF476F);
-    font-family: 'DM Serif Display', Georgia, serif;
+    color: var(--rosa);
+    font-family: var(--fonte-destaque);
     font-style: italic;
     font-weight: 400;
 }
@@ -156,13 +74,13 @@
 .header p {
     max-width: 760px;
     margin: 10px 0 0;
-    color: var(--texto-suave, #6C7C77);
+    color: var(--texto-suave);
     font-size: clamp(13px, 1vw, 16px);
     line-height: 1.55;
 }
 
 .header strong {
-    color: var(--verde-escuro, #006B4F);
+    color: var(--verde);
     font-weight: 700;
 }
 
@@ -183,10 +101,10 @@
     position: relative;
     padding: 10px 17px;
     box-sizing: border-box;
-    border: 1px solid #E9DED3;
+    border: 1px solid var(--borda);
     border-radius: 15px;
-    background: var(--branco, #FFFFFF);
-    color: var(--texto, #12261F);
+    background: var(--bg-surface);
+    color: var(--texto);
     font-family: inherit;
     text-align: left;
     cursor: pointer;
@@ -200,15 +118,15 @@
 
 .fieldCard:hover {
     transform: translateY(-2px);
-    border-color: #E9A6B7;
-    background: #FFFCF7;
+    border-color: var(--verde);
+    background: var(--bg-surface-2);
     box-shadow: 0 8px 18px rgba(18, 38, 31, 0.07);
 }
 
 /* CARD SELECIONADO */
 .fieldCardSelected {
-    border-color: var(--rosa, #EF476F);
-    background: #FFFCFB;
+    border-color: var(--rosa);
+    background: var(--bg-surface-2);
     box-shadow: 0 5px 16px rgba(239, 71, 111, 0.08);
 }
 
@@ -221,9 +139,9 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    border: 1px solid #DCCFC2;
+    border: 1px solid var(--borda-forte);
     border-radius: 50%;
-    background: #FFFFFF;
+    background: var(--bg-surface);
     color: transparent;
     transition:
         background 0.18s ease,
@@ -234,13 +152,13 @@
 }
 
 .fieldCard:hover .checkbox {
-    border-color: #D98DA2;
+    border-color: var(--verde);
 }
 
 .checkboxSelected {
-    border-color: var(--rosa, #EF476F);
-    background: var(--rosa, #EF476F);
-    color: #FFFFFF;
+    border-color: var(--rosa);
+    background: var(--rosa);
+    color: #ffffff;
     transform: scale(1.04);
     box-shadow: 0 4px 10px rgba(239, 71, 111, 0.18);
 }
@@ -248,7 +166,7 @@
 /* TEXTO DO CAMPO */
 .fieldName {
     flex: 1;
-    color: var(--texto, #12261F);
+    color: var(--texto);
     min-width: 0;
     overflow-wrap: anywhere;
     font-size: clamp(14px, 1.05vw, 17px);
@@ -266,8 +184,8 @@
     justify-content: center;
     margin-left: auto;
     border-radius: 11px;
-    background: #DDF4EB;
-    color: var(--verde-escuro, #006B4F);
+    background: var(--bg-verde-suave);
+    color: var(--verde);
     transition:
         background 0.18s ease,
         color 0.18s ease,
@@ -276,12 +194,12 @@
 
 .fieldCard:hover .fieldIcon {
     transform: scale(1.04);
-    background: #CDEBDD;
+    background: var(--bg-verde-suave);
 }
 
 .fieldCardSelected .fieldIcon {
-    background: #FCE3E9;
-    color: #C5365B;
+    background: var(--bg-surface-2);
+    color: var(--rosa);
 }
 
 /* ADICIONAR CAMPO */
@@ -292,10 +210,10 @@
     gap: 14px;
     padding: 10px 17px;
     box-sizing: border-box;
-    border: 1px dashed #D8B9AE;
+    border: 1px dashed var(--borda-forte);
     border-radius: 15px;
     background: transparent;
-    color: var(--texto, #12261F);
+    color: var(--texto);
     font-family: inherit;
     text-align: left;
     cursor: pointer;
@@ -309,8 +227,8 @@
 
 .addField:hover {
     transform: translateY(-2px);
-    border-color: var(--rosa, #EF476F);
-    background: #FFFCF7;
+    border-color: var(--rosa);
+    background: var(--bg-surface-2);
     box-shadow: 0 7px 17px rgba(18, 38, 31, 0.06);
 }
 
@@ -322,8 +240,8 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: var(--verde-escuro, #006B4F);
-    color: #FFFFFF;
+    background: var(--onboarding-primary-bg, var(--verde-escuro));
+    color: var(--onboarding-primary-text, #ffffff);
 }
 
 .addText {
@@ -334,14 +252,14 @@
 }
 
 .addText strong {
-    color: var(--texto, #12261F);
+    color: var(--texto);
     font-size: 14px;
     font-weight: 600;
 }
 
 .addText span {
     margin-top: 2px;
-    color: var(--texto-suave, #6C7C77);
+    color: var(--texto-suave);
     font-size: 11px;
 }
 
@@ -363,7 +281,7 @@
     padding: 9px 3px;
     border: none;
     background: transparent;
-    color: var(--verde-escuro, #006B4F);
+    color: var(--verde);
     font-family: inherit;
     font-size: 14px;
     font-weight: 600;
@@ -374,7 +292,7 @@
 }
 
 .backButton:hover {
-    color: var(--verde-dark, #005942);
+    color: var(--onboarding-primary-hover);
     transform: translateX(-2px);
 }
 
@@ -386,7 +304,7 @@
 }
 
 .selectedCounter {
-    color: var(--texto-suave, #6C7C77);
+    color: var(--texto-suave);
     font-size: 11px;
 }
 
@@ -401,8 +319,8 @@
     padding: 0 18px;
     border: none;
     border-radius: 9px;
-    background: var(--verde-escuro, #006B4F);
-    color: #FFFFFF;
+    background: var(--onboarding-primary-bg, var(--verde-escuro));
+    color: var(--onboarding-primary-text, #ffffff);
     font-family: inherit;
     font-size: 13px;
     font-weight: 700;
@@ -415,7 +333,7 @@
 }
 
 .nextButton:hover:not(:disabled) {
-    background: var(--verde-dark, #005942);
+    background: var(--onboarding-primary-hover, var(--verde));
     transform: translateY(-1px);
 }
 
@@ -426,8 +344,8 @@
 }
 
 .tituloDestaque {
-    color: var(--rosa, #EF476F);
-    font-family: 'DM Serif Display', serif;
+    color: var(--rosa);
+    font-family: var(--fonte-destaque);
     font-style: italic;
     font-weight: 400;
 }
@@ -470,15 +388,6 @@
 @media (max-width: 500px) {
     .container {
         padding: 22px 15px 20px;
-    }
-
-    .progressArea {
-        gap: 14px;
-    }
-
-    .stepBadge {
-        font-size: 11px;
-        padding: 6px 14px;
     }
 
     .fieldCard,
@@ -535,4 +444,124 @@
     .footer {
         padding-top: 18px;
     }
+}
+
+/* ============================================================
+   MODO ESCURO — SEM DESTAQUES ROSAS
+============================================================ */
+
+:global(:root[data-theme='dark']) .page {
+    /* Reutiliza a paleta escura global do Dashboard. */
+    background: var(--bg-page);
+    color: var(--texto);
+
+    /* Valores locais de proteção para a versão atual do global.css.
+       Ao centralizar esses tokens globalmente, remova estas três linhas. */
+    --onboarding-primary-bg: #16845f;
+    --onboarding-primary-hover: #10704f;
+    --onboarding-primary-text: #ffffff;
+}
+
+:global(:root[data-theme='dark']) .sportBadge,
+:global(:root[data-theme='dark']) .header h1 span,
+:global(:root[data-theme='dark']) .tituloDestaque {
+    color: var(--verde);
+}
+
+:global(:root[data-theme='dark']) .fieldCard {
+    background: var(--bg-surface);
+    border-color: var(--borda);
+    color: var(--texto);
+    box-shadow: var(--shadow-card);
+}
+
+:global(:root[data-theme='dark']) .fieldCard:hover {
+    background: var(--bg-surface-2);
+    border-color: var(--verde);
+}
+
+:global(:root[data-theme='dark']) .fieldCardSelected,
+:global(:root[data-theme='dark']) .fieldCardSelected:hover {
+    background: var(--bg-verde-suave);
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--verde) 13%, transparent);
+}
+
+:global(:root[data-theme='dark']) .checkbox {
+    background: var(--bg-surface);
+    border-color: var(--borda-forte);
+}
+
+:global(:root[data-theme='dark']) .checkboxSelected {
+    background: #16845f;
+    border-color: #16845f;
+    color: #ffffff;
+    box-shadow: none;
+}
+
+:global(:root[data-theme='dark']) .fieldCardSelected .fieldIcon {
+    background: var(--bg-surface-2);
+    color: var(--verde);
+}
+
+:global(:root[data-theme='dark']) .addField {
+    border-color: var(--borda-forte);
+    color: var(--texto);
+}
+
+:global(:root[data-theme='dark']) .addField:hover {
+    background: var(--bg-surface-2);
+    border-color: var(--verde);
+}
+
+:global(:root[data-theme='dark']) .addIcon,
+:global(:root[data-theme='dark']) .nextButton {
+    background: var(--onboarding-primary-bg);
+    color: var(--onboarding-primary-text);
+}
+
+:global(:root[data-theme='dark']) .nextButton:hover:not(:disabled) {
+    background: var(--onboarding-primary-hover);
+}
+
+:global(:root[data-theme='dark']) .backButton {
+    color: var(--verde);
+}
+
+.fieldCard:focus-visible,
+.addField:focus-visible,
+.backButton:focus-visible,
+.nextButton:focus-visible {
+    outline: 3px solid var(--verde);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fieldCard, .checkbox, .fieldIcon, .addField,
+    .backButton, .nextButton { transition: none; }
+}
+
+
+/* ============================================================
+   CONFIGURAÇÃO DA ANÁLISE — SCROLL INVISÍVEL
+============================================================ */
+
+.container {
+    max-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    /* Firefox */
+    scrollbar-width: none;
+
+    /* Internet Explorer / Edge antigo */
+    -ms-overflow-style: none;
+
+    /* Rolagem suave no celular */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Chrome, Edge e Safari */
+.container::-webkit-scrollbar {
+    display: none;
 }

@@ -7,17 +7,17 @@
   background:
     radial-gradient(circle at 12% 10%, rgba(239, 71, 111, 0.11), transparent 30%),
     radial-gradient(circle at 90% 88%, rgba(22, 168, 117, 0.12), transparent 34%),
-    #f6f9f7;
-  font-family: Poppins, Arial, sans-serif;
-  color: #12261f;
+    var(--bg-neutro);
+  font-family: var(--fonte-base);
+  color: var(--texto);
 }
 
 .card {
   width: min(100%, 480px);
   padding: 42px 36px 34px;
-  border: 1px solid #e1e8e4;
+  border: 1px solid var(--borda-neutra);
   border-radius: 26px;
-  background: #fffdf9;
+  background: var(--bg-surface-2);
   box-shadow: 0 24px 70px rgba(0, 61, 49, 0.10);
   text-align: center;
   box-sizing: border-box;
@@ -25,7 +25,7 @@
 
 .brand {
   margin-bottom: 30px;
-  color: #006b4f;
+  color: var(--verde-medio);
   font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.22em;
@@ -43,7 +43,7 @@
 }
 
 .iconPending {
-  color: #006b4f;
+  color: var(--verde-medio);
   background: #e7f6ef;
 }
 
@@ -53,13 +53,13 @@
 }
 
 .iconError {
-  color: #d52941;
+  color: var(--vermelho);
   background: #fff0f2;
 }
 
 .card h1 {
   margin: 0 0 12px;
-  color: #005942;
+  color: var(--verde);
   font-size: clamp(23px, 5vw, 29px);
   line-height: 1.2;
   font-weight: 800;
@@ -68,7 +68,7 @@
 .description {
   margin: 0 auto 25px;
   max-width: 370px;
-  color: #6c7c77;
+  color: var(--texto-suave);
   font-size: 14px;
   line-height: 1.75;
 }
@@ -89,10 +89,10 @@
   width: 100%;
   min-height: 48px;
   padding: 0 15px;
-  border: 1px solid #e1e8e4;
+  border: 1px solid var(--borda-neutra);
   border-radius: 13px;
-  background: #ffffff;
-  color: #12261f;
+  background: var(--bg-surface);
+  color: var(--texto);
   font: inherit;
   font-size: 14px;
   outline: none;
@@ -100,7 +100,7 @@
 }
 
 .form input:focus {
-  border-color: #16a875;
+  border-color: var(--verde-principal);
   box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
 }
 
@@ -114,8 +114,8 @@
   padding: 0 18px;
   border: 0;
   border-radius: 999px;
-  background: #16a875;
-  color: #ffffff;
+  background: var(--verde-principal);
+  color: var(--branco);
   font: inherit;
   font-size: 14px;
   font-weight: 700;
@@ -124,7 +124,7 @@
 }
 
 .form button:hover:not(:disabled) {
-  background: #006b4f;
+  background: var(--verde-medio);
   transform: translateY(-1px);
 }
 
@@ -150,14 +150,14 @@
   justify-content: center;
   gap: 8px;
   margin-top: 27px;
-  color: #006b4f;
+  color: var(--verde-medio);
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
 }
 
 .backLink:hover {
-  color: #16a875;
+  color: var(--verde-principal);
 }
 
 @media (max-width: 480px) {

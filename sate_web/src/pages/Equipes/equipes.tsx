@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 
 import styles from './equipes.module.css';
+import PageHeading from '../../components/ui/PageHeading/PageHeading';
+import ActionButton from '../../components/ui/ActionButton/ActionButton';
 
 import CardEquipe from '../../components/CardEquipe/cardEquipe';
 
@@ -1153,83 +1155,41 @@ const Equipes = () => {
 
   return (
     <>
-      <main className={styles.page}>
+      <main className={`${styles.page} sate-internal-page`}>
 
         {/* CABEÇALHO */}
 
-        <div className={styles.header}>
-          <div className={styles.headerText}>
-            <h1 className={styles.title}>
-              Minhas <em>equipes.</em>
-            </h1>
-
-            <p className={styles.description}>
-              Gerencie seus times,
-              acompanhe métricas de
-              performance e organize
-              seu portfólio de atletas
-              em um só lugar.
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-            }}
-          >
-            <button
-              type="button"
-              className={styles.newTeamButton}
-              onClick={() => {
-                setModoEditar((valor) => !valor);
-                setEquipeEmEdicao(null);
-              }}
-            >
-              <Pencil size={17} />
-
-              {modoEditar
-                ? 'Cancelar edição'
-                : 'Editar equipe'}
-            </button>
-
-            <button
-              type="button"
-              className={styles.newTeamButton}
-              disabled={carregandoAtletas}
-              onClick={() =>
-                setModalNovaEquipe(true)
-              }
-            >
-              <span className={styles.plus}>
-                +
-              </span>
-
-              {carregandoAtletas
-                ? 'Carregando...'
-                : 'Nova Equipe'}
-            </button>
-          </div>
-        </div>
+        <PageHeading
+          title={<>Minhas <em>equipes.</em></>}
+          description="Gerencie seus times, acompanhe métricas de performance e organize seu portfólio de atletas em um só lugar."
+          actions={
+            <>
+              <ActionButton
+                variant="secondary"
+                icon={<Pencil size={17} />}
+                onClick={() => {
+                  setModoEditar((valor) => !valor);
+                  setEquipeEmEdicao(null);
+                }}
+              >
+                {modoEditar ? 'Cancelar edição' : 'Editar equipe'}
+              </ActionButton>
+              <ActionButton
+                disabled={carregandoAtletas}
+                icon={<span aria-hidden="true">+</span>}
+                onClick={() => setModalNovaEquipe(true)}
+              >
+                {carregandoAtletas ? 'Carregando...' : 'Nova Equipe'}
+              </ActionButton>
+            </>
+          }
+        />
 
 
         {/* AVISO DO MODO DE EDIÇÃO */}
 
         {modoEditar && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              marginBottom: '16px',
-              padding: '10px 14px',
-              borderRadius: '9px',
-              background: 'rgba(255,255,255,.12)',
-              color: '#ffffff',
-              fontSize: '12px',
-            }}
-          >
+          <div className={styles.editHint}>
             <Pencil size={15} />
 
             Clique na equipe que deseja editar.

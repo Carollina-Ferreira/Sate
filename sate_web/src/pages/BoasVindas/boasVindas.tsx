@@ -2,9 +2,11 @@
 import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import OnboardingThemeToggle from '../../components/ui/OnboardingThemeToggle/OnboardingThemeToggle';
 import styles from './boasVindas.module.css';
 
-import logoSate from '../../assets/img/logoVerde_img.png';
+import logoVerde from '../../assets/img/logoVerde_img.png';
+import logoBranca from '../../assets/img/logo.png';
 import esportesImg from '../../assets/img/boas-vindas-esportes.png';
 
 export default function BoasVindas() {
@@ -16,13 +18,25 @@ export default function BoasVindas() {
 
     return (
         <main className={styles.container}>
-            <section className={styles.leftSide}>
-                <img
-                    src={logoSate}
-                    alt="SATE"
-                    className={styles.logo}
-                />
+            <OnboardingThemeToggle />
 
+            <section className={styles.leftSide}>
+                {/* LOGO: CLARO E ESCURO */}
+                <div className={styles.logoContainer}>
+                    <img
+                        src={logoVerde}
+                        alt="SATE"
+                        className={`${styles.logo} ${styles.logoClaro}`}
+                    />
+
+                    <img
+                        src={logoBranca}
+                        alt="SATE"
+                        className={`${styles.logo} ${styles.logoEscuro}`}
+                    />
+                </div>
+
+                {/* CONTEÚDO PRINCIPAL */}
                 <div className={styles.content}>
                     <h1>
                         Bem-vindo, <span>Treinador!</span>
@@ -44,11 +58,13 @@ export default function BoasVindas() {
                     </button>
                 </div>
 
+                {/* RODAPÉ */}
                 <p className={styles.footer}>
                     Sistema de Acompanhamento e Treinamento Esportivo
                 </p>
             </section>
 
+            {/* IMAGEM LATERAL */}
             <section className={styles.imageSide}>
                 <img
                     src={esportesImg}

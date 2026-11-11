@@ -1,5 +1,4 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap');
 
 /* =========================================
    PÁGINA DE CLIPES — TEMA GLOBAL SATE
@@ -14,7 +13,7 @@
 
     background: transparent;
     color: var(--texto);
-    font-family: var(--fonte-base, 'Inter'), sans-serif;
+    font-family: var(--fonte-base);
 }
 
 .page * {
@@ -75,7 +74,7 @@
 .titleRow h1 {
     margin: 0;
     color: var(--texto);
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+    font-family: var(--fonte-titulo);
     font-size: clamp(36px, 3.3vw, 48px);
     line-height: 1.04;
     font-weight: 700;
@@ -84,7 +83,7 @@
 
 .titleRow h1 em {
     color: var(--rosa);
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--fonte-destaque);
     font-style: italic;
     font-weight: 400;
     letter-spacing: -0.4px;
@@ -321,7 +320,7 @@
     justify-content: center;
     border-radius: 50%;
     background: rgba(0, 54, 42, .8);
-    color: #fff;
+    color: var(--branco);
     transform: translate(-50%, -50%);
     transition: transform .18s ease, background .18s ease;
 }
@@ -349,7 +348,7 @@
 .clipeTitle {
     margin: 0;
     color: var(--texto);
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+    font-family: var(--fonte-titulo);
     font-size: 12px;
     font-weight: 700;
 }
@@ -514,7 +513,7 @@
     justify-content: center;
     border-radius: 50%;
     background: rgba(0, 54, 42, .82);
-    color: #fff;
+    color: var(--branco);
     transform: translate(-50%, -50%);
 }
 
@@ -541,7 +540,7 @@
     padding: 0;
     border: none;
     background: transparent;
-    color: #fff;
+    color: var(--branco);
     cursor: pointer;
 }
 
@@ -570,12 +569,12 @@
     top: 50%;
     left: 38%;
     border-radius: 50%;
-    background: #fff;
+    background: var(--bg-surface);
     transform: translate(-50%, -50%);
 }
 
 .videoTime {
-    color: #fff;
+    color: var(--branco);
     font-size: 10px;
 }
 
@@ -596,7 +595,7 @@
 .mainVideoInfo h2 {
     margin: 2px 0 0;
     color: var(--texto);
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+    font-family: var(--fonte-titulo);
     font-size: 18px;
 }
 
@@ -641,7 +640,7 @@
 .otherClipsCard h2 {
     margin: 0 0 14px;
     color: var(--texto);
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+    font-family: var(--fonte-titulo);
     font-size: 15px;
 }
 
@@ -730,7 +729,7 @@
 .otherClipActive .otherPlay {
     border-color: var(--rosa);
     background: var(--rosa);
-    color: #fff;
+    color: var(--branco);
 }
 
 /* MODAL */
@@ -752,7 +751,7 @@
     position: relative;
     overflow: hidden;
     border-radius: 15px;
-    background: #000;
+    background: var(--verde-escuro);
     box-shadow: var(--sombra);
 }
 
@@ -770,7 +769,7 @@
     border: none;
     border-radius: 50%;
     background: rgba(0, 0, 0, .62);
-    color: #fff;
+    color: var(--branco);
     cursor: pointer;
 }
 
@@ -778,7 +777,7 @@
     width: 100%;
     max-height: 70vh;
     display: block;
-    background: #000;
+    background: var(--verde-escuro);
 }
 
 .videoModalInfo {
@@ -789,7 +788,7 @@
 .videoModalInfo h3 {
     margin: 0;
     color: var(--texto);
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+    font-family: var(--fonte-titulo);
     font-size: 15px;
 }
 
@@ -975,8 +974,8 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: linear-gradient(135deg, #e5f5ee, #d7e9e9);
-    color: #005c45;
+    background: linear-gradient(135deg, var(--bg-verde-suave), #d7e9e9);
+    color: var(--verde);
     font-size: 13px;
     font-weight: 600;
 }

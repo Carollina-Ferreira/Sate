@@ -15,8 +15,8 @@
   max-height: 72vh;
   min-height: 0;
   overflow: hidden;
-  background: #fff;
-  border: 1px solid #e8dfd3;
+  background: var(--bg-surface);
+  border: 1px solid var(--borda);
   border-radius: 14px;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
 }
@@ -36,12 +36,12 @@
 }
 .header h2 {
   margin: 5px 0 3px;
-  color: #12261f;
+  color: var(--texto);
   font-size: 20px;
 }
 .header p {
   margin: 0;
-  color: #6c7c77;
+  color: var(--texto-suave);
   font-size: 10px;
 }
 .close {
@@ -53,13 +53,13 @@
   height: 30px;
   border: 0;
   border-radius: 8px;
-  color: #6c7c77;
-  background: #f6f9f7;
+  color: var(--texto-suave);
+  background: var(--bg-neutro);
   cursor: pointer;
 }
 .close:hover {
-  color: #c9305a;
-  background: #fde6ec;
+  color: var(--vermelho);
+  background: var(--rosa-claro);
 }
 .content {
   flex: 1;
@@ -75,7 +75,7 @@
 .section { margin: 0 0 15px; }
 .section h3 {
   margin: 0 0 6px;
-  color: #005942;
+  color: var(--verde);
   font-size: 12px;
   line-height: 1.4;
 }
@@ -85,8 +85,8 @@
 .finalNote {
   padding: 10px 12px;
   border-radius: 9px;
-  background: #f6f9f7;
-  color: #005942;
+  background: var(--bg-neutro);
+  color: var(--verde);
 }
 .footer {
   display: flex;
@@ -98,13 +98,13 @@
   border: 0;
   border-radius: 8px;
   padding: 9px 14px;
-  background: #006b4f;
-  color: #fff;
+  background: var(--verde-medio);
+  color: var(--branco);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }
-.footer button:hover { background: #005942; }
+.footer button:hover { background: var(--verde); }
 @media (max-width: 560px) {
   .modal { width: min(420px, 100%); max-height: 78vh; }
   .header { padding: 14px 14px 10px; }
@@ -116,13 +116,13 @@
   cursor: not-allowed;
 }
 .close:disabled:hover {
-  color: #6c7c77;
-  background: #f6f9f7;
+  color: var(--texto-suave);
+  background: var(--bg-neutro);
 }
 .footer button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
 .footer button:disabled:hover {
-  background: #006b4f;
+  background: var(--verde-medio);
 }

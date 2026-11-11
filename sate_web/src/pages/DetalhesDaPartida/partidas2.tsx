@@ -426,8 +426,13 @@ export default function DetalhesPartida() {
       return null;
     }
 
-    if ('partida' in estadoNavegacao && estadoNavegacao.partida) {
-      return estadoNavegacao.partida;
+    if (
+      'partida' in estadoNavegacao &&
+      estadoNavegacao.partida &&
+      typeof estadoNavegacao.partida === 'object' &&
+      'id' in estadoNavegacao.partida
+    ) {
+      return estadoNavegacao.partida as Partida;
     }
 
     if ('id' in estadoNavegacao && Number(estadoNavegacao.id) > 0) {
@@ -648,14 +653,10 @@ export default function DetalhesPartida() {
         }),
       );
 
-      const todosEventos = resultados
-        .filter(
-          (
-            resultado,
-          ): resultado is PromiseFulfilledResult<MarcacaoVideo[]> =>
-            resultado.status === 'fulfilled',
+      const todosEventos: MarcacaoVideo[] = resultados
+        .flatMap((resultado) =>
+          resultado.status === 'fulfilled' ? resultado.value : [],
         )
-        .flatMap((resultado) => resultado.value)
         .sort(
           (a, b) =>
             Number(a.tempoInicio || 0) -
@@ -1278,7 +1279,7 @@ export default function DetalhesPartida() {
 
   if (carregando) {
     return (
-      <main className={styles.page}>
+      <main className={`${styles.page} sate-internal-page`}>
         <div className={styles.pageInner}>
           <div className={styles.loadingState}>
             <LoaderCircle size={24} className={styles.spinner} />
@@ -1291,7 +1292,7 @@ export default function DetalhesPartida() {
 
   if (!partida) {
     return (
-      <main className={styles.page}>
+      <main className={`${styles.page} sate-internal-page`}>
         <div className={styles.pageInner}>
           <div className={styles.emptyPage}>
             <CircleAlert size={38} />
@@ -1334,7 +1335,7 @@ export default function DetalhesPartida() {
         : styles.statusPending;
 
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} sate-internal-page`}>
       <div className={styles.pageInner}>
         <button
           type="button"

@@ -8,7 +8,7 @@
   border-radius: 30px;
   overflow: hidden;
 
-  box-shadow: 0 8px 24px var(--sombra);
+  box-shadow: 0 8px 24px var(--sombra-cor);
 
   transition:
     transform 0.25s ease,
@@ -22,7 +22,7 @@
 
   border-color: var(--verde-principal);
 
-  box-shadow: 0 14px 32px var(--sombra);
+  box-shadow: 0 14px 32px var(--sombra-cor);
 }
 
 /* ========================================
@@ -94,7 +94,7 @@
   border: 1px solid var(--borda);
   border-radius: 50%;
 
-  box-shadow: 0 3px 8px var(--sombra);
+  box-shadow: 0 3px 8px var(--sombra-cor);
 
   transition:
     background-color 0.2s ease,
@@ -126,7 +126,7 @@
   border: 3px solid var(--bg-surface);
   border-radius: 13px;
 
-  box-shadow: 0 5px 12px var(--sombra);
+  box-shadow: 0 5px 12px var(--sombra-cor);
 
   transition:
     background-color 0.2s ease,

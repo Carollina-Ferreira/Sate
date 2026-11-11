@@ -23,6 +23,8 @@ import {
 
 import { GiHand } from 'react-icons/gi';
 
+import OnboardingThemeToggle from '../../components/ui/OnboardingThemeToggle/OnboardingThemeToggle';
+import OnboardingProgress from '../../components/ui/OnboardingProgress/OnboardingProgress';
 import styles from './configuracaoEquipe.module.css';
 
 interface EstadoNavegacao {
@@ -275,8 +277,8 @@ export default function ConfiguracaoEquipe() {
                     ? {
                         backgroundImage: `
                             linear-gradient(
-                                rgba(0, 65, 48, 0.88),
-                                rgba(0, 65, 48, 0.93)
+                                var(--equipe-foto-overlay-inicio),
+                                var(--equipe-foto-overlay-fim)
                             ),
                             url(${imagemEsporte})
                           `,
@@ -284,54 +286,12 @@ export default function ConfiguracaoEquipe() {
                     : undefined
             }
         >
+            <OnboardingThemeToggle />
             <div className={styles.container}>
 
                 {/* ================= PROGRESSO ================= */}
 
-                <div
-                    className={
-                        styles.progressArea
-                    }
-                >
-                    <div
-                        className={
-                            styles.stepBadge
-                        }
-                    >
-                        Etapa 3 de 4 · Configuração
-                        da equipe
-                    </div>
-
-                    <div
-                        className={
-                            styles.progressSteps
-                        }
-                    >
-                        <div
-                            className={
-                                styles.progressComplete
-                            }
-                        />
-
-                        <div
-                            className={
-                                styles.progressComplete
-                            }
-                        />
-
-                        <div
-                            className={
-                                styles.progressComplete
-                            }
-                        />
-
-                        <div
-                            className={
-                                styles.progressInactive
-                            }
-                        />
-                    </div>
-                </div>
+                <OnboardingProgress etapa={3} descricao="Configuração da equipe" />
 
                 {/* ================= CABEÇALHO ================= */}
 
@@ -371,9 +331,7 @@ export default function ConfiguracaoEquipe() {
                     >
                         <button
                             type="button"
-                            className={
-                                styles.photoArea
-                            }
+                            className={`${styles.photoArea} ${imagemEquipe || imagemEsporte ? styles.photoAreaComImagem : ''}`}
                             onClick={() =>
                                 fileInputRef.current?.click()
                             }

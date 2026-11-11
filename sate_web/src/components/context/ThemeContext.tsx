@@ -6,6 +6,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { useLocation } from 'react-router-dom';
 
 type Tema = 'light' | 'dark';
 
@@ -23,6 +24,15 @@ export function ThemeProvider({
 }: {
   children: ReactNode;
 }) {
+  const { pathname } = useLocation();
+
+  // As páginas públicas são sempre claras, independentemente da preferência salva.
+  const paginasPublicas = new Set([
+    '/', '/login', '/carregamento', '/cadastro',
+    '/verificar-email', '/esqueci-senha', '/redefinir-senha',
+  ]);
+  const temaEfetivo = paginasPublicas.has(pathname) ? 'light' : null;
+
   const [tema, setTema] = useState<Tema>(() => {
     return localStorage.getItem('sate-tema') === 'dark'
       ? 'dark'
@@ -30,7 +40,10 @@ export function ThemeProvider({
   });
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', tema);
+    document.documentElement.setAttribute('data-theme', temaEfetivo ?? tema);
+  }, [tema, temaEfetivo]);
+
+  useEffect(() => {
     localStorage.setItem('sate-tema', tema);
   }, [tema]);
 

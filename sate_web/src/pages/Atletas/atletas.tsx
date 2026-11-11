@@ -1,4 +1,3 @@
-
 import {
     ArrowLeft,
     CheckCircle2,
@@ -20,6 +19,8 @@ import type { FormEvent } from 'react';
 import * as XLSX from 'xlsx';
 
 import styles from './atletas.module.css';
+import PageHeading from '../../components/ui/PageHeading/PageHeading';
+import ActionButton from '../../components/ui/ActionButton/ActionButton';
 
 import PerfilAtleta from './perfilAtletas';
 import EditarAtleta from './editarAtleta';
@@ -513,6 +514,17 @@ const Atletas = () => {
         setModoCadastro('escolha');
         setMostrarCadastro(true);
     };
+
+    // Rota legada /cadastro-atleta abre o modal real, em vez de uma tela de exemplo.
+    useEffect(() => {
+        if (searchParams.get('cadastro') !== '1') return;
+        abrirOpcoesCadastro();
+        setSearchParams((anteriores) => {
+            const parametros = new URLSearchParams(anteriores);
+            parametros.delete('cadastro');
+            return parametros;
+        }, { replace: true });
+    }, [searchParams, setSearchParams]);
 
     const fecharCadastro = () => {
         if (importandoPlanilha) return;
@@ -1429,44 +1441,29 @@ const Atletas = () => {
     // ========================================================
 
     return (
-        <div className={styles.page}>
-            <div className={styles.top}>
-                <div className={styles.titleArea}>
-                    <h1>Seus <em>atletas.</em></h1>
-
-                    <p>
-                        Acompanhe desempenho, evolução e informações individuais.
-                    </p>
-                </div>
-
-                <div className={styles.headerActions}>
-                    <button
-                        type="button"
-                        className={styles.exportButton}
-                        onClick={exportarAtletasExcel}
-                        disabled={
-                            carregando ||
-                            exportando ||
-                            atletasFiltrados.length === 0
-                        }
-                    >
-                        <FileSpreadsheet size={18} />
-
-                        {exportando
-                            ? 'Exportando...'
-                            : 'Exportar Excel'}
-                    </button>
-
-                    <button
-                        type="button"
-                        className={styles.newAthleteButton}
-                        onClick={abrirOpcoesCadastro}
-                    >
-                        <Plus size={18} />
-                        Novo atleta
-                    </button>
-                </div>
-            </div>
+        <div className={`${styles.page} sate-internal-page`}>
+            <PageHeading
+                title={<>Seus <em>atletas.</em></>}
+                description="Acompanhe desempenho, evolução e informações individuais."
+                actions={
+                    <>
+                        <ActionButton
+                            variant="secondary"
+                            icon={<FileSpreadsheet size={18} />}
+                            onClick={exportarAtletasExcel}
+                            disabled={carregando || exportando || atletasFiltrados.length === 0}
+                        >
+                            {exportando ? 'Exportando...' : 'Exportar Excel'}
+                        </ActionButton>
+                        <ActionButton
+                            icon={<Plus size={18} />}
+                            onClick={abrirOpcoesCadastro}
+                        >
+                            Novo atleta
+                        </ActionButton>
+                    </>
+                }
+            />
 
             {erro && !mostrarCadastro && (
                 <div className={styles.message}>
@@ -1565,6 +1562,16 @@ const Atletas = () => {
                     </button>
                 )}
             </div>
+
+            <button
+                type="button"
+                className={styles.teamFilterToggle}
+                onClick={() => setMostrarFiltros((atual) => !atual)}
+                aria-expanded={mostrarFiltros}
+            >
+                <ChevronDown size={15} aria-hidden="true" />
+                {mostrarFiltros ? 'Ocultar filtro de equipe' : 'Filtrar por equipe'}
+            </button>
 
             {mostrarFiltros && (
                 <div className={styles.teamFilter}>

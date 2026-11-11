@@ -20,7 +20,7 @@
     var(--bg-page);
 
   color: var(--texto);
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--fonte-base);
 }
 
 .page *,

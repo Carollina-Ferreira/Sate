@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState, type CSSProperties } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import styles from './carregamento.module.css';
 
 type LocationState = {
@@ -53,9 +55,10 @@ export default function Carregamento() {
       aria-live="polite"
       aria-label="Carregando"
       style={
-        { '--duracao': `${DURACAO}ms` } as React.CSSProperties
+        { '--duracao': `${DURACAO}ms` } as CSSProperties
       }
     >
+      {/* CÍRCULOS ANIMADOS DO FUNDO */}
       <div className={styles.rings} aria-hidden="true">
         <span />
         <span />
@@ -64,13 +67,15 @@ export default function Carregamento() {
       </div>
 
       <section className={styles.content}>
+        {/* ÍCONE ORIGINAL BRANCO E ANIMADO */}
         <div className={styles.brandMark} aria-hidden="true">
           <svg
+            className={styles.brandIcon}
             width="38"
             height="38"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="currentColor"
+            stroke="#FFFFFF"
             strokeWidth="2.4"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -82,6 +87,7 @@ export default function Carregamento() {
           </svg>
         </div>
 
+        {/* NOME DO SISTEMA */}
         <h1>
           SATE<span>.</span>
         </h1>
@@ -90,14 +96,13 @@ export default function Carregamento() {
           Treinar. Acompanhar. <em>Evoluir.</em>
         </p>
 
-        <div
-          className={styles.progress}
-          aria-hidden="true"
-        >
+        {/* BARRA DE CARREGAMENTO */}
+        <div className={styles.progress} aria-hidden="true">
           <i />
         </div>
 
-        <p className={styles.status}>
+        {/* MENSAGEM */}
+        <p className={styles.status} key={etapa}>
           {mensagemAtual}
         </p>
       </section>

@@ -17,7 +17,7 @@
     background: transparent;
     color: var(--texto);
 
-    font-family: var(--fonte-base, 'Inter'), sans-serif;
+    font-family: var(--fonte-base);
     box-sizing: border-box;
 }
 
@@ -118,7 +118,7 @@
     background: var(--rosa);
     color: var(--texto-sobre-verde);
 
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+    font-family: var(--fonte-titulo);
     font-size: 25px;
     font-weight: 700;
     letter-spacing: -0.5px;
@@ -145,7 +145,7 @@
 
     color: var(--texto);
 
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+    font-family: var(--fonte-titulo);
     font-size: clamp(22px, 2.1vw, 32px);
     font-weight: 800;
     line-height: 1.25;
@@ -181,7 +181,7 @@
 .profilePerformance strong {
     color: var(--verde);
 
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+    font-family: var(--fonte-titulo);
     font-size: 38px;
     font-weight: 800;
     line-height: 1;
@@ -327,7 +327,7 @@
     display: block;
     margin: 0;
 
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+    font-family: var(--fonte-titulo);
     font-size: 36px;
     font-weight: 700;
     line-height: 1;
@@ -404,7 +404,7 @@
 
     color: var(--texto);
 
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
+    font-family: var(--fonte-titulo);
     font-size: 19px;
     font-weight: 700;
     line-height: 1.4;
@@ -461,7 +461,7 @@
 .axisLabel {
     fill: var(--texto-claro);
 
-    font-family: var(--fonte-base, 'Inter'), sans-serif;
+    font-family: var(--fonte-base);
     font-size: 11px;
 }
 
@@ -539,7 +539,7 @@
 .radarLabel {
     fill: var(--texto-claro);
 
-    font-family: var(--fonte-base, 'Inter'), sans-serif;
+    font-family: var(--fonte-base);
     font-size: 12px;
 }
 

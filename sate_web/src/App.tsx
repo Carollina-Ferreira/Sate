@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // ==========================================
 // LANDING PAGE
@@ -29,7 +29,7 @@ import ConfiguracaoConcluida from "./pages/ConfiguracaoConcluida/configuracaoCon
 // LAYOUT
 // ==========================================
 import Layout from "./components/Layout/layout";
-import { ThemeProvider } from "./components/Context/ThemeContext";
+import { ThemeProvider } from "./components/context/ThemeContext";
 
 // ==========================================
 // ROTAS DE PROTEÇÃO
@@ -47,14 +47,13 @@ import Comparacoes from "./pages/Comparacoes/comparacoes";
 import Estatisticas from "./pages/Estatisticas/estatisticas";
 import Configuracoes from "./pages/Configuracoes/configuracoes";
 import AnaliseVideo from "./pages/AnaliseVideos/analiseVideos";
-import CadastroAtleta from "./pages/Atletas/modalCadastroAtletas";
 import Partidas from "./pages/Partidas/partidas";
 import DetalhesDaPartida from "./pages/DetalhesDaPartida/partidas2";
 
 function App() {
   return (
-    <ThemeProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider>
         <Routes>
           {/* ========================================
               PÁGINAS PÚBLICAS
@@ -149,7 +148,7 @@ function App() {
               {/* CADASTRO DE ATLETA */}
               <Route
                 path="/cadastro-atleta"
-                element={<CadastroAtleta />}
+                element={<Navigate to="/atletas?cadastro=1" replace />}
               />
 
               {/* ANÁLISE DE VÍDEO */}
@@ -191,8 +190,8 @@ function App() {
             </Route>
           </Route>
         </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

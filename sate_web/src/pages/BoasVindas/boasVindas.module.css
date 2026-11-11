@@ -1,304 +1,343 @@
+/* ============================================================
+   SATE — BOAS-VINDAS
+   O tema claro utiliza as variáveis globais já existentes.
+   O tema escuro segue as superfícies e os textos do Dashboard.
+============================================================ */
 
 .container {
-    width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--onboarding-page);
+  color: var(--onboarding-text);
+}
 
-    background: var(--creme, #FAF5EE);
+.container *,
+.container *::before,
+.container *::after {
+  box-sizing: border-box;
 }
 
 .leftSide {
-    width: 55%;
-    min-height: 100vh;
-    min-height: 100dvh;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 2;
+  width: 55%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(24px, 4vh, 48px)
+    clamp(24px, 6vw, 110px)
+    clamp(24px, 4vh, 48px)
+    clamp(24px, 5vw, 90px);
 
-    display: flex;
-    flex-direction: column;
+  background:
+    radial-gradient(ellipse at 5% 5%, var(--onboarding-glow) 0%, transparent 42%),
+    radial-gradient(ellipse at 45% 100%, var(--onboarding-glow-soft) 0%, transparent 48%),
+    linear-gradient(135deg,
+      var(--onboarding-bg-gradient-start) 0%,
+      var(--onboarding-bg-gradient-end) 48%,
+      var(--onboarding-accent-bg) 100%);
 
-    padding: clamp(24px, 4vh, 48px) clamp(24px, 6vw, 110px) clamp(24px, 4vh, 48px) clamp(24px, 5vw, 90px);
-
-    background:
-        radial-gradient(
-            ellipse at 5% 5%,
-            rgba(239, 71, 111, 0.19) 0%,
-            transparent 42%
-        ),
-        radial-gradient(
-            ellipse at 45% 100%,
-            rgba(255, 164, 190, 0.30) 0%,
-            transparent 48%
-        ),
-        linear-gradient(
-            135deg,
-            #FAF5EE 0%,
-            #FFF8F3 48%,
-            #FCE4E9 100%
-        );
-
-    clip-path: polygon(
-        0 0,
-        83% 0,
-        100% 50%,
-        83% 100%,
-        0 100%
-    );
-
-    filter: drop-shadow(
-        4px 0 7px rgba(0, 0, 0, 0.12)
-    );
+  clip-path: polygon(0 0, 83% 0, 100% 50%, 83% 100%, 0 100%);
+  filter: drop-shadow(4px 0 7px rgba(0, 0, 0, 0.12));
 }
 
-/* LOGO */
-
+/* Logo */
 .logo {
-    width: clamp(105px, 9vw, 170px);
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-
-    position: relative;
-    z-index: 5;
+  width: clamp(105px, 9vw, 170px);
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  position: relative;
+  z-index: 5;
 }
 
-/* CONTEÚDO */
-
+/* Conteúdo */
 .content {
-    width: 100%;
-    max-width: clamp(300px, 36vw, 620px);
-
-    margin-top: auto;
-    margin-bottom: auto;
-
-    position: relative;
-    z-index: 5;
+  width: 100%;
+  max-width: clamp(300px, 36vw, 620px);
+  margin-top: auto;
+  margin-bottom: auto;
+  position: relative;
+  z-index: 5;
 }
 
 .content h1 {
-    margin: 0 0 18px;
-
-    color: var(--texto, #12261F);
-
-    font-family: var(--fonte-titulo, 'Sora', sans-serif);
-    font-size: clamp(30px, 3.1vw, 58px);
-    font-weight: 700;
-    line-height: 1.14;
-    letter-spacing: -1px;
+  margin: 0 0 18px;
+  color: var(--onboarding-text);
+  font-family: var(--fonte-titulo);
+  font-size: clamp(30px, 3.1vw, 58px);
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -1px;
 }
 
 .content h1 span {
-    color: var(--rosa, #EF476F);
+  color: var(--rosa);
 }
 
 .content p {
-    width: 100%;
-    max-width: clamp(280px, 32vw, 560px);
-
-    margin: 0 0 clamp(22px, 3vh, 36px);
-
-    color: #526E65;
-
-    font-family: var(--fonte-base, 'Inter', sans-serif);
-    font-size: clamp(15px, 1.1vw, 19px);
-    font-weight: 400;
-    line-height: 1.6;
+  width: 100%;
+  max-width: clamp(280px, 32vw, 560px);
+  margin: 0 0 clamp(22px, 3vh, 36px);
+  color: var(--onboarding-muted);
+  font-family: var(--fonte-base);
+  font-size: clamp(15px, 1.1vw, 19px);
+  font-weight: 400;
+  line-height: 1.6;
 }
 
-/* BOTÃO */
-
+/* Botão */
 .startButton {
-    min-width: 155px;
-    height: 50px;
-    padding: 0 22px;
-
-    border: none;
-    border-radius: 11px;
-
-    background: var(--verde-escuro, #006B4F);
-    color: var(--branco, #FFFFFF);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 13px;
-
-    font-family: var(--fonte-base, 'Inter', sans-serif);
-    font-size: 15px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    box-shadow: 0 5px 14px rgba(0, 61, 49, 0.12);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
+  min-width: 155px;
+  min-height: 50px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 11px;
+  background: var(--onboarding-primary-bg);
+  color: var(--onboarding-primary-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  font-family: var(--fonte-base);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 14px rgba(0, 61, 49, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .startButton:hover {
-    background: var(--verde-principal, #16A875);
-    transform: translateY(-2px);
-
-    box-shadow: 0 10px 24px rgba(0, 61, 49, 0.18);
+  background: var(--onboarding-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 61, 49, 0.18);
 }
 
 .startButton:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
-/* IMAGEM */
+.startButton:focus-visible {
+  outline: 3px solid var(--rosa);
+  outline-offset: 4px;
+}
 
+/* Imagem */
 .imageSide {
-    width: 55%;
-
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-
-    overflow: hidden;
-    z-index: 1;
-
-    background: var(--verde-dark, #005942);
+  width: 55%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 1;
+  background: var(--onboarding-primary-bg);
 }
 
 .imageSide img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-    object-position: center;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
 }
-
-/* DIAGONAL */
 
 .diagonal {
-    display: none;
+  display: none;
 }
 
-/* RODAPÉ */
-
+/* Rodapé */
 .footer {
-    margin: 0;
+  margin: 0;
+  color: var(--onboarding-muted);
+  font-family: var(--fonte-base);
+  font-size: clamp(11px, 0.85vw, 14px);
+  font-weight: 400;
+  line-height: 1.4;
+  position: relative;
+  z-index: 5;
+}
 
-    color: #64766F;
+/* ============================================================
+   MODO ESCURO — MESMA IDENTIDADE DO DASHBOARD
+   Não altera o modo claro nem cria uma nova paleta.
+   As variáveis abaixo são aliases locais dos tokens globais.
+============================================================ */
 
-    font-family: var(--fonte-base, 'Inter', sans-serif);
-    font-size: clamp(11px, 0.85vw, 14px);
-    font-weight: 400;
-    line-height: 1.4;
+:global(:root[data-theme='dark']) .container {
+  --onboarding-page: var(--bg-page, #082f25);
+  --onboarding-text: var(--texto, #f1f8f4);
+  --onboarding-muted: var(--texto-suave, #b5cec2);
+  --onboarding-primary-bg: var(--verde, #65ddb0);
+  --onboarding-primary-hover: var(--verde-hover, #4bcb9a);
+  --onboarding-primary-text: var(--bg-page, #082f25);
+
+  background: var(--bg-page, #082f25);
+  color: var(--texto, #f1f8f4);
+}
+
+:global(:root[data-theme='dark']) .leftSide {
+  /* Sem um gradiente exclusivo: o mesmo fundo do Dashboard. */
+  background: var(--bg-page, #082f25);
+  filter: none;
+}
+
+:global(:root[data-theme='dark']) .content h1 span {
+  /* Destaque verde-claro, igual aos títulos do Dashboard. */
+  color: var(--verde, #65ddb0);
+}
+
+:global(:root[data-theme='dark']) .startButton {
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.18);
+}
+
+:global(:root[data-theme='dark']) .startButton:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+}
+
+/* ============================================================
+   RESPONSIVO
+============================================================ */
+
+@media (max-width: 1200px) {
+  .leftSide {
+    width: 58%;
+    padding-right: clamp(40px, 6vw, 70px);
+  }
+
+  .imageSide {
+    width: 58%;
+  }
+}
+
+@media (max-width: 900px) {
+  .leftSide {
+    width: 100%;
+    padding: 32px clamp(20px, 6vw, 48px);
+    clip-path: none;
+    filter: none;
+  }
+
+  .imageSide,
+  .diagonal {
+    display: none;
+  }
+
+  .content {
+    max-width: 620px;
+  }
+
+  .content p {
+    max-width: 560px;
+  }
+
+  .content h1 {
+    font-size: clamp(30px, 6vw, 42px);
+  }
+}
+
+@media (max-width: 600px) {
+  .leftSide {
+    padding: 26px 20px;
+  }
+
+  .logo {
+    width: 110px;
+  }
+
+  .content h1 {
+    letter-spacing: -0.6px;
+  }
+
+  .content p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .startButton {
+    width: 100%;
+    min-height: 50px;
+  }
+
+  .footer {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 360px) {
+  .leftSide {
+    padding: 22px 16px;
+  }
+
+  .content h1 {
+    font-size: 27px;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .leftSide {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  .content {
+    margin-top: 14px;
+    margin-bottom: 14px;
+  }
+
+  .content h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .content p {
+    margin-bottom: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .startButton {
+    transition: none;
+  }
+}
+
+
+/* ============================================================
+   LOGO — ALTERNÂNCIA ENTRE MODO CLARO E ESCURO
+============================================================ */
+
+.logoContainer {
+    display: flex;
+    align-items: center;
 
     position: relative;
     z-index: 5;
 }
 
-/* RESPONSIVO */
-
-/* Notebooks / tablets na horizontal */
-@media (max-width: 1200px) {
-    .leftSide {
-        width: 58%;
-        padding-right: clamp(40px, 6vw, 70px);
-    }
-
-    .imageSide {
-        width: 58%;
-    }
+/* Logo verde: aparece no modo claro */
+.logoClaro {
+    display: block;
 }
 
-/* Tablets e celulares: só o painel de texto, 100% da tela */
-@media (max-width: 900px) {
-    .leftSide {
-        width: 100%;
-        padding: 32px clamp(20px, 6vw, 48px);
-
-        clip-path: none;
-        filter: none;
-    }
-
-    .imageSide,
-    .diagonal {
-        display: none;
-    }
-
-    .content {
-        max-width: 620px;
-    }
-
-    .content p {
-        max-width: 560px;
-    }
-
-    .content h1 {
-        font-size: clamp(30px, 6vw, 42px);
-    }
+/* Logo branca: escondida no modo claro */
+.logoEscuro {
+    display: none;
 }
 
-/* Celulares */
-@media (max-width: 600px) {
-    .leftSide {
-        padding: 26px 20px;
-    }
+/* MODO ESCURO */
 
-    .logo {
-        width: 110px;
-    }
-
-    .content h1 {
-        letter-spacing: -0.6px;
-    }
-
-    .content p {
-        font-size: 15px;
-        line-height: 1.55;
-    }
-
-    .startButton {
-        width: 100%;
-        height: 50px;
-    }
-
-    .footer {
-        font-size: 11px;
-    }
+/* Esconde a logo verde */
+:global(:root[data-theme='dark']) .logoClaro {
+    display: none;
 }
 
-/* Celulares pequenos */
-@media (max-width: 360px) {
-    .leftSide {
-        padding: 22px 16px;
-    }
-
-    .content h1 {
-        font-size: 27px;
-    }
-}
-
-/* Telas baixas (celular deitado) */
-@media (max-height: 520px) and (orientation: landscape) {
-    .leftSide {
-        padding-top: 18px;
-        padding-bottom: 18px;
-    }
-
-    .content {
-        margin-top: 14px;
-        margin-bottom: 14px;
-    }
-
-    .content h1 {
-        font-size: 28px;
-        margin-bottom: 10px;
-    }
-
-    .content p {
-        margin-bottom: 16px;
-    }
+/* Mostra a logo branca original */
+:global(:root[data-theme='dark']) .logoEscuro {
+    display: block;
 }

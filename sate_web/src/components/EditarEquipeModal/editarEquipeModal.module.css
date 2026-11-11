@@ -1364,3 +1364,375 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================
+   MODO ESCURO — EDITAR EQUIPE
+========================================= */
+
+:global(:root[data-theme='dark']) .modal {
+  background: #10291f;
+  color: #edf7f1;
+  border-color: #315343;
+}
+
+:global(:root[data-theme='dark']) .modalHeader {
+  background: linear-gradient(115deg, #173d2e, #20523d);
+  border-bottom-color: #365b49;
+}
+
+:global(:root[data-theme='dark']) .modalHeader h2 {
+  color: #f0f8f3;
+}
+
+:global(:root[data-theme='dark']) .modalHeader p {
+  color: #b0c7b9;
+}
+
+:global(:root[data-theme='dark']) .eyebrow {
+  color: #65dba5;
+}
+
+:global(:root[data-theme='dark']) .closeButton {
+  background: #234838;
+  color: #d9eee2;
+  border-color: #426b55;
+}
+
+:global(:root[data-theme='dark']) .closeButton:hover:not(:disabled) {
+  background: #3b2630;
+  color: #ff9aa8;
+  border-color: #8c4854;
+}
+
+/* IMAGEM */
+
+:global(:root[data-theme='dark']) .imageArea {
+  background: #17372a;
+  border-color: #365c48;
+}
+
+:global(:root[data-theme='dark']) .imagePreview {
+  background: #102c21;
+  border-color: #47765a;
+}
+
+:global(:root[data-theme='dark']) .cameraCircle {
+  background: #24543e;
+  color: #75e4b1;
+}
+
+:global(:root[data-theme='dark']) .imagePlaceholder strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .imagePlaceholder span {
+  color: #a5bcad;
+}
+
+:global(:root[data-theme='dark']) .changeImageButton {
+  color: #81e2b5;
+  background: #193f2e;
+  border-color: #397653;
+}
+
+:global(:root[data-theme='dark']) .changeImageButton:hover:not(:disabled) {
+  background: #24543c;
+  border-color: #65c994;
+}
+
+:global(:root[data-theme='dark']) .removeImageButton {
+  color: #ff9da9;
+  background: #442a30;
+  border-color: #70404a;
+}
+
+:global(:root[data-theme='dark']) .removeImageButton:hover:not(:disabled) {
+  background: #583039;
+  border-color: #a95865;
+}
+
+:global(:root[data-theme='dark']) .imageError {
+  color: #ff9da9;
+}
+
+:global(:root[data-theme='dark']) .identityHint {
+  color: #b3d4c1;
+  background: #1c4030;
+}
+
+:global(:root[data-theme='dark']) .identityHint svg {
+  color: #75deb0;
+}
+
+/* FORMULÁRIO */
+
+:global(:root[data-theme='dark']) .form {
+  scrollbar-color: #47765b transparent;
+}
+
+:global(:root[data-theme='dark']) .form::-webkit-scrollbar-thumb {
+  background: #47765b;
+}
+
+:global(:root[data-theme='dark']) .formSection {
+  border-bottom-color: #365344;
+}
+
+:global(:root[data-theme='dark']) .sectionNumber {
+  color: #83e6b8;
+  background: #214b36;
+}
+
+:global(:root[data-theme='dark']) .sectionHeading h3 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .sectionHeading p {
+  color: #a8beb0;
+}
+
+:global(:root[data-theme='dark']) .selectionCount {
+  color: #83e6b8;
+  background: #214b36;
+}
+
+/* CAMPOS */
+
+:global(:root[data-theme='dark']) .field label {
+  color: #d3e7da;
+}
+
+:global(:root[data-theme='dark']) .field input,
+:global(:root[data-theme='dark']) .field select {
+  color: #edf7f1;
+  background: #123e30;
+  border-color: #416b55;
+}
+
+:global(:root[data-theme='dark']) .field input::placeholder {
+  color: #9bb7a7;
+}
+
+:global(:root[data-theme='dark']) .field input:focus,
+:global(:root[data-theme='dark']) .field select:focus {
+  border-color: #62dca4;
+  box-shadow: 0 0 0 3px rgba(98, 220, 164, 0.13);
+}
+
+:global(:root[data-theme='dark']) .field input:disabled,
+:global(:root[data-theme='dark']) .field select:disabled {
+  color: #91a99a;
+  background: #1a3529;
+}
+
+:global(:root[data-theme='dark']) .fieldHint {
+  color: #a3b9aa;
+}
+
+/* BUSCA DE ATLETAS */
+
+:global(:root[data-theme='dark']) .athleteSearch {
+  color: #9bc9ae;
+  background: #123e30;
+  border-color: #416b55;
+}
+
+:global(:root[data-theme='dark']) .athleteSearch input {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .athleteSearch input::placeholder {
+  color: #9bb7a7;
+}
+
+:global(:root[data-theme='dark']) .athleteSearch button {
+  color: #c5dfd0;
+  background: #28523d;
+}
+
+:global(:root[data-theme='dark']) .athletesList {
+  scrollbar-color: #47765b transparent;
+}
+
+:global(:root[data-theme='dark']) .athletesList::-webkit-scrollbar-thumb {
+  background: #47765b;
+}
+
+:global(:root[data-theme='dark']) .athleteItem {
+  background: #193b2c;
+  border-color: #365b46;
+}
+
+:global(:root[data-theme='dark']) .athleteItem:hover:not(:disabled) {
+  background: #214c37;
+  border-color: #5b9c76;
+}
+
+:global(:root[data-theme='dark']) .athleteSelected {
+  background: #214c37;
+  border-color: #65d89d;
+}
+
+:global(:root[data-theme='dark']) .athleteAvatar {
+  color: #86e5b5;
+  background: #28543d;
+}
+
+:global(:root[data-theme='dark']) .athleteInfo strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .athleteInfo small {
+  color: #aec5b5;
+}
+
+:global(:root[data-theme='dark']) .athleteCheck {
+  color: #b4cbbd;
+  background: #173729;
+  border-color: #45664f;
+}
+
+:global(:root[data-theme='dark']) .athleteSelected .athleteCheck {
+  color: #10291f;
+  background: #73dfaa;
+  border-color: #73dfaa;
+}
+
+:global(:root[data-theme='dark']) .emptyAthletes {
+  color: #a7c0b0;
+  background: #173529;
+  border-color: #456950;
+}
+
+:global(:root[data-theme='dark']) .emptyAthletes strong {
+  color: #e5f3e9;
+}
+
+/* DATA E HORÁRIO */
+
+:global(:root[data-theme='dark']) .dateInputWrapper {
+  color: #82dfb0;
+  background: #123e30;
+  border-color: #416b55;
+}
+
+:global(:root[data-theme='dark']) .dateInputWrapper input {
+  color: #edf7f1;
+  color-scheme: dark;
+}
+
+/* PRÉVIA DA PARTIDA */
+
+:global(:root[data-theme='dark']) .matchPreview {
+  color: #83e3b3;
+  background: #1b4030;
+  border-color: #3c684c;
+}
+
+:global(:root[data-theme='dark']) .matchPreview span {
+  color: #a8cbb5;
+}
+
+:global(:root[data-theme='dark']) .matchPreview strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .matchPreview small {
+  color: #b0c5b7;
+}
+
+/* CORES */
+
+:global(:root[data-theme='dark']) .selectedColorInfo {
+  background: #193b2c;
+  border-color: #3d604c;
+}
+
+:global(:root[data-theme='dark']) .selectedColorInfo span {
+  color: #a8beb0;
+}
+
+:global(:root[data-theme='dark']) .selectedColorInfo strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .customColorButton {
+  background: #234737;
+  border-color: #496b55;
+}
+
+:global(:root[data-theme='dark']) .colorSelected,
+:global(:root[data-theme='dark']) .customColorSelected {
+  outline-color: #83e6b8;
+}
+
+/* PRÉVIA DA EQUIPE */
+
+:global(:root[data-theme='dark']) .teamPreview {
+  background: linear-gradient(100deg, #1a4030, #214c38);
+  border-color: #3e684e;
+}
+
+:global(:root[data-theme='dark']) .previewInfo > span {
+  color: #a4d2b5;
+}
+
+:global(:root[data-theme='dark']) .previewInfo strong {
+  color: #f0f8f3;
+}
+
+:global(:root[data-theme='dark']) .previewInfo small {
+  color: #b1cbb9;
+}
+
+/* ERROS */
+
+:global(:root[data-theme='dark']) .formError {
+  color: #ffadb7;
+  background: #45252e;
+  border-color: #82404d;
+}
+
+/* RODAPÉ */
+
+:global(:root[data-theme='dark']) .footer {
+  background: #142f24;
+  border-top-color: #365343;
+}
+
+:global(:root[data-theme='dark']) .deleteConfirmation > span {
+  color: #ff9eaa;
+}
+
+:global(:root[data-theme='dark']) .deleteButton {
+  color: #ffabb5;
+  background: #482831;
+  border-color: #80434e;
+}
+
+:global(:root[data-theme='dark']) .deleteButton:hover:not(:disabled) {
+  background: #5b303a;
+  border-color: #a95865;
+}
+
+:global(:root[data-theme='dark']) .cancelButton {
+  color: #d4e6da;
+  background: #1b3d2d;
+  border-color: #45644f;
+}
+
+:global(:root[data-theme='dark']) .cancelButton:hover:not(:disabled) {
+  background: #28513b;
+  border-color: #619675;
+}
+
+:global(:root[data-theme='dark']) .saveButton {
+  color: #08291d;
+  background: #49c994;
+  border-color: #49c994;
+}
+
+:global(:root[data-theme='dark']) .saveButton:hover:not(:disabled) {
+  background: #65dda9;
+  border-color: #65dda9;
+}

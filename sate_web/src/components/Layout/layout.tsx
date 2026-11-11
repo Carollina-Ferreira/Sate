@@ -20,6 +20,7 @@ const Layout = () => {
     '/estatisticas': 'Estatísticas',
     '/comparacoes': 'Comparações',
     '/configuracoes': 'Configurações',
+    '/ajuda': 'Ajuda',
   };
 
   const title = titles[location.pathname] || 'SATE';

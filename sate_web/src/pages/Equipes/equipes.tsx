@@ -12,8 +12,7 @@ import {
 } from 'lucide-react';
 
 import styles from './equipes.module.css';
-import PageHeading from '../../components/ui/PageHeading/PageHeading';
-import ActionButton from '../../components/ui/ActionButton/ActionButton';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 import CardEquipe from '../../components/CardEquipe/cardEquipe';
 
@@ -1155,41 +1154,83 @@ const Equipes = () => {
 
   return (
     <>
-      <main className={`${styles.page} sate-internal-page`}>
+      <main className={styles.page}>
 
         {/* CABEÇALHO */}
 
-        <PageHeading
-          title={<>Minhas <em>equipes.</em></>}
-          description="Gerencie seus times, acompanhe métricas de performance e organize seu portfólio de atletas em um só lugar."
-          actions={
-            <>
-              <ActionButton
-                variant="secondary"
-                icon={<Pencil size={17} />}
-                onClick={() => {
-                  setModoEditar((valor) => !valor);
-                  setEquipeEmEdicao(null);
-                }}
-              >
-                {modoEditar ? 'Cancelar edição' : 'Editar equipe'}
-              </ActionButton>
-              <ActionButton
-                disabled={carregandoAtletas}
-                icon={<span aria-hidden="true">+</span>}
-                onClick={() => setModalNovaEquipe(true)}
-              >
-                {carregandoAtletas ? 'Carregando...' : 'Nova Equipe'}
-              </ActionButton>
-            </>
-          }
-        />
+        <div className={styles.header}>
+          <div className={styles.headerText}>
+            <h1 className={styles.title}>
+              Minhas <em>equipes.</em>
+            </h1>
+
+            <p className={styles.description}>
+              Gerencie seus times,
+              acompanhe métricas de
+              performance e organize
+              seu portfólio de atletas
+              em um só lugar.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+            }}
+          >
+            <button
+              type="button"
+              className={styles.newTeamButton}
+              onClick={() => {
+                setModoEditar((valor) => !valor);
+                setEquipeEmEdicao(null);
+              }}
+            >
+              <Pencil size={17} />
+
+              {modoEditar
+                ? 'Cancelar edição'
+                : 'Editar equipe'}
+            </button>
+
+            <button
+              type="button"
+              className={styles.newTeamButton}
+              disabled={carregandoAtletas}
+              onClick={() =>
+                setModalNovaEquipe(true)
+              }
+            >
+              <span className={styles.plus}>
+                +
+              </span>
+
+              {carregandoAtletas
+                ? <LoadingState variant="inline" title="Carregando atletas..." />
+                : 'Nova Equipe'}
+            </button>
+          </div>
+        </div>
 
 
         {/* AVISO DO MODO DE EDIÇÃO */}
 
         {modoEditar && (
-          <div className={styles.editHint}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              marginBottom: '16px',
+              padding: '10px 14px',
+              borderRadius: '9px',
+              background: 'rgba(255,255,255,.12)',
+              color: '#ffffff',
+              fontSize: '12px',
+            }}
+          >
             <Pencil size={15} />
 
             Clique na equipe que deseja editar.
@@ -1233,15 +1274,7 @@ const Equipes = () => {
         {/* CARREGAMENTO */}
 
         {carregando && (
-          <div
-            style={{
-              padding: '50px 20px',
-              textAlign: 'center',
-              color: '#ffffff',
-            }}
-          >
-            Carregando equipes...
-          </div>
+          <LoadingState variant="cards" title="Carregando equipes..." description="Preparando as equipes cadastradas." count={6} />
         )}
 
 

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 
 import styles from './esqueciSenha.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 import logoVerdeImg from '../../assets/img/logoVerde_img.png';
 import logo from '../../assets/img/logo.png';
@@ -482,7 +483,7 @@ const EsqueciSenha = () => {
             >
               <span>
                 {loading
-                  ? 'Enviando...'
+                  ? <LoadingState variant="inline" title="Enviando link..." />
                   : 'Enviar link'}
               </span>
 
@@ -573,7 +574,7 @@ const EsqueciSenha = () => {
               disabled={reenviando}
             >
               {reenviando
-                ? 'Reenviando...'
+                ? <LoadingState variant="inline" title="Reenviando..." />
                 : 'Reenviar e-mail'}
             </button>
 

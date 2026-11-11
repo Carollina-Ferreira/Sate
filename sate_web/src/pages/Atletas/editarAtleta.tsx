@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 
 import styles from './editarAtleta.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 const API_URL = 'http://localhost:3000';
 
@@ -257,7 +258,7 @@ const EditarAtleta = ({
 
         useState<string | null>(null);
 
-    const [, setFotoArquivo] =
+    const [fotoArquivo, setFotoArquivo] =
 
         useState<File | null>(null);
 
@@ -1792,7 +1793,7 @@ const EditarAtleta = ({
 
                             {salvando
 
-                                ? 'Salvando...'
+                                ? <LoadingState variant="inline" title="Salvando atleta..." />
 
                                 : 'Salvar Alterações'
 
@@ -1846,7 +1847,7 @@ const EditarAtleta = ({
 
                             {excluindo
 
-                                ? 'Excluindo...'
+                                ? <LoadingState variant="inline" title="Excluindo atleta..." />
 
                                 : 'Excluir atleta'
 
@@ -2737,7 +2738,7 @@ const EditarAtleta = ({
                             >
                                 <Upload size={18} />
                                 {enviandoDocumento
-                                    ? 'Enviando documento...'
+                                    ? <LoadingState variant="inline" title="Enviando documento..." />
                                     : 'Upload de novo documento'}
                             </button>
                         </div>

@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
@@ -51,15 +52,19 @@ const RotaInicial = () => {
       }
     };
 
-    verificarEquipe();
+    void verificarEquipe();
   }, []);
 
-  // Exibe a animação enquanto verifica as equipes.
+  // Animação original do SATE, sem navegação por tempo fixo.
   if (carregando) {
-    return <Carregamento />;
+    return (
+      <Carregamento
+        semRedirecionamento
+        mensagem="Preparando suas equipes..."
+      />
+    );
   }
 
-  // Sem autenticação, volta para o login.
   const token =
     localStorage.getItem('token') ||
     sessionStorage.getItem('token');
@@ -68,17 +73,16 @@ const RotaInicial = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // Se já possui equipe, segue para o dashboard.
   if (temEquipe) {
     return <Navigate to="/inicio" replace />;
   }
 
-  // Se ocorreu erro na consulta, não presume que não há equipe.
+  // Preserva o tratamento de erro já usado no seu projeto.
   if (erro) {
     return <Navigate to="/inicio" replace />;
   }
 
-  // Sem equipe: libera as telas de configuração inicial.
+  // Sem equipe: libera a configuração inicial.
   return <Outlet />;
 };
 

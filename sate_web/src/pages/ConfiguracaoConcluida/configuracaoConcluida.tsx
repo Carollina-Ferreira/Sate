@@ -13,9 +13,8 @@ import {
   FaWater,
 } from 'react-icons/fa';
 
-import OnboardingThemeToggle from '../../components/ui/OnboardingThemeToggle/OnboardingThemeToggle';
-import OnboardingProgress from '../../components/ui/OnboardingProgress/OnboardingProgress';
 import styles from './configuracaoConcluida.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 interface EstadoNavegacao {
   modalidade?: string;
@@ -175,9 +174,19 @@ export default function ConfiguracaoConcluida() {
 
   return (
     <main className={styles.page}>
-      <OnboardingThemeToggle />
       <div className={styles.container}>
-        <OnboardingProgress etapa={4} descricao="Configuração concluída" />
+        <div className={styles.progressArea}>
+          <div className={styles.stepBadge}>
+            Etapa 4 de 4 · Configuração concluída
+          </div>
+
+          <div className={styles.progressSteps}>
+            <div />
+            <div />
+            <div />
+            <div />
+          </div>
+        </div>
 
         <header className={styles.header}>
           <div className={styles.completeIcon}>
@@ -299,10 +308,7 @@ export default function ConfiguracaoConcluida() {
             disabled={salvando}
           >
             {salvando ? (
-              <>
-                <span className={styles.spinner} />
-                Salvando...
-              </>
+              <LoadingState variant="inline" title="Finalizando configuração..." />
             ) : (
               <>
                 Ir para o início

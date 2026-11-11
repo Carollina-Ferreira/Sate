@@ -4,6 +4,7 @@ import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, MailCheck, RefreshCw, ShieldCheck, XCircle } from 'lucide-react';
 import TurnstileWidget from '../../components/TurnstileWidget/TurnstileWidget';
 import styles from './verificarEmail.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 const API_URL = (import.meta.env.VITE_API_URL as string | undefined) || 'http://localhost:3000';
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
@@ -98,9 +99,7 @@ const VerificarEmail = () => {
         <div className={styles.brand}>SATE</div>
 
         {estado === 'verificando' && (
-          <div className={styles.iconPending}>
-            <RefreshCw size={34} />
-          </div>
+          <LoadingState variant="inline" title="Confirmando seu e-mail..." />
         )}
         {estado === 'pendente' && (
           <div className={styles.iconPending}>
@@ -146,7 +145,7 @@ const VerificarEmail = () => {
             />
             <button type="submit" disabled={reenviando}>
               <RefreshCw size={17} />
-              {reenviando ? 'Enviando...' : 'Reenviar link de confirmação'}
+              {reenviando ? <LoadingState variant="inline" title="Enviando link..." /> : 'Reenviar link de confirmação'}
             </button>
           </form>
         )}
@@ -170,7 +169,7 @@ const VerificarEmail = () => {
             />
             <button type="submit" disabled={reenviando}>
               <RefreshCw size={17} />
-              {reenviando ? 'Enviando...' : 'Solicitar novo link'}
+              {reenviando ? <LoadingState variant="inline" title="Solicitando link..." /> : 'Solicitar novo link'}
             </button>
           </form>
         )}

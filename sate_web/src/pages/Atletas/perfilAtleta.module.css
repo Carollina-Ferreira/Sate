@@ -1,815 +1,735 @@
 
-/* =========================================
+/* ============================================================
    SATE — PERFIL DO ATLETA
-   PADRÃO VISUAL GLOBAL
-========================================= */
-
-/* =========================================
-   PÁGINA
-========================================= */
+   MODO CLARO E ESCURO
+============================================================ */
 
 .page {
-    width: 100%;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-
-    background: transparent;
-    color: var(--texto);
-
-    font-family: var(--fonte-base);
-    box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--texto);
+  background: transparent;
+  font-family: var(--fonte-base, 'Inter', sans-serif);
 }
 
 .page *,
 .page *::before,
 .page *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
-
-/* =========================================
-   CONTEÚDO PRINCIPAL
-========================================= */
 
 .main {
-    width: min(1230px, calc(100% - 64px));
-    margin: 0 auto;
-    padding: 48px 0 55px;
+  width: min(1230px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 42px 0 60px;
 }
 
-/* =========================================
-   VOLTAR PARA ATLETAS
-========================================= */
+/* ============================================================
+   BOTÃO VOLTAR
+============================================================ */
 
 .backButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-
-    margin: 0 0 25px;
-    padding: 0;
-
-    border: none;
-    background: transparent;
-
-    color: var(--texto-suave);
-
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
-
-    cursor: pointer;
-    transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 26px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--verde);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .backButton:hover {
-    color: var(--verde);
+  text-decoration: underline;
 }
 
-.backButton svg {
-    flex-shrink: 0;
-    stroke-width: 1.8;
-}
-
-/* =========================================
-   CABEÇALHO DO PERFIL
-   SEM CARD OU BORDA EXTERNA
-========================================= */
+/* ============================================================
+   PERFIL DO ATLETA
+============================================================ */
 
 .profileCard {
-    width: 100%;
-    min-height: 112px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 28px;
-    padding: 0;
-
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 0 0 24px;
 }
 
 .profileLeft {
-    display: flex;
-    align-items: center;
-    gap: 23px;
-
-    flex: 1;
-    min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+  flex: 1;
 }
 
 .avatar {
-    width: 84px;
-    height: 84px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
-    border-radius: 50%;
-
-    background: var(--rosa);
-    color: var(--texto-sobre-verde);
-
-    font-family: var(--fonte-titulo);
-    font-size: 25px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 84px;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--rosa);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 750;
 }
 
 .avatar img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .nameGroup {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    min-width: 0;
-    gap: 7px;
+  min-width: 0;
 }
 
 .nameGroup h1 {
-    margin: 0;
-
-    color: var(--texto);
-
-    font-family: var(--fonte-titulo);
-    font-size: clamp(22px, 2.1vw, 32px);
-    font-weight: 800;
-    line-height: 1.25;
-    letter-spacing: -1.2px;
-
-    overflow-wrap: anywhere;
+  margin: 0 0 7px;
+  color: var(--texto);
+  font-size: clamp(23px, 2.3vw, 32px);
+  line-height: 1.25;
+  letter-spacing: -1px;
+  overflow-wrap: anywhere;
 }
 
 .metaInfo {
-    margin: 0;
-
-    color: var(--texto-suave);
-
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.6;
+  margin: 0;
+  font-size: 13px;
+  color: var(--texto-suave);
+  line-height: 1.65;
 }
 
-/* =========================================
-   ÍNDICE DE DESEMPENHO
-========================================= */
+/* ============================================================
+   DESEMPENHO
+============================================================ */
 
 .profilePerformance {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-
-    flex-shrink: 0;
-    gap: 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
 }
 
 .profilePerformance strong {
-    color: var(--verde);
-
-    font-family: var(--fonte-titulo);
-    font-size: 38px;
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -1.5px;
+  color: var(--verde);
+  font-size: 39px;
+  line-height: 1;
+  letter-spacing: -1px;
+  font-weight: 800;
 }
 
 .profilePerformance span {
-    color: var(--texto-suave);
-    font-size: 12px;
-    font-weight: 400;
+  color: var(--texto-suave);
+  font-size: 12px;
 }
 
-/* =========================================
-   BOTÕES DE NAVEGAÇÃO
-========================================= */
+/* ============================================================
+   NAVEGAÇÃO
+============================================================ */
 
 .actionsRow {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-
-    gap: 12px;
-    margin: 24px 0 36px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin: 8px 0 30px;
 }
 
 .actionButton {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 47px;
-    gap: 9px;
-    padding: 0 20px;
-
-    background: var(--bg-surface-2);
-    color: var(--verde);
-
-    border: 1px solid var(--borda-forte);
-    border-radius: 12px;
-
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-
-    white-space: nowrap;
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
-}
-
-.actionButton svg {
-    width: 16px;
-    height: 16px;
-
-    flex-shrink: 0;
-    stroke-width: 1.9;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  background: var(--bg-surface-2);
+  color: var(--verde);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    background .2s ease,
+    transform .2s ease;
 }
 
 .actionButton:hover:not(:disabled) {
-    background: var(--menu-hover-bg);
-    border-color: var(--verde-principal);
-    color: var(--verde);
-
-    transform: translateY(-1px);
+  background: var(
+    --bg-verde-suave,
+    var(--bg-surface)
+  );
+  transform: translateY(-1px);
 }
 
-.actionButton:focus-visible {
-    outline: 3px solid var(--sombra-foco);
-    outline-offset: 3px;
+.actionButton:focus-visible,
+.backButton:focus-visible {
+  outline: 3px solid var(--rosa);
+  outline-offset: 3px;
 }
 
 .actionButton:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
+  opacity: .45;
+  cursor: not-allowed;
 }
 
-/* =========================================
+/* ============================================================
    ESTATÍSTICAS
-   FAIXA COM DIVISÓRIAS INTERNAS
-========================================= */
+============================================================ */
 
 .statsGrid {
-    width: 100%;
-
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-
-    margin-bottom: 45px;
-
-    background: transparent;
-
-    border-top: 1px solid var(--borda);
-    border-bottom: 1px solid var(--borda);
-    border-radius: 0;
-
-    overflow: hidden;
-    box-shadow: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--borda);
+  border-bottom: 1px solid var(--borda);
+  margin-bottom: 28px;
 }
 
 .statItem {
-    min-width: 0;
-    min-height: 106px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-
-    padding: 20px 27px;
-
-    background: transparent;
-
-    border: none;
-    border-right: 1px solid var(--borda);
-    border-radius: 0;
-    box-shadow: none;
+  min-width: 0;
+  min-height: 112px;
+  padding: 22px;
+  border-right: 1px solid var(--borda);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .statItem:first-child {
-    padding-left: 0;
+  padding-left: 0;
 }
 
 .statItem:last-child {
-    border-right: none;
+  border-right: 0;
 }
 
 .statLabel {
-    display: block;
-    margin: 0 0 7px;
-
-    color: var(--texto-suave);
-
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1.5;
+  display: block;
+  margin-bottom: 7px;
+  font-size: 12px;
+  color: var(--texto-suave);
 }
 
 .statValue {
-    display: block;
-    margin: 0;
-
-    font-family: var(--fonte-titulo);
-    font-size: 36px;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -1px;
+  display: block;
+  font-size: 37px;
+  font-weight: 750;
+  line-height: 1;
 }
 
 .good {
-    color: var(--verde-principal);
+  color: var(--verde);
 }
 
 .bad {
-    color: var(--vermelho);
+  color: var(--vermelho, #D52941);
 }
 
 .neutral {
-    color: var(--texto-suave);
+  color: var(--texto-suave);
 }
 
 .highlight {
-    color: var(--rosa);
+  color: var(--rosa);
 }
 
-/* =========================================
+/* ============================================================
    ÁREA DOS GRÁFICOS
-========================================= */
+============================================================ */
 
 .chartsGrid {
-    width: 100%;
-
-    display: grid;
-    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
-
-    align-items: start;
-    gap: 48px;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.5fr)
+    minmax(0, 1fr);
+  gap: 22px;
 }
-
-/* =========================================
-   GRÁFICOS
-   SEM CARDS, BORDAS OU SOMBRAS EXTERNAS
-========================================= */
 
 .chartCard {
-    min-width: 0;
-    min-height: 355px;
-
-    display: flex;
-    flex-direction: column;
-
-    padding: 0;
-
-    background: transparent;
-    color: var(--texto);
-
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    overflow: visible;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 405px;
+  padding: clamp(20px, 2.5vw, 30px);
+  background: var(--bg-surface);
+  color: var(--texto);
+  border: 1px solid var(--borda);
+  border-radius: 20px;
+  box-shadow:
+    0 12px 35px rgba(11, 49, 35, .045);
 }
 
-/* =========================================
+/* ============================================================
    CABEÇALHO DOS GRÁFICOS
-========================================= */
+============================================================ */
 
 .chartHeader {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    gap: 15px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
 }
 
 .chartHeader h2 {
-    margin: 0 0 6px;
-
-    color: var(--texto);
-
-    font-family: var(--fonte-titulo);
-    font-size: 19px;
-    font-weight: 700;
-    line-height: 1.4;
-    letter-spacing: -0.5px;
+  margin: 0 0 6px;
+  font-size: clamp(17px, 1.55vw, 21px);
+  line-height: 1.3;
 }
 
 .chartHeader p {
-    margin: 0;
+  margin: 0;
+  max-width: 460px;
+  color: var(--texto-suave);
+  font-size: 12px;
+  line-height: 1.6;
+}
 
-    color: var(--texto-suave);
-
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.6;
+.chartEyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--rosa);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.2px;
 }
 
 .chartIcon {
-    display: none;
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(
+    --bg-verde-suave,
+    var(--bg-surface-2)
+  );
+  color: var(--verde);
 }
 
-/* =========================================
+/* ============================================================
+   INDICADORES DO GRÁFICO
+============================================================ */
+
+.chartTopMetrics {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 21px;
+  color: var(--texto-suave);
+  font-size: 12px;
+}
+
+.chartTopMetrics > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metricLegendDot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--verde);
+}
+
+.chartMetricPill {
+  padding: 8px 12px;
+  border: 1px solid var(--borda);
+  border-radius: 100px;
+  background: var(--bg-surface-2);
+  color: var(--texto);
+  font-size: 11px;
+}
+
+/* ============================================================
    GRÁFICO DE EVOLUÇÃO
-========================================= */
+============================================================ */
 
 .lineChartContainer {
-    flex: 1;
-
-    width: 100%;
-    min-height: 255px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-top: 20px;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 235px;
+  margin-top: 10px;
 }
 
 .lineChart {
-    display: block;
-
-    width: 100%;
-    height: auto;
-    max-height: 285px;
-
-    overflow: visible;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 285px;
+  overflow: visible;
 }
 
 .gridLine {
-    stroke: var(--borda);
-    stroke-width: 1;
-    stroke-dasharray: 3 5;
+  stroke: var(--borda);
+  stroke-width: 1;
+  stroke-dasharray: 3 6;
 }
 
 .axisLabel {
-    fill: var(--texto-claro);
-
-    font-family: var(--fonte-base);
-    font-size: 11px;
+  fill: var(--texto-suave);
+  font-size: 11px;
 }
 
 .dataLine {
-    stroke: var(--verde);
-    stroke-width: 2.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+  stroke: var(--verde);
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
 .dataPoint {
-    fill: var(--bg-page);
-    stroke: var(--verde);
-    stroke-width: 2;
+  fill: var(--bg-surface);
+  stroke: var(--verde);
+  stroke-width: 3.5;
 }
 
-.lastDataPoint {
-    fill: var(--rosa);
-    stroke: var(--verde);
-    stroke-width: 1.5;
+.pointHalo {
+  fill: var(--verde);
+  opacity: .14;
 }
 
-/* =========================================
-   GRÁFICO RADAR
-========================================= */
+.pointValue {
+  fill: var(--texto);
+  font-size: 11.5px;
+  font-weight: 750;
+}
+
+/* ============================================================
+   OBSERVAÇÕES E ESTADOS VAZIOS
+============================================================ */
+
+.chartFootnote {
+  margin: auto 0 0;
+  padding-top: 13px;
+  border-top: 1px solid var(--borda);
+  color: var(--texto-suave);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.chartEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 220px;
+  width: 100%;
+  padding: 22px 12px;
+  color: var(--texto-suave);
+  text-align: center;
+}
+
+.chartEmpty svg {
+  color: var(--verde);
+  opacity: .7;
+}
+
+.chartEmpty strong {
+  color: var(--texto);
+  font-size: 15px;
+}
+
+.chartEmpty p {
+  max-width: 340px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   GRÁFICO RADAR DE ATRIBUTOS
+============================================================ */
 
 .radarContainer {
-    flex: 1;
-
-    width: 100%;
-    min-height: 285px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-top: 14px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 265px;
+  margin-top: 16px;
 }
 
 .radarChart {
-    display: block;
-
-    width: 100%;
-    max-width: 340px;
-    height: auto;
-
-    overflow: visible;
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  overflow: visible;
 }
 
 .radarGrid {
-    fill: none;
-    stroke: var(--borda);
-    stroke-width: 1.2;
+  fill: none;
+  stroke: var(--borda);
+  stroke-width: 1.2;
 }
 
 .radarAxis {
-    stroke: var(--borda);
-    stroke-width: 1;
+  stroke: var(--borda);
+  stroke-width: 1;
 }
 
 .radarArea {
-    fill: color-mix(in srgb, var(--verde-principal) 16%, transparent);
-
-    stroke: var(--verde);
-    stroke-width: 2.5;
-    stroke-linejoin: round;
+  fill: color-mix(
+    in srgb,
+    var(--verde) 18%,
+    transparent
+  );
+  stroke: var(--verde);
+  stroke-width: 2.5;
 }
 
 .radarPoint {
-    fill: var(--rosa);
-    stroke: var(--rosa);
-    stroke-width: 1;
+  fill: var(--rosa);
 }
 
 .radarLabel {
-    fill: var(--texto-claro);
-
-    font-family: var(--fonte-base);
-    font-size: 12px;
+  fill: var(--texto-suave);
+  font-size: 11px;
 }
 
-/* =========================================
-   NOTEBOOKS
-========================================= */
+/* ============================================================
+   DISTRIBUIÇÃO DAS AÇÕES
+============================================================ */
+
+.actionsBreakdown {
+  width: 100%;
+  padding: 6px 0 14px;
+}
+
+.actionsTotal {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin-bottom: 20px;
+}
+
+.actionsTotal strong {
+  color: var(--texto);
+  font-size: 32px;
+  letter-spacing: -1px;
+}
+
+.actionsTotal span {
+  color: var(--texto-suave);
+  font-size: 12px;
+}
+
+.actionRow {
+  margin-bottom: 19px;
+}
+
+.actionRowHeading {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 7px;
+  color: var(--texto-suave);
+  font-size: 12px;
+}
+
+.actionRowHeading strong {
+  color: var(--texto);
+  font-size: 13px;
+}
+
+.actionTrack {
+  width: 100%;
+  height: 10px;
+  background: var(--bg-surface-2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.actionFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width .35s ease;
+}
+
+.acaoBoa {
+  background: var(--verde);
+}
+
+.acaoDestaque {
+  background: var(--rosa);
+}
+
+.acaoNeutra {
+  background: #84a9c0;
+}
+
+.acaoRuim {
+  background: #d86e72;
+}
+
+/* ============================================================
+   ERROS DA API
+============================================================ */
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 13px 16px;
+  color: var(--texto);
+  background: var(--bg-surface);
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.errorMessage > svg {
+  flex-shrink: 0;
+  color: var(--vermelho, #D52941);
+}
+
+.errorMessage > span {
+  flex: 1;
+}
+
+.errorMessage button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 8px 11px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--texto);
+  background: var(--bg-surface-2);
+  border: 1px solid var(--borda);
+  border-radius: 9px;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+============================================================ */
 
 @media (max-width: 1100px) {
-    .main {
-        width: calc(100% - 48px);
-    }
+  .main {
+    width: min(100% - 40px, 1230px);
+  }
 
-    .chartsGrid {
-        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-        gap: 30px;
-    }
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
 
-    .nameGroup h1 {
-        font-size: 25px;
-    }
-
-    .statItem {
-        padding-right: 18px;
-        padding-left: 18px;
-    }
-
-    .statItem:first-child {
-        padding-left: 0;
-    }
-
-    .chartHeader h2 {
-        font-size: 17px;
-    }
+  .chartCard {
+    min-height: 0;
+  }
 }
 
-/* =========================================
-   TABLETS
-========================================= */
+@media (max-width: 700px) {
+  .main {
+    width: calc(100% - 32px);
+    padding: 28px 0 48px;
+  }
 
-@media (max-width: 800px) {
-    .main {
-        width: calc(100% - 40px);
-        padding-top: 32px;
-    }
+  .profileLeft {
+    gap: 14px;
+  }
 
-    .profileCard {
-        align-items: flex-start;
-        gap: 20px;
-    }
+  .avatar {
+    flex-basis: 64px;
+    width: 64px;
+    height: 64px;
+    font-size: 21px;
+  }
 
-    .profileLeft {
-        gap: 16px;
-    }
+  .profilePerformance {
+    align-items: flex-start;
+  }
 
-    .avatar {
-        width: 68px;
-        height: 68px;
-        font-size: 22px;
-    }
+  .statsGrid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
 
-    .nameGroup h1 {
-        font-size: 22px;
-    }
+  .statItem {
+    min-height: 96px;
+    padding: 16px;
+  }
 
-    .metaInfo {
-        font-size: 12px;
-    }
+  .statItem:first-child {
+    padding-left: 16px;
+  }
 
-    .profilePerformance strong {
-        font-size: 32px;
-    }
+  .statItem:nth-child(2) {
+    border-right: 0;
+  }
 
-    .actionsRow {
-        margin-bottom: 28px;
-    }
+  .statItem:nth-child(-n+2) {
+    border-bottom: 1px solid var(--borda);
+  }
 
-    .statsGrid {
-        margin-bottom: 34px;
-    }
+  .statValue {
+    font-size: 31px;
+  }
 
-    .statItem {
-        min-height: 92px;
-        padding: 16px;
-    }
+  .chartCard {
+    padding: 20px 18px;
+    border-radius: 16px;
+  }
 
-    .statItem:first-child {
-        padding-left: 0;
-    }
+  .chartIcon {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+  }
 
-    .statValue {
-        font-size: 31px;
-    }
-
-    .chartsGrid {
-        grid-template-columns: 1fr;
-        gap: 36px;
-    }
-
-    .chartCard {
-        min-height: 320px;
-    }
-
-    .lineChartContainer {
-        min-height: 245px;
-    }
-
-    .radarContainer {
-        min-height: 275px;
-    }
-
-    .radarChart {
-        max-width: 320px;
-    }
+  .lineChartContainer {
+    min-height: 190px;
+  }
 }
 
-/* =========================================
-   CELULARES
-========================================= */
 
-@media (max-width: 540px) {
-    .main {
-        width: calc(100% - 32px);
-        padding: 24px 0 36px;
-    }
+/* ============================================================
+   BOLINHAS CLICÁVEIS DO GRÁFICO DE EVOLUÇÃO
+============================================================ */
 
-    .backButton {
-        margin-bottom: 22px;
-        font-size: 12px;
-    }
+.partidaClicavel {
+  cursor: pointer;
+  outline: none;
+}
 
-    .profileCard {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
-    }
+.partidaClicavel:hover .dataPoint,
+.partidaClicavel:focus-visible .dataPoint {
+  stroke: var(--rosa);
+  stroke-width: 4;
+}
 
-    .profileLeft {
-        width: 100%;
-        align-items: flex-start;
-        gap: 13px;
-    }
+.partidaClicavel:focus-visible .pointHalo {
+  opacity: 0.23;
+}
 
-    .avatar {
-        width: 57px;
-        height: 57px;
-        font-size: 19px;
-    }
-
-    .nameGroup {
-        flex: 1;
-    }
-
-    .nameGroup h1 {
-        font-size: 20px;
-        letter-spacing: -0.6px;
-    }
-
-    .metaInfo {
-        font-size: 11px;
-        overflow-wrap: anywhere;
-    }
-
-    .profilePerformance {
-        align-items: flex-start;
-    }
-
-    .profilePerformance strong {
-        font-size: 30px;
-    }
-
-    .profilePerformance span {
-        font-size: 11px;
-    }
-
-    /* Botões */
-
-    .actionsRow {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-
-        gap: 9px;
-        margin: 23px 0 28px;
-    }
-
-    .actionButton {
-        width: 100%;
-        min-width: 0;
-        min-height: 44px;
-
-        gap: 6px;
-        padding: 0 8px;
-
-        font-size: 11px;
-    }
-
-    .actionButton svg {
-        width: 15px;
-        height: 15px;
-    }
-
-    /* Estatísticas */
-
-    .statsGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        margin-bottom: 30px;
-    }
-
-    .statItem {
-        min-height: 90px;
-        padding: 17px 12px;
-        border-bottom: 1px solid var(--borda);
-    }
-
-    .statItem:first-child {
-        padding-left: 0;
-    }
-
-    .statItem:nth-child(2) {
-        border-right: none;
-    }
-
-    .statItem:nth-child(3),
-    .statItem:nth-child(4) {
-        border-bottom: none;
-    }
-
-    .statLabel {
-        margin-bottom: 8px;
-        font-size: 11px;
-    }
-
-    .statValue {
-        font-size: 30px;
-    }
-
-    /* Gráficos */
-
-    .chartsGrid {
-        gap: 32px;
-    }
-
-    .chartCard {
-        min-height: 0;
-    }
-
-    .chartHeader h2 {
-        font-size: 17px;
-    }
-
-    .chartHeader p {
-        font-size: 12px;
-    }
-
-    .lineChartContainer {
-        min-height: 0;
-        margin-top: 20px;
-    }
-
-    .lineChart {
-        width: 100%;
-    }
-
-    .radarContainer {
-        min-height: 0;
-        margin-top: 22px;
-        padding: 0 5px;
-    }
-
-    .radarChart {
-        width: 100%;
-        max-width: 310px;
-    }
+.pontoSelecionado {
+  stroke: var(--rosa);
+  stroke-width: 4;
+  fill: var(--bg-surface);
 }

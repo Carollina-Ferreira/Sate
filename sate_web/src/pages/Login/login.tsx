@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 import styles from './login.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 import TurnstileWidget from '../../components/TurnstileWidget/TurnstileWidget';
 
 import logoVerdeImg from '../../assets/img/logoVerde_img.png';
@@ -701,7 +702,7 @@ const Login = () => {
                                     disabled={reenviando}
                                     style={{ border: 0, background: 'transparent', color: '#006b4f', fontWeight: 700, cursor: reenviando ? 'wait' : 'pointer', padding: '6px 0', textAlign: 'left' }}
                                 >
-                                    {reenviando ? 'Enviando confirmação...' : 'Reenviar link de confirmação'}
+                                    {reenviando ? <LoadingState variant="inline" title="Enviando confirmação..." /> : 'Reenviar link de confirmação'}
                                 </button>
                                 {mensagemReenvio && (
                                     <p role="status" style={{ margin: 0, color: '#006b4f', fontSize: 13, lineHeight: 1.5 }}>
@@ -753,7 +754,7 @@ const Login = () => {
                         >
                             <span>
                                 {loading
-                                    ? 'Entrando...'
+                                    ? <LoadingState variant="inline" title="Entrando..." />
                                     : 'Entrar'}
                             </span>
 

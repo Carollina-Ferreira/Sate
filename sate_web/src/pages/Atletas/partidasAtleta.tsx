@@ -17,10 +17,10 @@ import {
     CircleCheck,
     CircleX,
     MinusCircle,
-    LoaderCircle,
 } from 'lucide-react';
 
 import styles from './partidasAtleta.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 // ============================================================
 // PROPRIEDADES
@@ -634,16 +634,7 @@ const PartidasAtleta = ({
             {/* CARREGANDO */}
 
             {carregando && (
-                <div className={styles.stateBox}>
-                    <LoaderCircle
-                        size={30}
-                        className={styles.loadingIcon}
-                    />
-                    <strong>Carregando partidas...</strong>
-                    <span>
-                        Buscando o histórico de {atletaNome}.
-                    </span>
-                </div>
+                <LoadingState variant="table" title="Carregando partidas..." description={`Buscando o histórico de ${atletaNome}.`} count={5} />
             )}
 
             {/* ERRO */}

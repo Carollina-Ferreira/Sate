@@ -23,6 +23,7 @@ import {
 import type { ChangeEvent } from 'react';
 
 import styles from './novaEquipeModal.module.css';
+import LoadingState from '../ui/LoadingState/LoadingState';
 
 export interface AtletaDisponivel {
   id: number;
@@ -48,7 +49,7 @@ export interface NovaEquipeData {
 interface NovaEquipeModalProps {
   open: boolean;
   onClose: () => void;
-  onCreate: (equipe: NovaEquipeData) => void;
+  onCreate: (equipe: NovaEquipeData) => void | Promise<void>;
   modalidadeInicial?: string;
   atletasDisponiveis?: AtletaDisponivel[];
 }
@@ -118,6 +119,7 @@ const NovaEquipeModal = ({
   const colorInputRef = useRef<HTMLInputElement>(null);
 
   const [nome, setNome] = useState('');
+  const [criando, setCriando] = useState(false);
 
   const [modalidade, setModalidade] = useState(
     esportes.includes(modalidadeInicial)
@@ -210,9 +212,10 @@ const NovaEquipeModal = ({
   }, [modalidadeInicial]);
 
   const fecharModal = useCallback(() => {
+    if (criando) return;
     resetFormulario();
     onClose();
-  }, [onClose, resetFormulario]);
+  }, [criando, onClose, resetFormulario]);
 
   useEffect(() => {
     if (!open) {
@@ -314,29 +317,33 @@ const NovaEquipeModal = ({
     );
   };
 
-  const criarEquipe = () => {
-    if (!formularioValido) {
-      return;
-    }
+  const criarEquipe = async () => {
+    if (!formularioValido || criando) return;
 
     const proximaPartida =
       dataPartida && horarioPartida
         ? `${dataPartida}T${horarioPartida}:00`
         : null;
 
-    onCreate({
-      nome: nome.trim(),
-      modalidade,
-      categoria,
-      atletasIds: atletasSelecionados,
-      cor,
-      proximaPartida,
-      imagemPreview,
-      imagemArquivo,
-    });
-
-    resetFormulario();
-    onClose();
+    setCriando(true);
+    try {
+      await onCreate({
+        nome: nome.trim(),
+        modalidade,
+        categoria,
+        atletasIds: atletasSelecionados,
+        cor,
+        proximaPartida,
+        imagemPreview,
+        imagemArquivo,
+      });
+      resetFormulario();
+      onClose();
+    } catch (erro) {
+      console.error('Erro ao criar equipe:', erro);
+    } finally {
+      setCriando(false);
+    }
   };
 
   if (!open) {
@@ -857,6 +864,7 @@ const NovaEquipeModal = ({
               type="button"
               className={styles.cancelButton}
               onClick={fecharModal}
+              disabled={criando}
             >
               Cancelar
             </button>
@@ -864,11 +872,13 @@ const NovaEquipeModal = ({
             <button
               type="button"
               className={styles.createButton}
-              disabled={!formularioValido}
-              onClick={criarEquipe}
+              disabled={!formularioValido || criando}
+              onClick={() => void criarEquipe()}
             >
-              <Plus size={17} />
-              Criar equipe
+              {!criando && <Plus size={17} />}
+              {criando
+                ? <LoadingState variant="inline" title="Criando equipe..." />
+                : 'Criar equipe'}
             </button>
           </div>
         </footer>

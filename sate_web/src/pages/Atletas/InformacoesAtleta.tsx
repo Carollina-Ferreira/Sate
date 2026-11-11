@@ -15,6 +15,43 @@ import {
 
 import styles from './informacoesAtleta.module.css';
 
+// Endereço do backend. Pode ser configurado no .env do Vite.
+const API_ORIGIN = String(import.meta.env.VITE_API_URL || 'http://localhost:3000')
+    .replace(/\/api\/?$/, '')
+    .replace(/\/$/, '');
+
+function enderecoDocumento(url: string): string {
+    const caminho = String(url || '').trim();
+    if (!caminho) throw new Error('Documento sem endereço cadastrado.');
+
+    // Caminhos gerados pelo servidor: /uploads/arquivo.pdf ou uploads/arquivo.pdf.
+    const destino = new URL(caminho, API_ORIGIN + '/');
+    if (!['http:', 'https:'].includes(destino.protocol)) {
+        throw new Error('O endereço do documento é inválido.');
+    }
+    return destino.toString();
+}
+
+function nomeParaDownload(documento: Documento, contentType: string): string {
+    const nome = String(documento.nome || 'documento')
+        .replace(/[\\/:*?"<>|\x00-\x1f]/g, '_')
+        .trim()
+        .slice(0, 100) || 'documento';
+    if (/\.[a-z0-9]{2,8}$/i.test(nome)) return nome;
+
+    const extensoes: Record<string, string> = {
+        'application/pdf': '.pdf',
+        'image/png': '.png',
+        'image/jpeg': '.jpg',
+        'image/webp': '.webp',
+        'text/plain': '.txt',
+    };
+    const caminhoExtensao = String(documento.url || '').split('?')[0].match(/\.([a-z0-9]{2,8})$/i);
+    const extensao = caminhoExtensao ? `.${caminhoExtensao[1].toLowerCase()}` : '';
+    return nome + (extensoes[contentType.split(';')[0].toLowerCase()] || extensao || '.bin');
+}
+
+
 
 // ============================================================
 // TIPOS
@@ -96,6 +133,81 @@ const InformacoesAtleta = ({
     atleta,
     onBack,
 }: InformacoesAtletaProps) => {
+
+    const [erroDocumento, setErroDocumento] = useState('');
+    const [documentoEmAcao, setDocumentoEmAcao] = useState<string | null>(null);
+
+    async function obterArquivo(documento: Documento): Promise<Blob> {
+        const destino = enderecoDocumento(documento.url);
+        const token = localStorage.getItem('token') || localStorage.getItem('accessToken');
+        const mesmaApi = new URL(destino).origin === new URL(API_ORIGIN).origin;
+        const resposta = await fetch(destino, {
+            method: 'GET',
+            // Nunca envie o token JWT para domínios externos.
+            headers: mesmaApi && token ? { Authorization: `Bearer ${token}` } : {},
+        });
+
+        if (!resposta.ok) {
+            if (resposta.status === 401 || resposta.status === 403) {
+                throw new Error('Você não tem permissão para acessar este documento.');
+            }
+            if (resposta.status === 404) {
+                throw new Error('Arquivo não encontrado no servidor.');
+            }
+            throw new Error(`Falha ao carregar o documento (HTTP ${resposta.status}).`);
+        }
+
+        const tipo = resposta.headers.get('content-type') || '';
+        if (tipo.includes('text/html')) {
+            throw new Error('O servidor retornou uma página HTML em vez do documento.');
+        }
+        return resposta.blob();
+    }
+
+    async function visualizarDocumento(documento: Documento) {
+        const chave = `visualizar-${documento.id}`;
+        setErroDocumento('');
+        setDocumentoEmAcao(chave);
+        // Abrir imediatamente evita o bloqueio de pop-ups após o fetch assíncrono.
+        const aba = window.open('', '_blank');
+
+        try {
+            const arquivo = await obterArquivo(documento);
+            const urlTemporaria = URL.createObjectURL(arquivo);
+            if (!aba) {
+                URL.revokeObjectURL(urlTemporaria);
+                throw new Error('Permita pop-ups no navegador para visualizar documentos.');
+            }
+            aba.location.replace(urlTemporaria);
+            // Mantém o blob disponível durante a visualização.
+            window.setTimeout(() => URL.revokeObjectURL(urlTemporaria), 5 * 60 * 1000);
+        } catch (error) {
+            aba?.close();
+            setErroDocumento(error instanceof Error ? error.message : 'Erro ao visualizar documento.');
+        } finally {
+            setDocumentoEmAcao(null);
+        }
+    }
+
+    async function baixarDocumento(documento: Documento) {
+        setErroDocumento('');
+        setDocumentoEmAcao(`baixar-${documento.id}`);
+        try {
+            const arquivo = await obterArquivo(documento);
+            const urlTemporaria = URL.createObjectURL(arquivo);
+            const link = document.createElement('a');
+            link.href = urlTemporaria;
+            link.download = nomeParaDownload(documento, arquivo.type);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.setTimeout(() => URL.revokeObjectURL(urlTemporaria), 60 * 1000);
+        } catch (error) {
+            setErroDocumento(error instanceof Error ? error.message : 'Erro ao baixar documento.');
+        } finally {
+            setDocumentoEmAcao(null);
+        }
+    }
 
     const [abaAtiva, setAbaAtiva] = useState<
         'pessoais' | 'contato' | 'documentos'
@@ -1296,6 +1408,12 @@ const InformacoesAtleta = ({
                         </div>
 
 
+                        {erroDocumento && (
+                            <p role="alert" style={{ color: 'var(--rosa, #D52941)', marginBottom: 16 }}>
+                                {erroDocumento}
+                            </p>
+                        )}
+
                         {documentos.length === 0 ? (
 
                             <div
@@ -1394,38 +1512,29 @@ const InformacoesAtleta = ({
 
                                                 <button
                                                     type="button"
-                                                    className={
-                                                        styles.docAction
-                                                    }
-                                                    onClick={() =>
-                                                        window.open(
-                                                            doc.url,
-                                                            '_blank'
-                                                        )
-                                                    }
+                                                    className={styles.docAction}
+                                                    onClick={() => void visualizarDocumento(doc)}
+                                                    disabled={documentoEmAcao !== null || !doc.url}
+                                                    title="Abrir documento em nova aba"
                                                 >
-
                                                     <Eye size={14} />
-
-                                                    Visualizar
-
+                                                    {documentoEmAcao === `visualizar-${doc.id}`
+                                                        ? 'Abrindo...'
+                                                        : 'Visualizar'}
                                                 </button>
 
-
-                                                <a
-                                                    href={doc.url}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    className={
-                                                        styles.docAction
-                                                    }
+                                                <button
+                                                    type="button"
+                                                    className={styles.docAction}
+                                                    onClick={() => void baixarDocumento(doc)}
+                                                    disabled={documentoEmAcao !== null || !doc.url}
+                                                    title="Baixar documento"
                                                 >
-
                                                     <Download size={14} />
-
-                                                    PDF
-
-                                                </a>
+                                                    {documentoEmAcao === `baixar-${doc.id}`
+                                                        ? 'Baixando...'
+                                                        : 'Baixar'}
+                                                </button>
 
                                             </div>
 

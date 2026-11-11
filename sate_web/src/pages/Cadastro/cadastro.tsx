@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 
 import styles from './cadastro.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 import TurnstileWidget from '../../components/TurnstileWidget/TurnstileWidget';
 import TermosUso from '../TermosUso/termosUso';
 
@@ -753,7 +754,7 @@ const Cadastro = () => {
             >
               <span>
                 {loading
-                  ? 'Criando conta...'
+                  ? <LoadingState variant="inline" title="Criando conta..." />
                   : 'Criar conta'}
               </span>
 

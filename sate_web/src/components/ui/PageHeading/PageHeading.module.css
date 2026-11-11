@@ -38,3 +38,23 @@
   .actions { flex-direction: column; align-items: stretch; }
   .actions > * { width: 100%; }
 }
+
+/* ============================================================
+   MODO ESCURO
+============================================================ */
+
+:global(:root[data-theme='dark']) .heading {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .title {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .title em {
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .description {
+  color: #a8beb3;
+}

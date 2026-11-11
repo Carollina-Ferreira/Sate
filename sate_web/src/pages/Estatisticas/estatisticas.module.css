@@ -55,39 +55,42 @@
   margin: 0 auto;
 }
 
+
 /* =====================================
-   CABEÇALHO
+    CABEÇALHO
 ===================================== */
 
 .pageHeader {
+  width: 100%;
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 24px;
-  margin: 3px 0 36px;
+  gap: 28px;
+  margin: 3px 0 24px;
 }
 
 .pageHeader h1 {
   margin: 0;
   color: var(--texto);
-  font-family: var(--fonte-titulo);
-  font-size: clamp(30px, 2.55vw, 44px);
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -1.8px;
+  font-family: var(--fonte-base);
+  font-size: clamp(36px, 3.2vw, 48px);
+  font-weight: 700;
+  line-height: 1.03;
+  letter-spacing: -1.7px;
 }
 
 .pageHeader h1 em {
   color: var(--rosa);
-  font-family: var(--fonte-titulo);
-  font-weight: 600;
+  font-family: var(--fonte-destaque);
+  font-style: italic;
+  font-weight: 400;
   letter-spacing: -0.6px;
 }
 
 .pageHeader p {
   margin: 12px 0 0;
   color: var(--texto-suave);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
 }
 
@@ -399,30 +402,37 @@
   stroke-width: 2;
 }
 
+
 /* =====================================
    MODO ESCURO
 ===================================== */
 
 :global(:root[data-theme='dark']) .page {
-  --stats-bg: var(--bg-page);
-  --stats-text: var(--texto);
-  --stats-muted: var(--texto-suave);
-  --stats-border: var(--borda-neutra);
+  --verde: #83e3b6;
+  --rosa: #83e3b6;
 
   background:
     radial-gradient(
-      ellipse 340px 230px at 96% 0%,
-      rgba(244, 63, 120, 0.10) 0%,
-      rgba(244, 63, 120, 0.04) 38%,
+      ellipse 360px 260px at 96% 0%,
+      rgba(22, 168, 117, 0.16) 0%,
+      rgba(22, 168, 117, 0.07) 42%,
       transparent 76%
     ),
-    var(--bg-page);
+    #102a22;
 
-  color: var(--texto);
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .pageHeader h1 {
+  color: #edf7f1;
 }
 
 :global(:root[data-theme='dark']) .pageHeader h1 em {
-  color: #7BE0A8;
+  color: #83e3b6;
+}
+
+:global(:root[data-theme='dark']) .pageHeader p {
+  color: #a8beb3;
 }
 
 /* =====================================

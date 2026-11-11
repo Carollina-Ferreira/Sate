@@ -527,11 +527,6 @@ const PartidasAtleta = ({
                     <h1>
                         Partidas <em>do atleta.</em>
                     </h1>
-
-                    <p>
-                        Confira a participação de {atletaNome}
-                        {' '}e suas ações em cada partida.
-                    </p>
                 </div>
             </header>
 

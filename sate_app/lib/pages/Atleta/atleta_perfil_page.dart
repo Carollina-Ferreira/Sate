@@ -706,11 +706,11 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
         onPressed: () {
           _confirmarSaida(context);
         },
-        icon: const Icon(Icons.logout_rounded, color: Color(0xFFC9305A)),
+        icon: const Icon(Icons.logout_rounded, color: Color(0xFFC0392B)),
         label: const Text(
           'Sair da conta',
           style: TextStyle(
-            color: Color(0xFFC9305A),
+            color: Color(0xFFC0392B),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -757,7 +757,7 @@ class _AtletaPerfilPageState extends State<AtletaPerfilPage> {
               },
               child: const Text(
                 'SAIR',
-                style: TextStyle(color: Color(0xFFC9305A)),
+                style: TextStyle(color: Color(0xFFC0392B)),
               ),
             ),
           ],

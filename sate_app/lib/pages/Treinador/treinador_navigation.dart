@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'treinador_home_page.dart';
-import 'treinos_page.dart';
-import 'atletas_page.dart';
-import 'feed_page.dart';
-import 'agenda_page.dart';
-import 'perfil_page.dart';
+import '../../sate/telas/calendario_page.dart';
+import '../../sate/telas/casca_sate.dart';
+import '../../sate/telas/comunidade_page.dart';
+import '../../sate/telas/hubs.dart';
+import '../../sate/telas/inicio_treinador.dart';
+import '../../sate/ui/widgets.dart';
 
-import '../../assets/menu_inferior_treinador.dart';
-
-class TreinadorNavigation extends StatefulWidget {
+/// Estrutura interna do treinador (depois do login e do vínculo com a equipe).
+/// Abas: Início, Atletas, Treinos, Calendário e Comunidade.
+/// Documentação, notificações, configurações e ajuda ficam na gaveta lateral.
+class TreinadorNavigation extends StatelessWidget {
   final String nomeUsuario;
   final String emailUsuario;
 
@@ -20,55 +21,32 @@ class TreinadorNavigation extends StatefulWidget {
   });
 
   @override
-  State<TreinadorNavigation> createState() =>
-      _TreinadorNavigationState();
-}
-
-class _TreinadorNavigationState
-    extends State<TreinadorNavigation> {
-  int indiceSelecionado = 0;
-
-  late final List<Widget> paginas;
-
-  @override
-  void initState() {
-    super.initState();
-
-    paginas = [
-      const TreinadorHomePage(),
-      const TreinosPage(),
-      const AtletasPage(),
-      const FeedPage(),
-      const AgendaPage(),
-      PerfilPage(
-        nomeUsuario: widget.nomeUsuario,
-        emailUsuario: widget.emailUsuario,
-      ),
-    ];
-  }
-
-  void mudarPagina(int indice) {
-    setState(() {
-      indiceSelecionado = indice;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFAF5EE),
-
-      body: IndexedStack(
-        index: indiceSelecionado,
-        children: paginas,
-      ),
-
-      bottomNavigationBar: MenuInferiorTreinador(
-        indiceSelecionado: indiceSelecionado,
-        onItemSelecionado: (indice) {
-          mudarPagina(indice);
-        },
-      ),
+    return CascaSate(
+      treinador: true,
+      nome: nomeUsuario,
+      email: emailUsuario,
+      titulos: const [
+        ('Seu', 'início'),
+        ('Seus', 'atletas'),
+        ('Seus', 'treinos'),
+        ('Seu', 'calendário'),
+        ('Nossa', 'comunidade'),
+      ],
+      itens: const [
+        ItemNav(Icons.home_outlined, Icons.home_rounded, 'Início'),
+        ItemNav(Icons.groups_outlined, Icons.groups_rounded, 'Atletas'),
+        ItemNav(Icons.fitness_center_outlined, Icons.fitness_center_rounded, 'Treinos'),
+        ItemNav(Icons.calendar_month_outlined, Icons.calendar_month_rounded, 'Calendário'),
+        ItemNav(Icons.forum_outlined, Icons.forum_rounded, 'Comunidade'),
+      ],
+      paginas: (ir) => [
+        InicioTreinadorPage(irPara: ir),
+        const AtletasHub(),
+        const TreinosHub(treinador: true),
+        const CalendarioPage(treinador: true),
+        const ComunidadePage(),
+      ],
     );
   }
 }

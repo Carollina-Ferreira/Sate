@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../sate/ui/fundo.dart';
 import 'package:http/http.dart' as http;
+
+import '../services/demo_http.dart';
 
 import 'link_enviado_page.dart';
 import '../theme/sate_theme.dart';
@@ -32,6 +35,11 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Estas telas têm fundo claro fixo: mantêm sempre o tema claro (legibilidade no modo escuro).
+    return Theme(data: SateTema.claro, child: _conteudo(context));
+  }
+
+  Widget _conteudo(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
@@ -279,7 +287,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
       debugPrint('Email: $email');
       debugPrint('================================');
 
-      final resposta = await http.post(
+      final resposta = await demoPost(
         Uri.parse(
           '$apiUrl/api/password/esqueci-senha',
         ),
@@ -356,7 +364,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(mensagem),
-        backgroundColor: erro ? Color(0xFFC9305A) : null,
+        backgroundColor: erro ? Color(0xFFC0392B) : null,
       ),
     );
   }
@@ -454,14 +462,8 @@ class BackgroundPainter extends CustomPainter {
   ) {
     // BLOB ROSA
 
-    final pinkPaint = Paint()
-      ..color = rosa.withValues(alpha: 0.13);
 
-    canvas.drawCircle(
-      Offset(size.width - 30, -20),
-      150,
-      pinkPaint,
-    );
+    orbeDegrade(canvas, Offset(size.width - 30, -20), 150, rosa, 0.30);
 
     // BLOB AZUL
 
@@ -476,14 +478,8 @@ class BackgroundPainter extends CustomPainter {
 
     // BLOB VERDE
 
-    final greenPaint = Paint()
-      ..color = verde.withValues(alpha: 0.08);
 
-    canvas.drawCircle(
-      Offset(-30, size.height - 50),
-      150,
-      greenPaint,
-    );
+    orbeDegrade(canvas, Offset(-30, size.height - 50), 150, verde, 0.14);
 
     // GRID DE PONTOS
 

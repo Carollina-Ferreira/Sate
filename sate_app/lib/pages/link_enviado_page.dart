@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../sate/ui/fundo.dart';
 import '../theme/sate_theme.dart';
 
 class LinkEnviadoPage extends StatelessWidget {
@@ -12,6 +13,11 @@ class LinkEnviadoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Estas telas têm fundo claro fixo: mantêm sempre o tema claro (legibilidade no modo escuro).
+    return Theme(data: SateTema.claro, child: _conteudo(context));
+  }
+
+  Widget _conteudo(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
@@ -231,9 +237,8 @@ class BackgroundPainter extends CustomPainter {
     // BLOB ROSA
     // ================================================================
 
-    final pinkPaint = Paint()..color = rosa.withValues(alpha: 0.13);
 
-    canvas.drawCircle(Offset(size.width - 30, -20), 150, pinkPaint);
+    orbeDegrade(canvas, Offset(size.width - 30, -20), 150, rosa, 0.30);
 
     // ================================================================
     // BLOB AZUL
@@ -247,9 +252,8 @@ class BackgroundPainter extends CustomPainter {
     // BLOB VERDE
     // ================================================================
 
-    final greenPaint = Paint()..color = verde.withValues(alpha: 0.08);
 
-    canvas.drawCircle(Offset(-30, size.height - 50), 150, greenPaint);
+    orbeDegrade(canvas, Offset(-30, size.height - 50), 150, verde, 0.14);
 
     // ================================================================
     // GRID DE PONTOS

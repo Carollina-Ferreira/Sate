@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../sate/ui/fundo.dart';
 import 'package:http/http.dart' as http;
+
+import '../services/demo_http.dart';
 
 import 'cadastro_page.dart';
 import 'esqueci_senha_page.dart';
@@ -40,6 +43,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Estas telas têm fundo claro fixo: mantêm sempre o tema claro (legibilidade no modo escuro).
+    return Theme(data: SateTema.claro, child: _conteudo(context));
+  }
+
+  Widget _conteudo(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
@@ -388,7 +396,7 @@ class _LoginPageState extends State<LoginPage> {
       debugPrint('Tipo escolhido: $tipo');
       debugPrint('================================');
 
-      final resposta = await http.post(
+      final resposta = await demoPost(
         Uri.parse('$apiUrl/api/auth/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'senha': senha, 'tipo': tipo}),
@@ -578,13 +586,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _googleIcon() {
-    return const Text(
-      'G',
-      style: TextStyle(
-        fontSize: 19,
-        fontWeight: FontWeight.w700,
-        color: Color(0xFF4285F4),
-      ),
+    // Logotipo oficial do Google (cores e proporções originais).
+    return Image.asset(
+      'assets/images/google_g.png',
+      width: 20,
+      height: 20,
+      fit: BoxFit.contain,
     );
   }
 
@@ -600,7 +607,7 @@ class _LoginPageState extends State<LoginPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(mensagem),
-        backgroundColor: erro ? Color(0xFFC9305A) : null,
+        backgroundColor: erro ? Color(0xFFC0392B) : null,
       ),
     );
   }
@@ -678,14 +685,12 @@ class BackgroundPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final pinkPaint = Paint()..color = rosa.withValues(alpha: 0.13);
-    canvas.drawCircle(Offset(size.width - 30, -20), 150, pinkPaint);
+    orbeDegrade(canvas, Offset(size.width - 30, -20), 150, rosa, 0.30);
 
     final bluePaint = Paint()..color = azul.withValues(alpha: 0.06);
     canvas.drawCircle(Offset(size.width - 90, 150), 80, bluePaint);
 
-    final greenPaint = Paint()..color = verde.withValues(alpha: 0.08);
-    canvas.drawCircle(Offset(-30, size.height - 50), 150, greenPaint);
+    orbeDegrade(canvas, Offset(-30, size.height - 50), 150, verde, 0.14);
 
     final dotPaint = Paint()..color = azul.withValues(alpha: 0.13);
 

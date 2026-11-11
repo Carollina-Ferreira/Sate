@@ -1616,3 +1616,10 @@
 
 /* O filtro agora possui botão próprio, sem sobreposição com a linha anterior. */
 .teamFilter { margin: 0 auto 22px; }
+
+/* COR DO DESTAQUE DO TÍTULO NO MODO ESCURO */
+:global(html[data-theme="dark"]) .page .titleArea h1 > *,
+:global(:root[data-theme="dark"]) .page .titleArea h1 > * {
+    color: #83e3b6 !important;
+    -webkit-text-fill-color: #83e3b6 !important;
+}

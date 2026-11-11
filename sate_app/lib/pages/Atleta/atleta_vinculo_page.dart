@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../login_page.dart' show BackgroundPainter;
 
 import 'atleta_navigation.dart';
 import 'atleta_qrcode_page.dart';
@@ -308,10 +309,17 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Estas telas têm fundo claro fixo: mantêm sempre o tema claro (legibilidade no modo escuro).
+    return Theme(data: SateTema.claro, child: _conteudo(context));
+  }
+
+  Widget _conteudo(BuildContext context) {
     return Scaffold(
       backgroundColor: fundo,
 
-      body: SafeArea(
+      body: CustomPaint(
+        painter: BackgroundPainter(verde: verde, rosa: rosa, azul: azul),
+        child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(22, 20, 22, 35),
           child: Column(
@@ -610,7 +618,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 

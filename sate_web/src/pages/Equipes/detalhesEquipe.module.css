@@ -661,3 +661,200 @@
     animation-duration: 0.01ms !important;
   }
 }
+
+/* =========================================
+   MODO ESCURO — DETALHES DA EQUIPE
+========================================= */
+
+:global(:root[data-theme='dark']) .page {
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(22, 168, 117, 0.16) 0%,
+      rgba(22, 168, 117, 0.07) 38%,
+      transparent 76%
+    ),
+    #102a22;
+
+  color: #edf7f1;
+}
+
+/* VOLTAR */
+
+:global(:root[data-theme='dark']) .backButton {
+  color: #75dbae;
+}
+
+:global(:root[data-theme='dark']) .backButton:hover {
+  color: #f18caf;
+}
+
+/* CABEÇALHO DA EQUIPE */
+
+:global(:root[data-theme='dark']) .teamHero {
+  background: #193b2d;
+  border-color: #365747;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.12);
+}
+
+:global(:root[data-theme='dark']) .avatar {
+  border-color: #234b37;
+  box-shadow: 0 0 0 1px #52765e;
+}
+
+:global(:root[data-theme='dark']) .heroLabel {
+  color: #f18caf;
+}
+
+:global(:root[data-theme='dark']) .teamIdentity h1 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .teamMeta {
+  color: #b3c9ba;
+}
+
+:global(:root[data-theme='dark']) .teamMeta i {
+  background: #f18caf;
+}
+
+/* DESEMPENHO GERAL */
+
+:global(:root[data-theme='dark']) .performance strong {
+  color: #f18caf;
+}
+
+:global(:root[data-theme='dark']) .performance span {
+  color: #b4c8bb;
+}
+
+/* CARDS DE RESUMO */
+
+:global(:root[data-theme='dark']) .summaryCard {
+  background: #193b2d;
+  border-color: #365747;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+:global(:root[data-theme='dark']) .summaryCard:hover {
+  background: #204634;
+  border-color: #527c62;
+  box-shadow: 0 9px 22px rgba(0, 0, 0, 0.16);
+}
+
+:global(:root[data-theme='dark']) .summaryIcon {
+  background: #244c38;
+  border-color: #42694f;
+  color: #75dfae;
+}
+
+:global(:root[data-theme='dark']) .summaryCard span {
+  color: #b4c9ba;
+}
+
+:global(:root[data-theme='dark']) .summaryCard strong {
+  color: #edf7f1;
+}
+
+/* CARDS PRINCIPAIS */
+
+:global(:root[data-theme='dark']) .card {
+  background: #193b2d;
+  border-color: #365747;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* CABEÇALHO DOS CARDS */
+
+:global(:root[data-theme='dark']) .cardHeader span {
+  color: #f18caf;
+}
+
+:global(:root[data-theme='dark']) .cardHeader h2 {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .cardHeader > strong {
+  color: #75dfae;
+}
+
+/* GRÁFICO */
+
+:global(:root[data-theme='dark']) .gridLine {
+  stroke: #365747;
+}
+
+:global(:root[data-theme='dark']) .axisLabel {
+  fill: #a9c0b1;
+}
+
+/* ESTATÍSTICAS GERAIS */
+
+:global(:root[data-theme='dark']) .statRow {
+  border-bottom-color: #365344;
+}
+
+:global(:root[data-theme='dark']) .statRow span {
+  color: #b2c7b9;
+}
+
+:global(:root[data-theme='dark']) .statRow strong {
+  color: #edf7f1;
+}
+
+/* ELENCO */
+
+:global(:root[data-theme='dark']) .playerCount {
+  background: #462c39;
+  border-color: #75465b;
+  color: #ffb2cc !important;
+}
+
+/* TABELA */
+
+:global(:root[data-theme='dark']) .tableHeader {
+  border-bottom-color: #42614d;
+}
+
+:global(:root[data-theme='dark']) .tableHeader span {
+  color: #f18caf;
+}
+
+:global(:root[data-theme='dark']) .tableRow {
+  border-bottom-color: #304d3d;
+}
+
+:global(:root[data-theme='dark']) .tableRow:hover {
+  background: #214634;
+}
+
+:global(:root[data-theme='dark']) .tableRow > span {
+  color: #b8cbbd;
+}
+
+/* ATLETA */
+
+:global(:root[data-theme='dark']) .playerAvatar {
+  border-color: #234b37;
+  box-shadow: 0 0 0 1px #52765e;
+}
+
+:global(:root[data-theme='dark']) .player strong {
+  color: #edf7f1;
+}
+
+/* DESEMPENHO DO ATLETA */
+
+:global(:root[data-theme='dark']) .performanceCell strong {
+  color: #f18caf;
+}
+
+:global(:root[data-theme='dark']) .miniProgress {
+  background: #365747;
+}
+
+/* ACESSIBILIDADE */
+
+:global(:root[data-theme='dark']) .backButton:focus-visible {
+  outline-color: #f18caf;
+}

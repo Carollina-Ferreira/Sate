@@ -1218,7 +1218,7 @@ class _TreinosPageState extends State<TreinosPage> {
                   ),
                   child: const Icon(
                     Icons.delete_outline_rounded,
-                    color: Color(0xFFC9305A),
+                    color: Color(0xFFC0392B),
                     size: 18,
                   ),
                 ),

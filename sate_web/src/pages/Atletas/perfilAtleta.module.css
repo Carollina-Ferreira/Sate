@@ -17,6 +17,24 @@
 .page *::before,
 .page *::after {
   box-sizing: border-box;
+  width: calc(100% + 96px);
+  min-height: calc(100vh - 64px + 48px);
+  margin: -48px -48px 0;
+  padding: 42px clamp(24px, 5vw, 76px) 56px;
+  box-sizing: border-box;
+  overflow-x: clip;
+
+  background:
+    radial-gradient(
+      ellipse 340px 230px at 96% 0%,
+      rgba(244, 63, 120, 0.16) 0%,
+      rgba(244, 63, 120, 0.08) 38%,
+      rgba(244, 63, 120, 0) 76%
+    ),
+    var(--bg-page);
+
+  color: var(--texto);
+  font-family: var(--fonte-base);
 }
 
 .main {

@@ -569,6 +569,7 @@
 }
 
 
+
 /* ============================================================
    MODO ESCURO
 ============================================================ */
@@ -576,34 +577,29 @@
 :global(:root[data-theme='dark']) .page {
   background:
     radial-gradient(
-      ellipse 340px 230px at 96% 0%,
+      ellipse 360px 260px at 96% 0%,
       rgba(22, 168, 117, 0.16) 0%,
-      rgba(22, 168, 117, 0.07) 38%,
+      rgba(22, 168, 117, 0.07) 42%,
       transparent 76%
     ),
-    #102a22;
+    var(--bg-page);
 
   color: #edf7f1;
 }
 
-
-/* Título */
+/* Cabeçalho */
 
 :global(:root[data-theme='dark']) .title {
   color: #edf7f1;
 }
 
 :global(:root[data-theme='dark']) .title em {
-  color: #72dfb0;
+  color: #83e3b6;
 }
-
-
-/* Descrição */
 
 :global(:root[data-theme='dark']) .description {
   color: #a8beb3;
 }
-
 
 /* Botões */
 
@@ -629,7 +625,6 @@
   border-color: #10966d;
 }
 
-
 /* Cancelar edição */
 
 :global(:root[data-theme='dark']) .editTeamButtonActive,
@@ -643,8 +638,19 @@
   color: #ffc0d1;
 }
 
+/* Aviso de edição — classe usada no JSX */
 
-/* Aviso */
+:global(:root[data-theme='dark']) .editHint {
+  background: #193b30;
+  border-color: #36594a;
+  color: #a7edce;
+}
+
+:global(:root[data-theme='dark']) .editHint svg {
+  color: #83e3b6;
+}
+
+/* Compatibilidade com editNotice */
 
 :global(:root[data-theme='dark']) .editNotice {
   background: #3a2630;
@@ -657,27 +663,26 @@
   color: #ffc0d1;
 }
 
-
 /* Filtros */
 
 :global(:root[data-theme='dark']) .filterButton {
   background: #17372c;
   border-color: #365447;
-  color: #8ee2ba;
+  color: #c2d9cc;
 }
 
 :global(:root[data-theme='dark']) .filterButton:hover {
   background: #224638;
   border-color: #65bd94;
+  color: #ffffff;
 }
 
 :global(:root[data-theme='dark']) .filterButton.active,
 :global(:root[data-theme='dark']) .filterButton.active:hover {
-  background: #006b50;
+  background: #087b5b;
   border-color: #65ddb0;
   color: #ffffff;
 }
-
 
 /* Cards */
 
@@ -685,20 +690,21 @@
   outline-color: #65ddb0;
 }
 
+:global(:root[data-theme='dark']) .page:has(.editHint) .teamClickable,
 :global(:root[data-theme='dark']) .page:has(.editNotice) .teamClickable {
   outline-color: rgba(101, 221, 176, 0.35);
 }
 
+:global(:root[data-theme='dark']) .page:has(.editHint) .teamClickable:hover,
 :global(:root[data-theme='dark']) .page:has(.editNotice) .teamClickable:hover {
   outline-color: #65ddb0;
 }
 
-
-/* Mensagens */
+/* Carregamento e lista vazia */
 
 :global(:root[data-theme='dark']) .loadingMessage,
 :global(:root[data-theme='dark']) .emptyMessage {
-  background: rgba(23, 55, 44, 0.85);
+  background: #17372c;
   border-color: #365447;
   color: #b2c7bb;
 }
@@ -711,24 +717,7 @@
   color: #a8beb3;
 }
 
-
-/* ============================================================
-   COMPATIBILIDADE COM O JSX ANTERIOR
-============================================================ */
-
-/* Caso os dois botões ainda estejam usando newTeamButton,
-   diferencia o primeiro (editar) do segundo (nova equipe). */
-
-.header > div:last-child > .newTeamButton:first-child {
-  border: 1px solid var(--borda);
-  background: var(--bg-surface);
-  color: var(--verde-medio);
-}
-
-.header > div:last-child > .newTeamButton:first-child:hover {
-  background: var(--bg-verde-suave);
-  border-color: var(--borda-forte);
-}
+/* Compatibilidade com botões antigos */
 
 :global(:root[data-theme='dark']) .header > div:last-child > .newTeamButton:first-child {
   background: #193b30;
@@ -736,19 +725,20 @@
   color: #a7edce;
 }
 
-
-/* Aviso antigo com estilos inline.
-   O ideal continua sendo utilizar styles.editNotice no JSX. */
-
-.page > div[style*="border-radius"] {
-  background: var(--rosa-claro) !important;
-  border: 1px solid #f6c3d1 !important;
-  color: var(--vermelho-escuro) !important;
+:global(:root[data-theme='dark']) .header > div:last-child > .newTeamButton:first-child:hover {
+  background: #224a3b;
+  border-color: #62bd96;
 }
 
-.page > div[style*="border-radius"] svg,
-.page > div[style*="border-radius"] span {
-  color: var(--vermelho-escuro) !important;
+/* Avisos antigos com estilos inline */
+
+:global(:root[data-theme='dark']) .page > div[style*="border-radius"] {
+  background: #3a2630 !important;
+  border: 1px solid #754153 !important;
+  color: #ffc0d1 !important;
 }
-/* Estado de edição: usa os tokens do tema, sem estilos inline. */
-.editHint { display:flex; align-items:center; gap:8px; margin-bottom:16px; padding:10px 14px; border:1px solid var(--borda); border-radius:9px; background:var(--bg-verde-suave); color:var(--texto-medio); font-size:12px; }
+
+:global(:root[data-theme='dark']) .page > div[style*="border-radius"] svg,
+:global(:root[data-theme='dark']) .page > div[style*="border-radius"] span {
+  color: #ffc0d1 !important;
+}

@@ -463,7 +463,7 @@
 
 /* Item ativo */
 :global(:root[data-theme='dark']) .active {
-    background: var(--verde);
+    background: var(--verde-dark);
     color: #ffffff;
 }
 

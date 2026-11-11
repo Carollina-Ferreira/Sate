@@ -19,28 +19,35 @@ const videoRoutes = require('./routes/videoRoutes');
 const configuracaoAnaliseRoutes = require('./routes/configuracaoAnaliseRoutes');
 const notificacaoRoutes = require('./routes/notificacaoRoutes');
 
+// NOVA ROTA — ESTATÍSTICAS
+const estatisticasRoutes = require('./routes/estatisticasRoutes');
+
 // ======================================================
 // VERIFICAÇÃO DAS ROTAS
 // ======================================================
 
 const rotas = {
-  authRoutes,
-  atletaRoutes,
-  treinadorRoutes,
-  passwordRoutes,
-  usuarioRoutes,
-  equipeRoutes,
-  partidaRoutes,
-  dashboardRoutes,
-  videoRoutes,
-  configuracaoAnaliseRoutes,
+    authRoutes,
+    atletaRoutes,
+    treinadorRoutes,
+    passwordRoutes,
+    usuarioRoutes,
+    equipeRoutes,
+    partidaRoutes,
+    dashboardRoutes,
+    videoRoutes,
+    configuracaoAnaliseRoutes,
+    notificacaoRoutes,
+    estatisticasRoutes,
 };
 
 for (const [nome, rota] of Object.entries(rotas)) {
-  if (typeof rota !== 'function') {
-    console.error(`ERRO: ${nome} não exporta um Router válido.`);
-    process.exit(1);
-  }
+    if (typeof rota !== 'function') {
+        console.error(
+            `ERRO: ${nome} não exporta um Router válido.`
+        );
+        process.exit(1);
+    }
 }
 
 console.log('Todas as rotas foram carregadas corretamente!');
@@ -117,21 +124,33 @@ app.get('/api/health', (req, res) => {
 // ROTAS DA API
 // ======================================================
 
+// Autenticação
 app.use('/api/auth', authRoutes);
 
+// Atletas
 app.use('/api/atletas', atletaRoutes);
 
+// Treinadores
 app.use('/api/treinadores', treinadorRoutes);
 
+// Recuperação de senha
 app.use('/api/password', passwordRoutes);
 
+// Usuários
 app.use('/api/usuarios', usuarioRoutes);
 
+// Equipes
 app.use('/api/equipes', equipeRoutes);
 
+// Partidas
 app.use('/api/partidas', partidaRoutes);
 
+// Dashboard
 app.use('/api/dashboard', dashboardRoutes);
+
+// Estatísticas
+app.use('/api/estatisticas', estatisticasRoutes);
+
 // Notificações
 app.use('/api/notificacoes', notificacaoRoutes);
 
@@ -169,20 +188,27 @@ app.use((err, req, res, next) => {
 
     if (err.code === 'LIMIT_FILE_SIZE') {
         return res.status(413).json({
-            mensagem: 'Vídeo muito grande. Limite de 500 MB por arquivo.',
+            mensagem:
+                'Vídeo muito grande. Limite de 500 MB por arquivo.',
         });
     }
 
     if (err.code === 'LIMIT_UNEXPECTED_FILE') {
         return res.status(400).json({
-            mensagem: 'Campo de arquivo inválido. Use o campo "arquivo".',
+            mensagem:
+                'Campo de arquivo inválido. Use o campo "arquivo".',
         });
     }
 
-    return res.status(
+    const status = Number(
         err.status || err.statusCode || 500
+    );
+
+    return res.status(
+        status >= 400 && status < 600 ? status : 500
     ).json({
-        mensagem: err.message || 'Erro interno do servidor.',
+        mensagem:
+            err.message || 'Erro interno do servidor.',
     });
 });
 
@@ -200,6 +226,7 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor: http://localhost:${PORT}`);
     console.log(`API: http://localhost:${PORT}/api`);
     console.log(`Dashboard: http://localhost:${PORT}/api/dashboard`);
+    console.log(`Estatísticas: http://localhost:${PORT}/api/estatisticas`);
     console.log(`Health: http://localhost:${PORT}/api/health`);
     console.log(`Vídeos: http://localhost:${PORT}/api/partidas/:id/videos`);
     console.log(`Configuração de análise: http://localhost:${PORT}/api/configuracao-analise`);

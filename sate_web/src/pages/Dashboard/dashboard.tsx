@@ -1007,7 +1007,7 @@ export default function Dashboard() {
 
   if (carregando) {
     return (
-      <main className={styles.page}>
+      <main className={`${styles.page} sate-internal-page`}>
         <div
           className={
             styles.feedback
@@ -1026,7 +1026,7 @@ export default function Dashboard() {
 
   if (erro) {
     return (
-      <main className={styles.page}>
+      <main className={`${styles.page} sate-internal-page`}>
         <div
           className={
             styles.feedback
@@ -1055,7 +1055,7 @@ export default function Dashboard() {
   // ==========================================================
 
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} sate-internal-page`}>
       <div
         className={
           styles.dashboard
@@ -1604,7 +1604,7 @@ export default function Dashboard() {
               }
               onClick={() =>
                 navigate(
-                  `/detalhes-partida/${partida.id}`,
+                  proxima?.id ? `/detalhes-partida/${proxima.id}` : '/partidas',
                 )
               }
             >

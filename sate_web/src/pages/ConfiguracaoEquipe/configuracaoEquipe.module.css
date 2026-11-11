@@ -1,635 +1,349 @@
-
+/* SATE — Configuração da Equipe | baseado nas variáveis do global.css */
 .page {
     width: 100%;
     min-height: 100vh;
     min-height: 100dvh;
-    overflow-x: hidden;
-
+    position: relative;
+    isolation: isolate;
+    overflow-x: clip;
     display: flex;
     justify-content: center;
-
-    position: relative;
-
-    background-color: var(--creme, #FAF5EE);
+    background-color: var(--bg-page);
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
-
-    color: var(--texto, #12261F);
-
-    font-family: var(--fonte-base, 'Poppins', sans-serif);
+    color: var(--texto);
+    font-family: var(--fonte-base);
+    /* Usado pelo gradiente da imagem no TSX: cores por tema. */
+    --equipe-foto-overlay-inicio: rgba(250, 245, 238, 0.88);
+    --equipe-foto-overlay-fim: rgba(250, 245, 238, 0.94);
 }
-
+.page, .page * { box-sizing: border-box; }
 .page::before {
     content: '';
-
     position: absolute;
     inset: 0;
-
-    background:
-        radial-gradient(
-            circle at 85% 8%,
-            rgba(239, 71, 111, 0.14),
-            transparent 30%
-        ),
-        linear-gradient(
-            135deg,
-            rgba(250, 245, 238, 0.92),
-            rgba(250, 245, 238, 0.96)
-        );
-
+    z-index: 0;
     pointer-events: none;
+    background: radial-gradient(ellipse 420px 300px at 97% 0%, var(--page-glow-start), transparent 77%);
 }
-
 .container {
     width: 100%;
     max-width: 1280px;
     min-height: 100vh;
     min-height: 100dvh;
-
-    display: flex;
-    flex-direction: column;
-
-    padding: clamp(20px, 4vh, 46px) clamp(16px, 4vw, 56px) clamp(20px, 3vh, 36px);
-
-    box-sizing: border-box;
-
     position: relative;
     z-index: 1;
-}
-
-/* PROGRESSO */
-
-
-/* PROGRESSO */
-
-.progressArea {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 18px;
+    padding: clamp(20px, 4vh, 46px) clamp(16px, 4vw, 56px) clamp(20px, 3vh, 36px);
 }
-
-.stepBadge {
-    max-width: 100%;
-    box-sizing: border-box;
-    text-align: center;
-    padding: 7px 19px;
-    border: 1px solid rgba(239, 71, 111, 0.12);
-    border-radius: 999px;
-    background: rgba(239, 71, 111, 0.09);
-    color: var(--rosa, #EF476F);
-    font-size: 11px;
-    font-weight: 500;
-}
-
-.progressSteps {
-    width: min(clamp(300px, 45vw, 700px), 100%);
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-}
-
-.progressComplete,
-.progressInactive {
-    height: 4px;
-    border-radius: 20px;
-}
-
-.progressComplete {
-    background: var(--verde-escuro, #006B4F);
-}
-
-.progressComplete:nth-child(3) {
-    background: var(--rosa, #EF476F);
-}
-
-.progressInactive {
-    background: #E7DED2;
-}
-
-
-/* CABEÇALHO */
-
-.header {
-    margin-top: 32px;
-    margin-bottom: 29px;
-
-    text-align: center;
-}
-
+/* Cabeçalho */
+.header { margin: 32px 0 29px; text-align: center; }
 .header h1 {
     margin: 0;
-
-    color: var(--texto, #12261F);
-
-    font-family: var(--fonte-titulo, 'Poppins', sans-serif);
+    color: var(--texto);
+    font-family: var(--fonte-titulo);
     font-size: clamp(24px, 2.4vw, 40px);
     font-weight: 700;
     line-height: 1.25;
 }
-
 .header h1 span {
-    color: var(--rosa, #EF476F);
-    font-family: 'DM Serif Display', serif;
+    color: var(--rosa);
+    font-family: var(--fonte-destaque);
     font-style: italic;
     font-weight: 400;
 }
-
 .header p {
     max-width: 700px;
-
     margin: 9px auto 0;
-
-    color: var(--texto-suave, #6C7C77);
-
-    font-size: clamp(12px, 0.95vw, 15px);
+    color: var(--texto-suave);
+    font-size: clamp(13px, 0.95vw, 15px);
     line-height: 1.55;
 }
-
-/* CARD */
-
+/* Card / layout */
 .formCard {
     display: grid;
-
-    grid-template-columns:
-        minmax(180px, 240px)
-        minmax(0, 1fr)
-        minmax(180px, 240px);
-
+    grid-template-columns: minmax(180px, 240px) minmax(0, 1fr) minmax(180px, 240px);
+    align-items: start;
     gap: clamp(16px, 2.2vw, 32px);
-
+    width: 100%;
     padding: clamp(16px, 2.2vw, 32px);
-
-    box-sizing: border-box;
-
-    border: 1px solid var(--borda, #E1E8E4);
-    border-radius: 18px;
-
-    background: var(--creme-card, #FFFCF7);
-
-    color: var(--texto, #12261F);
-
-    box-shadow:
-        0 12px 32px rgba(18, 38, 31, 0.06);
+    border: 1px solid var(--borda);
+    border-radius: var(--radius-card, 18px);
+    background: var(--bg-surface-2);
+    color: var(--texto);
+    box-shadow: var(--shadow-card, 0 10px 26px rgba(0, 0, 0, 0.06));
 }
-
-/* FOTO */
-
-.photoColumn {
-    display: flex;
-    flex-direction: column;
-
-    gap: 9px;
-}
-
+.formCard > * { min-width: 0; }
+/* Foto da equipe */
+.photoColumn { min-width: 0; display: flex; flex-direction: column; gap: 9px; }
 .photoArea {
     width: 100%;
+    min-height: 190px;
     height: clamp(170px, 16vw, 240px);
-
+    padding: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     gap: 8px;
-
-    padding: 15px;
-
-    box-sizing: border-box;
-
-    border: 1px dashed #E4D5C8;
-    border-radius: 14px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(239, 71, 111, 0.04),
-            rgba(250, 245, 238, 0.96)
-        );
-
-    background-position: center;
-    background-size: cover;
-
-    color: var(--branco, #FFFFFF);
-
-    font-family: inherit;
-
-    cursor: pointer;
-
     overflow: hidden;
+    border: 1px dashed var(--borda-forte);
+    border-radius: 14px;
+    background-color: var(--bg-surface);
+    background-size: cover;
+    background-position: center;
+    color: var(--texto);
+    font-family: inherit;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
-
+.photoArea:hover { border-color: var(--verde-principal); }
+.photoAreaComImagem { border-style: solid; border-color: var(--borda-forte); }
+.photoAreaComImagem strong, .photoAreaComImagem span { color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.55); }
 .camera {
     width: 53px;
     height: 53px;
-
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 14px;
-
-    background: var(--branco, #FFFFFF);
-
-    color: var(--verde-escuro, #006B4F);
-
-    box-shadow:
-        0 5px 14px rgba(18, 38, 31, 0.08);
+    background: var(--bg-surface);
+    color: var(--verde);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.08);
 }
-
-.photoArea strong {
-    margin-top: 5px;
-
-    color: var(--branco, #FFFFFF);
-
-    font-size: 12px;
-}
-
-.photoArea span {
-    font-size: 9px;
-
-    color: var(--texto-suave, #6C7C77);
-}
-
-.hiddenInput {
-    display: none;
-}
-
+.photoArea strong { margin-top: 5px; font-size: 12px; color: var(--texto); }
+.photoArea span { font-size: 11px; color: var(--texto-suave); }
+/* Se houver imagem, texto branco vence os estilos anteriores. */
+.photoArea.photoAreaComImagem strong,
+.photoArea.photoAreaComImagem span { color: #fff; }
+.hiddenInput { display: none; }
 .changePhoto {
-    height: 35px;
-
-    display: flex;
-    align-items: center;
+    min-height: 36px;
+    display: inline-flex;
     justify-content: center;
-
+    align-items: center;
     gap: 6px;
-
-    border: 1px solid var(--borda, #E1E8E4);
+    padding: 7px 10px;
+    border: 1px solid var(--borda);
     border-radius: 8px;
-
-    background: var(--branco, #FFFFFF);
-
-    color: var(--verde-escuro, #006B4F);
-
-    font-family: inherit;
-
-    font-size: 10px;
-
+    background: var(--bg-surface);
+    color: var(--verde);
+    font: inherit;
+    font-size: 11px;
     cursor: pointer;
+    transition: border-color 0.2s ease;
 }
-
-.changePhoto:hover {
-    border-color: var(--rosa, #EF476F);
-    color: var(--rosa, #EF476F);
-}
-
-/* FORMULÁRIO */
-
-.formArea {
-    display: flex;
-    flex-direction: column;
-
-    gap: 15px;
-}
-
-.field {
-    display: flex;
-    flex-direction: column;
-
-    gap: 6px;
-}
-
-.field label {
-    color: var(--texto, #12261F);
-
-    font-size: 11px;
-    font-weight: 600;
-}
-
-.field label span {
-    margin-left: 4px;
-
-    color: var(--rosa, #EF476F);
-}
-
-.field input,
-.field select {
+.changePhoto:hover { border-color: var(--verde); }
+/* Campos */
+.formArea { min-width: 0; display: flex; flex-direction: column; gap: 15px; }
+.field { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.field label { color: var(--texto); font-size: 12px; font-weight: 600; }
+.field label span { margin-left: 4px; color: var(--rosa); }
+.field input, .field select {
     width: 100%;
-    height: 43px;
-
+    min-height: 44px;
     padding: 0 12px;
-
-    box-sizing: border-box;
-
-    border: 1px solid #E1D6CA;
-    border-radius: 8px;
-
     outline: none;
-
-    background: var(--branco, #FFFFFF);
-
-    color: var(--texto, #12261F);
-
-    font-family: inherit;
-
-    font-size: 11px;
+    border: 1px solid var(--borda);
+    border-radius: 9px;
+    background: var(--bg-surface);
+    color: var(--texto);
+    font: inherit;
+    font-size: 13px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-
-.field input::placeholder {
-    color: #9A9992;
+.field input::placeholder { color: var(--texto-suave); opacity: 1; }
+.field input:focus, .field select:focus {
+    border-color: var(--verde-principal);
+    box-shadow: 0 0 0 3px var(--sombra-foco);
 }
-
-.field input:focus,
-.field select:focus {
-    border-color: var(--verde-principal, #16A875);
-
-    box-shadow:
-        0 0 0 3px rgba(22, 168, 117, 0.12);
-}
-
 .field select:disabled {
     opacity: 1;
-
-    background: #F0EAE1;
-
-    color: var(--texto-suave, #6C7C77);
-
+    background: var(--bg-neutro);
+    color: var(--texto-suave);
     cursor: not-allowed;
 }
-
-.field small {
-    color: var(--texto-suave, #6C7C77);
-
-    font-size: 8px;
-}
-
-/* PRÉVIA DA EQUIPE */
-
+.field select option { background: var(--bg-surface); color: var(--texto); }
+.field small { color: var(--texto-suave); font-size: 11px; line-height: 1.45; }
+/* Prévia */
 .preview {
     min-width: 0;
     align-self: center;
-
-    padding: 15px;
-
+    width: 100%;
+    padding: 17px 15px;
+    border: 1px solid transparent;
     border-radius: 12px;
-
-    background: var(--verde-escuro, #006B4F);
-
-    color: var(--branco, #FFFFFF);
+    background: var(--onboarding-preview-bg);
+    color: var(--onboarding-preview-text);
 }
-
-.previewTitle {
-    display: block;
-
-    margin-bottom: 12px;
-
-    color: rgba(255, 255, 255, 0.82);
-
-    font-size: 8px;
-}
-
-.previewContent {
-    display: flex;
-    align-items: center;
-
-    gap: 11px;
-}
-
+.previewTitle { display: block; margin-bottom: 12px; color: var(--onboarding-preview-muted); font-size: 11px; }
+.previewContent { display: flex; align-items: center; gap: 11px; min-width: 0; }
 .avatar {
     width: 47px;
     height: 47px;
-
     flex-shrink: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 50%;
-
-    background: var(--rosa, #EF476F);
-
-    background-position: center;
+    background-color: var(--onboarding-solid-accent);
     background-size: cover;
-
-    color: var(--branco, #FFFFFF);
-
+    background-position: center;
+    color: var(--onboarding-accent-text);
     font-size: 22px;
 }
-
-.previewContent > div:last-child {
-    min-width: 0;
-
-    display: flex;
-    flex-direction: column;
-}
-
+.previewContent > div:last-child { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .previewContent strong {
+    display: block;
     overflow: hidden;
-
-    color: var(--branco, #FFFFFF);
-
-    font-size: 11px;
-
-    white-space: nowrap;
+    color: var(--onboarding-preview-text);
+    font-size: 13px;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
-
-.previewContent span {
-    margin-top: 2px;
-
-    color: rgba(255, 255, 255, 0.8);
-
-    font-size: 8px;
-}
-
-/* RODAPÉ */
-
+.previewContent span { margin-top: 3px; color: var(--onboarding-preview-muted); font-size: 11px; }
+/* Navegação */
 .footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-
     margin-top: auto;
-
     padding-top: 34px;
 }
-
-.backButton {
-     display: flex;
+.backButton, .nextButton {
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 9px;
-    border: none;
-    background: transparent;
-    color: var(--verde-dark, #006B4F);
     font-family: inherit;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    transition: color 0.18s ease, transform 0.18s ease;
+    transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
 }
-
-.backButton:hover {
-    color: var(--verde-dark,#006B4F);
-    transform: translateX(-2px);
-}
-
+.backButton { padding: 10px 4px; border: 0; background: transparent; color: var(--verde); }
+.backButton:hover { color: var(--verde-hover); transform: translateX(-2px); }
 .nextButton {
     min-width: 135px;
-    height: 43px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
+    min-height: 44px;
+    padding: 0 18px;
     border: none;
     border-radius: 9px;
-
-    background: var(--verde-escuro, #006B4F);
-
-    color: var(--branco, #FFFFFF);
-
-    font-family: inherit;
-
-    font-size: 13px;
+    background: var(--onboarding-primary-bg, var(--verde));
+    color: var(--onboarding-primary-text, #fff);
     font-weight: 700;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 5px 12px rgba(0, 77, 58, 0.12);
-
-    transition:
-        background 0.18s ease,
-        transform 0.18s ease,
-        opacity 0.18s ease;
+    box-shadow: 0 5px 12px rgba(0, 77, 58, 0.12);
 }
-
-.nextButton:hover:not(:disabled) {
-    background: var(--verde-principal, #16A875);
-    transform: translateY(-1px);
+.nextButton:hover:not(:disabled) { background: var(--onboarding-primary-hover, var(--verde-hover)); transform: translateY(-1px); }
+.nextButton:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+.photoArea:focus-visible, .changePhoto:focus-visible, .backButton:focus-visible, .nextButton:focus-visible {
+    outline: 3px solid var(--verde-principal);
+    outline-offset: 3px;
 }
-
-.nextButton:disabled {
-    opacity: 0.4;
-
-    cursor: not-allowed;
+/* ============================================================
+   MODO ESCURO — mesma paleta do Dashboard, sem rosa decorativo
+============================================================ */
+:global(:root[data-theme='dark']) .page {
+    --equipe-foto-overlay-inicio: rgba(6, 30, 22, 0.86);
+    --equipe-foto-overlay-fim: rgba(6, 30, 22, 0.92);
+    background-color: var(--bg-page);
 }
-
-/* RESPONSIVO */
-
-/* Telas muito grandes */
+:global(:root[data-theme='dark']) .page::before { background: none; }
+:global(:root[data-theme='dark']) .header h1 span,
+:global(:root[data-theme='dark']) .field label span { color: var(--verde); }
+:global(:root[data-theme='dark']) .formCard {
+    background: var(--bg-surface);
+    border-color: var(--borda);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.14);
+}
+:global(:root[data-theme='dark']) .photoArea,
+:global(:root[data-theme='dark']) .field input,
+:global(:root[data-theme='dark']) .field select,
+:global(:root[data-theme='dark']) .changePhoto,
+:global(:root[data-theme='dark']) .camera {
+    background-color: var(--bg-surface-2);
+    border-color: var(--borda-forte);
+}
+:global(:root[data-theme='dark']) .photoAreaComImagem {
+    background-position: center;
+    background-size: cover;
+}
+:global(:root[data-theme='dark']) .field input,
+:global(:root[data-theme='dark']) .field select { color: var(--texto); color-scheme: dark; }
+:global(:root[data-theme='dark']) .field select:disabled { background: var(--bg-neutro); color: var(--texto-suave); }
+:global(:root[data-theme='dark']) .field input:focus,
+:global(:root[data-theme='dark']) .field select:focus { border-color: var(--verde-principal); }
+:global(:root[data-theme='dark']) .preview {
+    border-color: var(--borda);
+    background: var(--verde-escuro);
+    color: #fff;
+}
+:global(:root[data-theme='dark']) .avatar { background-color: var(--onboarding-primary-bg, #16845f); color: #fff; }
+:global(:root[data-theme='dark']) .nextButton {
+    background: var(--onboarding-primary-bg, #16845f);
+    color: var(--onboarding-primary-text, #fff);
+}
+:global(:root[data-theme='dark']) .nextButton:hover:not(:disabled) { background: var(--onboarding-primary-hover, #10704f); }
+/* Responsividade */
 @media (min-width: 1600px) {
-    .container {
-        max-width: 1440px;
-    }
-
-    .field input,
-    .field select {
-        height: 48px;
-        font-size: 13px;
-    }
-
-    .field label {
-        font-size: 13px;
-    }
+    .container { max-width: 1440px; }
+    .field input, .field select { min-height: 48px; }
 }
-
-/* Tablets / notebooks pequenos */
 @media (max-width: 980px) {
-    .formCard {
-        grid-template-columns: minmax(160px, 200px) minmax(0, 1fr);
-    }
-
-    .preview {
-        grid-column: 1 / -1;
-    }
+    .formCard { grid-template-columns: minmax(160px, 200px) minmax(0, 1fr); }
+    .preview { grid-column: 1 / -1; }
 }
-
-/* Celulares */
 @media (max-width: 620px) {
-    .container {
-        padding: 24px 16px 22px;
-    }
-
-    .header {
-        margin-top: 24px;
-        margin-bottom: 22px;
-    }
-
-    .formCard {
-        grid-template-columns: minmax(0, 1fr);
-        padding: 16px;
-        border-radius: 16px;
-    }
-
-    .photoArea {
-        height: 170px;
-    }
-
-    .preview {
-        grid-column: auto;
-    }
-
-    /* 16px evita o zoom automático do iPhone ao focar no campo */
-    .field input,
-    .field select {
-        height: 46px;
-        font-size: 16px;
-    }
-
-    .field label {
-        font-size: 12px;
-    }
-
-    .field small,
-    .previewTitle,
-    .previewContent span,
-    .photoArea span {
-        font-size: 10px;
-    }
-
-    .previewContent strong {
-        font-size: 12px;
-    }
-
-    .changePhoto {
-        font-size: 12px;
-    }
-
-    .footer {
-        padding-top: 24px;
-    }
-
-    .nextButton {
-        min-width: 120px;
-    }
+    .container { padding: 24px 16px 22px; }
+    .header { margin: 24px 0 22px; }
+    .formCard { grid-template-columns: minmax(0, 1fr); padding: 16px; border-radius: 16px; }
+    .photoArea { height: 170px; min-height: 170px; }
+    .preview { grid-column: auto; }
+    .field input, .field select { min-height: 46px; font-size: 16px; }
+    .field label { font-size: 13px; }
+    .footer { padding-top: 24px; }
+    .nextButton { min-width: 120px; }
 }
-
-/* Celulares pequenos */
 @media (max-width: 360px) {
-    .container {
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-
-    .formCard {
-        padding: 14px;
-    }
+    .container { padding-left: 12px; padding-right: 12px; }
+    .formCard { padding: 14px; }
+}
+@media (max-height: 560px) {
+    .header { margin-top: 16px; margin-bottom: 16px; }
+    .footer { padding-top: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .backButton, .nextButton, .photoArea, .field input, .field select { transition: none; }
 }
 
-/* Telas baixas (celular deitado) */
-@media (max-height: 560px) {
-    .header {
-        margin-top: 16px;
-        margin-bottom: 16px;
-    }
 
-    .footer {
-        padding-top: 18px;
-    }
+/* ============================================================
+   CONFIGURAÇÃO DA EQUIPE — SCROLL INVISÍVEL
+============================================================ */
+
+.container {
+    height: 100dvh;
+    max-height: 100dvh;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    /* Firefox */
+    scrollbar-width: none;
+
+    /* Edge antigo */
+    -ms-overflow-style: none;
+
+    /* Rolagem no celular */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Chrome, Edge e Safari */
+.container::-webkit-scrollbar {
+    display: none;
 }

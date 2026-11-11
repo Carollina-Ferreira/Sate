@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import NovaPartidaModal from '../../components/NovaPartidaModal/NovaPartidaModal';
 
 import styles from './partidas.module.css';
+import PageHeading from '../../components/ui/PageHeading/PageHeading';
+import ActionButton from '../../components/ui/ActionButton/ActionButton';
 
 type TipoStatus = 'analisada' | 'analise' | 'pendente';
 
@@ -1014,28 +1016,17 @@ export default function Partidas() {
   ============================================================ */
 
   return (
-    <div className={styles.page}>
-      <div className={styles.pageInner}>
-        <div className={styles.titleRow}>
-          <div>
-            <h2>
-              Suas <em>partidas.</em>
-            </h2>
-
-            <p>
-              Organize jogos, resultados e análises.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            className={styles.newButton}
-            onClick={abrirModal}
-          >
-            <span aria-hidden="true">+</span>
-            Nova partida
-          </button>
-        </div>
+    <div className={`${styles.page} sate-internal-page sate-internal-page--nested`}>
+      <div className={`${styles.pageInner} sate-page-inner`}>
+        <PageHeading
+          title={<>Suas <em>partidas.</em></>}
+          description="Organize jogos, resultados e análises."
+          actions={
+            <ActionButton icon={<span aria-hidden="true">+</span>} onClick={abrirModal}>
+              Nova partida
+            </ActionButton>
+          }
+        />
 
         <div
           className={styles.statusTabs}
@@ -1192,6 +1183,18 @@ export default function Partidas() {
 
                   <td className={styles.resultado}>
                     {partida.resultado}
+                    <button
+                      type="button"
+                      className={styles.editScoreButton}
+                      aria-label={`Editar placar de ${partida.confronto}`}
+                      onClick={(evento) => {
+                        evento.stopPropagation();
+                        void editarResultado(partida);
+                      }}
+                      onKeyDown={(evento) => evento.stopPropagation()}
+                    >
+                      Editar
+                    </button>
                   </td>
 
                   <td>

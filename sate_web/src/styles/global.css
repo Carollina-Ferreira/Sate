@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* =====================================
    VARIÁVEIS GLOBAIS — TEMA CLARO
@@ -9,8 +9,29 @@
   color-scheme: light;
 
   /* ===== TIPOGRAFIA ===== */
-  --fonte-titulo: 'Sora', sans-serif;
-  --fonte-base: 'Inter', sans-serif;
+  --fonte-titulo: 'Poppins', sans-serif;
+  --fonte-base: 'Poppins', sans-serif;
+  --fonte-destaque: 'DM Serif Display', Georgia, serif;
+
+  /* ===== DESIGN SYSTEM: ESTRUTURA E COMPONENTES ===== */
+  --page-max-width: 1240px;
+  --page-title-size: clamp(34px, 3vw, 44px);
+  --page-inline-padding: clamp(24px, 4vw, 64px);
+  --space-page-section: 36px;
+  --layout-content-padding: 32px;
+  --control-height: 46px;
+  --radius-control: 12px;
+  --radius-card: 16px;
+  --shadow-card: 0 10px 26px rgba(60, 47, 38, 0.06);
+  --page-glow-start: rgba(239, 71, 111, 0.15);
+  --page-glow-middle: rgba(239, 71, 111, 0.07);
+  --page-glow-end: rgba(239, 71, 111, 0);
+
+  --brilho-pagina-inicio: var(--page-glow-start);
+  --brilho-pagina-meio: var(--page-glow-middle);
+  --brilho-pagina-fim: var(--page-glow-end);
+  --texto-principal: var(--texto);
+  --fundo-brilho-rosa: var(--page-glow-start);
 
   /* ===== FUNDOS ===== */
   --bg-page: #faf5ee;
@@ -66,10 +87,48 @@
   --graf-5: #d652a2;
 
   /* ===== SOMBRAS / OVERLAYS ===== */
-  --sombra: rgba(0, 0, 0, 0.15);
+  --sombra-cor: rgba(0, 0, 0, 0.15);
+  --sombra: 0 10px 24px var(--sombra-cor);
   --sombra-foco: rgba(22, 168, 117, 0.18);
   --overlay: rgba(0, 35, 25, 0.68);
   --branco-translucido: rgba(255, 255, 255, 0.72);
+
+
+  /* ===== ONBOARDING — TOKENS SEMÂNTICOS =====
+     Compartilhados pelas cinco etapas e pelo modal de campos.
+     Nunca declarar cores isoladas dentro de cada página. */
+  --onboarding-page: var(--bg-page);
+  --onboarding-surface: var(--bg-surface);
+  --onboarding-surface-soft: var(--bg-surface-2);
+  --onboarding-text: var(--texto);
+  --onboarding-muted: var(--texto-suave);
+  --onboarding-border: var(--borda);
+  --onboarding-border-strong: var(--borda-forte);
+  --onboarding-progress-track: var(--borda-forte);
+  --onboarding-preview-bg: var(--verde-escuro);
+  --onboarding-preview-text: #ffffff;
+  --onboarding-preview-muted: rgba(255, 255, 255, 0.78);
+  --onboarding-success-bg: var(--bg-verde-suave);
+  --onboarding-success-text: var(--verde-medio);
+  --onboarding-icon-bg: var(--bg-verde-suave);
+  --onboarding-accent-bg: color-mix(in srgb, var(--rosa) 12%, var(--bg-surface));
+  --onboarding-accent-bg-hover: color-mix(in srgb, var(--rosa) 18%, var(--bg-surface));
+  --onboarding-accent-border: color-mix(in srgb, var(--rosa) 40%, var(--borda));
+  --onboarding-glow: color-mix(in srgb, var(--rosa) 15%, transparent);
+  --onboarding-glow-soft: color-mix(in srgb, var(--rosa) 8%, transparent);
+  --onboarding-bg-gradient-start: var(--bg-page);
+  --onboarding-bg-gradient-end: var(--bg-surface-2);
+  --onboarding-page-veil: rgba(250, 245, 238, 0.94);
+  --onboarding-photo-shade-start: rgba(45, 30, 36, 0.55);
+  --onboarding-photo-shade-end: rgba(45, 30, 36, 0.72);
+  --onboarding-image-text: #ffffff;
+  --onboarding-image-button-bg: rgba(19, 30, 27, 0.52);
+  --onboarding-solid-accent: #c92b54;
+  --onboarding-solid-accent-hover: #b7224c;
+  --onboarding-primary-bg: #005942;
+  --onboarding-primary-hover: #087b5b;
+  --onboarding-primary-text: #ffffff;
+  --onboarding-accent-text: #ffffff;
 
   /* ===== SIDEBAR ===== */
   --sidebar-fundo: var(--verde-escuro);
@@ -99,6 +158,11 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
+
+  --shadow-card: 0 10px 26px rgba(0, 0, 0, 0.15);
+  --page-glow-start: rgba(66, 201, 148, 0.11);
+  --page-glow-middle: rgba(66, 201, 148, 0.05);
+  --page-glow-end: rgba(66, 201, 148, 0);
 
   /* ===== FUNDOS ===== */
   --bg-page: #102a22;
@@ -154,10 +218,24 @@
   --graf-5: #f08acb;
 
   /* ===== SOMBRAS / OVERLAYS ===== */
-  --sombra: rgba(0, 0, 0, 0.4);
+  --sombra-cor: rgba(0, 0, 0, 0.4);
+  --sombra: 0 10px 24px var(--sombra-cor);
   --sombra-foco: rgba(66, 201, 148, 0.2);
   --overlay: rgba(0, 20, 15, 0.8);
   --branco-translucido: rgba(255, 255, 255, 0.12);
+
+
+  /* ===== ONBOARDING — ADAPTAÇÃO ESCURA ===== */
+  --onboarding-page-veil: rgba(16, 42, 34, 0.94);
+  --onboarding-photo-shade-start: rgba(6, 22, 19, 0.70);
+  --onboarding-photo-shade-end: rgba(6, 22, 19, 0.82);
+  --onboarding-image-button-bg: rgba(7, 29, 24, 0.74);
+  --onboarding-solid-accent: var(--rosa);
+  --onboarding-solid-accent-hover: var(--rosa-suave);
+  --onboarding-primary-bg: #42c994;
+  --onboarding-primary-hover: #83e3b6;
+  --onboarding-primary-text: #09251e;
+  --onboarding-accent-text: #28151c;
 
   /* ===== SIDEBAR ===== */
   --sidebar-fundo: #09251e;
@@ -194,6 +272,8 @@
 html,
 body,
 #root {
+  max-width: 100%;
+  overflow-x: clip;
   width: 100%;
   min-height: 100%;
   margin: 0;
@@ -202,7 +282,6 @@ body,
 
 html {
   background-color: var(--bg-page);
-  scrollbar-width: none;
 }
 
 body {
@@ -293,5 +372,203 @@ video {
 ===================================== */
 
 html {
-  scrollbar-width: none;
+}
+
+/* ============================================================
+   DESIGN SYSTEM — PÁGINAS INTERNAS
+   A página toda ocupa a área do Layout; o conteúdo fica centralizado.
+   Não aplicar à landing page, login ou onboarding.
+============================================================ */
+body .sate-internal-page {
+  width: calc(100% + 2 * var(--layout-content-padding));
+  min-height: calc(100vh - 56px);
+  margin: calc(-1 * var(--layout-content-padding));
+  box-sizing: border-box;
+  overflow-x: clip;
+  padding: 42px var(--page-inline-padding) 56px;
+  background: radial-gradient(ellipse 360px 260px at 96% 0%,
+      var(--page-glow-start) 0%, var(--page-glow-middle) 40%, var(--page-glow-end) 76%),
+    var(--bg-page);
+  color: var(--texto);
+  font-family: var(--fonte-base);
+}
+body .sate-internal-page--nested { padding: 0; }
+body .sate-internal-page--nested .sate-page-inner {
+  padding: 42px var(--page-inline-padding) 56px;
+}
+/* Acessibilidade: foco visível, inclusive quando estilos locais o removem. */
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid var(--verde-principal);
+  outline-offset: 3px;
+}
+@media (max-width: 1024px) {
+  :root { --layout-content-padding: 24px; --page-inline-padding: 28px; }
+}
+@media (max-width: 700px) {
+  :root { --layout-content-padding: 16px; --page-inline-padding: 20px; }
+  body .sate-internal-page { padding-top: 32px; padding-bottom: 40px; }
+  body .sate-internal-page--nested { padding: 0; }
+  body .sate-internal-page--nested .sate-page-inner { padding-top: 32px; padding-bottom: 40px; }
+}
+@media (max-width: 400px) {
+  :root { --layout-content-padding: 12px; --page-inline-padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+/* ============================================================
+   LANDING — ESCONDE A BARRA, MAS PERMITE ROLAR A PÁGINA
+   Escopo apenas da landing; outras rotas mantêm seu scroll.
+============================================================ */
+html:has(.sate-public-landing),
+body:has(.sate-public-landing) {
+  overflow-x: clip;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+
+html:has(.sate-public-landing)::-webkit-scrollbar,
+body:has(.sate-public-landing)::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+/* ============================================================
+   SATE — SCROLL INVISÍVEL EM TODO O SITE
+   Mantém a rolagem, mas esconde as barras
+============================================================ */
+
+html {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: clip;
+    scrollbar-width: none;
+}
+
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+
+    overflow-x: clip;
+    scrollbar-width: none;
+}
+
+#root {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    overflow-x: clip;
+    scrollbar-width: none;
+}
+
+/* Esconde as barras em todos os elementos */
+html *,
+body *,
+#root * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Chrome, Edge e Safari */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar,
+html *::-webkit-scrollbar,
+body *::-webkit-scrollbar,
+#root *::-webkit-scrollbar {
+    display: none;
+}
+
+/* Impede imagens e vídeos de ultrapassarem o container */
+img,
+video {
+    max-width: 100%;
+}
+
+
+
+/* ============================================================
+   SATE — SISTEMA GLOBAL DE PLANOS DE FUNDO
+============================================================ */
+
+/* MODO CLARO */
+
+:root,
+:root[data-theme='light'] {
+    --bg-page: #FAF7F2;
+    --bg-surface: #FFFFFF;
+    --bg-surface-2: #FFFDF9;
+
+    --bg-verde-suave: #E7F4ED;
+
+    --page-background:
+        radial-gradient(
+            ellipse 420px 300px at 97% 0%,
+            rgba(239, 71, 111, 0.08) 0%,
+            transparent 75%
+        ),
+        var(--bg-page);
+}
+
+/* MODO ESCURO */
+
+:root[data-theme='dark'] {
+    --bg-page: #082F25;
+    --bg-surface: #104334;
+    --bg-surface-2: #164D3D;
+
+    --bg-verde-suave: #1D634B;
+
+    --page-background:
+        var(--bg-page);
+}
+
+/* ============================================================
+   FUNDO GLOBAL
+============================================================ */
+
+html,
+body,
+#root {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--page-background);
+    color: var(--texto);
+    font-family: var(--fonte-base);
+}
+
+#root {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--page-background);
+}
+
+
+
+/* ============================================================
+   SATE — FUNDO PADRÃO DE TODAS AS PÁGINAS INTERNAS
+============================================================ */
+
+:root,
+:root[data-theme='light'] {
+    --page-background: var(--bg-page);
+}
+
+:root[data-theme='dark'] {
+    --page-background: var(--bg-page);
+}
+
+/* O fundo acompanha automaticamente o tema */
+.sate-page {
+    background: var(--page-background);
+    color: var(--texto);
+    min-height: 100dvh;
 }

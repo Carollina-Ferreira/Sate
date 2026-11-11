@@ -479,7 +479,7 @@ const Configuracoes = () => {
   };
 
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} sate-internal-page`}>
       {/* =================================================
           CABEÇALHO
       ================================================= */}

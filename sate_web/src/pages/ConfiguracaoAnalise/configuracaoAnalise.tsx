@@ -22,6 +22,8 @@ import {
 
 import ModalCampoPersonalizado from '../../components/ModalCampoPersonalizado/modalCampoPersonalizado';
 
+import OnboardingThemeToggle from '../../components/ui/OnboardingThemeToggle/OnboardingThemeToggle';
+import OnboardingProgress from '../../components/ui/OnboardingProgress/OnboardingProgress';
 import styles from './configuracaoAnalise.module.css';
 
 interface CampoAnalise {
@@ -719,41 +721,12 @@ rgba(91, 57, 63, 0.52)
                     : undefined
             }
         >
+            <OnboardingThemeToggle />
             <div className={styles.container}>
 
                 {/* ================= PROGRESSO ================= */}
 
-                <div className={styles.progressArea}>
-                    <div className={styles.stepBadge}>
-                        Etapa 2 de 4 · Configuração da análise
-                    </div>
-
-                    <div className={styles.progressSteps}>
-                        <div
-                            className={
-                                styles.progressComplete
-                            }
-                        />
-
-                        <div
-                            className={
-                                styles.progressActive
-                            }
-                        />
-
-                        <div
-                            className={
-                                styles.progressInactive
-                            }
-                        />
-
-                        <div
-                            className={
-                                styles.progressInactive
-                            }
-                        />
-                    </div>
-                </div>
+                <OnboardingProgress etapa={2} descricao="Configuração da análise" />
 
                 {/* ================= CABEÇALHO ================= */}
 

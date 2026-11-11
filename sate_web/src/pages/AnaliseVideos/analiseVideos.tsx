@@ -1806,7 +1806,7 @@ export default function AnaliseVideos() {
   ============================================================ */
 
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} sate-internal-page`}>
       <header className={styles.pageHeader}>
         <div>
           <div className={styles.titleArea}>

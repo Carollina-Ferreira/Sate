@@ -257,7 +257,7 @@ const EditarAtleta = ({
 
         useState<string | null>(null);
 
-    const [fotoArquivo, setFotoArquivo] =
+    const [, setFotoArquivo] =
 
         useState<File | null>(null);
 

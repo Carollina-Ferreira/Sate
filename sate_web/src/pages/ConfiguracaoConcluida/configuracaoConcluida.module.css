@@ -1,596 +1,1191 @@
 
+
 .page {
+
   width: 100%;
+
   min-height: 100vh;
+
   min-height: 100dvh;
+
   overflow-x: hidden;
+
   display: flex;
+
   justify-content: center;
-  background-color: var(--creme, #FAF5EE);
+
+  background-color: var(--onboarding-page);
+
   background-image:
-    radial-gradient(circle at 91% 8%, rgba(239, 71, 111, 0.13), transparent 22%);
+
+    radial-gradient(circle at 91% 8%, var(--onboarding-glow), transparent 22%);
+
   background-position: center;
+
   background-repeat: no-repeat;
+
   background-size: cover;
-  color: var(--texto, #12261F);
-  font-family: 'Poppins', sans-serif;
+
+  color: var(--onboarding-text);
+
+  font-family: var(--fonte-base);
+
 }
+
+
 
 .container {
+
   width: 100%;
+
   max-width: 1280px;
+
   min-height: 100vh;
+
   min-height: 100dvh;
+
   display: flex;
+
   flex-direction: column;
+
   padding: clamp(20px, 4vh, 40px) clamp(16px, 4vw, 56px) clamp(20px, 3vh, 34px);
+
   box-sizing: border-box;
-}
 
-/* PROGRESSO */
-
-.progressArea {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 18px;
 }
 
 
-   
-.stepBadge {
-    max-width: 100%;
-    box-sizing: border-box;
-    text-align: center;
-    padding: 7px 19px;
 
-    border: 1px solid rgba(239, 71, 111, 0.16);
-    border-radius: 999px;
-
-    background: rgba(239, 71, 111, 0.08);
-
-    color: var(--rosa, #EF476F);
-
-    font-family: var(--fonte-base, 'Poppins', sans-serif);
-    font-size: 11px;
-    font-weight: 500;
-}
-
-
-.progressSteps {
-    width: min(clamp(300px, 45vw, 700px), 100%);
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-}
-
-.progressSteps > div {
-    height: 4px;
-    border-radius: 20px;
-    background: var(--verde-escuro, #006B4F);
-}
-
-/* Terceira barrinha rosa */
-.progressSteps > div:nth-child(4) {
-    background: var(--rosa, #EF476F);
-}
 /* CABEÇALHO */
 
+
+
 .header {
+
   width: min(900px, 100%);
+
   margin: 27px auto 0;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   text-align: center;
+
 }
+
+
 
 .completeIcon {
+
   width: 54px;
+
   height: 54px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   margin-bottom: 13px;
+
   border-radius: 50%;
-  background: var(--rosa, #EF476F);
-  color: var(--branco, #FFFFFF);
+
+  background: var(--onboarding-solid-accent);
+
+  color: var(--onboarding-accent-text);
+
   box-shadow: 0 8px 20px rgba(239, 71, 111, 0.16);
+
 }
+
+
 
 .header h1 {
+
   margin: 0;
-  color: var(--texto, #12261F);
+
+  color: var(--onboarding-text);
+
   font-size: clamp(25px, 2.6vw, 44px);
+
   font-weight: 700;
+
   line-height: 1.2;
+
   letter-spacing: -0.8px;
+
 }
+
+
 
 .header h1 em {
-  color: var(--rosa, #EF476F);
-  font-family: 'DM Serif Display', serif;
+
+  color: var(--rosa);
+
+  font-family: var(--fonte-destaque);
+
   font-weight: 400;
+
   font-style: italic;
+
 }
 
+
+
 .header p {
+
   max-width: 680px;
+
   margin: 9px 0 0;
-  color: var(--texto-suave, #6C7C77);
+
+  color: var(--onboarding-muted);
+
   font-size: clamp(12px, 1vw, 15px);
+
   line-height: 1.5;
+
 }
+
+
 
 /* ÁREA DOS CARDS */
 
+
+
 .summaryArea {
+
   width: min(900px, 100%);
+
   margin: 27px auto 0;
+
   display: grid;
+
   grid-template-columns: repeat(2, minmax(0, 1fr));
+
   gap: 18px;
+
 }
+
+
 
 /* CARD DOS CAMPOS */
 
+
+
 .fieldsCard {
+
   min-height: 205px;
+
   padding: 18px;
+
   box-sizing: border-box;
-  border: 1px solid var(--borda, #E1E8E4);
+
+  border: 1px solid var(--onboarding-border);
+
   border-radius: 16px;
-  background: var(--branco, #FFFFFF);
-  color: var(--texto, #12261F);
+
+  background: var(--onboarding-surface);
+
+  color: var(--onboarding-text);
+
   box-shadow: 0 5px 16px rgba(18, 38, 31, 0.025);
+
 }
+
+
 
 .sportHeader {
+
   display: flex;
+
   align-items: center;
+
   gap: 10px;
+
 }
+
+
 
 .sportCircle {
+
   width: 38px;
+
   height: 38px;
+
   flex-shrink: 0;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   border-radius: 50%;
+
   background: rgba(22, 168, 117, 0.12);
-  color: var(--verde-principal, #16A875);
+
+  color: var(--verde-principal);
+
   font-size: 18px;
+
 }
+
+
 
 .sportHeader > div:last-child {
+
   display: flex;
+
   flex-direction: column;
+
   gap: 1px;
+
 }
+
+
 
 .sportHeader strong {
-  color: var(--texto, #12261F);
+
+  color: var(--onboarding-text);
+
   font-size: 14px;
+
   font-weight: 700;
+
 }
+
+
 
 .sportHeader span {
-  color: var(--texto-suave, #6C7C77);
+
+  color: var(--onboarding-muted);
+
   font-size: 8px;
+
   font-weight: 700;
+
   letter-spacing: 0.5px;
+
 }
+
+
 
 .divider {
+
   width: 100%;
+
   height: 1px;
+
   margin: 14px 0;
-  background: var(--borda, #E1E8E4);
+
+  background: var(--onboarding-border);
+
 }
+
+
 
 .fieldsTitle {
+
   display: block;
+
   margin-bottom: 10px;
-  color: var(--texto, #12261F);
+
+  color: var(--onboarding-text);
+
   font-size: 10px;
+
   font-weight: 600;
+
 }
+
+
 
 .fieldsCard ul {
+
   margin: 0;
+
   padding: 0;
+
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 7px;
+
   list-style: none;
+
 }
+
+
 
 .fieldsCard li {
+
   display: flex;
+
   align-items: center;
+
   gap: 5px;
+
   padding: 6px 9px;
+
   border: 1px solid rgba(22, 168, 117, 0.08);
+
   border-radius: 999px;
-  background: #E4F5EE;
-  color: var(--verde-escuro, #006B4F);
+
+  background: var(--onboarding-success-bg);
+
+  color: var(--onboarding-success-text);
+
   font-size: 9px;
+
   font-weight: 500;
+
 }
+
+
 
 .fieldsCard li svg {
+
   flex-shrink: 0;
-  color: var(--verde-principal, #16A875);
+
+  color: var(--verde-principal);
+
 }
+
+
 
 .emptyFields {
+
   margin: 10px 0 0;
-  color: var(--texto-suave, #6C7C77);
+
+  color: var(--onboarding-muted);
+
   font-size: 9px;
+
 }
 
+
+
 .moreFields {
+
   display: block;
+
   margin-top: 10px;
-  color: var(--verde-principal, #16A875);
+
+  color: var(--verde-principal);
+
   font-size: 9px;
+
   font-weight: 600;
+
 }
+
+
 
 /* CARD DA EQUIPE */
 
+
+
 .teamCard {
+
   min-height: 205px;
+
   overflow: hidden;
-  border: 1px solid var(--borda, #E1E8E4);
+
+  border: 1px solid var(--onboarding-border);
+
   border-radius: 16px;
-  background: var(--branco, #FFFFFF);
-  color: var(--texto, #12261F);
+
+  background: var(--onboarding-surface);
+
+  color: var(--onboarding-text);
+
   box-shadow: 0 5px 16px rgba(18, 38, 31, 0.025);
+
 }
+
+
 
 .teamImage {
+
   height: 108px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   overflow: hidden;
-  background-color: var(--verde-escuro, #006B4F);
+
+  background-color: var(--onboarding-primary-bg);
+
   background-position: center;
+
   background-repeat: no-repeat;
+
   background-size: cover;
-  color: var(--branco, #FFFFFF);
+
+  color: var(--onboarding-primary-text);
+
   font-size: 36px;
+
 }
+
+
 
 .teamInfo {
+
   min-height: 95px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 12px;
+
   padding: 13px 16px;
+
   box-sizing: border-box;
+
 }
+
+
 
 .teamInfo > div:first-child {
+
   min-width: 0;
+
 }
+
+
 
 .teamInfo span {
+
   display: block;
+
   margin-bottom: 3px;
-  color: var(--rosa, #EF476F);
+
+  color: var(--rosa);
+
   font-size: 8px;
+
   font-weight: 700;
+
   letter-spacing: 0.7px;
+
 }
+
+
 
 .teamInfo h2 {
+
   overflow: hidden;
+
   margin: 0;
-  color: var(--texto, #12261F);
+
+  color: var(--onboarding-text);
+
   font-size: 16px;
+
   font-weight: 700;
+
   white-space: nowrap;
+
   text-overflow: ellipsis;
+
 }
+
+
 
 .teamInfo p {
+
   margin: 3px 0 0;
-  color: var(--texto-suave, #6C7C77);
+
+  color: var(--onboarding-muted);
+
   font-size: 9px;
+
 }
 
+
+
 .sportEmoji {
+
   width: 34px;
+
   height: 34px;
+
   flex-shrink: 0;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   border-radius: 50%;
+
   background: rgba(22, 168, 117, 0.12);
-  color: var(--verde-principal, #16A875);
+
+  color: var(--verde-principal);
+
   font-size: 16px;
+
 }
+
+
 
 /* MENSAGEM FINAL */
 
+
+
 .finalMessage {
+
   width: min(900px, 100%);
+
   margin: 14px auto 0;
+
   padding: 10px 13px;
+
   box-sizing: border-box;
+
   display: flex;
+
   align-items: center;
+
   gap: 10px;
+
   border: 1px solid rgba(22, 168, 117, 0.14);
+
   border-radius: 11px;
-  background: #E1F5ED;
+
+  background: var(--onboarding-success-bg);
+
 }
+
+
 
 .finalMessageIcon {
+
   width: 28px;
+
   height: 28px;
+
   flex-shrink: 0;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   border-radius: 50%;
-  background: var(--verde-escuro, #006B4F);
-  color: var(--branco, #FFFFFF);
+
+  background: var(--onboarding-primary-bg);
+
+  color: var(--onboarding-primary-text);
+
 }
+
+
 
 .finalMessage > div:last-child {
+
   min-width: 0;
+
   display: flex;
+
   flex-direction: column;
+
   gap: 1px;
+
 }
+
+
 
 .finalMessage strong {
-  color: var(--texto, #12261F);
+
+  color: var(--onboarding-text);
+
   font-size: 10px;
+
   font-weight: 700;
+
 }
 
+
+
 .finalMessage span {
-  color: var(--texto-suave, #6C7C77);
+
+  color: var(--onboarding-muted);
+
   font-size: 8px;
+
   line-height: 1.4;
+
 }
+
+
 
 /* RODAPÉ */
 
+
+
 .footer {
+
   width: min(900px, 100%);
+
   margin: auto auto 0;
+
   padding-top: 18px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 14px;
+
 }
+
+
 
 .backButton {
+
   display: flex;
+
   align-items: center;
+
   gap: 7px;
+
   padding: 0;
+
   border: none;
+
   background: transparent;
-  color: var(--verde-escuro, #006B4F);
+
+  color: var(--verde);
+
   font-family: inherit;
+
   font-size: 11px;
+
   font-weight: 600;
+
   cursor: pointer;
+
   transition: opacity 0.2s ease, transform 0.2s ease;
+
 }
+
+
 
 .backButton:hover:not(:disabled) {
+
   opacity: 0.75;
+
   transform: translateX(-2px);
+
 }
+
+
 
 .backButton:disabled {
+
   opacity: 0.5;
+
   cursor: not-allowed;
+
 }
+
+
 
 .nextButton {
+
   min-width: 135px;
+
   height: 40px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 7px;
+
   padding: 0 16px;
+
   border: none;
+
   border-radius: 9px;
-  background: var(--rosa, #EF476F);
-  color: var(--branco, #FFFFFF);
+
+  background: var(--onboarding-solid-accent);
+
+  color: var(--onboarding-accent-text);
+
   font-family: inherit;
+
   font-size: 11px;
+
   font-weight: 700;
+
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+
+  transition: background-color 0.2s ease, transform 0.2s ease;
+
 }
+
+
 
 .nextButton:hover:not(:disabled) {
-  background: #D93660;
+
+  background: var(--onboarding-solid-accent-hover);
+
   transform: translateY(-1px);
+
 }
 
+
+
 .nextButton:disabled {
+
   opacity: 0.7;
+
   cursor: not-allowed;
+
 }
+
+
 
 /* LOADING */
 
+
+
 .spinner {
+
   width: 13px;
+
   height: 13px;
+
   border: 2px solid rgba(255, 255, 255, 0.35);
-  border-top-color: #FFFFFF;
+
+  border-top-color: var(--branco);
+
   border-radius: 50%;
+
   animation: girar 0.7s linear infinite;
+
 }
 
+
+
 @keyframes girar {
+
   to {
+
     transform: rotate(360deg);
+
   }
+
 }
+
+
 
 /* RESPONSIVO */
 
+
+
 /* Telas muito grandes */
+
 @media (min-width: 1600px) {
+
   .container {
+
     max-width: 1440px;
+
   }
+
+
 
   .summaryArea,
+
   .header,
+
   .finalMessage,
+
   .footer {
+
     width: min(1000px, 100%);
+
   }
+
+
 
   .fieldsCard li {
+
     font-size: 11px;
+
   }
+
 }
+
+
 
 /* Tablets e celulares: cards empilhados */
+
 @media (max-width: 800px) {
+
   .container {
+
     padding: 28px 20px 24px;
+
   }
 
+
+
   .summaryArea {
+
     grid-template-columns: minmax(0, 1fr);
+
   }
+
+
 
   .fieldsCard,
+
   .teamCard {
+
     min-height: auto;
+
   }
+
+
 
   .teamImage {
+
     height: clamp(110px, 24vw, 170px);
+
   }
+
 }
+
+
 
 /* Celulares */
+
 @media (max-width: 500px) {
+
   .container {
+
     padding: 22px 15px;
+
   }
 
-  .stepBadge {
-    padding: 6px 15px;
-    font-size: 10px;
-  }
 
-  .progressSteps {
-    gap: 6px;
-  }
 
   .header {
+
     margin-top: 24px;
+
   }
+
+
 
   .completeIcon {
+
     width: 48px;
+
     height: 48px;
+
     margin-bottom: 12px;
+
   }
+
+
 
   .header p {
+
     font-size: 12px;
+
   }
 
+
+
   .summaryArea {
+
     margin-top: 24px;
+
     gap: 14px;
+
   }
+
+
 
   .fieldsCard {
+
     padding: 16px;
+
   }
+
+
 
   .fieldsCard li,
+
   .moreFields,
+
   .emptyFields,
+
   .teamInfo p {
+
     font-size: 10px;
+
   }
+
+
 
   .sportHeader span,
+
   .teamInfo span,
+
   .finalMessage span {
+
     font-size: 10px;
+
   }
+
+
 
   .fieldsTitle,
+
   .finalMessage strong {
+
     font-size: 11px;
+
   }
+
+
 
   .teamInfo {
+
     padding: 12px 14px;
+
   }
+
+
 
   .finalMessage {
+
     align-items: flex-start;
+
   }
 
+
+
   .footer {
+
     flex-direction: column-reverse;
+
     align-items: stretch;
+
     padding-top: 18px;
+
   }
+
+
 
   .backButton {
+
     justify-content: center;
+
     min-height: 40px;
+
     font-size: 12px;
+
   }
+
+
 
   .nextButton {
+
     width: 100%;
+
     font-size: 12px;
+
   }
+
 }
+
+
 
 /* Celulares pequenos */
+
 @media (max-width: 360px) {
+
   .container {
+
     padding-left: 12px;
+
     padding-right: 12px;
+
   }
+
+
 
   .teamInfo h2 {
+
     font-size: 14px;
+
   }
+
 }
 
+
+
 /* Telas baixas (celular deitado) */
+
 @media (max-height: 560px) {
+
   .header {
+
     margin-top: 14px;
+
   }
+
+
 
   .summaryArea {
+
     margin-top: 14px;
+
   }
 
+
+
   .footer {
+
     padding-top: 14px;
+
   }
+
+}
+
+
+
+
+
+/* ============================================================
+
+   CONFIGURAÇÃO CONCLUÍDA — SCROLL INVISÍVEL
+
+============================================================ */
+
+
+
+.container {
+
+    min-height: 100dvh;
+
+    height: 100dvh;
+
+    box-sizing: border-box;
+
+
+
+    overflow-x: hidden;
+
+    overflow-y: auto;
+
+
+
+    /* Firefox */
+
+    scrollbar-width: none;
+
+
+
+    /* Edge antigo */
+
+    -ms-overflow-style: none;
+
+
+
+    /* Rolagem no celular */
+
+    -webkit-overflow-scrolling: touch;
+
+}
+
+
+
+/* Chrome, Edge e Safari */
+
+.container::-webkit-scrollbar {
+
+    display: none;
+
+}
+
+
+
+/* ============================================================
+   MODO ESCURO — IDENTIDADE SATE
+   Verde nos destaques; botão de avançar rosa
+============================================================ */
+
+:global(:root[data-theme='dark']) .page {
+    background-color: var(--bg-page);
+    background-image: none;
+    color: var(--texto);
+}
+
+:global(:root[data-theme='dark']) .header h1 {
+    color: var(--texto);
+}
+
+:global(:root[data-theme='dark']) .header h1 em,
+:global(:root[data-theme='dark']) .teamInfo span {
+    color: var(--verde);
+}
+
+:global(:root[data-theme='dark']) .completeIcon {
+    background: var(--onboarding-primary-bg);
+    color: var(--onboarding-primary-text);
+    box-shadow: none;
+}
+
+:global(:root[data-theme='dark']) .nextButton {
+    background: var(--rosa);
+    color: #ffffff;
+}
+
+:global(:root[data-theme='dark']) .nextButton:hover:not(:disabled) {
+    background: var(--rosa);
+    filter: brightness(0.9);
+}
+
+:global(:root[data-theme='dark']) .nextButton:focus-visible {
+    outline: 3px solid var(--verde);
+    outline-offset: 3px;
+}
+
+
+/* BOTÃO DE AVANÇAR — ROSA-ESCURO NO MODO ESCURO */
+
+:global(:root[data-theme='dark']) .nextButton {
+    background: #B8325B;
+    color: #FFFFFF;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+:global(:root[data-theme='dark']) .nextButton:hover:not(:disabled) {
+    background: #982548;
 }

@@ -4,6 +4,8 @@
 <dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Precisamos da câmera para escanear o QR Code da equipe.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>O SATE precisa acessar suas fotos para você escolher a foto de perfil.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

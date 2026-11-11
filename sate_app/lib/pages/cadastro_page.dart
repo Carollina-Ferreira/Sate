@@ -2,7 +2,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../sate/ui/fundo.dart';
 import 'package:http/http.dart' as http;
+
+import '../services/demo_http.dart';
 import '../theme/sate_theme.dart';
 
 class CadastroPage extends StatefulWidget {
@@ -40,6 +43,11 @@ class _CadastroPageState extends State<CadastroPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Estas telas têm fundo claro fixo: mantêm sempre o tema claro (legibilidade no modo escuro).
+    return Theme(data: SateTema.claro, child: _conteudo(context));
+  }
+
+  Widget _conteudo(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
@@ -589,8 +597,7 @@ class _CadastroPageState extends State<CadastroPage> {
       );
       debugPrint('================================');
 
-      final resposta = await http
-          .post(
+      final resposta = await demoPost(
             Uri.parse(
               '$apiUrl/api/auth/cadastro',
             ),
@@ -709,7 +716,7 @@ class _CadastroPageState extends State<CadastroPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(mensagem),
-        backgroundColor: erro ? Color(0xFFC9305A) : null,
+        backgroundColor: erro ? Color(0xFFC0392B) : null,
       ),
     );
   }
@@ -825,14 +832,8 @@ class BackgroundPainter extends CustomPainter {
     Canvas canvas,
     Size size,
   ) {
-    final pinkPaint = Paint()
-      ..color = rosa.withValues(alpha: 0.13);
 
-    canvas.drawCircle(
-      Offset(size.width - 30, -20),
-      150,
-      pinkPaint,
-    );
+    orbeDegrade(canvas, Offset(size.width - 30, -20), 150, rosa, 0.30);
 
     final bluePaint = Paint()
       ..color = azul.withValues(alpha: 0.06);
@@ -843,14 +844,8 @@ class BackgroundPainter extends CustomPainter {
       bluePaint,
     );
 
-    final greenPaint = Paint()
-      ..color = verde.withValues(alpha: 0.08);
 
-    canvas.drawCircle(
-      Offset(-30, size.height - 50),
-      150,
-      greenPaint,
-    );
+    orbeDegrade(canvas, Offset(-30, size.height - 50), 150, verde, 0.14);
 
     final dotPaint = Paint()
       ..color = azul.withValues(alpha: 0.13);

@@ -13,6 +13,7 @@ import {
 } from 'react-router-dom';
 
 import styles from './comparacoes.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 
 const API_URL =
@@ -1007,21 +1008,7 @@ export default function Comparacoes() {
       {/* CARREGANDO */}
 
       {carregando && (
-
-        <section
-          className={
-            styles.stateCard
-          }
-        >
-          <h2>
-            Carregando equipes...
-          </h2>
-
-          <p>
-            Buscando os dados das suas equipes.
-          </p>
-        </section>
-
+        <LoadingState variant="charts" title="Carregando comparações..." description="Buscando os dados das suas equipes." count={2} />
       )}
 
 

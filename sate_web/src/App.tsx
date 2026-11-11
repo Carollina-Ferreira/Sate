@@ -49,12 +49,14 @@ import Configuracoes from "./pages/Configuracoes/configuracoes";
 import AnaliseVideo from "./pages/AnaliseVideos/analiseVideos";
 import Partidas from "./pages/Partidas/partidas";
 import DetalhesDaPartida from "./pages/DetalhesDaPartida/partidas2";
+import Ajuda from './pages/Ajuda/ajuda';
 
 function App() {
   return (
     <BrowserRouter>
       <ThemeProvider>
         <Routes>
+
           {/* ========================================
               PÁGINAS PÚBLICAS
           ======================================== */}
@@ -186,6 +188,8 @@ function App() {
                 path="/configuracoes"
                 element={<Configuracoes />}
               />
+
+              <Route path="/ajuda" element={<Ajuda />} />
 
             </Route>
           </Route>

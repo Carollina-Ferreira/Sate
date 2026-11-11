@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* =========================================================
    SATE — CONFIGURAÇÕES
@@ -5,6 +6,20 @@
 ========================================================= */
 
 .page {
+  --verde: #005942;
+  --verde-profundo: #003d31;
+  --verde-suave: #dff3eb;
+
+  --rosa: #ef3f6f;
+  --rosa-claro: #ffe4ec;
+
+  --creme: #faf5ee;
+  --creme-card: #fffaf4;
+  --creme-linha: #e8ddd2;
+
+  --texto: #172a23;
+  --texto-secundario: #777e79;
+
   width: calc(100% + 60px);
   min-height: calc(100vh + 60px);
 
@@ -20,11 +35,11 @@
       rgba(239, 63, 111, 0.06) 43%,
       rgba(239, 63, 111, 0) 76%
     ),
-    var(--bg-page);
+    var(--creme);
 
   color: var(--texto);
 
-  font-family: var(--fonte-base);
+  font-family: 'Poppins', sans-serif;
 }
 
 .page * {
@@ -58,7 +73,7 @@
 .pageHeader h1 em {
   color: var(--rosa);
 
-  font-family: var(--fonte-destaque);
+  font-family: 'DM Serif Display', serif;
   font-style: italic;
   font-weight: 400;
 
@@ -70,7 +85,7 @@
 
   margin: 10px 0 0;
 
-  color: var(--texto-suave);
+  color: var(--texto-secundario);
 
   font-size: 13px;
   line-height: 1.6;
@@ -102,7 +117,7 @@
 
   padding: 28px 30px 30px;
 
-  border: 1px solid var(--borda);
+  border: 1px solid var(--creme-linha);
   border-radius: 18px;
 
   background: rgba(255, 250, 244, 0.88);
@@ -135,7 +150,7 @@
 .cardHeader p {
   margin: 6px 0 0;
 
-  color: var(--texto-suave);
+  color: var(--texto-secundario);
 
   font-size: 11px;
   line-height: 1.55;
@@ -147,7 +162,7 @@
 
   margin: 20px 0;
 
-  background: var(--borda);
+  background: var(--creme-linha);
 }
 
 
@@ -182,7 +197,7 @@
 
   background: var(--verde);
 
-  color: var(--branco);
+  color: #ffffff;
 
   font-size: 20px;
   font-weight: 700;
@@ -214,7 +229,7 @@
   border: 1px solid #d9cdbf;
   border-radius: 10px;
 
-  background: var(--bg-surface);
+  background: #ffffff;
 
   color: var(--verde);
 
@@ -234,7 +249,7 @@
 .photoButton:hover {
   border-color: #aebdb5;
 
-  background: var(--bg-verde-suave);
+  background: #f4f8f6;
 
   transform: translateY(-1px);
 }
@@ -284,7 +299,7 @@
 
   outline: none;
 
-  background: var(--bg-surface);
+  background: #ffffff;
 
   color: var(--texto);
 
@@ -323,7 +338,7 @@
   margin-top: 26px;
   padding-top: 24px;
 
-  border-top: 1px solid var(--borda);
+  border-top: 1px solid var(--creme-linha);
 }
 
 .passwordTitle {
@@ -364,7 +379,7 @@
 .passwordTitle p {
   margin: 3px 0 0;
 
-  color: var(--texto-suave);
+  color: var(--texto-secundario);
 
   font-size: 10px;
 }
@@ -450,7 +465,7 @@
   margin-top: 26px;
   padding-top: 22px;
 
-  border-top: 1px solid var(--borda);
+  border-top: 1px solid var(--creme-linha);
 }
 
 .saveButton {
@@ -469,7 +484,7 @@
 
   background: var(--verde);
 
-  color: var(--branco);
+  color: #ffffff;
 
   font-family: inherit;
 
@@ -487,7 +502,7 @@
 }
 
 .saveButton:hover {
-  background: var(--verde-escuro);
+  background: var(--verde-profundo);
 
   transform: translateY(-1px);
 }
@@ -513,7 +528,7 @@
 
   padding: 11px 2px;
 
-  border-bottom: 1px solid var(--borda);
+  border-bottom: 1px solid var(--creme-linha);
 }
 
 .preferenceRow:first-child {
@@ -541,7 +556,7 @@
 }
 
 .preferenceText span {
-  color: var(--texto-suave);
+  color: var(--texto-secundario);
 
   font-size: 9px;
   line-height: 1.45;
@@ -584,7 +599,7 @@
 
   border-radius: 50%;
 
-  background: var(--bg-surface);
+  background: #ffffff;
 
   box-shadow:
     0 1px 4px rgba(0, 0, 0, 0.15);
@@ -699,15 +714,15 @@
       rgba(239, 63, 111, 0.04) 43%,
       transparent 76%
     ),
-    var(--bg-page);
+    var(--creme);
 
   color: var(--texto);
 }
 
 /* Cartões */
 :global(:root[data-theme='dark']) .card {
-  background: var(--bg-surface-2);
-  border-color: var(--borda);
+  background: var(--creme-card);
+  border-color: var(--creme-linha);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
 }
 
@@ -758,7 +773,7 @@
 :global(:root[data-theme='dark']) .passwordSection,
 :global(:root[data-theme='dark']) .saveArea,
 :global(:root[data-theme='dark']) .preferenceRow {
-  border-color: var(--borda);
+  border-color: var(--creme-linha);
 }
 
 /* Ícone de senha */
@@ -826,4 +841,28 @@
 /* Título destacado */
 :global(:root[data-theme='dark']) .pageHeader h1 em {
   color: #7be0a8;
+}
+
+/* =========================================================
+   RETORNO DO SALVAMENTO DAS PREFERÊNCIAS
+========================================================= */
+.preferenceStatus {
+  margin: 14px 0 0;
+  color: var(--texto-secundario);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.preferenceNotice {
+  margin: 8px 0 0;
+  color: var(--texto-secundario);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.switch:disabled {
+  cursor: not-allowed;
+  opacity: .52;
+}
+.switch:focus-visible {
+  outline: 2px solid var(--rosa);
+  outline-offset: 3px;
 }

@@ -32,6 +32,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import styles from './header.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 // ============================================================
 // INTERFACES
@@ -922,7 +923,7 @@ const Header = ({
             {openPanel === 'search' && (
               <div className={styles.searchDropdown}>
                 {loadingSearch ? (
-                  <div className={styles.emptySearch}>Carregando resultados...</div>
+                  <div className={styles.emptySearch}><LoadingState variant="inline" title="Carregando resultados..." /></div>
                 ) : (
                   <>
                     {searchError && (
@@ -992,7 +993,7 @@ const Header = ({
                 <div className={styles.notificationList}>
                   {loadingNotifications && notifications.length === 0 ? (
                     <div className={styles.emptySearch}>
-                      Carregando notificações...
+                      <LoadingState variant="inline" title="Carregando notificações..." />
                     </div>
                   ) : notificationError && notifications.length === 0 ? (
                     <div className={styles.emptySearch}>{notificationError}</div>
@@ -1015,9 +1016,8 @@ const Header = ({
                           disabled={
                             processingNotificationId === notification.id
                           }
-                          className={`${styles.notificationItem} ${
-                            !notification.read ? styles.notificationUnread : ''
-                          }`}
+                          className={`${styles.notificationItem} ${!notification.read ? styles.notificationUnread : ''
+                            }`}
                           onClick={() =>
                             void handleNotificationClick(notification)
                           }
@@ -1073,9 +1073,8 @@ const Header = ({
               </div>
 
               <ChevronDown
-                className={`${styles.userArrow} ${
-                  openPanel === 'user' ? styles.userArrowOpen : ''
-                }`}
+                className={`${styles.userArrow} ${openPanel === 'user' ? styles.userArrowOpen : ''
+                  }`}
                 size={19}
               />
             </button>
@@ -1121,9 +1120,8 @@ const Header = ({
                     </span>
 
                     <span
-                      className={`${styles.themeSwitch} ${
-                        theme === 'dark' ? styles.themeSwitchActive : ''
-                      }`}
+                      className={`${styles.themeSwitch} ${theme === 'dark' ? styles.themeSwitchActive : ''
+                        }`}
                       aria-hidden="true"
                     >
                       <span className={styles.themeSwitchKnob} />
@@ -1165,8 +1163,11 @@ const Header = ({
                     type="button"
                     className={styles.userMenuItem}
                     onClick={() => {
-                      onHelp?.();
-                      setOpenPanel(null);
+                      if (onHelp) {
+                        onHelp();
+                      } else {
+                        navigate('/ajuda');
+                      }
                     }}
                   >
                     <CircleHelp size={18} />

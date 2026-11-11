@@ -21,6 +21,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import styles from './dashboard.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 
 // ============================================================
@@ -45,10 +46,50 @@ type StatusPartida =
 
 
 type Periodo =
+  | 'Todas as partidas'
   | 'Últimas 7 partidas'
   | 'Últimas 5 partidas'
   | 'Últimas 3 partidas';
 
+type Classificacao = 'boa' | 'ruim' | 'neutra' | 'destaque';
+
+interface AcoesPartida {
+  id: number;
+  equipeId: number | null;
+  equipeNome: string;
+  adversario: string;
+  data: string;
+  boas: number;
+  ruins: number;
+  neutras: number;
+  destaques: number;
+  total: number;
+  valor: number | null;
+}
+
+interface PartidaApi {
+  id: number;
+  equipeId?: number | null;
+  equipe?: { id?: number; nome?: string } | null;
+  adversario?: string;
+  data?: string;
+  status?: string;
+}
+
+interface VideoApi { id: number }
+
+interface MarcacaoApi {
+  id: number;
+  categoria?: string | null;
+  categoriaId?: number | null;
+  avaliacao?: string | null;
+  tipoRegistro?: string | null;
+}
+
+interface ConfiguracaoAnaliseApi {
+  id: number;
+  tipo?: string | null;
+}
 
 interface Resumo {
   id: number;
@@ -93,18 +134,6 @@ interface Equipe {
 }
 
 
-interface Serie {
-  equipe: number[];
-  adversario: number[];
-}
-
-
-type DadosGrafico = Record<
-  Periodo,
-  Serie
->;
-
-
 interface DashboardResponse {
   treinador: {
     id: number;
@@ -116,7 +145,7 @@ interface DashboardResponse {
 
   atividades: AtividadeRecente[];
 
-  desempenho: DadosGrafico;
+  desempenho?: unknown;
 
   partidas: Partida[];
 
@@ -136,34 +165,73 @@ interface ErroApi {
 // CONFIGURAÇÕES
 // ============================================================
 
-const API_URL =
-  'http://localhost:3000/api';
+const API_URL = String(
+  import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+).replace(/\/+$/, '');
 
 
 const periodos: Periodo[] = [
+  'Todas as partidas',
   'Últimas 7 partidas',
   'Últimas 5 partidas',
   'Últimas 3 partidas',
 ];
 
+/** Aceita respostas em array ou encapsuladas como {partidas/videos/marcacoes/dados}. */
+function extrairLista<T>(dados: unknown, chaves: string[]): T[] {
+  if (Array.isArray(dados)) return dados as T[];
+  if (!dados || typeof dados !== 'object') return [];
+  const registro = dados as Record<string, unknown>;
+  for (const chave of chaves) {
+    if (Array.isArray(registro[chave])) return registro[chave] as T[];
+    if (registro[chave] && typeof registro[chave] === 'object') {
+      const interna = extrairLista<T>(registro[chave], chaves);
+      if (interna.length) return interna;
+    }
+  }
+  return [];
+}
 
-const vazio: DadosGrafico = {
-  'Últimas 7 partidas': {
-    equipe: [],
-    adversario: [],
-  },
+async function buscarLista<T>(url: string, token: string, chaves: string[]): Promise<T[]> {
+  const resposta = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!resposta.ok) {
+    throw new Error(`Erro HTTP ${resposta.status} ao consultar ${url}`);
+  }
+  const dados: unknown = await resposta.json();
+  return extrairLista<T>(dados, chaves);
+}
 
-  'Últimas 5 partidas': {
-    equipe: [],
-    adversario: [],
-  },
+/** Mesma regra usada pelo Perfil do Atleta para classificar ações reais. */
+function normalizarAvaliacao(valor: unknown): Classificacao | null {
+  const texto = String(valor ?? '')
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase();
 
-  'Últimas 3 partidas': {
-    equipe: [],
-    adversario: [],
-  },
-};
+  if (['POSITIVA', 'POSITIVO', 'BOA', 'BOM'].includes(texto)) return 'boa';
+  if (['NEGATIVA', 'NEGATIVO', 'RUIM'].includes(texto)) return 'ruim';
+  if (['NEUTRA', 'NEUTRO'].includes(texto)) return 'neutra';
+  if (['DESTAQUE', 'DESTACADA', 'DESTACADO'].includes(texto)) return 'destaque';
+  return null;
+}
 
+function classificarMarcacao(
+  marcacao: MarcacaoApi,
+  tiposCategorias: Map<number, string>,
+): Classificacao | null {
+  const tipoRegistro = String(marcacao.tipoRegistro || 'EVENTO').toUpperCase();
+  if (tipoRegistro !== 'EVENTO') return null;
+  const categoria = String(marcacao.categoria || '').toUpperCase();
+  if (categoria === 'CLIPE' || categoria === 'CLIP') return null;
+
+  // Preferência: avaliação explícita > tipo da configuração > categoria legada.
+  return normalizarAvaliacao(marcacao.avaliacao)
+    || normalizarAvaliacao(tiposCategorias.get(Number(marcacao.categoriaId)))
+    || normalizarAvaliacao(marcacao.categoria);
+}
 
 const diasSemana = [
   'SEG',
@@ -286,55 +354,43 @@ const criarCalendario = (
 
 
 // ============================================================
-// GRÁFICO
+// GRÁFICO — mesmos limites e curvas do Perfil do Atleta
 // ============================================================
 
-const coordenadas = (
-  valores: number[],
-) => {
-  return valores.map(
-    (valor, index) => {
-      const x =
-        valores.length === 1
-          ? 350
-          : (index * 700) /
-          (valores.length - 1);
+const LIMITE_ESQUERDO = 55;
+const LIMITE_DIREITO = 625;
+const GRAFICO_TOPO = 45;
+const GRAFICO_BASE = 245;
 
-      const valorLimitado =
-        Math.max(
-          0,
-          Math.min(
-            100,
-            valor,
-          ),
-        );
+interface PontoEvolucao extends AcoesPartida {
+  x: number;
+  y: number;
+}
 
-      const y =
-        200 -
-        valorLimitado * 2;
+function gerarPontos(partidas: AcoesPartida[]): PontoEvolucao[] {
+  return partidas.map((partida, index) => {
+    const valor = Math.max(0, Math.min(100, Number(partida.valor ?? 0)));
+    return {
+      ...partida,
+      x: partidas.length === 1
+        ? (LIMITE_ESQUERDO + LIMITE_DIREITO) / 2
+        : LIMITE_ESQUERDO + index *
+          ((LIMITE_DIREITO - LIMITE_ESQUERDO) / (partidas.length - 1)),
+      y: GRAFICO_BASE - (valor / 100) * (GRAFICO_BASE - GRAFICO_TOPO),
+    };
+  });
+}
 
-      return {
-        x,
-        y,
-      };
-    },
-  );
-};
-
-
-const pontos = (
-  valores: number[],
-) => {
-  return coordenadas(
-    valores,
-  )
-    .map(
-      (ponto) =>
-        `${ponto.x},${ponto.y}`,
-    )
-    .join(' ');
-};
-
+function gerarLinhaSuave(pontos: PontoEvolucao[]): string {
+  if (pontos.length < 2) return '';
+  return pontos.reduce((caminho, ponto, index) => {
+    if (index === 0) return `M ${ponto.x} ${ponto.y}`;
+    const anterior = pontos[index - 1];
+    const distancia = (ponto.x - anterior.x) * 0.34;
+    return `${caminho} C ${anterior.x + distancia} ${anterior.y}, ` +
+      `${ponto.x - distancia} ${ponto.y}, ${ponto.x} ${ponto.y}`;
+  }, '');
+}
 
 // ============================================================
 // ÍCONES DE ATIVIDADES
@@ -439,6 +495,138 @@ export default function Dashboard() {
       'Últimas 7 partidas',
     );
 
+
+  // Gráfico global: mesmos critérios do Perfil do Atleta (boas+destaques/total).
+  const [equipeGrafico, setEquipeGrafico] = useState('todas');
+  const [acoesPartidas, setAcoesPartidas] = useState<AcoesPartida[]>([]);
+  const [carregandoAcoes, setCarregandoAcoes] = useState(true);
+  const [erroAcoes, setErroAcoes] = useState('');
+  const [partidasIncompletas, setPartidasIncompletas] = useState(0);
+
+  useEffect(() => {
+    let cancelado = false;
+    const token = obterToken();
+    if (!token) {
+      setCarregandoAcoes(false);
+      return;
+    }
+
+    async function carregarEvolucao() {
+      setCarregandoAcoes(true);
+      setErroAcoes('');
+      setPartidasIncompletas(0);
+      try {
+        // Mesmo campo de classificação do endpoint do perfil: configuracaoAnalise.tipo.
+        // O GET antigo pode retornar configuracoes, campos ou dados.
+        let tiposCategorias = new Map<number, string>();
+        try {
+          const configuracoes = await buscarLista<ConfiguracaoAnaliseApi>(
+            `${API_URL}/configuracao-analise`, token!,
+            ['configuracoes', 'campos', 'dados'],
+          );
+          tiposCategorias = new Map(
+            configuracoes
+              .filter((campo) => Number.isFinite(Number(campo.id)))
+              .map((campo) => [Number(campo.id), String(campo.tipo || '')]),
+          );
+        } catch (error) {
+          console.warn('Configurações de análise indisponíveis; tentando avaliações diretas.', error);
+        }
+
+        const lista = (await buscarLista<PartidaApi>(
+          `${API_URL}/partidas`, token!, ['partidas', 'dados'],
+        )).filter((partida) =>
+          String(partida.status || '').toUpperCase() !== 'CANCELADA'
+        );
+
+        let indice = 0;
+        let falhas = 0;
+        const resultados: Array<AcoesPartida | null> = new Array(lista.length).fill(null);
+
+        // Quatro partidas simultaneamente para não sobrecarregar o backend.
+        async function trabalhador() {
+          while (indice < lista.length && !cancelado) {
+            const atual = indice++;
+            const partida = lista[atual];
+            const resumo = { boa: 0, ruim: 0, neutra: 0, destaque: 0 };
+            let completa = true;
+
+            try {
+              const videos = await buscarLista<VideoApi>(
+                `${API_URL}/partidas/${partida.id}/videos`, token!,
+                ['videos', 'dados'],
+              );
+              const resultadosVideos = await Promise.allSettled(
+                videos.map((video) => buscarLista<MarcacaoApi>(
+                  `${API_URL}/videos/${video.id}/marcacoes`, token!,
+                  ['marcacoes', 'eventos', 'dados'],
+                )),
+              );
+
+              for (const resultado of resultadosVideos) {
+                if (resultado.status === 'rejected') {
+                  completa = false;
+                  falhas += 1;
+                  continue;
+                }
+                for (const marcacao of resultado.value) {
+                  const tipo = classificarMarcacao(marcacao, tiposCategorias);
+                  if (tipo) resumo[tipo] += 1;
+                }
+              }
+            } catch (error) {
+              console.error('Falha ao consultar evolução da partida:', partida.id, error);
+              falhas += 1;
+              completa = false;
+            }
+
+            // Não calcula porcentagens com eventos que não puderam ser consultados.
+            if (!completa) continue;
+
+            const total = resumo.boa + resumo.ruim + resumo.neutra + resumo.destaque;
+            const equipeId = partida.equipeId ?? partida.equipe?.id;
+            resultados[atual] = {
+              id: Number(partida.id),
+              equipeId: equipeId != null && Number.isFinite(Number(equipeId))
+                ? Number(equipeId) : null,
+              equipeNome: partida.equipe?.nome || 'Equipe',
+              adversario: partida.adversario || 'Adversário',
+              data: partida.data || '',
+              boas: resumo.boa,
+              ruins: resumo.ruim,
+              neutras: resumo.neutra,
+              destaques: resumo.destaque,
+              total,
+              valor: total > 0
+                ? Math.round(((resumo.boa + resumo.destaque) / total) * 100)
+                : null,
+            };
+          }
+        }
+        await Promise.all(
+          Array.from({ length: Math.min(4, lista.length) }, () => trabalhador())
+        );
+        if (!cancelado) {
+          setAcoesPartidas(
+            resultados.filter((item): item is AcoesPartida => item !== null)
+          );
+          setPartidasIncompletas(falhas);
+        }
+      } catch (error) {
+        if (!cancelado) {
+          setErroAcoes(
+            error instanceof Error ? error.message
+              : 'Não foi possível consultar a evolução das equipes.'
+          );
+        }
+      } finally {
+        if (!cancelado) setCarregandoAcoes(false);
+      }
+    }
+
+    void carregarEvolucao();
+    return () => { cancelado = true; };
+  }, []);
 
   const [
     mes,
@@ -705,13 +893,46 @@ export default function Dashboard() {
     [];
 
 
-  const serie =
-    (
-      dashboard?.desempenho ||
-      vazio
-    )[periodo] ||
-    vazio[periodo];
+  const serieGrafico = useMemo(() => {
+    const avaliadas = acoesPartidas
+      .filter((partida) =>
+        (equipeGrafico === 'todas' || String(partida.equipeId) === equipeGrafico)
+        && partida.valor !== null
+      )
+      .sort((a, b) =>
+        (dataLocal(b.data)?.getTime() || 0) - (dataLocal(a.data)?.getTime() || 0)
+        || b.id - a.id
+      );
 
+    const quantidade = periodo === 'Todas as partidas'
+      ? avaliadas.length
+      : Number(periodo.match(/\d+/)?.[0] || 7);
+    const partidasSelecionadas = avaliadas.slice(0, quantidade).reverse();
+    const pontos = gerarPontos(partidasSelecionadas);
+    const linha = gerarLinhaSuave(pontos);
+    const primeiro = pontos[0];
+    const ultimo = pontos[pontos.length - 1];
+    const area = pontos.length > 1 && primeiro && ultimo
+      ? `${linha} L ${ultimo.x} ${GRAFICO_BASE} L ${primeiro.x} ${GRAFICO_BASE} Z`
+      : '';
+
+    const somaPositivas = partidasSelecionadas.reduce(
+      (soma, partida) => soma + partida.boas + partida.destaques, 0
+    );
+    const somaTotal = partidasSelecionadas.reduce(
+      (soma, partida) => soma + partida.total, 0
+    );
+
+    return {
+      pontos,
+      linha,
+      area,
+      percentualTotal: somaTotal > 0
+        ? Math.round((somaPositivas / somaTotal) * 100) : null,
+      somaPositivas,
+      somaTotal,
+    };
+  }, [acoesPartidas, equipeGrafico, periodo]);
 
   // ==========================================================
   // CALENDÁRIO
@@ -1007,14 +1228,8 @@ export default function Dashboard() {
 
   if (carregando) {
     return (
-      <main className={`${styles.page} sate-internal-page`}>
-        <div
-          className={
-            styles.feedback
-          }
-        >
-          Carregando dashboard...
-        </div>
+      <main className={styles.page}>
+        <LoadingState variant="charts" title="Carregando dashboard..." description="Preparando indicadores e evolução das equipes." count={2} />
       </main>
     );
   }
@@ -1026,7 +1241,7 @@ export default function Dashboard() {
 
   if (erro) {
     return (
-      <main className={`${styles.page} sate-internal-page`}>
+      <main className={styles.page}>
         <div
           className={
             styles.feedback
@@ -1055,7 +1270,7 @@ export default function Dashboard() {
   // ==========================================================
 
   return (
-    <main className={`${styles.page} sate-internal-page`}>
+    <main className={styles.page}>
       <div
         className={
           styles.dashboard
@@ -1224,269 +1439,159 @@ export default function Dashboard() {
             styles.topGrid
           }
         >
-          {/* GRÁFICO */}
-
-          <article
-            className={`${styles.card} ${styles.performance}`}
-          >
-            <div
-              className={
-                styles.cardHeading
-              }
-            >
+          {/* GRÁFICO — IDÊNTICO AO PADRÃO DO PERFIL DO ATLETA */}
+          <article className={`${styles.card} ${styles.performance}`}>
+            <div className={styles.cardHeading}>
               <div>
-
-
-                <h2>
-                  Evolução de{' '}
-
-                  <em>
-                    desempenho
-                  </em>
-                </h2>
-
-
-                <p>
-                  Sua equipe comparada
-                  aos adversários.
-                </p>
+                <span className={styles.evolucaoEyebrow}>DESEMPENHO EM PARTIDAS</span>
+                <h2>Evolução ao longo do <em>tempo</em></h2>
+                <p>Percentual de ações boas e destaques por partida.</p>
               </div>
+              <span className={styles.evolucaoIcon} aria-hidden="true">
+                <TrendingUp size={19} />
+              </span>
+            </div>
 
-
-              <div
-                className={
-                  styles.periodSelect
-                }
-              >
+            <div className={styles.chartFilters}>
+              <label className={styles.evolucaoFilter}>
+                <span>Equipe</span>
+                <select
+                  value={equipeGrafico}
+                  onChange={(event) => setEquipeGrafico(event.target.value)}
+                  aria-label="Selecionar equipe do gráfico"
+                >
+                  <option value="todas">Todas as equipes</option>
+                  {equipes.map((equipe) => (
+                    <option key={equipe.id} value={String(equipe.id)}>
+                      {equipe.nome}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className={styles.evolucaoFilter}>
+                <span>Período</span>
                 <select
                   value={periodo}
-                  onChange={(
-                    event,
-                  ) =>
-                    setPeriodo(
-                      event.target
-                        .value as Periodo,
-                    )
-                  }
-                  aria-label="Período do gráfico"
+                  onChange={(event) => setPeriodo(event.target.value as Periodo)}
+                  aria-label="Selecionar período do gráfico"
                 >
-                  {periodos.map(
-                    (item) => (
-                      <option
-                        key={item}
-                        value={item}
-                      >
-                        {item}
-                      </option>
-                    ),
-                  )}
+                  {periodos.map((item) => (
+                    <option key={item} value={item}>{item}</option>
+                  ))}
                 </select>
-              </div>
+              </label>
             </div>
 
-
-            <div
-              className={
-                styles.chart
-              }
-            >
-              <div
-                className={
-                  styles.chartAxis
-                }
-              >
-                {[
-                  100,
-                  75,
-                  50,
-                  25,
-                  0,
-                ].map(
-                  (numero) => (
-                    <span
-                      key={numero}
-                    >
-                      {numero}
-                    </span>
-                  ),
-                )}
+            <div className={styles.evolucaoMetrics}>
+              <div className={styles.evolucaoMetricLabel}>
+                <span className={styles.evolucaoMetricDot} />
+                <span>Taxa de ações positivas</span>
               </div>
+              <strong className={styles.evolucaoMetricPill}>
+                {carregandoAcoes || serieGrafico.percentualTotal === null
+                  ? 'Sem dados'
+                  : `${serieGrafico.percentualTotal}% no total`}
+              </strong>
+            </div>
 
-
-              <div
-                className={
-                  styles.chartPlot
-                }
-              >
-                <svg
-                  viewBox="0 0 700 200"
-                  preserveAspectRatio="none"
-                  aria-label="Gráfico de evolução de desempenho"
-                >
-                  {[
-                    0,
-                    50,
-                    100,
-                    150,
-                    200,
-                  ].map(
-                    (y) => (
-                      <line
-                        key={y}
-                        x1="0"
-                        x2="700"
-                        y1={y}
-                        y2={y}
-                        className={
-                          styles.gridLine
-                        }
-                      />
-                    ),
-                  )}
-
-
-                  {serie.equipe
-                    .length >
-                    1 && (
-                      <polygon
-                        points={`0,200 ${pontos(
-                          serie.equipe,
-                        )} 700,200`}
-                        className={
-                          styles.areaFill
-                        }
-                      />
-                    )}
-
-
-                  {serie.adversario
-                    .length >
-                    1 && (
-                      <polyline
-                        points={pontos(
-                          serie.adversario,
-                        )}
-                        className={
-                          styles.opponentLine
-                        }
-                      />
-                    )}
-
-
-                  {serie.equipe
-                    .length >
-                    1 && (
-                      <polyline
-                        points={pontos(
-                          serie.equipe,
-                        )}
-                        className={
-                          styles.teamLine
-                        }
-                      />
-                    )}
-
-
-                  {coordenadas(
-                    serie.adversario,
-                  ).map(
-                    (
-                      ponto,
-                      index,
-                    ) => (
-                      <circle
-                        key={`adversario-${index}`}
-                        cx={
-                          ponto.x
-                        }
-                        cy={
-                          ponto.y
-                        }
-                        r="4.5"
-                        className={
-                          styles.opponentPoint
-                        }
-                      />
-                    ),
-                  )}
-
-
-                  {coordenadas(
-                    serie.equipe,
-                  ).map(
-                    (
-                      ponto,
-                      index,
-                    ) => (
-                      <circle
-                        key={`equipe-${index}`}
-                        cx={
-                          ponto.x
-                        }
-                        cy={
-                          ponto.y
-                        }
-                        r="4.5"
-                        className={
-                          styles.teamPoint
-                        }
-                      />
-                    ),
-                  )}
-                </svg>
-
-
-                <div
-                  className={
-                    styles.chartLabels
-                  }
-                >
-                  {serie.equipe.map(
-                    (
-                      _,
-                      index,
-                    ) => (
-                      <span
-                        key={index}
-                      >
-                        J
-                        {index + 1}
-                      </span>
-                    ),
-                  )}
+            <div className={styles.evolucaoGraphContainer}>
+              {carregandoAcoes ? (
+                <div className={styles.evolucaoEmpty} role="status">
+                  <LoadingState variant="inline" title="Carregando evolução..." />
+                  <p>Consultando os eventos das partidas.</p>
                 </div>
-              </div>
+              ) : erroAcoes ? (
+                <div className={styles.evolucaoEmpty} role="alert">
+                  <strong>Não foi possível carregar a evolução.</strong>
+                  <p>{erroAcoes}</p>
+                </div>
+              ) : serieGrafico.pontos.length === 0 ? (
+                <div className={styles.evolucaoEmpty} role="status">
+                  <BarChart3 size={28} />
+                  <strong>Nenhuma partida avaliada ainda</strong>
+                  <p>Registre eventos classificados como boas, ruins, neutras ou destaques na análise de vídeo para visualizar a evolução.</p>
+                </div>
+              ) : (
+                <svg
+                  className={styles.evolucaoSvg}
+                  viewBox="0 0 680 292"
+                  role="img"
+                  aria-label={`Evolução de ações positivas em ${serieGrafico.pontos.length} partidas avaliadas`}
+                  preserveAspectRatio="xMidYMid meet"
+                >
+                  <defs>
+                    <linearGradient id="sateDashboardEvolucaoArea" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#16A875" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#16A875" stopOpacity="0.015" />
+                    </linearGradient>
+                  </defs>
+                  {[0, 25, 50, 75, 100].map((valor) => {
+                    const y = GRAFICO_BASE -
+                      (valor / 100) * (GRAFICO_BASE - GRAFICO_TOPO);
+                    return (
+                      <g key={valor}>
+                        <text x="36" y={y + 4} textAnchor="end"
+                          className={styles.evolucaoAxisLabel}>
+                          {valor}%
+                        </text>
+                        <line x1={LIMITE_ESQUERDO} x2={LIMITE_DIREITO}
+                          y1={y} y2={y} className={styles.evolucaoGridLine} />
+                      </g>
+                    );
+                  })}
+
+                  {serieGrafico.pontos.length > 1 && (
+                    <>
+                      <path d={serieGrafico.area} fill="url(#sateDashboardEvolucaoArea)" />
+                      <path d={serieGrafico.linha} className={styles.evolucaoLine} fill="none" />
+                    </>
+                  )}
+
+                  {serieGrafico.pontos.map((ponto, index) => {
+                    const total = serieGrafico.pontos.length;
+                    const intervalo = Math.max(1, Math.ceil(total / 8));
+                    const exibirRotulo = total <= 8 || index % intervalo === 0 || index === total - 1;
+                    return (
+                      <g key={ponto.id}>
+                        <title>{`${ponto.equipeNome} vs. ${ponto.adversario} • ${formatarData(ponto.data)} • ${ponto.valor}% de ações positivas (${ponto.boas} boas + ${ponto.destaques} destaques em ${ponto.total} ações)`}</title>
+                        {index === total - 1 && (
+                          <circle cx={ponto.x} cy={ponto.y} r="12"
+                            className={styles.evolucaoHalo} />
+                        )}
+                        <circle cx={ponto.x} cy={ponto.y} r="5"
+                          className={styles.evolucaoPoint} />
+                        {exibirRotulo && (
+                          <>
+                            <text x={ponto.x} y={Math.max(25, ponto.y - 15)}
+                              textAnchor="middle" className={styles.evolucaoValue}>
+                              {ponto.valor}%
+                            </text>
+                            <text x={ponto.x} y="275" textAnchor="middle"
+                              className={styles.evolucaoAxisLabel}>
+                              {`J${index + 1}`}
+                            </text>
+                          </>
+                        )}
+                      </g>
+                    );
+                  })}
+                </svg>
+              )}
             </div>
 
-
-            <div
-              className={
-                styles.chartLegend
-              }
-            >
-              <span>
-                <i
-                  className={
-                    styles.teamLegend
-                  }
-                />
-
-                Sua equipe
-              </span>
-
-
-              <span>
-                <i
-                  className={
-                    styles.opponentLegend
-                  }
-                />
-
-                Adversários
-              </span>
-            </div>
+            <p className={styles.evolucaoFootnote}>
+              {serieGrafico.pontos.length === 1
+                ? 'Uma partida avaliada. A linha de evolução aparecerá após a segunda.'
+                : 'Calculado a partir das ações avaliadas nos vídeos; não é uma nota técnica.'}
+              {serieGrafico.somaTotal > 0 &&
+                ` · ${serieGrafico.pontos.length} partida(s) com eventos · ${serieGrafico.somaPositivas} de ${serieGrafico.somaTotal} ações positivas.`}
+            </p>
+            {partidasIncompletas > 0 && !carregandoAcoes && (
+              <p className={styles.chartWarning} role="status">
+                Algumas análises não puderam ser consultadas ({partidasIncompletas} falha(s)); as partidas incompletas foram excluídas do cálculo.
+              </p>
+            )}
           </article>
-
 
           {/* =================================================
               PRÓXIMA PARTIDA
@@ -1604,7 +1709,7 @@ export default function Dashboard() {
               }
               onClick={() =>
                 navigate(
-                  proxima?.id ? `/detalhes-partida/${proxima.id}` : '/partidas',
+                  proxima ? proxima ? `/detalhes-partida/${proxima.id}` : '/partidas'  : '/partidas',
                 )
               }
             >

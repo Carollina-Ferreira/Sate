@@ -26,6 +26,7 @@ import type {
 } from 'react';
 
 import styles from './editarEquipeModal.module.css';
+import LoadingState from '../ui/LoadingState/LoadingState';
 
 /* =====================================
    TIPOS
@@ -838,7 +839,7 @@ const EditarEquipeModal = ({
                   onClick={handleExcluir}
                   disabled={salvando}
                 >
-                  {salvando ? 'Aguarde...' : 'Sim, excluir'}
+                  {salvando ? <LoadingState variant="inline" title="Excluindo equipe..." /> : 'Sim, excluir'}
                 </button>
                 <button
                   type="button"
@@ -868,7 +869,7 @@ const EditarEquipeModal = ({
               disabled={salvando || !formularioValido}
             >
               <Save size={17} />
-              {salvando ? 'Salvando...' : 'Salvar alterações'}
+              {salvando ? <LoadingState variant="inline" title="Salvando equipe..." /> : 'Salvar alterações'}
             </button>
           </div>
         </footer>

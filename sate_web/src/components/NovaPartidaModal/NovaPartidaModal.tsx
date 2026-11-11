@@ -1,5 +1,6 @@
 
 import styles from './NovaPartidaModal.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 type Equipe = {
   id: number;
@@ -154,9 +155,7 @@ export default function NovaPartidaModal({
             </div>
 
             {carregandoAtletas ? (
-              <p className={styles.athleteMessage}>
-                Carregando atletas...
-              </p>
+              <LoadingState variant="list" title="Carregando atletas da equipe..." count={4} />
             ) : erroAtletas ? (
               <p className={styles.athleteError}>
                 {erroAtletas}
@@ -321,7 +320,7 @@ export default function NovaPartidaModal({
             onClick={onSubmit}
             disabled={salvando}
           >
-            {salvando ? 'Salvando...' : 'Criar partida'}
+            {salvando ? <LoadingState variant="inline" title="Criando partida..." /> : 'Criar partida'}
           </button>
         </div>
       </div>

@@ -5,7 +5,6 @@ import {
   CircleAlert,
   Clock3,
   Film,
-  LoaderCircle,
   Pencil,
   Play,
   Plus,
@@ -39,6 +38,7 @@ import {
 } from 'react-router-dom';
 
 import styles from './partidas2.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 const API_URL = 'http://localhost:3000/api';
 
@@ -426,13 +426,17 @@ export default function DetalhesPartida() {
       return null;
     }
 
-    if (
-      'partida' in estadoNavegacao &&
-      estadoNavegacao.partida &&
-      typeof estadoNavegacao.partida === 'object' &&
-      'id' in estadoNavegacao.partida
-    ) {
-      return estadoNavegacao.partida as Partida;
+    if ('partida' in estadoNavegacao) {
+      const partidaRecebida = estadoNavegacao.partida;
+
+      if (
+        partidaRecebida &&
+        typeof partidaRecebida === 'object' &&
+        'id' in partidaRecebida &&
+        Number(partidaRecebida.id) > 0
+      ) {
+        return partidaRecebida as Partida;
+      }
     }
 
     if ('id' in estadoNavegacao && Number(estadoNavegacao.id) > 0) {
@@ -1279,12 +1283,9 @@ export default function DetalhesPartida() {
 
   if (carregando) {
     return (
-      <main className={`${styles.page} sate-internal-page`}>
+      <main className={styles.page}>
         <div className={styles.pageInner}>
-          <div className={styles.loadingState}>
-            <LoaderCircle size={24} className={styles.spinner} />
-            Carregando detalhes da partida...
-          </div>
+          <LoadingState variant="charts" title="Carregando detalhes da partida..." description="Buscando o resultado, os vídeos e as marcações." count={2} />
         </div>
       </main>
     );
@@ -1292,7 +1293,7 @@ export default function DetalhesPartida() {
 
   if (!partida) {
     return (
-      <main className={`${styles.page} sate-internal-page`}>
+      <main className={styles.page}>
         <div className={styles.pageInner}>
           <div className={styles.emptyPage}>
             <CircleAlert size={38} />
@@ -1335,7 +1336,7 @@ export default function DetalhesPartida() {
         : styles.statusPending;
 
   return (
-    <main className={`${styles.page} sate-internal-page`}>
+    <main className={styles.page}>
       <div className={styles.pageInner}>
         <button
           type="button"
@@ -1496,17 +1497,9 @@ export default function DetalhesPartida() {
                       className={styles.primaryButton}
                       onClick={() => void salvarResultado()}
                       disabled={salvandoResultado}
-                    >
-                      {salvandoResultado ? (
-                        <LoaderCircle
-                          size={15}
-                          className={styles.spinner}
-                        />
-                      ) : (
-                        <Save size={15} />
-                      )}
+                    >{!salvandoResultado && (<Save size={15} />)}
 
-                      {salvandoResultado ? 'Salvando...' : 'Salvar'}
+                      {salvandoResultado ? <LoadingState variant="inline" title="Salvando resultado..." /> : 'Salvar'}
                     </button>
 
                     <button
@@ -1613,17 +1606,9 @@ export default function DetalhesPartida() {
               className={styles.primaryButton}
               onClick={() => void atualizarStatus(statusAnalise)}
               disabled={salvandoStatus}
-            >
-              {salvandoStatus ? (
-                <LoaderCircle
-                  size={16}
-                  className={styles.spinner}
-                />
-              ) : (
-                <Save size={16} />
-              )}
+            >{!salvandoStatus && (<Save size={16} />)}
 
-              {salvandoStatus ? 'Salvando...' : 'Salvar status'}
+              {salvandoStatus ? <LoadingState variant="inline" title="Salvando status..." /> : 'Salvar status'}
             </button>
           </div>
         </section>
@@ -1659,13 +1644,7 @@ export default function DetalhesPartida() {
             </div>
 
             {carregandoAtletas ? (
-              <div className={styles.loadingState}>
-                <LoaderCircle
-                  size={19}
-                  className={styles.spinner}
-                />
-                Carregando atletas...
-              </div>
+              <LoadingState variant="list" title="Carregando atletas..." count={4} />
             ) : atletasParticipantes.length === 0 ? (
               <div className={styles.emptyState}>
                 <div className={styles.emptyIcon}>
@@ -1734,13 +1713,7 @@ export default function DetalhesPartida() {
             </div>
 
             {carregandoVideos ? (
-              <div className={styles.loadingState}>
-                <LoaderCircle
-                  size={19}
-                  className={styles.spinner}
-                />
-                Carregando vídeos...
-              </div>
+              <LoadingState variant="videos" title="Carregando vídeos..." count={3} />
             ) : videos.length === 0 ? (
               <div className={styles.emptyState}>
                 <div className={styles.emptyIcon}>
@@ -1851,13 +1824,7 @@ export default function DetalhesPartida() {
           </div>
 
           {carregandoEventos ? (
-            <div className={styles.loadingState}>
-              <LoaderCircle
-                size={19}
-                className={styles.spinner}
-              />
-              Carregando eventos...
-            </div>
+            <LoadingState variant="list" title="Carregando eventos..." count={4} />
           ) : eventosPartida.length === 0 ? (
             <div className={styles.emptyState}>
               <div className={styles.emptyIcon}>
@@ -2140,13 +2107,7 @@ export default function DetalhesPartida() {
 
             <div className={styles.athletePickerList}>
               {carregandoAtletas ? (
-                <div className={styles.loadingState}>
-                  <LoaderCircle
-                    size={18}
-                    className={styles.spinner}
-                  />
-                  Carregando atletas...
-                </div>
+                <LoadingState variant="list" title="Carregando atletas..." count={4} />
               ) : atletasFiltrados.length === 0 ? (
                 <div className={styles.pickerEmpty}>
                   <Users size={24} />
@@ -2215,17 +2176,9 @@ export default function DetalhesPartida() {
                 className={styles.primaryButton}
                 onClick={() => void salvarAtletas()}
                 disabled={salvando || carregandoAtletas}
-              >
-                {salvando ? (
-                  <LoaderCircle
-                    size={15}
-                    className={styles.spinner}
-                  />
-                ) : (
-                  <Save size={15} />
-                )}
+              >{!salvando && (<Save size={15} />)}
 
-                {salvando ? 'Salvando...' : 'Salvar atletas'}
+                {salvando ? <LoadingState variant="inline" title="Salvando atletas..." /> : 'Salvar atletas'}
               </button>
             </footer>
           </section>
@@ -2362,19 +2315,9 @@ export default function DetalhesPartida() {
                   type="submit"
                   className={styles.primaryButton}
                   disabled={enviandoVideo}
-                >
-                  {enviandoVideo ? (
-                    <LoaderCircle
-                      size={15}
-                      className={styles.spinner}
-                    />
-                  ) : (
-                    <Upload size={15} />
-                  )}
+                >{!enviandoVideo && (<Upload size={15} />)}
 
-                  {enviandoVideo
-                    ? 'Enviando...'
-                    : 'Enviar vídeo'}
+                  {enviandoVideo ? <LoadingState variant="inline" title="Enviando vídeo..." /> : 'Enviar vídeo'}
                 </button>
               </footer>
             </form>
@@ -2427,19 +2370,9 @@ export default function DetalhesPartida() {
                 className={styles.dangerButton}
                 onClick={() => void excluirPartida()}
                 disabled={excluindoPartida}
-              >
-                {excluindoPartida ? (
-                  <LoaderCircle
-                    size={15}
-                    className={styles.spinner}
-                  />
-                ) : (
-                  <Trash2 size={15} />
-                )}
+              >{!excluindoPartida && (<Trash2 size={15} />)}
 
-                {excluindoPartida
-                  ? 'Excluindo...'
-                  : 'Confirmar exclusão'}
+                {excluindoPartida ? <LoadingState variant="inline" title="Excluindo partida..." /> : 'Confirmar exclusão'}
               </button>
             </footer>
           </section>

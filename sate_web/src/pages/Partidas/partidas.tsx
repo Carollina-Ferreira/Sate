@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import NovaPartidaModal from '../../components/NovaPartidaModal/NovaPartidaModal';
 
 import styles from './partidas.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 import PageHeading from '../../components/ui/PageHeading/PageHeading';
 import ActionButton from '../../components/ui/ActionButton/ActionButton';
 
@@ -1004,9 +1005,36 @@ export default function Partidas() {
   ============================================================ */
 
   function abrirDetalhes(partida: Partida) {
-    navigate('/detalhes-partida', {
+    const partidaId = Number(partida.id);
+
+    if (!Number.isSafeInteger(partidaId) || partidaId <= 0) {
+      setErro('Não foi possível abrir os detalhes: ID da partida inválido.');
+      console.error('Partida sem ID válido:', partida);
+      return;
+    }
+
+    // O App.tsx precisa ter a rota /detalhes-partida/:id.
+    // Passar a data original evita erros ao renderizar dados recebidos pelo state.
+    navigate(`/detalhes-partida/${partidaId}`, {
       state: {
-        partida,
+        partidaId,
+        partida: {
+          id: partidaId,
+          equipeId: partida.equipeId,
+          equipe: partida.equipe,
+          adversario: partida.adversario,
+          data: partida.dataOriginal,
+          golsEquipe: partida.golsEquipe,
+          golsAdversario: partida.golsAdversario,
+          status:
+            partida.status === 'Finalizada'
+              ? 'FINALIZADA'
+              : partida.status === 'Em análise'
+                ? 'EM_ANDAMENTO'
+                : partida.status === 'Cancelada'
+                  ? 'CANCELADA'
+                  : 'AGENDADA',
+        },
       },
     });
   }
@@ -1145,7 +1173,7 @@ export default function Partidas() {
         </div>
 
         <div className={styles.tableContainer}>
-          <table>
+          {!carregando && <table>
             <thead>
               <tr>
                 <th>Confronto</th>
@@ -1210,12 +1238,15 @@ export default function Partidas() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table>}
 
           {carregando && (
-            <div className={styles.empty}>
-              <h3>Carregando partidas...</h3>
-            </div>
+            <LoadingState
+              variant="table"
+              title="Carregando partidas..."
+              description="Buscando confrontos e resultados."
+              count={5}
+            />
           )}
 
           {!carregando && erro && (

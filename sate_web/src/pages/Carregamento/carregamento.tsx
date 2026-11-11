@@ -9,6 +9,13 @@ type LocationState = {
   mensagem?: string;
 };
 
+type CarregamentoProps = {
+  /** Mantém a tela aberta até o componente pai terminar a consulta. */
+  semRedirecionamento?: boolean;
+  /** Texto usado pelas verificações de acesso e outros carregamentos. */
+  mensagem?: string;
+};
+
 const mensagens = [
   'Preparando seu ambiente...',
   'Organizando suas equipes...',
@@ -17,14 +24,28 @@ const mensagens = [
 
 const DURACAO = 2200;
 
-export default function Carregamento() {
+export default function Carregamento({
+  semRedirecionamento = false,
+  mensagem,
+}: CarregamentoProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
   const state = location.state as LocationState | null;
   const [etapa, setEtapa] = useState(0);
+  const [ciclo, setCiclo] = useState(0);
 
   useEffect(() => {
+    if (semRedirecionamento) {
+      // Reinicia a barra quando termina um ciclo. Não navega sozinho.
+      const intervalo = window.setInterval(() => {
+        setCiclo((atual) => atual + 1);
+      }, DURACAO);
+
+      return () => window.clearInterval(intervalo);
+    }
+
+    // Mantém o comportamento original da rota /carregamento.
     const intervalo = window.setInterval(() => {
       setEtapa((atual) =>
         Math.min(atual + 1, mensagens.length - 1)
@@ -41,12 +62,13 @@ export default function Carregamento() {
       window.clearInterval(intervalo);
       window.clearTimeout(timer);
     };
-  }, [navigate, state?.destino]);
+  }, [navigate, semRedirecionamento, state?.destino]);
 
   const mensagemAtual =
-    state?.mensagem && etapa === 0
+    mensagem ||
+    (state?.mensagem && etapa === 0
       ? state.mensagem
-      : mensagens[etapa];
+      : mensagens[etapa]);
 
   return (
     <main
@@ -54,6 +76,7 @@ export default function Carregamento() {
       role="status"
       aria-live="polite"
       aria-label="Carregando"
+      aria-busy="true"
       style={
         { '--duracao': `${DURACAO}ms` } as CSSProperties
       }
@@ -67,10 +90,9 @@ export default function Carregamento() {
       </div>
 
       <section className={styles.content}>
-        {/* ÍCONE ORIGINAL BRANCO E ANIMADO */}
+        {/* ÍCONE BRANCO DO SATE */}
         <div className={styles.brandMark} aria-hidden="true">
           <svg
-            className={styles.brandIcon}
             width="38"
             height="38"
             viewBox="0 0 24 24"
@@ -87,22 +109,23 @@ export default function Carregamento() {
           </svg>
         </div>
 
-        {/* NOME DO SISTEMA */}
+        {/* LOGO */}
         <h1>
           SATE<span>.</span>
         </h1>
 
+        {/* SLOGAN */}
         <p className={styles.tagline}>
           Treinar. Acompanhar. <em>Evoluir.</em>
         </p>
 
         {/* BARRA DE CARREGAMENTO */}
         <div className={styles.progress} aria-hidden="true">
-          <i />
+          <i key={semRedirecionamento ? ciclo : 'original'} />
         </div>
 
         {/* MENSAGEM */}
-        <p className={styles.status} key={etapa}>
+        <p className={styles.status} key={mensagemAtual}>
           {mensagemAtual}
         </p>
       </section>

@@ -19,6 +19,7 @@ import type { FormEvent } from 'react';
 import * as XLSX from 'xlsx';
 
 import styles from './atletas.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 import PageHeading from '../../components/ui/PageHeading/PageHeading';
 import ActionButton from '../../components/ui/ActionButton/ActionButton';
 
@@ -1453,7 +1454,7 @@ const Atletas = () => {
                             onClick={exportarAtletasExcel}
                             disabled={carregando || exportando || atletasFiltrados.length === 0}
                         >
-                            {exportando ? 'Exportando...' : 'Exportar Excel'}
+                            {exportando ? <LoadingState variant="inline" title="Exportando planilha..." /> : 'Exportar Excel'}
                         </ActionButton>
                         <ActionButton
                             icon={<Plus size={18} />}
@@ -1549,8 +1550,7 @@ const Atletas = () => {
                     <ChevronDown size={17} />
                 </div>
 
-                {(busca ||
-                    filtroModalidade !== 'Todas' ||
+                {(filtroModalidade !== 'Todas' ||
                     filtroCategoria !== 'Todas' ||
                     filtroEquipe !== 'Todas') && (
                     <button
@@ -1605,13 +1605,12 @@ const Atletas = () => {
             </div>
 
             {carregando && (
-                <div className={styles.empty}>
-                    <strong>Carregando atletas...</strong>
-
-                    <span>
-                        Aguarde enquanto buscamos os atletas.
-                    </span>
-                </div>
+                <LoadingState
+                    variant="cards"
+                    title="Carregando atletas..."
+                    description="Organizando as informações da equipe."
+                    count={6}
+                />
             )}
 
             {!carregando && atletasFiltrados.length === 0 && (
@@ -2406,7 +2405,7 @@ const Atletas = () => {
                                         }
                                     >
                                         {importandoPlanilha
-                                            ? 'Importando atletas...'
+                                            ? <LoadingState variant="inline" title="Importando atletas..." />
                                             : `Importar ${atletasPlanilha.length} atleta(s)`}
                                     </button>
                                 </div>

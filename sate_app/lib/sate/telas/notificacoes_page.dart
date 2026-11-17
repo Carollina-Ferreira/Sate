@@ -69,8 +69,10 @@ class NotificacoesPage extends StatelessWidget {
         final pend = treinador ? s.pendenciasTreinador() : const [];
         final naoLidas = _avisos.where((a) => !s.notifLidas.contains(a.id)).length;
         return Tela(
-          titulo: 'Notifi',
-          destaque: 'cações',
+          // Só o "es" fica em itálico, colado ao restante da palavra.
+          titulo: 'Notificaçõ',
+          destaque: 'es',
+          colado: true,
           subtitulo: treinador
               ? 'Avisos e pendências que pedem sua atenção'
               : 'Avisos e lembretes',

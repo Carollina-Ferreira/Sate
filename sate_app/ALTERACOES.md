@@ -1,3 +1,54 @@
+# SATE Mobile — v0.3.0+4 (continuação da v0.2.1+3 · somente front-end Flutter)
+
+Backend, banco, APIs, rotas e logins **não foram alterados**. Depois de abrir o projeto, rode `flutter pub get`
+(duas dependências novas: `pdf` e `printing`).
+
+## Treinador
+- **Botão "Novo atleta" removido** da lista de atletas (`sate/telas/atletas_page.dart`). A busca ocupa a linha inteira.
+  A função de cadastro continua existindo para outras partes do app.
+- **Relatório individual em PDF:** na tela de perfil de cada atleta, botão **"Exportar relatório em PDF"** → visualizar/imprimir/salvar ou
+  compartilhar (`sate/relatorios/relatorio_atleta_pdf.dart`). Conteúdo, sempre do atleta aberto e só com dados reais do app:
+  identificação (nome, posição, idade, altura, peso, e-mail), equipe/modalidade/local, resumo (assiduidade, últimos 30 dias, índice físico),
+  frequência mensal (gráfico de barras dos últimos 6 meses), perfil físico por categoria, resultados dos testes (último, melhor marca,
+  evolução), histórico de avaliações, atividades recentes, metas, feedbacks e documentação. Seções sem registros informam que não há dados.
+  O app não registra estatísticas de jogo (gols, pontos etc.); por isso não há essa seção.
+
+## Atleta
+- **Registro dos próprios testes:** o atleta agora registra resultados com o **mesmo formulário do treinador** (`registrarTeste`,
+  com `atletaFixo`): botão **"Registrar novo teste"** na Evolução, botão **+** na tela de Testes, e botão "+" na lista de testes embutida.
+  O resultado é sempre gravado para o atleta logado (não há escolha de outro atleta). O atleta vê o histórico (até 10 registros),
+  a evolução por teste e pode remover os **próprios** registros.
+- **Home: dias arrastáveis.** A faixa "Minha semana" rola horizontalmente (60 dias antes e depois de hoje). Tocar em um dia seleciona;
+  o dia escolhido atualiza o cartão do treino, a lista de exercícios, o texto da semana e a data do topo. "Voltar para hoje" reaparece
+  quando outro dia está selecionado (`sate/telas/inicio_atleta.dart`).
+
+## Gerais
+- **Calendários sem "Pendente":** removida a legenda, o marcador de anel e a pílula de status. Eventos e treinos continuam como antes.
+  Os textos do tutorial foram ajustados.
+- **Animações em todos os exercícios:** nova biblioteca reutilizável (`sate/ui/animacao_exercicio.dart`) com 16 movimentos
+  (polichinelo, elevação de joelhos, agachamento, afundo, salto, salto na caixa, prancha, flexão, abdominal, corrida, tiro, escada de agilidade,
+  toque e manchete, saque, condução de bola e mobilidade de quadril). Cada exercício do app usa seu movimento; os criados pelo treinador
+  recebem o movimento pelo nome ou, se não houver correspondência, pelo grupo — assim **nenhum exercício fica sem animação**.
+  O seletor de animação do treinador (`videosDemo`) agora oferece as 16 opções. Respeita "reduzir animações".
+- **Deslizar entre as abas (Atleta e Treinador):** `PageView` na estrutura principal (`sate/telas/casca_sate.dart`). A barra inferior
+  continua fixa e sincronizada. Cada perfil só desliza entre as próprias abas. Rolagens horizontais internas têm prioridade.
+- **Entrar em equipe / código:** removida a ilustração decorativa (círculos e linha com bolinhas) das telas de vínculo do atleta e do treinador
+  (`pages/Atleta/atleta_vinculo_page.dart`, `pages/Treinador/treinador_equipes_page.dart`, `pages/Treinador/treinador_vinculo_page.dart`).
+  A tela do atleta foi reorganizada (cartão único com campo, botão e QR Code; passos logo abaixo). Vincular por código e por QR Code continuam iguais.
+- **Sobre o app:** removida a seção "Telas da versão anterior" (e seus imports); versão exibida: 0.3.0 (4).
+- **Notificações:** título "Notificaçõ" + **"es"** em itálico, sem espaço entre as partes (novo parâmetro `colado` em `Tela`/`CabecalhoTela`).
+
+- **Calendário sem cores repetidas:** cada tipo de evento ganhou cor própria (`corTipoEv`, `ui/cores.dart`): **Jogo = azul**, **Avaliação = âmbar**,
+  **Reunião = violeta**, **Lembrete = ardósia**. Antes, Jogo repetia o rosa de "Não realizado", Lembrete repetia a cor de "Sem treino" e Avaliação era um verde
+  parecido com "Realizado". Presença continua: verde = realizado, rosa = não realizado, cinza claro = sem treino. O contorno do dia de hoje deixou de ser rosa (igual a "não realizado") e passou a ser neutro. Vale para o calendário, a legenda, os detalhes
+  do evento e a Home do treinador (mesma função de cor).
+
+## Verificação
+Não foi possível executar `flutter pub get`, `flutter analyze` nem compilar neste ambiente (o SDK não pôde ser baixado). Foi feita
+checagem de sintaxe dos arquivos alterados e revisão manual dos nomes e assinaturas usados. **Rode `flutter pub get` e `flutter analyze` antes de publicar.**
+
+---
+
 # SATE Mobile — Ajustes finais de interface (somente front-end) · v0.2.1+3
 
 Sem backend, banco, APIs ou regras de negócio alterados.

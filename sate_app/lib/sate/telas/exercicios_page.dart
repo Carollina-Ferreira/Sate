@@ -238,7 +238,7 @@ class ExercicioDetalhePage extends StatelessWidget {
                 ]
               : const [],
           children: [
-            VideoDemo(video: e.video, titulo: e.nome),
+            VideoDemo(video: e.video, titulo: e.nome, exercicio: e),
             const SizedBox(height: 18),
             Row(children: [
               Expanded(

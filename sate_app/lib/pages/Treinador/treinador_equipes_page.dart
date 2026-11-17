@@ -22,8 +22,6 @@ class TreinadorEquipesPage extends StatefulWidget {
 class _TreinadorEquipesPageState
     extends State<TreinadorEquipesPage> {
   static const Color verde = Color(0xFF003D31);
-  static const Color rosa = Color(0xFFEF476F);
-  static const Color azul = Color(0xFF55CA9B);
 
   final List<Map<String, String>> equipes = [
     {
@@ -67,11 +65,6 @@ class _TreinadorEquipesPageState
       backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
         children: [
-          Positioned.fill(
-            child: CustomPaint(
-              painter: BackgroundPainter(verde: verde, rosa: rosa, azul: azul),
-            ),
-          ),
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(

@@ -107,8 +107,8 @@ class _TestesPageState extends State<TestesPage> {
             0 => Column(children: [
                 _EvolucaoTeste(tipo: tipo, res: res),
                 const SizedBox(height: 14),
-                for (final r in res.reversed.take(4))
-                  _LinhaHistorico(r: r, tipo: tipo, pode: false),
+                for (final r in res.reversed.take(10))
+                  _LinhaHistorico(r: r, tipo: tipo, pode: !r.demo),
               ]),
             1 => Column(children: [
                 MetasAtletaLeitura(atleta: a),
@@ -124,12 +124,13 @@ class _TestesPageState extends State<TestesPage> {
           voltar: widget.comVoltar,
           titulo: 'Testes',
           destaque: 'físicos',
-          fab: widget.treinador && !widget.embutido
+          fab: !widget.embutido
               ? FloatingActionButton(
                   heroTag: null,
                   backgroundColor: c.rosa,
                   foregroundColor: Colors.white,
-                  onPressed: () => registrarTeste(context, atletaInicial: a),
+                  onPressed: () => registrarTeste(context,
+                      atletaInicial: a, atletaFixo: !widget.treinador),
                   child: const Icon(Icons.add_rounded),
                 )
               : null,
@@ -154,13 +155,14 @@ class _TestesPageState extends State<TestesPage> {
                     onTap: () => _escolherTeste(tipos, tipo),
                   ),
                 ),
-                if (widget.treinador && widget.embutido) ...[
+                if (widget.embutido) ...[
                   const SizedBox(width: 10),
                   BotaoIcone(
                     icone: Icons.add_rounded,
                     destaque: true,
                     dica: 'Registrar resultado',
-                    onTap: () => registrarTeste(context, atletaInicial: a),
+                    onTap: () => registrarTeste(context,
+                        atletaInicial: a, atletaFixo: !widget.treinador),
                   ),
                 ],
               ]),
@@ -436,10 +438,13 @@ class _LinhaHistorico extends StatelessWidget {
   }
 }
 
-/// Registro de resultado (somente treinador).
-Future<void> registrarTeste(BuildContext context, {Atleta? atletaInicial}) async {
+/// Registro de resultado de teste físico.
+/// O treinador escolhe o atleta; com [atletaFixo] (perfil do atleta) o resultado
+/// é sempre registrado para o próprio atleta logado.
+Future<void> registrarTeste(BuildContext context,
+    {Atleta? atletaInicial, bool atletaFixo = false}) async {
   final s = SateStore.i;
-  var atleta = atletaInicial ?? s.atletas.first;
+  var atleta = atletaFixo ? s.eu : (atletaInicial ?? s.atletas.first);
   var teste = s.testesDoAtleta(atleta).first;
   var data = s.hoje;
   final valor = TextEditingController();
@@ -459,14 +464,16 @@ Future<void> registrarTeste(BuildContext context, {Atleta? atletaInicial}) async
               Text('Registrar resultado',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: c.texto)),
               const SizedBox(height: 16),
-              Text('Atleta', style: TextStyle(fontSize: 12.5, color: c.texto2)),
-              const SizedBox(height: 8),
-              LinhaChips([
-                for (final a in s.atletas)
-                  FiltroChip(a.nome.split(' ').first, a.id == atleta.id,
-                      () => setM(() => atleta = a)),
-              ]),
-              const SizedBox(height: 14),
+              if (!atletaFixo) ...[
+                Text('Atleta', style: TextStyle(fontSize: 12.5, color: c.texto2)),
+                const SizedBox(height: 8),
+                LinhaChips([
+                  for (final a in s.atletas)
+                    FiltroChip(a.nome.split(' ').first, a.id == atleta.id,
+                        () => setM(() => atleta = a)),
+                ]),
+                const SizedBox(height: 14),
+              ],
               Text('Teste', style: TextStyle(fontSize: 12.5, color: c.texto2)),
               const SizedBox(height: 8),
               Wrap(spacing: 8, runSpacing: 8, children: [
@@ -532,5 +539,7 @@ Future<void> registrarTeste(BuildContext context, {Atleta? atletaInicial}) async
   final v = double.parse(valor.text.replaceAll(',', '.'));
   await s.registrarTeste(
       ResultadoTeste(atleta.nome, teste.nome, teste.unidade, data, v, obs.text.trim()));
-  if (context.mounted) aviso(context, 'Resultado salvo para ${atleta.nome}.');
+  if (context.mounted) {
+    aviso(context, atletaFixo ? 'Resultado salvo.' : 'Resultado salvo para ${atleta.nome}.');
+  }
 }

@@ -128,7 +128,6 @@ class _CalendarioPageState extends State<CalendarioPage> {
             Legenda([
               ('Realizado', c.ok),
               ('Não realizado', c.falta),
-              ('Pendente', c.pendente),
               ('Sem treino', c.vazio),
             ]),
             if (_modo == 0) ...[
@@ -177,7 +176,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
             decoration: BoxDecoration(
               color: selecionado ? c.primariaSuave : Colors.transparent,
               borderRadius: BorderRadius.circular(14),
-              border: ehHoje ? Border.all(color: c.rosa, width: 1.5) : null,
+              border: ehHoje ? Border.all(color: c.texto, width: 1.5) : null,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -194,7 +193,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                 SizedBox(
                   height: 8,
                   child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    if (st != StatusPres.semTreino)
+                    if (st != StatusPres.semTreino && st != StatusPres.pendente)
                       Container(
                         width: 8,
                         height: 8,
@@ -404,13 +403,9 @@ class _CalendarioPageState extends State<CalendarioPage> {
               () => s.marcarPresenca(a, _sel, presente ? null : true)),
           botao(Icons.close_rounded, c.falta, faltou,
               () => s.marcarPresenca(a, _sel, faltou ? null : false)),
-        ] else
+        ] else if (st == StatusPres.realizado || st == StatusPres.naoRealizado)
           Pilula(
-            switch (st) {
-              StatusPres.realizado => 'Presente',
-              StatusPres.naoRealizado => 'Faltou',
-              _ => 'Pendente',
-            },
+            st == StatusPres.realizado ? 'Presente' : 'Faltou',
             _cor(c, st),
           ),
       ]),

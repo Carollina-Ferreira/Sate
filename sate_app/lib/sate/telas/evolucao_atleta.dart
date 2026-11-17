@@ -295,6 +295,22 @@ class _EvolucaoAtletaViewState extends State<EvolucaoAtletaView> {
             ]),
           ),
 
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 50,
+            child: OutlinedButton.icon(
+              onPressed: () =>
+                  registrarTeste(context, atletaInicial: s.eu, atletaFixo: true),
+              icon: const Icon(Icons.add_circle_outline_rounded),
+              label: const Text('Registrar novo teste'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: c.primaria,
+                side: BorderSide(color: c.primaria),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              ),
+            ),
+          ),
+
           titulo('Últimas avaliações'),
           if (ultimas.isEmpty)
             const VazioView(Icons.assignment_outlined, 'Sem avaliações',

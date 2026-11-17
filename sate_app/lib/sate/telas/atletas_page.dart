@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/modelos.dart';
+import '../relatorios/relatorio_atleta_pdf.dart';
 import '../data/sate_store.dart';
 import '../ui/cores.dart';
 import '../ui/tela.dart';
@@ -71,13 +72,6 @@ class _AtletasListaViewState extends State<AtletasListaView> {
                   prefixIcon: Icon(Icons.search_rounded, color: c.texto2),
                 ),
               ),
-            ),
-            const SizedBox(width: 10),
-            BotaoIcone(
-              icone: Icons.person_add_alt_1_rounded,
-              destaque: true,
-              dica: 'Novo atleta',
-              onTap: () => novoAtleta(context),
             ),
           ]),
           const SizedBox(height: 12),
@@ -255,6 +249,20 @@ class _AtletaDetalhePageState extends State<AtletaDetalhePage> {
                   ]),
                 ),
               ]),
+            ),
+            const SizedBox(height: 14),
+            SizedBox(
+              height: 48,
+              child: OutlinedButton.icon(
+                onPressed: () => exportarRelatorioAtleta(context, a),
+                icon: const Icon(Icons.picture_as_pdf_outlined),
+                label: const Text('Exportar relatório em PDF'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: c.primaria,
+                  side: BorderSide(color: c.primaria),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+              ),
             ),
             const SizedBox(height: 18),
             LinhaChips([

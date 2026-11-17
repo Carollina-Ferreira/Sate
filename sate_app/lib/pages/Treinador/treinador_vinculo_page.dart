@@ -30,8 +30,6 @@ class TreinadorVinculoPage extends StatefulWidget {
 
 class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
   static const Color verde = Color(0xFF003D31);
-  static const Color rosa = Color(0xFFEF476F);
-  static const Color azul = Color(0xFF55CA9B);
 
   String get codigo => widget.codigoEquipe;
 
@@ -71,11 +69,6 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
       backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
         children: [
-          Positioned.fill(
-            child: CustomPaint(
-              painter: BackgroundPainter(verde: verde, rosa: rosa, azul: azul),
-            ),
-          ),
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 30),

@@ -40,6 +40,13 @@ class SC {
   Color get pendente =>
       escuro ? const Color(0xFFFFD166) : const Color(0xFFE5A100);
   Color get vazio => escuro ? const Color(0xFF5C8173) : const Color(0xFFBDB5A8);
+
+  // Tipos de evento do calendário: cada um com uma cor própria, diferente das cores de
+  // presença (verde = realizado, rosa = não realizado, cinza claro = sem treino).
+  Color get jogo => escuro ? const Color(0xFF7CC0EC) : const Color(0xFF4EA5D9); // azul
+  Color get avaliacao => escuro ? const Color(0xFFFFD166) : const Color(0xFFE5A100); // âmbar
+  Color get reuniao => escuro ? const Color(0xFFB7A3F0) : const Color(0xFF8062D6); // violeta
+  Color get lembrete => escuro ? const Color(0xFF9AA9BC) : const Color(0xFF64748B); // ardósia
   Color get vermelho =>
       escuro ? const Color(0xFFFF6B6B) : const Color(0xFFD93A4A);
 

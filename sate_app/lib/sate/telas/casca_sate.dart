@@ -63,6 +63,7 @@ class CascaSate extends StatefulWidget {
 
 class _CascaSateState extends State<CascaSate> {
   int _i = 0;
+  final PageController _pagina = PageController();
   late final Future<void> _pronto;
   List<Widget>? _paginas;
 
@@ -86,7 +87,26 @@ class _CascaSateState extends State<CascaSate> {
     }
   }
 
-  void _ir(int i) => setState(() => _i = i);
+  @override
+  void dispose() {
+    _pagina.dispose();
+    super.dispose();
+  }
+
+  /// Troca de aba pela barra inferior (ou por atalhos das telas): a página desliza
+  /// quando é vizinha e salta quando está longe, mantendo a barra sincronizada.
+  void _ir(int i) {
+    if (i == _i) return;
+    setState(() => _i = i);
+    if (!_pagina.hasClients) return;
+    final atual = (_pagina.page ?? _i.toDouble()).round();
+    if ((i - atual).abs() == 1) {
+      _pagina.animateToPage(i,
+          duration: const Duration(milliseconds: 280), curve: Curves.easeOutCubic);
+    } else {
+      _pagina.jumpToPage(i);
+    }
+  }
 
   void _abrirNotificacoes() => abrir(
         context,
@@ -216,7 +236,16 @@ class _CascaSateState extends State<CascaSate> {
               const SizedBox(width: 16),
             ],
           ),
-          body: IndexedStack(index: _i, children: _paginas!),
+          // Deslizar para os lados troca de aba (como no Instagram). A barra inferior
+          // continua fixa e é atualizada junto; rolagens horizontais internas têm prioridade.
+          body: PageView(
+            controller: _pagina,
+            physics: const PageScrollPhysics(),
+            onPageChanged: (i) {
+              if (i != _i) setState(() => _i = i);
+            },
+            children: [for (final p in _paginas!) _PaginaMantida(child: p)],
+          ),
           bottomNavigationBar: SateNavBar(
             indice: _i,
             onChanged: _ir,
@@ -338,5 +367,26 @@ class GavetaSate extends StatelessWidget {
         ),
       ]),
     );
+  }
+}
+
+/// Mantém o estado de cada aba (rolagem, filtros) enquanto o usuário desliza entre elas.
+class _PaginaMantida extends StatefulWidget {
+  final Widget child;
+  const _PaginaMantida({required this.child});
+
+  @override
+  State<_PaginaMantida> createState() => _PaginaMantidaState();
+}
+
+class _PaginaMantidaState extends State<_PaginaMantida>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.child;
   }
 }

@@ -44,6 +44,9 @@ class Tela extends StatelessWidget {
   /// false nas abas principais: o título fica no cabeçalho do app.
   final bool mostrarTitulo;
 
+  /// true quando [destaque] completa a mesma palavra de [titulo] (sem espaço entre os dois).
+  final bool colado;
+
   const Tela({
     super.key,
     required this.titulo,
@@ -54,6 +57,7 @@ class Tela extends StatelessWidget {
     this.fab,
     this.voltar = true,
     this.mostrarTitulo = true,
+    this.colado = false,
   });
 
   @override
@@ -81,13 +85,16 @@ class Tela extends StatelessWidget {
                     child: Text.rich(
                       TextSpan(children: [
                         TextSpan(
-                          text: titulo.isEmpty ? '' : '$titulo ',
+                          text: titulo.isEmpty ? '' : (colado ? titulo : '$titulo '),
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w700, color: c.texto),
                         ),
                         TextSpan(
                           text: destaque,
-                          style: SateEstilo.destaque.copyWith(fontSize: 23, color: c.rosa),
+                          style: SateEstilo.destaque.copyWith(
+                              fontSize: colado ? 20 : 23,
+                              letterSpacing: colado ? 0 : null,
+                              color: c.rosa),
                         ),
                       ]),
                       maxLines: 1,
@@ -110,6 +117,7 @@ class Tela extends StatelessWidget {
                       destaque: destaque,
                       subtitulo: subtitulo,
                       acoes: acoes,
+                      colado: colado,
                     ),
                     const SizedBox(height: 20),
                   ] else if (compacto && subtitulo != null) ...[

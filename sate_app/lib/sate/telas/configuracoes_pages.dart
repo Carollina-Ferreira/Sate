@@ -2,18 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../services/acessibilidade_controller.dart';
 import '../../services/tema_controller.dart';
-import '../../pages/Atleta/atleta_desempenho_page.dart';
-import '../../pages/Atleta/atleta_treino_page.dart';
-import '../../pages/Treinador/atletas_page.dart';
-import '../../pages/Treinador/treinos_page.dart';
 import '../data/sate_store.dart';
 import '../ui/cores.dart';
 import '../ui/tela.dart';
 import '../ui/widgets.dart';
 import 'tutorial_page.dart';
 
-const String versaoApp = '0.2.1';
-const String buildApp = '3';
+const String versaoApp = '0.3.0';
+const String buildApp = '4';
 
 // ───────────────────────── Tema (somente claro e escuro) ─────────────────────────
 
@@ -242,36 +238,6 @@ class _SobrePageState extends State<SobrePage> {
               'Resultados individuais e gráficos de evolução.'),
           recurso(Icons.calendar_month_rounded, 'Calendário e presença',
               'Treinos, jogos e eventos com acompanhamento mensal e anual.'),
-          const SizedBox(height: 22),
-          const SecaoCab('Telas da versão anterior'),
-          const SizedBox(height: 2),
-          if (widget.treinador) ...[
-            LinhaItem(
-              icone: Icons.fitness_center_outlined,
-              titulo: 'Treinos (original)',
-              fim: Icon(Icons.chevron_right_rounded, color: c.texto2),
-              onTap: () => abrirLegado(context, const TreinosPage()),
-            ),
-            LinhaItem(
-              icone: Icons.groups_outlined,
-              titulo: 'Atletas (original)',
-              fim: Icon(Icons.chevron_right_rounded, color: c.texto2),
-              onTap: () => abrirLegado(context, const AtletasPage()),
-            ),
-          ] else ...[
-            LinhaItem(
-              icone: Icons.fitness_center_outlined,
-              titulo: 'Treinos (original)',
-              fim: Icon(Icons.chevron_right_rounded, color: c.texto2),
-              onTap: () => abrirLegado(context, const AtletaTreinoPage()),
-            ),
-            LinhaItem(
-              icone: Icons.bar_chart_rounded,
-              titulo: 'Desempenho (original)',
-              fim: Icon(Icons.chevron_right_rounded, color: c.texto2),
-              onTap: () => abrirLegado(context, const AtletaDesempenhoPage()),
-            ),
-          ],
           // Opção de teste do limite de atletas (liberada ao tocar 7 vezes na versão).
           if (widget.treinador && (_avancado || s.simularLimite)) ...[
             const SizedBox(height: 18),

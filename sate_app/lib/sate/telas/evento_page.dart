@@ -7,10 +7,10 @@ import '../ui/tela.dart';
 import '../ui/widgets.dart';
 
 Color corTipoEv(SC c, TipoEv t) => switch (t) {
-      TipoEv.jogo => c.rosa,
-      TipoEv.avaliacao => c.primaria,
-      TipoEv.reuniao => c.texto2,
-      TipoEv.lembrete => c.vazio,
+      TipoEv.jogo => c.jogo,
+      TipoEv.avaliacao => c.avaliacao,
+      TipoEv.reuniao => c.reuniao,
+      TipoEv.lembrete => c.lembrete,
     };
 
 /// Detalhes de um evento do calendário (jogo, avaliação, reunião, lembrete).

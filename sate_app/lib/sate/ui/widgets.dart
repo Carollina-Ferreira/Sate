@@ -69,6 +69,7 @@ class CabecalhoTela extends StatelessWidget {
   final String destaque;
   final String? subtitulo;
   final List<Widget> acoes;
+  final bool colado;
 
   const CabecalhoTela({
     super.key,
@@ -76,6 +77,7 @@ class CabecalhoTela extends StatelessWidget {
     required this.destaque,
     this.subtitulo,
     this.acoes = const [],
+    this.colado = false,
   });
 
   @override
@@ -91,7 +93,7 @@ class CabecalhoTela extends StatelessWidget {
               Text.rich(
                 TextSpan(children: [
                   TextSpan(
-                    text: '$titulo ',
+                    text: colado ? titulo : '$titulo ',
                     style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.w700,
@@ -102,7 +104,8 @@ class CabecalhoTela extends StatelessWidget {
                   TextSpan(
                     text: destaque,
                     style: SateEstilo.destaque.copyWith(
-                      fontSize: 30,
+                      fontSize: colado ? 26 : 30,
+                      letterSpacing: colado ? 0 : null,
                       color: c.rosa,
                     ),
                   ),

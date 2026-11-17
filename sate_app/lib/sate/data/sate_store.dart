@@ -104,12 +104,25 @@ const List<String> categoriasUniversais = [
   'Flexibilidade',
 ];
 
+/// Animações demonstrativas disponíveis (chave -> nome). Todas são desenhadas por
+/// `AnimacaoExercicio` (ui/animacao_exercicio.dart).
 const Map<String, String> videosDemo = {
-  'demo:agachamento': 'Agachamento',
-  'demo:salto': 'Salto',
-  'demo:prancha': 'Prancha',
-  'demo:corrida': 'Corrida',
   'demo:polichinelo': 'Polichinelo',
+  'demo:joelhos': 'Elevação de joelhos',
+  'demo:agachamento': 'Agachamento',
+  'demo:afundo': 'Afundo',
+  'demo:salto': 'Salto vertical',
+  'demo:salto_caixa': 'Salto na caixa',
+  'demo:prancha': 'Prancha',
+  'demo:flexao': 'Flexão de braços',
+  'demo:abdominal': 'Abdominal',
+  'demo:corrida': 'Corrida',
+  'demo:sprint': 'Tiro de velocidade',
+  'demo:escada': 'Escada de agilidade',
+  'demo:toque_manchete': 'Toque e manchete',
+  'demo:saque': 'Saque',
+  'demo:conducao': 'Condução de bola',
+  'demo:mobilidade': 'Mobilidade de quadril',
 };
 
 const List<String> gruposExercicio = [
@@ -218,7 +231,7 @@ const List<Exercicio> _exerciciosDemo = [
       duracaoSeg: 480,
       instrucoes:
           'Comece com trote leve e evolua para elevação de joelhos, skipping e rotações de quadril. Mantenha a respiração controlada.',
-      video: 'demo:polichinelo',
+      video: 'demo:joelhos',
       demo: true),
   Exercicio(
       id: 'ex_agach',
@@ -240,7 +253,7 @@ const List<Exercicio> _exerciciosDemo = [
       duracaoSeg: 0,
       instrucoes:
           'Dê um passo largo à frente e desça o joelho de trás em direção ao chão. Mantenha o tronco ereto e alterne as pernas.',
-      video: 'demo:agachamento',
+      video: 'demo:afundo',
       demo: true),
   Exercicio(
       id: 'ex_prancha',
@@ -262,7 +275,7 @@ const List<Exercicio> _exerciciosDemo = [
       duracaoSeg: 0,
       instrucoes:
           'Flexione os joelhos, balance os braços e salte sobre a caixa aterrissando suave, com joelhos semiflexionados. Desça caminhando.',
-      video: 'demo:salto',
+      video: 'demo:salto_caixa',
       demo: true),
   Exercicio(
       id: 'ex_escada',
@@ -273,7 +286,7 @@ const List<Exercicio> _exerciciosDemo = [
       duracaoSeg: 30,
       instrucoes:
           'Passos curtos e rápidos dentro de cada quadrado, olhando à frente. Priorize frequência de passos e leveza nos apoios.',
-      video: 'demo:corrida',
+      video: 'demo:escada',
       demo: true),
   Exercicio(
       id: 'ex_tiro',
@@ -284,7 +297,7 @@ const List<Exercicio> _exerciciosDemo = [
       duracaoSeg: 0,
       instrucoes:
           'Largada com tronco inclinado, passadas fortes nos primeiros metros e postura ereta ao final. Recuperação completa entre os tiros.',
-      video: 'demo:corrida',
+      video: 'demo:sprint',
       demo: true),
   Exercicio(
       id: 'ex_toque',
@@ -295,7 +308,7 @@ const List<Exercicio> _exerciciosDemo = [
       duracaoSeg: 0,
       instrucoes:
           'Em duplas, alterne toque e manchete. Posicione-se sob a bola, braços firmes e contato na altura dos antebraços.',
-      video: 'demo:polichinelo',
+      video: 'demo:toque_manchete',
       demo: true),
   Exercicio(
       id: 'ex_saque',
@@ -306,7 +319,7 @@ const List<Exercicio> _exerciciosDemo = [
       duracaoSeg: 0,
       instrucoes:
           'Mire nas zonas indicadas da quadra adversária. Lançamento constante, golpe com a palma aberta e continuidade do movimento.',
-      video: 'demo:salto',
+      video: 'demo:saque',
       demo: true),
   Exercicio(
       id: 'ex_conducao',
@@ -317,7 +330,7 @@ const List<Exercicio> _exerciciosDemo = [
       duracaoSeg: 0,
       instrucoes:
           'Conduza a bola entre os cones usando as duas pernas. Cabeça erguida entre os toques e controle de direção em velocidade.',
-      video: 'demo:corrida',
+      video: 'demo:conducao',
       demo: true),
   Exercicio(
       id: 'ex_mobil',
@@ -328,7 +341,7 @@ const List<Exercicio> _exerciciosDemo = [
       duracaoSeg: 0,
       instrucoes:
           'Em posição de quatro apoios, faça círculos amplos com o quadril de cada lado. Movimento lento e controlado.',
-      video: 'demo:agachamento',
+      video: 'demo:mobilidade',
       demo: true),
   Exercicio(
       id: 'ex_interv',

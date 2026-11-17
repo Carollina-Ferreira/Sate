@@ -21,8 +21,6 @@ class TreinadorEquipesPage extends StatefulWidget {
 class _TreinadorEquipesPageState
     extends State<TreinadorEquipesPage> {
   static const Color verde = Color(0xFF003D31);
-  static const Color rosa = Color(0xFFEF476F);
-  static const Color azul = Color(0xFF003D31);
 
   final List<Map<String, String>> equipes = [
     {
@@ -57,19 +55,15 @@ class _TreinadorEquipesPageState
 
   @override
   Widget build(BuildContext context) {
+    // Estas telas têm fundo claro fixo: mantêm sempre o tema claro (legibilidade no modo escuro).
+    return Theme(data: SateTema.claro, child: _conteudo(context));
+  }
+
+  Widget _conteudo(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF5EE),
       body: Stack(
         children: [
-          Positioned.fill(
-            child: CustomPaint(
-              painter: _FundoPainter(
-                rosa: rosa,
-                azul: azul,
-                verde: verde,
-              ),
-            ),
-          ),
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(
@@ -339,109 +333,5 @@ class _TreinadorEquipesPageState
         ],
       ),
     );
-  }
-}
-
-class _FundoPainter extends CustomPainter {
-  final Color rosa;
-  final Color azul;
-  final Color verde;
-
-  _FundoPainter({
-    required this.rosa,
-    required this.azul,
-    required this.verde,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.fill;
-
-    paint.color = rosa.withOpacity(0.12);
-
-    canvas.drawCircle(
-      Offset(
-        size.width * 0.10,
-        size.height * 0.12,
-      ),
-      85,
-      paint,
-    );
-
-    paint.color = azul.withOpacity(0.13);
-
-    canvas.drawCircle(
-      Offset(
-        size.width * 0.92,
-        size.height * 0.22,
-      ),
-      100,
-      paint,
-    );
-
-    paint.color = verde.withOpacity(0.08);
-
-    canvas.drawCircle(
-      Offset(
-        size.width * 0.88,
-        size.height * 0.84,
-      ),
-      130,
-      paint,
-    );
-
-    final pontos = Paint()
-      ..color = verde.withOpacity(0.10)
-      ..style = PaintingStyle.fill;
-
-    for (int i = 0; i < 18; i++) {
-      final x = (i * 53.0) % size.width;
-      final y = 80 + ((i * 91.0) % size.height);
-
-      canvas.drawCircle(
-        Offset(x, y),
-        2.5,
-        pontos,
-      );
-    }
-
-    final linha = Paint()
-      ..color = rosa.withOpacity(0.16)
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke;
-
-    final path = Path();
-
-    path.moveTo(
-      0,
-      size.height * 0.72,
-    );
-
-    path.quadraticBezierTo(
-      size.width * 0.30,
-      size.height * 0.62,
-      size.width * 0.52,
-      size.height * 0.73,
-    );
-
-    path.quadraticBezierTo(
-      size.width * 0.74,
-      size.height * 0.84,
-      size.width,
-      size.height * 0.70,
-    );
-
-    canvas.drawPath(
-      path,
-      linha,
-    );
-  }
-
-  @override
-  bool shouldRepaint(
-    covariant _FundoPainter oldDelegate,
-  ) {
-    return false;
   }
 }

@@ -736,7 +736,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 ),
                 decoration: BoxDecoration(
                   color: concluido
-                      ? Color(0xFF005942).withValues(alpha: 0.10)
+                      ? Color(0xFF16A875).withValues(alpha: 0.10)
                       : Color(0xFFE39B18).withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -888,7 +888,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
                 ),
                 decoration: BoxDecoration(
                   color: concluido
-                      ? Color(0xFF005942).withValues(alpha: 0.10)
+                      ? Color(0xFF16A875).withValues(alpha: 0.10)
                       : Color(0xFFE39B18).withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -1011,6 +1011,9 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
             ),
           ],
 
+          // Presença/participação é registrada somente pelo treinador:
+          // o botão de confirmação fica oculto para jogos e reuniões.
+          if (!isJogo && !isReuniao) ...[
           const SizedBox(height: 8),
 
           SizedBox(
@@ -1054,6 +1057,7 @@ class _AtletaTreinoPageState extends State<AtletaTreinoPage> {
               ),
             ),
           ),
+          ],
         ],
       ),
     );

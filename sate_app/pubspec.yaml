@@ -1,7 +1,7 @@
 name: "SATE"
 description: "Sistema de Acompanhamento e Treinamento Esportivo"
 publish_to: 'none'
-version: 0.1.0+1
+version: 0.3.0+4
 
 environment:
   sdk: ^3.13.2
@@ -10,21 +10,25 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.6.0
+  shared_preferences: ^2.3.0
   qr_flutter: ^4.1.0
   mobile_scanner: ^5.2.3
+  image_picker: ^1.1.2
+  pdf: ^3.11.1
+  printing: ^5.13.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
-  image_picker: ^1.1.2
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/
+    - assets/fonts/
 
   fonts:
     - family: Poppins

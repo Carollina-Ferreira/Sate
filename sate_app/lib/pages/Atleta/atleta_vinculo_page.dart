@@ -308,306 +308,312 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Estas telas têm fundo claro fixo: mantêm sempre o tema claro (legibilidade no modo escuro).
+    return Theme(data: SateTema.claro, child: _conteudo(context));
+  }
+
+  Widget _conteudo(BuildContext context) {
     return Scaffold(
       backgroundColor: fundo,
-
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(22, 20, 22, 35),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // LOGO
-              Center(
-                child: Image.asset(
-                  'assets/images/logoVerde_img.png',
-                  width: 120,
-                ),
-              ),
-
-              const SizedBox(height: 38),
-
-              // ÍCONE
-              Center(
-                child: Container(
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    color: azul.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(22),
-                  ),
-                  child: const Icon(
-                    Icons.link_rounded,
-                    color: azul,
-                    size: 36,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 22),
-
-              // TÍTULO
-              const Center(
-                child: Text.rich(
-                  TextSpan(children: [TextSpan(text: 'Entre na sua '), TextSpan(text: 'equipe', style: SateEstilo.destaque)]),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 27,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF10251F),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 9),
-
-              Center(
-                child: Text(
-                  'Digite o código fornecido pelo seu treinador '
-                  'ou escaneie o QR Code.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 1.5,
-                    color: Color(0xFF68736F),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              // CAMPO DO CÓDIGO
-              const Text(
-                'Código da equipe',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF10251F),
-                ),
-              ),
-
-              const SizedBox(height: 9),
-
-              TextField(
-                controller: codigoController,
-                textCapitalization: TextCapitalization.characters,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 2,
-                  color: azul,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'EX: TRN-4829',
-                  hintStyle: TextStyle(
-                    color: Color(0xFFA3ADA9),
-                    fontSize: 15,
-                    letterSpacing: 1,
-                  ),
-                  prefixIcon: const Icon(
-                    Icons.key_rounded,
-                    color: azul,
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 17,
-                    horizontal: 16,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Color(0xFFE8DFD3),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 480),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(22, 20, 22, 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // LOGO
+                  Center(
+                    child: Image.asset(
+                      'assets/images/logoVerde_img.png',
+                      width: 104,
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Color(0xFFE8DFD3),
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(
-                      color: azul,
-                      width: 1.5,
-                    ),
-                  ),
-                ),
-              ),
 
-              const SizedBox(height: 16),
+                  const SizedBox(height: 28),
 
-              // BOTÃO VINCULAR
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: carregando ? null : vincular,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: verde,
-                    disabledBackgroundColor: Color(0xFFD5C9BA),
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                  // TÍTULO
+                  const Text.rich(
+                    TextSpan(children: [
+                      TextSpan(text: 'Entre na sua '),
+                      TextSpan(text: 'equipe', style: SateEstilo.destaque),
+                    ]),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 27,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF10251F),
                     ),
                   ),
-                  child: carregando
-                      ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
+
+                  const SizedBox(height: 8),
+
+                  const Text(
+                    'Digite o código fornecido pelo seu treinador '
+                    'ou escaneie o QR Code.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      height: 1.5,
+                      color: Color(0xFF68736F),
+                    ),
+                  ),
+
+                  const SizedBox(height: 26),
+
+                  // CARTÃO COM O CÓDIGO
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(22),
+                      border: Border.all(color: const Color(0xFFE8DFD3)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          'Código da equipe',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF10251F),
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        TextField(
+                          controller: codigoController,
+                          textCapitalization: TextCapitalization.characters,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 2,
+                            color: azul,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: 'EX: TRN-4829',
+                            hintStyle: const TextStyle(
+                              color: Color(0xFFA3ADA9),
+                              fontSize: 15,
+                              letterSpacing: 1,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.key_rounded,
+                              color: azul,
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFFF6F9F7),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 17,
+                              horizontal: 16,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFE8DFD3),
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFE8DFD3),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                color: azul,
+                                width: 1.5,
+                              ),
                             ),
                           ),
-                        )
-                      : const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // BOTÃO VINCULAR
+                        SizedBox(
+                          height: 52,
+                          child: ElevatedButton(
+                            onPressed: carregando ? null : vincular,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: verde,
+                              disabledBackgroundColor: const Color(0xFFD5C9BA),
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            child: carregando
+                                ? const SizedBox(
+                                    width: 22,
+                                    height: 22,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Vincular à equipe',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Icon(
+                                        Icons.arrow_forward_rounded,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // DIVISOR "OU"
+                        Row(
                           children: [
-                            Text(
-                              'Vincular à equipe',
+                            const Expanded(
+                              child: Divider(color: Color(0xFFE8DFD3)),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                'ou',
+                                style: TextStyle(
+                                  color: Color(0xFF8A938F),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const Expanded(
+                              child: Divider(color: Color(0xFFE8DFD3)),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // BOTÃO ESCANEAR QR CODE
+                        SizedBox(
+                          height: 52,
+                          child: OutlinedButton.icon(
+                            onPressed: carregando ? null : _escanearQrCode,
+                            icon: const Icon(
+                              Icons.qr_code_scanner_rounded,
+                              size: 22,
+                            ),
+                            label: const Text(
+                              'Escanear QR Code',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(width: 8),
-                            Icon(
-                              Icons.arrow_forward_rounded,
-                              size: 20,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: verde,
+                              side: const BorderSide(color: verde, width: 1.5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
                             ),
-                          ],
+                          ),
                         ),
-                ),
-              ),
-
-              const SizedBox(height: 18),
-
-              // DIVISOR "OU"
-              Row(
-                children: [
-                  Expanded(child: Divider(color: Color(0xFFD5C9BA))),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(
-                      'ou',
-                      style: TextStyle(
-                        color: Color(0xFF8A938F),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      ],
                     ),
                   ),
-                  Expanded(child: Divider(color: Color(0xFFD5C9BA))),
-                ],
-              ),
 
-              const SizedBox(height: 18),
+                  const SizedBox(height: 30),
 
-              // BOTÃO ESCANEAR QR CODE
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: OutlinedButton.icon(
-                  onPressed: carregando ? null : _escanearQrCode,
-                  icon: const Icon(
-                    Icons.qr_code_scanner_rounded,
-                    size: 22,
-                  ),
-                  label: const Text(
-                    'Escanear QR Code',
+                  // COMO FUNCIONA
+                  const Text.rich(
+                    TextSpan(children: [
+                      TextSpan(text: 'Como '),
+                      TextSpan(text: 'funciona?', style: SateEstilo.destaque),
+                    ]),
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 19,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF10251F),
                     ),
                   ),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: verde,
-                    side: const BorderSide(color: verde, width: 1.5),
-                    shape: RoundedRectangleBorder(
+
+                  const SizedBox(height: 14),
+
+                  _buildStep(
+                    numero: '1',
+                    titulo: 'Peça o código',
+                    descricao: 'Solicite o código da sua equipe ao treinador.',
+                    cor: azul,
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  _buildStep(
+                    numero: '2',
+                    titulo: 'Digite o código ou escaneie',
+                    descricao: 'Insira o código no campo ou use o QR Code.',
+                    cor: rosa,
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  _buildStep(
+                    numero: '3',
+                    titulo: 'Confirme o vínculo',
+                    descricao: 'Confira a equipe e confirme para entrar.',
+                    cor: verde,
+                  ),
+
+                  const SizedBox(height: 18),
+
+                  // AVISO
+                  Container(
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: azul.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              // COMO FUNCIONA
-              const Text.rich(
-                TextSpan(children: [TextSpan(text: 'Como '), TextSpan(text: 'funciona?', style: SateEstilo.destaque)]),
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF10251F),
-                ),
-              ),
-
-              const SizedBox(height: 15),
-
-              _buildStep(
-                numero: '1',
-                titulo: 'Peça o código',
-                descricao: 'Solicite o código da sua equipe ao treinador.',
-                cor: azul,
-              ),
-
-              const SizedBox(height: 12),
-
-              _buildStep(
-                numero: '2',
-                titulo: 'Digite o código ou escaneie',
-                descricao: 'Insira o código no campo ou use o QR Code.',
-                cor: rosa,
-              ),
-
-              const SizedBox(height: 12),
-
-              _buildStep(
-                numero: '3',
-                titulo: 'Confirme o vínculo',
-                descricao: 'Confira a equipe e confirme para entrar.',
-                cor: verde,
-              ),
-
-              const SizedBox(height: 20),
-
-              // AVISO
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: azul.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.info_outline_rounded,
-                      color: azul,
-                      size: 21,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'O código deve ser fornecido pelo treinador '
-                        'da sua equipe.',
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          height: 1.4,
-                          color: Color(0xFF4F5A56),
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.info_outline_rounded,
+                          color: azul,
+                          size: 21,
                         ),
-                      ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'O código deve ser fornecido pelo treinador '
+                            'da sua equipe.',
+                            style: TextStyle(
+                              fontSize: 12.5,
+                              height: 1.4,
+                              color: Color(0xFF4F5A56),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

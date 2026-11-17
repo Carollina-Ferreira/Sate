@@ -382,7 +382,7 @@ class _AtletaFeedPageState extends State<AtletaFeedPage> {
                             : Icons.favorite_border_rounded,
                         size: 18,
                         color: publicacao['curtido']
-                            ? Color(0xFFC9305A)
+                            ? Color(0xFFC0392B)
                             : Color(0xFF68736F),
                       ),
                       const SizedBox(width: 5),

@@ -1,950 +1,672 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap');
-
-/* =========================================
-   PÁGINA DE CLIPES — TEMA GLOBAL SATE
-========================================= */
+/* ============================================================
+   SATE — CLIPES DO ATLETA
+   CSS Module | versão sem filtro de campeonatos
+   Compatível com o tema global claro/escuro.
+============================================================ */
 
 .page {
-    width: calc(100% + 60px);
-    min-height: calc(100vh + 60px);
-    margin: -30px;
-    padding: 34px 34px 64px;
-    box-sizing: border-box;
+  --clipe-surface: var(--bg-surface, #ffffff);
+  --clipe-surface-2: var(--bg-surface-2, #f4f7f6);
+  --clipe-text: var(--texto, #16382f);
+  --clipe-muted: var(--texto-suave, #6f827b);
+  --clipe-border: var(--borda, #dfe9e4);
+  --clipe-green: var(--verde-principal, var(--verde, #16a875));
+  --clipe-pink: var(--rosa, #e98ba8);
 
-    background: transparent;
-    color: var(--texto);
-    font-family: var(--fonte-base, 'Inter'), sans-serif;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  margin: 0;
+  padding: clamp(20px, 3vw, 36px) clamp(16px, 3vw, 40px) 64px;
+  box-sizing: border-box;
+  background: transparent;
+  color: var(--clipe-text);
+  font-family: var(--fonte-base, 'Poppins', sans-serif);
+  overflow-x: clip;
 }
 
-.page * {
-    box-sizing: border-box;
+.page *,
+.page *::before,
+.page *::after {
+  box-sizing: border-box;
 }
 
-/* VOLTAR */
+/* ============================================================
+   VOLTAR
+============================================================ */
 
 .backButton {
-    width: min(100%, 1235px);
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    margin: 0 auto 22px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: var(--texto-suave);
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color .18s ease, transform .18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: 100%;
+  min-height: 34px;
+  margin: 0 0 22px;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--clipe-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
 .backButton:hover {
-    color: var(--verde-principal);
-    transform: translateX(-2px);
+  color: var(--clipe-green);
 }
 
-/* CABEÇALHO */
+.backButton:focus-visible,
+.filterButton:focus-visible,
+.downloadButton:focus-visible,
+.shareButton:focus-visible,
+.videoModalClose:focus-visible {
+  outline: 2px solid var(--clipe-pink);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   CABEÇALHO
+============================================================ */
 
 .toolbar {
-    width: min(100%, 1235px);
-    margin: 0 auto 32px;
-    padding: 0;
-    background: transparent;
-    box-shadow: none;
+  width: 100%;
+  margin: 0 0 28px;
+  padding: 0;
+  background: transparent;
 }
 
 .toolbarHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 32px;
-    margin-bottom: 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  min-width: 0;
+  gap: 20px;
+  margin: 0 0 24px;
 }
 
 .titleArea {
-    min-width: 0;
-    flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .titleRow {
-    display: block;
+  display: block;
+  min-width: 0;
 }
 
 .titleRow h1 {
-    margin: 0;
-    color: var(--texto);
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
-    font-size: clamp(36px, 3.3vw, 48px);
-    line-height: 1.04;
-    font-weight: 700;
-    letter-spacing: -1.6px;
+  margin: 0;
+  color: var(--clipe-text);
+  font-family: var(--fonte-titulo, Georgia, serif);
+  font-size: clamp(29px, 3.4vw, 46px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.9px;
+  overflow-wrap: break-word;
 }
 
 .titleRow h1 em {
-    color: var(--rosa);
-    font-family: 'DM Serif Display', serif;
-    font-style: italic;
-    font-weight: 400;
-    letter-spacing: -0.4px;
-}
-
-.countBadge {
-    display: none;
+  color: var(--clipe-pink);
+  font-family: var(--fonte-destaque, Georgia, serif);
+  font-style: italic;
+  font-weight: 400;
 }
 
 .subtitle {
-    max-width: 590px;
-    margin: 10px 0 0;
-    color: var(--texto-suave);
-    font-size: 12px;
-    line-height: 1.65;
+  max-width: 650px;
+  margin: 10px 0 0;
+  color: var(--clipe-muted);
+  font-size: 12px;
+  line-height: 1.75;
 }
 
-/* SELECT CAMPEONATO */
-
-.championshipSelectWrapper {
-    position: relative;
-    flex-shrink: 0;
-}
-
-.championshipSelect {
-    min-width: 240px;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 0 16px;
-
-    border: 1px solid var(--borda-forte);
-    border-radius: 12px;
-    background: var(--bg-surface);
-    color: var(--texto);
-
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: border-color .18s ease, box-shadow .18s ease;
-}
-
-.championshipSelect:hover {
-    border-color: var(--verde);
-}
-
-.championshipSelect:focus-visible {
-    outline: none;
-    border-color: var(--verde);
-    box-shadow: var(--sombra-foco);
-}
-
-.dropdown {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    z-index: 100;
-    min-width: 240px;
-    padding: 7px;
-
-    border: 1px solid var(--borda);
-    border-radius: 12px;
-    background: var(--bg-surface);
-    box-shadow: var(--sombra);
-}
-
-.dropdownItem {
-    width: 100%;
-    display: block;
-    padding: 10px 12px;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    color: var(--texto-medio);
-    font-family: inherit;
-    font-size: 11px;
-    text-align: left;
-    cursor: pointer;
-    transition: background .18s ease, color .18s ease;
-}
-
-.dropdownItem:hover {
-    background: var(--menu-hover-bg);
-    color: var(--verde-principal);
-}
-
-/* ABAS / FILTROS */
+/* ============================================================
+   FILTROS DE CATEGORIA
+============================================================ */
 
 .filtersRow {
-    min-height: 46px;
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    overflow-x: auto;
-    border-bottom: 1px solid var(--borda);
-    scrollbar-width: none;
-}
-
-.filtersRow::-webkit-scrollbar {
-    display: none;
-}
-
-.filterLabel {
-    display: none;
+  display: flex;
+  align-items: stretch;
+  gap: clamp(14px, 2.3vw, 30px);
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--clipe-border);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--clipe-border) transparent;
 }
 
 .filterButton {
-    min-height: 46px;
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: var(--texto-suave);
-    font-family: inherit;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: color .18s ease;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: 7px;
+  min-height: 48px;
+  padding: 0 1px 2px;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  color: var(--clipe-muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
 .filterButton svg {
-    display: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  opacity: 0.75;
 }
 
 .filterButton small {
-    color: var(--texto-claro);
-    font-size: 9px;
-    font-weight: 600;
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  min-height: 20px;
+  padding: 0 5px;
+  border-radius: 6px;
+  background: var(--clipe-surface-2);
+  color: var(--clipe-muted);
+  font-size: 10px;
+  font-weight: 700;
 }
 
-.filterButton:hover {
-    color: var(--texto);
+.filterButton:hover,
+.filterButton.filterActive {
+  color: var(--clipe-text);
 }
 
-.filterActive {
-    color: var(--texto);
+.filterButton.filterActive small {
+  color: var(--clipe-pink);
 }
 
-.filterActive small {
-    color: var(--rosa);
+.filterButton.filterActive::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  border-radius: 5px 5px 0 0;
+  background: var(--clipe-pink);
 }
 
-.filterActive::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    bottom: -1px;
-    left: 0;
-    height: 2px;
-    background: var(--rosa);
-}
-
-/* GRID DOS CLIPES */
+/* ============================================================
+   GRID DE CLIPES
+============================================================ */
 
 .clipesGrid {
-    width: min(100%, 1235px);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 34px 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
 }
 
 .clipeCard {
-    min-width: 0;
-    height: auto;
-    position: relative;
-    overflow: visible;
-    display: block;
-    border: none;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--clipe-border);
+  border-radius: 16px;
+  background: var(--clipe-surface);
+  box-shadow: 0 6px 18px rgba(0, 65, 49, 0.035);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .clipeCard:hover {
-    transform: none;
-    box-shadow: none;
+  border-color: var(--clipe-green);
+  box-shadow: 0 10px 24px rgba(0, 65, 49, 0.075);
 }
 
-/* VÍDEO */
+/* ============================================================
+   CAPA / MINIATURA
+============================================================ */
 
 .videoWrapper {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    position: relative;
-    overflow: hidden;
-    border-radius: 13px;
-    background: var(--verde-profundo);
-    cursor: pointer;
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--verde-profundo, #005c45);
+  cursor: pointer;
+}
+
+.thumbnail,
+.thumbnailFallback {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .thumbnail {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    filter: saturate(.75) contrast(.95);
-    transition: transform .25s ease;
-}
-
-.videoWrapper::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        180deg,
-        rgba(0, 72, 53, .12),
-        rgba(0, 72, 53, .34)
-    );
-    pointer-events: none;
+  object-fit: cover;
+  transition: transform 0.25s ease;
 }
 
 .videoWrapper:hover .thumbnail {
-    transform: scale(1.025);
+  transform: scale(1.035);
+}
+
+.thumbnailFallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+  background: linear-gradient(135deg, #075744, #147b60);
+  color: #ffffff;
+  font-size: 12px;
+  text-align: center;
+}
+
+.videoWrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 48%,
+    rgba(0, 0, 0, 0.45)
+  );
+  pointer-events: none;
 }
 
 .playOverlay {
-    width: 48px;
-    height: 48px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(0, 54, 42, .8);
-    color: #fff;
-    transform: translate(-50%, -50%);
-    transition: transform .18s ease, background .18s ease;
-}
-
-.videoWrapper:hover .playOverlay {
-    background: rgba(0, 54, 42, .94);
-    transform: translate(-50%, -50%) scale(1.05);
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 50%;
+  background: rgba(0, 54, 42, 0.86);
+  color: #ffffff;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .playOverlay svg {
-    margin-left: 2px;
+  margin-left: 2px;
 }
 
-/* INFO ABAIXO */
-
-.clipeInfo {
-    position: relative;
-    padding: 11px 0 0;
+.videoWrapper:hover .playOverlay {
+  background: #005c45;
+  transform: translate(-50%, -50%) scale(1.08);
 }
 
 .timestamp {
-    display: none;
+  position: absolute;
+  right: 11px;
+  bottom: 11px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 7px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.76);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   INFORMAÇÕES DO CLIPE
+============================================================ */
+
+.clipeInfo {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 16px;
 }
 
 .clipeTitle {
-    margin: 0;
-    color: var(--texto);
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
-    font-size: 12px;
-    font-weight: 700;
+  width: 100%;
+  margin: 0;
+  color: var(--clipe-text);
+  font-family: var(--fonte-base, 'Poppins', sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .matchName {
-    margin: 6px 0 0;
-    color: var(--texto-suave);
-    font-size: 10px;
-    line-height: 1.5;
+  width: 100%;
+  margin: 7px 0 0;
+  color: var(--clipe-muted);
+  font-size: 11px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
-/* TAG ROSA SOBRE A MINIATURA */
-
 .categoryTag {
-    position: absolute;
-    top: calc(-100% - 2px);
-    left: 13px;
-    z-index: 5;
-
-    min-height: 27px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-
-    padding: 0 10px;
-    margin: 0;
-
-    border-radius: 999px;
-    background: var(--rosa);
-    color: var(--texto-inverso);
-
-    font-size: 9px;
-    font-weight: 700;
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-height: 28px;
+  margin: 12px 0 0;
+  padding: 5px 10px;
+  border: 1px solid var(--clipe-pink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--clipe-text);
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .categoryTag svg {
-    display: none;
+  flex: 0 0 auto;
+  color: var(--clipe-pink);
 }
 
-.categoryTag::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: currentColor;
-}
-
-.categoryTag::after {
-    content: attr(data-label);
-}
-
-/* AÇÕES NO HOVER */
+/* ============================================================
+   BOTÕES DE DOWNLOAD E COMPARTILHAMENTO
+============================================================ */
 
 .cardFooter {
-    position: absolute;
-    top: 7px;
-    right: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin: 0;
-    padding: 0;
-    opacity: 0;
-    transition: opacity .18s ease;
-}
-
-.clipeCard:hover .cardFooter {
-    opacity: 1;
+  position: static;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin: auto 0 0;
+  padding: 17px 0 0;
+  opacity: 1;
 }
 
 .downloadButton,
 .shareButton {
-    height: 30px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    padding: 0 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 7px 12px;
+  border: 1px solid var(--clipe-border);
+  border-radius: 10px;
+  background: var(--clipe-surface-2);
+  color: var(--clipe-green);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
 
-    border: 1px solid var(--borda-forte);
-    border-radius: 8px;
-    background: var(--bg-surface);
-    color: var(--verde-principal);
-
-    font-family: inherit;
-    font-size: 9px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .18s ease, border-color .18s ease;
+.downloadButton {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .shareButton {
-    width: 30px;
-    padding: 0;
+  flex: 0 0 38px;
+  width: 38px;
+  padding: 7px;
 }
 
 .downloadButton:hover,
 .shareButton:hover {
-    background: var(--bg-verde-suave);
-    border-color: var(--verde);
+  border-color: var(--clipe-green);
+  background: var(
+    --bg-verde-suave,
+    var(--clipe-surface-2)
+  );
 }
 
-/* ESTADO VAZIO */
+/* ============================================================
+   CARREGAMENTO, ERRO E ESTADOS VAZIOS
+============================================================ */
 
 .emptyState {
-    width: min(100%, 1235px);
-    margin: 0 auto;
-    padding: 54px 20px;
-
-    border: 1px solid var(--borda);
-    border-radius: 14px;
-    background: var(--bg-surface);
-
-    color: var(--texto-suave);
-    text-align: center;
-    font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 210px;
+  margin: 0;
+  padding: 30px 20px;
+  border: 1px dashed var(--clipe-border);
+  border-radius: 16px;
+  background: var(--clipe-surface);
+  color: var(--clipe-muted);
+  text-align: center;
 }
 
-/* TRY — PLAYER ESPECIAL */
-
-.tryLayout {
-    width: min(100%, 1235px);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 330px;
-    gap: 20px;
+.emptyState > svg {
+  color: var(--clipe-green);
 }
 
-.mainPlayerCard,
-.otherClipsCard {
-    overflow: hidden;
-    border: 1px solid var(--borda);
-    border-radius: 15px;
-    background: var(--bg-surface);
-    box-shadow: var(--sombra);
+.emptyState p {
+  margin: 0;
+  color: var(--clipe-text);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.55;
 }
 
-.mainVideo {
-    position: relative;
-    width: 100%;
-    height: 470px;
-    overflow: hidden;
-    background: var(--verde-profundo);
-    cursor: pointer;
+.emptyState span {
+  max-width: 460px;
+  font-size: 11px;
+  line-height: 1.65;
 }
 
-.mainThumbnail {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
+.emptyState button {
+  margin-top: 8px;
+  padding: 9px 14px;
+  border: 1px solid var(--clipe-border);
+  border-radius: 9px;
+  background: var(--clipe-surface-2);
+  color: var(--clipe-green);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-.mainPlayButton {
-    width: 70px;
-    height: 70px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(0, 54, 42, .82);
-    color: #fff;
-    transform: translate(-50%, -50%);
-}
-
-.videoControls {
-    position: absolute;
-    right: 18px;
-    bottom: 18px;
-    left: 18px;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    padding: 0 15px;
-    border-radius: 11px;
-    background: rgba(0, 0, 0, .84);
-}
-
-.controlPlay {
-    width: 34px;
-    height: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: #fff;
-    cursor: pointer;
-}
-
-.progressContainer {
-    flex: 1;
-}
-
-.progressTrack {
-    height: 4px;
-    position: relative;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, .72);
-}
-
-.progressPlayed {
-    width: 38%;
-    height: 100%;
-    border-radius: 999px;
-    background: var(--rosa);
-}
-
-.progressIndicator {
-    width: 11px;
-    height: 11px;
-    position: absolute;
-    top: 50%;
-    left: 38%;
-    border-radius: 50%;
-    background: #fff;
-    transform: translate(-50%, -50%);
-}
-
-.videoTime {
-    color: #fff;
-    font-size: 10px;
-}
-
-.mainVideoInfo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 18px 20px;
-}
-
-.mainVideoTime {
-    color: var(--rosa);
-    font-size: 10px;
-    font-weight: 700;
-}
-
-.mainVideoInfo h2 {
-    margin: 2px 0 0;
-    color: var(--texto);
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
-    font-size: 18px;
-}
-
-.mainVideoInfo p {
-    margin: 4px 0 0;
-    color: var(--texto-suave);
-    font-size: 10px;
-}
-
-.mainActions {
-    display: flex;
-    gap: 7px;
-}
-
-.mainActions button {
-    height: 34px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0 10px;
-
-    border: 1px solid var(--borda-forte);
-    border-radius: 8px;
-    background: var(--bg-surface);
-    color: var(--verde-principal);
-
-    font-family: inherit;
-    font-size: 9px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .18s ease;
-}
-
-.mainActions button:hover {
-    background: var(--bg-verde-suave);
-}
-
-.otherClipsCard {
-    padding: 18px;
-}
-
-.otherClipsCard h2 {
-    margin: 0 0 14px;
-    color: var(--texto);
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
-    font-size: 15px;
-}
-
-.otherClipsList {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-}
-
-.otherClip {
-    width: 100%;
-    min-height: 78px;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 7px;
-
-    border: 1px solid transparent;
-    border-radius: 10px;
-    background: var(--bg-surface-2);
-    color: var(--texto);
-    text-align: left;
-    font-family: inherit;
-    cursor: pointer;
-    transition: background .18s ease, border-color .18s ease;
-}
-
-.otherClipActive {
-    background: var(--verde-principal);
-    color: var(--texto-sobre-verde);
-}
-
-.otherThumbnail {
-    width: 76px;
-    height: 61px;
-    overflow: hidden;
-    flex-shrink: 0;
-    border-radius: 8px;
-}
-
-.otherThumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.otherClipInfo {
-    min-width: 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.otherClipInfo strong {
-    font-size: 10px;
-}
-
-.otherClipInfo span {
-    overflow: hidden;
-    color: var(--texto-suave);
-    font-size: 9px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.otherClipActive .otherClipInfo span {
-    color: var(--texto-sobre-verde);
-    opacity: .8;
-}
-
-.otherPlay {
-    width: 28px;
-    height: 28px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid var(--borda-forte);
-    border-radius: 50%;
-    background: var(--bg-surface);
-    color: var(--texto);
-}
-
-.otherClipActive .otherPlay {
-    border-color: var(--rosa);
-    background: var(--rosa);
-    color: #fff;
-}
-
-/* MODAL */
+/* ============================================================
+   MODAL DE VÍDEO
+============================================================ */
 
 .videoModalOverlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 22px;
-    background: var(--overlay);
-    backdrop-filter: blur(5px);
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(2, 26, 21, 0.78);
+  backdrop-filter: blur(5px);
 }
 
 .videoModal {
-    width: min(900px, 100%);
-    position: relative;
-    overflow: hidden;
-    border-radius: 15px;
-    background: #000;
-    box-shadow: var(--sombra);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(940px, 100%);
+  max-height: calc(100dvh - 48px);
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--clipe-border);
+  border-radius: 16px;
+  background: var(--clipe-surface);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
 }
 
 .videoModalClose {
-    width: 36px;
-    height: 36px;
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, .62);
-    color: #fff;
-    cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  cursor: pointer;
 }
 
 .videoPlayer {
-    width: 100%;
-    max-height: 70vh;
-    display: block;
-    background: #000;
+  display: block;
+  width: 100%;
+  max-height: min(70vh, 70dvh);
+  background: #001d17;
+  object-fit: contain;
 }
 
 .videoModalInfo {
-    padding: 15px 18px;
-    background: var(--bg-surface);
+  min-width: 0;
+  padding: 16px 20px;
+  overflow-y: auto;
+  background: var(--clipe-surface);
 }
 
 .videoModalInfo h3 {
-    margin: 0;
-    color: var(--texto);
-    font-family: var(--fonte-titulo, 'Sora'), sans-serif;
-    font-size: 15px;
+  margin: 0;
+  color: var(--clipe-text);
+  font-size: 16px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .videoModalInfo p {
-    margin: 4px 0 0;
-    color: var(--texto-suave);
-    font-size: 10px;
+  margin: 6px 0 0;
+  color: var(--clipe-muted);
+  font-size: 11px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
-/* =========================================
+/* ============================================================
+   TEMA ESCURO
+============================================================ */
+
+:global(:root[data-theme='dark']) .titleRow h1 em {
+  color: var(--verde-claro, #72d6b4);
+}
+
+:global(:root[data-theme='dark']) .clipeCard {
+  box-shadow: none;
+}
+
+/* ============================================================
    RESPONSIVIDADE
-========================================= */
+============================================================ */
 
-@media (max-width: 1050px) {
-    .clipesGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .tryLayout {
-        grid-template-columns: 1fr;
-    }
-
-    .otherClipsList {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+@media (max-width: 1100px) {
+  .clipesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
 }
 
 @media (max-width: 760px) {
-    .page {
-        width: calc(100% + 32px);
-        min-height: calc(100vh + 32px);
-        margin: -16px;
-        padding: 24px 16px 40px;
-    }
+  .page {
+    padding: 20px 16px 42px;
+  }
 
-    .toolbarHeader {
-        align-items: stretch;
-        flex-direction: column;
-        gap: 20px;
-    }
+  .toolbarHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 18px;
+  }
 
-    .titleRow h1 {
-        font-size: clamp(30px, 8vw, 40px);
-    }
+  .titleRow h1 {
+    font-size: clamp(29px, 7vw, 39px);
+  }
 
-    .championshipSelectWrapper,
-    .championshipSelect {
-        width: 100%;
-    }
+  .filtersRow {
+    gap: 20px;
+  }
 
-    .dropdown {
-        width: 100%;
-    }
+  .clipesGrid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
 
-    .filtersRow {
-        gap: 22px;
-    }
+  .videoModalOverlay {
+    padding: 12px;
+  }
 
-    .clipesGrid {
-        grid-template-columns: 1fr;
-        gap: 26px;
-    }
-
-    .cardFooter {
-        position: static;
-        margin-top: 9px;
-        opacity: 1;
-    }
-
-    .mainVideo {
-        height: 320px;
-    }
-
-    .mainVideoInfo {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 14px;
-    }
-
-    .mainActions {
-        flex-wrap: wrap;
-    }
-
-    .otherClipsList {
-        grid-template-columns: 1fr;
-    }
+  .videoModal {
+    max-height: calc(100dvh - 24px);
+    border-radius: 12px;
+  }
 }
 
-@media (max-width: 500px) {
-    .page {
-        padding: 20px 12px 32px;
-    }
+@media (max-width: 480px) {
+  .page {
+    padding: 16px 12px 36px;
+  }
 
-    .backButton {
-        margin-bottom: 18px;
-    }
+  .backButton {
+    margin-bottom: 16px;
+  }
 
-    .toolbar {
-        margin-bottom: 24px;
-    }
+  .toolbar {
+    margin-bottom: 22px;
+  }
 
-    .toolbarHeader {
-        margin-bottom: 22px;
-    }
+  .titleRow h1 {
+    font-size: 30px;
+  }
 
-    .titleRow h1 {
-        font-size: 30px;
-        letter-spacing: -1px;
-    }
+  .subtitle {
+    font-size: 11px;
+  }
 
-    .subtitle {
-        font-size: 11px;
-    }
+  .clipeInfo {
+    padding: 13px;
+  }
 
-    .filtersRow {
-        gap: 18px;
-    }
-
-    .mainVideo {
-        height: 240px;
-    }
-
-    .videoControls {
-        right: 10px;
-        bottom: 10px;
-        left: 10px;
-        height: 44px;
-        gap: 8px;
-        padding: 0 10px;
-    }
-
-    .mainVideoInfo {
-        padding: 15px;
-    }
-
-    .mainVideoInfo h2 {
-        font-size: 16px;
-    }
-
-    .otherClipsCard {
-        padding: 14px;
-    }
-
-    .videoModalOverlay {
-        padding: 12px;
-    }
-}
-
-/* Nome em destaque no título */
-.titleRow h1 em {
-    color: var(--rosa);
-}
-
-/* Modo escuro: nome em verde claro */
-:global(:root[data-theme='dark']) .titleRow h1 em {
-    color: var(--verde-claro);
+  .videoModalInfo {
+    padding: 13px;
+  }
 }

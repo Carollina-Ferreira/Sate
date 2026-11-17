@@ -1,0 +1,35 @@
+.toggle {
+  position: fixed;
+  top: clamp(14px, 3vh, 26px);
+  right: clamp(14px, 3vw, 36px);
+  z-index: 80;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 13px;
+  border: 1px solid var(--onboarding-border);
+  border-radius: var(--radius-control);
+  background: var(--onboarding-surface);
+  color: var(--onboarding-text);
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  font-family: var(--fonte-base);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.toggle:hover {
+  background: var(--onboarding-accent-bg);
+  border-color: var(--onboarding-accent-border);
+  transform: translateY(-1px);
+}
+.toggle:focus-visible {
+  outline: 2px solid var(--verde-principal);
+  outline-offset: 3px;
+}
+@media (max-width: 700px) {
+  .toggle { top: 12px; right: 12px; width: 40px; height: 40px; padding: 0; }
+  .toggle span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}

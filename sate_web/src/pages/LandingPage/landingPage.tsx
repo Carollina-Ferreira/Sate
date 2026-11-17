@@ -167,7 +167,7 @@ export default function LandingPage() {
       });
   };
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} sate-public-landing`}>
       {/* ======================================
           HERO
       ====================================== */}
@@ -1146,26 +1146,36 @@ export default function LandingPage() {
           análise específicos e
           personalizáveis.
         </p>
+        {/* Carrossel contínuo: a segunda sequência cria o loop sem cortes. */}
         <div
-          className={
-            styles.sportsGrid
-          }
+          className={styles.sportsMarquee}
+          aria-label="Modalidades esportivas atendidas pelo SATE"
         >
-          {esportes.map((esporte) => (
-            <article
-              key={esporte.nome}
-              className={styles.sportCard}
-            >
-              <div className={styles.sportImageBox}>
-                <img
-                  src={esporte.imagem}
-                  alt={esporte.nome}
-                  className={styles.sportImage}
-                />
+          <div className={styles.sportsTrack}>
+            {[0, 1].map((repeticao) => (
+              <div
+                key={repeticao}
+                className={styles.sportsSequence}
+                aria-hidden={repeticao === 1 ? true : undefined}
+              >
+                {esportes.map((esporte) => (
+                  <article
+                    key={esporte.nome}
+                    className={styles.sportCard}
+                  >
+                    <div className={styles.sportImageBox}>
+                      <img
+                        src={esporte.imagem}
+                        alt={esporte.nome}
+                        className={styles.sportImage}
+                      />
+                    </div>
+                    <strong>{esporte.nome}</strong>
+                  </article>
+                ))}
               </div>
-              <strong>{esporte.nome}</strong>
-            </article>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
       {/* ======================================

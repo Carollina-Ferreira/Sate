@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 import styles from './equipes.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 import CardEquipe from '../../components/CardEquipe/cardEquipe';
 
@@ -1207,7 +1208,7 @@ const Equipes = () => {
               </span>
 
               {carregandoAtletas
-                ? 'Carregando...'
+                ? <LoadingState variant="inline" title="Carregando atletas..." />
                 : 'Nova Equipe'}
             </button>
           </div>
@@ -1273,15 +1274,7 @@ const Equipes = () => {
         {/* CARREGAMENTO */}
 
         {carregando && (
-          <div
-            style={{
-              padding: '50px 20px',
-              textAlign: 'center',
-              color: '#ffffff',
-            }}
-          >
-            Carregando equipes...
-          </div>
+          <LoadingState variant="cards" title="Carregando equipes..." description="Preparando as equipes cadastradas." count={6} />
         )}
 
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../login_page.dart' show BackgroundPainter;
 
 import './treinador_vinculo_page.dart';
 import '../../theme/sate_theme.dart';

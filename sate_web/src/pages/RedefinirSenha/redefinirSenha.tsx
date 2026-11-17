@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 
 import styles from '../EsqueciSenha/esqueciSenha.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 import logoVerdeImg from '../../assets/img/logoVerde_img.png';
 
@@ -450,7 +451,7 @@ const RedefinirSenha = () => {
                 disabled={loading || !token}
               >
                 <span>
-                  {loading ? 'Salvando...' : 'Salvar nova senha'}
+                  {loading ? <LoadingState variant="inline" title="Salvando nova senha..." /> : 'Salvar nova senha'}
                 </span>
 
                 {!loading && (

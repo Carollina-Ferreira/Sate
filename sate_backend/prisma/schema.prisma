@@ -7,6 +7,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================================
+// USUÁRIO
+// ============================================================
+
 model Usuario {
   id             Int          @id @default(autoincrement())
   email          String       @unique
@@ -18,10 +22,29 @@ model Usuario {
   avatarUrl      String?      @db.LongText
   primeiroAcesso Boolean      @default(true)
 
-  atleta              Atleta?
-  treinador           Treinador?
-  passwordResetTokens PasswordResetToken[]
+  // Preserva contas existentes como verificadas.
+  // O cadastro de novos usuários deve definir false explicitamente.
+  emailVerificado Boolean @default(true)
+
+  atleta                  Atleta?
+  treinador               Treinador?
+  preferenciasUsuario     PreferenciasUsuario?
+  passwordResetTokens     PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
 }
+
+model PreferenciasUsuario {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int      @unique
+  email     Boolean  @default(true)
+  push      Boolean  @default(true)
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================================
+// TREINADOR
+// ============================================================
 
 model Treinador {
   id        Int      @id @default(autoincrement())
@@ -35,9 +58,14 @@ model Treinador {
   atletas              Atleta[]
   configuracoesAnalise ConfiguracaoAnalise[]
   notificacoes         Notificacao[]
+  marcacoes            MarcacaoVideo[]
 
   @@index([usuarioId])
 }
+
+// ============================================================
+// NOTIFICAÇÕES
+// ============================================================
 
 model Notificacao {
   id           Int       @id @default(autoincrement())
@@ -61,21 +89,37 @@ model Notificacao {
   @@index([treinadorId, resolvidaEm])
 }
 
+// ============================================================
+// CONFIGURAÇÕES DE ANÁLISE
+// ============================================================
+
 model ConfiguracaoAnalise {
-  id          Int               @id @default(autoincrement())
-  nome        String
-  descricao   String?
-  tipo        TipoEventoAnalise @default(POSITIVA)
-  ordem       Int               @default(0)
-  treinadorId Int
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  id                Int               @id @default(autoincrement())
+  nome              String
+  descricao         String?
+  tipo              TipoEventoAnalise @default(POSITIVA)
+  ordem             Int               @default(0)
+  treinadorId       Int
+  equipeId          Int?
+  icone             String?
+  cor               String?
+  mostrarNaTimeline Boolean           @default(true)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 
   treinador Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
+  equipe    Equipe?   @relation(fields: [equipeId], references: [id], onDelete: Cascade)
+
+  marcacoes MarcacaoVideo[]
 
   @@index([treinadorId])
   @@index([treinadorId, ordem])
+  @@index([equipeId])
 }
+
+// ============================================================
+// ATLETA
+// ============================================================
 
 model Atleta {
   id             Int       @id @default(autoincrement())
@@ -102,15 +146,19 @@ model Atleta {
 
   documentos Documento[]
 
-  // Partidas em que o atleta foi escalado
+  // Partidas em que o atleta foi escalado.
   partidas PartidaAtleta[]
 
-  // Marcações de vídeo associadas ao atleta
+  // Marcações de vídeo associadas ao atleta.
   marcacoes MarcacaoVideo[]
 
   @@index([equipeId])
   @@index([treinadorId])
 }
+
+// ============================================================
+// EQUIPE
+// ============================================================
 
 model Equipe {
   id             Int       @id @default(autoincrement())
@@ -125,11 +173,17 @@ model Equipe {
   updatedAt      DateTime  @updatedAt
 
   treinador Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
-  atletas   Atleta[]
-  partidas  Partida[]
+
+  atletas              Atleta[]
+  partidas             Partida[]
+  configuracoesAnalise ConfiguracaoAnalise[]
 
   @@index([treinadorId], map: "Equipe_treinadorId_fkey")
 }
+
+// ============================================================
+// PARTIDA
+// ============================================================
 
 model Partida {
   id             Int           @id @default(autoincrement())
@@ -154,6 +208,10 @@ model Partida {
   @@index([data])
 }
 
+// ============================================================
+// ATLETAS ESCALADOS NA PARTIDA
+// ============================================================
+
 model PartidaAtleta {
   id        Int      @id @default(autoincrement())
   partidaId Int
@@ -163,10 +221,14 @@ model PartidaAtleta {
   partida Partida @relation(fields: [partidaId], references: [id], onDelete: Cascade)
   atleta  Atleta  @relation(fields: [atletaId], references: [id], onDelete: Cascade)
 
-  // Impede cadastrar o mesmo atleta duas vezes na mesma partida
+  // Impede cadastrar o mesmo atleta duas vezes na mesma partida.
   @@unique([partidaId, atletaId])
   @@index([atletaId])
 }
+
+// ============================================================
+// VÍDEOS DAS PARTIDAS
+// ============================================================
 
 model VideoPartida {
   id          Int      @id @default(autoincrement())
@@ -181,29 +243,64 @@ model VideoPartida {
 
   partida   Partida         @relation(fields: [partidaId], references: [id], onDelete: Cascade)
   marcacoes MarcacaoVideo[]
+  anotacoes AnotacaoVideo[]
 
   @@index([partidaId], map: "VideoPartida_partidaId_fkey")
 }
 
-model MarcacaoVideo {
-  id          Int      @id @default(autoincrement())
-  videoId     Int
-  atletaId    Int?
-  titulo      String
-  categoria   String
-  tempoInicio Float
-  tempoFim    Float
-  observacao  String?  @db.Text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+// ============================================================
+// MARCAÇÕES DE VÍDEO
+// ============================================================
 
-  video  VideoPartida @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  atleta Atleta?      @relation(fields: [atletaId], references: [id], onDelete: SetNull)
+model MarcacaoVideo {
+  id           Int                @id @default(autoincrement())
+  videoId      Int
+  atletaId     Int?
+  titulo       String
+  categoria    String
+  tempoInicio  Float
+  tempoFim     Float
+  observacao   String?            @db.Text
+  treinadorId  Int?
+  categoriaId  Int?
+  avaliacao    TipoEventoAnalise?
+  tipoRegistro String             @default("EVENTO")
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  video        VideoPartida         @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  atleta       Atleta?              @relation(fields: [atletaId], references: [id], onDelete: SetNull)
+  treinador    Treinador?           @relation(fields: [treinadorId], references: [id], onDelete: SetNull)
+  configuracao ConfiguracaoAnalise? @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
 
   @@index([videoId])
   @@index([videoId, tempoInicio])
   @@index([atletaId])
+  @@index([treinadorId])
+  @@index([categoriaId])
 }
+
+// ============================================================
+// ANOTAÇÕES E DESENHOS SOBRE VÍDEOS
+// ============================================================
+
+model AnotacaoVideo {
+  id        Int      @id @default(autoincrement())
+  videoId   Int
+  tempo     Float
+  duracao   Float    @default(5)
+  formas    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  video VideoPartida @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@index([videoId, tempo])
+}
+
+// ============================================================
+// RESPONSÁVEL DO ATLETA
+// ============================================================
 
 model Responsavel {
   id             Int      @id @default(autoincrement())
@@ -215,6 +312,10 @@ model Responsavel {
 
   atleta Atleta?
 }
+
+// ============================================================
+// ENDEREÇO
+// ============================================================
 
 model Endereco {
   id          Int      @id @default(autoincrement())
@@ -231,6 +332,10 @@ model Endereco {
   atleta Atleta?
 }
 
+// ============================================================
+// DOCUMENTOS DO ATLETA
+// ============================================================
+
 model Documento {
   id        Int      @id @default(autoincrement())
   nome      String
@@ -245,6 +350,10 @@ model Documento {
   @@index([atletaId], map: "Documento_atletaId_fkey")
 }
 
+// ============================================================
+// RECUPERAÇÃO DE SENHA
+// ============================================================
+
 model PasswordResetToken {
   id        Int       @id @default(autoincrement())
   tokenHash String    @unique
@@ -257,6 +366,27 @@ model PasswordResetToken {
 
   @@index([usuarioId])
 }
+
+// ============================================================
+// VERIFICAÇÃO DE E-MAIL
+// ============================================================
+
+model EmailVerificationToken {
+  id        Int       @id @default(autoincrement())
+  tokenHash String    @unique
+  usuarioId Int
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, expiresAt])
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
 
 enum TipoUsuario {
   TREINADOR
@@ -281,4 +411,5 @@ enum TipoEventoAnalise {
   POSITIVA
   NEGATIVA
   NEUTRA
+  DESTAQUE
 }

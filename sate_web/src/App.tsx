@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // ==========================================
 // LANDING PAGE
@@ -14,6 +14,7 @@ import Carregamento from "./pages/Carregamento/carregamento";
 import Cadastro from "./pages/Cadastro/cadastro";
 import EsqueciSenha from "./pages/EsqueciSenha/esqueciSenha";
 import RedefinirSenha from "./pages/RedefinirSenha/redefinirSenha";
+import VerificarEmail from "./pages/VerificarEmail/verificarEmail";
 
 // ==========================================
 // PÁGINAS DE BOAS-VINDAS / CONFIGURAÇÃO
@@ -28,7 +29,7 @@ import ConfiguracaoConcluida from "./pages/ConfiguracaoConcluida/configuracaoCon
 // LAYOUT
 // ==========================================
 import Layout from "./components/Layout/layout";
-import { ThemeProvider } from "./components/Context/ThemeContext";
+import { ThemeProvider } from "./components/context/ThemeContext";
 
 // ==========================================
 // ROTAS DE PROTEÇÃO
@@ -46,15 +47,16 @@ import Comparacoes from "./pages/Comparacoes/comparacoes";
 import Estatisticas from "./pages/Estatisticas/estatisticas";
 import Configuracoes from "./pages/Configuracoes/configuracoes";
 import AnaliseVideo from "./pages/AnaliseVideos/analiseVideos";
-import CadastroAtleta from "./pages/Atletas/modalCadastroAtletas";
 import Partidas from "./pages/Partidas/partidas";
 import DetalhesDaPartida from "./pages/DetalhesDaPartida/partidas2";
+import Ajuda from './pages/Ajuda/ajuda';
 
 function App() {
   return (
-    <ThemeProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider>
         <Routes>
+
           {/* ========================================
               PÁGINAS PÚBLICAS
           ======================================== */}
@@ -73,6 +75,9 @@ function App() {
 
           {/* Cadastro */}
           <Route path="/cadastro" element={<Cadastro />} />
+
+          {/* Confirmação de e-mail do cadastro */}
+          <Route path="/verificar-email" element={<VerificarEmail />} />
 
           {/* Recuperação de senha */}
           <Route path="/esqueci-senha" element={<EsqueciSenha />} />
@@ -145,7 +150,7 @@ function App() {
               {/* CADASTRO DE ATLETA */}
               <Route
                 path="/cadastro-atleta"
-                element={<CadastroAtleta />}
+                element={<Navigate to="/atletas?cadastro=1" replace />}
               />
 
               {/* ANÁLISE DE VÍDEO */}
@@ -162,7 +167,7 @@ function App() {
 
               {/* DETALHES DA PARTIDA */}
               <Route
-                path="/detalhes-partida"
+                path="/detalhes-partida/:id"
                 element={<DetalhesDaPartida />}
               />
 
@@ -184,11 +189,13 @@ function App() {
                 element={<Configuracoes />}
               />
 
+              <Route path="/ajuda" element={<Ajuda />} />
+
             </Route>
           </Route>
         </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

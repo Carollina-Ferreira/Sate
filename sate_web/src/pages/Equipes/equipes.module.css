@@ -1,16 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* ============================================================
    CONFIGURAÇÕES GERAIS
 ============================================================ */
-
-:global(html),
-:global(body),
-:global(#root) {
-  max-width: 100%;
-  min-height: 100%;
-  overflow-x: clip;
-}
 
 .page {
   width: calc(100% + 96px);
@@ -27,10 +18,10 @@
       rgba(244, 63, 120, 0.08) 38%,
       rgba(244, 63, 120, 0) 76%
     ),
-    #faf5ee;
+    var(--bg-page);
 
-  color: #10251f;
-  font-family: 'Poppins', sans-serif;
+  color: var(--texto);
+  font-family: var(--fonte-base);
 }
 
 
@@ -55,9 +46,9 @@
 
 .title {
   margin: 0;
-  color: #10251f;
+  color: var(--texto);
 
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--fonte-base);
   font-size: clamp(34px, 3vw, 44px);
   font-weight: 700;
   line-height: 1.08;
@@ -65,9 +56,9 @@
 }
 
 .title em {
-  color: #f04470;
+  color: var(--rosa);
 
-  font-family: 'DM Serif Display', serif;
+  font-family: var(--fonte-destaque);
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.5px;
@@ -77,7 +68,7 @@
   max-width: 700px;
   margin: 14px 0 0;
 
-  color: #778079;
+  color: var(--texto-suave);
 
   font-size: 13px;
   font-weight: 400;
@@ -112,7 +103,7 @@
 
   border-radius: 12px;
 
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--fonte-base);
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
@@ -130,14 +121,14 @@
 /* Nova equipe */
 
 .newTeamButton {
-  border: 1px solid #005942;
-  background: #005942;
-  color: #ffffff;
+  border: 1px solid var(--verde);
+  background: var(--verde);
+  color: var(--branco);
 }
 
 .newTeamButton:hover:not(:disabled) {
-  border-color: #007d62;
-  background: #007d62;
+  border-color: var(--verde-hover);
+  background: var(--verde-hover);
   transform: translateY(-1px);
 }
 
@@ -151,14 +142,14 @@
 /* Editar equipe */
 
 .editTeamButton {
-  border: 1px solid #ddcfc0;
-  background: #ffffff;
-  color: #00634d;
+  border: 1px solid var(--borda);
+  background: var(--bg-surface);
+  color: var(--verde-medio);
 }
 
 .editTeamButton:hover {
-  border-color: #9dbbb0;
-  background: #f6fbf8;
+  border-color: var(--borda-forte);
+  background: var(--bg-verde-suave);
   transform: translateY(-1px);
 }
 
@@ -168,8 +159,8 @@
 .editTeamButtonActive,
 .editTeamButtonActive:hover {
   border: 1px solid #f6c3d1;
-  background: #fde6ec;
-  color: #a02a4f;
+  background: var(--rosa-claro);
+  color: var(--vermelho-escuro);
   transform: none;
 }
 
@@ -179,7 +170,7 @@
 }
 
 .editTeamButtonActive svg {
-  color: #a02a4f;
+  color: var(--vermelho-escuro);
 }
 
 
@@ -201,7 +192,7 @@
 .editTeamButtonActive:focus-visible,
 .filterButton:focus-visible,
 .teamClickable:focus-visible {
-  outline: 2px solid #f04470;
+  outline: 2px solid var(--rosa);
   outline-offset: 3px;
 }
 
@@ -224,17 +215,17 @@
   border: 1px solid #f6c3d1;
   border-radius: 11px;
 
-  background: #fde6ec;
-  color: #a02a4f;
+  background: var(--rosa-claro);
+  color: var(--vermelho-escuro);
 
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--fonte-base);
   font-size: 12px;
   font-weight: 600;
   line-height: 1.5;
 }
 
 .editNotice span {
-  color: #a02a4f;
+  color: var(--vermelho-escuro);
 }
 
 .editNotice svg {
@@ -277,13 +268,13 @@
 
   padding: 0 16px;
 
-  border: 1px solid #ddcfc0;
+  border: 1px solid var(--borda);
   border-radius: 999px;
 
-  background: #ffffff;
-  color: #263930;
+  background: var(--bg-surface);
+  color: var(--texto);
 
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--fonte-base);
   font-size: 12px;
   font-weight: 500;
   white-space: nowrap;
@@ -298,8 +289,8 @@
 }
 
 .filterButton:hover {
-  border-color: #9dbbb0;
-  background: #f6fbf8;
+  border-color: var(--borda-forte);
+  background: var(--bg-verde-suave);
   transform: translateY(-1px);
 }
 
@@ -308,15 +299,15 @@
 
 .filterButton.active,
 .active {
-  border-color: #005942;
-  background: #005942;
-  color: #ffffff;
+  border-color: var(--verde);
+  background: var(--verde);
+  color: var(--branco);
 }
 
 .filterButton.active:hover,
 .active:hover {
-  border-color: #007d62;
-  background: #007d62;
+  border-color: var(--verde-hover);
+  background: var(--verde-hover);
 }
 
 .filterIcon {
@@ -383,7 +374,7 @@
 }
 
 .teamClickable:focus-visible {
-  outline: 2px solid #f04470;
+  outline: 2px solid var(--rosa);
   outline-offset: 4px;
 }
 
@@ -396,7 +387,7 @@
 }
 
 .page:has(.editNotice) .teamClickable:hover {
-  outline: 2px solid #f04470;
+  outline: 2px solid var(--rosa);
   outline-offset: 3px;
 }
 
@@ -420,25 +411,25 @@
   justify-content: center;
   gap: 8px;
 
-  border: 1px solid #e8ddd2;
+  border: 1px solid var(--borda);
   border-radius: 15px;
 
   background: rgba(255, 255, 255, 0.72);
-  color: #718078;
+  color: var(--texto-suave);
 
   text-align: center;
 }
 
 .emptyMessage h3 {
   margin: 0;
-  color: #152b23;
+  color: var(--texto);
   font-size: 14px;
   font-weight: 700;
 }
 
 .emptyMessage p {
   margin: 0;
-  color: #718078;
+  color: var(--texto-suave);
   font-size: 12px;
 }
 
@@ -578,6 +569,7 @@
 }
 
 
+
 /* ============================================================
    MODO ESCURO
 ============================================================ */
@@ -585,34 +577,29 @@
 :global(:root[data-theme='dark']) .page {
   background:
     radial-gradient(
-      ellipse 340px 230px at 96% 0%,
+      ellipse 360px 260px at 96% 0%,
       rgba(22, 168, 117, 0.16) 0%,
-      rgba(22, 168, 117, 0.07) 38%,
+      rgba(22, 168, 117, 0.07) 42%,
       transparent 76%
     ),
-    #102a22;
+    var(--bg-page);
 
   color: #edf7f1;
 }
 
-
-/* Título */
+/* Cabeçalho */
 
 :global(:root[data-theme='dark']) .title {
   color: #edf7f1;
 }
 
 :global(:root[data-theme='dark']) .title em {
-  color: #72dfb0;
+  color: #83e3b6;
 }
-
-
-/* Descrição */
 
 :global(:root[data-theme='dark']) .description {
   color: #a8beb3;
 }
-
 
 /* Botões */
 
@@ -638,7 +625,6 @@
   border-color: #10966d;
 }
 
-
 /* Cancelar edição */
 
 :global(:root[data-theme='dark']) .editTeamButtonActive,
@@ -652,8 +638,19 @@
   color: #ffc0d1;
 }
 
+/* Aviso de edição — classe usada no JSX */
 
-/* Aviso */
+:global(:root[data-theme='dark']) .editHint {
+  background: #193b30;
+  border-color: #36594a;
+  color: #a7edce;
+}
+
+:global(:root[data-theme='dark']) .editHint svg {
+  color: #83e3b6;
+}
+
+/* Compatibilidade com editNotice */
 
 :global(:root[data-theme='dark']) .editNotice {
   background: #3a2630;
@@ -666,27 +663,26 @@
   color: #ffc0d1;
 }
 
-
 /* Filtros */
 
 :global(:root[data-theme='dark']) .filterButton {
   background: #17372c;
   border-color: #365447;
-  color: #8ee2ba;
+  color: #c2d9cc;
 }
 
 :global(:root[data-theme='dark']) .filterButton:hover {
   background: #224638;
   border-color: #65bd94;
+  color: #ffffff;
 }
 
 :global(:root[data-theme='dark']) .filterButton.active,
 :global(:root[data-theme='dark']) .filterButton.active:hover {
-  background: #006b50;
+  background: #087b5b;
   border-color: #65ddb0;
   color: #ffffff;
 }
-
 
 /* Cards */
 
@@ -694,20 +690,21 @@
   outline-color: #65ddb0;
 }
 
+:global(:root[data-theme='dark']) .page:has(.editHint) .teamClickable,
 :global(:root[data-theme='dark']) .page:has(.editNotice) .teamClickable {
   outline-color: rgba(101, 221, 176, 0.35);
 }
 
+:global(:root[data-theme='dark']) .page:has(.editHint) .teamClickable:hover,
 :global(:root[data-theme='dark']) .page:has(.editNotice) .teamClickable:hover {
   outline-color: #65ddb0;
 }
 
-
-/* Mensagens */
+/* Carregamento e lista vazia */
 
 :global(:root[data-theme='dark']) .loadingMessage,
 :global(:root[data-theme='dark']) .emptyMessage {
-  background: rgba(23, 55, 44, 0.85);
+  background: #17372c;
   border-color: #365447;
   color: #b2c7bb;
 }
@@ -720,24 +717,7 @@
   color: #a8beb3;
 }
 
-
-/* ============================================================
-   COMPATIBILIDADE COM O JSX ANTERIOR
-============================================================ */
-
-/* Caso os dois botões ainda estejam usando newTeamButton,
-   diferencia o primeiro (editar) do segundo (nova equipe). */
-
-.header > div:last-child > .newTeamButton:first-child {
-  border: 1px solid #ddcfc0;
-  background: #ffffff;
-  color: #00634d;
-}
-
-.header > div:last-child > .newTeamButton:first-child:hover {
-  background: #f6fbf8;
-  border-color: #9dbbb0;
-}
+/* Compatibilidade com botões antigos */
 
 :global(:root[data-theme='dark']) .header > div:last-child > .newTeamButton:first-child {
   background: #193b30;
@@ -745,17 +725,20 @@
   color: #a7edce;
 }
 
-
-/* Aviso antigo com estilos inline.
-   O ideal continua sendo utilizar styles.editNotice no JSX. */
-
-.page > div[style*="border-radius"] {
-  background: #fde6ec !important;
-  border: 1px solid #f6c3d1 !important;
-  color: #a02a4f !important;
+:global(:root[data-theme='dark']) .header > div:last-child > .newTeamButton:first-child:hover {
+  background: #224a3b;
+  border-color: #62bd96;
 }
 
-.page > div[style*="border-radius"] svg,
-.page > div[style*="border-radius"] span {
-  color: #a02a4f !important;
+/* Avisos antigos com estilos inline */
+
+:global(:root[data-theme='dark']) .page > div[style*="border-radius"] {
+  background: #3a2630 !important;
+  border: 1px solid #754153 !important;
+  color: #ffc0d1 !important;
+}
+
+:global(:root[data-theme='dark']) .page > div[style*="border-radius"] svg,
+:global(:root[data-theme='dark']) .page > div[style*="border-radius"] span {
+  color: #ffc0d1 !important;
 }

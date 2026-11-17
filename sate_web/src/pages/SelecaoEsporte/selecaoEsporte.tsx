@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import OnboardingThemeToggle from '../../components/ui/OnboardingThemeToggle/OnboardingThemeToggle';
+import OnboardingProgress from '../../components/ui/OnboardingProgress/OnboardingProgress';
 import styles from './selecaoEsporte.module.css';
 
 import futebolImg from '../../assets/img/esportes/futebol.jpg';
@@ -130,29 +132,13 @@ export default function SelecaoEsporte() {
                     : undefined
             }
         >
+            <OnboardingThemeToggle />
             {!esporteAtual && (
                 <div className={styles.fundoInicial} />
             )}
 
             <div className={styles.conteudo}>
-                {/* ETAPA */}
-                <div
-                    className={`${styles.etapa} ${
-                        esporteAtual
-                            ? styles.etapaSelecionada
-                            : ''
-                    }`}
-                >
-                    Etapa 1 de 4 · Configuração do esporte
-                </div>
-
-                {/* PROGRESSO */}
-                <div className={styles.linhaProgresso}>
-                    <div className={styles.progressoAtivo} />
-                    <div />
-                    <div />
-                    <div />
-                </div>
+                <OnboardingProgress etapa={1} descricao="Configuração do esporte" />
 
                 {/* CABEÇALHO */}
                 <section className={styles.cabecalho}>

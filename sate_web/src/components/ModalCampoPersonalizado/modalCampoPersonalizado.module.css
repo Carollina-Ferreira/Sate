@@ -28,13 +28,13 @@
   overflow-y: auto;
   overflow-x: hidden;
 
-  border: 1px solid #e8cbd5;
+  border: 1px solid var(--onboarding-accent-border);
   border-radius: 26px;
 
-  background: #fffaf3;
-  color: #294238;
+  background: var(--onboarding-surface-soft);
+  color: var(--onboarding-text);
 
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--fonte-base);
 
   box-shadow: 0 26px 65px rgba(25, 44, 35, 0.28);
 }
@@ -51,14 +51,14 @@
 
   padding: 28px 38px 22px;
 
-  border-bottom: 1px solid #ead9d9;
-  background: #fffaf3;
+  border-bottom: 1px solid var(--onboarding-border);
+  background: var(--onboarding-surface-soft);
 }
 
 .header h2 {
   margin: 0;
 
-  color: #294238;
+  color: var(--onboarding-text);
   font-size: 25px;
   font-weight: 700;
   line-height: 1.2;
@@ -67,7 +67,7 @@
 .header p {
   margin: 7px 0 0;
 
-  color: #817b72;
+  color: var(--onboarding-muted);
   font-size: 13px;
 }
 
@@ -85,7 +85,7 @@
   border-radius: 10px;
 
   background: transparent;
-  color: #68776d;
+  color: var(--onboarding-muted);
 
   cursor: pointer;
 
@@ -93,8 +93,8 @@
 }
 
 .closeButton:hover {
-  background: #f7e4e9;
-  color: #bd6684;
+  background: var(--onboarding-accent-bg);
+  color: var(--rosa);
 }
 
 /* ============================================================
@@ -109,7 +109,7 @@
   padding: 24px 38px;
   box-sizing: border-box;
 
-  background: #fffaf3;
+  background: var(--onboarding-surface-soft);
 }
 
 /* ============================================================
@@ -124,7 +124,7 @@
 .field label {
   margin-bottom: 8px;
 
-  color: #40564a;
+  color: var(--onboarding-text);
   font-size: 14px;
   font-weight: 600;
 }
@@ -136,12 +136,12 @@
   padding: 0 17px;
   box-sizing: border-box;
 
-  border: 1px solid #e4cbd3;
+  border: 1px solid var(--onboarding-border);
   border-radius: 15px;
   outline: none;
 
-  background: #ffffff;
-  color: #294238;
+  background: var(--onboarding-surface);
+  color: var(--onboarding-text);
 
   font-family: inherit;
   font-size: 15px;
@@ -150,18 +150,18 @@
 }
 
 .field input::placeholder {
-  color: #a19a91;
+  color: var(--onboarding-muted);
 }
 
 .field input:focus {
-  border-color: #d986a4;
+  border-color: var(--onboarding-accent-border);
   box-shadow: 0 0 0 4px rgba(217, 134, 164, 0.16);
 }
 
 .error {
   margin-top: 7px;
 
-  color: #b64255;
+  color: var(--vermelho);
   font-size: 12px;
 }
 
@@ -187,7 +187,7 @@
 }
 
 .iconSectionHeader strong {
-  color: #40564a;
+  color: var(--onboarding-text);
   font-size: 14px;
   font-weight: 600;
 }
@@ -195,7 +195,7 @@
 .iconSectionHeader span {
   margin-top: 3px;
 
-  color: #8b837a;
+  color: var(--onboarding-muted);
   font-size: 11px;
 }
 
@@ -226,11 +226,11 @@
   padding: 10px;
   box-sizing: border-box;
 
-  border: 1px solid #e6d7d6;
+  border: 1px solid var(--onboarding-border);
   border-radius: 16px;
 
-  background: #fffdf9;
-  color: #496054;
+  background: var(--onboarding-surface-soft);
+  color: var(--onboarding-text);
 
   font-family: inherit;
   cursor: pointer;
@@ -245,14 +245,14 @@
 .iconOption:hover {
   transform: translateY(-2px);
 
-  border-color: #dfa1b5;
-  background: #fff4f6;
+  border-color: var(--onboarding-accent-border);
+  background: var(--onboarding-accent-bg);
 
   box-shadow: 0 5px 14px rgba(110, 62, 79, 0.08);
 }
 
 .iconOption > span:last-child {
-  color: #68766c;
+  color: var(--onboarding-muted);
   font-size: 11px;
   font-weight: 500;
 }
@@ -271,8 +271,8 @@
 
   border-radius: 14px;
 
-  background: #f7e5eb;
-  color: #bd6684;
+  background: var(--onboarding-accent-bg);
+  color: var(--rosa);
 
   transition: background 0.16s ease, color 0.16s ease;
 }
@@ -282,19 +282,19 @@
 ============================================================ */
 
 .iconOptionSelected {
-  border-color: #d986a4;
-  background: #fff1f5;
+  border-color: var(--onboarding-accent-border);
+  background: var(--onboarding-accent-bg);
 
   box-shadow: 0 4px 14px rgba(190, 102, 132, 0.13);
 }
 
 .iconOptionSelected .iconBox {
-  background: #f1d2de;
-  color: #ad4f73;
+  background: var(--onboarding-accent-bg-hover);
+  color: var(--rosa);
 }
 
 .iconOptionSelected > span:last-child {
-  color: #a84f70;
+  color: var(--rosa);
   font-weight: 600;
 }
 
@@ -316,11 +316,11 @@
 
   box-sizing: border-box;
 
-  border: 3px solid #fffaf3;
+  border: 3px solid var(--bg-surface-2);
   border-radius: 50%;
 
-  background: #d986a4;
-  color: #ffffff;
+  background: var(--onboarding-solid-accent);
+  color: var(--onboarding-accent-text);
 
   box-shadow: 0 4px 10px rgba(173, 79, 115, 0.22);
 }
@@ -336,10 +336,10 @@
 
   padding: 15px 19px;
 
-  border: 1px solid #e7d4d6;
+  border: 1px solid var(--onboarding-border);
   border-radius: 16px;
 
-  background: #f6e8e8;
+  background: var(--onboarding-accent-bg);
 }
 
 .previewIcon {
@@ -353,8 +353,8 @@
 
   border-radius: 15px;
 
-  background: #eed2dc;
-  color: #ad4f73;
+  background: var(--onboarding-accent-bg-hover);
+  color: var(--rosa);
 }
 
 .preview > div:last-child {
@@ -364,14 +364,14 @@
 }
 
 .preview span {
-  color: #9c7884;
+  color: var(--onboarding-muted);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 1px;
 }
 
 .preview strong {
-  color: #365044;
+  color: var(--onboarding-text);
   font-size: 15px;
   font-weight: 600;
   overflow-wrap: anywhere;
@@ -389,8 +389,8 @@
 
   padding: 17px 38px;
 
-  border-top: 1px solid #ead9d9;
-  background: #f8eee9;
+  border-top: 1px solid var(--onboarding-border);
+  background: var(--onboarding-surface-soft);
 }
 
 .cancelButton,
@@ -416,28 +416,28 @@
 }
 
 .cancelButton {
-  border: 1px solid #d9c8c8;
+  border: 1px solid var(--onboarding-border);
 
-  background: #fffaf3;
-  color: #637269;
+  background: var(--onboarding-surface-soft);
+  color: var(--onboarding-muted);
 }
 
 .cancelButton:hover {
-  border-color: #d9a1b4;
-  background: #f9e8ed;
-  color: #a84f70;
+  border-color: var(--onboarding-accent-border);
+  background: var(--onboarding-accent-bg);
+  color: var(--rosa);
 }
 
 .addButton {
-  border: 1px solid #087c59;
+  border: 1px solid var(--onboarding-primary-bg);
 
-  background: #087c59;
-  color: #ffffff;
+  background: var(--onboarding-primary-bg);
+  color: var(--onboarding-primary-text);
 }
 
 .addButton:hover {
-  border-color: #066849;
-  background: #066849;
+  border-color: var(--onboarding-primary-hover);
+  background: var(--onboarding-primary-hover);
   transform: translateY(-1px);
 }
 

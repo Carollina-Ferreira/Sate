@@ -842,3 +842,27 @@
 :global(:root[data-theme='dark']) .pageHeader h1 em {
   color: #7be0a8;
 }
+
+/* =========================================================
+   RETORNO DO SALVAMENTO DAS PREFERÊNCIAS
+========================================================= */
+.preferenceStatus {
+  margin: 14px 0 0;
+  color: var(--texto-secundario);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.preferenceNotice {
+  margin: 8px 0 0;
+  color: var(--texto-secundario);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.switch:disabled {
+  cursor: not-allowed;
+  opacity: .52;
+}
+.switch:focus-visible {
+  outline: 2px solid var(--rosa);
+  outline-offset: 3px;
+}

@@ -21,7 +21,7 @@
     background: #00775b;
     border-radius: 12px;
     padding: 15px 25px 20px;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fonte-base);
     box-sizing: border-box;
     max-height: 98vh; 
 }
@@ -50,7 +50,7 @@
 
 .stepLineProgress {
     height: 100%;
-    background: #ffffff;
+    background: var(--bg-surface);
     border-radius: 2px;
     transition: width 0.4s ease;
 }
@@ -72,7 +72,7 @@
     justify-content: center;
     border-radius: 50%;
     background: #f2f2f2;
-    color: #999;
+    color: var(--texto-claro);
     font-size: 16px;
     font-weight: 600;
     border: 2px solid #ddd;
@@ -80,8 +80,8 @@
 
 .stepCircle.active {
     color: white;
-    background: var(--verde-principal, #16a875);
-    border-color: var(--verde-principal, #16a875);
+    background: var(--verde-principal, var(--verde-principal));
+    border-color: var(--verde-principal, var(--verde-principal));
 }
 
 .stepLabel {
@@ -129,7 +129,7 @@
 }
 
 .manualCard, .importCard {
-    background: #ffffff;
+    background: var(--bg-surface);
     border-radius: 8px;
     padding: 15px 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -174,7 +174,7 @@
 }
 
 .formGroup input:focus, .formGroup select:focus {
-    border-color: var(--verde-principal, #16a875);
+    border-color: var(--verde-principal, var(--verde-principal));
     box-shadow: 0 0 0 2px rgba(22, 168, 117, 0.12);
 }
 
@@ -204,7 +204,7 @@
     height: 38px;
     border: none;
     border-radius: 6px;
-    background: var(--verde-principal, #16a875);
+    background: var(--verde-principal, var(--verde-principal));
     color: white;
     font-family: inherit;
     font-size: 14px;
@@ -223,10 +223,10 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    border: 1px solid var(--verde-principal, #16a875);
+    border: 1px solid var(--verde-principal, var(--verde-principal));
     border-radius: 6px;
     background: white;
-    color: var(--verde-principal, #16a875);
+    color: var(--verde-principal, var(--verde-principal));
     font-family: inherit;
     font-size: 13px;
     font-weight: 600;
@@ -249,7 +249,7 @@
     border: 2px dashed #d8d8d8;
     border-radius: 8px;
     background: #f9f9f9;
-    color: #999;
+    color: var(--texto-claro);
     text-align: center;
     font-size: 13px;
     cursor: pointer;
@@ -262,7 +262,7 @@
 .formCard {
     width: min(500px, 100%);
     margin: 0 auto;
-    background: #ffffff;
+    background: var(--bg-surface);
     border-radius: 8px;
     padding: 15px 20px;
     box-sizing: border-box;
@@ -285,7 +285,7 @@
 ========================= */
 .reviewCard {
     width: 100%;
-    background: #ffffff;
+    background: var(--bg-surface);
     border-radius: 8px;
     padding: 15px 20px;
     box-sizing: border-box;

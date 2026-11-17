@@ -1,41 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-:global(*) {
-  box-sizing: border-box;
-}
-
-:global(html),
-:global(body),
-:global(#root) {
-  margin: 0;
-  min-height: 100%;
-}
-
-:global(body) {
-  color: #12261f;
-  background: #f6f9f7;
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-:global(button),
-:global(input) {
-  font: inherit;
-}
-
-:global(a) {
-  color: inherit;
-  text-decoration: none;
-}
+/* Os resets de html/body, tipografia, botões e links vivem em global.css.
+   Não declarar :global(body) em CSS Modules: afeta outras rotas. */
 
 .page {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1.15fr 1fr;
-  background: #FAF5EE;
-  color: #12261f;
-  font-family: 'Poppins', sans-serif;
+  background: var(--bg-page);
+  color: var(--texto);
+  font-family: var(--fonte-base);
 }
 
 .hero,
@@ -49,8 +22,8 @@
   justify-content: flex-end;
   padding: 56px 52px;
   isolation: isolate;
-  background: linear-gradient(160deg, #0b2e22 0%, #005942 55%, #0b2e22 100%);
-  color: #fff;
+  background: linear-gradient(160deg, #0b2e22 0%, var(--verde) 55%, #0b2e22 100%);
+  color: var(--branco);
 }
 
 .heroImages {
@@ -126,7 +99,7 @@
 .heroContent h1 em,
 .leftContent h1 em {
   color: #ff7a98;
-  font-family: 'DM Serif Display', serif;
+  font-family: var(--fonte-destaque);
   font-weight: 400;
   font-style: italic;
   letter-spacing: -.02em;
@@ -189,7 +162,7 @@
   min-height: 100vh;
   padding: 40px;
   overflow: hidden;
-  background: radial-gradient(120% 120% at 100% 0%, #f3e8da 0%, #FAF5EE 55%);
+  background: radial-gradient(120% 120% at 100% 0%, #f3e8da 0%, var(--bg-page) 55%);
 }
 
 .backgroundDecor {
@@ -212,7 +185,7 @@
   height: 290px;
   top: -130px;
   right: -150px;
-  background: #ef476f;
+  background: var(--rosa);
   opacity: 0.09;
 }
 
@@ -221,7 +194,7 @@
   height: 260px;
   bottom: -130px;
   left: -120px;
-  background: #16a875;
+  background: var(--verde-principal);
   opacity: 0.18;
 }
 
@@ -230,7 +203,7 @@
   height: 180px;
   left: -120px;
   top: 35%;
-  background: #16a875;
+  background: var(--verde-principal);
   opacity: 0.10;
 }
 
@@ -239,7 +212,7 @@
   height: 170px;
   bottom: 5%;
   right: -90px;
-  background: #16a875;
+  background: var(--verde-principal);
   opacity: 0.10;
 }
 
@@ -248,7 +221,7 @@
   height: 90px;
   top: 12%;
   left: 8%;
-  background: #ef476f;
+  background: var(--rosa);
   opacity: 0.05;
 }
 
@@ -257,21 +230,21 @@
   height: 110px;
   bottom: 8%;
   right: 5%;
-  background: #4ea5d9;
+  background: var(--azul);
   opacity: 0.07;
 }
 
 .auroraTop {
   top: 3%;
   right: -12%;
-  background: #ef476f;
+  background: var(--rosa);
   opacity: 0.07;
 }
 
 .auroraBottom {
   bottom: -5%;
   left: -10%;
-  background: #16a875;
+  background: var(--verde-principal);
   opacity: 0.12;
 }
 
@@ -282,9 +255,9 @@
   width: 100%;
   max-width: 410px;
   padding: 38px 36px 32px;
-  border: 1px solid #E8DFD3;
+  border: 1px solid var(--borda);
   border-radius: 24px;
-  background: #fff;
+  background: var(--bg-surface);
   box-shadow: 0 2px 6px #12261f0a, 0 28px 56px #12261f17;
   animation: cardEnter .45s ease both;
 }
@@ -300,8 +273,8 @@
 
 .cardHeader h2 {
   margin: 0 0 7px;
-  color: #12261f;
-  font-family: 'Poppins', sans-serif;
+  color: var(--texto);
+  font-family: var(--fonte-base);
   font-size: 26px;
   font-weight: 700;
   letter-spacing: -.045em;
@@ -310,15 +283,15 @@
 
 .cardHeader h2 em,
 .formContainer h2 em {
-  color: #EF476F;
-  font-family: 'DM Serif Display', serif;
+  color: var(--rosa);
+  font-family: var(--fonte-destaque);
   font-weight: 400;
 }
 
 .cardHeader p,
 .subtitle {
   margin: 0 0 24px;
-  color: #6C7C77;
+  color: var(--texto-suave);
   font-size: 13.5px;
   line-height: 1.6;
 }
@@ -338,7 +311,7 @@
 
 .field label,
 .inputGroup label {
-  color: #6C7C77;
+  color: var(--texto-suave);
   font-size: 12.5px;
   font-weight: 600;
 }
@@ -355,12 +328,12 @@
   height: 46px;
   min-width: 0;
   padding: 0 14px 0 42px;
-  border: 1.5px solid #E8DFD3;
+  border: 1.5px solid var(--borda);
   border-radius: 12px;
   outline: none;
-  background: #F6F9F7;
-  color: #12261f;
-  font-family: 'Inter', sans-serif;
+  background: var(--bg-neutro);
+  color: var(--texto);
+  font-family: var(--fonte-base);
   font-size: 14px;
   transition: border-color .18s, box-shadow .18s, background .18s;
 }
@@ -381,8 +354,8 @@
 
 .inputWrapper input:focus,
 .inputGroup input:focus {
-  border-color: #16A875;
-  background: #fff;
+  border-color: var(--verde-principal);
+  background: var(--bg-surface);
   box-shadow: 0 0 0 4px #ef476f24;
 }
 
@@ -406,13 +379,13 @@
   border: 0;
   border-radius: 8px;
   background: transparent;
-  color: #6C7C77;
+  color: var(--texto-suave);
   cursor: pointer;
 }
 
 .passwordToggle:hover {
-  color: #C9305A;
-  background: #FDE6EC;
+  color: var(--vermelho);
+  background: var(--rosa-claro);
 }
 
 .passwordToggle~input {
@@ -426,7 +399,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  color: #6C7C77;
+  color: var(--texto-suave);
   font-size: 12.5px;
 }
 
@@ -439,13 +412,13 @@
 .terms input {
   width: 16px;
   height: 16px;
-  accent-color: #EF476F;
+  accent-color: var(--rosa);
 }
 
 .forgotPassword,
 .createAccount,
 .link {
-  color: #C9305A;
+  color: var(--vermelho);
   font-size: 12.5px;
   font-weight: 600;
 }
@@ -453,7 +426,7 @@
 .forgotPassword:hover,
 .createAccount:hover,
 .link:hover {
-  color: #005942;
+  color: var(--verde);
   text-decoration: underline;
 }
 
@@ -468,9 +441,9 @@
   margin-top: 6px;
   border: 0;
   border-radius: 12px;
-  background: linear-gradient(135deg, #005942, #08795d);
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--verde), #08795d);
+  color: var(--branco);
+  font-family: var(--fonte-base);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -497,22 +470,22 @@
 }
 
 .errorMessage {
-  background: #FDE6EC;
+  background: var(--rosa-claro);
   border: 1px solid #f8c6d3;
-  color: #C9305A;
+  color: var(--vermelho);
 }
 
 .successMessage {
   background: #DFF7EE;
   border: 1px solid #bfe5d8;
-  color: #005942;
+  color: var(--verde);
 }
 
 .terms {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  color: #6C7C77;
+  color: var(--texto-suave);
   font-size: 12px;
   line-height: 1.5;
 }
@@ -533,7 +506,7 @@
   flex-wrap: wrap;
   gap: 5px;
   margin-top: 22px;
-  color: #6C7C77;
+  color: var(--texto-suave);
   font-size: 12.5px;
 }
 
@@ -562,8 +535,8 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background: #fff;
-  border: 1px solid #E8DFD3;
+  background: var(--bg-surface);
+  border: 1px solid var(--borda);
   border-radius: 24px;
   box-shadow: 0 30px 70px #0b2e224d;
   animation: cardEnter .28s ease both;
@@ -578,8 +551,8 @@
   justify-content: center;
   margin-bottom: 18px;
   border-radius: 50%;
-  background: #FDE6EC;
-  color: #EF476F;
+  background: var(--rosa-claro);
+  color: var(--rosa);
 }
 
 .successIcon:after {
@@ -598,7 +571,7 @@
 
 .confirmationCard p {
   margin: 0 0 14px;
-  color: #6C7C77;
+  color: var(--texto-suave);
   font-size: 13.5px;
   line-height: 1.6;
 }
@@ -610,7 +583,7 @@
   overflow: hidden;
   border-radius: 999px;
   background: #DFF7EE;
-  color: #005942;
+  color: var(--verde);
   font-size: 13px;
   font-weight: 600;
   text-overflow: ellipsis;
@@ -622,32 +595,32 @@
   padding: 6px 10px;
   border: 0;
   background: transparent;
-  color: #C9305A;
+  color: var(--vermelho);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
 
 .resendButton:disabled {
-  color: #6C7C77;
+  color: var(--texto-suave);
   cursor: default;
 }
 
 .resendMessage {
   margin: 4px 0 0 !important;
-  color: #005942 !important;
+  color: var(--verde) !important;
   font-size: 12.5px !important;
 }
 
 .confirmationLink {
   margin-top: 8px;
-  color: #6C7C77;
+  color: var(--texto-suave);
   font-size: 13px;
   font-weight: 500;
 }
 
 .confirmationLink:hover {
-  color: #C9305A;
+  color: var(--vermelho);
 }
 
 @keyframes cardEnter {
@@ -809,7 +782,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: #C9305A;
+  color: var(--vermelho);
   font: inherit;
   font-weight: 700;
   text-decoration: underline;
@@ -817,5 +790,5 @@
 }
 
 .termsLink:hover {
-  color: #005942;
+  color: var(--verde);
 }

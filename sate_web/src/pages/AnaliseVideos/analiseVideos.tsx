@@ -49,6 +49,7 @@ import {
 } from 'react';
 
 import styles from './analiseVideos.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 const API_URL = 'http://localhost:3000/api';
 
@@ -1864,6 +1865,10 @@ export default function AnaliseVideos() {
               </select>
             </div>
 
+            {(carregandoPartidas || carregandoVideos) && (
+              <LoadingState variant="inline" title={carregandoPartidas ? 'Carregando partidas...' : 'Carregando vídeos...'} />
+            )}
+
             {partidaSelecionada && (
               <div className={styles.matchDetails}>
                 <span>{partidaSelecionada.data}</span>
@@ -1872,7 +1877,7 @@ export default function AnaliseVideos() {
                 <i />
                 <span>
                   {carregandoEscalacao
-                    ? 'Carregando escalação...'
+                    ? <LoadingState variant="inline" title="Carregando escalação..." />
                     : `${escalacao.length} ${
                         escalacao.length === 1 ? 'atleta' : 'atletas'
                       } na partida`}
@@ -2000,11 +2005,11 @@ export default function AnaliseVideos() {
                 ) : (
                   <div className={styles.videoEmpty}>
                     <Video size={42} />
-                    <span>
-                      {carregandoVideos
-                        ? 'Carregando vídeo...'
-                        : 'Nenhum vídeo disponível para esta partida'}
-                    </span>
+                    {carregandoVideos ? (
+                      <LoadingState variant="inline" title="Carregando vídeo..." />
+                    ) : (
+                      <span>Nenhum vídeo disponível para esta partida</span>
+                    )}
                   </div>
                 )}
 
@@ -2419,7 +2424,7 @@ export default function AnaliseVideos() {
                           disabled={desenhoAtual.length === 0 || salvando}
                         >
                           <Save size={15} />
-                          {salvando ? 'Salvando...' : 'Salvar desenho'}
+                          {salvando ? <LoadingState variant="inline" title="Salvando desenho..." /> : 'Salvar desenho'}
                         </button>
                       </div>
                     </>
@@ -2598,7 +2603,7 @@ export default function AnaliseVideos() {
                               onClick={() => void adicionarEvento()}
                             >
                               <Check size={15} />
-                              {salvando ? 'Salvando...' : 'Salvar evento'}
+                              {salvando ? <LoadingState variant="inline" title="Salvando evento..." /> : 'Salvar evento'}
                             </button>
                           </div>
                         </div>
@@ -2825,7 +2830,7 @@ export default function AnaliseVideos() {
                         onClick={() => void adicionarClipe()}
                       >
                         <Scissors size={15} />
-                        {salvando ? 'Salvando...' : 'Salvar clipe'}
+                        {salvando ? <LoadingState variant="inline" title="Salvando clipe..." /> : 'Salvar clipe'}
                       </button>
                     </div>
                   </aside>
@@ -3045,7 +3050,7 @@ export default function AnaliseVideos() {
                                 <Check size={15} />
                               )}
                               {salvandoCategoria
-                                ? 'Salvando...'
+                                ? <LoadingState variant="inline" title="Salvando categoria..." />
                                 : formularioCategoria.id === null
                                   ? 'Criar categoria'
                                   : 'Salvar alterações'}
@@ -3232,7 +3237,7 @@ export default function AnaliseVideos() {
                 <h2>Eventos</h2>
                 <span>
                   {carregandoEventos
-                    ? 'Carregando marcações salvas...'
+                    ? <LoadingState variant="inline" title="Carregando marcações..." />
                     : `${eventos.length} ${
                         eventos.length === 1 ? 'evento' : 'eventos'
                       } neste vídeo`}
@@ -3242,7 +3247,9 @@ export default function AnaliseVideos() {
             </div>
 
             <div className={styles.eventsList}>
-              {!carregandoEventos && eventosOrdenados.length === 0 ? (
+              {carregandoEventos ? (
+                <LoadingState variant="list" title="Carregando marcações salvas..." count={4} />
+              ) : eventosOrdenados.length === 0 ? (
                 <div className={styles.eventsEmpty}>
                   Nenhum evento registrado neste vídeo. Use “Marcar evento” para
                   adicionar o primeiro.

@@ -1,5 +1,4 @@
 const express = require('express');
-
 const autenticar = require('../middleware/authMiddleware');
 
 const {
@@ -12,63 +11,14 @@ const {
 
 const router = express.Router();
 
-/*
-|--------------------------------------------------------------------------
-| CONFIGURAÇÃO DA ANÁLISE
-|--------------------------------------------------------------------------
-*/
+router.use(autenticar);
 
-/*
- * GET
- * Buscar configurações do treinador logado
- */
-router.get(
-    '/',
-    autenticar,
-    listarConfiguracoesAnalise
-);
+router.get('/', listarConfiguracoesAnalise);
+router.post('/', criarConfiguracaoAnalise);
 
-/*
- * POST
- * Criar nova configuração
- */
-router.post(
-    '/',
-    autenticar,
-    criarConfiguracaoAnalise
-);
-
-/*
- * PUT
- * Atualizar ordem
- *
- * IMPORTANTE:
- * Essa rota precisa ficar ANTES de /:id
- */
-router.put(
-    '/ordem',
-    autenticar,
-    atualizarOrdemConfiguracoes
-);
-
-/*
- * PUT
- * Atualizar configuração
- */
-router.put(
-    '/:id',
-    autenticar,
-    atualizarConfiguracaoAnalise
-);
-
-/*
- * DELETE
- * Excluir configuração
- */
-router.delete(
-    '/:id',
-    autenticar,
-    excluirConfiguracaoAnalise
-);
+// Esta rota precisa ficar antes de /:id.
+router.put('/ordem', atualizarOrdemConfiguracoes);
+router.put('/:id', atualizarConfiguracaoAnalise);
+router.delete('/:id', excluirConfiguracaoAnalise);
 
 module.exports = router;

@@ -18,6 +18,7 @@ import type {
 } from 'react';
 
 import styles from './configuracoes.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 interface Preferencias {
   email: boolean;
@@ -33,7 +34,44 @@ interface Usuario {
   avatarUrl?: string | null;
 }
 
-const API_URL = 'http://localhost:3000';
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api')
+  .replace(/\/+$/, '')
+  .replace(/\/api$/i, '');
+
+const PREF_ENDPOINT = `${API_URL}/api/usuarios/preferencias`;
+const CHAVE_PREF = 'sate:preferencias:v1:';
+
+type PreferenciasNotificacao = Pick<Preferencias, 'email' | 'push'>;
+
+function extrairPreferencias(dados: unknown): PreferenciasNotificacao | null {
+  if (!dados || typeof dados !== 'object') return null;
+  const envelope = dados as Record<string, unknown>;
+  const p = (envelope.preferencias ?? envelope) as Record<string, unknown>;
+  if (!p || typeof p.email !== 'boolean' || typeof p.push !== 'boolean') {
+    return null;
+  }
+  return { email: p.email, push: p.push };
+}
+
+function lerPreferenciasLocais(id: number): PreferenciasNotificacao {
+  try {
+    const armazenadas = JSON.parse(localStorage.getItem(`${CHAVE_PREF}${id}`) || 'null');
+    return extrairPreferencias(armazenadas) ?? { email: true, push: true };
+  } catch {
+    return { email: true, push: true };
+  }
+}
+
+function guardarPreferenciasLocais(id: number, dados: PreferenciasNotificacao) {
+  try {
+    localStorage.setItem(`${CHAVE_PREF}${id}`, JSON.stringify(dados));
+    window.dispatchEvent(new CustomEvent('sate:preferencias-atualizadas', {
+      detail: { usuarioId: id, ...dados },
+    }));
+  } catch (erro) {
+    console.warn('Não foi possível guardar preferências neste navegador:', erro);
+  }
+}
 
 const Configuracoes = () => {
   const fileInputRef =
@@ -45,6 +83,9 @@ const Configuracoes = () => {
 
   const [usuario, setUsuario] =
     useState<Usuario | null>(null);
+
+  const [carregandoUsuario, setCarregandoUsuario] = useState(true);
+  const [salvandoPerfil, setSalvandoPerfil] = useState(false);
 
   const [nome, setNome] =
     useState('');
@@ -72,6 +113,15 @@ const Configuracoes = () => {
       push: true,
       twoFactor: false,
     });
+
+  // =====================================================
+  // CONTROLE DE PREFERÊNCIAS
+  // =====================================================
+
+  const [carregandoPreferencias, setCarregandoPreferencias] = useState(true);
+  const [salvandoPreferencia, setSalvandoPreferencia] = useState(false);
+  const [statusPreferencias, setStatusPreferencias] = useState('');
+  const [preferenciasNoServidor, setPreferenciasNoServidor] = useState(false);
 
   // =====================================================
   // SENHA
@@ -103,7 +153,9 @@ const Configuracoes = () => {
   const obterToken = () => {
     return (
       localStorage.getItem('token') ||
-      sessionStorage.getItem('token')
+      localStorage.getItem('accessToken') ||
+      sessionStorage.getItem('token') ||
+      sessionStorage.getItem('accessToken')
     );
   };
 
@@ -113,9 +165,11 @@ const Configuracoes = () => {
 
   useEffect(() => {
     const carregarUsuario = async () => {
+      setCarregandoUsuario(true);
       const token = obterToken();
 
       if (!token) {
+        setCarregandoUsuario(false);
         return;
       }
 
@@ -196,6 +250,9 @@ const Configuracoes = () => {
           setUsuario(null);
         }
       }
+      finally {
+        setCarregandoUsuario(false);
+      }
     };
 
     carregarUsuario();
@@ -273,18 +330,129 @@ const Configuracoes = () => {
   };
 
   // =====================================================
-  // PREFERÊNCIAS
+  // PREFERÊNCIAS — CARREGAR E PERSISTIR
   // =====================================================
 
-  const togglePreferencia = (
-    key: keyof Preferencias,
-  ) => {
-    setPreferencias((atual) => ({
-      ...atual,
+  useEffect(() => {
+    if (!usuario?.id) {
+      setCarregandoPreferencias(false);
+      return;
+    }
 
-      [key]:
-        !atual[key],
-    }));
+    let cancelado = false;
+    const id = usuario.id;
+
+    const carregar = async () => {
+      setCarregandoPreferencias(true);
+      setStatusPreferencias('');
+
+      // Mostra inicialmente o que foi salvo neste navegador.
+      const local = lerPreferenciasLocais(id);
+      setPreferencias({ ...local, twoFactor: false });
+
+      const token = obterToken();
+      if (!token) {
+        if (!cancelado) setCarregandoPreferencias(false);
+        return;
+      }
+
+      try {
+        const resposta = await fetch(PREF_ENDPOINT, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (resposta.status === 404 || resposta.status === 405) {
+          if (!cancelado) {
+            setPreferenciasNoServidor(false);
+            setStatusPreferencias('Preferências salvas apenas neste navegador. Configure a rota no backend para sincronizar entre dispositivos.');
+          }
+          return;
+        }
+
+        if (!resposta.ok) throw new Error('Falha ao consultar preferências.');
+        const remotas = extrairPreferencias(await resposta.json());
+        if (!remotas) throw new Error('O servidor retornou preferências inválidas.');
+
+        if (!cancelado) {
+          setPreferencias({ ...remotas, twoFactor: false });
+          setPreferenciasNoServidor(true);
+          guardarPreferenciasLocais(id, remotas);
+        }
+      } catch (erro) {
+        if (!cancelado) {
+          setPreferenciasNoServidor(false);
+          setStatusPreferencias('Sem conexão com as preferências do servidor. As escolhas deste navegador continuam disponíveis.');
+          console.warn('Preferências em modo local:', erro);
+        }
+      } finally {
+        if (!cancelado) setCarregandoPreferencias(false);
+      }
+    };
+
+    void carregar();
+    return () => { cancelado = true; };
+  }, [usuario?.id]);
+
+  const togglePreferencia = async (key: 'email' | 'push') => {
+    if (!usuario?.id || salvandoPreferencia || carregandoPreferencias) return;
+
+    const anterior = preferencias;
+    const proxima: Preferencias = { ...anterior, [key]: !anterior[key] };
+    const payload: PreferenciasNotificacao = { email: proxima.email, push: proxima.push };
+    const id = usuario.id;
+    const token = obterToken();
+
+    setPreferencias(proxima);
+    setSalvandoPreferencia(true);
+    setStatusPreferencias('Salvando preferência...');
+
+    // Sem endpoint disponível, mantém a escolha local, nunca afirma que
+    // o backend já está enviando ou bloqueando notificações.
+    try {
+      if (!token) throw new Error('Faça login novamente para salvar suas preferências.');
+
+      const resposta = await fetch(PREF_ENDPOINT, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (resposta.status === 404 || resposta.status === 405) {
+        guardarPreferenciasLocais(id, payload);
+        setPreferenciasNoServidor(false);
+        setStatusPreferencias('Salvo neste navegador. Para aplicar às notificações em todos os dispositivos, instale a rota no backend.');
+        return;
+      }
+
+      if (!resposta.ok) {
+        const dados = await resposta.json().catch(() => null);
+        throw new Error(dados?.mensagem || `Não foi possível salvar (HTTP ${resposta.status}).`);
+      }
+
+      const confirmadas = extrairPreferencias(await resposta.json().catch(() => null));
+      if (!confirmadas) throw new Error('O servidor não confirmou as preferências.');
+
+      setPreferencias({ ...confirmadas, twoFactor: false });
+      guardarPreferenciasLocais(id, confirmadas);
+      setPreferenciasNoServidor(true);
+      setStatusPreferencias('Preferências salvas na sua conta.');
+    } catch (erro) {
+      // Falha de conexão: mantém uma cópia local, mas sinaliza que NÃO há
+      // confirmação de sincronização com o servidor.
+      if (erro instanceof TypeError) {
+        guardarPreferenciasLocais(id, payload);
+        setPreferenciasNoServidor(false);
+        setStatusPreferencias('Sem conexão com o servidor: preferência guardada somente neste navegador.');
+      } else {
+        setPreferencias(anterior);
+        setStatusPreferencias(erro instanceof Error ? erro.message : 'Erro ao salvar preferências.');
+      }
+    } finally {
+      setSalvandoPreferencia(false);
+    }
   };
 
   // =====================================================
@@ -369,6 +537,7 @@ const Configuracoes = () => {
     }
 
     try {
+      setSalvandoPerfil(true);
       const formData =
         new FormData();
 
@@ -475,8 +644,14 @@ const Configuracoes = () => {
           ? error.message
           : 'Erro ao atualizar o perfil.',
       );
+    } finally {
+      setSalvandoPerfil(false);
     }
   };
+
+  if (carregandoUsuario) {
+    return <LoadingState variant="page" title="Carregando configurações..." description="Preparando os dados da sua conta." />;
+  }
 
   return (
     <main className={styles.page}>
@@ -862,13 +1037,13 @@ const Configuracoes = () => {
               className={
                 styles.saveButton
               }
-              onClick={
-                handleSalvar
-              }
+              onClick={handleSalvar}
+              disabled={salvandoPerfil}
             >
-              <Save size={17} />
-
-              Salvar alterações
+              {!salvandoPerfil && <Save size={17} />}
+              {salvandoPerfil
+                ? <LoadingState variant="inline" title="Salvando configurações..." />
+                : 'Salvar alterações'}
             </button>
           </div>
         </section>
@@ -913,11 +1088,8 @@ const Configuracoes = () => {
               active={
                 preferencias.email
               }
-              onClick={() =>
-                togglePreferencia(
-                  'email',
-                )
-              }
+              onClick={() => { void togglePreferencia('email'); }}
+              disabled={carregandoPreferencias || salvandoPreferencia || !usuario?.id}
             />
 
             <PreferenceRow
@@ -926,26 +1098,34 @@ const Configuracoes = () => {
               active={
                 preferencias.push
               }
-              onClick={() =>
-                togglePreferencia(
-                  'push',
-                )
-              }
+              onClick={() => { void togglePreferencia('push'); }}
+              disabled={carregandoPreferencias || salvandoPreferencia || !usuario?.id}
             />
 
             <PreferenceRow
               label="Autenticação em duas etapas"
-              description="Adicione uma camada extra de segurança à conta."
+              description="Requer ativação no backend e verificação obrigatória durante o login."
               active={
                 preferencias.twoFactor
               }
-              onClick={() =>
-                togglePreferencia(
-                  'twoFactor',
-                )
-              }
+              onClick={() => {}}
+              disabled
             />
           </div>
+
+          <p className={styles.preferenceStatus} role="status" aria-live="polite">
+            {carregandoPreferencias
+              ? 'Carregando preferências...'
+              : salvandoPreferencia
+                ? 'Salvando preferência...'
+                : statusPreferencias || (preferenciasNoServidor
+                  ? 'Suas preferências estão sincronizadas com a conta.'
+                  : 'Os interruptores de notificação são salvos automaticamente.')}
+          </p>
+          <p className={styles.preferenceNotice}>
+            A autenticação em duas etapas não pode ser ativada apenas com este interruptor.
+            É necessário configurar os códigos de verificação no backend e no login.
+          </p>
         </section>
       </div>
     </main>
@@ -957,6 +1137,7 @@ interface PreferenceRowProps {
   description: string;
   active: boolean;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 const PreferenceRow = ({
@@ -964,6 +1145,7 @@ const PreferenceRow = ({
   description,
   active,
   onClick,
+  disabled = false,
 }: PreferenceRowProps) => {
   return (
     <div
@@ -992,8 +1174,11 @@ const PreferenceRow = ({
             ? styles.switchActive
             : ''
         }`}
-        aria-pressed={active}
+        role="switch"
+        aria-checked={active}
         aria-label={label}
+        aria-disabled={disabled}
+        disabled={disabled}
         onClick={onClick}
       >
         <span />

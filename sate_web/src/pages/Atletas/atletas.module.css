@@ -1,13 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* Remove a barra de rolagem horizontal sem afetar a rolagem vertical. */
-:global(html),
-:global(body),
-:global(#root) {
-  max-width: 100%;
-  overflow-x: clip;
-}
-
 .page {
   overflow-x: clip;
 }
@@ -26,9 +18,9 @@
   box-sizing: border-box;
   background:
     radial-gradient(ellipse 340px 230px at 96% 0%, rgba(244, 63, 120, 0.16) 0%, rgba(244, 63, 120, 0.08) 38%, rgba(244, 63, 120, 0) 76%),
-    #faf5ee;
-  color: #10251f;
-  font-family: 'Poppins', sans-serif;
+    var(--bg-page);
+  color: var(--texto);
+  font-family: var(--fonte-base);
 }
 
 .top {
@@ -42,22 +34,22 @@
 .titleArea { min-width: 0; }
 .titleArea h1 {
   margin: 0;
-  color: #10251f;
+  color: var(--texto);
   font-size: clamp(34px, 3vw, 44px);
   font-weight: 700;
   line-height: 1.08;
   letter-spacing: -1.4px;
 }
 .titleArea h1 em {
-  color: #f04470;
-  font-family: 'DM Serif Display', serif;
+  color: var(--rosa);
+  font-family: var(--fonte-destaque);
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.5px;
 }
 .titleArea p {
   margin: 14px 0 0;
-  color: #778079;
+  color: var(--texto-suave);
   font-size: 13px;
   line-height: 1.6;
 }
@@ -78,10 +70,10 @@
   cursor: pointer;
   transition: background .18s ease, border-color .18s ease, transform .18s ease;
 }
-.exportButton { min-width: 140px; border: 1px solid #ddcfc0; background: #fff; color: #00634d; }
-.exportButton:hover:not(:disabled) { background: #f6fbf8; border-color: #9dbbb0; transform: translateY(-1px); }
-.newAthleteButton { min-width: 154px; border: 1px solid #005942; background: #005942; color: #fff; }
-.newAthleteButton:hover:not(:disabled) { background: #007d62; border-color: #007d62; transform: translateY(-1px); }
+.exportButton { min-width: 140px; border: 1px solid var(--borda); background: var(--bg-surface); color: var(--verde-medio); }
+.exportButton:hover:not(:disabled) { background: var(--bg-verde-suave); border-color: var(--borda-forte); transform: translateY(-1px); }
+.newAthleteButton { min-width: 154px; border: 1px solid var(--verde); background: var(--verde); color: var(--branco); }
+.newAthleteButton:hover:not(:disabled) { background: var(--verde-hover); border-color: var(--verde-hover); transform: translateY(-1px); }
 .exportButton:disabled, .newAthleteButton:disabled { opacity: .5; cursor: not-allowed; }
 
 /* Barra de busca e filtros */
@@ -92,57 +84,57 @@
   grid-template-columns: minmax(280px, 1fr) 253px 253px;
   gap: 0;
   overflow: hidden;
-  border: 1px solid #ddcfc0;
+  border: 1px solid var(--borda);
   border-radius: 14px;
-  background: #fff;
+  background: var(--bg-surface);
   box-shadow: none;
 }
-.searchBox, .selectBox { min-width: 0; height: 51px; position: relative; display: flex; align-items: center; background: #fff; }
+.searchBox, .selectBox { min-width: 0; height: 51px; position: relative; display: flex; align-items: center; background: var(--bg-surface); }
 .searchBox { gap: 10px; padding: 0 17px; }
 .searchBox > svg { display: none; }
-.searchBox input { width: 100%; min-width: 0; border: none; outline: none; background: transparent; color: #20352d; font-family: inherit; font-size: 12px; }
+.searchBox input { width: 100%; min-width: 0; border: none; outline: none; background: transparent; color: var(--texto); font-family: inherit; font-size: 12px; }
 .searchBox input::placeholder { color: #94a099; }
-.clearSearchButton { width: 28px; height: 28px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0; border: none; border-radius: 50%; background: transparent; color: #71837a; cursor: pointer; }
-.clearSearchButton:hover { background: #eef4f1; color: #244238; }
-.selectBox { border-left: 1px solid #e8ddd2; }
-.selectBox select { width: 100%; height: 100%; min-width: 0; padding: 0 40px 0 17px; box-sizing: border-box; border: none; outline: none; appearance: none; background: transparent; color: #263930; font-family: inherit; font-size: 12px; font-weight: 400; cursor: pointer; }
-.selectBox > svg { position: absolute; right: 15px; color: #20352d; pointer-events: none; }
-.filterButton { height: 51px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 15px; border: none; border-left: 1px solid #e8ddd2; background: #fff; color: #006b52; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
-.filterButton:hover { background: #f4f8f6; }
-.clearFiltersButton { grid-column: 1 / -1; justify-self: end; width: fit-content; margin: 10px 0 0; padding: 0; border: none; background: transparent; color: #64736c; font-family: inherit; font-size: 11px; font-weight: 600; cursor: pointer; }
-.clearFiltersButton:hover { color: #005942; text-decoration: underline; }
+.clearSearchButton { width: 28px; height: 28px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0; border: none; border-radius: 50%; background: transparent; color: var(--texto-suave); cursor: pointer; }
+.clearSearchButton:hover { background: var(--bg-verde-suave); color: var(--texto-medio); }
+.selectBox { border-left: 1px solid var(--borda); }
+.selectBox select { width: 100%; height: 100%; min-width: 0; padding: 0 40px 0 17px; box-sizing: border-box; border: none; outline: none; appearance: none; background: transparent; color: var(--texto); font-family: inherit; font-size: 12px; font-weight: 400; cursor: pointer; }
+.selectBox > svg { position: absolute; right: 15px; color: var(--texto); pointer-events: none; }
+.filterButton { height: 51px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 15px; border: none; border-left: 1px solid var(--borda); background: var(--bg-surface); color: var(--verde-medio); font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+.filterButton:hover { background: var(--bg-verde-suave); }
+.clearFiltersButton { grid-column: 1 / -1; justify-self: end; width: fit-content; margin: 10px 0 0; padding: 0; border: none; background: transparent; color: var(--texto-suave); font-family: inherit; font-size: 11px; font-weight: 600; cursor: pointer; }
+.clearFiltersButton:hover { color: var(--verde); text-decoration: underline; }
 .teamFilter { width: min(100%, 1200px); margin: -24px auto 22px; }
-.teamFilter .selectBox { width: min(280px, 100%); height: 44px; overflow: hidden; border: 1px solid #ddcfc0; border-radius: 11px; background: #fff; }
+.teamFilter .selectBox { width: min(280px, 100%); height: 44px; overflow: hidden; border: 1px solid var(--borda); border-radius: 11px; background: var(--bg-surface); }
 
-.athleteCount { width: min(100%, 1200px); margin: 0 auto 8px; color: #7b827d; font-size: 12px; font-weight: 400; }
+.athleteCount { width: min(100%, 1200px); margin: 0 auto 8px; color: var(--texto-suave); font-size: 12px; font-weight: 400; }
 .athletesGrid { width: min(100%, 1228px); margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
-.athleteCard { width: 100%; position: relative; overflow: hidden; border: none; border-bottom: 1px solid #e8ddd2; border-radius: 0; background: transparent; box-shadow: none; transition: background .18s ease, box-shadow .18s ease; }
+.athleteCard { width: 100%; position: relative; overflow: hidden; border: none; border-bottom: 1px solid var(--borda); border-radius: 0; background: transparent; box-shadow: none; transition: background .18s ease, box-shadow .18s ease; }
 .athleteCard:first-child { border-radius: 13px 13px 0 0; }
 .athleteCard:last-child { border-bottom: none; border-radius: 0 0 13px 13px; }
-.athleteCard:hover { z-index: 1; background: #fff; box-shadow: 0 8px 22px rgba(77, 44, 24, .06); }
+.athleteCard:hover { z-index: 1; background: var(--bg-surface); box-shadow: 0 8px 22px rgba(77, 44, 24, .06); }
 .cardContent { width: 100%; min-height: 70px; display: grid; grid-template-columns: 48px minmax(260px, 1.35fr) minmax(150px, .7fr) minmax(90px, .45fr) 80px 270px; align-items: center; gap: 16px; padding: 8px 12px; box-sizing: border-box; }
-.avatar { width: 43px; height: 43px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 50%; color: #fff; font-size: 14px; font-weight: 600; }
+.avatar { width: 43px; height: 43px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 50%; color: var(--branco); font-size: 14px; font-weight: 600; }
 .avatarImage { width: 100%; height: 100%; display: block; object-fit: cover; }
-.verde { background: #00634d; }
-.rosa { background: #f04470; }
-.azul { background: #4289c7; }
+.verde { background: var(--verde-medio); }
+.rosa { background: var(--rosa); }
+.azul { background: var(--azul); }
 .roxo { background: #7b5cda; }
 .laranja { background: #dc8235; }
 .athleteName { min-width: 0; }
-.athleteName h2 { overflow: hidden; margin: 0; color: #152b23; font-size: 12px; font-weight: 600; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
-.team { min-width: 0; overflow: hidden; color: #7c827d; font-size: 12px; font-weight: 400; white-space: nowrap; text-overflow: ellipsis; }
-.category { min-width: 0; color: #7c827d; font-size: 12px; font-weight: 400; white-space: nowrap; }
-.frequency { color: #006b52; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.athleteName h2 { overflow: hidden; margin: 0; color: var(--texto); font-size: 12px; font-weight: 600; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; }
+.team { min-width: 0; overflow: hidden; color: var(--texto-suave); font-size: 12px; font-weight: 400; white-space: nowrap; text-overflow: ellipsis; }
+.category { min-width: 0; color: var(--texto-suave); font-size: 12px; font-weight: 400; white-space: nowrap; }
+.frequency { color: var(--verde-medio); font-size: 12px; font-weight: 700; white-space: nowrap; }
 .actionSpace { width: 270px; height: 1px; justify-self: end; }
 .cardHover { width: 270px; position: absolute; top: 0; right: 12px; bottom: 0; z-index: 3; display: flex; align-items: center; justify-content: flex-end; gap: 6px; opacity: 0; visibility: hidden; transform: translateX(5px); transition: opacity .18s ease, visibility .18s ease, transform .18s ease; }
 .athleteCard:hover .cardHover, .athleteCard:focus-within .cardHover { opacity: 1; visibility: visible; transform: translateX(0); }
-.cardHover button { height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 0 10px; border: 1px solid #ddcfc0; border-radius: 9px; background: #fff; color: #00634d; font-family: inherit; font-size: 10px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background .18s ease, border-color .18s ease, color .18s ease; }
+.cardHover button { height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 0 10px; border: 1px solid var(--borda); border-radius: 9px; background: var(--bg-surface); color: var(--verde-medio); font-family: inherit; font-size: 10px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background .18s ease, border-color .18s ease, color .18s ease; }
 .cardHover button svg { flex-shrink: 0; }
-.cardHover button:hover { background: #f0f8f4; border-color: #9dbbb0; color: #003d31; }
-.message, .empty { width: min(100%, 1200px); min-height: 150px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 28px; box-sizing: border-box; border: 1px solid #e8ddd2; border-radius: 15px; background: rgba(255,255,255,.72); color: #718078; text-align: center; }
-.message strong, .empty strong { color: #152b23; font-size: 14px; }
+.cardHover button:hover { background: var(--bg-verde-suave); border-color: var(--borda-forte); color: var(--verde-escuro); }
+.message, .empty { width: min(100%, 1200px); min-height: 150px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 28px; box-sizing: border-box; border: 1px solid var(--borda); border-radius: 15px; background: rgba(255,255,255,.72); color: var(--texto-suave); text-align: center; }
+.message strong, .empty strong { color: var(--texto); font-size: 14px; }
 .message span, .empty span { max-width: 520px; font-size: 12px; }
-.message button { height: 36px; margin-top: 6px; padding: 0 13px; border: none; border-radius: 8px; background: #007d62; color: #fff; font-family: inherit; cursor: pointer; }
+.message button { height: 36px; margin-top: 6px; padding: 0 13px; border: none; border-radius: 8px; background: var(--verde-hover); color: var(--branco); font-family: inherit; cursor: pointer; }
 
 @media (max-width: 1180px) {
   .page { width: calc(100% + 56px); margin: -28px -28px 0; padding: 34px 28px 48px; }
@@ -156,8 +148,8 @@
   .headerActions { width: 100%; }
   .exportButton, .newAthleteButton { flex: 1; }
   .filters { grid-template-columns: 1fr; gap: 8px; overflow: visible; border: none; background: transparent; }
-  .searchBox, .selectBox { overflow: hidden; border: 1px solid #ddcfc0; border-radius: 12px; }
-  .selectBox { border-left: 1px solid #ddcfc0; }
+  .searchBox, .selectBox { overflow: hidden; border: 1px solid var(--borda); border-radius: 12px; }
+  .selectBox { border-left: 1px solid var(--borda); }
   .cardContent { grid-template-columns: 44px minmax(0, 1fr) 70px 55px; gap: 12px; }
   .team { display: none; }
   .actionSpace { display: none; }
@@ -227,7 +219,7 @@
 
   border-radius: 20px;
 
-  background: #e7efeb;
+  background: var(--borda-neutra);
 
   box-shadow:
     0 25px 70px rgba(0, 0, 0, 0.32);
@@ -254,7 +246,7 @@
   border-bottom:
     1px solid #cbd8d2;
 
-  background: #e7efeb;
+  background: var(--borda-neutra);
 }
 
 .modalHeader > div:first-child {
@@ -364,7 +356,7 @@
 .sectionHeader h3 {
   margin: 0;
 
-  color: #263a31;
+  color: var(--texto);
 
   font-size: 17px;
   font-weight: 700;
@@ -466,9 +458,9 @@
 
   outline: none;
 
-  background: #ffffff;
+  background: var(--bg-surface);
 
-  color: #263a31;
+  color: var(--texto);
 
   font-family: inherit;
 
@@ -536,7 +528,7 @@
   border-top:
     1px solid #cbd8d2;
 
-  background: #e7efeb;
+  background: var(--borda-neutra);
 }
 
 .cancelButton,
@@ -581,9 +573,9 @@
 .submitButton {
   border: none;
 
-  background: #087b5b;
+  background: var(--verde-hover);
 
-  color: #ffffff;
+  color: var(--branco);
 }
 
 .submitButton:hover {
@@ -1098,7 +1090,7 @@
   box-sizing: border-box;
   border: 1px solid #c8d6d0;
   border-radius: 14px;
-  background: #ffffff;
+  background: var(--bg-surface);
   text-align: left;
   font-family: inherit;
   cursor: pointer;
@@ -1121,7 +1113,7 @@
 }
 .cadastroOpcaoIconeVerde { background: #dceee6; color: #0b8c64; }
 .cadastroOpcaoIconeRosa { background: #f7e5ea; color: #b04d68; }
-.cadastroOpcao > strong { margin-bottom: 7px; color: #263a31; font-size: 14px; font-weight: 700; }
+.cadastroOpcao > strong { margin-bottom: 7px; color: var(--texto); font-size: 14px; font-weight: 700; }
 .cadastroOpcaoDescricao { color: #728078; font-size: 11px; line-height: 1.6; }
 .cadastroOpcaoLink { margin-top: auto; padding-top: 17px; color: #0b8c64; font-size: 10px; font-weight: 700; }
 .cadastroOpcaoPlanilha .cadastroOpcaoLink { color: #b04d68; }
@@ -1138,14 +1130,14 @@
   box-sizing: border-box;
   border: 1.5px dashed #9fb5ab;
   border-radius: 14px;
-  background: #ffffff;
+  background: var(--bg-surface);
   text-align: center;
   cursor: pointer;
   transition: border-color .2s ease, background .2s ease;
 }
-.uploadArea:hover { border-color: #16a875; background: #f8fcfa; }
+.uploadArea:hover { border-color: var(--verde-principal); background: #f8fcfa; }
 .uploadArea .cadastroOpcaoIcone { margin-bottom: 5px; }
-.uploadArea > strong { color: #263a31; font-size: 13px; font-weight: 700; }
+.uploadArea > strong { color: var(--texto); font-size: 13px; font-weight: 700; }
 .hiddenFileInput { display: none; }
 .helpText { margin: 10px 0 0; color: #77867f; font-size: 10px; line-height: 1.6; }
 
@@ -1156,7 +1148,7 @@
   overflow-x: auto;
   border: 1px solid #cbd8d2;
   border-radius: 10px;
-  background: #fff;
+  background: var(--bg-surface);
 }
 .previewTable { width: 100%; border-collapse: collapse; }
 .previewTable th {
@@ -1181,7 +1173,7 @@
   border: 1px solid #b6d8ca;
   border-radius: 10px;
   background: #e9f6f0;
-  color: #087b5b;
+  color: var(--verde-hover);
 }
 .importResult svg { flex-shrink: 0; }
 .importResult span { font-size: 10px; line-height: 1.5; }
@@ -1617,3 +1609,17 @@
 }
 
 
+
+/* Filtro opcional da lista, com o mesmo padrão de ações secundárias. */
+.teamFilterToggle { display:inline-flex; align-items:center; gap:7px; margin:0 0 24px; padding:6px 0; background:transparent; border:0; color:var(--verde); font:600 12px var(--fonte-base); cursor:pointer; }
+.teamFilterToggle[aria-expanded='true'] svg { transform:rotate(180deg); }
+
+/* O filtro agora possui botão próprio, sem sobreposição com a linha anterior. */
+.teamFilter { margin: 0 auto 22px; }
+
+/* COR DO DESTAQUE DO TÍTULO NO MODO ESCURO */
+:global(html[data-theme="dark"]) .page .titleArea h1 > *,
+:global(:root[data-theme="dark"]) .page .titleArea h1 > * {
+    color: #83e3b6 !important;
+    -webkit-text-fill-color: #83e3b6 !important;
+}

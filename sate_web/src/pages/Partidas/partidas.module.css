@@ -1,14 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* =========================================================
    SATE — PARTIDAS
 ========================================================= */
 
 .page {
-  --creme: #faf5ee;
-  --creme-linha: #e8ddd2;
-  --texto-secundario: #7a807b;
-
   width: calc(100% + 60px);
   min-height: calc(100vh + 60px);
   margin: -30px;
@@ -21,10 +16,10 @@
       rgba(240, 68, 112, 0.07) 42%,
       rgba(240, 68, 112, 0) 76%
     ),
-    #faf5ee;
+    var(--bg-page);
 
   color: var(--texto);
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--fonte-base);
 }
 
 .page * {
@@ -62,7 +57,7 @@
 
 .titleRow h2 em {
   color: var(--rosa);
-  font-family: 'DM Serif Display', serif;
+  font-family: var(--fonte-destaque);
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.6px;
@@ -70,7 +65,7 @@
 
 .titleRow p {
   margin: 12px 0 0;
-  color: #777d78;
+  color: var(--texto-suave);
   font-size: 13px;
   line-height: 1.6;
 }
@@ -92,7 +87,7 @@
   border: 1px solid var(--verde);
   border-radius: 11px;
   background: var(--verde);
-  color: #ffffff;
+  color: var(--branco);
 
   font-family: inherit;
   font-size: 12px;
@@ -109,8 +104,8 @@
 }
 
 .newButton:hover {
-  background: #00735a;
-  border-color: #00735a;
+  background: var(--verde-hover);
+  border-color: var(--verde-hover);
 }
 
 /* =========================================================
@@ -124,7 +119,7 @@
   gap: 32px;
   overflow-x: auto;
   margin-bottom: 31px;
-  border-bottom: 1px solid var(--creme-linha);
+  border-bottom: 1px solid var(--borda);
   scrollbar-width: none;
 }
 
@@ -143,7 +138,7 @@
   padding: 0 2px;
   border: none;
   background: transparent;
-  color: #858782;
+  color: var(--texto-claro);
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
@@ -191,9 +186,9 @@
   gap: 0;
   overflow: hidden;
   margin-bottom: 0;
-  border: 1px solid #ddcfc0;
+  border: 1px solid var(--borda);
   border-radius: 14px;
-  background: #ffffff;
+  background: var(--bg-surface);
 }
 
 .filters select,
@@ -201,8 +196,8 @@
   width: 100%;
   height: 54px;
   border: none;
-  background: #ffffff;
-  color: #263930;
+  background: var(--bg-surface);
+  color: var(--texto);
   font-family: inherit;
   font-size: 12px;
 }
@@ -214,8 +209,8 @@
   cursor: pointer;
 
   background-image:
-    linear-gradient(45deg, transparent 50%, #20352d 50%),
-    linear-gradient(135deg, #20352d 50%, transparent 50%);
+    linear-gradient(45deg, transparent 50%, var(--texto) 50%),
+    linear-gradient(135deg, var(--texto) 50%, transparent 50%);
   background-position:
     calc(100% - 20px) calc(50% - 2px),
     calc(100% - 15px) calc(50% - 2px);
@@ -225,7 +220,7 @@
 
 .filters > select + select,
 .dateInput {
-  border-left: 1px solid #e8ddd2;
+  border-left: 1px solid var(--borda);
 }
 
 .filters select:focus,
@@ -246,7 +241,7 @@
   border: none;
   outline: none;
   background: transparent;
-  color: #263930;
+  color: var(--texto);
   font-family: inherit;
   font-size: 12px;
   cursor: pointer;
@@ -299,7 +294,7 @@
 
 .tableContainer th {
   padding: 13px 14px 12px;
-  border-bottom: 1px solid var(--creme-linha);
+  border-bottom: 1px solid var(--borda);
   color: #7e817d;
   font-size: 10px;
   font-weight: 600;
@@ -309,7 +304,7 @@
 
 .tableContainer td {
   padding: 18px 14px;
-  border-bottom: 1px solid var(--creme-linha);
+  border-bottom: 1px solid var(--borda);
   color: #253830;
   font-size: 11px;
   white-space: nowrap;
@@ -332,7 +327,7 @@
 }
 
 .resultado {
-  color: #20352d !important;
+  color: var(--texto) !important;
   font-weight: 700;
 }
 
@@ -348,8 +343,8 @@
   border: 1px solid #d9cdbf;
   border-radius: 6px;
 
-  background: #ffffff;
-  color: #005942;
+  background: var(--bg-surface);
+  color: var(--verde);
 
   font-family: inherit;
   font-size: 10px;
@@ -366,7 +361,7 @@
 }
 
 .adicionarResultado:focus-visible {
-  outline: 2px solid #005942;
+  outline: 2px solid var(--verde);
   outline-offset: 2px;
 }
 
@@ -400,7 +395,7 @@
 }
 
 .analisada {
-  color: #00634d;
+  color: var(--verde-medio);
 }
 
 .analise {
@@ -408,7 +403,7 @@
 }
 
 .pendente {
-  color: #ef3f6f;
+  color: var(--rosa);
 }
 
 /* =========================================================
@@ -499,9 +494,9 @@
     height: 50px;
     overflow: hidden;
     margin-bottom: 8px;
-    border: 1px solid #ddcfc0 !important;
+    border: 1px solid var(--borda) !important;
     border-radius: 11px;
-    background-color: #ffffff;
+    background-color: var(--bg-surface);
   }
 }
 
@@ -732,3 +727,6 @@
     border-color: #365447 !important;
   }
 }
+.editScoreButton { margin-left:10px; padding:3px 5px; border:0; border-radius:6px; background:transparent; color:var(--verde); font:600 11px var(--fonte-base); cursor:pointer; }
+.editScoreButton:hover { background:var(--bg-verde-suave); }
+.editScoreButton:focus-visible { outline:2px solid var(--verde-principal); outline-offset:2px; }

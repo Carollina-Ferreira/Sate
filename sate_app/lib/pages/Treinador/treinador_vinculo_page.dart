@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../login_page.dart' show BackgroundPainter;
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 

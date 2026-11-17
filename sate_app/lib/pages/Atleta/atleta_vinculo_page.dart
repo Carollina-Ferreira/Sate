@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../login_page.dart' show BackgroundPainter;
 
 import 'atleta_navigation.dart';
 import 'atleta_qrcode_page.dart';
@@ -616,7 +617,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
             ),
           ),
         ),
-      ),
+      )),
     );
   }
 

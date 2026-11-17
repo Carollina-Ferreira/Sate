@@ -1,16 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
 
-:root {
+/* Tokens exclusivos da landing: não sobrescrevem o tema das outras páginas. */
+.page {
   --verde: #005942;
   --verde-profundo: #003d31;
-  --verde-claro: #dff3eb;
-  --rosa: #ef3f6f;
+  --verde-claro: #edf7f1;
+  --rosa: #ef476f;
   --rosa-claro: #ffe4ec;
   --creme: #faf5ee;
   --creme-2: #fffaf4;
   --linha: #e8ddd2;
-  --texto: #172a23;
-  --texto-secundario: #737c77;
+  --texto: #12261f;
+  --texto-secundario: #6c7c77;
   --branco: #ffffff;
 }
 
@@ -18,30 +18,18 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-}
-
-button {
-  font: inherit;
-}
-
 .page {
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: var(--creme);
   color: var(--texto);
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--fonte-base);
 }
 
 .page em {
   color: var(--rosa);
-  font-family: 'DM Serif Display', serif;
+  font-family: var(--fonte-destaque);
   font-style: italic;
   font-weight: 400;
 }
@@ -55,7 +43,7 @@ button {
   position: relative;
   overflow: hidden;
   background: var(--verde-profundo);
-  color: #fff;
+  color: var(--branco);
 }
 
 .heroBackgrounds,
@@ -114,7 +102,7 @@ button {
   background:
     linear-gradient(
       90deg,
-      #003d31 0%,
+      var(--verde-escuro) 0%,
       rgba(0, 61, 49, .99) 28%,
       rgba(0, 61, 49, .91) 42%,
       rgba(0, 61, 49, .69) 56%,
@@ -146,7 +134,7 @@ button {
   padding: 0;
   border: none;
   background: transparent;
-  color: #fff;
+  color: var(--branco);
   cursor: pointer;
 }
 
@@ -183,7 +171,7 @@ button {
 
 .navigation button:hover,
 .loginButton:hover {
-  color: #fff;
+  color: var(--branco);
 }
 
 .mobileLogin {
@@ -221,7 +209,7 @@ button {
 .headerCta {
   border: 1px solid rgba(255,255,255,.16);
   background: var(--rosa);
-  color: #fff;
+  color: var(--branco);
 }
 
 .headerCta:hover {
@@ -238,7 +226,7 @@ button {
   border: 1px solid rgba(255,255,255,.2);
   border-radius: 10px;
   background: rgba(255,255,255,.08);
-  color: #fff;
+  color: var(--branco);
   cursor: pointer;
 }
 
@@ -270,7 +258,7 @@ button {
 .heroContent h1 {
   max-width: 850px;
   margin: 0;
-  color: #fff;
+  color: var(--branco);
   font-size: clamp(50px, 5vw, 76px);
   line-height: 1.03;
   font-weight: 700;
@@ -299,7 +287,7 @@ button {
 .primaryButton {
   border: 1px solid var(--rosa);
   background: var(--rosa);
-  color: #fff;
+  color: var(--branco);
 }
 
 .primaryButton:hover {
@@ -311,7 +299,7 @@ button {
 .secondaryButton {
   border: 1px solid rgba(255,255,255,.45);
   background: rgba(0,0,0,.08);
-  color: #fff;
+  color: var(--branco);
 }
 
 .secondaryButton:hover {
@@ -436,7 +424,7 @@ button {
 }
 
 .featureCardFeatured {
-  background: linear-gradient(180deg, #fff7fa, #fffaf4);
+  background: linear-gradient(180deg, #fff7fa, var(--bg-surface-2));
   border-color: #f2cad6;
 }
 
@@ -477,7 +465,7 @@ button {
   padding: 0;
   border: 1px solid #dfd3c7;
   border-radius: 50%;
-  background: #fff;
+  background: var(--bg-surface);
   color: var(--verde);
   cursor: pointer;
 }
@@ -485,7 +473,7 @@ button {
 .featureArrow:hover {
   background: var(--verde);
   border-color: var(--verde);
-  color: #fff;
+  color: var(--branco);
 }
 
 /* =========================================================
@@ -504,12 +492,12 @@ button {
   overflow: hidden;
   background:
     radial-gradient(circle at 12% 22%, rgba(239,63,111,.16), transparent 34%),
-    linear-gradient(135deg, #005942, #003d31 65%, #002e26);
-  color: #fff;
+    linear-gradient(135deg, var(--verde), var(--verde-escuro) 65%, #002e26);
+  color: var(--branco);
 }
 
 .platformText h2 {
-  color: #fff;
+  color: var(--branco);
 }
 
 .platformText h2 em {
@@ -525,7 +513,7 @@ button {
 .platformButton {
   border: 1px solid rgba(255,255,255,.32);
   background: rgba(255,255,255,.07);
-  color: #fff;
+  color: var(--branco);
 }
 
 .platformButton:hover {
@@ -548,7 +536,7 @@ button {
   overflow: hidden;
   border: 8px solid #101412;
   border-radius: 22px 22px 6px 6px;
-  background: #fff;
+  background: var(--bg-surface);
   box-shadow: 0 35px 70px rgba(0,0,0,.3);
 }
 
@@ -565,7 +553,7 @@ button {
 .mockSidebar {
   padding: 18px 10px;
   background: var(--verde);
-  color: #fff;
+  color: var(--branco);
 }
 
 .mockLogo {
@@ -596,12 +584,12 @@ button {
 
 .mockSidebar .mockActive {
   background: rgba(239,63,111,.22);
-  color: #fff;
+  color: var(--branco);
 }
 
 .mockDashboard {
   padding: 20px;
-  background: #faf5ee;
+  background: var(--bg-page);
 }
 
 .mockHeader {
@@ -652,7 +640,7 @@ button {
   padding: 11px;
   border: 1px solid var(--linha);
   border-radius: 10px;
-  background: #fff;
+  background: var(--bg-surface);
 }
 
 .mockStat strong { font-size: 15px; }
@@ -663,7 +651,7 @@ button {
 .mockAthletes,
 .mockTraining {
   border: 1px solid var(--linha);
-  background: #fff;
+  background: var(--bg-surface);
 }
 
 .mockChart {
@@ -748,7 +736,7 @@ button {
   margin-bottom: 7px;
   border-radius: 7px;
   background: linear-gradient(135deg,#174e3d,#73a68d);
-  color: #fff;
+  color: var(--branco);
 }
 
 .mockTraining strong,
@@ -778,7 +766,7 @@ button {
 .greenButton {
   border: none;
   background: var(--verde);
-  color: #fff;
+  color: var(--branco);
 }
 
 .greenButton:hover {
@@ -821,7 +809,7 @@ button {
   gap: 9px;
   border: 1px solid var(--linha);
   border-radius: 18px;
-  background: #fff;
+  background: var(--bg-surface);
   box-shadow: 0 18px 45px rgba(75,53,39,.08);
   transform: rotate(-4deg);
 }
@@ -834,7 +822,7 @@ button {
   justify-content: center;
   border-radius: 15px;
   background: #107c41;
-  color: #fff;
+  color: var(--branco);
   box-shadow: -8px 7px 0 #21a366;
 }
 
@@ -849,7 +837,7 @@ button {
   padding: 11px;
   border: 1px solid var(--linha);
   border-radius: 16px;
-  background: #fff;
+  background: var(--bg-surface);
   box-shadow: 0 20px 50px rgba(75,53,39,.08);
 }
 
@@ -867,7 +855,7 @@ button {
 }
 
 .excelHeader {
-  background: #faf5ee;
+  background: var(--bg-page);
   color: #929a97;
   font-weight: 600;
 }
@@ -890,7 +878,7 @@ button {
   padding: 13px;
   border: 1px solid var(--linha);
   border-radius: 11px;
-  background: #fff;
+  background: var(--bg-surface);
   box-shadow: 0 14px 38px rgba(75,53,39,.11);
 }
 
@@ -1027,7 +1015,7 @@ button {
   border: none;
   border-radius: 10px;
   background: #111;
-  color: #fff;
+  color: var(--branco);
   text-align: left;
   cursor: pointer;
 }
@@ -1051,7 +1039,7 @@ button {
   padding: 15px;
   border: 7px solid #171a19;
   border-radius: 38px;
-  background: #fff;
+  background: var(--bg-surface);
   color: #15211c;
   box-shadow: 0 24px 50px rgba(0,58,43,.15);
 }
@@ -1112,7 +1100,7 @@ button {
   padding:9px 4px;
   border:1px solid #eee5dd;
   border-radius:7px;
-  background:#fffaf4;
+  background:var(--bg-surface-2);
   text-align:center;
 }
 
@@ -1141,7 +1129,7 @@ button {
   margin:14px 0;
   padding:7px;
   border-radius:8px;
-  background:#fffaf4;
+  background:var(--bg-surface-2);
 }
 
 .phoneChart svg { width:100%; height:100%; }
@@ -1174,7 +1162,7 @@ button {
   padding:72px 7%;
   background:
     radial-gradient(circle at 85% 20%, rgba(239,63,111,.18), transparent 35%),
-    linear-gradient(135deg,#003d31 0%,#005942 58%,#00684f 100%);
+    linear-gradient(135deg,var(--verde-escuro) 0%,var(--verde) 58%,#00684f 100%);
 }
 
 .finalCtaContent {
@@ -1194,7 +1182,7 @@ button {
 
 .finalCta h2 {
   margin:0;
-  color:#fff;
+  color:var(--branco);
   font-size:clamp(40px,4.2vw,60px);
   line-height:1.05;
   font-weight:700;
@@ -1216,8 +1204,8 @@ button {
   min-height:56px;
   position:relative;
   z-index:2;
-  border:2px solid #fff;
-  background:#fff;
+  border:2px solid var(--branco);
+  background:var(--bg-surface);
   color:var(--verde);
   font-size:15px;
 }
@@ -1235,7 +1223,7 @@ button {
   width:100%;
   padding:76px 7% 30px;
   background:#002f26;
-  color:#fff;
+  color:var(--branco);
 }
 
 .footerTop {
@@ -1269,7 +1257,7 @@ button {
   display:block;
   margin-top:25px;
   color:#ff9db8;
-  font-family:'DM Serif Display',serif;
+  font-family: var(--fonte-destaque);
   font-size:21px;
   font-style:italic;
 }
@@ -1433,7 +1421,7 @@ button {
     background:
       linear-gradient(
         90deg,
-        #003d31 0%,
+        var(--verde-escuro) 0%,
         rgba(0,61,49,.98) 42%,
         rgba(0,61,49,.76) 62%,
         rgba(0,61,49,.24) 100%
@@ -1540,7 +1528,7 @@ button {
     background:
       linear-gradient(
         90deg,
-        #003d31 0%,
+        var(--verde-escuro) 0%,
         rgba(0,61,49,.98) 54%,
         rgba(0,61,49,.7) 78%,
         rgba(0,61,49,.38) 100%
@@ -1755,5 +1743,69 @@ button {
 
   * {
     scroll-behavior:auto !important;
+  }
+}
+
+/* =========================================================
+   ESPORTES — CARROSSEL REALMENTE INFINITO
+   As duas sequências são idênticas e se alternam sem salto.
+========================================================= */
+
+.sportsMarquee {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.sportsTrack {
+  display: flex;
+  width: max-content;
+  flex-wrap: nowrap;
+  animation: sportsInfiniteScroll 38s linear infinite;
+  /* O global.css zera animações no modo "movimento reduzido".
+     Esta é a exceção explícita para o carrossel solicitado. */
+  animation-duration: 38s !important;
+  animation-play-state: running;
+  will-change: transform;
+}
+
+.sportsSequence {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  gap: 14px;
+  padding-right: 14px;
+}
+
+.sportsSequence .sportCard {
+  width: 160px;
+  flex: 0 0 160px;
+}
+
+/* Pausa apenas se o cursor estiver em cima de um card. */
+.sportsMarquee:has(.sportCard:hover) .sportsTrack {
+  animation-play-state: paused;
+}
+
+@keyframes sportsInfiniteScroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (max-width: 700px) {
+  .sportsSequence {
+    gap: 11px;
+    padding-right: 11px;
+  }
+
+  .sportsSequence .sportCard {
+    width: 150px;
+    flex-basis: 150px;
   }
 }

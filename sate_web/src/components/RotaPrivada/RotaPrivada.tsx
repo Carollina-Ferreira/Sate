@@ -1,5 +1,8 @@
+
 import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
+
+import Carregamento from '../../pages/Carregamento/carregamento';
 
 const RotaPrivada = () => {
   const [carregando, setCarregando] = useState(true);
@@ -30,7 +33,6 @@ const RotaPrivada = () => {
 
         if (!resposta.ok) {
           setTemEquipe(false);
-          setCarregando(false);
           return;
         }
 
@@ -42,51 +44,37 @@ const RotaPrivada = () => {
 
         setTemEquipe(equipes.length > 0);
       } catch (error) {
-        console.error(
-          'Erro ao verificar equipes:',
-          error
-        );
-
+        console.error('Erro ao verificar equipes:', error);
         setTemEquipe(false);
       } finally {
         setCarregando(false);
       }
     };
 
-    verificarEquipe();
+    void verificarEquipe();
   }, [token]);
 
-  /*
-   * Não está logado
-   */
+  // Sem login: volta para a entrada.
   if (!token) {
     return <Navigate to="/" replace />;
   }
 
-  /*
-   * Aguarda consultar o banco
-   */
+  // Usa a MESMA tela visual /carregamento, sem redirecionar pelo timer.
   if (carregando) {
-    return null;
-  }
-
-  /*
-   * Está logado, mas ainda não possui equipe.
-   * Precisa fazer o onboarding.
-   */
-  if (!temEquipe) {
     return (
-      <Navigate
-        to="/boas-vindas"
-        replace
+      <Carregamento
+        semRedirecionamento
+        mensagem="Verificando seu acesso..."
       />
     );
   }
 
-  /*
-   * Está logado e possui equipe.
-   * Pode acessar o sistema normalmente.
-   */
+  // Usuário sem equipe: abre a configuração inicial.
+  if (!temEquipe) {
+    return <Navigate to="/boas-vindas" replace />;
+  }
+
+  // Usuário com equipe: libera a rota solicitada.
   return <Outlet />;
 };
 

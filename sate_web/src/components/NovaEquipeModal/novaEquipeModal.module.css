@@ -54,7 +54,7 @@
 
   box-shadow: 0 24px 70px rgba(0, 35, 25, 0.3);
 
-  font-family: 'Inter', 'Poppins', sans-serif;
+  font-family: var(--fonte-base);
 }
 
 /* =========================================
@@ -71,7 +71,7 @@
 
   padding: 24px 28px 21px;
 
-  background: linear-gradient(135deg, #e8f3eb, #f0f6f1);
+  background: linear-gradient(135deg, #e8f3eb, var(--bg-verde-suave));
   border-bottom: 1px solid #d7e5db;
   border-radius: 20px 20px 0 0;
 }
@@ -131,7 +131,7 @@
 }
 
 .closeButton:hover {
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #dceee2;
   border-color: #b9d8c4;
   transform: rotate(4deg);
@@ -198,7 +198,7 @@
 }
 
 .imagePreview:hover {
-  border-color: #16a875;
+  border-color: var(--verde-principal);
   background: #d9ebdf;
 }
 
@@ -241,7 +241,7 @@
   align-items: center;
   justify-content: center;
 
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #cce5d4;
 
   border: 1px solid #bad9c5;
@@ -283,7 +283,7 @@
   box-sizing: border-box;
 
   color: #426151;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px solid #c8dacf;
   border-radius: 10px;
@@ -297,8 +297,8 @@
 }
 
 .changeImageButton:hover {
-  color: #087b5b;
-  border-color: #16a875;
+  color: var(--verde-hover);
+  border-color: var(--verde-principal);
   background: #e8f5ec;
 }
 
@@ -314,7 +314,7 @@
   padding: 7px 10px;
 
   color: #bd354b;
-  background: #fff0f1;
+  background: var(--vermelho-claro);
 
   border: 1px solid #f2cbd1;
   border-radius: 9px;
@@ -388,7 +388,7 @@
   align-items: center;
   justify-content: center;
 
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #dcefe2;
 
   border: 1px solid #c9e3d1;
@@ -452,7 +452,7 @@
   box-sizing: border-box;
 
   color: #2c4336;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px solid #cbdad1;
   border-radius: 10px;
@@ -473,8 +473,8 @@
 
 .field input:focus,
 .field select:focus {
-  border-color: #16a875;
-  background: #ffffff;
+  border-color: var(--verde-principal);
+  background: var(--bg-surface);
   box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.12);
 }
 
@@ -503,7 +503,7 @@
   padding: 2px 8px;
   box-sizing: border-box;
 
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #dcefe2;
 
   border: 1px solid #c9e3d1;
@@ -527,7 +527,7 @@
   box-sizing: border-box;
 
   color: #2c4336;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px solid #cbdad1;
   border-radius: 10px;
@@ -538,7 +538,7 @@
 }
 
 .athleteSearch input:focus {
-  border-color: #16a875;
+  border-color: var(--verde-principal);
   box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.1);
 }
 
@@ -582,7 +582,7 @@
   box-sizing: border-box;
 
   color: #30483a;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px solid #d8e4dc;
   border-radius: 11px;
@@ -614,7 +614,7 @@
 
   overflow: hidden;
 
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #dcefe2;
 
   border-radius: 10px;
@@ -674,16 +674,16 @@
 }
 
 .athleteSelected .athleteCheck {
-  color: #ffffff;
-  background: #16a875;
-  border-color: #16a875;
+  color: var(--branco);
+  background: var(--verde-principal);
+  border-color: var(--verde-principal);
 }
 
 .emptyAthletes {
   padding: 20px 12px;
 
   color: #819086;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px dashed #d0ded5;
   border-radius: 11px;
@@ -715,8 +715,8 @@
   padding: 0 10px;
   box-sizing: border-box;
 
-  color: #087b5b;
-  background: #ffffff;
+  color: var(--verde-hover);
+  background: var(--bg-surface);
 
   border: 1px solid #cbdad1;
   border-radius: 10px;
@@ -725,7 +725,7 @@
 }
 
 .dateInputWrapper:focus-within {
-  border-color: #16a875;
+  border-color: var(--verde-principal);
   box-shadow: 0 0 0 3px rgba(22, 168, 117, 0.1);
 }
 
@@ -771,7 +771,7 @@
 
   padding: 12px;
 
-  color: #087b5b;
+  color: var(--verde-hover);
   background: #e4f2e8;
 
   border: 1px solid #c9dfd0;
@@ -844,7 +844,7 @@
   border: 2px solid transparent;
   border-radius: 50%;
 
-  color: #ffffff;
+  color: var(--branco);
 
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(26, 61, 43, 0.13);
@@ -857,7 +857,7 @@
 }
 
 .colorSelected {
-  border-color: #ffffff;
+  border-color: var(--branco);
   box-shadow: 0 0 0 2px #245d43;
 }
 
@@ -872,7 +872,7 @@
 
   padding: 0;
 
-  background: #ffffff;
+  background: var(--bg-surface);
   border: 2px solid transparent;
   border-radius: 50%;
 
@@ -900,14 +900,14 @@
   box-sizing: border-box;
 
   background: conic-gradient(
-    #ef476f,
+    var(--rosa),
     #d9822b,
     #b6b51a,
-    #16a875,
-    #1674b8,
+    var(--verde-principal),
+    var(--azul),
     #7c5ce5,
     #d652a2,
-    #ef476f
+    var(--rosa)
   );
 
   border-radius: 50%;
@@ -921,10 +921,10 @@
   align-items: center;
   justify-content: center;
 
-  color: #ffffff;
+  color: var(--branco);
   background: rgba(255, 255, 255, 0.12);
 
-  border: 2px solid #ffffff;
+  border: 2px solid var(--branco);
   border-radius: 50%;
 }
 
@@ -973,7 +973,7 @@
 
   margin-left: auto;
 
-  border: 2px solid #ffffff;
+  border: 2px solid var(--branco);
   border-radius: 50%;
 
   box-shadow: 0 1px 5px rgba(25, 55, 40, 0.15);
@@ -995,7 +995,7 @@
 
   box-sizing: border-box;
 
-  background: linear-gradient(135deg, #e8f3eb, #f0f6f1);
+  background: linear-gradient(135deg, #e8f3eb, var(--bg-verde-suave));
   border: 1px solid #cfdfd5;
   border-radius: 13px;
 }
@@ -1013,7 +1013,7 @@
 
   overflow: hidden;
 
-  color: #ffffff;
+  color: var(--branco);
 
   border: 3px solid rgba(255, 255, 255, 0.85);
   border-radius: 13px;
@@ -1122,7 +1122,7 @@
 
 .cancelButton {
   color: #50695a;
-  background: #ffffff;
+  background: var(--bg-surface);
 
   border: 1px solid #c5d6cb;
 }
@@ -1133,10 +1133,10 @@
 }
 
 .createButton {
-  color: #ffffff;
-  background: #087b5b;
+  color: var(--branco);
+  background: var(--verde-hover);
 
-  border: 1px solid #087b5b;
+  border: 1px solid var(--verde-hover);
   box-shadow: 0 3px 8px rgba(8, 123, 91, 0.15);
 }
 
@@ -1366,4 +1366,351 @@
     padding: 0 9px;
     font-size: 11px;
   }
+}
+
+/* =========================================
+   MODO ESCURO — CRIAR EQUIPE
+========================================= */
+
+:global(:root[data-theme='dark']) .modal {
+  color: #edf7f1;
+  background: #10291f;
+  border-color: #365544;
+}
+
+/* CABEÇALHO */
+
+:global(:root[data-theme='dark']) .modalHeader {
+  background: linear-gradient(135deg, #173e2e, #20543e);
+  border-bottom-color: #365b49;
+}
+
+:global(:root[data-theme='dark']) .eyebrow {
+  color: #69dca8;
+}
+
+:global(:root[data-theme='dark']) .modalHeader h2 {
+  color: #f0f8f3;
+}
+
+:global(:root[data-theme='dark']) .modalHeader p {
+  color: #b2c8ba;
+}
+
+:global(:root[data-theme='dark']) .closeButton {
+  color: #d9eee2;
+  background: #214735;
+  border-color: #416950;
+}
+
+:global(:root[data-theme='dark']) .closeButton:hover {
+  color: #ffabb5;
+  background: #492a32;
+  border-color: #8e4c59;
+}
+
+/* ÁREA DA IMAGEM */
+
+:global(:root[data-theme='dark']) .imagePreview {
+  color: #a8d7ba;
+  background: linear-gradient(145deg, #1b4230, #244b36);
+  border-color: #527b60;
+}
+
+:global(:root[data-theme='dark']) .imagePreview:hover {
+  background: #28563d;
+  border-color: #6cdda5;
+}
+
+:global(:root[data-theme='dark']) .cameraCircle {
+  color: #78e3b2;
+  background: #28553d;
+  border-color: #477b59;
+}
+
+:global(:root[data-theme='dark']) .imagePlaceholder strong,
+:global(:root[data-theme='dark']) .imagePreview strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .imagePlaceholder span,
+:global(:root[data-theme='dark']) .imagePreview span {
+  color: #aec5b5;
+}
+
+/* BOTÕES DA IMAGEM */
+
+:global(:root[data-theme='dark']) .changeImageButton {
+  color: #84e4b6;
+  background: #193f2e;
+  border-color: #427456;
+}
+
+:global(:root[data-theme='dark']) .changeImageButton:hover {
+  color: #a7f1cb;
+  background: #24533b;
+  border-color: #70dba4;
+}
+
+:global(:root[data-theme='dark']) .removeImageButton {
+  color: #ffabb5;
+  background: #462831;
+  border-color: #7a424d;
+}
+
+:global(:root[data-theme='dark']) .removeImageButton:hover {
+  background: #5b303a;
+  border-color: #a95865;
+}
+
+:global(:root[data-theme='dark']) .imageError {
+  color: #ff9eaa;
+}
+
+:global(:root[data-theme='dark']) .identityHint {
+  color: #b6d2c0;
+}
+
+/* SEÇÕES */
+
+:global(:root[data-theme='dark']) .sectionNumber {
+  color: #83e6b8;
+  background: #214b36;
+  border-color: #426d50;
+}
+
+:global(:root[data-theme='dark']) .sectionHeading strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .sectionHeading span {
+  color: #aec4b5;
+}
+
+/* CAMPOS */
+
+:global(:root[data-theme='dark']) .field label {
+  color: #d6e9dc;
+}
+
+:global(:root[data-theme='dark']) .field input,
+:global(:root[data-theme='dark']) .field select {
+  color: #edf7f1;
+  background: #123e30;
+  border-color: #416b55;
+}
+
+:global(:root[data-theme='dark']) .field input::placeholder {
+  color: #9bb7a7;
+}
+
+:global(:root[data-theme='dark']) .field input:focus,
+:global(:root[data-theme='dark']) .field select:focus {
+  border-color: #64dca5;
+  background: #154332;
+  box-shadow: 0 0 0 3px rgba(100, 220, 165, 0.13);
+}
+
+:global(:root[data-theme='dark']) .fieldHint {
+  color: #a7bdad;
+}
+
+/* ATLETAS */
+
+:global(:root[data-theme='dark']) .selectionCount {
+  color: #83e6b8;
+  background: #214b36;
+  border-color: #426d50;
+}
+
+:global(:root[data-theme='dark']) .athleteSearch input {
+  color: #edf7f1;
+  background: #123e30;
+  border-color: #416b55;
+}
+
+:global(:root[data-theme='dark']) .athleteSearch input::placeholder {
+  color: #9bb7a7;
+}
+
+:global(:root[data-theme='dark']) .athletesList {
+  scrollbar-color: #47765b transparent;
+}
+
+:global(:root[data-theme='dark']) .athletesList::-webkit-scrollbar-thumb {
+  background: #47765b;
+}
+
+:global(:root[data-theme='dark']) .athleteItem {
+  color: #edf7f1;
+  background: #193b2c;
+  border-color: #365b46;
+}
+
+:global(:root[data-theme='dark']) .athleteItem:hover {
+  background: #214c37;
+  border-color: #5b9c76;
+}
+
+:global(:root[data-theme='dark']) .athleteSelected {
+  background: #214c37;
+  border-color: #65d89d;
+}
+
+:global(:root[data-theme='dark']) .athleteAvatar {
+  color: #83e6b8;
+  background: #28543d;
+}
+
+:global(:root[data-theme='dark']) .athleteInfo strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .athleteInfo span {
+  color: #aec5b5;
+}
+
+:global(:root[data-theme='dark']) .athleteCheck {
+  color: #b4cbbd;
+  background: #173729;
+  border-color: #45664f;
+}
+
+:global(:root[data-theme='dark']) .athleteSelected .athleteCheck {
+  color: #10291f;
+  background: #73dfaa;
+  border-color: #73dfaa;
+}
+
+:global(:root[data-theme='dark']) .emptyAthletes {
+  color: #b0c7b8;
+  background: #173529;
+  border-color: #456950;
+}
+
+/* DATA E HORÁRIO */
+
+:global(:root[data-theme='dark']) .dateInputWrapper {
+  color: #83e3b3;
+  background: #123e30;
+  border-color: #416b55;
+}
+
+:global(:root[data-theme='dark']) .dateInputWrapper input {
+  color: #edf7f1;
+  color-scheme: dark;
+}
+
+/* PRÉVIA DA PARTIDA */
+
+:global(:root[data-theme='dark']) .matchPreview {
+  color: #83e3b3;
+  background: #1b4030;
+  border-color: #3c684c;
+}
+
+:global(:root[data-theme='dark']) .matchPreview span {
+  color: #b2cbb9;
+}
+
+:global(:root[data-theme='dark']) .matchPreview strong {
+  color: #edf7f1;
+}
+
+/* CORES */
+
+:global(:root[data-theme='dark']) .colorsArea {
+  background: #17372a;
+  border-color: #3c6049;
+}
+
+:global(:root[data-theme='dark']) .selectedColorInfo {
+  border-top-color: #41604c;
+}
+
+:global(:root[data-theme='dark']) .selectedColorInfo span {
+  color: #aec5b5;
+}
+
+:global(:root[data-theme='dark']) .selectedColorInfo strong {
+  color: #edf7f1;
+}
+
+:global(:root[data-theme='dark']) .customColorButton {
+  background: #234737;
+  border-color: #496b55;
+}
+
+:global(:root[data-theme='dark']) .colorSelected {
+  border-color: #10291f;
+}
+
+:global(:root[data-theme='dark']) .customColorSelected {
+  box-shadow: 0 0 0 2px #83e6b8;
+}
+
+/* PRÉVIA DA EQUIPE */
+
+:global(:root[data-theme='dark']) .teamPreview {
+  background: linear-gradient(135deg, #1a4030, #214c38);
+  border-color: #3e684e;
+}
+
+:global(:root[data-theme='dark']) .previewInfo span {
+  color: #a4d2b5;
+}
+
+:global(:root[data-theme='dark']) .previewInfo strong {
+  color: #f0f8f3;
+}
+
+:global(:root[data-theme='dark']) .previewInfo small {
+  color: #b1cbb9;
+}
+
+/* RODAPÉ */
+
+:global(:root[data-theme='dark']) .footer {
+  background: #142f24;
+  border-top-color: #365343;
+}
+
+:global(:root[data-theme='dark']) .requiredHint {
+  color: #aec3b4;
+}
+
+:global(:root[data-theme='dark']) .cancelButton {
+  color: #d5e8dc;
+  background: #1b3d2d;
+  border-color: #45644f;
+}
+
+:global(:root[data-theme='dark']) .cancelButton:hover {
+  background: #28513b;
+  border-color: #619675;
+}
+
+:global(:root[data-theme='dark']) .createButton {
+  color: #08291d;
+  background: #49c994;
+  border-color: #49c994;
+}
+
+:global(:root[data-theme='dark']) .createButton:hover:not(:disabled) {
+  color: #08291d;
+  background: #65dda9;
+  border-color: #65dda9;
+}
+
+/* ACESSIBILIDADE */
+
+:global(:root[data-theme='dark']) .closeButton:focus-visible,
+:global(:root[data-theme='dark']) .changeImageButton:focus-visible,
+:global(:root[data-theme='dark']) .removeImageButton:focus-visible,
+:global(:root[data-theme='dark']) .customColorButton:focus-visible,
+:global(:root[data-theme='dark']) .colorButton:focus-visible,
+:global(:root[data-theme='dark']) .cancelButton:focus-visible,
+:global(:root[data-theme='dark']) .createButton:focus-visible,
+:global(:root[data-theme='dark']) .athleteItem:focus-visible {
+  outline-color: #77e2af;
 }

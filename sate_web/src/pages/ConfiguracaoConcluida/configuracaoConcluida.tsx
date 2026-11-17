@@ -14,6 +14,7 @@ import {
 } from 'react-icons/fa';
 
 import styles from './configuracaoConcluida.module.css';
+import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 interface EstadoNavegacao {
   modalidade?: string;
@@ -307,10 +308,7 @@ export default function ConfiguracaoConcluida() {
             disabled={salvando}
           >
             {salvando ? (
-              <>
-                <span className={styles.spinner} />
-                Salvando...
-              </>
+              <LoadingState variant="inline" title="Finalizando configuração..." />
             ) : (
               <>
                 Ir para o início

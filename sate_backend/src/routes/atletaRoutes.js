@@ -80,6 +80,24 @@ const uploadDocumento = multer({
 // ATLETAS DISPONÍVEIS
 // =====================================
 
+/**
+ * @swagger
+ * /api/atletas/disponiveis:
+ *   get:
+ *     tags: [Atletas]
+ *     summary: Listar atletas disponíveis
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '500':
+ *         description: Erro interno
+ */
 router.get(
     '/disponiveis',
     autenticar,
@@ -90,6 +108,24 @@ router.get(
 // LISTAR ATLETAS
 // =====================================
 
+/**
+ * @swagger
+ * /api/atletas:
+ *   get:
+ *     tags: [Atletas]
+ *     summary: Listar atletas
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '500':
+ *         description: Erro interno
+ */
 router.get(
     '/',
     autenticar,
@@ -100,6 +136,41 @@ router.get(
 // CRIAR ATLETA
 // =====================================
 
+/**
+ * @swagger
+ * /api/atletas:
+ *   post:
+ *     tags: [Atletas]
+ *     summary: Cadastrar atleta
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               cpf:
+ *                 type: string
+ *               categoria:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '201':
+ *         description: Recurso criado, quando aplicável
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '500':
+ *         description: Erro interno
+ */
 router.post(
     '/',
     autenticar,
@@ -110,6 +181,32 @@ router.post(
 // PARTIDAS DO ATLETA
 // =====================================
 
+/**
+ * @swagger
+ * /api/atletas/{id}/partidas:
+ *   get:
+ *     tags: [Atletas]
+ *     summary: Listar partidas do atleta
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.get(
     '/:id/partidas',
     autenticar,
@@ -120,6 +217,44 @@ router.get(
 // DOCUMENTOS
 // =====================================
 
+/**
+ * @swagger
+ * /api/atletas/{id}/documentos:
+ *   post:
+ *     tags: [Atletas]
+ *     summary: Enviar documento PDF
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               arquivo:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '201':
+ *         description: Recurso criado, quando aplicável
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.post(
     '/:id/documentos',
     autenticar,
@@ -131,6 +266,32 @@ router.post(
 // BUSCAR ATLETA
 // =====================================
 
+/**
+ * @swagger
+ * /api/atletas/{id}:
+ *   get:
+ *     tags: [Atletas]
+ *     summary: Buscar atleta
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.get(
     '/:id',
     autenticar,
@@ -141,6 +302,39 @@ router.get(
 // ATUALIZAR ATLETA
 // =====================================
 
+/**
+ * @swagger
+ * /api/atletas/{id}:
+ *   put:
+ *     tags: [Atletas]
+ *     summary: Atualizar atleta
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             additionalProperties: true
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.put(
     '/:id',
     autenticar,
@@ -151,6 +345,32 @@ router.put(
 // EXCLUIR ATLETA
 // =====================================
 
+/**
+ * @swagger
+ * /api/atletas/{id}:
+ *   delete:
+ *     tags: [Atletas]
+ *     summary: Excluir atleta
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.delete(
     '/:id',
     autenticar,

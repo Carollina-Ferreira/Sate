@@ -22,7 +22,12 @@ function verificar(res,code) { expect(res.status).toHaveBeenCalledWith(code); }
 
 const controller = require('../../src/controllers/atletaController');
 describe('Atletas - buscas, permissões e erros reais', () => {
- beforeEach(() => jest.resetAllMocks());
+ beforeEach(() => {
+   jest.resetAllMocks();
+   // resetAllMocks limpa também o mock de $transaction.
+   // Recria a transação simulada para executar o callback do controller.
+   prisma.$transaction.mockImplementation(async (callback) => callback(prisma));
+ });
  const treinador={id:7};
  test('listar atletas restringe resultados ao treinador logado',async()=>{
    prisma.treinador.findUnique.mockResolvedValue(treinador);
@@ -78,7 +83,14 @@ describe('Atletas - buscas, permissões e erros reais', () => {
    const res=await executar(controller,'excluirAtleta',requisicao({id:'22'}));
    verificar(res,200);
    expect(prisma.$transaction).toHaveBeenCalledTimes(1);
-   expect(prisma.notificacao.updateMany).toHaveBeenCalled();
+   expect(prisma.notificacao.updateMany).toHaveBeenCalledWith({
+     where: {
+       treinadorId: 7,
+       chave: 'cadastro-atleta-22',
+       resolvidaEm: null,
+     },
+     data: { resolvidaEm: expect.any(Date) },
+   });
    expect(prisma.atleta.delete).toHaveBeenCalledWith({where:{id:22}});
  });
 });

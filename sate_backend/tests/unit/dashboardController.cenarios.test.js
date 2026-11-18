@@ -32,7 +32,8 @@ describe('Dashboard - autorização e falhas do banco',()=>{
     prisma.treinador.findUnique.mockRejectedValue(new Error('banco offline'));
     const res=await executar();
     // O controller faz tratamento próprio de falha; não deve retornar indicadores.
-    expect(res.json).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({mensagem:'Erro ao carregar o dashboard.'}));
     expect(prisma.atleta.findMany).not.toHaveBeenCalled();
   });
 });

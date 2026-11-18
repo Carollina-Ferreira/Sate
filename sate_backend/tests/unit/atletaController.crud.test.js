@@ -78,7 +78,7 @@ describe('Atletas - CRUD completo e upload de documentos',()=>{
   })}));
  });
  test('atualização modifica dados do atleta e nome de usuário',async()=>{
-  prisma.atleta.findFirst.mockResolvedValue({id:22,usuarioId:12,usuario:{id:12}});
+  prisma.atleta.findFirst.mockResolvedValueOnce({id:22,usuarioId:12,usuario:{id:12}}).mockResolvedValue(null);
   const res=await executar('atualizarAtleta',{
    nome:'Nome atualizado',email:'NOVO@exemplo.com',avatarUrl:'/avatar.png',
    cpf:'111',rg:'123',categoria:'Sub-17',telefone:'11999',sexo:'Feminino',dataNascimento:'2007-01-01'

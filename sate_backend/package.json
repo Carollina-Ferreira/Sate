@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "test": "jest --runInBand",
-    "test:unit": "jest tests/unit --runInBand",
-    "test:routes": "jest tests/routes --runInBand",
-    "test:coverage": "jest --coverage --runInBand"
+    "test": "jest --runInBand --silent",
+    "test:unit": "jest tests/unit --runInBand --silent",
+    "test:routes": "jest tests/routes --runInBand --silent",
+    "test:coverage": "jest --coverage --runInBand --silent"
   },
   "keywords": [],
   "author": "",

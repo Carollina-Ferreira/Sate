@@ -51,7 +51,7 @@ describe('Categorias de análise - CRUD, validação e ordenação',()=>{
    expect(prisma.configuracaoAnalise.create).not.toHaveBeenCalled();
  });
  test('recusa categoria duplicada',async()=>{
-   prisma.configuracaoAnalise.findFirst.mockResolvedValue({id:12,nome:'Passe'});
+   prisma.configuracaoAnalise.findMany.mockResolvedValue([{id:12,nome:'Passe'}]);
    codigo(await executar('criarConfiguracaoAnalise',{nome:'Passe'}),409);
    expect(prisma.configuracaoAnalise.create).not.toHaveBeenCalled();
  });
@@ -64,9 +64,7 @@ describe('Categorias de análise - CRUD, validação e ordenação',()=>{
    })}));
  });
  test('cria categoria com ordem após a última',async()=>{
-   prisma.configuracaoAnalise.findFirst
-     .mockResolvedValueOnce(null)
-     .mockResolvedValueOnce({ordem:4});
+   prisma.configuracaoAnalise.findFirst.mockResolvedValue({ordem:4});
    prisma.configuracaoAnalise.create.mockResolvedValue({id:18,nome:'Assistência'});
    codigo(await executar('criarConfiguracaoAnalise',{nome:'Assistência'}),201);
    expect(prisma.configuracaoAnalise.create).toHaveBeenCalledWith(expect.objectContaining({data:expect.objectContaining({ordem:5})}));

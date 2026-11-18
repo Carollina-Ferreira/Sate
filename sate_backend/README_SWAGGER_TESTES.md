@@ -65,7 +65,7 @@ Os comandos `npm test`, `npm run test:unit`, `npm run test:routes` e `npm run te
 
 Os testes também são executados automaticamente na branch de desenvolvimento dos testes, por `.github/workflows/tcc-sate-coverage.yml`, com relatórios consultáveis na aba Actions do GitHub.
 
-Na execução validada de 18/11/2026 (antes de acrescentar a última suíte de preferências), **445 testes passaram**, com 88,10% de statements, 80,34% de branches, 98,57% de functions e 89,09% de lines. Consulte o último relatório de Actions antes de usar números na apresentação.
+Na execução validada de 18/11/2026 (GitHub Actions, execução 44315924386), **466 testes passaram em 59 suítes**, com **90,81% de statements, 83,00% de branches, 99,04% de functions e 91,94% de lines**. Consulte o relatório da aba Actions antes de usar números na apresentação.
 
 ## 7. Limitações e checklist de revisão
 

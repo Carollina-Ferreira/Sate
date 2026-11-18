@@ -37,7 +37,7 @@ describe('Configuração de análise - falhas e permissões',()=>{
  test('treinador inexistente não consulta configuração',async()=>{
   prisma.treinador.findUnique.mockResolvedValue(null);
   const res=await executar('listarConfiguracoesAnalise');
-  expect(res.status).toHaveBeenCalledWith(404);
+  expect(res.status).toHaveBeenCalledWith(401);
   expect(prisma.configuracaoAnalise.findMany).not.toHaveBeenCalled();
  });
 });

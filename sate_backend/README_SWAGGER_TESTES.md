@@ -57,10 +57,20 @@ O Jest executa os testes unitários **sem banco de dados real**. Isso não demon
 
 **Exemplo de teste HTTP:** abra `tests/routes/atletaRoutes.test.js` e explique que Supertest chama o Express, enquanto o middleware e os controllers são simulados. Esse teste mede roteamento e aplicação do middleware configurado no teste — não acesso ao banco.
 
-## 6. Limitações e checklist de revisão
+## 6. Cobertura mínima obrigatória de 80%
 
-- Os testes foram adicionados ao código, mas **ainda não foram executados com todas as dependências instaladas** no ambiente do SATE. Não declare porcentagem de cobertura ou aprovação sem rodar `npm run test:coverage`.
+A configuração `jest.config.cjs` exige agora cobertura global mínima de **80% em statements, branches, functions e lines**. Se qualquer métrica ficar abaixo de 80%, `npm run test:coverage` falha. Não são excluídos controllers ou middleware para inflar o relatório.
+
+Os comandos `npm test`, `npm run test:unit`, `npm run test:routes` e `npm run test:coverage` usam `--silent`: mensagens `console.error` produzidas por erros de banco **simulados nos testes** deixam de poluir o terminal, mas o Jest continua exibindo testes que falharem. Isso não altera os logs reais da API ao executar `npm run dev`.
+
+Os testes também são executados automaticamente na branch de desenvolvimento dos testes, por `.github/workflows/tcc-sate-coverage.yml`, com relatórios consultáveis na aba Actions do GitHub.
+
+Na execução validada de 18/11/2026 (antes de acrescentar a última suíte de preferências), **445 testes passaram**, com 88,10% de statements, 80,34% de branches, 98,57% de functions e 89,09% de lines. Consulte o último relatório de Actions antes de usar números na apresentação.
+
+## 7. Limitações e checklist de revisão
+
+- Os testes foram executados no GitHub Actions com dependências instaladas e estão sendo validados também após a inclusão da exigência de 80%. Reexecute `npm run test:coverage` localmente para confirmar no computador do TCC.
 - Há 55 operações de rota documentadas, mas não há 55 controllers diferentes. Cada operação da API foi incluída nos testes HTTP.
-- Os testes unitários existentes exercitam algumas regras por controller; para garantir cobertura total de todos os métodos, cenários de sucesso, falhas, permissões, filtros, upload e serviços, é necessário ampliar os testes e analisar o relatório de cobertura.
+- A cobertura acima de 80% não significa que todos os caminhos foram testados: ainda é importante avaliar regras específicas, integração com MySQL, envios reais de e-mail, upload e ponta a ponta.
 - A branch adiciona `/api/header` ao `server.js`, porque o arquivo `headerRoutes.js` existia, mas não estava montado na `develop`.
 - Confira se sua versão local tem alterações posteriores. Não mescle automaticamente em `main` sem revisão.

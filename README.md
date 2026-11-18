@@ -468,23 +468,6 @@ Verificação isolada de funções e regras de negócio, conforme a cobertura de
 
 ---
 
-## 🎨 Identidade Visual
-
-A identidade visual do SATE utiliza cores que representam desenvolvimento, organização e tecnologia.
-
-| Cor | Código |
-|---|---|
-| 🟢 Verde principal | `#16A875` |
-| 🌲 Verde escuro | `#005C45` |
-| 🔵 Azul | `#4EA5D9` |
-| 🌸 Rosa | `#EF476F` |
-| 🔴 Vermelho | `#D52941` |
-| ⚪ Branco | `#FFFFFF` |
-
-A interface busca manter uma experiência moderna, intuitiva e consistente entre as plataformas.
-
----
-
 ## 🎓 Contexto Acadêmico
 
 O SATE foi desenvolvido como **Trabalho de Conclusão de Curso (TCC)** do curso Técnico em Desenvolvimento de Sistemas do SENAI Osasco.

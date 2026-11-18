@@ -170,6 +170,13 @@ jest.mock('../../src/lib/prisma', () => ({
     },
   }));
 
+// O controller consulta metadados do Prisma, mas estes testes verificam
+// autorização/validação e não precisam do cliente gerado pelo Prisma.
+// Isso permite rodar Jest após npm install --ignore-scripts.
+jest.mock('@prisma/client', () => ({
+  Prisma: { dmmf: { datamodel: { models: [] } } }
+}));
+
 const prisma = require('../../src/lib/prisma');
 const { criarResposta } = require('../helpers/resposta');
 const controller = require('../../src/controllers/perfilAtletaController');

@@ -181,7 +181,7 @@ describe('videoController - regras de negócio', () => {
   test('desenho com coordenadas fora do vídeo é rejeitado', async () => {
     prepararVideo();
     const res=await executar('adicionarAnotacao',req({videoId:'4'},{
-      tempo:1,formas:[{tipo:'reta',cor:'#fff',pontos:[{x:2,y:0.5}]}]
+      tempo:1,formas:[{tipo:'linha',cor:'#fff',pontos:[{x:2,y:0.5}]}]
     }));
     status(res,400);
   });
@@ -195,7 +195,7 @@ describe('videoController - regras de negócio', () => {
     prepararVideo();
     prisma.anotacaoVideo.create.mockResolvedValue({id:20});
     const res=await executar('adicionarAnotacao',req({videoId:'4'},{
-      tempo:5,formas:[{tipo:'reta',cor:'#ffffff',pontos:[{x:0.1,y:0.5},{x:0.9,y:0.5}]}]
+      tempo:5,formas:[{tipo:'linha',cor:'#ffffff',pontos:[{x:0.1,y:0.5},{x:0.9,y:0.5}]}]
     }));
     status(res,201);
     expect(prisma.anotacaoVideo.create).toHaveBeenCalled();

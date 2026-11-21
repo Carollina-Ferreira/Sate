@@ -144,21 +144,54 @@ class EditarInformacoesPage extends StatefulWidget {
 class _EditarInformacoesPageState extends State<EditarInformacoesPage> {
   late final TextEditingController _nome;
   late final TextEditingController _email;
-  String? _erroNome, _erroEmail;
+  late final TextEditingController _altura;
+  late final TextEditingController _peso;
+  String? _erroNome, _erroEmail, _erroAltura, _erroPeso;
   bool _salvando = false;
 
   @override
   void initState() {
     super.initState();
+    final eu = SateStore.i.eu;
     _nome = TextEditingController(text: SateStore.i.nomeUsuario);
     _email = TextEditingController(text: SateStore.i.emailUsuario);
+    _altura = TextEditingController(text: eu.alturaCm > 0 ? '${eu.alturaCm}' : '');
+    _peso = TextEditingController(
+        text: eu.pesoKg > 0 ? eu.pesoKg.toStringAsFixed(eu.pesoKg % 1 == 0 ? 0 : 1) : '');
   }
 
   @override
   void dispose() {
     _nome.dispose();
     _email.dispose();
+    _altura.dispose();
+    _peso.dispose();
     super.dispose();
+  }
+
+  /// Altura em cm. Aceita "175" ou "1,75" (metros). Retorna null se vazio/inválido.
+  int? _lerAltura() {
+    final t = _altura.text.trim().replaceAll(',', '.');
+    final v = double.tryParse(t);
+    if (v == null) return null;
+    final cm = v < 3 ? (v * 100).round() : v.round();
+    return (cm >= 50 && cm <= 260) ? cm : null;
+  }
+
+  double? _lerPeso() {
+    final v = double.tryParse(_peso.text.trim().replaceAll(',', '.'));
+    return (v != null && v >= 10 && v <= 400) ? v : null;
+  }
+
+  /// IMC calculado na hora, com o que está digitado.
+  ({double valor, String classe})? _imcAoVivo() {
+    final h = _lerAltura(), p = _lerPeso();
+    if (h == null || p == null) return null;
+    final v = p / ((h / 100) * (h / 100));
+    final classe = v < 18.5
+        ? 'Abaixo do peso'
+        : (v < 25 ? 'Peso normal' : (v < 30 ? 'Sobrepeso' : 'Obesidade'));
+    return (valor: v, classe: classe);
   }
 
   Future<void> _salvar() async {
@@ -169,13 +202,36 @@ class _EditarInformacoesPageState extends State<EditarInformacoesPage> {
       _erroNome = nome.isEmpty ? 'Informe seu nome.' : null;
       _erroEmail = _emailValido(email) ? null : 'Informe um e-mail válido.';
     });
+    // Medidas do atleta (opcionais, mas se preenchidas precisam ser válidas).
+    int? altura;
+    double? peso;
+    if (!widget.treinador) {
+      final tA = _altura.text.trim(), tP = _peso.text.trim();
+      altura = _lerAltura();
+      peso = _lerPeso();
+      setState(() {
+        _erroAltura = (tA.isNotEmpty && altura == null) ? 'Altura inválida (ex.: 175 ou 1,75).' : null;
+        _erroPeso = (tP.isNotEmpty && peso == null) ? 'Peso inválido (ex.: 68,5).' : null;
+      });
+      if (_erroAltura != null || _erroPeso != null) return;
+    }
     if (_erroNome != null || _erroEmail != null) return;
-    if (nome == s.nomeUsuario && email == s.emailUsuario) {
+    final mudouMedidas = !widget.treinador &&
+        ((altura != null && altura != s.eu.alturaCm) ||
+            (peso != null && (peso - s.eu.pesoKg).abs() > 0.001));
+    final mudouConta = nome != s.nomeUsuario || email != s.emailUsuario;
+    if (!mudouConta && !mudouMedidas) {
       aviso(context, 'Nenhuma alteração para salvar.');
       return;
     }
     setState(() => _salvando = true);
-    final r = await PerfilService.atualizarDados(nome: nome, email: email);
+    var r = ResultadoPerfil.sucesso;
+    if (mudouConta) {
+      r = await PerfilService.atualizarDados(nome: nome, email: email);
+    }
+    if (r == ResultadoPerfil.sucesso && mudouMedidas) {
+      r = await PerfilService.atualizarMedidas(alturaCm: altura, pesoKg: peso);
+    }
     if (!mounted) return;
     setState(() => _salvando = false);
     switch (r) {
@@ -185,7 +241,7 @@ class _EditarInformacoesPageState extends State<EditarInformacoesPage> {
       case ResultadoPerfil.indisponivel:
         await _avisarIndisponivel(context, 'nome e e-mail');
       case ResultadoPerfil.falha:
-        aviso(context, 'Não foi possível salvar. Tente novamente.');
+        aviso(context, PerfilService.ultimaMensagem ?? 'Não foi possível salvar. Tente novamente.');
     }
   }
 
@@ -215,6 +271,50 @@ class _EditarInformacoesPageState extends State<EditarInformacoesPage> {
             prefixIcon: Icon(Icons.mail_outline_rounded, color: c.texto2),
           ),
         ),
+        if (!widget.treinador) ...[
+          const SizedBox(height: 14),
+          Row(children: [
+            Expanded(
+              child: TextField(
+                controller: _altura,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                onChanged: (_) => setState(() => _erroAltura = null),
+                style: TextStyle(color: c.texto),
+                decoration: decoracaoCampo(context, 'Altura (cm)').copyWith(
+                  errorText: _erroAltura,
+                  prefixIcon: Icon(Icons.height_rounded, color: c.texto2),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: TextField(
+                controller: _peso,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                onChanged: (_) => setState(() => _erroPeso = null),
+                style: TextStyle(color: c.texto),
+                decoration: decoracaoCampo(context, 'Peso (kg)').copyWith(
+                  errorText: _erroPeso,
+                  prefixIcon: Icon(Icons.monitor_weight_outlined, color: c.texto2),
+                ),
+              ),
+            ),
+          ]),
+          const SizedBox(height: 10),
+          Builder(builder: (_) {
+            final imc = _imcAoVivo();
+            return Text(
+              imc == null
+                  ? 'Informe altura e peso para ver seu IMC.'
+                  : 'IMC ${imc.valor.toStringAsFixed(1)} · ${imc.classe}',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: imc == null ? FontWeight.w400 : FontWeight.w700,
+                color: imc == null ? c.texto2 : c.primaria,
+              ),
+            );
+          }),
+        ],
         const SizedBox(height: 14),
         TextField(
           readOnly: true,
@@ -274,8 +374,8 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
   Future<void> _salvar() async {
     setState(() {
       _eAtual = _atual.text.isEmpty ? 'Informe a senha atual.' : null;
-      _eNova = _nova.text.length < 6
-          ? 'A senha deve ter pelo menos 6 caracteres.'
+      _eNova = _nova.text.length < 8
+          ? 'A senha deve ter pelo menos 8 caracteres.'
           : (_nova.text == _atual.text ? 'A nova senha deve ser diferente da atual.' : null);
       _eConfirma = _confirma.text != _nova.text ? 'As senhas não coincidem.' : null;
     });
@@ -292,7 +392,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
       case ResultadoPerfil.indisponivel:
         await _avisarIndisponivel(context, 'senha');
       case ResultadoPerfil.falha:
-        aviso(context, 'Não foi possível alterar a senha. Verifique a senha atual.');
+        aviso(context, PerfilService.ultimaMensagem ?? 'Não foi possível alterar a senha. Verifique a senha atual.');
     }
   }
 

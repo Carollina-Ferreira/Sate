@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../sate/ui/fundo.dart';
 import 'package:http/http.dart' as http;
 
+import '../services/api_config.dart';
 import '../services/demo_http.dart';
 import '../theme/sate_theme.dart';
 
@@ -30,7 +31,7 @@ class _CadastroPageState extends State<CadastroPage> {
   static const rosa = Color(0xFFEF476F);
   static const azul = Color(0xFF003D31);
 
-  static const String apiUrl = 'http://localhost:3000';
+  static String get apiUrl => ApiConfig.baseUrl;
 
   @override
   void dispose() {
@@ -597,7 +598,7 @@ class _CadastroPageState extends State<CadastroPage> {
       );
       debugPrint('================================');
 
-      final resposta = await demoPost(
+      final resposta = await apiPost(
             Uri.parse(
               '$apiUrl/api/auth/cadastro',
             ),

@@ -407,6 +407,10 @@ class TreinoDetalhePage extends StatelessWidget {
 /// Cria ou edita um treino (folha inferior).
 Future<void> editarTreino(BuildContext context, {Treino? atual, DateTime? data}) async {
   final s = SateStore.i;
+  if (atual == null && s.equipes.isEmpty) {
+    aviso(context, 'Crie uma equipe pelo site para agendar treinos.');
+    return;
+  }
   final titulo = TextEditingController(text: atual?.titulo ?? '');
   final objetivo = TextEditingController(text: atual?.objetivo ?? '');
   final foco = TextEditingController(text: atual?.foco ?? '');

@@ -22,7 +22,7 @@ String quandoTxt(DateTime d, DateTime hoje) {
 double _evolucao(SateStore s, Atleta a) {
   var soma = 0.0, n = 0;
   for (final t in s.testesDoAtleta(a).where((t) => t.modalidade == null)) {
-    final r = s.resultadosDe(a.nome, teste: t.nome);
+    final r = s.resultadosDe(a.id, teste: t.nome);
     if (r.length < 2) continue;
     soma += t.escore(r.last.valor) - t.escore(r.first.valor);
     n++;

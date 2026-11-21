@@ -1,3 +1,12 @@
+# v0.4.0 — Integração com o backend
+
+O app passou a consumir a API real do SATE e os dados de demonstração foram removidos. Veja `INTEGRACAO_API.md`.
+
+* Corrigido: `pubspec.yaml` tinha a chave `version` duplicada; `atleta_vinculo_page.dart` tinha um parêntese sobrando (erro de compilação).
+* Novos pacotes: `flutter_secure_storage`, `http_parser`.
+
+---
+
 # SATE Mobile — v0.3.0+4 (continuação da v0.2.1+3 · somente front-end Flutter)
 
 Backend, banco, APIs, rotas e logins **não foram alterados**. Depois de abrir o projeto, rode `flutter pub get`

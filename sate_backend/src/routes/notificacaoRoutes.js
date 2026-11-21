@@ -2,6 +2,8 @@
 const express = require('express');
 
 const autenticar = require('../middleware/authMiddleware');
+const { comContexto } = require('../lib/acesso');
+const atleta = require('../controllers/notificacaoAtletaController');
 
 const {
     listarNotificacoes,
@@ -14,6 +16,12 @@ const router = express.Router();
 // Todas as rotas exigem autenticação.
 router.use(autenticar);
 
+// Atletas (aplicativo mobile) usam as mesmas URLs, mas leem a tabela
+// NotificacaoAtleta. Para treinadores, o fluxo original continua igual.
+const carregarContexto = comContexto();
+const daqui = (handlerAtleta) => (req, res, next) =>
+    req.ctx.tipo === 'ATLETA' ? handlerAtleta(req, res, next) : next();
+
 // ============================================================
 // LISTAR NOTIFICAÇÕES
 // GET /api/notificacoes
@@ -21,6 +29,8 @@ router.use(autenticar);
 
 router.get(
     '/',
+    carregarContexto,
+    daqui(atleta.listar),
     listarNotificacoes
 );
 
@@ -31,6 +41,8 @@ router.get(
 
 router.patch(
     '/lidas',
+    carregarContexto,
+    daqui(atleta.marcarTodasLidas),
     marcarTodasComoLidas
 );
 
@@ -41,6 +53,8 @@ router.patch(
 
 router.patch(
     '/:id/lida',
+    carregarContexto,
+    daqui(atleta.marcarLida),
     marcarNotificacaoComoLida
 );
 

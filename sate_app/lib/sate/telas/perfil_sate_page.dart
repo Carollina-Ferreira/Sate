@@ -1,3 +1,5 @@
+import 'equipe_agenda.dart';
+import 'perfil_profissional.dart';
 import 'package:flutter/material.dart';
 
 import '../data/modelos.dart';
@@ -125,20 +127,33 @@ class PerfilTreinadorSatePage extends StatelessWidget {
             const SizedBox(height: 30),
             const SecaoCab('Equipes'),
             const SizedBox(height: 4),
+            if (s.equipes.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  'Nenhuma equipe ainda. Crie uma equipe pelo site e ela aparece aqui.',
+                  style: TextStyle(color: c.texto2),
+                ),
+              ),
             for (final e in s.equipes)
               LinhaItem(
                 icone: Icons.groups_rounded,
                 titulo: e.nome,
-                sub: '${s.atletasDaEquipe(e.id).length} atletas · ${e.modalidade}',
+                sub: '${s.atletasDaEquipe(e.id).length} atletas · ${e.modalidade}'
+                    '${e.dias.isEmpty ? ' · defina os dias de treino' : ''}',
+                onTap: () => editarEquipe(context, e),
               ),
             const SizedBox(height: 18),
-            const SecaoCab('Informações profissionais'),
+            SecaoCab('Informações profissionais',
+                acao: 'Editar', onAcao: () => editarPerfilProfissional(context)),
             const SizedBox(height: 4),
-            _linhaInfo(c, 'Formação', 'Educação Física'),
+            _linhaInfo(c, 'Formação', s.formacao.isEmpty ? 'Não informado' : s.formacao),
             Divider(height: 1, color: c.linha),
-            _linhaInfo(c, 'Registro profissional', 'Não informado'),
+            _linhaInfo(c, 'Registro profissional',
+                s.registroProfissional.isEmpty ? 'Não informado' : s.registroProfissional),
             Divider(height: 1, color: c.linha),
-            _linhaInfo(c, 'Experiência', '8 anos'),
+            _linhaInfo(
+                c, 'Experiência', s.experiencia.isEmpty ? 'Não informado' : s.experiencia),
             const SizedBox(height: 22),
             LinhaItem(
               icone: Icons.manage_accounts_outlined,
@@ -203,7 +218,7 @@ class PerfilAtletaSatePage extends StatelessWidget {
             _linhaInfo(c, 'Posição', a.posicao),
             Divider(height: 1, color: c.linha),
             _linhaInfo(c, 'Idade · altura · peso',
-                '${a.idade} anos · ${a.alturaCm} cm · ${a.pesoKg.toStringAsFixed(0)} kg'),
+                '${a.idadeTxt} · ${a.alturaTxt} · ${a.pesoTxt}${a.imc == null ? '' : ' · IMC ${a.imcTxt}'}'),
             const SizedBox(height: 22),
             const SecaoCab('Histórico esportivo'),
             const SizedBox(height: 10),

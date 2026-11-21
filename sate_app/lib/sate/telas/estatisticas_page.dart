@@ -17,11 +17,11 @@ class EstatisticasPage extends StatefulWidget {
 
 class _EstatisticasPageState extends State<EstatisticasPage> {
   int _aba = 0;
-  String _atletaId = 'a1';
+  String _atletaId = '';
   String _teste = catalogoTestes.first.nome;
   int _periodo = 1; // 0=3m 1=6m 2=tudo
-  final Set<String> _comparar = {'a1', 'a2'};
-  String? _equipe = 'eq1';
+  final Set<String> _comparar = {};
+  String? _equipe;
 
   List<ResultadoTeste> _filtra(List<ResultadoTeste> r) {
     if (_periodo == 2) return r;
@@ -35,6 +35,17 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
       animation: SateStore.i,
       builder: (context, _) {
         final c = context.sc;
+        final st = SateStore.i;
+        // Ajusta a seleção aos atletas/equipes reais (vindos do servidor).
+        if (st.atletas.isNotEmpty) {
+          if (!st.atletas.any((a) => a.id == _atletaId)) _atletaId = st.atletas.first.id;
+          _comparar.removeWhere((id) => !st.atletas.any((a) => a.id == id));
+          if (_comparar.isEmpty) {
+            _comparar.addAll(st.atletas.take(2).map((a) => a.id));
+          }
+        }
+        if (_equipe != null && !st.equipes.any((e) => e.id == _equipe)) _equipe = null;
+        final semAtletas = st.atletas.isEmpty;
         return corpoDeTela(
           embutido: widget.embutido,
           titulo: 'Gráficos e',
@@ -45,8 +56,17 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
                 FiltroChip(e.value, _aba == e.key, () => setState(() => _aba = e.key)),
             ]),
             const SizedBox(height: 16),
-            if (_aba == 0) ..._individual(c),
-            if (_aba == 1) ..._comparacao(c),
+            if (semAtletas && (_aba == 0 || _aba == 1))
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: Text(
+                  'Nenhum atleta cadastrado ainda. Cadastre atletas pelo site e eles aparecem aqui.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: c.texto2),
+                ),
+              ),
+            if (!semAtletas && _aba == 0) ..._individual(c),
+            if (!semAtletas && _aba == 1) ..._comparacao(c),
             if (_aba == 2) ..._coletivo(c),
             if (_aba == 3) ..._frequencia(c),
           ],
@@ -137,7 +157,7 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
     final s = SateStore.i;
     final a = s.atletas.firstWhere((x) => x.id == _atletaId);
     final tipo = _tipo;
-    final res = _filtra(s.resultadosDe(a.nome, teste: tipo.nome));
+    final res = _filtra(s.resultadosDe(a.id, teste: tipo.nome));
     return [
       _linhaSeletores(),
       const SizedBox(height: 12),
@@ -183,7 +203,7 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
     final series = <SerieLinha>[];
     List<String> rotulos = [];
     for (var i = 0; i < selecionados.length; i++) {
-      final r = _filtra(s.resultadosDe(selecionados[i].nome, teste: tipo.nome));
+      final r = _filtra(s.resultadosDe(selecionados[i].id, teste: tipo.nome));
       if (r.isEmpty) continue;
       if (rotulos.length < r.length) {
         rotulos = [for (final x in r) '${x.data.day}/${x.data.month}'];
@@ -194,7 +214,7 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
     // Ranking por último resultado de todos os atletas que fazem o teste.
     final ranking = <(String, double)>[];
     for (final a in s.atletas) {
-      final r = s.resultadosDe(a.nome, teste: tipo.nome);
+      final r = s.resultadosDe(a.id, teste: tipo.nome);
       if (r.isNotEmpty) ranking.add((a.nome.split(' ').first, r.last.valor));
     }
     ranking.sort((x, y) => tipo.menorMelhor ? x.$2.compareTo(y.$2) : y.$2.compareTo(x.$2));
@@ -264,7 +284,7 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
 
     // Média do grupo no teste escolhido (k-ésimo resultado de cada atleta).
     final listas = [
-      for (final a in grupo) _filtra(s.resultadosDe(a.nome, teste: tipo.nome)),
+      for (final a in grupo) _filtra(s.resultadosDe(a.id, teste: tipo.nome)),
     ].where((l) => l.isNotEmpty).toList();
     final n = listas.isEmpty ? 0 : listas.map((l) => l.length).reduce((a, b) => a < b ? a : b);
     final mediaTeste = <double>[

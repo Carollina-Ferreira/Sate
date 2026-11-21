@@ -10,6 +10,8 @@ const {
   buscarPerfil,
 } = require('../controllers/usuarioController');
 
+const { alterarSenha } = require('../controllers/senhaController');
+
 const router = express.Router();
 
 /*
@@ -99,5 +101,11 @@ router.put(
   upload.single('avatar'),
   atualizarPerfil
 );
+
+/*
+ * PUT
+ * Troca a senha do usuário logado.
+ */
+router.put('/senha', authMiddleware, alterarSenha);
 
 module.exports = router;

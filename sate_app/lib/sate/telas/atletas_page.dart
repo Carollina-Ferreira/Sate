@@ -318,7 +318,7 @@ class _Resumo extends StatelessWidget {
     // Evolução geral (como na versão anterior): média dos escores dos testes gerais.
     var atualSoma = 0.0, primSoma = 0.0, nTestes = 0;
     for (final t in s.testesDoAtleta(a).where((t) => t.modalidade == null)) {
-      final r = s.resultadosDe(a.nome, teste: t.nome);
+      final r = s.resultadosDe(a.id, teste: t.nome);
       if (r.isEmpty) continue;
       atualSoma += t.escore(r.last.valor);
       primSoma += t.escore(r.first.valor);
@@ -405,9 +405,10 @@ class _Resumo extends StatelessWidget {
       Superficie(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Row(children: [
-          dado('Idade', '${a.idade} anos'),
-          dado('Altura', '${a.alturaCm} cm'),
-          dado('Peso', '${a.pesoKg.toStringAsFixed(0)} kg'),
+          dado('Idade', a.idadeTxt),
+          dado('Altura', a.alturaTxt),
+          dado('Peso', a.pesoTxt),
+          dado('IMC', a.imcTxt),
         ]),
       ),
       const SizedBox(height: 20),
@@ -761,7 +762,7 @@ class _TestesResumo extends StatelessWidget {
       const SizedBox(height: 10),
       for (final t in s.testesDoAtleta(a))
         () {
-          final r = s.resultadosDe(a.nome, teste: t.nome);
+          final r = s.resultadosDe(a.id, teste: t.nome);
           if (r.isEmpty) return const SizedBox.shrink();
           final melhorou =
               t.menorMelhor ? r.last.valor <= r.first.valor : r.last.valor >= r.first.valor;

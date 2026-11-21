@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../data/modelos.dart';
@@ -122,7 +126,7 @@ class _PostCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: AspectRatio(
               aspectRatio: 16 / 10,
-              child: Image.asset(p.imagem!, fit: BoxFit.cover),
+              child: imagemDoPost(p.imagem!),
             ),
           ),
         ],
@@ -162,6 +166,42 @@ class _PostCard extends StatelessWidget {
   }
 }
 
+// Cache simples para não decodificar a mesma foto a cada reconstrução da tela.
+final Map<String, Uint8List> _cacheImagens = {};
+
+/// Mostra a imagem de um post: foto escolhida (guardada como "data:image/...;base64,...")
+/// ou um asset antigo do app.
+Widget imagemDoPost(String src) {
+  if (src.startsWith('data:')) {
+    final bytes = _cacheImagens.putIfAbsent(src, () => base64Decode(src.split(',').last));
+    return Image.memory(bytes, fit: BoxFit.cover, width: double.infinity, gaplessPlayback: true);
+  }
+  return Image.asset(src, fit: BoxFit.cover, width: double.infinity);
+}
+
+/// Abre a câmera OU a galeria (as duas únicas opções) e devolve a foto comprimida.
+Future<String?> _escolherImagem(BuildContext context, ImageSource origem) async {
+  try {
+    final x = await ImagePicker().pickImage(
+      source: origem,
+      maxWidth: 1080,
+      imageQuality: 72, // reduz o tamanho: o feed é guardado no aparelho
+    );
+    if (x == null) return null;
+    final bytes = await x.readAsBytes();
+    return 'data:image/jpeg;base64,${base64Encode(bytes)}';
+  } catch (_) {
+    if (context.mounted) {
+      aviso(
+          context,
+          origem == ImageSource.camera
+              ? 'Não foi possível abrir a câmera. Verifique a permissão do app.'
+              : 'Não foi possível abrir a galeria. Verifique a permissão do app.');
+    }
+    return null;
+  }
+}
+
 Future<void> publicar(BuildContext context, {Post? atual}) async {
   final texto = TextEditingController(text: atual?.texto ?? '');
   String? imagem = atual?.imagem;
@@ -181,44 +221,56 @@ Future<void> publicar(BuildContext context, {Post? atual}) async {
           decoration: decoracaoCampo(ctx, 'No que você está pensando?'),
         ),
         const SizedBox(height: 16),
-        Text('Imagem', style: TextStyle(fontSize: 12.5, color: c.texto2)),
+        Text('Imagem (opcional)', style: TextStyle(fontSize: 12.5, color: c.texto2)),
         const SizedBox(height: 8),
-        SizedBox(
-          height: 72,
-          child: ListView(scrollDirection: Axis.horizontal, children: [
-            GestureDetector(
-              onTap: () => setM(() => imagem = null),
-              child: Container(
-                width: 72,
-                margin: const EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  color: c.superficie,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                      color: imagem == null ? c.rosa : Colors.transparent, width: 2),
-                ),
-                child: Icon(Icons.hide_image_outlined, color: c.texto2),
+        if (imagem != null) ...[
+          Stack(children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: SizedBox(
+                height: 150,
+                width: double.infinity,
+                child: imagemDoPost(imagem!),
               ),
             ),
-            for (final img in imagensFeed)
-              GestureDetector(
-                onTap: () => setM(() => imagem = img),
+            Positioned(
+              top: 6,
+              right: 6,
+              child: InkWell(
+                onTap: () => setM(() => imagem = null),
                 child: Container(
-                  width: 72,
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                        color: imagem == img ? c.rosa : Colors.transparent, width: 2),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: Image.asset(img, fit: BoxFit.cover),
-                  ),
+                  padding: const EdgeInsets.all(6),
+                  decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
+                  child: const Icon(Icons.close_rounded, size: 18, color: Colors.white),
                 ),
               ),
+            ),
           ]),
-        ),
+          const SizedBox(height: 10),
+        ],
+        Row(children: [
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: () async {
+                final r = await _escolherImagem(ctx, ImageSource.camera);
+                if (r != null) setM(() => imagem = r);
+              },
+              icon: const Icon(Icons.photo_camera_outlined),
+              label: const Text('Câmera'),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: () async {
+                final r = await _escolherImagem(ctx, ImageSource.gallery);
+                if (r != null) setM(() => imagem = r);
+              },
+              icon: const Icon(Icons.photo_library_outlined),
+              label: const Text('Galeria'),
+            ),
+          ),
+        ]),
         const SizedBox(height: 20),
         FilledButton(
           style: estiloBotao(ctx),

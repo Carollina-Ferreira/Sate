@@ -53,12 +53,20 @@ model Treinador {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Informações profissionais (preenchidas no aplicativo mobile).
+  formacao            String?
+  registroProfissional String?
+  experiencia         String?
+
   usuario              Usuario               @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   equipes              Equipe[]
   atletas              Atleta[]
   configuracoesAnalise ConfiguracaoAnalise[]
   notificacoes         Notificacao[]
   marcacoes            MarcacaoVideo[]
+  exercicios           Exercicio[]
+  treinos              Treino[]
+  eventosAgenda        EventoAgenda[]
 
   @@index([usuarioId])
 }
@@ -135,6 +143,9 @@ model Atleta {
   enderecoId     Int?      @unique
   equipeId       Int?
   treinadorId    Int?
+  posicao        String?
+  alturaCm       Int?
+  pesoKg         Float?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
@@ -151,6 +162,14 @@ model Atleta {
 
   // Marcações de vídeo associadas ao atleta.
   marcacoes MarcacaoVideo[]
+
+  // Integração com o aplicativo mobile.
+  treinosEspecificos TreinoAtleta[]
+  presencas          Presenca[]
+  testesFisicos      TesteFisico[]
+  metas              MetaAtleta[]
+  feedbacks          FeedbackAtleta[]
+  notificacoes       NotificacaoAtleta[]
 
   @@index([equipeId])
   @@index([treinadorId])
@@ -172,11 +191,20 @@ model Equipe {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
+  // Integração com o aplicativo mobile.
+  codigoConvite String? @unique
+  local         String?
+  diasTreino    String? // dias da semana separados por vírgula: 1=segunda ... 7=domingo
+  inicioMin     Int? // início padrão do treino, em minutos desde 00:00
+  duracaoMin    Int? // duração padrão do treino, em minutos
+
   treinador Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
 
   atletas              Atleta[]
   partidas             Partida[]
   configuracoesAnalise ConfiguracaoAnalise[]
+  treinos              Treino[]
+  eventosAgenda        EventoAgenda[]
 
   @@index([treinadorId], map: "Equipe_treinadorId_fkey")
 }
@@ -337,13 +365,18 @@ model Endereco {
 // ============================================================
 
 model Documento {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   nome      String
   tipo      String
   url       String
   atletaId  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Metadados usados pelo aplicativo mobile (nulos/padrão para documentos já existentes).
+  categoria String?
+  validade  DateTime?
+  aprovado  Boolean   @default(true)
+  obs       String?   @db.Text
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   atleta Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
 
@@ -382,6 +415,170 @@ model EmailVerificationToken {
   usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
   @@index([usuarioId, expiresAt])
+}
+
+// ============================================================
+// INTEGRAÇÃO MOBILE — EXERCÍCIOS, TREINOS, FREQUÊNCIA, TESTES,
+// AGENDA, METAS, FEEDBACKS E NOTIFICAÇÕES DO ATLETA
+// ============================================================
+
+model Exercicio {
+  id          Int      @id @default(autoincrement())
+  treinadorId Int
+  nome        String
+  grupo       String   @default("Geral")
+  series      Int      @default(3)
+  repeticoes  Int      @default(10)
+  duracaoSeg  Int      @default(0)
+  instrucoes  String?  @db.Text
+  video       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  treinador Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
+
+  @@index([treinadorId])
+}
+
+model Treino {
+  id          Int      @id @default(autoincrement())
+  equipeId    Int
+  treinadorId Int
+  titulo      String
+  objetivo    String?
+  foco        String?
+  observacoes String?  @db.Text
+  data        DateTime @db.Date
+  inicioMin   Int      @default(1080)
+  duracaoMin  Int      @default(60)
+  // Lista (JSON) com os ids dos exercícios do treino.
+  exercicios  String?  @db.Text
+  // Preenchido quando o treino altera/cancela uma sessão recorrente da equipe.
+  padraoChave String?
+  cancelado   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  equipe    Equipe        @relation(fields: [equipeId], references: [id], onDelete: Cascade)
+  treinador Treinador     @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
+  atletas   TreinoAtleta[]
+
+  @@unique([equipeId, padraoChave])
+  @@index([equipeId, data])
+  @@index([treinadorId])
+}
+
+// Sem registros = o treino vale para toda a equipe.
+model TreinoAtleta {
+  id       Int @id @default(autoincrement())
+  treinoId Int
+  atletaId Int
+
+  treino Treino @relation(fields: [treinoId], references: [id], onDelete: Cascade)
+  atleta Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+
+  @@unique([treinoId, atletaId])
+  @@index([atletaId])
+}
+
+model Presenca {
+  id        Int      @id @default(autoincrement())
+  atletaId  Int
+  data      DateTime @db.Date
+  presente  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  atleta Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+
+  @@unique([atletaId, data])
+  @@index([data])
+}
+
+model TesteFisico {
+  id             Int      @id @default(autoincrement())
+  atletaId       Int
+  teste          String
+  unidade        String
+  valor          Float
+  data           DateTime
+  obs            String?  @db.Text
+  registradoPor  String   @default("TREINADOR") // TREINADOR ou ATLETA
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  atleta Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+
+  @@index([atletaId, teste, data])
+}
+
+model EventoAgenda {
+  id          Int      @id @default(autoincrement())
+  treinadorId Int
+  // Nulo = vale para todas as equipes do treinador.
+  equipeId    Int?
+  titulo      String
+  tipo        String   @default("LEMBRETE") // JOGO, AVALIACAO, REUNIAO, LEMBRETE
+  local       String?
+  observacoes String?  @db.Text
+  data        DateTime @db.Date
+  inicioMin   Int      @default(480)
+  fimMin      Int      @default(540)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  treinador Treinador @relation(fields: [treinadorId], references: [id], onDelete: Cascade)
+  equipe    Equipe?   @relation(fields: [equipeId], references: [id], onDelete: Cascade)
+
+  @@index([treinadorId, data])
+  @@index([equipeId])
+}
+
+model MetaAtleta {
+  id        Int      @id @default(autoincrement())
+  atletaId  Int
+  titulo    String
+  descricao String?  @db.Text
+  progresso Int      @default(0)
+  prazo     DateTime @db.Date
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  atleta Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+
+  @@index([atletaId])
+}
+
+model FeedbackAtleta {
+  id        Int      @id @default(autoincrement())
+  atletaId  Int
+  texto     String   @db.Text
+  createdAt DateTime @default(now())
+
+  atleta Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+
+  @@index([atletaId, createdAt])
+}
+
+// Equivalente de Notificacao (que pertence ao treinador) para o atleta.
+model NotificacaoAtleta {
+  id           Int      @id @default(autoincrement())
+  atletaId     Int
+  tipo         String
+  titulo       String
+  descricao    String   @db.Text
+  link         String?
+  chave        String
+  lida         Boolean  @default(false)
+  entidadeTipo String?
+  entidadeId   Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  atleta Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+
+  @@unique([atletaId, chave])
+  @@index([atletaId, lida, createdAt])
 }
 
 // ============================================================

@@ -1,0 +1,31 @@
+name: TCC SATE - Jest e cobertura
+on:
+  push:
+    branches:
+      - tcc/swagger-jest-por-rota-20261118
+  workflow_dispatch:
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: sate_backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar dependências
+        run: npm install --no-audit --no-fund
+      - name: Instalar Swagger e ferramentas de teste
+        run: npm install --no-audit --no-fund swagger-jsdoc swagger-ui-express jest supertest
+      - name: Rodar testes e gerar cobertura
+        run: npm run test:coverage -- --silent
+      - name: Guardar relatório
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-coverage
+          path: sate_backend/coverage/
+          if-no-files-found: ignore

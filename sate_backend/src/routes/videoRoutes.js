@@ -114,25 +114,334 @@ router.use(autenticar);
 // VÍDEOS DA PARTIDA
 // ============================================================
 
+/**
+ * @swagger
+ * /api/partidas/{partidaId}/videos:
+ *   get:
+ *     tags: [Vídeos e marcações]
+ *     summary: Listar vídeos
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: partidaId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.get('/partidas/:partidaId/videos', listarVideos);
+/**
+ * @swagger
+ * /api/partidas/{partidaId}/videos:
+ *   post:
+ *     tags: [Vídeos e marcações]
+ *     summary: Enviar vídeo
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: partidaId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               arquivo:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '201':
+ *         description: Recurso criado, quando aplicável
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.post('/partidas/:partidaId/videos', receberArquivoVideo, adicionarVideo);
+/**
+ * @swagger
+ * /api/videos/{id}:
+ *   delete:
+ *     tags: [Vídeos e marcações]
+ *     summary: Excluir vídeo
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.delete('/videos/:id', excluirVideo);
 
 // ============================================================
 // EVENTOS E CLIPES
 // ============================================================
 
+/**
+ * @swagger
+ * /api/videos/{videoId}/marcacoes:
+ *   get:
+ *     tags: [Vídeos e marcações]
+ *     summary: Listar marcações
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: videoId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.get('/videos/:videoId/marcacoes', listarMarcacoes);
+/**
+ * @swagger
+ * /api/videos/{videoId}/marcacoes:
+ *   post:
+ *     tags: [Vídeos e marcações]
+ *     summary: Adicionar marcação
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: videoId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tempoInicio:
+ *                 type: number
+ *               tempoFim:
+ *                 type: number
+ *               atletaId:
+ *                 type: integer
+ *               tipo:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '201':
+ *         description: Recurso criado, quando aplicável
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.post('/videos/:videoId/marcacoes', adicionarMarcacao);
+/**
+ * @swagger
+ * /api/marcacoes/{id}:
+ *   put:
+ *     tags: [Vídeos e marcações]
+ *     summary: Editar marcação
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             additionalProperties: true
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.put('/marcacoes/:id', editarMarcacao);
+/**
+ * @swagger
+ * /api/marcacoes/{id}:
+ *   delete:
+ *     tags: [Vídeos e marcações]
+ *     summary: Excluir marcação
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.delete('/marcacoes/:id', excluirMarcacao);
 
 // ============================================================
 // DESENHOS / ANOTAÇÕES DO VÍDEO
 // ============================================================
 
+/**
+ * @swagger
+ * /api/videos/{videoId}/anotacoes:
+ *   get:
+ *     tags: [Vídeos e marcações]
+ *     summary: Listar desenhos
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: videoId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.get('/videos/:videoId/anotacoes', listarAnotacoes);
+/**
+ * @swagger
+ * /api/videos/{videoId}/anotacoes:
+ *   post:
+ *     tags: [Vídeos e marcações]
+ *     summary: Adicionar desenho
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: videoId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               formas:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '201':
+ *         description: Recurso criado, quando aplicável
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.post('/videos/:videoId/anotacoes', adicionarAnotacao);
+/**
+ * @swagger
+ * /api/anotacoes/{id}:
+ *   delete:
+ *     tags: [Vídeos e marcações]
+ *     summary: Excluir desenho
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '404':
+ *         description: Não encontrado
+ *       '500':
+ *         description: Erro interno
+ */
 router.delete('/anotacoes/:id', excluirAnotacao);
 
 module.exports = router;

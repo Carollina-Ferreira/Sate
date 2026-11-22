@@ -19,6 +19,9 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const videoRoutes = require('./routes/videoRoutes');
 const configuracaoAnaliseRoutes = require('./routes/configuracaoAnaliseRoutes');
 const notificacaoRoutes = require('./routes/notificacaoRoutes');
+const headerRoutes = require('./routes/headerRoutes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 const mobileRoutes = require('./routes/mobileRoutes');
 
 // ======================================================
@@ -354,6 +357,9 @@ app.use('/api/documentos', mobileRoutes.rotasDocumentos);
 // ======================================================
 // ROTA NÃO ENCONTRADA
 // ======================================================
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/header', headerRoutes);
 
 app.use((req, res) => {
     return res.status(404).json({

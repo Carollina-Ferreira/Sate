@@ -19,6 +19,15 @@ describe('Rotas de notificacao', () => {
       return next();
     });
 
+    // A verificação de perfil é testada separadamente nos controllers.
+    // Neste teste de roteamento basta simular contexto de treinador.
+    jest.doMock('../../src/lib/acesso', () => ({
+      comContexto: () => (req, res, next) => {
+        req.ctx = { tipo: 'TREINADOR', treinador: { id: 1 } };
+        next();
+      },
+    }));
+
     acionarController = jest.fn((req, res) => {
       return res.status(200).json({ metodo: req.method, rota: req.path });
     });

@@ -79,6 +79,23 @@ describe('Cloudflare Turnstile - validação tradicional da autenticação',()=>
    global.fetch.mockResolvedValue({ok:true,json:jest.fn().mockResolvedValue({success:true,action:'signup'})});
    retorno(await executar(login,{...loginValido,turnstileToken:'captcha'}),400);
  });
+ test('chave distribuída no app não ignora CAPTCHA em produção',async()=>{
+   const chaveAntiga=process.env.MOBILE_APP_KEY;
+   const ambienteAntigo=process.env.NODE_ENV;
+   process.env.MOBILE_APP_KEY='chave-publica-do-app';
+   process.env.NODE_ENV='production';
+   try {
+     const res=criarResposta();
+     await cadastro({body:cadastroValido,ip:'127.0.0.1',
+       headers:{'x-sate-app-key':'chave-publica-do-app'}},res);
+     retorno(res,400);
+     expect(global.fetch).not.toHaveBeenCalled();
+   } finally {
+     if(chaveAntiga===undefined)delete process.env.MOBILE_APP_KEY;
+     else process.env.MOBILE_APP_KEY=chaveAntiga;
+     process.env.NODE_ENV=ambienteAntigo;
+   }
+ });
  test('login permite validar CAPTCHA com ação auth',async()=>{
    global.fetch.mockResolvedValue({ok:true,json:jest.fn().mockResolvedValue({success:true,action:'auth'})});
    retorno(await executar(login,{...loginValido,turnstileToken:'captcha'}),401);

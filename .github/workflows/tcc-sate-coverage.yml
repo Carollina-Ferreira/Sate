@@ -26,6 +26,9 @@ jobs:
       - name: Instalar dependências (atualiza lock legado)
         run: npm install --no-audit --no-fund
       - name: Validar JSON e cliente Prisma
+        env:
+          # Apenas para Prisma generate; nenhum banco é acessado neste job.
+          DATABASE_URL: mysql://root:ci@127.0.0.1:3306/sate_ci
         run: |
           node -e "JSON.parse(require('fs').readFileSync('package.json','utf8'))"
           npx prisma generate

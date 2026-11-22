@@ -44,11 +44,12 @@ class ApiClient {
   static final Map<String, Future<dynamic>> _emAndamento = {};
 
   static Future<dynamic> _unica(String chave, Future<dynamic> Function() envio) {
-    final existente = _emAndamento[chave];
+    final chaveSessao = '${Sessao.revisao}:$chave';
+    final existente = _emAndamento[chaveSessao];
     if (existente != null) return existente;
     final f = envio();
-    _emAndamento[chave] = f;
-    f.whenComplete(() => _emAndamento.remove(chave)).ignore();
+    _emAndamento[chaveSessao] = f;
+    f.whenComplete(() => _emAndamento.remove(chaveSessao)).ignore();
     return f;
   }
 
@@ -113,6 +114,7 @@ class ApiClient {
 
   static Future<dynamic> _enviar(Future<http.Response> Function() chamada,
       {bool autenticado = true}) async {
+    final revisaoNoInicio = Sessao.revisao;
     http.Response r;
     try {
       r = await chamada().timeout(ApiConfig.timeout);
@@ -145,7 +147,8 @@ class ApiClient {
         : 'Erro ${r.statusCode} ao falar com o servidor.';
 
     // Token vencido/inválido: encerra a sessão e volta ao login.
-    if (r.statusCode == 401 && autenticado && Sessao.token != null) {
+    if (r.statusCode == 401 && autenticado && Sessao.token != null &&
+        Sessao.revisao == revisaoNoInicio) {
       await Sessao.limpar();
       Sessao.aoExpirar?.call();
       throw ApiException('Sua sessão expirou. Entre novamente.', status: 401);

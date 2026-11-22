@@ -14,12 +14,13 @@ import 'inicial_page.dart';
 ///  - Atleta COM equipe  -> telas do atleta;  SEM equipe -> tela de código/QR Code.
 ///  - Treinador          -> suas equipes (login) ou direto ao app (sessão retomada).
 Future<Widget> destinoPosLogin(UsuarioSessao u, {bool retomar = false}) async {
+  // Validar o JWT ao retomar também para treinadores.
+  final me = await SateApi.me();
   if (u.ehTreinador) {
     return retomar
         ? TreinadorNavigation(nomeUsuario: u.nome, emailUsuario: u.email)
         : TreinadorEquipesPage(nomeUsuario: u.nome, emailUsuario: u.email);
   }
-  final me = await SateApi.me();
   final atleta = me['atleta'] as Map?;
   final temEquipe = atleta != null && atleta['equipeId'] != null;
   return temEquipe

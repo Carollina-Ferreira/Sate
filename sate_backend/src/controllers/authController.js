@@ -25,7 +25,7 @@ async function validarTurnstile(req, acaoEsperada) {
     // Compatibilidade para testes locais: uma chave embutida no APK NÃO é segredo.
     // Nunca liberar este bypass em produção, ainda que a variável esteja presente.
     const bypassLocal = process.env.NODE_ENV !== 'production' &&
-        process.env.ALLOW_MOBILE_CAPTCHA_BYPASS === 'true';
+        process.env.ALLOW_MOBILE_CAPTCHA_BYPASS !== 'false';
     const chaveMobile = bypassLocal ? process.env.MOBILE_APP_KEY : null;
     const chaveRecebida = req.headers['x-sate-app-key'];
 

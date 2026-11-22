@@ -345,6 +345,12 @@ class SateStore extends ChangeNotifier {
   static const _kExOcultos = 'sate_exercicios_ocultos';
 
   bool _carregado = false;
+  int? _usuarioLocalId;
+  int _geracaoSessao = 0;
+
+  // Dados apenas locais ficam isolados por usuário, mesmo no mesmo aparelho.
+  String _chaveLocal(String chave) => '${chave}_usuario_${_usuarioLocalId ?? 'desconhecido'}';
+
   bool treinador = true;
   String nomeUsuario = '';
   String emailUsuario = '';
@@ -408,47 +414,69 @@ class SateStore extends ChangeNotifier {
     required String email,
     required bool ehTreinador,
   }) async {
+    final usuarioId = Sessao.usuario?.id;
+    if (!Sessao.logado || usuarioId == null) return;
+
+    if (_usuarioLocalId != usuarioId) {
+      await encerrar();
+      _usuarioLocalId = usuarioId;
+    }
+    final geracao = _geracaoSessao;
     treinador = ehTreinador;
     nomeUsuario = nome.trim();
     emailUsuario = email;
     if (!_carregado) {
       final p = await SharedPreferences.getInstance();
-      _lerDocsLocais(p.getString(_kDocs));
-      _lerPosts(p.getString(_kPosts));
+      if (geracao != _geracaoSessao || Sessao.usuario?.id != usuarioId) return;
+      _lerDocsLocais(p.getString(_chaveLocal(_kDocs)));
+      _lerPosts(p.getString(_chaveLocal(_kPosts)));
       _exOcultos
         ..clear()
-        ..addAll(p.getStringList(_kExOcultos) ?? const []);
-      simularLimite = p.getBool(_kSimLimite) ?? false;
-      planoAtual = (p.getInt(_kPlano) ?? 0).clamp(0, planosSate.length - 1).toInt();
+        ..addAll(p.getStringList(_chaveLocal(_kExOcultos)) ?? const []);
+      simularLimite = p.getBool(_chaveLocal(_kSimLimite)) ?? false;
+      planoAtual = (p.getInt(_chaveLocal(_kPlano)) ?? 0).clamp(0, planosSate.length - 1).toInt();
       _carregado = true;
     }
     await sincronizar();
+    if (geracao != _geracaoSessao || !Sessao.logado || Sessao.usuario?.id != usuarioId) return;
     _timer?.cancel();
-    // Atualização periódica: mudanças feitas no site chegam ao app sem reabrir.
     _timer = Timer.periodic(const Duration(seconds: 45), (_) => sincronizar(silencioso: true));
   }
 
-  /// Sai da conta: limpa tudo que estava em memória.
+  /// Descartar dados da sessão anterior antes de exibir outra conta.
   Future<void> encerrar() async {
+    _geracaoSessao++;
     _timer?.cancel();
     _timer = null;
+    _sincronizando = false;
+    _usuarioLocalId = null;
+    _carregado = false;
+    nomeUsuario = '';
+    emailUsuario = '';
     _equipes.clear();
     _atletas.clear();
     _exerciciosApi.clear();
+    _exOcultos.clear();
     _treinos.clear();
     _pres.clear();
     _testes.clear();
     _docs.clear();
+    _docsLocais.clear();
+    _posts.clear();
     _eventos.clear();
     _metas.clear();
     _feedbacks.clear();
     _notificacoes.clear();
+    planoAtual = 0;
+    simularLimite = false;
     formacao = registroProfissional = experiencia = '';
     eu = _atletaVazio;
     fotoBytes = null;
     _avatarBaixado = null;
     primeiraCargaFeita = false;
+    carregando = false;
     erroSincronizacao = null;
+    ultimaSincronizacao = null;
     _reconstruirExercicios();
     notifyListeners();
   }
@@ -463,6 +491,13 @@ class SateStore extends ChangeNotifier {
   /// Busca no servidor tudo o que o usuário pode ver e atualiza as telas.
   Future<void> sincronizar({bool silencioso = false}) async {
     if (_sincronizando || !Sessao.logado) return;
+    final geracao = _geracaoSessao;
+    final revisao = Sessao.revisao;
+    final usuarioId = Sessao.usuario?.id;
+    bool vigente() => geracao == _geracaoSessao &&
+        revisao == Sessao.revisao &&
+        usuarioId != null && usuarioId == Sessao.usuario?.id &&
+        Sessao.logado;
     _sincronizando = true;
     if (!silencioso) {
       carregando = true;
@@ -470,9 +505,11 @@ class SateStore extends ChangeNotifier {
     }
     try {
       final snap = await SateApi.snapshot();
+      if (!vigente()) return;
       _aplicarSnapshot(snap);
       try {
         final n = await SateApi.notificacoes();
+        if (!vigente()) return;
         _notificacoes
           ..clear()
           ..addAll([
@@ -480,21 +517,25 @@ class SateStore extends ChangeNotifier {
               NotificacaoApp.fromApi(Map<String, dynamic>.from(x as Map))
           ]);
       } catch (_) {
-        // Notificações não devem derrubar a tela principal.
+        // Falha nas notificações não impede o carregamento dos demais dados.
       }
+      if (!vigente()) return;
       erroSincronizacao = null;
       ultimaSincronizacao = DateTime.now();
       primeiraCargaFeita = true;
       _baixarAvatar();
     } on ApiException catch (e) {
+      if (!vigente()) return;
       erroSincronizacao = e.mensagem;
       if (!silencioso && !e.semConexao && e.status != 401) _erro(e);
     } catch (_) {
-      erroSincronizacao = 'Não foi possível atualizar os dados.';
+      if (vigente()) erroSincronizacao = 'Não foi possível atualizar os dados.';
     } finally {
-      _sincronizando = false;
-      carregando = false;
-      notifyListeners();
+      if (vigente()) {
+        _sincronizando = false;
+        carregando = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -622,9 +663,13 @@ class SateStore extends ChangeNotifier {
   }
 
   Future<void> _baixarAvatar() async {
-    // O avatar do usuário vem de /api/mobile/me (campo avatarUrl).
+    final geracao = _geracaoSessao;
+    final revisao = Sessao.revisao;
+    bool vigente() => geracao == _geracaoSessao &&
+        revisao == Sessao.revisao && Sessao.logado;
     try {
       final me = await SateApi.me();
+      if (!vigente()) return;
       final url = (me['usuario'] as Map?)?['avatarUrl'] as String?;
       if (url == null || url.isEmpty) {
         if (fotoBytes != null && _avatarBaixado != null) {
@@ -635,13 +680,16 @@ class SateStore extends ChangeNotifier {
         return;
       }
       if (url == _avatarBaixado) return;
+      Uint8List bytes;
       if (url.startsWith('data:')) {
-        fotoBytes = base64Decode(url.split(',').last);
+        bytes = base64Decode(url.split(',').last);
       } else {
         final r = await http.get(Uri.parse(ApiConfig.urlArquivo(url)));
-        if (r.statusCode != 200) return;
-        fotoBytes = r.bodyBytes;
+        if (!vigente() || r.statusCode != 200) return;
+        bytes = r.bodyBytes;
       }
+      if (!vigente()) return;
+      fotoBytes = bytes;
       _avatarBaixado = url;
       notifyListeners();
     } catch (_) {}
@@ -773,7 +821,7 @@ class SateStore extends ChangeNotifier {
   Future<void> _ocultarExercicio(String id) async {
     _exOcultos.add(id);
     final p = await SharedPreferences.getInstance();
-    await p.setStringList(_kExOcultos, _exOcultos.toList());
+    await p.setStringList(_chaveLocal(_kExOcultos), _exOcultos.toList());
     _reconstruirExercicios();
     notifyListeners();
   }
@@ -1094,7 +1142,7 @@ class SateStore extends ChangeNotifier {
   Future<void> escolherPlano(int i) async {
     planoAtual = i;
     final p = await SharedPreferences.getInstance();
-    await p.setInt(_kPlano, i);
+    await p.setInt(_chaveLocal(_kPlano), i);
     notifyListeners();
   }
 
@@ -1102,12 +1150,12 @@ class SateStore extends ChangeNotifier {
 
   Future<bool> tutorialVisto(bool paraTreinador) async {
     final p = await SharedPreferences.getInstance();
-    return p.getBool(paraTreinador ? 'sate_tut_treinador' : 'sate_tut_atleta') ?? false;
+    return p.getBool(_chaveLocal(paraTreinador ? 'sate_tut_treinador' : 'sate_tut_atleta')) ?? false;
   }
 
   Future<void> marcarTutorialVisto(bool paraTreinador) async {
     final p = await SharedPreferences.getInstance();
-    await p.setBool(paraTreinador ? 'sate_tut_treinador' : 'sate_tut_atleta', true);
+    await p.setBool(_chaveLocal(paraTreinador ? 'sate_tut_treinador' : 'sate_tut_atleta'), true);
   }
 
   // ── Eventos da agenda ──
@@ -1464,7 +1512,7 @@ class SateStore extends ChangeNotifier {
   Future<void> definirSimularLimite(bool v) async {
     simularLimite = v;
     final p = await SharedPreferences.getInstance();
-    await p.setBool(_kSimLimite, v);
+    await p.setBool(_chaveLocal(_kSimLimite), v);
     notifyListeners();
   }
 
@@ -1565,8 +1613,10 @@ class SateStore extends ChangeNotifier {
   // ── Persistência local (somente itens que não existem no servidor) ──
 
   Future<void> _persistir(String chave, Object dados) async {
+    if (_usuarioLocalId == null) return;
+    final chaveDestaConta = _chaveLocal(chave);
     final p = await SharedPreferences.getInstance();
-    await p.setString(chave, jsonEncode(dados));
+    await p.setString(chaveDestaConta, jsonEncode(dados));
   }
 
   String novoId() => DateTime.now().microsecondsSinceEpoch.toString();

@@ -38,6 +38,7 @@ class Sessao {
 
   static String? _token;
   static UsuarioSessao? _usuario;
+  static int revisao = 0;
 
   /// Chamado quando o servidor recusa o token (sessão expirada).
   /// O app define esta função para voltar à tela de login.
@@ -48,6 +49,7 @@ class Sessao {
   static bool get logado => _token != null && _usuario != null;
 
   static Future<void> carregar() async {
+    revisao++;
     try {
       _token = await _seguro.read(key: _kToken);
     } catch (_) {
@@ -72,6 +74,7 @@ class Sessao {
   }
 
   static Future<void> salvar(String token, UsuarioSessao usuario) async {
+    revisao++;
     _token = token;
     _usuario = usuario;
     final p = await SharedPreferences.getInstance();
@@ -91,6 +94,7 @@ class Sessao {
 
   /// Sai da conta (apaga token e dados da sessão deste aparelho).
   static Future<void> limpar() async {
+    revisao++;
     _token = null;
     _usuario = null;
     final p = await SharedPreferences.getInstance();

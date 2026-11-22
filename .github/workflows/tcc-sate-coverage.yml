@@ -1,13 +1,20 @@
-name: TCC SATE - Jest e cobertura
+name: SATE - Backend e app Flutter
+
 on:
   push:
     branches:
       - tcc/swagger-jest-por-rota-20261118
+      - fix/integracao-app-backend-20261122
+  pull_request:
+    branches:
+      - develop
   workflow_dispatch:
+
 jobs:
-  testes:
+  backend:
+    name: Jest e cobertura (backend)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: sate_backend
@@ -16,16 +23,40 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Instalar dependências
+      - name: Instalar dependências (atualiza lock legado)
         run: npm install --no-audit --no-fund
-      - name: Instalar Swagger e ferramentas de teste
-        run: npm install --no-audit --no-fund swagger-jsdoc swagger-ui-express jest supertest
-      - name: Rodar testes e gerar cobertura
-        run: npm run test:coverage -- --silent
-      - name: Guardar relatório
+      - name: Validar JSON e cliente Prisma
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('package.json','utf8'))"
+          npx prisma generate
+      - name: Executar testes Jest com cobertura
+        run: npm run test:coverage
+      - name: Guardar relatório de cobertura
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: jest-coverage
           path: sate_backend/coverage/
           if-no-files-found: ignore
+
+  flutter:
+    name: Flutter analyze e testes
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: sate_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter analyze --no-fatal-infos
+      - name: Testes Flutter (quando presentes)
+        run: |
+          if find test -name '*_test.dart' -type f 2>/dev/null | grep -q .; then
+            flutter test
+          else
+            echo "Sem testes Flutter; análise estática executada."
+          fi

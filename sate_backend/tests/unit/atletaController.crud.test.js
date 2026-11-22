@@ -56,7 +56,7 @@ describe('Atletas - CRUD completo e upload de documentos',()=>{
   const res=await executar('criarAtleta',padrao);
   code(res,201);
   expect(prisma.$transaction).toHaveBeenCalledTimes(1);
-  expect(bcrypt.hash).toHaveBeenCalledWith('SATE@123',10);
+  expect(bcrypt.hash).toHaveBeenCalledWith(expect.stringMatching(/^SATE-[A-Za-z0-9_-]{16}$/),10);
   expect(prisma.usuario.create).toHaveBeenCalledWith({data:expect.objectContaining({email:'marina@exemplo.com',tipo:'ATLETA'})});
   expect(prisma.atleta.create).toHaveBeenCalledWith(expect.objectContaining({data:expect.objectContaining({
    nome:'Marina',treinador:{connect:{id:7}},usuario:{connect:{id:12}}

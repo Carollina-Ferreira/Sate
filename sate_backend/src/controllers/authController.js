@@ -27,7 +27,7 @@ async function validarTurnstile(req, acaoEsperada) {
     const bypassLocal = process.env.NODE_ENV !== 'production' &&
         process.env.ALLOW_MOBILE_CAPTCHA_BYPASS !== 'false';
     const chaveMobile = bypassLocal ? process.env.MOBILE_APP_KEY : null;
-    const chaveRecebida = req.headers['x-sate-app-key'];
+    const chaveRecebida = req.headers?.['x-sate-app-key'];
 
     if (
         chaveMobile &&

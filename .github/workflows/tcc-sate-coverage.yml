@@ -96,10 +96,12 @@ jobs:
         with:
           node-version: '22'
       - run: npm install --no-audit --no-fund
-      - name: Criar esquema no MySQL temporário
+      - name: Criar esquema no MySQL efêmero pelo schema Prisma
+        # Migrações históricas legadas têm dependência de VideoPartida ausente.
+        # Não editar migrações já aplicadas no banco real só para fazer o CI passar.
         run: |
           npx prisma generate
-          npx prisma migrate deploy
+          npx prisma db push --skip-generate
       - name: Iniciar API e aguardar healthcheck
         run: |
           node src/server.js > /tmp/sate-api-ci.log 2>&1 &

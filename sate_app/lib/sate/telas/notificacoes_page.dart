@@ -7,42 +7,56 @@ import '../ui/widgets.dart';
 import 'documentos_page.dart';
 import 'planos_page.dart';
 
-class _Aviso {
-  final String id;
-  final IconData icone;
-  final String titulo, texto, tempo;
-  final bool rosa;
-  const _Aviso(this.id, this.icone, this.titulo, this.texto, this.tempo, this.rosa);
+/// Ícone e cor conforme o tipo da notificação enviada pelo servidor.
+IconData _iconeDoTipo(String tipo) {
+  if (tipo.startsWith('treino')) return Icons.calendar_month_outlined;
+  if (tipo.startsWith('evento')) return Icons.event_outlined;
+  if (tipo.startsWith('teste')) return Icons.bar_chart_rounded;
+  if (tipo.startsWith('meta')) return Icons.flag_outlined;
+  if (tipo.startsWith('feedback')) return Icons.chat_bubble_outline_rounded;
+  if (tipo.startsWith('documento')) return Icons.folder_outlined;
+  if (tipo.contains('equipe') || tipo.contains('atleta')) return Icons.groups_2_outlined;
+  return Icons.notifications_none_rounded;
 }
 
-// Mesmo conteúdo das notificações da versão anterior.
-const List<_Aviso> _avisos = [
-  _Aviso('n1', Icons.calendar_month_outlined, 'Novo treino agendado',
-      'Treino de força hoje às 18:00', 'Agora', true),
-  _Aviso('n2', Icons.flag_outlined, 'Meta concluída',
-      'Parabéns! A meta "Melhorar resistência" foi concluída.', '20 min', false),
-  _Aviso('n3', Icons.notifications_none_rounded, 'Lembrete de treino',
-      'O treino começa em 30 minutos.', '1h', true),
-  _Aviso('n4', Icons.sports_handball_outlined, 'Novo desafio',
-      'Participe do desafio "30 dias de foco".', '2h', false),
-  _Aviso('n5', Icons.bar_chart_rounded, 'Avaliação disponível',
-      'Uma nova avaliação física foi disponibilizada.', '1d', false),
-];
+String _tempoRelativo(DateTime quando) {
+  final d = DateTime.now().difference(quando);
+  if (d.inMinutes < 1) return 'Agora';
+  if (d.inMinutes < 60) return '${d.inMinutes} min';
+  if (d.inHours < 24) return '${d.inHours} h';
+  if (d.inDays < 30) return '${d.inDays} d';
+  return '${quando.day.toString().padLeft(2, '0')}/${quando.month.toString().padLeft(2, '0')}';
+}
 
-/// Quantidade de avisos que ainda pedem atenção (para o selo do sino).
+/// Quantidade de avisos que ainda pedem atenção (para o selo do sino):
+/// notificações não lidas do servidor + pendências do treinador.
 int contarAvisos(bool treinador) {
   final s = SateStore.i;
-  final novos = _avisos.where((a) => !s.notifLidas.contains(a.id)).length;
-  return novos + (treinador ? s.pendenciasTreinador().length : 0);
+  return s.notificacoesNaoLidas + (treinador ? s.pendenciasTreinador().length : 0);
 }
 
 /// Notificações: avisos, lembretes e (para o treinador) pendências.
-class NotificacoesPage extends StatelessWidget {
+class NotificacoesPage extends StatefulWidget {
   final bool treinador;
 
   /// Chamado com o índice da aba a abrir (a tela se fecha antes).
   final ValueChanged<int>? irPara;
   const NotificacoesPage({super.key, required this.treinador, this.irPara});
+
+  @override
+  State<NotificacoesPage> createState() => _NotificacoesPageState();
+}
+
+class _NotificacoesPageState extends State<NotificacoesPage> {
+  bool get treinador => widget.treinador;
+  ValueChanged<int>? get irPara => widget.irPara;
+
+  @override
+  void initState() {
+    super.initState();
+    // Ao abrir, busca no servidor as notificações mais recentes (inclusive as do site).
+    SateStore.i.sincronizar(silencioso: true);
+  }
 
   void _abrirDestino(BuildContext context, String destino) {
     switch (destino) {
@@ -67,7 +81,8 @@ class NotificacoesPage extends StatelessWidget {
       builder: (context, _) {
         final s = SateStore.i;
         final pend = treinador ? s.pendenciasTreinador() : const [];
-        final naoLidas = _avisos.where((a) => !s.notifLidas.contains(a.id)).length;
+        final avisos = s.notificacoes;
+        final naoLidas = s.notificacoesNaoLidas;
         return Tela(
           // Só o "es" fica em itálico, colado ao restante da palavra.
           titulo: 'Notificaçõ',
@@ -79,12 +94,7 @@ class NotificacoesPage extends StatelessWidget {
           acoes: [
             if (naoLidas > 0)
               TextButton(
-                onPressed: () {
-                  for (final a in _avisos) {
-                    s.notifLidas.add(a.id);
-                  }
-                  s.marcarNotifLida('n1');
-                },
+                onPressed: s.marcarTodasNotifLidas,
                 child: Text('Marcar lidas', style: TextStyle(color: c.rosa)),
               ),
           ],
@@ -111,13 +121,22 @@ class NotificacoesPage extends StatelessWidget {
             ],
             const SecaoCab('Recentes'),
             const SizedBox(height: 4),
-            for (final a in _avisos)
+            if (avisos.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: Text(
+                  s.erroSincronizacao ?? 'Você não tem notificações no momento.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: c.texto2),
+                ),
+              ),
+            for (final a in avisos)
               LinhaItem(
-                icone: a.icone,
-                cor: a.rosa ? c.rosa : c.ok,
+                icone: _iconeDoTipo(a.tipo),
+                cor: a.lida ? c.ok : c.rosa,
                 titulo: a.titulo,
-                sub: '${a.texto} · ${a.tempo}',
-                fim: s.notifLidas.contains(a.id)
+                sub: '${a.texto} · ${_tempoRelativo(a.quando)}',
+                fim: a.lida
                     ? null
                     : Container(
                         width: 9,

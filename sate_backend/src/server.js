@@ -22,6 +22,7 @@ const notificacaoRoutes = require('./routes/notificacaoRoutes');
 const headerRoutes = require('./routes/headerRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
+const mobileRoutes = require('./routes/mobileRoutes');
 
 // ======================================================
 // NOVA ROTA — PREFERÊNCIAS
@@ -101,6 +102,7 @@ app.use(
         allowedHeaders: [
             'Content-Type',
             'Authorization',
+            'X-SATE-App-Key',
         ],
     })
 );
@@ -333,6 +335,24 @@ app.use(
     '/api',
     videoRoutes
 );
+
+// ======================================================
+// APLICATIVO MOBILE (Flutter) — mesmo banco, mesmo JWT do site
+//
+// GET /api/mobile/me         GET /api/mobile/snapshot
+// /api/exercicios  /api/treinos  /api/eventos  /api/presencas
+// /api/testes      /api/metas    /api/feedbacks /api/documentos
+// ======================================================
+
+app.use('/api/mobile', mobileRoutes.rotasMobile);
+app.use('/api/exercicios', mobileRoutes.rotasExercicios);
+app.use('/api/treinos', mobileRoutes.rotasTreinos);
+app.use('/api/eventos', mobileRoutes.rotasEventos);
+app.use('/api/presencas', mobileRoutes.rotasPresencas);
+app.use('/api/testes', mobileRoutes.rotasTestes);
+app.use('/api/metas', mobileRoutes.rotasMetas);
+app.use('/api/feedbacks', mobileRoutes.rotasFeedbacks);
+app.use('/api/documentos', mobileRoutes.rotasDocumentos);
 
 // ======================================================
 // ROTA NÃO ENCONTRADA

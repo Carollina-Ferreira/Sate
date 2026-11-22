@@ -20,6 +20,11 @@ const {
 } = require('../controllers/partidasAtletaController');
 
 const autenticar = require('../middleware/authMiddleware');
+const { comContexto } = require('../lib/acesso');
+const {
+    meuPerfil,
+    atualizarMeuPerfil,
+} = require('../controllers/equipeMobileController');
 
 const router = express.Router();
 
@@ -75,6 +80,24 @@ const uploadDocumento = multer({
         cb(null, true);
     },
 });
+
+// =====================================
+// PERFIL DO ATLETA LOGADO (aplicativo mobile)
+// Precisa vir antes das rotas com /:id.
+// =====================================
+router.get(
+    '/me',
+    autenticar,
+    comContexto('ATLETA'),
+    meuPerfil
+);
+
+router.put(
+    '/me',
+    autenticar,
+    comContexto('ATLETA'),
+    atualizarMeuPerfil
+);
 
 // =====================================
 // ATLETAS DISPONÍVEIS

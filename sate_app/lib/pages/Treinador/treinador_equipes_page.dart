@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import '../login_page.dart' show BackgroundPainter;
 
+import './treinador_navigation.dart';
 import './treinador_vinculo_page.dart';
+import '../../services/api_client.dart';
+import '../../services/sate_api.dart';
 import '../../theme/sate_theme.dart';
 
 class TreinadorEquipesPage extends StatefulWidget {
@@ -23,22 +26,58 @@ class _TreinadorEquipesPageState
     extends State<TreinadorEquipesPage> {
   static const Color verde = Color(0xFF003D31);
 
-  final List<Map<String, String>> equipes = [
-    {
-      'nome': 'Falcões FC',
-      'modalidade': 'Futebol',
-      'atletas': '18 atletas',
-      'codigo': 'TRN-4829',
-    },
-    {
-      'nome': 'Águias Vôlei',
-      'modalidade': 'Vôlei',
-      'atletas': '12 atletas',
-      'codigo': 'TRN-7351',
-    },
-  ];
+  /// Equipes do treinador vindas do servidor (as mesmas cadastradas no site).
+  List<Map<String, String>> equipes = [];
+  bool _carregando = true;
+  String? _erro;
 
-  void selecionarEquipe(Map<String, String> equipe) {
+  @override
+  void initState() {
+    super.initState();
+    _carregar();
+  }
+
+  Future<void> _carregar() async {
+    setState(() {
+      _carregando = true;
+      _erro = null;
+    });
+    try {
+      final lista = await SateApi.equipesDoTreinador();
+      if (!mounted) return;
+      setState(() {
+        equipes = [
+          for (final e in lista)
+            {
+              'id': '${(e as Map)['id']}',
+              'nome': '${e['nome'] ?? ''}',
+              'modalidade': '${e['modalidade'] ?? ''}',
+              'atletas': '${e['numeroAtletas'] ?? 0} '
+                  '${(e['numeroAtletas'] ?? 0) == 1 ? 'atleta' : 'atletas'}',
+            }
+        ];
+        _carregando = false;
+      });
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _erro = e.mensagem;
+        _carregando = false;
+      });
+    }
+  }
+
+  /// Abre o app já na equipe escolhida; o código de convite vem do servidor.
+  Future<void> selecionarEquipe(Map<String, String> equipe) async {
+    String codigo = '';
+    try {
+      codigo = await SateApi.codigoEquipe(equipe['id'] ?? '');
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.mensagem)));
+      return;
+    }
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -48,7 +87,19 @@ class _TreinadorEquipesPageState
           nomeEquipe: equipe['nome'] ?? '',
           modalidade: equipe['modalidade'] ?? '',
           atletas: equipe['atletas'] ?? '',
-          codigoEquipe: equipe['codigo'] ?? '',
+          codigoEquipe: codigo,
+        ),
+      ),
+    );
+  }
+
+  void _continuarSemEquipe() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => TreinadorNavigation(
+          nomeUsuario: widget.nomeUsuario,
+          emailUsuario: widget.emailUsuario,
         ),
       ),
     );
@@ -148,16 +199,53 @@ class _TreinadorEquipesPageState
 
                   const SizedBox(height: 24),
 
-                  ...equipes.map(
-                    (equipe) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 16,
-                        ),
-                        child: _cardEquipe(equipe),
-                      );
-                    },
-                  ),
+                  if (_carregando)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(24),
+                        child: CircularProgressIndicator(color: verde),
+                      ),
+                    )
+                  else if (_erro != null) ...[
+                    Text(
+                      _erro!,
+                      style: const TextStyle(color: Color(0xFFC0392B), fontSize: 14),
+                    ),
+                    const SizedBox(height: 12),
+                    OutlinedButton(
+                      onPressed: _carregar,
+                      child: const Text('Tentar novamente'),
+                    ),
+                  ] else if (equipes.isEmpty) ...[
+                    const Text(
+                      'Você ainda não tem equipes. Crie uma equipe pelo site do SATE '
+                      'e ela aparecerá aqui automaticamente.',
+                      style: TextStyle(color: Color(0xFF68736F), fontSize: 14, height: 1.5),
+                    ),
+                    const SizedBox(height: 14),
+                    OutlinedButton(onPressed: _carregar, child: const Text('Atualizar')),
+                  ] else
+                    ...equipes.map(
+                      (equipe) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 16,
+                          ),
+                          child: _cardEquipe(equipe),
+                        );
+                      },
+                    ),
+
+                  // Só aparece quando não há equipes (ou houve erro), para não travar o acesso.
+                  if (!_carregando && equipes.isEmpty) ...[
+                    const SizedBox(height: 8),
+                    Center(
+                      child: TextButton(
+                        onPressed: _continuarSemEquipe,
+                        child: const Text('Entrar no aplicativo'),
+                      ),
+                    ),
+                  ],
 
                   const SizedBox(height: 8),
 

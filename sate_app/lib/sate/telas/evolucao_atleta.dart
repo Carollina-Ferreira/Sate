@@ -33,7 +33,7 @@ class _EvolucaoAtletaViewState extends State<EvolucaoAtletaView> {
   /// Índice físico (0..100) a cada data de avaliação: média dos escores dos testes gerais.
   List<(DateTime, double)> _indice(SateStore s, Atleta a) {
     final gerais = s.testesDoAtleta(a).where((t) => t.modalidade == null).toList();
-    final porTeste = {for (final t in gerais) t.nome: s.resultadosDe(a.nome, teste: t.nome)};
+    final porTeste = {for (final t in gerais) t.nome: s.resultadosDe(a.id, teste: t.nome)};
     final datas = <DateTime>{
       for (final l in porTeste.values) for (final r in l) somenteData(r.data),
     }.toList()
@@ -102,9 +102,9 @@ class _EvolucaoAtletaViewState extends State<EvolucaoAtletaView> {
         final atingidas = metas.where((m) => m.concluida).length;
 
         // Avaliação física
-        final cooper = s.resultadosDe(a.nome, teste: 'Teste de Cooper (12 min)');
+        final cooper = s.resultadosDe(a.id, teste: 'Teste de Cooper (12 min)');
         final vo2 = cooper.isEmpty ? null : (cooper.last.valor - 504.9) / 44.73;
-        final imc = a.alturaCm > 0 ? a.pesoKg / ((a.alturaCm / 100) * (a.alturaCm / 100)) : null;
+        final imc = a.imc;
         String classeImc(double v) =>
             v < 18.5 ? 'Abaixo do peso' : (v < 25 ? 'Normal' : (v < 30 ? 'Sobrepeso' : 'Obesidade'));
         String classeVo2(double v) => v >= 45 ? 'Excelente' : (v >= 38 ? 'Boa' : 'Regular');

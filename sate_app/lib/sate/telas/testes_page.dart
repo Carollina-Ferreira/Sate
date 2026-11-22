@@ -33,13 +33,16 @@ class _TestesPageState extends State<TestesPage> {
   void initState() {
     super.initState();
     final s = SateStore.i;
-    _atletaId = widget.treinador ? (widget.atletaId ?? s.atletas.first.id) : s.eu.id;
+    _atletaId = widget.treinador
+        ? (widget.atletaId ?? (s.atletas.isEmpty ? '' : s.atletas.first.id))
+        : s.eu.id;
   }
 
   Atleta get _atleta {
     final s = SateStore.i;
     if (!widget.treinador) return s.eu;
-    return s.atletas.firstWhere((a) => a.id == _atletaId, orElse: () => s.atletas.first);
+    return s.atletas.firstWhere((a) => a.id == _atletaId,
+        orElse: () => s.atletas.isEmpty ? s.eu : s.atletas.first);
   }
 
   Future<void> _escolherAtleta() async {
@@ -82,7 +85,7 @@ class _TestesPageState extends State<TestesPage> {
         final a = _atleta;
         final tipos = s.testesDoAtleta(a);
         final tipo = tipos.firstWhere((t) => t.nome == _teste, orElse: () => tipos.first);
-        final res = s.resultadosDe(a.nome, teste: tipo.nome);
+        final res = s.resultadosDe(a.id, teste: tipo.nome);
 
         // Etapa 1: quem e qual teste. Etapa 2: uma visão por vez.
         final vistas = widget.treinador
@@ -444,6 +447,10 @@ class _LinhaHistorico extends StatelessWidget {
 Future<void> registrarTeste(BuildContext context,
     {Atleta? atletaInicial, bool atletaFixo = false}) async {
   final s = SateStore.i;
+  if (!atletaFixo && atletaInicial == null && s.atletas.isEmpty) {
+    aviso(context, 'Cadastre um atleta pelo site para registrar avaliações.');
+    return;
+  }
   var atleta = atletaFixo ? s.eu : (atletaInicial ?? s.atletas.first);
   var teste = s.testesDoAtleta(atleta).first;
   var data = s.hoje;
@@ -538,7 +545,8 @@ Future<void> registrarTeste(BuildContext context,
   if (ok != true) return;
   final v = double.parse(valor.text.replaceAll(',', '.'));
   await s.registrarTeste(
-      ResultadoTeste(atleta.nome, teste.nome, teste.unidade, data, v, obs.text.trim()));
+      ResultadoTeste(atleta.nome, teste.nome, teste.unidade, data, v, obs.text.trim(),
+          atletaId: atleta.id));
   if (context.mounted) {
     aviso(context, atletaFixo ? 'Resultado salvo.' : 'Resultado salvo para ${atleta.nome}.');
   }

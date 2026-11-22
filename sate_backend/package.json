@@ -10,6 +10,7 @@
     "test:unit": "jest tests/unit --runInBand --silent",
     "test:routes": "jest tests/routes --runInBand --silent",
     "test:coverage": "jest --coverage --runInBand --silent"
+    "test:integracao": "node scripts/teste_integracao.js"
   },
   "keywords": [],
   "author": "",

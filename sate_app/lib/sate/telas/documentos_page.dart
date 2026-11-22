@@ -332,9 +332,9 @@ Future<void> editarDocumento(
             const SizedBox(height: 14),
           ] else if (dono != null) ...[
             Row(children: [
-              AvatarIni(s.atletas.firstWhere((a) => a.id == dono).nome, tamanho: 30),
+              AvatarIni(s.atletaPorId(dono!)?.nome ?? '', tamanho: 30),
               const SizedBox(width: 10),
-              Text(s.atletas.firstWhere((a) => a.id == dono).nome,
+              Text(s.atletaPorId(dono!)?.nome ?? '',
                   style: TextStyle(
                       fontSize: 13.5, fontWeight: FontWeight.w600, color: c.texto)),
             ]),

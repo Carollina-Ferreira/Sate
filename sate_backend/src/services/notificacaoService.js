@@ -737,6 +737,25 @@ async function resolverNotificacaoPartida(
 }
 
 // ============================================================
+// NOTIFICAÇÃO DE CADASTRO DE ATLETA
+// Chamada pelo atletaController ao criar/atualizar um atleta.
+// A notificação de cadastros incompletos é agregada por treinador,
+// então basta recalcular o resumo do treinador.
+// (Esta função era importada pelo controller mas não existia.)
+// ============================================================
+
+async function sincronizarNotificacaoCadastroAtleta(
+    prismaClient,
+    treinadorId,
+    _atleta
+) {
+    return sincronizarNotificacoesCadastroTreinador(
+        prismaClient,
+        treinadorId
+    );
+}
+
+// ============================================================
 // EXPORTAÇÕES
 // ============================================================
 
@@ -744,6 +763,7 @@ module.exports = {
     obterPendenciasAtleta,
     sincronizarNotificacaoGeral,
     sincronizarNotificacoesCadastroTreinador,
+    sincronizarNotificacaoCadastroAtleta,
     sincronizarNotificacaoPartida,
     sincronizarNotificacoesPartidasTreinador,
     sincronizarNotificacoesEscalacaoTreinador,

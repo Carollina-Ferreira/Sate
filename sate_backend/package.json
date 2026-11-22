@@ -9,7 +9,7 @@
     "test": "jest --runInBand --silent",
     "test:unit": "jest tests/unit --runInBand --silent",
     "test:routes": "jest tests/routes --runInBand --silent",
-    "test:coverage": "jest --coverage --runInBand --silent"
+    "test:coverage": "jest --coverage --runInBand --silent",
     "test:integracao": "node scripts/teste_integracao.js"
   },
   "keywords": [],
@@ -27,10 +27,14 @@
     "multer": "^2.4.0",
     "mysql2": "^3.24.5",
     "nodemailer": "^10.3.1",
-    "prisma": "^6.19.3"
+    "prisma": "^6.19.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
   },
   "allowScripts": {
     "@prisma/client@6.19.0": true,

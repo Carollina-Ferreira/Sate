@@ -111,20 +111,17 @@ async function snapshot(req, res) {
         if (eu.equipeId) {
             const colegas = await prisma.atleta.findMany({
                 where: { equipeId: eu.equipeId, id: { not: eu.id } },
-                include: { usuario: { select: { nome: true, avatarUrl: true } } },
+                select: {
+                    id: true,
+                    nome: true,
+                    equipeId: true,
+                    posicao: true,
+                    usuario: { select: { nome: true, avatarUrl: true } },
+                },
                 orderBy: { nome: 'asc' },
             });
-            for (const c of colegas) {
-                atletas.push({
-                    ...c,
-                    cpf: null,
-                    rg: null,
-                    telefone: null,
-                    responsavel: null,
-                    endereco: null,
-                    usuario: { ...c.usuario, email: '' },
-                });
-            }
+            // Nunca carregar CPF, RG, nascimento ou medidas físicas dos colegas.
+            atletas.push(...colegas);
         }
     }
 
@@ -197,7 +194,17 @@ async function snapshot(req, res) {
         tipo: ctx.tipo,
         treinador: ehTreinador ? treinadorJson(ctx.treinador) : null,
         equipes: equipes.map((e) => equipeJson(e, { comCodigo: ehTreinador })),
-        atletas: atletas.map(atletaJson),
+        atletas: ehTreinador
+            ? atletas.map(atletaJson)
+            : atletas.map((a, index) => index === 0
+                ? atletaJson(a)
+                : {
+                    id: a.id,
+                    nome: a.nome || a.usuario?.nome || 'Atleta',
+                    equipeId: a.equipeId,
+                    posicao: a.posicao || '',
+                    avatarUrl: a.usuario?.avatarUrl || null,
+                }),
         treinos: treinosVisiveis.map(treinoJson),
         exercicios: exercicios.map(exercicioJson),
         eventos: eventos.map(eventoJson),

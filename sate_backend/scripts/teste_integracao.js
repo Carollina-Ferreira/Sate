@@ -81,11 +81,14 @@ function dia(n) {
     });
     afirma(r.status === 201, 'POST /api/atletas', r);
     const atletaAId = r.json?.atleta?.id;
+    const senhaA = r.json?.senhaTemporaria;
     r = await api('POST', '/api/atletas', {
         token: T,
         corpo: { nome: 'Bia Atleta', email: emailB, categoria: 'Sub-17' },
     });
     const atletaBId = r.json?.atleta?.id;
+    const senhaB = r.json?.senhaTemporaria;
+    afirma(!!senhaA && !!senhaB && senhaA !== senhaB, 'senhas provisórias são únicas por atleta');
     afirma(r.status === 201 && atletaBId, 'segundo atleta', r);
 
     r = await api('POST', '/api/equipes', {
@@ -98,12 +101,12 @@ function dia(n) {
 
     console.log('\n[3] Atleta entra no app com a senha temporária e vê os mesmos dados');
     r = await api('POST', '/api/auth/login', {
-        corpo: { email: emailA, senha: 'SATE@123', tipo: 'ATLETA' },
+        corpo: { email: emailA, senha: senhaA, tipo: 'ATLETA' },
     });
     afirma(r.status === 200 && r.json.token, 'login de atleta', r);
     const A = r.json.token;
     r = await api('POST', '/api/auth/login', {
-        corpo: { email: emailA, senha: 'SATE@123', tipo: 'TREINADOR' },
+        corpo: { email: emailA, senha: senhaA, tipo: 'TREINADOR' },
     });
     afirma(r.status === 403, 'atleta não entra como treinador', r);
 
@@ -124,7 +127,7 @@ function dia(n) {
     afirma(r.status === 403, 'atleta não lê código da equipe', r);
 
     r = await api('POST', '/api/auth/login', {
-        corpo: { email: emailB, senha: 'SATE@123', tipo: 'ATLETA' },
+        corpo: { email: emailB, senha: senhaB, tipo: 'ATLETA' },
     });
     const B = r.json.token;
     r = await api('POST', '/api/equipes/entrar', { token: B, corpo: { codigo: 'SATE-ZZZZZZ' } });

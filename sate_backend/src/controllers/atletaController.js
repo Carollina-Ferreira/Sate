@@ -1,6 +1,7 @@
 
 const prisma = require('../lib/prisma');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const fs = require('fs');
 
 const {
@@ -289,9 +290,9 @@ async function criarAtleta(req, res) {
             }
         }
 
-        // Mantém o comportamento de senha temporária
-        // que já existia no projeto.
-        const senhaTemporaria = 'SATE@123';
+        // Senha provisória única: a senha fixa permitia acessar qualquer novo atleta.
+        // Entregue-a ao usuário pelo fluxo de cadastro já existente.
+        const senhaTemporaria = 'SATE-' + crypto.randomBytes(12).toString('base64url');
 
         const senhaHash = await bcrypt.hash(
             senhaTemporaria,

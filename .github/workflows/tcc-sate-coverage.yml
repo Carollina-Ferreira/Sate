@@ -63,3 +63,57 @@ jobs:
           else
             echo "Sem testes Flutter; análise estática executada."
           fi
+
+  integracao:
+    name: Integração real API + MySQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci
+          MYSQL_DATABASE: sate_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -uroot -pci"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      NODE_ENV: test
+      PORT: 3000
+      DATABASE_URL: mysql://root:ci@127.0.0.1:3306/sate_ci
+      JWT_SECRET: chave-local-exclusiva-de-testes-ci-nao-usar-em-producao
+      # Turnstile sem secret em CI: testamos autenticação e integração funcional.
+    defaults:
+      run:
+        working-directory: sate_backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - name: Criar esquema no MySQL temporário
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+      - name: Iniciar API e aguardar healthcheck
+        run: |
+          node src/server.js > /tmp/sate-api-ci.log 2>&1 &
+          for i in $(seq 1 45); do
+            if curl -fsS http://127.0.0.1:3000/api/health; then
+              echo "API pronta."
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/sate-api-ci.log
+          exit 1
+      - name: Testar fluxos entre site, banco e app
+        run: node scripts/teste_integracao.js
+      - name: Logs do backend em caso de erro
+        if: failure()
+        run: cat /tmp/sate-api-ci.log || true

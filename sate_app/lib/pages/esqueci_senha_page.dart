@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../sate/ui/fundo.dart';
 import 'package:http/http.dart' as http;
 
+import '../services/api_config.dart';
 import '../services/demo_http.dart';
 
 import 'link_enviado_page.dart';
@@ -25,7 +26,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
   static const rosa = Color(0xFFEF476F);
   static const azul = Color(0xFF003D31);
 
-  static const String apiUrl = 'http://localhost:3000';
+  static String get apiUrl => ApiConfig.baseUrl;
 
   @override
   void dispose() {
@@ -287,7 +288,7 @@ class _EsqueciSenhaPageState extends State<EsqueciSenhaPage> {
       debugPrint('Email: $email');
       debugPrint('================================');
 
-      final resposta = await demoPost(
+      final resposta = await apiPost(
         Uri.parse(
           '$apiUrl/api/password/esqueci-senha',
         ),

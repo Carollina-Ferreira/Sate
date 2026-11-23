@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../pages/Atleta/atleta_qrcode_page.dart';
+import '../../pages/Treinador/treinador_equipes_page.dart';
 import '../../pages/login_page.dart';
+import '../../services/navegacao.dart';
+import '../../services/sessao.dart';
 import '../../theme/sate_theme.dart';
 import '../data/sate_store.dart';
 import '../ui/cores.dart';
@@ -15,8 +18,12 @@ import 'planos_page.dart';
 import 'tutorial_page.dart';
 
 Future<void> sairDaConta(BuildContext context) async {
+  // O menu lateral já foi fechado quando esta função roda: usa o contexto do navegador
+  // global, que continua existindo, em vez do contexto (morto) do menu.
+  final ctxDialogo = sateNavigatorKey.currentContext ?? context;
   final ok = await showDialog<bool>(
-    context: context,
+    // ignore: use_build_context_synchronously
+    context: ctxDialogo,
     builder: (ctx) => AlertDialog(
       title: const Text('Sair da conta?'),
       content: const Text('Você voltará para a tela de login.'),
@@ -26,11 +33,17 @@ Future<void> sairDaConta(BuildContext context) async {
       ],
     ),
   );
-  if (ok == true && context.mounted) {
-    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+  if (ok == true) {
+    // 1) Troca de tela PRIMEIRO, pelo navegador global (não depende deste context,
+    //    que deixa de existir quando os dados são limpos).
+    final nav = sateNavigatorKey.currentState ?? Navigator.of(context, rootNavigator: true);
+    nav.pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const LoginPage()),
       (_) => false,
     );
+    // 2) Depois apaga o token e os dados em memória deste aparelho.
+    await Sessao.limpar();
+    await SateStore.i.encerrar();
   }
 }
 
@@ -61,7 +74,7 @@ class CascaSate extends StatefulWidget {
   State<CascaSate> createState() => _CascaSateState();
 }
 
-class _CascaSateState extends State<CascaSate> {
+class _CascaSateState extends State<CascaSate> with WidgetsBindingObserver {
   int _i = 0;
   final PageController _pagina = PageController();
   late final Future<void> _pronto;
@@ -70,6 +83,7 @@ class _CascaSateState extends State<CascaSate> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _pronto = SateStore.i
         .iniciar(nome: widget.nome, email: widget.email, ehTreinador: widget.treinador)
         .then((_) => _tutorialInicial());
@@ -89,8 +103,18 @@ class _CascaSateState extends State<CascaSate> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _pagina.dispose();
     super.dispose();
+  }
+
+  /// Ao voltar para o app, busca as novidades feitas no site.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SateStore.i.sincronizar(silencioso: true);
+      SateStore.i.carregarImagensEquipes(); // foto alterada no site aparece ao voltar
+    }
   }
 
   /// Troca de aba pela barra inferior (ou por atalhos das telas): a página desliza
@@ -341,6 +365,16 @@ class GavetaSate extends StatelessWidget {
               item(Icons.workspace_premium_outlined, 'Planos',
                   () => abrir(context, const PlanosSatePage()),
                   cor: c.rosa, sub: 'Limite de atletas excedido'),
+            if (treinador)
+              item(Icons.swap_horiz_rounded, 'Trocar de equipe', () {
+                // Volta para a escolha de equipe; o app inteiro passa a mostrar a nova.
+                sateNavigatorKey.currentState?.pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (_) =>
+                          TreinadorEquipesPage(nomeUsuario: nome, emailUsuario: email)),
+                  (_) => false,
+                );
+              }, sub: SateStore.i.equipeAtiva?.nome ?? 'Escolher equipe'),
             if (!treinador)
               item(Icons.qr_code_2_rounded, 'QR Code',
                   () => abrirLegado(context, const AtletaQrCodePage()),

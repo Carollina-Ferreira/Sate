@@ -101,7 +101,7 @@ Future<Uint8List> gerarRelatorioAtletaPdf(Atleta a) async {
   final linhasTeste = <({TipoTeste tipo, List<ResultadoTeste> res})>[];
 
   for (final t in s.testesDoAtleta(a)) {
-    final r = s.resultadosDe(a.nome, teste: t.nome);
+    final r = s.resultadosDe(a.id, teste: t.nome);
 
     if (r.isNotEmpty) {
       linhasTeste.add((tipo: t, res: r));
@@ -113,7 +113,7 @@ Future<Uint8List> gerarRelatorioAtletaPdf(Atleta a) async {
   for (final cat in categoriasUniversais) {
     final t = catalogoTestes.firstWhere((x) => x.categoria == cat);
 
-    final r = s.resultadosDe(a.nome, teste: t.nome);
+    final r = s.resultadosDe(a.id, teste: t.nome);
 
     categorias.add((
       nome: cat,
@@ -131,7 +131,7 @@ Future<Uint8List> gerarRelatorioAtletaPdf(Atleta a) async {
           ) /
           comEscore.length;
 
-  final historico = s.resultadosDe(a.nome).reversed.take(15).toList();
+  final historico = s.resultadosDe(a.id).reversed.take(15).toList();
   final metas = s.metasDe(a.id);
   final feedbacks = s.feedbacksDe(a.id).take(5).toList();
   final docs = s.documentosDe(a.id);
@@ -378,12 +378,10 @@ Future<Uint8List> gerarRelatorioAtletaPdf(Atleta a) async {
         campo('Posição / função', a.posicao),
         campo('Equipe', eq.nome),
         campo('Modalidade', eq.modalidade),
-        campo('Idade', '${a.idade} anos'),
-        campo('Altura', '${a.alturaCm} cm'),
-        campo(
-          'Peso',
-          '${a.pesoKg.toStringAsFixed(a.pesoKg % 1 == 0 ? 0 : 1)} kg',
-        ),
+        campo('Idade', a.idadeTxt),
+        campo('Altura', a.alturaTxt),
+        campo('Peso', a.pesoTxt),
+        campo('IMC', a.imc == null ? '—' : '${a.imcTxt} (${a.imcClasse})'),
         if (a.email.isNotEmpty)
           campo('E-mail', a.email, largura: 230),
         campo('Local de treino', eq.local, largura: 230),

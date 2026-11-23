@@ -14,6 +14,10 @@ class Equipe {
   final String id, nome, modalidade, local;
   final List<int> dias; // DateTime.monday..sunday
   final int inicioMin, duracaoMin;
+
+  /// Código de convite (só o treinador recebe do servidor).
+  final String? codigo;
+  final String categoria;
   const Equipe({
     required this.id,
     required this.nome,
@@ -22,16 +26,44 @@ class Equipe {
     required this.dias,
     required this.inicioMin,
     required this.duracaoMin,
+    this.codigo,
+    this.categoria = '',
   });
+
+  /// Equipe "vazia" usada quando o atleta ainda não tem equipe.
+  static const Equipe nenhuma = Equipe(
+    id: '',
+    nome: 'Sem equipe',
+    modalidade: '',
+    local: '',
+    dias: [],
+    inicioMin: 18 * 60,
+    duracaoMin: 90,
+  );
+
+  factory Equipe.fromApi(Map<String, dynamic> j) => Equipe(
+        id: '${j['id']}',
+        nome: (j['nome'] ?? '') as String,
+        modalidade: (j['modalidade'] ?? '') as String,
+        categoria: (j['categoria'] ?? '') as String,
+        local: (j['local'] ?? '') as String,
+        dias: [for (final d in (j['diasTreino'] as List? ?? const [])) (d as num).toInt()],
+        inicioMin: (j['inicioMin'] as num?)?.toInt() ?? 18 * 60,
+        duracaoMin: (j['duracaoMin'] as num?)?.toInt() ?? 90,
+        codigo: j['codigoConvite'] as String?,
+      );
 }
 
 class Atleta {
   final String id, nome, equipeId, posicao, email;
+
+  /// 0 quando o dado não foi informado no cadastro.
   final int idade, alturaCm;
   final double pesoKg;
 
-  /// Taxa de presença usada para gerar o histórico de demonstração (0..1).
+  /// Não é mais usado (era do histórico de demonstração); mantido por compatibilidade.
   final double assiduidade;
+  final String telefone, categoria;
 
   const Atleta({
     required this.id,
@@ -42,8 +74,47 @@ class Atleta {
     required this.idade,
     required this.alturaCm,
     required this.pesoKg,
-    required this.assiduidade,
+    this.assiduidade = 0,
+    this.telefone = '',
+    this.categoria = '',
   });
+
+  /// Textos prontos: "—" quando o dado ainda não foi informado.
+  String get idadeTxt => idade > 0 ? '$idade anos' : '—';
+  String get alturaTxt => alturaCm > 0 ? '$alturaCm cm' : '—';
+  String get pesoTxt =>
+      pesoKg > 0 ? '${pesoKg.toStringAsFixed(pesoKg % 1 == 0 ? 0 : 1)} kg' : '—';
+
+  /// IMC = peso (kg) / altura (m)². Nulo enquanto peso ou altura não forem informados.
+  double? get imc =>
+      (alturaCm > 0 && pesoKg > 0) ? pesoKg / ((alturaCm / 100) * (alturaCm / 100)) : null;
+
+  String get imcTxt => imc == null ? '—' : imc!.toStringAsFixed(1);
+
+  /// Classificação da OMS para adultos (para jovens o treinador deve interpretar o valor).
+  String get imcClasse {
+    final v = imc;
+    if (v == null) return 'Sem dados';
+    if (v < 18.5) return 'Abaixo do peso';
+    if (v < 25) return 'Peso normal';
+    if (v < 30) return 'Sobrepeso';
+    return 'Obesidade';
+  }
+
+  factory Atleta.fromApi(Map<String, dynamic> j) => Atleta(
+        id: '${j['id']}',
+        nome: (j['nome'] ?? 'Atleta') as String,
+        equipeId: j['equipeId'] == null ? '' : '${j['equipeId']}',
+        posicao: ((j['posicao'] ?? '') as String).isEmpty
+            ? 'A definir'
+            : j['posicao'] as String,
+        email: (j['email'] ?? '') as String,
+        idade: (j['idade'] as num?)?.toInt() ?? 0,
+        alturaCm: (j['alturaCm'] as num?)?.toInt() ?? 0,
+        pesoKg: (j['pesoKg'] as num?)?.toDouble() ?? 0,
+        telefone: (j['telefone'] ?? '') as String,
+        categoria: (j['categoria'] ?? '') as String,
+      );
 }
 
 class Exercicio {
@@ -104,6 +175,10 @@ class Treino {
   final List<String> atletaIds;
   final bool modelo;
 
+  /// Chave da sessão recorrente que este treino altera/cancela ("p-<equipe>-<data>").
+  final String? padrao;
+  final bool cancelado;
+
   const Treino({
     required this.id,
     required this.titulo,
@@ -117,7 +192,25 @@ class Treino {
     required this.exercicioIds,
     required this.atletaIds,
     this.modelo = false,
+    this.padrao,
+    this.cancelado = false,
   });
+
+  factory Treino.fromApi(Map<String, dynamic> j) => Treino(
+        id: '${j['id']}',
+        titulo: (j['titulo'] ?? '') as String,
+        objetivo: (j['objetivo'] ?? '') as String,
+        foco: (j['foco'] ?? '') as String,
+        observacoes: (j['observacoes'] ?? '') as String,
+        equipeId: '${j['equipeId']}',
+        data: somenteData(DateTime.parse(j['data'] as String)),
+        inicioMin: (j['inicioMin'] as num?)?.toInt() ?? 1080,
+        duracaoMin: (j['duracaoMin'] as num?)?.toInt() ?? 60,
+        exercicioIds: [for (final e in (j['exercicioIds'] as List? ?? const [])) '$e'],
+        atletaIds: [for (final a in (j['atletaIds'] as List? ?? const [])) '$a'],
+        padrao: j['padraoChave'] as String?,
+        cancelado: (j['cancelado'] ?? false) as bool,
+      );
 
   String get chave => chaveData(data);
 
@@ -185,9 +278,13 @@ class ResultadoTeste {
   final double valor;
   final bool demo;
 
+  /// Id no servidor e id do atleta dono do resultado (vazios em registros novos).
+  final int? id;
+  final String atletaId;
+
   const ResultadoTeste(this.atleta, this.teste, this.unidade, this.data,
       this.valor, this.obs,
-      {this.demo = false});
+      {this.demo = false, this.id, this.atletaId = ''});
 
   // Mesmo formato já usado pela tela de testes anterior (dados continuam válidos).
   Map<String, dynamic> toJson() => {
@@ -311,6 +408,39 @@ class EventoAgenda {
     this.equipeId,
     this.demo = false,
   });
+
+  factory EventoAgenda.fromApi(Map<String, dynamic> j) => EventoAgenda(
+        id: '${j['id']}',
+        titulo: (j['titulo'] ?? '') as String,
+        local: (j['local'] ?? '') as String,
+        observacoes: (j['observacoes'] ?? '') as String,
+        data: somenteData(DateTime.parse(j['data'] as String)),
+        tipo: switch (j['tipo']) {
+          'JOGO' => TipoEv.jogo,
+          'AVALIACAO' => TipoEv.avaliacao,
+          'REUNIAO' => TipoEv.reuniao,
+          _ => TipoEv.lembrete,
+        },
+        inicioMin: (j['inicioMin'] as num?)?.toInt() ?? 480,
+        fimMin: (j['fimMin'] as num?)?.toInt() ?? 540,
+        equipeId: j['equipeId'] == null ? null : '${j['equipeId']}',
+      );
+
+  Map<String, dynamic> toApi() => {
+        'titulo': titulo,
+        'local': local,
+        'observacoes': observacoes,
+        'data': chaveData(data),
+        'tipo': switch (tipo) {
+          TipoEv.jogo => 'JOGO',
+          TipoEv.avaliacao => 'AVALIACAO',
+          TipoEv.reuniao => 'REUNIAO',
+          TipoEv.lembrete => 'LEMBRETE',
+        },
+        'inicioMin': inicioMin,
+        'fimMin': fimMin,
+        'equipeId': equipeId == null ? null : int.tryParse(equipeId!),
+      };
 
   Map<String, dynamic> toJson() => {
         'id': id,

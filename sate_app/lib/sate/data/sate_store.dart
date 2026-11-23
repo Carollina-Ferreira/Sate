@@ -1,10 +1,21 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../services/api_client.dart';
+import '../../services/api_config.dart';
+import '../../services/sate_api.dart';
+import '../../services/sessao.dart';
+import 'escopo_equipe.dart';
 import 'modelos.dart';
+
+/// Permite exibir mensagens de erro da API de qualquer lugar (ligado ao MaterialApp).
+final GlobalKey<ScaffoldMessengerState> sateMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 // ───────────────────────── Catálogos fixos ─────────────────────────
 
@@ -163,64 +174,6 @@ const List<Plano> planosSate = [
   ]),
 ];
 
-const List<Equipe> _equipesDemo = [
-  Equipe(
-      id: 'eq1',
-      nome: 'Vôlei Sub-17 Feminino',
-      modalidade: 'Vôlei',
-      local: 'Ginásio Municipal',
-      dias: [DateTime.monday, DateTime.wednesday, DateTime.friday],
-      inicioMin: 18 * 60,
-      duracaoMin: 90),
-  Equipe(
-      id: 'eq2',
-      nome: 'Futsal Adulto',
-      modalidade: 'Futsal',
-      local: 'Quadra Coberta',
-      dias: [DateTime.tuesday, DateTime.thursday],
-      inicioMin: 19 * 60 + 30,
-      duracaoMin: 75),
-  Equipe(
-      id: 'eq3',
-      nome: 'Atletismo Base',
-      modalidade: 'Atletismo',
-      local: 'Pista do Parque',
-      dias: [DateTime.saturday],
-      inicioMin: 8 * 60,
-      duracaoMin: 90),
-];
-
-Atleta _a(String id, String nome, String eq, String pos, int idade, int alt,
-        double peso, double ass) =>
-    Atleta(
-      id: id,
-      nome: nome,
-      equipeId: eq,
-      posicao: pos,
-      email: '${nome.toLowerCase().split(' ').first}@exemplo.com',
-      idade: idade,
-      alturaCm: alt,
-      pesoKg: peso,
-      assiduidade: ass,
-    );
-
-final List<Atleta> _atletasDemo = [
-  _a('a1', 'Marina Costa', 'eq1', 'Ponteira', 16, 176, 63, 0.94),
-  _a('a2', 'Beatriz Lima', 'eq1', 'Levantadora', 16, 171, 59, 0.88),
-  _a('a3', 'Júlia Ramos', 'eq1', 'Central', 17, 182, 68, 0.81),
-  _a('a4', 'Camila Duarte', 'eq1', 'Líbero', 15, 165, 55, 0.91),
-  _a('a5', 'Sofia Martins', 'eq1', 'Oposta', 17, 179, 66, 0.72),
-  _a('a6', 'Larissa Alves', 'eq1', 'Ponteira', 16, 174, 61, 0.85),
-  _a('a7', 'Rafael Nunes', 'eq2', 'Fixo', 24, 178, 74, 0.90),
-  _a('a8', 'Lucas Barbosa', 'eq2', 'Ala', 22, 175, 70, 0.83),
-  _a('a9', 'Pedro Teixeira', 'eq2', 'Goleiro', 26, 184, 82, 0.78),
-  _a('a10', 'Gustavo Pires', 'eq2', 'Pivô', 25, 180, 77, 0.69),
-  _a('a11', 'Thiago Moura', 'eq2', 'Ala', 23, 173, 68, 0.87),
-  _a('a12', 'Ana Clara Souza', 'eq3', 'Velocista', 15, 168, 54, 0.92),
-  _a('a13', 'Davi Carvalho', 'eq3', 'Fundista', 16, 172, 58, 0.86),
-  _a('a14', 'Helena Ribeiro', 'eq3', 'Saltadora', 16, 170, 56, 0.79),
-];
-
 const List<Exercicio> _exerciciosDemo = [
   Exercicio(
       id: 'ex_aquec',
@@ -356,107 +309,175 @@ const List<Exercicio> _exerciciosDemo = [
       demo: true),
 ];
 
-typedef _Modelo = (String, String, String, List<String>);
+// ───────────────────────── Armazenamento ─────────────────────────
 
-const Map<String, Map<int, _Modelo>> _modelosSessao = {
-  'eq1': {
-    DateTime.monday: (
-      'Força e potência',
-      'Desenvolver força de membros inferiores e potência de salto.',
-      'Intensidade com técnica: cada repetição conta.',
-      ['ex_aquec', 'ex_agach', 'ex_afundo', 'ex_caixa', 'ex_prancha'],
-    ),
-    DateTime.wednesday: (
-      'Fundamentos de ataque e saque',
-      'Aprimorar saque, recepção e passe.',
-      'Concentração no gesto técnico.',
-      ['ex_aquec', 'ex_toque', 'ex_saque', 'ex_escada', 'ex_mobil'],
-    ),
-    DateTime.friday: (
-      'Jogo coletivo e resistência',
-      'Aplicar os fundamentos em situação de jogo.',
-      'Comunicação e confiança em quadra.',
-      ['ex_aquec', 'ex_escada', 'ex_interv', 'ex_saque', 'ex_mobil'],
-    ),
-  },
-  'eq2': {
-    DateTime.tuesday: (
-      'Condução e velocidade',
-      'Melhorar condução de bola e arrancadas curtas.',
-      'Decisões rápidas sob pressão.',
-      ['ex_aquec', 'ex_tiro', 'ex_conducao', 'ex_escada', 'ex_mobil'],
-    ),
-    DateTime.thursday: (
-      'Força e resistência específica',
-      'Construir base de força e capacidade aeróbia.',
-      'Constância até o último minuto.',
-      ['ex_aquec', 'ex_agach', 'ex_afundo', 'ex_interv', 'ex_prancha'],
-    ),
-  },
-  'eq3': {
-    DateTime.saturday: (
-      'Velocidade e saltos',
-      'Trabalhar aceleração e potência de impulsão.',
-      'Relaxar na velocidade máxima.',
-      ['ex_aquec', 'ex_tiro', 'ex_caixa', 'ex_interv', 'ex_mobil'],
-    ),
-  },
-};
+/// Notificação do usuário (vinda de /api/notificacoes; atleta e treinador).
+class NotificacaoApp {
+  final String id, tipo, titulo, texto;
+  final DateTime quando;
+  final bool lida;
+  const NotificacaoApp(this.id, this.tipo, this.titulo, this.texto, this.quando, this.lida);
+
+  factory NotificacaoApp.fromApi(Map<String, dynamic> j) => NotificacaoApp(
+        '${j['id']}',
+        (j['type'] ?? '') as String,
+        (j['title'] ?? '') as String,
+        (j['description'] ?? '') as String,
+        DateTime.tryParse('${j['time'] ?? j['createdAt']}')?.toLocal() ?? DateTime.now(),
+        (j['read'] ?? false) as bool,
+      );
+}
 
 // ───────────────────────── Armazenamento ─────────────────────────
 
-/// Estado local do app. Tudo aqui é demonstrativo: sem servidor.
-/// Persistem no aparelho apenas os itens criados/editados pelo usuário.
+/// Estado do app. O BANCO DE DADOS DO SERVIDOR é a fonte oficial: tudo o que
+/// aparece aqui vem de /api/mobile/snapshot (mesmos dados do site) e fica apenas em
+/// memória. Toda alteração é enviada à API e, depois, o estado é atualizado.
+/// Permanecem somente no aparelho: tutorial já visto, plano (visual), feed da
+/// comunidade e documentos pessoais do treinador (o servidor ainda não tem essas tabelas).
 class SateStore extends ChangeNotifier {
   SateStore._();
   static final SateStore i = SateStore._();
 
-  static const _kExercicios = 'sate_exercicios';
-  static const _kTreinos = 'sate_treinos_custom';
-  static const _kRemovidos = 'sate_treinos_removidos';
-  static const _kPresencas = 'sate_presencas';
-  static const _kTestes = 'sate_testes'; // mesma chave da versão anterior
   static const _kDocs = 'sate_docs';
   static const _kPlano = 'sate_plano';
-  static const _kEventos = 'sate_eventos';
-  static const _kMetas = 'sate_metas';
-  static const _kFeedbacks = 'sate_feedbacks';
   static const _kPosts = 'sate_posts';
-  static const _kExtras = 'sate_atletas_extra';
   static const _kSimLimite = 'sate_sim_limite';
-  static const _kDocsAtletas = 'sate_docs_atletas_v1';
+  static const _kExOcultos = 'sate_exercicios_ocultos';
+  static const _kEquipeAtiva = 'sate_equipe_ativa';
 
   bool _carregado = false;
   bool treinador = true;
   String nomeUsuario = '';
   String emailUsuario = '';
 
-  List<Equipe> get equipes => _equipesDemo;
+  /// Estados de carregamento e erro para as telas.
+  bool carregando = false;
+  bool primeiraCargaFeita = false;
+  String? erroSincronizacao;
+  DateTime? ultimaSincronizacao;
+
+  final List<Equipe> _equipes = [];
   final List<Atleta> _atletas = [];
-  late Atleta eu;
+  Atleta eu = _atletaVazio;
+
+  static const Atleta _atletaVazio = Atleta(
+      id: '',
+      nome: '',
+      equipeId: '',
+      posicao: '',
+      email: '',
+      idade: 0,
+      alturaCm: 0,
+      pesoKg: 0);
+
+  // ── Equipe ativa (filtro do treinador) ──
+  // O treinador escolhe UMA equipe e todo o app passa a mostrar só os dados dela
+  // (atletas, treinos, eventos, documentos). O filtro usa o ID real da equipe.
+  String? _equipeAtivaId;
+
+  String? get equipeAtivaId => _equipeAtivaId;
+
+  /// Equipe escolhida pelo treinador (nula para atleta ou antes de escolher).
+  Equipe? get equipeAtiva {
+    for (final e in _equipes) {
+      if (e.id == _equipeAtivaId) return e;
+    }
+    return null;
+  }
+
+  /// Todas as equipes do treinador (para trocar de equipe e editar agenda/código).
+  List<Equipe> get todasEquipes => List.unmodifiable(_equipes);
+
+  /// Equipes visíveis agora: só a ativa (se houver) — o resto do app usa esta lista.
+  List<Equipe> get equipes =>
+      List.unmodifiable(noEscopoDaEquipe<Equipe>(_equipes, _equipeAtivaId, (e) => e.id));
+
+  /// Fotos das equipes (data URL base64 vindas do site), por id da equipe.
+  final Map<String, String> _imagensEquipes = {};
+  String? imagemDaEquipe(String id) => _imagensEquipes[id];
+
+  /// Escolhe a equipe ativa (ou null para ver todas) e guarda no aparelho.
+  Future<void> definirEquipeAtiva(String? id) async {
+    if (!treinador) return;
+    _equipeAtivaId = (id == null || id.isEmpty) ? null : id;
+    notifyListeners();
+    final p = await SharedPreferences.getInstance();
+    if (_equipeAtivaId == null) {
+      await p.remove(_kEquipeAtiva);
+    } else {
+      await p.setString(_kEquipeAtiva, _equipeAtivaId!);
+    }
+  }
+
+  /// Equipe escolhida na última vez (usada ao reabrir o app com a sessão salva).
+  static Future<String?> equipeAtivaSalva() async {
+    final p = await SharedPreferences.getInstance();
+    return p.getString(_kEquipeAtiva);
+  }
+
+  /// Busca as fotos das equipes no servidor (mesmo endpoint que o site já usa).
+  /// Fica separado do snapshot para não trazer imagens grandes a cada atualização.
+  Future<void> carregarImagensEquipes() async {
+    if (!treinador || !Sessao.logado) return;
+    try {
+      final lista = await SateApi.equipesDoTreinador();
+      final novo = <String, String>{
+        for (final e in lista)
+          if (e is Map && (e['imagem'] ?? '').toString().isNotEmpty)
+            '${e['id']}': e['imagem'].toString(),
+      };
+      var mudou = novo.length != _imagensEquipes.length;
+      if (!mudou) {
+        for (final k in novo.keys) {
+          if (_imagensEquipes[k] != novo[k]) {
+            mudou = true;
+            break;
+          }
+        }
+      }
+      if (mudou) {
+        _imagensEquipes
+          ..clear()
+          ..addAll(novo);
+        notifyListeners();
+      }
+    } catch (_) {
+      // Foto é um complemento: se falhar, o app mostra o ícone padrão.
+    }
+  }
 
   final List<Exercicio> _exercicios = [];
-  final List<Treino> _custom = [];
-  final Set<String> _removidos = {};
+  final List<Exercicio> _exerciciosApi = [];
+  final Set<String> _exOcultos = {};
+  final List<Treino> _treinos = [];
   final Map<String, String> _pres = {};
   final List<ResultadoTeste> _testes = [];
-  final List<ResultadoTeste> _testesDemo = [];
   final List<Documento> _docs = [];
+  final List<Documento> _docsLocais = []; // documentos pessoais do treinador
   int planoAtual = 0;
   final List<EventoAgenda> _eventos = [];
   final List<MetaAtleta> _metas = [];
   final List<FeedbackAtleta> _feedbacks = [];
   final List<Post> _posts = [];
-  final List<Atleta> _extras = [];
-  final Set<String> notifLidas = {};
+  final List<NotificacaoApp> _notificacoes = [];
 
-  /// Foto de perfil do usuário atual (guardada somente neste aparelho).
+  Timer? _timer;
+  bool _sincronizando = false;
+  String? _avatarBaixado;
+
+  /// Informações profissionais do treinador (vêm do servidor).
+  String formacao = '', registroProfissional = '', experiencia = '';
+
+  /// Foto de perfil do usuário atual (vem do servidor; cache em memória).
   Uint8List? fotoBytes;
 
   /// Apenas para demonstrar a tela de planos: finge que o limite foi excedido.
   bool simularLimite = false;
 
   DateTime get hoje => somenteData(DateTime.now());
+
+  // ── Ciclo de vida da sessão ──
 
   Future<void> iniciar({
     required String nome,
@@ -468,178 +489,311 @@ class SateStore extends ChangeNotifier {
     emailUsuario = email;
     if (!_carregado) {
       final p = await SharedPreferences.getInstance();
-      _lerExercicios(p.getString(_kExercicios));
-      _lerTreinos(p.getString(_kTreinos));
-      _removidos
-        ..clear()
-        ..addAll(p.getStringList(_kRemovidos) ?? const []);
-      final presRaw = p.getString(_kPresencas);
-      if (presRaw != null) {
-        final m = jsonDecode(presRaw) as Map<String, dynamic>;
-        _pres
-          ..clear()
-          ..addAll(m.map((k, v) => MapEntry(k, v as String)));
-      }
-      final testesRaw = p.getString(_kTestes);
-      if (testesRaw != null) {
-        _testes
-          ..clear()
-          ..addAll((jsonDecode(testesRaw) as List)
-              .map((e) => ResultadoTeste.fromJson(e as Map<String, dynamic>)));
-      }
-      _lerDocs(p.getString(_kDocs));
-      if (!(p.getBool(_kDocsAtletas) ?? false)) {
-        _docs.addAll(_docsDosAtletas());
-        await _persistir(_kDocs, _docs.map((e) => e.toJson()).toList());
-        await p.setBool(_kDocsAtletas, true);
-      }
-      _lerExtras(p.getString(_kExtras));
-      simularLimite = p.getBool(_kSimLimite) ?? false;
-      _lerEventos(p.getString(_kEventos));
-      _lerMetas(p.getString(_kMetas));
-      _lerFeedbacks(p.getString(_kFeedbacks));
+      _lerDocsLocais(p.getString(_kDocs));
       _lerPosts(p.getString(_kPosts));
+      _exOcultos
+        ..clear()
+        ..addAll(p.getStringList(_kExOcultos) ?? const []);
+      simularLimite = p.getBool(_kSimLimite) ?? false;
+      _equipeAtivaId = p.getString(_kEquipeAtiva);
       planoAtual = (p.getInt(_kPlano) ?? 0).clamp(0, planosSate.length - 1).toInt();
       _carregado = true;
     }
-    final pf = await SharedPreferences.getInstance();
-    final f = pf.getString('sate_foto_${emailUsuario.toLowerCase()}');
-    fotoBytes = f == null ? null : base64Decode(f);
-    _montarDemo();
+    await sincronizar();
+    carregarImagensEquipes(); // não bloqueia: a foto aparece quando chegar
+    _timer?.cancel();
+    // Atualização periódica: mudanças feitas no site chegam ao app sem reabrir.
+    _timer = Timer.periodic(const Duration(seconds: 45), (_) => sincronizar(silencioso: true));
+  }
+
+  /// Sai da conta: limpa tudo que estava em memória.
+  Future<void> encerrar() async {
+    _timer?.cancel();
+    _timer = null;
+    _equipes.clear();
+    _atletas.clear();
+    _exerciciosApi.clear();
+    _treinos.clear();
+    _pres.clear();
+    _testes.clear();
+    _docs.clear();
+    _eventos.clear();
+    _metas.clear();
+    _feedbacks.clear();
+    _notificacoes.clear();
+    _imagensEquipes.clear();
+    _equipeAtivaId = null;
+    SharedPreferences.getInstance().then((p) => p.remove(_kEquipeAtiva));
+    formacao = registroProfissional = experiencia = '';
+    eu = _atletaVazio;
+    fotoBytes = null;
+    _avatarBaixado = null;
+    primeiraCargaFeita = false;
+    erroSincronizacao = null;
+    _reconstruirExercicios();
     notifyListeners();
+  }
+
+  void _erro(Object e) {
+    final msg = e is ApiException ? e.mensagem : 'Algo deu errado. Tente novamente.';
+    sateMessengerKey.currentState
+      ?..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(msg), behavior: SnackBarBehavior.floating));
+  }
+
+  /// Busca no servidor tudo o que o usuário pode ver e atualiza as telas.
+  Future<void> sincronizar({bool silencioso = false}) async {
+    if (_sincronizando || !Sessao.logado) return;
+    _sincronizando = true;
+    if (!silencioso) {
+      carregando = true;
+      notifyListeners();
+    }
+    try {
+      final snap = await SateApi.snapshot();
+      _aplicarSnapshot(snap);
+      try {
+        final n = await SateApi.notificacoes();
+        _notificacoes
+          ..clear()
+          ..addAll([
+            for (final x in (n['notificacoes'] as List? ?? const []))
+              NotificacaoApp.fromApi(Map<String, dynamic>.from(x as Map))
+          ]);
+      } catch (_) {
+        // Notificações não devem derrubar a tela principal.
+      }
+      erroSincronizacao = null;
+      ultimaSincronizacao = DateTime.now();
+      primeiraCargaFeita = true;
+      _baixarAvatar();
+    } on ApiException catch (e) {
+      erroSincronizacao = e.mensagem;
+      if (!silencioso && !e.semConexao && e.status != 401) _erro(e);
+    } catch (_) {
+      erroSincronizacao = 'Não foi possível atualizar os dados.';
+    } finally {
+      _sincronizando = false;
+      carregando = false;
+      notifyListeners();
+    }
+  }
+
+  void _aplicarSnapshot(Map<String, dynamic> j) {
+    List<Map<String, dynamic>> lista(String k) => [
+          for (final x in (j[k] as List? ?? const [])) Map<String, dynamic>.from(x as Map)
+        ];
+
+    _equipes
+      ..clear()
+      ..addAll(lista('equipes').map(Equipe.fromApi));
+
+    // Equipe ativa: restaura a última escolha e descarta se a equipe não existe mais.
+    if (treinador) {
+      if (_equipeAtivaId != null && !_equipes.any((e) => e.id == _equipeAtivaId)) {
+        _equipeAtivaId = null;
+      }
+      // Treinador com UMA só equipe: ela já é a equipe ativa.
+      if (_equipeAtivaId == null && _equipes.length == 1) {
+        _equipeAtivaId = _equipes.first.id;
+      }
+    } else {
+      _equipeAtivaId = null;
+    }
+
+    final tr = j['treinador'];
+    if (tr is Map) {
+      formacao = (tr['formacao'] ?? '') as String;
+      registroProfissional = (tr['registroProfissional'] ?? '') as String;
+      experiencia = (tr['experiencia'] ?? '') as String;
+    }
+
+    final todos = lista('atletas').map(Atleta.fromApi).toList();
+    if (treinador) {
+      _atletas
+        ..clear()
+        ..addAll(todos);
+      eu = _atletaVazio;
+    } else {
+      // Para o atleta, o primeiro item é ele mesmo; os demais são colegas de equipe.
+      eu = todos.isNotEmpty ? todos.first : _atletaVazio;
+      _atletas
+        ..clear()
+        ..addAll(todos.skip(1));
+    }
+
+    _treinos
+      ..clear()
+      ..addAll(lista('treinos').map(Treino.fromApi));
+    _exerciciosApi
+      ..clear()
+      ..addAll(lista('exercicios').map(_exercicioApi));
+    _reconstruirExercicios();
+
+    _eventos
+      ..clear()
+      ..addAll(lista('eventos').map(EventoAgenda.fromApi));
+
+    _pres.clear();
+    for (final p in lista('presencas')) {
+      _pres['${p['atletaId']}|${p['data']}'] = (p['presente'] == true) ? 'ok' : 'falta';
+    }
+
+    final nomes = {for (final a in [..._atletas, eu]) a.id: a.nome};
+    _testes
+      ..clear()
+      ..addAll([
+        for (final t in lista('testes'))
+          ResultadoTeste(
+            nomes['${t['atletaId']}'] ?? '',
+            t['teste'] as String,
+            (t['unidade'] ?? '') as String,
+            DateTime.parse(t['data'] as String).toLocal(),
+            (t['valor'] as num).toDouble(),
+            (t['obs'] ?? '') as String,
+            id: (t['id'] as num).toInt(),
+            atletaId: '${t['atletaId']}',
+          )
+      ]);
+
+    _metas
+      ..clear()
+      ..addAll([
+        for (final m in lista('metas'))
+          MetaAtleta(
+            id: '${m['id']}',
+            atletaId: '${m['atletaId']}',
+            titulo: m['titulo'] as String,
+            descricao: (m['descricao'] ?? '') as String,
+            progresso: (m['progresso'] as num?)?.toInt() ?? 0,
+            prazo: somenteData(DateTime.parse(m['prazo'] as String)),
+          )
+      ]);
+
+    _feedbacks
+      ..clear()
+      ..addAll([
+        for (final f in lista('feedbacks'))
+          FeedbackAtleta('${f['id']}', '${f['atletaId']}', f['texto'] as String,
+              DateTime.parse(f['criadoEm'] as String).toLocal())
+      ]);
+
+    _docs
+      ..clear()
+      ..addAll([
+        for (final d in lista('documentos'))
+          Documento(
+            id: '${d['id']}',
+            titulo: d['titulo'] as String,
+            categoria: (d['categoria'] ?? 'Geral') as String,
+            validade: d['validade'] == null
+                ? null
+                : somenteData(DateTime.parse(d['validade'] as String)),
+            aprovado: (d['aprovado'] ?? false) as bool,
+            obs: (d['obs'] ?? '') as String,
+            atletaId: '${d['atletaId']}',
+          )
+      ]);
+  }
+
+  Exercicio _exercicioApi(Map<String, dynamic> e) => Exercicio(
+        id: '${e['id']}',
+        nome: e['nome'] as String,
+        grupo: (e['grupo'] ?? 'Geral') as String,
+        series: (e['series'] as num?)?.toInt() ?? 3,
+        repeticoes: (e['repeticoes'] as num?)?.toInt() ?? 10,
+        duracaoSeg: (e['duracaoSeg'] as num?)?.toInt() ?? 0,
+        instrucoes: (e['instrucoes'] ?? '') as String,
+        video: (e['video'] ?? '') as String,
+      );
+
+  /// Biblioteca = exercícios-modelo do app (menos os ocultados) + os do treinador no servidor.
+  void _reconstruirExercicios() {
+    _exercicios
+      ..clear()
+      ..addAll(_exerciciosDemo.where((e) => !_exOcultos.contains(e.id)))
+      ..addAll(_exerciciosApi);
+  }
+
+  Future<void> _baixarAvatar() async {
+    // O avatar do usuário vem de /api/mobile/me (campo avatarUrl).
+    try {
+      final me = await SateApi.me();
+      final url = (me['usuario'] as Map?)?['avatarUrl'] as String?;
+      if (url == null || url.isEmpty) {
+        if (fotoBytes != null && _avatarBaixado != null) {
+          fotoBytes = null;
+          _avatarBaixado = null;
+          notifyListeners();
+        }
+        return;
+      }
+      if (url == _avatarBaixado) return;
+      if (url.startsWith('data:')) {
+        fotoBytes = base64Decode(url.split(',').last);
+      } else {
+        final r = await http.get(Uri.parse(ApiConfig.urlArquivo(url)));
+        if (r.statusCode != 200) return;
+        fotoBytes = r.bodyBytes;
+      }
+      _avatarBaixado = url;
+      notifyListeners();
+    } catch (_) {}
   }
 
   /// Foto do usuário atual, se [nome] for o dele.
   Uint8List? fotoParaNome(String nome) =>
       (nomeUsuario.isNotEmpty && nome == nomeUsuario) ? fotoBytes : null;
 
-  /// Guarda (ou remove, com null) a foto de perfil neste aparelho.
+  /// Envia (ou remove, com null) a foto de perfil para o servidor.
   Future<void> definirFoto(Uint8List? bytes) async {
-    final p = await SharedPreferences.getInstance();
-    final chave = 'sate_foto_${emailUsuario.toLowerCase()}';
-    if (bytes == null) {
-      await p.remove(chave);
-    } else {
-      await p.setString(chave, base64Encode(bytes));
-    }
-    fotoBytes = bytes;
-    notifyListeners();
-  }
-
-  void _lerExercicios(String? raw) {
-    _exercicios.clear();
-    if (raw != null) {
-      _exercicios.addAll((jsonDecode(raw) as List)
-          .map((e) => Exercicio.fromJson(e as Map<String, dynamic>)));
-    } else {
-      _exercicios.addAll(_exerciciosDemo);
-    }
-  }
-
-  void _lerTreinos(String? raw) {
-    _custom.clear();
-    if (raw != null) {
-      _custom.addAll((jsonDecode(raw) as List)
-          .map((e) => Treino.fromJson(e as Map<String, dynamic>)));
-    }
-  }
-
-  void _lerDocs(String? raw) {
-    _docs.clear();
-    if (raw != null) {
-      _docs.addAll((jsonDecode(raw) as List)
-          .map((e) => Documento.fromJson(e as Map<String, dynamic>)));
-      return;
-    }
-    final h = hoje;
-    Documento d(String id, String t, String c, int? dias, bool ok, String o) =>
-        Documento(
-          id: id,
-          titulo: t,
-          categoria: c,
-          validade: dias == null ? null : somaDias(h, dias),
-          aprovado: ok,
-          obs: o,
-        );
-    _docs.addAll([
-      d('d1', 'Registro profissional (CREF)', 'Profissional', 210, true,
-          ''),
-      d('d2', 'Atestado de antecedentes', 'Profissional', 20, true,
-          'Renovar nas próximas semanas.'),
-      d('d3', 'Certificado de primeiros socorros', 'Capacitação', -35, true,
-          'Validade expirada: agendar reciclagem.'),
-      d('d4', 'Seguro de responsabilidade civil', 'Seguros', null, false,
-          'Ainda não enviado.'),
-      d('d5', 'Autorização de uso do espaço esportivo', 'Local', 75, true, ''),
-      d('d6', 'Termos de responsabilidade dos atletas', 'Atletas', null, false,
-          'Coletar assinaturas do grupo Sub-17.'),
-      d('d7', 'Curso de preparação física', 'Capacitação', 400, true, ''),
-      d('d8', 'Comprovante de formação continuada', 'Capacitação', -5, true,
-          'Vencido há poucos dias.'),
-    ]);
-  }
-
-  // ── Demonstração: atletas, testes ──
-
-  double _h(String s, [int salt = 0]) {
-    var h = (2166136261 ^ salt) & 0xFFFFFFFF;
-    for (final u in s.codeUnits) {
-      h ^= u;
-      h = (h * 16777619) & 0xFFFFFFFF;
-    }
-    return (h % 10000) / 10000.0;
-  }
-
-  void _montarDemo() {
-    _atletas
-      ..clear()
-      ..addAll(_atletasDemo)
-      ..addAll(_extras);
-    eu = Atleta(
-      id: 'eu',
-      nome: nomeUsuario.isEmpty ? 'Atleta' : nomeUsuario,
-      equipeId: 'eq1',
-      posicao: 'Ponteira',
-      email: emailUsuario,
-      idade: 16,
-      alturaCm: 172,
-      pesoKg: 60,
-      assiduidade: 0.88,
-    );
-    _testesDemo.clear();
-    for (final a in [..._atletas, if (!treinador) eu]) {
-      final eq = equipes.firstWhere((e) => e.id == a.equipeId);
-      final aplicaveis = catalogoTestes.where(
-          (t) => t.modalidade == null || t.modalidade == eq.modalidade);
-      for (final t in aplicaveis) {
-        final nivel = 0.30 + _h(a.id, t.nome.length) * 0.42;
-        final tendencia = 0.08 + _h(a.id, t.nome.length + 7) * 0.14;
-        for (var k = 0; k < 6; k++) {
-          final ruido = (_h('${a.id}${t.nome}$k') - 0.5) * 0.06;
-          final f = (nivel + tendencia * k / 5 + ruido).clamp(0.02, 0.98).toDouble();
-          var v = t.pior + (t.melhor - t.pior) * f;
-          v = double.parse(v.toStringAsFixed(t.casas == 0 ? 0 : t.casas));
-          final data = somaDias(hoje, -((5 - k) * 28 + 6));
-          _testesDemo.add(ResultadoTeste(a.nome, t.nome, t.unidade, data, v, '',
-              demo: true));
-        }
+    try {
+      if (bytes != null) {
+        await SateApi.atualizarUsuarioComFoto(
+            nome: nomeUsuario, email: emailUsuario, bytes: bytes);
+        fotoBytes = bytes;
+        _avatarBaixado = null;
+        _baixarAvatar();
+      } else {
+        // O servidor ainda não oferece remoção de foto: limpa só neste aparelho.
+        fotoBytes = null;
       }
+    } catch (e) {
+      _erro(e);
     }
+    notifyListeners();
   }
 
   // ── Consultas básicas ──
 
-  List<Atleta> get atletas => List.unmodifiable(_atletas);
+  /// Atletas visíveis: com equipe ativa, SOMENTE os vinculados a ela (por ID).
+  List<Atleta> get atletas => List.unmodifiable(
+      noEscopoDaEquipe<Atleta>(_atletas, _equipeAtivaId, (a) => a.equipeId));
+
+  /// Total de atletas do treinador (todas as equipes) — usado no limite do plano.
+  int get totalAtletasDoTreinador => _atletas.length;
 
   List<Atleta> atletasDaEquipe(String? equipeId) => equipeId == null
       ? atletas
       : _atletas.where((a) => a.equipeId == equipeId).toList();
 
-  Equipe equipe(String id) => equipes.firstWhere((e) => e.id == id);
+  Equipe equipe(String id) {
+    for (final e in _equipes) {
+      if (e.id == id) return e;
+    }
+    return Equipe.nenhuma;
+  }
 
   Atleta? atletaPorNome(String nome) {
     for (final a in [..._atletas, eu]) {
       if (a.nome.toLowerCase() == nome.trim().toLowerCase()) return a;
+    }
+    return null;
+  }
+
+  Atleta? atletaPorId(String id) {
+    for (final a in [..._atletas, eu]) {
+      if (a.id == id) return a;
     }
     return null;
   }
@@ -650,90 +804,100 @@ class SateStore extends ChangeNotifier {
     for (final e in _exercicios) {
       if (e.id == id) return e;
     }
+    for (final e in _exerciciosDemo) {
+      if (e.id == id) return e;
+    }
     return null;
   }
 
-  List<Documento> get documentos => List.unmodifiable(_docs);
-
-  /// Documentos de um atleta (ou do treinador, quando [atletaId] é null).
-  List<Documento> documentosDe(String? atletaId) =>
-      _docs.where((d) => d.atletaId == atletaId).toList();
-
-  /// Documentos iniciais de cada atleta (atestado, termo e identificação).
-  List<Documento> _docsDosAtletas() {
-    final h = hoje;
-    final res = <Documento>[];
-    for (final a in _atletasDemo) {
-      final r = _h(a.id, 21);
-      final r2 = _h(a.id, 22);
-      DateTime? val(int dias) => somaDias(h, dias);
-      // Atestado médico: varia entre em dia, vencendo, vencido e pendente.
-      final estado = (r * 10).floor();
-      res.add(Documento(
-        id: 'da1-${a.id}',
-        titulo: 'Atestado médico',
-        categoria: 'Saúde',
-        validade: estado == 9 ? null : val(estado < 5 ? 120 + estado * 20 : (estado < 7 ? 18 : -12)),
-        aprovado: estado != 9,
-        obs: estado == 9 ? 'Ainda não enviado.' : '',
-        atletaId: a.id,
-      ));
-      res.add(Documento(
-        id: 'da2-${a.id}',
-        titulo: a.idade < 18 ? 'Autorização dos responsáveis' : 'Termo de responsabilidade',
-        categoria: 'Termos',
-        validade: val(300),
-        aprovado: r2 > 0.2,
-        obs: r2 > 0.2 ? '' : 'Aguardando assinatura.',
-        atletaId: a.id,
-      ));
-      res.add(Documento(
-        id: 'da3-${a.id}',
-        titulo: 'Documento de identificação',
-        categoria: 'Cadastro',
-        validade: null,
-        aprovado: true,
-        obs: '',
-        atletaId: a.id,
-      ));
-    }
-    return res;
+  List<Documento> get documentos {
+    final ids = atletas.map((a) => a.id).toSet();
+    return List.unmodifiable([
+      ..._docs.where((d) => _equipeAtivaId == null || ids.contains(d.atletaId)),
+      ..._docsLocais,
+    ]);
   }
 
-  // ── Exercícios (CRUD local) ──
+  /// Documentos de um atleta (ou do treinador, quando [atletaId] é null).
+  List<Documento> documentosDe(String? atletaId) => atletaId == null
+      ? _docsLocais.toList()
+      : _docs.where((d) => d.atletaId == atletaId).toList();
+
+  void _lerDocsLocais(String? raw) {
+    _docsLocais.clear();
+    if (raw != null) {
+      try {
+        _docsLocais.addAll((jsonDecode(raw) as List)
+            .map((e) => Documento.fromJson(e as Map<String, dynamic>))
+            .where((d) => d.atletaId == null));
+      } catch (_) {}
+    }
+  }
+
+  // ── Exercícios ──
+
+  Map<String, dynamic> _corpoExercicio(Exercicio e) => {
+        'nome': e.nome,
+        'grupo': e.grupo,
+        'series': e.series,
+        'repeticoes': e.repeticoes,
+        'duracaoSeg': e.duracaoSeg,
+        'instrucoes': e.instrucoes,
+        'video': e.video,
+      };
 
   Future<void> salvarExercicio(Exercicio e) async {
-    final idx = _exercicios.indexWhere((x) => x.id == e.id);
-    if (idx >= 0) {
-      _exercicios[idx] = e;
-    } else {
-      _exercicios.add(e);
+    try {
+      final existeNoServidor = _exerciciosApi.any((x) => x.id == e.id);
+      if (existeNoServidor) {
+        await SateApi.atualizarExercicio(e.id, _corpoExercicio(e));
+      } else {
+        await SateApi.criarExercicio(_corpoExercicio(e));
+        // Editar um exercício-modelo cria uma cópia sua e oculta o original.
+        if (_exerciciosDemo.any((x) => x.id == e.id)) await _ocultarExercicio(e.id);
+      }
+      await sincronizar(silencioso: true);
+    } catch (err) {
+      _erro(err);
     }
-    await _persistir(_kExercicios, _exercicios.map((e) => e.toJson()).toList());
-    notifyListeners();
   }
 
   Future<void> removerExercicio(String id) async {
-    _exercicios.removeWhere((x) => x.id == id);
-    await _persistir(_kExercicios, _exercicios.map((e) => e.toJson()).toList());
+    try {
+      if (_exerciciosApi.any((x) => x.id == id)) {
+        await SateApi.excluirExercicio(id);
+      } else {
+        await _ocultarExercicio(id);
+      }
+      await sincronizar(silencioso: true);
+    } catch (err) {
+      _erro(err);
+    }
+  }
+
+  Future<void> _ocultarExercicio(String id) async {
+    _exOcultos.add(id);
+    final p = await SharedPreferences.getInstance();
+    await p.setStringList(_kExOcultos, _exOcultos.toList());
+    _reconstruirExercicios();
     notifyListeners();
   }
 
   // ── Treinos ──
 
+  /// Sessão recorrente gerada a partir do dia/horário da equipe (salvos no servidor).
   Treino _padrao(Equipe e, DateTime d) {
-    final m = _modelosSessao[e.id]?[d.weekday];
     return Treino(
       id: 'p-${e.id}-${chaveData(d)}',
-      titulo: m?.$1 ?? 'Treino da equipe',
-      objetivo: m?.$2 ?? '',
-      foco: m?.$3 ?? '',
+      titulo: 'Treino da equipe',
+      objetivo: '',
+      foco: '',
       observacoes: '',
       equipeId: e.id,
       data: d,
       inicioMin: e.inicioMin,
       duracaoMin: e.duracaoMin,
-      exercicioIds: m?.$4 ?? const [],
+      exercicioIds: const [],
       atletaIds: const [],
       modelo: true,
     );
@@ -743,22 +907,24 @@ class SateStore extends ChangeNotifier {
     final d = somenteData(dia);
     final k = chaveData(d);
     final res = <Treino>[];
-    for (final t in _custom) {
-      if (t.chave == k) res.add(t);
+    for (final t in noEscopoDaEquipe<Treino>(_treinos, _equipeAtivaId, (t) => t.equipeId)) {
+      if (t.chave == k && !t.cancelado) res.add(t);
     }
     for (final e in equipes) {
+      if (!e.dias.contains(d.weekday)) continue;
       final id = 'p-${e.id}-$k';
-      if (_removidos.contains(id) || _custom.any((t) => t.id == id)) continue;
-      if (e.dias.contains(d.weekday)) res.add(_padrao(e, d));
+      // Já existe alteração ou cancelamento desta sessão no servidor.
+      if (_treinos.any((t) => t.padrao == id)) continue;
+      res.add(_padrao(e, d));
     }
-    final filtrados = equipeId == null
-        ? res
-        : res.where((t) => t.equipeId == equipeId).toList();
+    final filtrados =
+        equipeId == null ? res : res.where((t) => t.equipeId == equipeId).toList();
     filtrados.sort((a, b) => a.inicioMin.compareTo(b.inicioMin));
     return filtrados;
   }
 
   List<Treino> treinosDoAtleta(Atleta a, DateTime dia) {
+    if (a.equipeId.isEmpty) return const [];
     return treinosNoDia(dia)
         .where((t) =>
             t.equipeId == a.equipeId &&
@@ -774,36 +940,69 @@ class SateStore extends ChangeNotifier {
       final d = somaDias(hoje, i);
       final lista = atleta == null ? treinosNoDia(d) : treinosDoAtleta(atleta, d);
       for (final t in lista) {
-        final fim = DateTime(d.year, d.month, d.day).add(Duration(minutes: t.inicioMin + t.duracaoMin));
+        final fim = DateTime(d.year, d.month, d.day)
+            .add(Duration(minutes: t.inicioMin + t.duracaoMin));
         if (fim.isAfter(agora)) res.add(t);
       }
     }
     return res.take(limite).toList();
   }
 
+  Map<String, dynamic> _corpoTreino(Treino t, {bool cancelado = false}) => {
+        'equipeId': int.parse(t.equipeId),
+        'titulo': t.titulo,
+        'objetivo': t.objetivo,
+        'foco': t.foco,
+        'observacoes': t.observacoes,
+        'data': t.chave,
+        'inicioMin': t.inicioMin,
+        'duracaoMin': t.duracaoMin,
+        'exercicioIds': t.exercicioIds,
+        'atletaIds': [for (final a in t.atletaIds) int.parse(a)],
+        'cancelado': cancelado,
+      };
+
   Future<void> salvarTreino(Treino t) async {
-    final idx = _custom.indexWhere((x) => x.id == t.id);
-    if (idx >= 0) {
-      _custom[idx] = t;
-    } else {
-      _custom.add(t);
+    try {
+      if (t.id.startsWith('p-')) {
+        await SateApi.criarTreino({..._corpoTreino(t), 'padraoChave': t.id});
+      } else if (_treinos.any((x) => x.id == t.id)) {
+        await SateApi.atualizarTreino(t.id, _corpoTreino(t));
+      } else {
+        await SateApi.criarTreino(_corpoTreino(t));
+      }
+      await sincronizar(silencioso: true);
+    } catch (e) {
+      _erro(e);
     }
-    _removidos.remove(t.id);
-    await _salvarTreinos();
-    notifyListeners();
   }
 
   Future<void> removerTreino(String id) async {
-    _custom.removeWhere((x) => x.id == id);
-    if (id.startsWith('p-')) _removidos.add(id);
-    await _salvarTreinos();
-    notifyListeners();
-  }
-
-  Future<void> _salvarTreinos() async {
-    await _persistir(_kTreinos, _custom.map((e) => e.toJson()).toList());
-    final p = await SharedPreferences.getInstance();
-    await p.setStringList(_kRemovidos, _removidos.toList());
+    try {
+      if (id.startsWith('p-')) {
+        // Sessão recorrente: registra o cancelamento apenas daquele dia.
+        final partes = id.split('-'); // p, equipe, yyyy, mm, dd
+        final equipeId = int.parse(partes[1]);
+        final data = partes.sublist(2).join('-');
+        await SateApi.criarTreino({
+          'equipeId': equipeId,
+          'titulo': 'Treino cancelado',
+          'data': data,
+          'padraoChave': id,
+          'cancelado': true,
+        });
+      } else {
+        final t = _treinos.where((x) => x.id == id).firstOrNull;
+        if (t?.padrao != null) {
+          await SateApi.atualizarTreino(id, {'cancelado': true});
+        } else {
+          await SateApi.excluirTreino(id);
+        }
+      }
+      await sincronizar(silencioso: true);
+    } catch (e) {
+      _erro(e);
+    }
   }
 
   // ── Frequência ──
@@ -814,24 +1013,33 @@ class SateStore extends ChangeNotifier {
     final o = _pres['${a.id}|${chaveData(d)}'];
     if (o == 'ok') return StatusPres.realizado;
     if (o == 'falta') return StatusPres.naoRealizado;
-    if (d.isBefore(hoje)) {
-      return _h('${a.id}${chaveData(d)}') < a.assiduidade
-          ? StatusPres.realizado
-          : StatusPres.naoRealizado;
-    }
+    // Sem registro do treinador: ainda não conta como presença nem como falta.
     return StatusPres.pendente;
   }
 
-  /// Marca presença (true), falta (false) ou limpa a marcação (null).
+  /// Marca presença (true), falta (false) ou limpa a marcação (null). Salvo no servidor.
   Future<void> marcarPresenca(Atleta a, DateTime dia, bool? presente) async {
-    final k = '${a.id}|${chaveData(somenteData(dia))}';
+    final data = chaveData(somenteData(dia));
+    final k = '${a.id}|$data';
+    final anterior = _pres[k];
+    // Atualiza na hora para a tela responder, e desfaz se o servidor recusar.
     if (presente == null) {
       _pres.remove(k);
     } else {
       _pres[k] = presente ? 'ok' : 'falta';
     }
-    await _persistir(_kPresencas, _pres);
     notifyListeners();
+    try {
+      await SateApi.registrarPresenca(a.id, data, presente);
+    } catch (e) {
+      if (anterior == null) {
+        _pres.remove(k);
+      } else {
+        _pres[k] = anterior;
+      }
+      notifyListeners();
+      _erro(e);
+    }
   }
 
   ({int ok, int total}) contagem(List<Atleta> lista, DateTime ini, DateTime fim) {
@@ -853,7 +1061,7 @@ class SateStore extends ChangeNotifier {
     return (ok: ok, total: total);
   }
 
-  /// Percentual de presença (0..1) ou null se não houve treino no período.
+  /// Percentual de presença (0..1) ou null se não houve registro no período.
   double? pct(List<Atleta> lista, DateTime ini, DateTime fim) {
     final c = contagem(lista, ini, fim);
     return c.total == 0 ? null : c.ok / c.total;
@@ -885,26 +1093,43 @@ class SateStore extends ChangeNotifier {
         .toList();
   }
 
-  /// Resultados de UM atleta (nunca mistura atletas), do mais antigo ao mais novo.
+  /// Resultados de UM atleta, do mais antigo ao mais novo. Aceita o id do atleta
+  /// (preferido, evita misturar homônimos) ou o nome.
   List<ResultadoTeste> resultadosDe(String atleta, {String? teste}) {
-    final nome = atleta.trim().toLowerCase();
-    final todos = [..._testesDemo, ..._testes].where((r) =>
-        r.atleta.trim().toLowerCase() == nome &&
+    final chave = atleta.trim().toLowerCase();
+    final todos = _testes.where((r) =>
+        (r.atletaId == atleta || r.atleta.trim().toLowerCase() == chave) &&
         (teste == null || r.teste.toLowerCase() == teste.toLowerCase()));
     final l = todos.toList()..sort((a, b) => a.data.compareTo(b.data));
     return l;
   }
 
   Future<void> registrarTeste(ResultadoTeste r) async {
-    _testes.add(r);
-    await _persistir(_kTestes, _testes.map((e) => e.toJson()).toList());
-    notifyListeners();
+    try {
+      final alvo = r.atletaId.isNotEmpty ? atletaPorId(r.atletaId) : atletaPorNome(r.atleta);
+      await SateApi.registrarTeste({
+        // O atleta logado grava sempre para si (o servidor também garante isso).
+        if (treinador && alvo != null) 'atletaId': int.parse(alvo.id),
+        'teste': r.teste,
+        'unidade': r.unidade,
+        'valor': r.valor,
+        'data': r.data.toUtc().toIso8601String(),
+        'obs': r.obs,
+      });
+      await sincronizar(silencioso: true);
+    } catch (e) {
+      _erro(e);
+    }
   }
 
   Future<void> removerTeste(ResultadoTeste r) async {
-    _testes.remove(r);
-    await _persistir(_kTestes, _testes.map((e) => e.toJson()).toList());
-    notifyListeners();
+    if (r.id == null) return;
+    try {
+      await SateApi.excluirTeste(r.id!);
+      await sincronizar(silencioso: true);
+    } catch (e) {
+      _erro(e);
+    }
   }
 
   /// Escores 0..1 por categoria universal usando o último resultado do atleta.
@@ -913,7 +1138,7 @@ class SateStore extends ChangeNotifier {
       for (final cat in categoriasUniversais)
         () {
           final t = catalogoTestes.firstWhere((x) => x.categoria == cat);
-          final r = resultadosDe(a.nome, teste: t.nome);
+          final r = resultadosDe(a.id, teste: t.nome);
           return r.isEmpty ? 0.0 : t.escore(r.last.valor);
         }(),
     ];
@@ -922,20 +1147,51 @@ class SateStore extends ChangeNotifier {
   // ── Documentos ──
 
   Future<void> salvarDocumento(Documento d) async {
-    final idx = _docs.indexWhere((x) => x.id == d.id);
-    if (idx >= 0) {
-      _docs[idx] = d;
-    } else {
-      _docs.add(d);
+    try {
+      if (d.atletaId == null) {
+        // Documento pessoal do treinador: ainda sem tabela no servidor (fica no aparelho).
+        final idx = _docsLocais.indexWhere((x) => x.id == d.id);
+        if (idx >= 0) {
+          _docsLocais[idx] = d;
+        } else {
+          _docsLocais.add(d);
+        }
+        await _persistir(_kDocs, _docsLocais.map((e) => e.toJson()).toList());
+        notifyListeners();
+        return;
+      }
+      final corpo = {
+        'atletaId': int.parse(d.atletaId!),
+        'titulo': d.titulo,
+        'categoria': d.categoria,
+        'validade': d.validade == null ? null : chaveData(d.validade!),
+        'obs': d.obs,
+        'aprovado': d.aprovado,
+      };
+      if (_docs.any((x) => x.id == d.id)) {
+        await SateApi.atualizarDocumento(d.id, corpo);
+      } else {
+        await SateApi.criarDocumento(corpo);
+      }
+      await sincronizar(silencioso: true);
+    } catch (e) {
+      _erro(e);
     }
-    await _persistir(_kDocs, _docs.map((e) => e.toJson()).toList());
-    notifyListeners();
   }
 
   Future<void> removerDocumento(String id) async {
-    _docs.removeWhere((x) => x.id == id);
-    await _persistir(_kDocs, _docs.map((e) => e.toJson()).toList());
-    notifyListeners();
+    try {
+      if (_docsLocais.any((x) => x.id == id)) {
+        _docsLocais.removeWhere((x) => x.id == id);
+        await _persistir(_kDocs, _docsLocais.map((e) => e.toJson()).toList());
+        notifyListeners();
+        return;
+      }
+      await SateApi.excluirDocumento(id);
+      await sincronizar(silencioso: true);
+    } catch (e) {
+      _erro(e);
+    }
   }
 
   // ── Plano (somente visual) ──
@@ -959,46 +1215,17 @@ class SateStore extends ChangeNotifier {
     await p.setBool(paraTreinador ? 'sate_tut_treinador' : 'sate_tut_atleta', true);
   }
 
+  // ── Eventos da agenda ──
 
-  // ───────────────────────── Eventos do calendário ─────────────────────────
+  /// Eventos da equipe ativa + os que valem para todas as equipes.
+  List<EventoAgenda> get eventos => List.unmodifiable(_eventosDoEscopo);
 
-  void _lerEventos(String? raw) {
-    _eventos.clear();
-    if (raw != null) {
-      _eventos.addAll((jsonDecode(raw) as List)
-          .map((e) => EventoAgenda.fromJson(e as Map<String, dynamic>)));
-      return;
-    }
-    final h = hoje;
-    EventoAgenda ev(String id, int dias, String t, TipoEv tp, int i, int f,
-            String l, {String? eq, String o = ''}) =>
-        EventoAgenda(
-          id: id,
-          titulo: t,
-          local: l,
-          observacoes: o,
-          data: somaDias(h, dias),
-          tipo: tp,
-          inicioMin: i,
-          fimMin: f,
-          equipeId: eq,
-          demo: true,
-        );
-    _eventos.addAll([
-      ev('e1', 3, 'Jogo amistoso', TipoEv.jogo, 10 * 60, 12 * 60, 'Ginásio Municipal',
-          eq: 'eq1', o: 'Chegar 40 minutos antes para o aquecimento. Uniforme completo.'),
-      ev('e2', 6, 'Avaliação física', TipoEv.avaliacao, 8 * 60 + 30, 10 * 60,
-          'Sala de avaliação', o: 'Testes de velocidade, salto e flexibilidade.'),
-      ev('e3', 8, 'Reunião com atletas', TipoEv.reuniao, 14 * 60, 15 * 60,
-          'Sala da comissão', o: 'Alinhamento do calendário do mês.'),
-      ev('e4', 12, 'Jogo - 1ª rodada do campeonato', TipoEv.jogo, 15 * 60, 17 * 60,
-          'Quadra Coberta', eq: 'eq2'),
-      ev('e5', 1, 'Lembrete: levar atestado médico', TipoEv.lembrete, 9 * 60,
-          9 * 60 + 30, 'Secretaria'),
-    ]);
-  }
-
-  List<EventoAgenda> get eventos => List.unmodifiable(_eventos);
+  List<EventoAgenda> get _eventosDoEscopo => noEscopoDaEquipe<EventoAgenda>(
+        _eventos,
+        _equipeAtivaId,
+        (e) => e.equipeId,
+        aceitarSemEquipe: true,
+      );
 
   EventoAgenda? evento(String id) {
     for (final e in _eventos) {
@@ -1009,7 +1236,7 @@ class SateStore extends ChangeNotifier {
 
   List<EventoAgenda> eventosNoDia(DateTime dia, {String? equipeId}) {
     final d = somenteData(dia);
-    final l = _eventos
+    final l = _eventosDoEscopo
         .where((e) =>
             e.data == d &&
             (equipeId == null || e.equipeId == null || e.equipeId == equipeId))
@@ -1019,20 +1246,25 @@ class SateStore extends ChangeNotifier {
   }
 
   Future<void> salvarEvento(EventoAgenda e) async {
-    final i = _eventos.indexWhere((x) => x.id == e.id);
-    if (i >= 0) {
-      _eventos[i] = e;
-    } else {
-      _eventos.add(e);
+    try {
+      if (_eventos.any((x) => x.id == e.id)) {
+        await SateApi.atualizarEvento(e.id, e.toApi());
+      } else {
+        await SateApi.criarEvento(e.toApi());
+      }
+      await sincronizar(silencioso: true);
+    } catch (err) {
+      _erro(err);
     }
-    await _persistir(_kEventos, _eventos.map((x) => x.toJson()).toList());
-    notifyListeners();
   }
 
   Future<void> removerEvento(String id) async {
-    _eventos.removeWhere((x) => x.id == id);
-    await _persistir(_kEventos, _eventos.map((x) => x.toJson()).toList());
-    notifyListeners();
+    try {
+      await SateApi.excluirEvento(id);
+      await sincronizar(silencioso: true);
+    } catch (err) {
+      _erro(err);
+    }
   }
 
   /// Tudo o que está programado num dia: treinos + eventos.
@@ -1058,7 +1290,7 @@ class SateStore extends ChangeNotifier {
         treino: t,
       ));
     }
-    for (final e in _eventos.where((e) => e.data == d)) {
+    for (final e in _eventosDoEscopo.where((e) => e.data == d)) {
       final vale = atleta != null
           ? (e.equipeId == null || e.equipeId == atleta.equipeId)
           : (equipeIds == null || e.equipeId == null || equipeIds.contains(e.equipeId));
@@ -1093,85 +1325,36 @@ class SateStore extends ChangeNotifier {
 
   // ───────────────────────── Metas e feedbacks ─────────────────────────
 
-  void _lerMetas(String? raw) {
-    _metas.clear();
-    if (raw != null) {
-      _metas.addAll((jsonDecode(raw) as List)
-          .map((e) => MetaAtleta.fromJson(e as Map<String, dynamic>)));
-      return;
-    }
-    final h = hoje;
-    for (final a in [..._atletasDemo, _atletaEuBase()]) {
-      _metas.add(MetaAtleta(
-        id: 'm1-${a.id}',
-        atletaId: a.id,
-        titulo: 'Melhorar resistência',
-        descricao: 'Aumentar o desempenho nos treinos aeróbicos.',
-        progresso: 40 + (_h(a.id, 3) * 55).round(),
-        prazo: somaDias(h, 30),
-      ));
-      _metas.add(MetaAtleta(
-        id: 'm2-${a.id}',
-        atletaId: a.id,
-        titulo: 'Aumentar frequência',
-        descricao: 'Manter frequência acima de 90%.',
-        progresso: 50 + (_h(a.id, 9) * 50).round(),
-        prazo: somaDias(h, 45),
-      ));
-    }
-  }
-
-  Atleta _atletaEuBase() => const Atleta(
-      id: 'eu',
-      nome: '',
-      equipeId: 'eq1',
-      posicao: '',
-      email: '',
-      idade: 0,
-      alturaCm: 0,
-      pesoKg: 0,
-      assiduidade: 0);
-
   List<MetaAtleta> metasDe(String atletaId) =>
       _metas.where((m) => m.atletaId == atletaId).toList()
         ..sort((a, b) => a.prazo.compareTo(b.prazo));
 
   Future<void> salvarMeta(MetaAtleta m) async {
-    final i = _metas.indexWhere((x) => x.id == m.id);
-    if (i >= 0) {
-      _metas[i] = m;
-    } else {
-      _metas.add(m);
+    try {
+      final corpo = {
+        'atletaId': int.parse(m.atletaId),
+        'titulo': m.titulo,
+        'descricao': m.descricao,
+        'progresso': m.progresso,
+        'prazo': chaveData(m.prazo),
+      };
+      if (_metas.any((x) => x.id == m.id)) {
+        await SateApi.atualizarMeta(m.id, corpo);
+      } else {
+        await SateApi.criarMeta(corpo);
+      }
+      await sincronizar(silencioso: true);
+    } catch (e) {
+      _erro(e);
     }
-    await _persistir(_kMetas, _metas.map((x) => x.toJson()).toList());
-    notifyListeners();
   }
 
   Future<void> removerMeta(String id) async {
-    _metas.removeWhere((x) => x.id == id);
-    await _persistir(_kMetas, _metas.map((x) => x.toJson()).toList());
-    notifyListeners();
-  }
-
-  void _lerFeedbacks(String? raw) {
-    _feedbacks.clear();
-    if (raw != null) {
-      _feedbacks.addAll((jsonDecode(raw) as List)
-          .map((e) => FeedbackAtleta.fromJson(e as Map<String, dynamic>)));
-      return;
-    }
-    final agora = DateTime.now();
-    for (final id in ['a1', 'a2', 'a3', 'a4', 'a7', 'a12', 'eu']) {
-      _feedbacks.add(FeedbackAtleta(
-          'f1-$id',
-          id,
-          'Ótima evolução nos últimos treinos. Demonstrou dedicação e participação.',
-          agora.subtract(const Duration(hours: 5))));
-      _feedbacks.add(FeedbackAtleta(
-          'f2-$id',
-          id,
-          'Melhorou a execução dos exercícios. Continue mantendo esse ritmo.',
-          agora.subtract(const Duration(days: 12))));
+    try {
+      await SateApi.excluirMeta(id);
+      await sincronizar(silencioso: true);
+    } catch (e) {
+      _erro(e);
     }
   }
 
@@ -1180,20 +1363,21 @@ class SateStore extends ChangeNotifier {
         ..sort((a, b) => b.quando.compareTo(a.quando));
 
   Future<void> salvarFeedback(FeedbackAtleta f) async {
-    final i = _feedbacks.indexWhere((x) => x.id == f.id);
-    if (i >= 0) {
-      _feedbacks[i] = f;
-    } else {
-      _feedbacks.add(f);
+    try {
+      await SateApi.criarFeedback({'atletaId': int.parse(f.atletaId), 'texto': f.texto});
+      await sincronizar(silencioso: true);
+    } catch (e) {
+      _erro(e);
     }
-    await _persistir(_kFeedbacks, _feedbacks.map((x) => x.toJson()).toList());
-    notifyListeners();
   }
 
   Future<void> removerFeedback(String id) async {
-    _feedbacks.removeWhere((x) => x.id == id);
-    await _persistir(_kFeedbacks, _feedbacks.map((x) => x.toJson()).toList());
-    notifyListeners();
+    try {
+      await SateApi.excluirFeedback(id);
+      await sincronizar(silencioso: true);
+    } catch (e) {
+      _erro(e);
+    }
   }
 
   /// Linha do tempo do atleta: atividades recentes + marcos importantes.
@@ -1216,7 +1400,7 @@ class SateStore extends ChangeNotifier {
       }
     }
     for (final t in testesDoAtleta(a)) {
-      final r = resultadosDe(a.nome, teste: t.nome);
+      final r = resultadosDe(a.id, teste: t.nome);
       if (r.isEmpty) continue;
       final melhor = t.menorMelhor
           ? r.map((x) => x.valor).reduce((x, y) => x < y ? x : y)
@@ -1249,59 +1433,23 @@ class SateStore extends ChangeNotifier {
         marco: true,
       ));
     }
-    res.add((
-      data: somaDias(hoje, -200),
-      icone: Icons.groups_rounded,
-      titulo: 'Entrada na equipe',
-      sub: equipe(a.equipeId).nome,
-      marco: true,
-    ));
     res.sort((x, y) => y.data.compareTo(x.data));
     return res;
   }
 
   // ───────────────────────── Comunidade (feed) ─────────────────────────
+  // ATENÇÃO: o servidor ainda não tem tabelas de publicações. O feed continua
+  // guardado só neste aparelho (sem dados de demonstração).
 
   void _lerPosts(String? raw) {
     _posts.clear();
     if (raw != null) {
-      _posts.addAll((jsonDecode(raw) as List)
-          .map((e) => Post.fromJson(e as Map<String, dynamic>)));
-      return;
+      try {
+        _posts.addAll((jsonDecode(raw) as List)
+            .map((e) => Post.fromJson(e as Map<String, dynamic>))
+            .where((p) => p.minha));
+      } catch (_) {}
     }
-    final agora = DateTime.now();
-    Post p(String id, String autor, Duration atras, String texto, int curt,
-            String grupo, List<Comentario> c,
-            {bool curtido = false, String? imagem}) =>
-        Post(
-          id: id,
-          autor: autor,
-          texto: texto,
-          quando: agora.subtract(atras),
-          minha: false,
-          grupo: grupo,
-          curtidasBase: curt,
-          curtido: curtido,
-          comentarios: c,
-          imagem: imagem,
-        );
-    _posts.addAll([
-      p('p1', 'João Silva', const Duration(hours: 2),
-          'Treino concluído com sucesso!\nFoco e disciplina sempre!', 45, 'equipe', const [
-        Comentario('Ana Costa', 'Muito bom! Parabéns pelo treino!'),
-        Comentario('Carlos Mendes', 'É isso aí! Foco sempre.'),
-      ], curtido: true, imagem: imagensFeed[0]),
-      p('p2', 'Ana Costa', const Duration(hours: 4),
-          'Treino coletivo foi demais hoje!\nSeguimos evoluindo.', 65, 'equipe',
-          const [Comentario('João Silva', 'Treino muito bom hoje!')],
-          imagem: imagensFeed[1]),
-      p('p3', 'Carlos Mendes', const Duration(days: 1),
-          'Mais um treino finalizado. Evolução é construída todos os dias!', 38,
-          'seguindo', const [], imagem: imagensFeed[2]),
-      p('p4', 'Mariana Souza', const Duration(days: 1, hours: 3),
-          'Muito bom poder acompanhar a evolução da equipe.', 51, 'seguindo',
-          const [], imagem: imagensFeed[3]),
-    ]);
   }
 
   List<Post> get posts =>
@@ -1356,45 +1504,66 @@ class SateStore extends ChangeNotifier {
     await _salvarPosts();
   }
 
-  // ───────────────────────── Atletas cadastrados e limite do plano ─────────────────────────
+  // ───────────────────────── Equipes (vínculo) ─────────────────────────
 
-  void _lerExtras(String? raw) {
-    _extras.clear();
-    if (raw == null) return;
-    for (final e in jsonDecode(raw) as List) {
-      final m = e as Map<String, dynamic>;
-      _extras.add(Atleta(
-        id: m['id'] as String,
-        nome: m['n'] as String,
-        equipeId: m['e'] as String,
-        posicao: (m['p'] ?? '') as String,
-        email: '',
-        idade: 18,
-        alturaCm: 170,
-        pesoKg: 65,
-        assiduidade: 0.8,
-      ));
+  /// Atleta entra na equipe pelo código/QR Code. Retorna a mensagem de sucesso.
+  Future<String> entrarEquipePorCodigo(String codigo) async {
+    final r = await SateApi.entrarEquipe(codigo.trim());
+    await sincronizar(silencioso: true);
+    return (r['mensagem'] ?? 'Você entrou na equipe.') as String;
+  }
+
+  /// Código de convite da equipe (treinador).
+  Future<String> codigoDaEquipe(String equipeId, {bool renovar = false}) =>
+      SateApi.codigoEquipe(equipeId, renovar: renovar);
+
+  /// Define dias, horário e local dos treinos recorrentes da equipe.
+  Future<bool> salvarAgendaEquipe(
+    String equipeId, {
+    required String local,
+    required List<int> dias,
+    required int inicioMin,
+    required int duracaoMin,
+  }) async {
+    try {
+      await SateApi.agendaEquipe(equipeId, {
+        'local': local,
+        'diasTreino': dias,
+        'inicioMin': inicioMin,
+        'duracaoMin': duracaoMin,
+      });
+      await sincronizar(silencioso: true);
+      return true;
+    } catch (e) {
+      _erro(e);
+      return false;
     }
   }
 
+  /// Salva Formação, Registro profissional e Experiência do treinador no servidor.
+  Future<bool> salvarPerfilProfissional({
+    required String formacao,
+    required String registroProfissional,
+    required String experiencia,
+  }) async {
+    try {
+      await SateApi.perfilProfissional({
+        'formacao': formacao,
+        'registroProfissional': registroProfissional,
+        'experiencia': experiencia,
+      });
+      await sincronizar(silencioso: true);
+      return true;
+    } catch (e) {
+      _erro(e);
+      return false;
+    }
+  }
+
+  /// O cadastro de atletas é feito no site (exige e-mail e gera a senha temporária).
   Future<void> adicionarAtleta(String nome, String equipeId, String posicao) async {
-    final a = Atleta(
-      id: 'x${novoId()}',
-      nome: nome,
-      equipeId: equipeId,
-      posicao: posicao.isEmpty ? 'A definir' : posicao,
-      email: '',
-      idade: 18,
-      alturaCm: 170,
-      pesoKg: 65,
-      assiduidade: 0.8,
-    );
-    _extras.add(a);
-    await _persistir(_kExtras, [
-      for (final x in _extras) {'id': x.id, 'n': x.nome, 'e': x.equipeId, 'p': x.posicao}
-    ]);
-    _montarDemo();
-    notifyListeners();
+    _erro(const ApiException(
+        'O cadastro de atletas é feito pelo site do SATE. Depois ele aparece aqui automaticamente.'));
   }
 
   Plano get plano => planosSate[planoAtual];
@@ -1412,13 +1581,52 @@ class SateStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Avisos (notificações) ──
+  // ── Notificações (servidor) ──
+
+  List<NotificacaoApp> get notificacoes => List.unmodifiable(_notificacoes);
+
+  int get notificacoesNaoLidas => _notificacoes.where((n) => !n.lida).length;
+
+  Future<void> marcarNotifLida(String id) async {
+    final i = _notificacoes.indexWhere((n) => n.id == id);
+    if (i < 0 || _notificacoes[i].lida) return;
+    final n = _notificacoes[i];
+    _notificacoes[i] = NotificacaoApp(n.id, n.tipo, n.titulo, n.texto, n.quando, true);
+    notifyListeners();
+    try {
+      await SateApi.marcarNotificacaoLida(id);
+    } catch (e) {
+      _notificacoes[i] = n;
+      notifyListeners();
+      _erro(e);
+    }
+  }
+
+  Future<void> marcarTodasNotifLidas() async {
+    final antes = List<NotificacaoApp>.from(_notificacoes);
+    for (var i = 0; i < _notificacoes.length; i++) {
+      final n = _notificacoes[i];
+      _notificacoes[i] = NotificacaoApp(n.id, n.tipo, n.titulo, n.texto, n.quando, true);
+    }
+    notifyListeners();
+    try {
+      await SateApi.marcarTodasNotificacoesLidas();
+    } catch (e) {
+      _notificacoes
+        ..clear()
+        ..addAll(antes);
+      notifyListeners();
+      _erro(e);
+    }
+  }
+
+  // ── Pendências do treinador (calculadas com os dados reais) ──
 
   /// Pendências que exigem atenção do treinador.
   List<({String id, String titulo, String sub, String destino})> pendenciasTreinador() {
     final h = hoje;
     final res = <({String id, String titulo, String sub, String destino})>[];
-    final docs = _docs.where((d) {
+    final docs = documentos.where((d) {
       final e = d.estado(h);
       return e == EstadoDoc.pendente || e == EstadoDoc.vencido;
     }).length;
@@ -1430,7 +1638,7 @@ class SateStore extends ChangeNotifier {
         destino: 'docs',
       ));
     }
-    final baixa = _atletas.where((a) {
+    final baixa = atletas.where((a) {
       final p = pct([a], somaDias(h, -30), h);
       return p != null && p < 0.6;
     }).toList();
@@ -1442,9 +1650,11 @@ class SateStore extends ChangeNotifier {
         destino: 'atletas',
       ));
     }
+    final agoraMin = DateTime.now().hour * 60 + DateTime.now().minute;
     final hojeSemChamada = treinosNoDia(h).where((t) {
-      final agoraMin = DateTime.now().hour * 60 + DateTime.now().minute;
-      return t.inicioMin <= agoraMin;
+      if (t.inicioMin > agoraMin) return false;
+      final doEquipe = atletasDaEquipe(t.equipeId);
+      return doEquipe.any((a) => statusAtleta(a, h) == StatusPres.pendente);
     }).length;
     if (hojeSemChamada > 0) {
       res.add((
@@ -1465,12 +1675,7 @@ class SateStore extends ChangeNotifier {
     return res;
   }
 
-  void marcarNotifLida(String id) {
-    notifLidas.add(id);
-    notifyListeners();
-  }
-
-  // ── Persistência ──
+  // ── Persistência local (somente itens que não existem no servidor) ──
 
   Future<void> _persistir(String chave, Object dados) async {
     final p = await SharedPreferences.getInstance();

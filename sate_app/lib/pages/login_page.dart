@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import '../sate/ui/fundo.dart';
 import 'package:http/http.dart' as http;
 
+import '../services/api_client.dart';
+import '../services/api_config.dart';
 import '../services/demo_http.dart';
+import '../services/sessao.dart';
+import 'sessao_gate.dart';
 
 import 'cadastro_page.dart';
 import 'esqueci_senha_page.dart';
@@ -32,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   static const rosa = Color(0xFFEF476F);
   static const azul = Color(0xFF003D31);
 
-  static const String apiUrl = 'http://localhost:3000';
+  static String get apiUrl => ApiConfig.baseUrl;
 
   @override
   void dispose() {
@@ -390,21 +394,14 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final tipo = tipoUsuario == 'Atleta' ? 'ATLETA' : 'TREINADOR';
 
-      debugPrint('================================');
-      debugPrint('LOGIN');
-      debugPrint('Email: $email');
-      debugPrint('Tipo escolhido: $tipo');
-      debugPrint('================================');
-
-      final resposta = await demoPost(
+      final resposta = await apiPost(
         Uri.parse('$apiUrl/api/auth/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'senha': senha, 'tipo': tipo}),
       );
 
       debugPrint('Status do login: ${resposta.statusCode}');
-      debugPrint('Resposta do servidor: ${resposta.body}');
-
+      
       if (!mounted) return;
 
       final data = jsonDecode(resposta.body);
@@ -418,53 +415,43 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       final usuario = data['usuario'];
+      final token = data['token'];
 
-      if (usuario == null) {
+      if (usuario == null || token == null) {
         _mostrarMensagem('Dados do usuário não foram retornados.');
         return;
       }
 
-      final nomeUsuario = usuario['nome'] ?? '';
-      final emailUsuario = usuario['email'] ?? email;
-      final tipoRetornado = usuario['tipo'];
+      final sessao = UsuarioSessao(
+        id: (usuario['id'] as num).toInt(),
+        nome: (usuario['nome'] ?? '') as String,
+        email: (usuario['email'] ?? email) as String,
+        tipo: (usuario['tipo'] ?? '') as String,
+      );
 
-      if (tipoRetornado == 'ATLETA') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => AtletaVinculoPage(
-              nomeUsuario: nomeUsuario,
-              emailUsuario: emailUsuario,
-            ),
-          ),
-        );
-      } else if (tipoRetornado == 'TREINADOR') {
-        final usuarioId = usuario['id'];
-
-        if (usuarioId == null) {
-          _mostrarMensagem('ID do usuário não foi retornado.', erro: true);
-          return;
-        }
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => TreinadorEquipesPage(
-              nomeUsuario: nomeUsuario,
-              emailUsuario: emailUsuario,
-            ),
-          ),
-        );
-      } else {
+      if (sessao.tipo != 'ATLETA' && sessao.tipo != 'TREINADOR') {
         _mostrarMensagem('Tipo de usuário inválido.', erro: true);
+        return;
       }
+
+      // Guarda o token com segurança e abre a área correta do app.
+      await Sessao.salvar(token as String, sessao);
+      final destino = await destinoPosLogin(sessao);
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => destino),
+      );
     } catch (error) {
       if (!mounted) return;
 
       debugPrint('Erro no login: $error');
 
       _mostrarMensagem(
-        'Não foi possível conectar ao servidor.\n$error',
+        error is ApiException
+            ? error.mensagem
+            : 'Não foi possível conectar ao servidor (${ApiConfig.baseUrl}).\nVerifique a internet e o endereço da API.',
         erro: true,
       );
     } finally {

@@ -6,10 +6,11 @@ import '../data/sate_store.dart';
 import '../ui/cores.dart';
 import '../ui/tela.dart';
 import '../ui/widgets.dart';
+import 'suporte_page.dart';
 import 'tutorial_page.dart';
 
-const String versaoApp = '0.3.0';
-const String buildApp = '4';
+const String versaoApp = '0.4.1';
+const String buildApp = '6';
 
 // ───────────────────────── Tema (somente claro e escuro) ─────────────────────────
 
@@ -288,8 +289,9 @@ class AjudaPage extends StatelessWidget {
         LinhaItem(
           icone: Icons.mail_outline_rounded,
           titulo: 'Falar com o suporte',
-          sub: 'Canal de atendimento do SATE',
-          onTap: () => aviso(context, 'O atendimento por aqui estará disponível em breve.'),
+          sub: 'Envie sua dúvida ou problema por e-mail',
+          fim: Icon(Icons.chevron_right_rounded, color: c.texto2),
+          onTap: () => abrir(context, const SuportePage()),
         ),
       ],
     );

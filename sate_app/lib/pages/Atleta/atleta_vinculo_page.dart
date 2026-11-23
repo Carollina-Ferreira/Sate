@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../login_page.dart' show BackgroundPainter;
 
 import 'atleta_navigation.dart';
+import '../../sate/data/sate_store.dart';
+import '../../services/api_client.dart';
 import 'atleta_qrcode_page.dart';
 import '../../theme/sate_theme.dart';
 
@@ -56,15 +58,37 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
       carregando = true;
     });
 
-    await Future.delayed(const Duration(seconds: 1));
+    // Vínculo real: o servidor valida o código e registra o atleta na equipe.
+    try {
+      final mensagem = await SateStore.i.entrarEquipePorCodigo(codigo);
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    setState(() {
-      carregando = false;
-    });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(mensagem), behavior: SnackBarBehavior.floating),
+      );
 
-    mostrarTreinador();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => AtletaNavigation(
+            nomeUsuario: widget.nomeUsuario,
+            emailUsuario: widget.emailUsuario,
+          ),
+        ),
+      );
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.mensagem), behavior: SnackBarBehavior.floating),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          carregando = false;
+        });
+      }
+    }
   }
 
   // ============================================================
@@ -617,7 +641,7 @@ class _AtletaVinculoPageState extends State<AtletaVinculoPage> {
             ),
           ),
         ),
-      )),
+      ),
     );
   }
 

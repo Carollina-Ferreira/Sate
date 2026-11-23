@@ -22,6 +22,24 @@ async function validarTurnstile(req, acaoEsperada) {
     // Sem chave secreta, a verificação fica desativada.
     if (!secret) return true;
 
+    // O aplicativo mobile não consegue resolver o captcha do navegador.
+    // Ele se identifica com a chave MOBILE_APP_KEY (definida no .env do backend
+    // e no app via --dart-define). Sem essa variável, o bypass fica desativado.
+    const chaveMobile = process.env.MOBILE_APP_KEY;
+    const chaveRecebida = req.headers['x-sate-app-key'];
+
+    if (
+        chaveMobile &&
+        typeof chaveRecebida === 'string' &&
+        chaveRecebida.length === chaveMobile.length &&
+        require('crypto').timingSafeEqual(
+            Buffer.from(chaveRecebida),
+            Buffer.from(chaveMobile)
+        )
+    ) {
+        return true;
+    }
+
     const token = req.body?.turnstileToken;
 
     if (typeof token !== 'string' || !token || token.length > 2048) {

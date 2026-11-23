@@ -10,6 +10,8 @@ const {
   buscarPerfil,
 } = require('../controllers/usuarioController');
 
+const { alterarSenha } = require('../controllers/senhaController');
+
 const router = express.Router();
 
 /*
@@ -83,6 +85,24 @@ const upload = multer({
  * GET
  * Retorna perfil do usuário logado.
  */
+/**
+ * @swagger
+ * /api/usuarios/perfil:
+ *   get:
+ *     tags: [Usuários]
+ *     summary: Consultar perfil
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '500':
+ *         description: Erro interno
+ */
 router.get(
   '/perfil',
   authMiddleware,
@@ -93,11 +113,49 @@ router.get(
  * PUT
  * Atualiza nome, e-mail e foto.
  */
+/**
+ * @swagger
+ * /api/usuarios/perfil:
+ *   put:
+ *     tags: [Usuários]
+ *     summary: Atualizar perfil
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               avatar:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '400':
+ *         description: Dados inválidos
+ *       '401':
+ *         description: Autenticação necessária
+ *       '500':
+ *         description: Erro interno
+ */
 router.put(
   '/perfil',
   authMiddleware,
   upload.single('avatar'),
   atualizarPerfil
 );
+
+/*
+ * PUT
+ * Troca a senha do usuário logado.
+ */
+router.put('/senha', authMiddleware, alterarSenha);
 
 module.exports = router;

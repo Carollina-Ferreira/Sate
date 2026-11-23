@@ -89,8 +89,70 @@ const limitarLogin = criarLimitador({
 // ROTAS
 // ============================================================================
 
+/**
+ * @swagger
+ * /api/auth/cadastro:
+ *   post:
+ *     tags: [Autenticação]
+ *     summary: Cadastrar usuário
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '201':
+ *         description: Recurso criado, quando aplicável
+ *       '400':
+ *         description: Dados inválidos
+ *       '429':
+ *         description: Limite de tentativas
+ *       '500':
+ *         description: Erro interno
+ */
 router.post('/cadastro', limitarCadastro, cadastro);
 
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     tags: [Autenticação]
+ *     summary: Fazer login
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *               tipo:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Operação realizada
+ *       '201':
+ *         description: Recurso criado, quando aplicável
+ *       '400':
+ *         description: Dados inválidos
+ *       '429':
+ *         description: Limite de tentativas
+ *       '500':
+ *         description: Erro interno
+ */
 router.post('/login', limitarLogin, login);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../pages/Atleta/atleta_qrcode_page.dart';
+import '../../pages/Treinador/treinador_equipes_page.dart';
 import '../../pages/login_page.dart';
 import '../../services/navegacao.dart';
 import '../../services/sessao.dart';
@@ -112,6 +113,7 @@ class _CascaSateState extends State<CascaSate> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       SateStore.i.sincronizar(silencioso: true);
+      SateStore.i.carregarImagensEquipes(); // foto alterada no site aparece ao voltar
     }
   }
 
@@ -363,6 +365,16 @@ class GavetaSate extends StatelessWidget {
               item(Icons.workspace_premium_outlined, 'Planos',
                   () => abrir(context, const PlanosSatePage()),
                   cor: c.rosa, sub: 'Limite de atletas excedido'),
+            if (treinador)
+              item(Icons.swap_horiz_rounded, 'Trocar de equipe', () {
+                // Volta para a escolha de equipe; o app inteiro passa a mostrar a nova.
+                sateNavigatorKey.currentState?.pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (_) =>
+                          TreinadorEquipesPage(nomeUsuario: nome, emailUsuario: email)),
+                  (_) => false,
+                );
+              }, sub: SateStore.i.equipeAtiva?.nome ?? 'Escolher equipe'),
             if (!treinador)
               item(Icons.qr_code_2_rounded, 'QR Code',
                   () => abrirLegado(context, const AtletaQrCodePage()),

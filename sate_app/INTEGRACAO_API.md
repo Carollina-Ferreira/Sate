@@ -46,6 +46,11 @@ lib/pages/sessao_gate.dart     retoma a sessão ao abrir o app e decide a tela i
 * **Treinos recorrentes**: gerados a partir da agenda da equipe; alterar/cancelar um dia grava um treino com `padraoChave`.
 * **Notificações**: lidas de `/api/notificacoes` (atleta e treinador); marcar como lida persiste no servidor.
 
+## Equipe ativa (filtro) e foto da equipe (v0.4.1)
+
+* O treinador escolhe a equipe na tela inicial; `SateStore.equipeAtivaId` guarda o **ID real** e `sate/data/escopo_equipe.dart` filtra atletas, treinos, eventos e documentos. Menu lateral → *Trocar de equipe*.
+* A foto vem de `GET /api/equipes` (campo `imagem`, o mesmo que o site grava) e é exibida por `sate/ui/foto_equipe.dart`; sem foto, o ícone padrão.
+
 ## Pendências (não integrado — avisado de forma explícita)
 
 * **Comunidade (feed)**: o backend não tem tabela de publicações; o feed é **local ao aparelho**, sem posts de exemplo.

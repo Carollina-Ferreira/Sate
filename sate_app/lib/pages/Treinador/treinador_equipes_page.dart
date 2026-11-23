@@ -3,6 +3,8 @@ import '../login_page.dart' show BackgroundPainter;
 
 import './treinador_navigation.dart';
 import './treinador_vinculo_page.dart';
+import '../../sate/data/sate_store.dart';
+import '../../sate/ui/foto_equipe.dart';
 import '../../services/api_client.dart';
 import '../../services/sate_api.dart';
 import '../../theme/sate_theme.dart';
@@ -54,6 +56,8 @@ class _TreinadorEquipesPageState
               'modalidade': '${e['modalidade'] ?? ''}',
               'atletas': '${e['numeroAtletas'] ?? 0} '
                   '${(e['numeroAtletas'] ?? 0) == 1 ? 'atleta' : 'atletas'}',
+              // Foto escolhida no site (data URL); vazio = sem foto.
+              'imagem': '${e['imagem'] ?? ''}',
             }
         ];
         _carregando = false;
@@ -78,10 +82,14 @@ class _TreinadorEquipesPageState
       return;
     }
     if (!mounted) return;
+    // A equipe escolhida vira o FILTRO do app inteiro (pelo ID real da equipe).
+    await SateStore.i.definirEquipeAtiva(equipe['id']);
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => TreinadorVinculoPage(
+          imagem: equipe['imagem'],
           nomeUsuario: widget.nomeUsuario,
           emailUsuario: widget.emailUsuario,
           nomeEquipe: equipe['nome'] ?? '',
@@ -288,17 +296,22 @@ class _TreinadorEquipesPageState
         children: [
           Row(
             children: [
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFDFF7EE),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Icon(
-                  Icons.groups_rounded,
-                  color: verde,
-                  size: 28,
+              FotoEquipe(
+                imagem: equipe['imagem'],
+                largura: 52,
+                raio: 16,
+                fallback: Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDFF7EE),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.groups_rounded,
+                    color: verde,
+                    size: 28,
+                  ),
                 ),
               ),
               const SizedBox(width: 14),

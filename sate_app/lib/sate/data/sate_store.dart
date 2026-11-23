@@ -10,6 +10,7 @@ import '../../services/api_client.dart';
 import '../../services/api_config.dart';
 import '../../services/sate_api.dart';
 import '../../services/sessao.dart';
+import 'escopo_equipe.dart';
 import 'modelos.dart';
 
 /// Permite exibir mensagens de erro da API de qualquer lugar (ligado ao MaterialApp).
@@ -343,6 +344,7 @@ class SateStore extends ChangeNotifier {
   static const _kPosts = 'sate_posts';
   static const _kSimLimite = 'sate_sim_limite';
   static const _kExOcultos = 'sate_exercicios_ocultos';
+  static const _kEquipeAtiva = 'sate_equipe_ativa';
 
   bool _carregado = false;
   bool treinador = true;
@@ -369,7 +371,81 @@ class SateStore extends ChangeNotifier {
       alturaCm: 0,
       pesoKg: 0);
 
-  List<Equipe> get equipes => List.unmodifiable(_equipes);
+  // ── Equipe ativa (filtro do treinador) ──
+  // O treinador escolhe UMA equipe e todo o app passa a mostrar só os dados dela
+  // (atletas, treinos, eventos, documentos). O filtro usa o ID real da equipe.
+  String? _equipeAtivaId;
+
+  String? get equipeAtivaId => _equipeAtivaId;
+
+  /// Equipe escolhida pelo treinador (nula para atleta ou antes de escolher).
+  Equipe? get equipeAtiva {
+    for (final e in _equipes) {
+      if (e.id == _equipeAtivaId) return e;
+    }
+    return null;
+  }
+
+  /// Todas as equipes do treinador (para trocar de equipe e editar agenda/código).
+  List<Equipe> get todasEquipes => List.unmodifiable(_equipes);
+
+  /// Equipes visíveis agora: só a ativa (se houver) — o resto do app usa esta lista.
+  List<Equipe> get equipes =>
+      List.unmodifiable(noEscopoDaEquipe<Equipe>(_equipes, _equipeAtivaId, (e) => e.id));
+
+  /// Fotos das equipes (data URL base64 vindas do site), por id da equipe.
+  final Map<String, String> _imagensEquipes = {};
+  String? imagemDaEquipe(String id) => _imagensEquipes[id];
+
+  /// Escolhe a equipe ativa (ou null para ver todas) e guarda no aparelho.
+  Future<void> definirEquipeAtiva(String? id) async {
+    if (!treinador) return;
+    _equipeAtivaId = (id == null || id.isEmpty) ? null : id;
+    notifyListeners();
+    final p = await SharedPreferences.getInstance();
+    if (_equipeAtivaId == null) {
+      await p.remove(_kEquipeAtiva);
+    } else {
+      await p.setString(_kEquipeAtiva, _equipeAtivaId!);
+    }
+  }
+
+  /// Equipe escolhida na última vez (usada ao reabrir o app com a sessão salva).
+  static Future<String?> equipeAtivaSalva() async {
+    final p = await SharedPreferences.getInstance();
+    return p.getString(_kEquipeAtiva);
+  }
+
+  /// Busca as fotos das equipes no servidor (mesmo endpoint que o site já usa).
+  /// Fica separado do snapshot para não trazer imagens grandes a cada atualização.
+  Future<void> carregarImagensEquipes() async {
+    if (!treinador || !Sessao.logado) return;
+    try {
+      final lista = await SateApi.equipesDoTreinador();
+      final novo = <String, String>{
+        for (final e in lista)
+          if (e is Map && (e['imagem'] ?? '').toString().isNotEmpty)
+            '${e['id']}': e['imagem'].toString(),
+      };
+      var mudou = novo.length != _imagensEquipes.length;
+      if (!mudou) {
+        for (final k in novo.keys) {
+          if (_imagensEquipes[k] != novo[k]) {
+            mudou = true;
+            break;
+          }
+        }
+      }
+      if (mudou) {
+        _imagensEquipes
+          ..clear()
+          ..addAll(novo);
+        notifyListeners();
+      }
+    } catch (_) {
+      // Foto é um complemento: se falhar, o app mostra o ícone padrão.
+    }
+  }
 
   final List<Exercicio> _exercicios = [];
   final List<Exercicio> _exerciciosApi = [];
@@ -419,10 +495,12 @@ class SateStore extends ChangeNotifier {
         ..clear()
         ..addAll(p.getStringList(_kExOcultos) ?? const []);
       simularLimite = p.getBool(_kSimLimite) ?? false;
+      _equipeAtivaId = p.getString(_kEquipeAtiva);
       planoAtual = (p.getInt(_kPlano) ?? 0).clamp(0, planosSate.length - 1).toInt();
       _carregado = true;
     }
     await sincronizar();
+    carregarImagensEquipes(); // não bloqueia: a foto aparece quando chegar
     _timer?.cancel();
     // Atualização periódica: mudanças feitas no site chegam ao app sem reabrir.
     _timer = Timer.periodic(const Duration(seconds: 45), (_) => sincronizar(silencioso: true));
@@ -443,6 +521,9 @@ class SateStore extends ChangeNotifier {
     _metas.clear();
     _feedbacks.clear();
     _notificacoes.clear();
+    _imagensEquipes.clear();
+    _equipeAtivaId = null;
+    SharedPreferences.getInstance().then((p) => p.remove(_kEquipeAtiva));
     formacao = registroProfissional = experiencia = '';
     eu = _atletaVazio;
     fotoBytes = null;
@@ -506,6 +587,19 @@ class SateStore extends ChangeNotifier {
     _equipes
       ..clear()
       ..addAll(lista('equipes').map(Equipe.fromApi));
+
+    // Equipe ativa: restaura a última escolha e descarta se a equipe não existe mais.
+    if (treinador) {
+      if (_equipeAtivaId != null && !_equipes.any((e) => e.id == _equipeAtivaId)) {
+        _equipeAtivaId = null;
+      }
+      // Treinador com UMA só equipe: ela já é a equipe ativa.
+      if (_equipeAtivaId == null && _equipes.length == 1) {
+        _equipeAtivaId = _equipes.first.id;
+      }
+    } else {
+      _equipeAtivaId = null;
+    }
 
     final tr = j['treinador'];
     if (tr is Map) {
@@ -672,7 +766,12 @@ class SateStore extends ChangeNotifier {
 
   // ── Consultas básicas ──
 
-  List<Atleta> get atletas => List.unmodifiable(_atletas);
+  /// Atletas visíveis: com equipe ativa, SOMENTE os vinculados a ela (por ID).
+  List<Atleta> get atletas => List.unmodifiable(
+      noEscopoDaEquipe<Atleta>(_atletas, _equipeAtivaId, (a) => a.equipeId));
+
+  /// Total de atletas do treinador (todas as equipes) — usado no limite do plano.
+  int get totalAtletasDoTreinador => _atletas.length;
 
   List<Atleta> atletasDaEquipe(String? equipeId) => equipeId == null
       ? atletas
@@ -711,7 +810,13 @@ class SateStore extends ChangeNotifier {
     return null;
   }
 
-  List<Documento> get documentos => List.unmodifiable([..._docs, ..._docsLocais]);
+  List<Documento> get documentos {
+    final ids = atletas.map((a) => a.id).toSet();
+    return List.unmodifiable([
+      ..._docs.where((d) => _equipeAtivaId == null || ids.contains(d.atletaId)),
+      ..._docsLocais,
+    ]);
+  }
 
   /// Documentos de um atleta (ou do treinador, quando [atletaId] é null).
   List<Documento> documentosDe(String? atletaId) => atletaId == null
@@ -802,10 +907,10 @@ class SateStore extends ChangeNotifier {
     final d = somenteData(dia);
     final k = chaveData(d);
     final res = <Treino>[];
-    for (final t in _treinos) {
+    for (final t in noEscopoDaEquipe<Treino>(_treinos, _equipeAtivaId, (t) => t.equipeId)) {
       if (t.chave == k && !t.cancelado) res.add(t);
     }
-    for (final e in _equipes) {
+    for (final e in equipes) {
       if (!e.dias.contains(d.weekday)) continue;
       final id = 'p-${e.id}-$k';
       // Já existe alteração ou cancelamento desta sessão no servidor.
@@ -1112,7 +1217,15 @@ class SateStore extends ChangeNotifier {
 
   // ── Eventos da agenda ──
 
-  List<EventoAgenda> get eventos => List.unmodifiable(_eventos);
+  /// Eventos da equipe ativa + os que valem para todas as equipes.
+  List<EventoAgenda> get eventos => List.unmodifiable(_eventosDoEscopo);
+
+  List<EventoAgenda> get _eventosDoEscopo => noEscopoDaEquipe<EventoAgenda>(
+        _eventos,
+        _equipeAtivaId,
+        (e) => e.equipeId,
+        aceitarSemEquipe: true,
+      );
 
   EventoAgenda? evento(String id) {
     for (final e in _eventos) {
@@ -1123,7 +1236,7 @@ class SateStore extends ChangeNotifier {
 
   List<EventoAgenda> eventosNoDia(DateTime dia, {String? equipeId}) {
     final d = somenteData(dia);
-    final l = _eventos
+    final l = _eventosDoEscopo
         .where((e) =>
             e.data == d &&
             (equipeId == null || e.equipeId == null || e.equipeId == equipeId))
@@ -1177,7 +1290,7 @@ class SateStore extends ChangeNotifier {
         treino: t,
       ));
     }
-    for (final e in _eventos.where((e) => e.data == d)) {
+    for (final e in _eventosDoEscopo.where((e) => e.data == d)) {
       final vale = atleta != null
           ? (e.equipeId == null || e.equipeId == atleta.equipeId)
           : (equipeIds == null || e.equipeId == null || equipeIds.contains(e.equipeId));
@@ -1525,7 +1638,7 @@ class SateStore extends ChangeNotifier {
         destino: 'docs',
       ));
     }
-    final baixa = _atletas.where((a) {
+    final baixa = atletas.where((a) {
       final p = pct([a], somaDias(h, -30), h);
       return p != null && p < 0.6;
     }).toList();

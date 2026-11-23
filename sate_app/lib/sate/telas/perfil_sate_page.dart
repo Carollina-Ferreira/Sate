@@ -99,7 +99,7 @@ class PerfilTreinadorSatePage extends StatelessWidget {
       builder: (context, _) {
         final s = SateStore.i;
         final nome = s.nomeUsuario.isEmpty ? 'Treinador' : s.nomeUsuario;
-        final modalidades = s.equipes.map((e) => e.modalidade).toSet().toList();
+        final modalidades = s.todasEquipes.map((e) => e.modalidade).toSet().toList();
         return Tela(
           titulo: 'Meu',
           destaque: 'perfil',
@@ -121,13 +121,13 @@ class PerfilTreinadorSatePage extends StatelessWidget {
             const SizedBox(height: 24),
             _FaixaNumeros(c, [
               ('${s.totalAtletas}', 'Atletas'),
-              ('${s.equipes.length}', 'Equipes'),
+              ('${s.todasEquipes.length}', 'Equipes'),
               ('${modalidades.length}', 'Modalidades'),
             ]),
             const SizedBox(height: 30),
             const SecaoCab('Equipes'),
             const SizedBox(height: 4),
-            if (s.equipes.isEmpty)
+            if (s.todasEquipes.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Text(
@@ -135,7 +135,7 @@ class PerfilTreinadorSatePage extends StatelessWidget {
                   style: TextStyle(color: c.texto2),
                 ),
               ),
-            for (final e in s.equipes)
+            for (final e in s.todasEquipes)
               LinhaItem(
                 icone: Icons.groups_rounded,
                 titulo: e.nome,

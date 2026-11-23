@@ -15,7 +15,10 @@ import 'inicial_page.dart';
 ///  - Treinador          -> suas equipes (login) ou direto ao app (sessão retomada).
 Future<Widget> destinoPosLogin(UsuarioSessao u, {bool retomar = false}) async {
   if (u.ehTreinador) {
-    return retomar
+    // Ao reabrir o app, volta direto para a equipe que ele tinha escolhido;
+    // se não havia escolha guardada, pede para escolher (evita misturar equipes).
+    final salva = retomar ? await SateStore.equipeAtivaSalva() : null;
+    return (retomar && salva != null)
         ? TreinadorNavigation(nomeUsuario: u.nome, emailUsuario: u.email)
         : TreinadorEquipesPage(nomeUsuario: u.nome, emailUsuario: u.email);
   }

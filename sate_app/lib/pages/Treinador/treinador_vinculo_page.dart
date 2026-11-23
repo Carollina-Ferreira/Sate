@@ -1,3 +1,4 @@
+import '../../sate/ui/foto_equipe.dart';
 import 'package:flutter/material.dart';
 import '../login_page.dart' show BackgroundPainter;
 import 'package:flutter/services.dart';
@@ -14,8 +15,12 @@ class TreinadorVinculoPage extends StatefulWidget {
   final String atletas;
   final String codigoEquipe;
 
+  /// Foto da equipe (a mesma do site); nula/vazia = ícone padrão.
+  final String? imagem;
+
   const TreinadorVinculoPage({
     super.key,
+    this.imagem,
     required this.nomeUsuario,
     required this.emailUsuario,
     required this.nomeEquipe,
@@ -76,24 +81,29 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: Container(
-                      width: 68,
-                      height: 68,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(22),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xFF10251F).withOpacity(0.06),
-                            blurRadius: 15,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.sports_rounded,
-                        color: verde,
-                        size: 36,
+                    child: FotoEquipe(
+                      imagem: widget.imagem,
+                      largura: 68,
+                      raio: 22,
+                      fallback: Container(
+                        width: 68,
+                        height: 68,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(22),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFF10251F).withOpacity(0.06),
+                              blurRadius: 15,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.sports_rounded,
+                          color: verde,
+                          size: 36,
+                        ),
                       ),
                     ),
                   ),
@@ -288,14 +298,19 @@ class _TreinadorVinculoPageState extends State<TreinadorVinculoPage> {
                     ),
                     child: Row(
                       children: [
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFDFF7EE),
-                            borderRadius: BorderRadius.circular(15),
+                        FotoEquipe(
+                          imagem: widget.imagem,
+                          largura: 48,
+                          raio: 15,
+                          fallback: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFDFF7EE),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: const Icon(Icons.groups_rounded, color: verde),
                           ),
-                          child: const Icon(Icons.groups_rounded, color: verde),
                         ),
                         const SizedBox(width: 14),
                         Expanded(

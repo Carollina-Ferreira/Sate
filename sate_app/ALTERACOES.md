@@ -1,3 +1,12 @@
+# v0.4.1 — Fotos das equipes e filtro por equipe
+
+* **Foto da equipe:** o app agora exibe a foto cadastrada no site (campo `imagem` de `GET /api/equipes`, que o app descartava). Sem foto, continua o ícone padrão. Atualiza ao abrir a tela de equipes e ao voltar para o app.
+* **Filtro por equipe:** ao escolher uma equipe, o app inteiro passa a mostrar SÓ os atletas, treinos, eventos e documentos dela (filtro pelo ID real, em `sate/data/escopo_equipe.dart`). Menu lateral → **Trocar de equipe**. A escolha fica salva ao reabrir o app.
+* Teste da regra: `dart run test/escopo_equipe_test.dart`.
+* A versão exibida em "Sobre" estava desatualizada (0.3.0); agora acompanha o `pubspec.yaml`.
+
+---
+
 # v0.4.0 — Integração com o backend
 
 O app passou a consumir a API real do SATE e os dados de demonstração foram removidos. Veja `INTEGRACAO_API.md`.

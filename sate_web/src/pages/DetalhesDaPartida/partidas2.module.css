@@ -530,10 +530,7 @@
 
 /* ---------- MODAIS (mesmo padrão da página de Atletas) ---------- */
 
-.modalOverlay {
-  position: fixed; z-index: 1000; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  overflow-x: hidden; overflow-y: auto; padding: 18px;
+.modalOverlay {z-index: 1000; align-items: center; overflow-x: hidden; overflow-y: auto; padding: 18px;
   background: rgba(0, 38, 28, 0.72);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -554,7 +551,7 @@
 
 @keyframes sateModalIn { from { opacity: 0; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-.modalHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.modalHeader {gap: 12px; margin-bottom: 8px; }
 .modalHeader > div { min-width: 0; }
 .modalHeader h2 { margin-bottom: 0; color: #24382f; font-size: 21px; font-weight: 700; letter-spacing: -0.4px; overflow-wrap: anywhere; }
 .modalHeader .eyebrow { margin-bottom: 5px; color: #0e8662; }
@@ -678,7 +675,6 @@
 .confirmModal > p { margin-bottom: 0; color: #6e7d76; font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
 .confirmModal > p strong { color: var(--text); }
 .confirmModal .modalActions { margin-top: 18px; }
-
 
 /* =========================================================
    RESPONSIVIDADE
@@ -819,7 +815,6 @@
   .iconButtonDanger { width: 28px; min-width: 28px; height: 28px; min-height: 28px; }
   .athleteCheck { font-size: 9px; }
 }
-
 
 /* =========================================================
    SATE — MODO ESCURO

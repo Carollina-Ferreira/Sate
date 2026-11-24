@@ -352,7 +352,7 @@ const NovaEquipeModal = ({
 
   return (
     <div
-      className={styles.overlay}
+      className={`${styles.overlay} sate-modal-layer`}
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           fecharModal();
@@ -367,7 +367,7 @@ const NovaEquipeModal = ({
       >
         {/* CABEÇALHO */}
 
-        <header className={styles.modalHeader}>
+        <header className={`${styles.modalHeader} sate-modal-header-layout`}>
           <div>
             <span className={styles.eyebrow}>
               GESTÃO DE EQUIPES

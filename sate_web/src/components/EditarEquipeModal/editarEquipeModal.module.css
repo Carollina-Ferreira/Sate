@@ -2,14 +2,9 @@
    OVERLAY E CARD PRINCIPAL
 ============================================================ */
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: auto;
+.overlay {z-index: 9999;
+align-items: center;
+overflow: auto;
   padding: 18px;
   box-sizing: border-box;
   background: rgba(9, 35, 26, 0.62);
@@ -39,10 +34,7 @@
 
 .modalHeader {
   flex: 0 0 auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18px;
+gap: 18px;
   padding: 21px 27px 18px;
   border-bottom: 1px solid #E2ECE5;
   background: linear-gradient(115deg, var(--branco), #F0F8F3);

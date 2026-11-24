@@ -2049,7 +2049,7 @@ export default function DetalhesPartida() {
       {/* MODAL DE ATLETAS */}
       {modalAtletas && (
         <div
-          className={styles.modalOverlay}
+          className={`${styles.modalOverlay} sate-modal-layer`}
           onMouseDown={(evento) =>
             fecharModalAoClicarFora(evento, () =>
               setModalAtletas(false),
@@ -2062,7 +2062,7 @@ export default function DetalhesPartida() {
             aria-modal="true"
             aria-labelledby="tituloModalAtletas"
           >
-            <header className={styles.modalHeader}>
+            <header className={`${styles.modalHeader} sate-modal-header-layout`}>
               <div>
                 <span className={styles.eyebrow}>PARTICIPANTES</span>
                 <h2 id="tituloModalAtletas">Gerenciar atletas</h2>
@@ -2188,7 +2188,7 @@ export default function DetalhesPartida() {
       {/* MODAL DE UPLOAD */}
       {modalUpload && (
         <div
-          className={styles.modalOverlay}
+          className={`${styles.modalOverlay} sate-modal-layer`}
           onMouseDown={(evento) => {
             if (
               evento.target === evento.currentTarget &&
@@ -2204,7 +2204,7 @@ export default function DetalhesPartida() {
             aria-modal="true"
             aria-labelledby="tituloModalVideo"
           >
-            <header className={styles.modalHeader}>
+            <header className={`${styles.modalHeader} sate-modal-header-layout`}>
               <div>
                 <span className={styles.eyebrow}>
                   ANÁLISE ESPORTIVA
@@ -2328,7 +2328,7 @@ export default function DetalhesPartida() {
       {/* MODAL DE EXCLUSÃO */}
       {modalExcluir && (
         <div
-          className={styles.modalOverlay}
+          className={`${styles.modalOverlay} sate-modal-layer`}
           onMouseDown={(evento) =>
             fecharModalAoClicarFora(evento, () => {
               if (!excluindoPartida) {

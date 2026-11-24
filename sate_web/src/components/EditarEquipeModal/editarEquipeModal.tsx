@@ -437,7 +437,7 @@ const EditarEquipeModal = ({
   if (!open || !equipe) return null;
 
   return (
-    <div className={styles.overlay} onMouseDown={handleOverlayMouseDown}>
+    <div className={`${styles.overlay} sate-modal-layer`} onMouseDown={handleOverlayMouseDown}>
       <section
         className={styles.modal}
         role="dialog"
@@ -446,7 +446,7 @@ const EditarEquipeModal = ({
         onMouseDown={(event) => event.stopPropagation()}
       >
         {/* CABEÇALHO */}
-        <header className={styles.modalHeader}>
+        <header className={`${styles.modalHeader} sate-modal-header-layout`}>
           <div>
             <h2 id="editar-equipe-titulo">Editar equipe</h2>
             <p>Atualize as informações, os atletas e a identidade do seu time.</p>

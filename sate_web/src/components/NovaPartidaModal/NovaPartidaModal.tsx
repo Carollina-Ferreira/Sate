@@ -87,14 +87,14 @@ export default function NovaPartidaModal({
 
   return (
     <div
-      className={styles.modalOverlay}
+      className={`${styles.modalOverlay} sate-modal-layer`}
       onClick={onClose}
     >
       <div
         className={styles.modal}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className={styles.modalHeader}>
+        <div className={`${styles.modalHeader} sate-modal-header-layout`}>
           <h3>Nova Partida</h3>
 
           <button

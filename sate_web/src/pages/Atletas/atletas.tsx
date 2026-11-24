@@ -1734,7 +1734,7 @@ const Atletas = () => {
 
             {mostrarCadastro && (
                 <div
-                    className={styles.modalOverlay}
+                    className={`${styles.modalOverlay} sate-modal-layer`}
                     onMouseDown={(event) => {
                         if (event.target === event.currentTarget) {
                             fecharCadastro();
@@ -1747,7 +1747,7 @@ const Atletas = () => {
                             event.stopPropagation()
                         }
                     >
-                        <div className={styles.modalHeader}>
+                        <div className={`${styles.modalHeader} sate-modal-header-layout`}>
                             <div>
                                 <span>CADASTRO</span>
 

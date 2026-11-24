@@ -205,26 +205,26 @@ const EsqueciSenha = () => {
 
 
   return (
-    <main className={styles.page}>
+    <main className={(styles.page + ' sate-auth-page')}>
 
       {/* =====================================================
           LADO ESQUERDO
       ===================================================== */}
 
-      <section className={styles.left}>
+      <section className={(styles.left + ' sate-auth-left')}>
 
         {/* IMAGENS */}
 
         <div
-          className={styles.heroImages}
+          className={(styles.heroImages + ' sate-auth-heroImages')}
           aria-hidden="true"
         >
           {heroSlides.map((image, index) => (
             <div
               key={image}
-              className={`${styles.heroSlide} ${
+              className={`${styles.heroSlide} sate-auth-heroSlide ${
                 index === activeSlide
-                  ? styles.heroSlideActive
+                  ? (styles.heroSlideActive + ' sate-auth-heroSlideActive')
                   : ''
               }`}
               style={{
@@ -238,7 +238,7 @@ const EsqueciSenha = () => {
         {/* OVERLAY */}
 
         <div
-          className={styles.leftOverlay}
+          className={(styles.leftOverlay + ' sate-auth-leftOverlay')}
           aria-hidden="true"
         />
 
@@ -269,20 +269,20 @@ const EsqueciSenha = () => {
 
         <Link
           to="/"
-          className={styles.heroLogoLink}
+          className={(styles.heroLogoLink + ' sate-auth-heroLogoLink')}
           aria-label="Página inicial do SATE"
         >
           <img
             src={logo}
             alt="SATE"
-            className={styles.heroLogo}
+            className={(styles.heroLogo + ' sate-auth-heroLogo')}
           />
         </Link>
 
 
         {/* CONTEÚDO */}
 
-        <div className={styles.leftContent}>
+        <div className={(styles.leftContent + ' sate-auth-leftContent')}>
 
           <h1>
             <span>
@@ -308,9 +308,9 @@ const EsqueciSenha = () => {
 
         {/* ESTATÍSTICAS */}
 
-        <div className={styles.leftFooter}>
+        <div className={(styles.leftFooter + ' sate-auth-leftFooter')}>
 
-          <div className={styles.stat}>
+          <div className={(styles.stat + ' sate-auth-stat')}>
             <strong>
               50+
             </strong>
@@ -322,11 +322,11 @@ const EsqueciSenha = () => {
 
 
           <span
-            className={styles.statDivider}
+            className={(styles.statDivider + ' sate-auth-statDivider')}
           />
 
 
-          <div className={styles.stat}>
+          <div className={(styles.stat + ' sate-auth-stat')}>
             <strong>
               100+
             </strong>
@@ -338,11 +338,11 @@ const EsqueciSenha = () => {
 
 
           <span
-            className={styles.statDivider}
+            className={(styles.statDivider + ' sate-auth-statDivider')}
           />
 
 
-          <div className={styles.stat}>
+          <div className={(styles.stat + ' sate-auth-stat')}>
             <strong>
               5+
             </strong>
@@ -361,48 +361,48 @@ const EsqueciSenha = () => {
           LADO DIREITO
       ===================================================== */}
 
-      <section className={styles.right}>
+      <section className={(styles.right + ' sate-auth-right')}>
 
         {/* FUNDO ANIMADO */}
 
         <div
-          className={styles.backgroundDecor}
+          className={(styles.backgroundDecor + ' sate-auth-backgroundDecor')}
           aria-hidden="true"
         >
           <span
-            className={`${styles.gradientOrb} ${styles.orbTop}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbTop} sate-auth-orbTop`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbRight}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbRight} sate-auth-orbRight`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbBottom}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbBottom} sate-auth-orbBottom`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbLeft}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbLeft} sate-auth-orbLeft`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbCenter}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbCenter} sate-auth-orbCenter`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbSmallOne}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbSmallOne} sate-auth-orbSmallOne`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbSmallTwo}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbSmallTwo} sate-auth-orbSmallTwo`}
           />
 
           <span
-            className={styles.auroraTop}
+            className={(styles.auroraTop + ' sate-auth-auroraTop')}
           />
 
           <span
-            className={styles.auroraBottom}
+            className={(styles.auroraBottom + ' sate-auth-auroraBottom')}
           />
         </div>
 
@@ -411,22 +411,22 @@ const EsqueciSenha = () => {
             CARD
         ===================================================== */}
 
-        <div className={styles.formContainer}>
+        <div className={(styles.formContainer + ' sate-auth-formContainer')}>
 
           <img
             src={logoVerdeImg}
             alt="SATE"
-            className={styles.cardLogo}
+            className={(styles.cardLogo + ' sate-auth-cardLogo')}
           />
 
 
-          <div className={styles.cardHeader}>
+          <div className={(styles.cardHeader + ' sate-auth-cardHeader')}>
 
             <h2>
               Esqueceu sua senha?
             </h2>
 
-            <p className={styles.subtitle}>
+            <p className={(styles.subtitle + ' sate-auth-subtitle')}>
               Informe seu email e enviaremos
               um link para você redefinir sua senha.
             </p>
@@ -435,21 +435,21 @@ const EsqueciSenha = () => {
 
 
           <form
-            className={styles.form}
+            className={(styles.form + ' sate-auth-form')}
             onSubmit={handleSubmit}
           >
 
-            <div className={styles.inputGroup}>
+            <div className={(styles.inputGroup + ' sate-auth-inputGroup')}>
 
               <label htmlFor="email">
                 Email
               </label>
 
-              <div className={styles.inputWrapper}>
+              <div className={(styles.inputWrapper + ' sate-auth-inputWrapper')}>
 
                 <Mail
                   size={18}
-                  className={styles.inputIcon}
+                  className={(styles.inputIcon + ' sate-auth-inputIcon')}
                 />
 
                 <input
@@ -470,7 +470,7 @@ const EsqueciSenha = () => {
 
 
             {erro && (
-              <div className={styles.errorMessage}>
+              <div className={(styles.errorMessage + ' sate-auth-errorMessage')}>
                 {erro}
               </div>
             )}
@@ -478,7 +478,7 @@ const EsqueciSenha = () => {
 
             <button
               type="submit"
-              className={styles.submitButton}
+              className={(styles.submitButton + ' sate-auth-submitButton')}
               disabled={loading}
             >
               <span>
@@ -498,7 +498,7 @@ const EsqueciSenha = () => {
           </form>
 
 
-          <div className={styles.backArea}>
+          <div className={(styles.backArea + ' sate-auth-backArea')}>
 
             <span>
               Lembrou da senha?
@@ -506,7 +506,7 @@ const EsqueciSenha = () => {
 
             <Link
               to="/login"
-              className={styles.link}
+              className={(styles.link + ' sate-auth-link')}
             >
               Voltar para o login
             </Link>
@@ -525,15 +525,15 @@ const EsqueciSenha = () => {
       {emailEnviado && (
 
         <div
-          className={styles.modalOverlay}
+          className={(styles.modalOverlay + ' sate-auth-modalOverlay')}
           role="dialog"
           aria-modal="true"
           aria-labelledby="confirmationTitle"
         >
 
-          <div className={styles.confirmationCard}>
+          <div className={(styles.confirmationCard + ' sate-auth-confirmationCard')}>
 
-            <div className={styles.successIcon}>
+            <div className={(styles.successIcon + ' sate-auth-successIcon')}>
               <Check
                 size={28}
                 strokeWidth={2.4}
@@ -553,14 +553,14 @@ const EsqueciSenha = () => {
             </p>
 
 
-            <span className={styles.emailText}>
+            <span className={(styles.emailText + ' sate-auth-emailText')}>
               {form.email}
             </span>
 
 
             <button
               type="button"
-              className={styles.confirmationButton}
+              className={(styles.confirmationButton + ' sate-auth-confirmationButton')}
               onClick={fecharModal}
             >
               Entendi
@@ -569,7 +569,7 @@ const EsqueciSenha = () => {
 
             <button
               type="button"
-              className={styles.resendButton}
+              className={(styles.resendButton + ' sate-auth-resendButton')}
               onClick={reenviarEmail}
               disabled={reenviando}
             >
@@ -580,7 +580,7 @@ const EsqueciSenha = () => {
 
 
             {mensagemReenvio && (
-              <p className={styles.resendMessage}>
+              <p className={(styles.resendMessage + ' sate-auth-resendMessage')}>
                 {mensagemReenvio}
               </p>
             )}
@@ -588,7 +588,7 @@ const EsqueciSenha = () => {
 
             <Link
               to="/login"
-              className={styles.confirmationLink}
+              className={(styles.confirmationLink + ' sate-auth-confirmationLink')}
             >
               Voltar para o login
             </Link>

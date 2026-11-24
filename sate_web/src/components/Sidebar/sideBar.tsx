@@ -1,9 +1,9 @@
-
+﻿
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import styles from './sidebar.module.css';
+import styles from './sideBar.module.css';
 import logo from '../../assets/img/logo.png';
 
 interface SidebarProps {
@@ -15,10 +15,10 @@ const menuItems = [
   { label: 'Dashboard', icon: 'dashboard', path: '/inicio' },
   { label: 'Equipes', icon: 'groups', path: '/equipes' },
   { label: 'Atletas', icon: 'person', path: '/atletas' },
-  { label: 'Análise de Vídeos', icon: 'videocam', path: '/videos' },
+  { label: 'AnÃ¡lise de VÃ­deos', icon: 'videocam', path: '/videos' },
   { label: 'Partidas', icon: 'emoji_events', path: '/partidas' },
-  { label: 'Estatísticas', icon: 'bar_chart', path: '/estatisticas' },
-  { label: 'Comparações', icon: 'compare_arrows', path: '/comparacoes' },
+  { label: 'EstatÃ­sticas', icon: 'bar_chart', path: '/estatisticas' },
+  { label: 'ComparaÃ§Ãµes', icon: 'compare_arrows', path: '/comparacoes' },
 ];
 
 const Sidebar = ({ onExpand, onCollapse }: SidebarProps) => {
@@ -99,10 +99,10 @@ const Sidebar = ({ onExpand, onCollapse }: SidebarProps) => {
                 <span className="material-icons">logout</span>
               </div>
 
-              <h2>Você realmente deseja sair?</h2>
+              <h2>VocÃª realmente deseja sair?</h2>
 
               <p>
-                Ao sair, você precisará entrar novamente para acessar sua conta.
+                Ao sair, vocÃª precisarÃ¡ entrar novamente para acessar sua conta.
               </p>
 
               <div className={styles.modalBotoes}>
@@ -131,3 +131,4 @@ const Sidebar = ({ onExpand, onCollapse }: SidebarProps) => {
 };
 
 export default Sidebar;
+

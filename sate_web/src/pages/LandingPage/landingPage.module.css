@@ -1809,3 +1809,126 @@
     flex-basis: 150px;
   }
 }
+
+
+/* =========================================================
+   MODAIS DOS BOTÕES DAS LOJAS — ADIÇÃO SEM ALTERAR O LAYOUT
+========================================================= */
+.storeModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(9, 25, 19, .62);
+  backdrop-filter: blur(5px);
+  animation: storeModalFadeIn .18s ease-out;
+}
+
+.storeModal {
+  width: min(100%, 440px);
+  position: relative;
+  padding: 38px 32px 30px;
+  border: 1px solid var(--linha);
+  border-radius: 22px;
+  background: var(--creme-2);
+  color: var(--texto);
+  text-align: center;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .24);
+  animation: storeModalUp .22s ease-out;
+}
+
+.storeModalClose {
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--creme);
+  color: var(--texto-secundario);
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.storeModalIcon {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  border-radius: 18px;
+  background: var(--rosa-claro);
+  color: var(--rosa);
+  font-size: 27px;
+}
+
+.storeModal h2 {
+  margin: 0 0 12px;
+  color: var(--texto);
+  font-size: 23px;
+  line-height: 1.25;
+}
+
+.storeModal p {
+  margin: 0 auto 23px;
+  color: var(--texto-secundario);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.storeModalDownload {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-bottom: 10px;
+  padding: 0 20px;
+  border-radius: 11px;
+  background: var(--verde);
+  color: var(--branco);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.storeModalDownload:hover {
+  background: var(--verde-profundo);
+  transform: translateY(-1px);
+}
+
+.storeModalDismiss {
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1px solid var(--linha);
+  border-radius: 11px;
+  background: transparent;
+  color: var(--texto-secundario);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@keyframes storeModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes storeModalUp {
+  from { opacity: 0; transform: translateY(10px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 480px) {
+  .storeModal { padding: 36px 22px 24px; }
+  .storeModal h2 { font-size: 20px; }
+}

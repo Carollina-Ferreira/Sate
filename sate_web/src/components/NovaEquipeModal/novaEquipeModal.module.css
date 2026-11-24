@@ -2,16 +2,9 @@
    OVERLAY — FUNDO DO MODAL
 ========================================= */
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-
-  padding: 24px 16px;
+.overlay {z-index: 1000;
+align-items: flex-start;
+padding: 24px 16px;
   box-sizing: border-box;
 
   background: rgba(0, 35, 25, 0.68);
@@ -63,11 +56,7 @@
 
 .modalHeader {
   flex-shrink: 0;
-
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18px;
+gap: 18px;
 
   padding: 24px 28px 21px;
 

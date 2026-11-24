@@ -206,7 +206,7 @@ const TermosUso = ({ onFechar, onLeuTermos }: TermosUsoProps) => {
 
   return (
     <div
-      className={styles.overlay}
+      className={`${styles.overlay} sate-modal-layer`}
       onMouseDown={(event) => {
         if (
           event.target === event.currentTarget &&

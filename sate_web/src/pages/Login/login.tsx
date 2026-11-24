@@ -312,26 +312,26 @@ const Login = () => {
 
 
     return (
-        <main className={styles.page}>
+        <main className={(styles.page + ' sate-auth-page')}>
 
             {/* =================================================
                 LADO ESQUERDO
             ================================================= */}
 
-            <section className={styles.hero}>
+            <section className={(styles.hero + ' sate-auth-hero')}>
 
                 {/* IMAGENS */}
 
                 <div
-                    className={styles.heroImages}
+                    className={(styles.heroImages + ' sate-auth-heroImages')}
                     aria-hidden="true"
                 >
 
                     {heroSlides.map((image, index) => (
                         <div
                             key={image}
-                            className={`${styles.heroSlide} ${index === activeSlide
-                                    ? styles.heroSlideActive
+                            className={`${styles.heroSlide} sate-auth-heroSlide ${index === activeSlide
+                                    ? (styles.heroSlideActive + ' sate-auth-heroSlideActive')
                                     : ''
                                 }`}
                             style={{
@@ -345,7 +345,7 @@ const Login = () => {
                 {/* OVERLAY */}
 
                 <div
-                    className={styles.heroOverlay}
+                    className={(styles.heroOverlay + ' sate-auth-heroOverlay')}
                     aria-hidden="true"
                 />
 
@@ -384,20 +384,20 @@ const Login = () => {
 
                 <Link
                     to="/"
-                    className={styles.heroLogoLink}
+                    className={(styles.heroLogoLink + ' sate-auth-heroLogoLink')}
                     aria-label="Página inicial do SATE"
                 >
                     <img
                         src={logo}
                         alt="SATE"
-                        className={styles.heroLogo}
+                        className={(styles.heroLogo + ' sate-auth-heroLogo')}
                     />
                 </Link>
 
 
                 {/* TEXTO */}
 
-                <div className={styles.heroContent}>
+                <div className={(styles.heroContent + ' sate-auth-heroContent')}>
                     <h1>
                         <span>Dados que revelam</span>
                         <span>
@@ -416,9 +416,9 @@ const Login = () => {
 
                 {/* INDICADORES */}
 
-                <div className={styles.heroStats}>
+                <div className={(styles.heroStats + ' sate-auth-heroStats')}>
 
-                    <div className={styles.heroStat}>
+                    <div className={(styles.heroStat + ' sate-auth-heroStat')}>
                         <strong>
                             50+
                         </strong>
@@ -430,11 +430,11 @@ const Login = () => {
 
 
                     <span
-                        className={styles.statDivider}
+                        className={(styles.statDivider + ' sate-auth-statDivider')}
                     />
 
 
-                    <div className={styles.heroStat}>
+                    <div className={(styles.heroStat + ' sate-auth-heroStat')}>
                         <strong>
                             100+
                         </strong>
@@ -446,11 +446,11 @@ const Login = () => {
 
 
                     <span
-                        className={styles.statDivider}
+                        className={(styles.statDivider + ' sate-auth-statDivider')}
                     />
 
 
-                    <div className={styles.heroStat}>
+                    <div className={(styles.heroStat + ' sate-auth-heroStat')}>
                         <strong>
                             5+
                         </strong>
@@ -469,77 +469,77 @@ const Login = () => {
                 LADO DIREITO
             ================================================= */}
 
-            <section className={styles.loginArea}>
+            <section className={(styles.loginArea + ' sate-auth-loginArea')}>
 
                 {/* =================================================
                     FUNDO DECORATIVO
                 ================================================= */}
 
                 <div
-                    className={styles.backgroundDecor}
+                    className={(styles.backgroundDecor + ' sate-auth-backgroundDecor')}
                     aria-hidden="true"
                 >
 
                     {/* ORB GRANDE SUPERIOR */}
 
                     <span
-                        className={`${styles.gradientOrb} ${styles.orbTop}`}
+                        className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbTop} sate-auth-orbTop`}
                     />
 
 
                     {/* ORB GRANDE DIREITO */}
 
                     <span
-                        className={`${styles.gradientOrb} ${styles.orbRight}`}
+                        className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbRight} sate-auth-orbRight`}
                     />
 
 
                     {/* ORB GRANDE INFERIOR */}
 
                     <span
-                        className={`${styles.gradientOrb} ${styles.orbBottom}`}
+                        className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbBottom} sate-auth-orbBottom`}
                     />
 
 
                     {/* ORB LATERAL ESQUERDO */}
 
                     <span
-                        className={`${styles.gradientOrb} ${styles.orbLeft}`}
+                        className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbLeft} sate-auth-orbLeft`}
                     />
 
 
                     {/* ORB CENTRAL */}
 
                     <span
-                        className={`${styles.gradientOrb} ${styles.orbCenter}`}
+                        className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbCenter} sate-auth-orbCenter`}
                     />
 
 
                     {/* ORB PEQUENO 1 */}
 
                     <span
-                        className={`${styles.gradientOrb} ${styles.orbSmallOne}`}
+                        className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbSmallOne} sate-auth-orbSmallOne`}
                     />
 
 
                     {/* ORB PEQUENO 2 */}
 
                     <span
-                        className={`${styles.gradientOrb} ${styles.orbSmallTwo}`}
+                        className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbSmallTwo} sate-auth-orbSmallTwo`}
                     />
 
 
                     {/* FAIXA AURORA SUPERIOR */}
 
                     <span
-                        className={styles.auroraTop}
+                        className={(styles.auroraTop + ' sate-auth-auroraTop')}
                     />
 
 
                     {/* FAIXA AURORA INFERIOR */}
 
                     <span
-                        className={styles.auroraBottom}
+                        className={(styles.auroraBottom + ' sate-auth-auroraBottom')}
                     />
 
                 </div>
@@ -549,20 +549,20 @@ const Login = () => {
                     CARD
                 ================================================= */}
 
-                <div className={styles.loginCard}>
+                <div className={(styles.loginCard + ' sate-auth-loginCard')}>
 
                     {/* LOGO */}
 
                     <img
                         src={logoVerdeImg}
                         alt="SATE"
-                        className={styles.cardLogo}
+                        className={(styles.cardLogo + ' sate-auth-cardLogo')}
                     />
 
 
                     {/* HEADER */}
 
-                    <div className={styles.cardHeader}>
+                    <div className={(styles.cardHeader + ' sate-auth-cardHeader')}>
 
                         <h2>
                             Bem-vindo de volta!
@@ -579,23 +579,23 @@ const Login = () => {
                     {/* FORM */}
 
                     <form
-                        className={styles.form}
+                        className={(styles.form + ' sate-auth-form')}
                         onSubmit={handleSubmit}
                     >
 
                         {/* EMAIL */}
 
-                        <div className={styles.field}>
+                        <div className={(styles.field + ' sate-auth-field')}>
 
                             <label htmlFor="email">
                                 Email
                             </label>
 
-                            <div className={styles.inputWrapper}>
+                            <div className={(styles.inputWrapper + ' sate-auth-inputWrapper')}>
 
                                 <Mail
                                     size={18}
-                                    className={styles.inputIcon}
+                                    className={(styles.inputIcon + ' sate-auth-inputIcon')}
                                 />
 
                                 <input
@@ -616,17 +616,17 @@ const Login = () => {
 
                         {/* SENHA */}
 
-                        <div className={styles.field}>
+                        <div className={(styles.field + ' sate-auth-field')}>
 
                             <label htmlFor="senha">
                                 Senha
                             </label>
 
-                            <div className={styles.inputWrapper}>
+                            <div className={(styles.inputWrapper + ' sate-auth-inputWrapper')}>
 
                                 <LockKeyhole
                                     size={18}
-                                    className={styles.inputIcon}
+                                    className={(styles.inputIcon + ' sate-auth-inputIcon')}
                                 />
 
                                 <input
@@ -649,7 +649,7 @@ const Login = () => {
                                     <button
                                         type="button"
                                         className={
-                                            styles.passwordToggle
+                                            (styles.passwordToggle + ' sate-auth-passwordToggle')
                                         }
                                         onClick={() =>
                                             setShowPassword(
@@ -688,7 +688,7 @@ const Login = () => {
 
                         {erro && (
                             <div
-                                className={styles.errorMessage}
+                                className={(styles.errorMessage + ' sate-auth-errorMessage')}
                             >
                                 {erro}
                             </div>
@@ -715,10 +715,10 @@ const Login = () => {
 
                         {/* OPÇÕES */}
 
-                        <div className={styles.options}>
+                        <div className={(styles.options + ' sate-auth-options')}>
 
                             <label
-                                className={styles.remember}
+                                className={(styles.remember + ' sate-auth-remember')}
                             >
                                 <input
                                     type="checkbox"
@@ -736,7 +736,7 @@ const Login = () => {
                             <Link
                                 to="/esqueci-senha"
                                 className={
-                                    styles.forgotPassword
+                                    (styles.forgotPassword + ' sate-auth-forgotPassword')
                                 }
                             >
                                 Esqueci minha senha
@@ -749,7 +749,7 @@ const Login = () => {
 
                         <button
                             type="submit"
-                            className={styles.submitButton}
+                            className={(styles.submitButton + ' sate-auth-submitButton')}
                             disabled={loading}
                         >
                             <span>
@@ -771,12 +771,12 @@ const Login = () => {
 
                     {/* DIVISOR */}
 
-                    <div className={styles.signupDivider}>
+                    <div className={(styles.signupDivider + ' sate-auth-signupDivider')}>
                         <p>Ainda não possui uma conta?</p>
 
                         <Link
                             to="/cadastro"
-                            className={styles.createAccount}
+                            className={(styles.createAccount + ' sate-auth-createAccount')}
                         >
                             Criar conta
                         </Link>

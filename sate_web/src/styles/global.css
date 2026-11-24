@@ -1,12 +1,8 @@
-
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@400;500;600;700;800&display=swap');
-
-/* =====================================
-   VARIÁVEIS GLOBAIS — TEMA CLARO
-===================================== */
 
 :root {
   color-scheme: light;
+  --page-background: var(--bg-page);
 
   /* ===== TIPOGRAFIA ===== */
   --fonte-titulo: 'Poppins', sans-serif;
@@ -34,11 +30,11 @@
   --fundo-brilho-rosa: var(--page-glow-start);
 
   /* ===== FUNDOS ===== */
-  --bg-page: #faf5ee;
+  --bg-page: #FAF7F2;
   --bg-surface: #ffffff;
-  --bg-surface-2: #fffaf4;
+  --bg-surface-2: #FFFDF9;
   --bg-neutro: #f6f9f7;
-  --bg-verde-suave: #edf7f1;
+  --bg-verde-suave: #E7F4ED;
 
   /* ===== BORDAS ===== */
   --borda: #e8ddd2;
@@ -158,6 +154,7 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
+  --page-background: var(--bg-page);
 
   --shadow-card: 0 10px 26px rgba(0, 0, 0, 0.15);
   --page-glow-start: rgba(66, 201, 148, 0.11);
@@ -165,11 +162,11 @@
   --page-glow-end: rgba(66, 201, 148, 0);
 
   /* ===== FUNDOS ===== */
-  --bg-page: #102a22;
-  --bg-surface: #17372c;
-  --bg-surface-2: #1d3d30;
+  --bg-page: #082F25;
+  --bg-surface: #104334;
+  --bg-surface-2: #164D3D;
   --bg-neutro: #153027;
-  --bg-verde-suave: #224638;
+  --bg-verde-suave: #1D634B;
 
   /* ===== BORDAS ===== */
   --borda: #2b493b;
@@ -260,7 +257,7 @@
 }
 
 /* =====================================
-   RESET GLOBAL
+   RESET E BASE GLOBAL
 ===================================== */
 
 *,
@@ -272,63 +269,33 @@
 html,
 body,
 #root {
-  max-width: 100%;
-  overflow-x: clip;
   width: 100%;
+  max-width: 100%;
   min-height: 100%;
   margin: 0;
   padding: 0;
+  overflow-x: clip;
+  scrollbar-width: none;
 }
 
-html {
-  background-color: var(--bg-page);
+html,
+body,
+#root {
+  background: var(--page-background);
 }
 
 body {
-  min-height: 100vh;
-
-  background:
-    radial-gradient(
-      ellipse 340px 230px at 96% 0%,
-      var(--fundo-brilho-rosa, rgba(244, 63, 120, 0.16)) 0%,
-      rgba(244, 63, 120, 0.08) 38%,
-      rgba(244, 63, 120, 0) 76%
-    ),
-    var(--bg-page);
-
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-attachment: fixed;
-
-  font-family: var(--fonte-base);
   color: var(--texto);
-
+  font-family: var(--fonte-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-:root[data-theme='dark'] body {
-  background:
-    radial-gradient(
-      ellipse 340px 230px at 96% 0%,
-      rgba(66, 201, 148, 0.1) 0%,
-      rgba(66, 201, 148, 0) 76%
-    ),
-    var(--bg-page);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 #root {
   min-height: 100vh;
-  background: transparent;
+  min-height: 100dvh;
 }
-
-/* =====================================
-   TIPOGRAFIA
-===================================== */
 
 h1,
 h2,
@@ -349,29 +316,35 @@ select {
   font-family: var(--fonte-base);
 }
 
-/* =====================================
-   INPUTS
-===================================== */
-
 input::-ms-reveal,
 input::-ms-clear {
   display: none;
 }
-
-/* =====================================
-   IMAGENS E MÍDIA
-===================================== */
 
 img,
 video {
   max-width: 100%;
 }
 
-/* =====================================
-   SCROLL
-===================================== */
+html *,
+body *,
+#root * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 
-html {
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar,
+html *::-webkit-scrollbar,
+body *::-webkit-scrollbar,
+#root *::-webkit-scrollbar {
+  display: none;
+}
+
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid var(--verde-principal);
+  outline-offset: 3px;
 }
 
 /* ============================================================
@@ -396,11 +369,7 @@ body .sate-internal-page--nested { padding: 0; }
 body .sate-internal-page--nested .sate-page-inner {
   padding: 42px var(--page-inline-padding) 56px;
 }
-/* Acessibilidade: foco visível, inclusive quando estilos locais o removem. */
-:where(button, a, input, select, textarea):focus-visible {
-  outline: 2px solid var(--verde-principal);
-  outline-offset: 3px;
-}
+
 @media (max-width: 1024px) {
   :root { --layout-content-padding: 24px; --page-inline-padding: 28px; }
 }
@@ -434,141 +403,649 @@ body:has(.sate-public-landing)::-webkit-scrollbar {
   display: none;
 }
 
-
-
-/* ============================================================
-   SATE — SCROLL INVISÍVEL EM TODO O SITE
-   Mantém a rolagem, mas esconde as barras
-============================================================ */
-
-html {
-    width: 100%;
-    min-height: 100%;
-    overflow-x: clip;
-    scrollbar-width: none;
-}
-
-body {
-    width: 100%;
-    min-height: 100%;
-    margin: 0;
-
-    overflow-x: clip;
-    scrollbar-width: none;
-}
-
-#root {
-    width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
-
-    overflow-x: clip;
-    scrollbar-width: none;
-}
-
-/* Esconde as barras em todos os elementos */
-html *,
-body *,
-#root * {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-/* Chrome, Edge e Safari */
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-#root::-webkit-scrollbar,
-html *::-webkit-scrollbar,
-body *::-webkit-scrollbar,
-#root *::-webkit-scrollbar {
-    display: none;
-}
-
-/* Impede imagens e vídeos de ultrapassarem o container */
-img,
-video {
-    max-width: 100%;
-}
-
-
-
-/* ============================================================
-   SATE — SISTEMA GLOBAL DE PLANOS DE FUNDO
-============================================================ */
-
-/* MODO CLARO */
-
-:root,
-:root[data-theme='light'] {
-    --bg-page: #FAF7F2;
-    --bg-surface: #FFFFFF;
-    --bg-surface-2: #FFFDF9;
-
-    --bg-verde-suave: #E7F4ED;
-
-    --page-background:
-        radial-gradient(
-            ellipse 420px 300px at 97% 0%,
-            rgba(239, 71, 111, 0.08) 0%,
-            transparent 75%
-        ),
-        var(--bg-page);
-}
-
-/* MODO ESCURO */
-
-:root[data-theme='dark'] {
-    --bg-page: #082F25;
-    --bg-surface: #104334;
-    --bg-surface-2: #164D3D;
-
-    --bg-verde-suave: #1D634B;
-
-    --page-background:
-        var(--bg-page);
-}
-
-/* ============================================================
-   FUNDO GLOBAL
-============================================================ */
-
-html,
-body,
-#root {
-    min-height: 100%;
-}
-
-body {
-    margin: 0;
-    background: var(--page-background);
-    color: var(--texto);
-    font-family: var(--fonte-base);
-}
-
-#root {
-    min-height: 100vh;
-    min-height: 100dvh;
-    background: var(--page-background);
-}
-
-
-
-/* ============================================================
-   SATE — FUNDO PADRÃO DE TODAS AS PÁGINAS INTERNAS
-============================================================ */
-
-:root,
-:root[data-theme='light'] {
-    --page-background: var(--bg-page);
-}
-
-:root[data-theme='dark'] {
-    --page-background: var(--bg-page);
-}
-
-/* O fundo acompanha automaticamente o tema */
 .sate-page {
     background: var(--page-background);
     color: var(--texto);
     min-height: 100dvh;
+}
+
+/* ============================================================
+   COMPONENTES COMPARTILHADOS
+============================================================ */
+
+.sate-modal-layer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.sate-modal-header-layout {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+/* Regras compartilhadas pelas telas de autenticação. */
+
+
+.sate-auth-auroraBottom {
+  bottom: -5%;
+  left: -10%;
+  background: var(--verde-principal);
+  opacity: 0.12;
+}
+
+.sate-auth-auroraTop {
+  top: 3%;
+  right: -12%;
+  background: var(--rosa);
+  opacity: 0.07;
+}
+
+.sate-auth-backArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 22px;
+  color: var(--texto-suave);
+  font-size: 12.5px;
+}
+
+.sate-auth-backgroundDecor {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sate-auth-cardHeader h2 {
+  margin: 0 0 7px;
+  color: var(--texto);
+  font-family: var(--fonte-base);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.18;
+}
+
+.sate-auth-cardHeader h2 em,
+.sate-auth-formContainer h2 em {
+  color: var(--rosa);
+  font-family: var(--fonte-destaque);
+  font-weight: 400;
+}
+
+.sate-auth-cardHeader p,
+.sate-auth-subtitle {
+  margin: 0 0 24px;
+  color: var(--texto-suave);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.sate-auth-cardLogo {
+  display: block;
+  width: 82px;
+  height: 42px;
+  object-fit: contain;
+  object-position: left center;
+  margin: 0 0 20px;
+}
+
+.sate-auth-confirmationCard {
+  width: 100%;
+  max-width: 400px;
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--borda);
+  border-radius: 24px;
+  box-shadow: 0 30px 70px #0b2e224d;
+  animation: cardEnter .28s ease both;
+}
+
+.sate-auth-confirmationCard h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  letter-spacing: -.04em;
+}
+
+.sate-auth-confirmationCard p {
+  margin: 0 0 14px;
+  color: var(--texto-suave);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.sate-auth-confirmationLink {
+  margin-top: 8px;
+  color: var(--texto-suave);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.sate-auth-confirmationLink:hover {
+  color: var(--vermelho);
+}
+
+.sate-auth-emailText {
+  max-width: 100%;
+  margin-bottom: 20px;
+  padding: 6px 14px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #DFF7EE;
+  color: var(--verde);
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sate-auth-errorMessage {
+  background: var(--rosa-claro);
+  border: 1px solid #f8c6d3;
+  color: var(--vermelho);
+}
+
+.sate-auth-errorMessage,
+.sate-auth-successMessage {
+  padding: 11px 13px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.sate-auth-field label,
+.sate-auth-inputGroup label {
+  color: var(--texto-suave);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.sate-auth-field,
+.sate-auth-inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sate-auth-forgotPassword,
+.sate-auth-createAccount,
+.sate-auth-link {
+  color: var(--vermelho);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.sate-auth-forgotPassword:hover,
+.sate-auth-createAccount:hover,
+.sate-auth-link:hover {
+  color: var(--verde);
+  text-decoration: underline;
+}
+
+.sate-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sate-auth-gradientOrb {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  filter: blur(42px);
+}
+
+.sate-auth-hero,
+.sate-auth-left {
+  position: relative;
+  min-width: 0;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 56px 52px;
+  isolation: isolate;
+  background: linear-gradient(160deg, #0b2e22 0%, var(--verde) 55%, #0b2e22 100%);
+  color: var(--branco);
+}
+
+.sate-auth-heroContent h1 em,
+.sate-auth-leftContent h1 em {
+  color: #ff7a98;
+  font-family: var(--fonte-destaque);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -.02em;
+}
+
+.sate-auth-heroContent h1 span,
+.sate-auth-leftContent h1 span {
+  display: block;
+}
+
+.sate-auth-heroContent h1,
+.sate-auth-leftContent h1 {
+  margin: 0 0 14px;
+  font-size: clamp(29px, 3vw, 42px);
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -.045em;
+}
+
+.sate-auth-heroContent p,
+.sate-auth-leftContent p {
+  max-width: 430px;
+  margin: 0;
+  color: #ffffffbd;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.sate-auth-heroContent,
+.sate-auth-leftContent {
+  position: relative;
+  z-index: 2;
+  max-width: 440px;
+  margin-bottom: 28px;
+}
+
+.sate-auth-heroImages {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.sate-auth-heroLogo {
+  width: 118px;
+  max-height: 48px;
+  object-fit: contain;
+}
+
+.sate-auth-heroLogoLink {
+  position: absolute;
+  top: 30px;
+  left: 42px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+}
+
+.sate-auth-heroOverlay,
+.sate-auth-leftOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 78% 22%, rgba(239, 71, 111, .24), transparent 42%), linear-gradient(180deg, rgba(11, 46, 34, .30), rgba(11, 46, 34, .55) 45%, rgba(11, 46, 34, .93));
+}
+
+.sate-auth-heroSlide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  filter: saturate(.8) contrast(1.02);
+  transition: opacity 1.8s ease-in-out;
+}
+
+.sate-auth-heroSlideActive {
+  opacity: .55;
+}
+
+.sate-auth-heroStat span,
+.sate-auth-stat span {
+  color: #ffffffbd;
+  font-size: 11px;
+}
+
+.sate-auth-heroStat strong,
+.sate-auth-stat strong {
+  color: #5fe0b0;
+  font-size: 21px;
+  line-height: 1.2;
+}
+
+.sate-auth-heroStat,
+.sate-auth-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sate-auth-heroStats,
+.sate-auth-leftFooter {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 22px;
+  padding-top: 22px;
+  border-top: 1px solid #ffffff30;
+}
+
+.sate-auth-inputGroup input {
+  padding-left: 42px;
+}
+
+.sate-auth-inputIcon {
+  position: absolute;
+  left: 14px;
+  z-index: 1;
+  color: #8a9a93;
+  pointer-events: none;
+}
+
+.sate-auth-inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sate-auth-inputWrapper input,
+.sate-auth-inputGroup input {
+  width: 100%;
+  height: 46px;
+  min-width: 0;
+  padding: 0 14px 0 42px;
+  border: 1.5px solid var(--borda);
+  border-radius: 12px;
+  outline: none;
+  background: var(--bg-neutro);
+  color: var(--texto);
+  font-family: var(--fonte-base);
+  font-size: 14px;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+}
+
+.sate-auth-inputWrapper input::placeholder,
+.sate-auth-inputGroup input::placeholder {
+  color: #a3aea9;
+}
+
+.sate-auth-inputWrapper input:focus,
+.sate-auth-inputGroup input:focus {
+  border-color: var(--verde-principal);
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 4px #ef476f24;
+}
+
+.sate-auth-inputWrapper input:hover,
+.sate-auth-inputGroup input:hover {
+  border-color: #d3c8ba;
+}
+
+.sate-auth-link {
+  font-size: inherit;
+}
+
+.sate-auth-loginArea,
+.sate-auth-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100vh;
+  padding: 40px;
+  overflow: hidden;
+  background: radial-gradient(120% 120% at 100% 0%, #f3e8da 0%, var(--bg-page) 55%);
+}
+
+.sate-auth-loginCard,
+.sate-auth-formContainer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 410px;
+  padding: 38px 36px 32px;
+  border: 1px solid var(--borda);
+  border-radius: 24px;
+  background: var(--bg-surface);
+  box-shadow: 0 2px 6px #12261f0a, 0 28px 56px #12261f17;
+  animation: cardEnter .45s ease both;
+}
+
+.sate-auth-modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #0b2e228c;
+  backdrop-filter: blur(4px);
+  animation: fadeIn .2s ease both;
+}
+
+.sate-auth-options,
+.sate-auth-remember,
+.sate-auth-signupDivider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--texto-suave);
+  font-size: 12.5px;
+}
+
+.sate-auth-orbBottom {
+  width: 260px;
+  height: 260px;
+  bottom: -130px;
+  left: -120px;
+  background: var(--verde-principal);
+  opacity: 0.18;
+}
+
+.sate-auth-orbCenter {
+  width: 170px;
+  height: 170px;
+  bottom: 5%;
+  right: -90px;
+  background: var(--verde-principal);
+  opacity: 0.10;
+}
+
+.sate-auth-orbLeft {
+  width: 180px;
+  height: 180px;
+  left: -120px;
+  top: 35%;
+  background: var(--verde-principal);
+  opacity: 0.10;
+}
+
+.sate-auth-orbSmallOne {
+  width: 90px;
+  height: 90px;
+  top: 12%;
+  left: 8%;
+  background: var(--rosa);
+  opacity: 0.05;
+}
+
+.sate-auth-orbSmallTwo {
+  width: 110px;
+  height: 110px;
+  bottom: 8%;
+  right: 5%;
+  background: var(--azul);
+  opacity: 0.07;
+}
+
+.sate-auth-orbTop,
+.sate-auth-orbRight {
+  width: 290px;
+  height: 290px;
+  top: -130px;
+  right: -150px;
+  background: var(--rosa);
+  opacity: 0.09;
+}
+
+.sate-auth-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  background: var(--bg-page);
+  color: var(--texto);
+  font-family: var(--fonte-base);
+}
+
+.sate-auth-passwordToggle {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--texto-suave);
+  cursor: pointer;
+}
+
+.sate-auth-passwordToggle:hover {
+  color: var(--vermelho);
+  background: var(--rosa-claro);
+}
+
+.sate-auth-passwordToggle~input {
+  padding-right: 44px;
+}
+
+.sate-auth-remember {
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.sate-auth-remember input,
+.sate-auth-terms input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--rosa);
+}
+
+.sate-auth-resendButton {
+  margin-top: 14px;
+  padding: 6px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--vermelho);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sate-auth-resendButton:disabled {
+  color: var(--texto-suave);
+  cursor: default;
+}
+
+.sate-auth-resendMessage {
+  margin: 4px 0 0 !important;
+  color: var(--verde) !important;
+  font-size: 12.5px !important;
+}
+
+.sate-auth-statDivider {
+  width: 1px;
+  height: 30px;
+  background: #ffffff38;
+}
+
+.sate-auth-submitButton,
+.sate-auth-confirmationButton {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--verde), #08795d);
+  color: var(--branco);
+  font-family: var(--fonte-base);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s, opacity .15s;
+}
+
+.sate-auth-submitButton:disabled {
+  opacity: .7;
+  cursor: progress;
+}
+
+.sate-auth-submitButton:hover:not(:disabled),
+.sate-auth-confirmationButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px #0059424d;
+}
+
+.sate-auth-subtitle {
+  margin-top: 0;
+}
+
+.sate-auth-successIcon {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: var(--rosa-claro);
+  color: var(--rosa);
+}
+
+.sate-auth-successIcon:after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1.5px dashed #ef476f66;
+}
+
+.sate-auth-successMessage {
+  background: #DFF7EE;
+  border: 1px solid #bfe5d8;
+  color: var(--verde);
+}
+
+.sate-auth-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--texto-suave);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.sate-auth-terms input {
+  flex-shrink: 0;
+  margin-top: 2px;
 }

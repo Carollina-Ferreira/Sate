@@ -88,7 +88,7 @@ const Sidebar = ({ onExpand, onCollapse }: SidebarProps) => {
       {modalSairAberto &&
         createPortal(
           <div
-            className={styles.modalOverlay}
+            className={`${styles.modalOverlay} sate-modal-layer`}
             onClick={() => setModalSairAberto(false)}
           >
             <div

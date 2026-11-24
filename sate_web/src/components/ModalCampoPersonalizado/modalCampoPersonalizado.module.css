@@ -2,16 +2,9 @@
    MODAL — SATE | ROSA, CREME E VERDE
 ============================================================ */
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 20px;
+.overlay {z-index: 2000;
+align-items: center;
+padding: 20px;
   box-sizing: border-box;
 
   background: rgba(27, 48, 39, 0.72);

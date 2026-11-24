@@ -1,11 +1,6 @@
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
+.overlay {z-index: 200;
+align-items: center;
+padding: 12px;
   background: rgba(11, 46, 34, 0.42);
 }
 .modal {

@@ -196,7 +196,7 @@ export default function ModalCampoPersonalizado({
 
   return (
     <div
-      className={styles.overlay}
+      className={`${styles.overlay} sate-modal-layer`}
       onMouseDown={onClose}
     >
       <div

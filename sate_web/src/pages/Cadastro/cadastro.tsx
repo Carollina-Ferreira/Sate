@@ -276,25 +276,25 @@ const Cadastro = () => {
 
 
   return (
-    <main className={styles.page}>
+    <main className={(styles.page + ' sate-auth-page')}>
 
       {/* =====================================================
           LADO ESQUERDO
       ===================================================== */}
 
-      <section className={styles.left}>
+      <section className={(styles.left + ' sate-auth-left')}>
 
         {/* IMAGENS */}
 
         <div
-          className={styles.heroImages}
+          className={(styles.heroImages + ' sate-auth-heroImages')}
           aria-hidden="true"
         >
           {heroSlides.map((image, index) => (
             <div
               key={image}
-              className={`${styles.heroSlide} ${index === activeSlide
-                  ? styles.heroSlideActive
+              className={`${styles.heroSlide} sate-auth-heroSlide ${index === activeSlide
+                  ? (styles.heroSlideActive + ' sate-auth-heroSlideActive')
                   : ''
                 }`}
               style={{
@@ -306,7 +306,7 @@ const Cadastro = () => {
 
 
         <div
-          className={styles.leftOverlay}
+          className={(styles.leftOverlay + ' sate-auth-leftOverlay')}
           aria-hidden="true"
         />
 
@@ -337,20 +337,20 @@ const Cadastro = () => {
 
         <Link
           to="/"
-          className={styles.heroLogoLink}
+          className={(styles.heroLogoLink + ' sate-auth-heroLogoLink')}
           aria-label="Página inicial do SATE"
         >
           <img
             src={logo}
             alt="SATE"
-            className={styles.heroLogo}
+            className={(styles.heroLogo + ' sate-auth-heroLogo')}
           />
         </Link>
 
 
         {/* TEXTO */}
 
-        <div className={styles.leftContent}>
+        <div className={(styles.leftContent + ' sate-auth-leftContent')}>
 
           <h1>
             <span>
@@ -376,9 +376,9 @@ const Cadastro = () => {
 
         {/* ESTATÍSTICAS */}
 
-        <div className={styles.leftFooter}>
+        <div className={(styles.leftFooter + ' sate-auth-leftFooter')}>
 
-          <div className={styles.stat}>
+          <div className={(styles.stat + ' sate-auth-stat')}>
             <strong>
               50+
             </strong>
@@ -390,11 +390,11 @@ const Cadastro = () => {
 
 
           <span
-            className={styles.statDivider}
+            className={(styles.statDivider + ' sate-auth-statDivider')}
           />
 
 
-          <div className={styles.stat}>
+          <div className={(styles.stat + ' sate-auth-stat')}>
             <strong>
               100+
             </strong>
@@ -406,11 +406,11 @@ const Cadastro = () => {
 
 
           <span
-            className={styles.statDivider}
+            className={(styles.statDivider + ' sate-auth-statDivider')}
           />
 
 
-          <div className={styles.stat}>
+          <div className={(styles.stat + ' sate-auth-stat')}>
             <strong>
               5+
             </strong>
@@ -429,48 +429,48 @@ const Cadastro = () => {
           LADO DIREITO
       ===================================================== */}
 
-      <section className={styles.right}>
+      <section className={(styles.right + ' sate-auth-right')}>
 
         {/* FUNDO ANIMADO */}
 
         <div
-          className={styles.backgroundDecor}
+          className={(styles.backgroundDecor + ' sate-auth-backgroundDecor')}
           aria-hidden="true"
         >
           <span
-            className={`${styles.gradientOrb} ${styles.orbTop}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbTop} sate-auth-orbTop`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbRight}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbRight} sate-auth-orbRight`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbBottom}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbBottom} sate-auth-orbBottom`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbLeft}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbLeft} sate-auth-orbLeft`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbCenter}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbCenter} sate-auth-orbCenter`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbSmallOne}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbSmallOne} sate-auth-orbSmallOne`}
           />
 
           <span
-            className={`${styles.gradientOrb} ${styles.orbSmallTwo}`}
+            className={`${styles.gradientOrb} sate-auth-gradientOrb ${styles.orbSmallTwo} sate-auth-orbSmallTwo`}
           />
 
           <span
-            className={styles.auroraTop}
+            className={(styles.auroraTop + ' sate-auth-auroraTop')}
           />
 
           <span
-            className={styles.auroraBottom}
+            className={(styles.auroraBottom + ' sate-auth-auroraBottom')}
           />
         </div>
 
@@ -479,22 +479,22 @@ const Cadastro = () => {
             CARD
         ===================================================== */}
 
-        <div className={styles.formContainer}>
+        <div className={(styles.formContainer + ' sate-auth-formContainer')}>
 
           <img
             src={logoVerdeImg}
             alt="SATE"
-            className={styles.cardLogo}
+            className={(styles.cardLogo + ' sate-auth-cardLogo')}
           />
 
 
-          <div className={styles.cardHeader}>
+          <div className={(styles.cardHeader + ' sate-auth-cardHeader')}>
 
             <h2>
               Crie sua conta
             </h2>
 
-            <p className={styles.subtitle}>
+            <p className={(styles.subtitle + ' sate-auth-subtitle')}>
               Cadastre-se para começar a acompanhar
               o desempenho da sua equipe.
             </p>
@@ -503,23 +503,23 @@ const Cadastro = () => {
 
 
           <form
-            className={styles.form}
+            className={(styles.form + ' sate-auth-form')}
             onSubmit={handleSubmit}
           >
 
             {/* NOME */}
 
-            <div className={styles.inputGroup}>
+            <div className={(styles.inputGroup + ' sate-auth-inputGroup')}>
 
               <label htmlFor="nome">
                 Nome completo
               </label>
 
-              <div className={styles.inputWrapper}>
+              <div className={(styles.inputWrapper + ' sate-auth-inputWrapper')}>
 
                 <UserRound
                   size={17}
-                  className={styles.inputIcon}
+                  className={(styles.inputIcon + ' sate-auth-inputIcon')}
                 />
 
                 <input
@@ -540,17 +540,17 @@ const Cadastro = () => {
 
             {/* EMAIL */}
 
-            <div className={styles.inputGroup}>
+            <div className={(styles.inputGroup + ' sate-auth-inputGroup')}>
 
               <label htmlFor="email">
                 Email
               </label>
 
-              <div className={styles.inputWrapper}>
+              <div className={(styles.inputWrapper + ' sate-auth-inputWrapper')}>
 
                 <Mail
                   size={17}
-                  className={styles.inputIcon}
+                  className={(styles.inputIcon + ' sate-auth-inputIcon')}
                 />
 
                 <input
@@ -571,17 +571,17 @@ const Cadastro = () => {
 
             {/* SENHA */}
 
-            <div className={styles.inputGroup}>
+            <div className={(styles.inputGroup + ' sate-auth-inputGroup')}>
 
               <label htmlFor="senha">
                 Senha
               </label>
 
-              <div className={styles.inputWrapper}>
+              <div className={(styles.inputWrapper + ' sate-auth-inputWrapper')}>
 
                 <LockKeyhole
                   size={17}
-                  className={styles.inputIcon}
+                  className={(styles.inputIcon + ' sate-auth-inputIcon')}
                 />
 
                 <input
@@ -605,7 +605,7 @@ const Cadastro = () => {
                   <button
                     type="button"
                     className={
-                      styles.passwordToggle
+                      (styles.passwordToggle + ' sate-auth-passwordToggle')
                     }
                     onClick={() =>
                       setShowPassword(
@@ -633,17 +633,17 @@ const Cadastro = () => {
 
             {/* CONFIRMAR */}
 
-            <div className={styles.inputGroup}>
+            <div className={(styles.inputGroup + ' sate-auth-inputGroup')}>
 
               <label htmlFor="confirmarSenha">
                 Confirmar senha
               </label>
 
-              <div className={styles.inputWrapper}>
+              <div className={(styles.inputWrapper + ' sate-auth-inputWrapper')}>
 
                 <LockKeyhole
                   size={17}
-                  className={styles.inputIcon}
+                  className={(styles.inputIcon + ' sate-auth-inputIcon')}
                 />
 
                 <input
@@ -667,7 +667,7 @@ const Cadastro = () => {
                   <button
                     type="button"
                     className={
-                      styles.passwordToggle
+                      (styles.passwordToggle + ' sate-auth-passwordToggle')
                     }
                     onClick={() =>
                       setShowConfirmPassword(
@@ -705,14 +705,14 @@ const Cadastro = () => {
             {/* MENSAGENS */}
 
             {erro && (
-              <div className={styles.errorMessage}>
+              <div className={(styles.errorMessage + ' sate-auth-errorMessage')}>
                 {erro}
               </div>
             )}
 
 
             {sucesso && (
-              <div className={styles.successMessage}>
+              <div className={(styles.successMessage + ' sate-auth-successMessage')}>
                 {sucesso}
               </div>
             )}
@@ -720,7 +720,7 @@ const Cadastro = () => {
 
             {/* TERMOS */}
 
-            <label className={styles.terms}>
+            <label className={(styles.terms + ' sate-auth-terms')}>
 
               <input
                 type="checkbox"
@@ -749,7 +749,7 @@ const Cadastro = () => {
 
             <button
               type="submit"
-              className={styles.submitButton}
+              className={(styles.submitButton + ' sate-auth-submitButton')}
               disabled={loading}
             >
               <span>
@@ -771,7 +771,7 @@ const Cadastro = () => {
 
           {/* LOGIN */}
 
-          <div className={styles.backArea}>
+          <div className={(styles.backArea + ' sate-auth-backArea')}>
 
             <span>
               Já possui uma conta?
@@ -779,7 +779,7 @@ const Cadastro = () => {
 
             <Link
               to="/login"
-              className={styles.link}
+              className={(styles.link + ' sate-auth-link')}
             >
               Entrar
             </Link>

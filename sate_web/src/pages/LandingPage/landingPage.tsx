@@ -129,6 +129,8 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [heroAtual, setHeroAtual] =
     useState(0);
+  const [lojaSelecionada, setLojaSelecionada] =
+    useState<'ios' | 'android' | null>(null);
   /* ========================================
      FADE AUTOMÁTICO
   ======================================== */
@@ -1222,7 +1224,7 @@ export default function LandingPage() {
           >
             <button
               type="button"
-              onClick={irParaLogin}
+              onClick={() => setLojaSelecionada('ios')}
             >
               <FaApple
                 className={
@@ -1240,7 +1242,7 @@ export default function LandingPage() {
             </button>
             <button
               type="button"
-              onClick={irParaLogin}
+              onClick={() => setLojaSelecionada('android')}
             >
               <FaGooglePlay
                 className={
@@ -1610,6 +1612,59 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      {lojaSelecionada && (
+        <div
+          className={styles.storeModalOverlay}
+          onClick={() => setLojaSelecionada(null)}
+          role="presentation"
+        >
+          <section
+            className={styles.storeModal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="store-modal-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className={styles.storeModalClose}
+              onClick={() => setLojaSelecionada(null)}
+              aria-label="Fechar aviso"
+            >
+              ×
+            </button>
+            <div className={styles.storeModalIcon}>
+              {lojaSelecionada === 'ios' ? <FaApple /> : <FaGooglePlay />}
+            </div>
+            <h2 id="store-modal-title">
+              {lojaSelecionada === 'ios'
+                ? 'O SATE ainda não está disponível para iOS.'
+                : 'O SATE ainda não está na Google Play.'}
+            </h2>
+            <p>
+              No momento, o aplicativo está disponível apenas para Android,
+              por meio da instalação direta do APK.
+            </p>
+            {lojaSelecionada === 'android' && (
+              <a
+                className={styles.storeModalDownload}
+                href="/downloads/sate.apk"
+                download="sate.apk"
+              >
+                Baixar APK
+                <ArrowRight size={17} />
+              </a>
+            )}
+            <button
+              type="button"
+              className={styles.storeModalDismiss}
+              onClick={() => setLojaSelecionada(null)}
+            >
+              Entendi
+            </button>
+          </section>
+        </div>
+      )}
     </main>
   );
 }

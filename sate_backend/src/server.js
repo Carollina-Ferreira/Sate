@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -82,6 +81,16 @@ console.log('Todas as rotas foram carregadas corretamente!');
 // ======================================================
 
 const app = express();
+
+// ======================================================
+// SWAGGER - DOCUMENTAÇÃO DA API
+// ======================================================
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.get('/api-docs.json', (req, res) => {
+    res.json(swaggerSpec);
+});
 
 // ======================================================
 // CORS
@@ -358,7 +367,6 @@ app.use('/api/documentos', mobileRoutes.rotasDocumentos);
 // ROTA NÃO ENCONTRADA
 // ======================================================
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/header', headerRoutes);
 
 app.use((req, res) => {
@@ -438,6 +446,7 @@ app.listen(PORT, '0.0.0.0', () => {
 
     console.log(`Servidor: http://localhost:${PORT}`);
     console.log(`API: http://localhost:${PORT}/api`);
+    console.log(`Swagger: http://localhost:${PORT}/api-docs/`);
 
     console.log(
         `Dashboard: http://localhost:${PORT}/api/dashboard`

@@ -27,7 +27,9 @@
     "multer": "^2.4.0",
     "mysql2": "^3.24.5",
     "nodemailer": "^10.3.1",
-    "prisma": "^6.19.3"
+    "prisma": "^6.19.3",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

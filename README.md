@@ -273,7 +273,7 @@ O projeto disponibiliza dois formatos de documentação:
 
 | Documento | Descrição |
 |---|---|
-|[📄 Documentação Técnica](./Documentacao_Tecnica_SATE.pdf) | Requisitos, arquitetura, banco de dados, funcionalidades, segurança, testes e implantação |
+|[![PDF](https://img.shields.io/badge/Documentação_Técnica-E98BA8?style=for-the-badge&logo=readthedocs&logoColor=white)](https://drive.google.com/file/d/19la6uY7sUYixE3eHXQH2fsEkxZRxMERk/view?usp=sharing) | Requisitos, arquitetura, banco de dados, funcionalidades, segurança, testes e implantação |
 | [🔌 Swagger — OpenAPI](https://sate-backend.onrender.com/api-docs/) | Documentação interativa dos endpoints da API REST |
 
 O Swagger possui 36 caminhos documentados na versão validada, permitindo consultar parâmetros, métodos HTTP, respostas e realizar requisições.

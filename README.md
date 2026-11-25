@@ -273,7 +273,7 @@ O projeto disponibiliza dois formatos de documentação:
 
 | Documento | Descrição |
 |---|---|
-| [📄 Documentação Técnica — PDF](./docs/Documentacao_Tecnica_SATE.pdf) | Requisitos, arquitetura, banco de dados, funcionalidades, segurança, testes e implantação |
+|[📄 Documentação Técnica](./Documentacao_Tecnica_SATE.pdf) | Requisitos, arquitetura, banco de dados, funcionalidades, segurança, testes e implantação |
 | [🔌 Swagger — OpenAPI](https://sate-backend.onrender.com/api-docs/) | Documentação interativa dos endpoints da API REST |
 
 O Swagger possui 36 caminhos documentados na versão validada, permitindo consultar parâmetros, métodos HTTP, respostas e realizar requisições.

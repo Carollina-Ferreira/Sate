@@ -2,6 +2,7 @@
 <div align="center">
 
 # 🏆 SATE
+
 ### Sistema de Acompanhamento e Treinamento Esportivo
 
 **Treinar. Acompanhar. Evoluir.**
@@ -11,17 +12,23 @@ Plataforma integrada para gestão esportiva, análise de desempenho e acompanham
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
+
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 
+---
+
 [![Site](https://img.shields.io/badge/Acessar_Site-005C45?style=for-the-badge&logo=googlechrome&logoColor=white)](https://sateweb.vercel.app/)
+[![Android](https://img.shields.io/badge/Baixar_App-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Carollina-Ferreira/Sate/releases/download/lan%C3%A7amentos/SATE.apk)
 [![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://sate-backend.onrender.com/api-docs/)
-[![Android](https://img.shields.io/badge/Aplicativo-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Carollina-Ferreira/Sate/releases)
+[![PDF](https://img.shields.io/badge/Documentação_Técnica-E98BA8?style=for-the-badge&logo=readthedocs&logoColor=white)](./docs/Documentacao_Tecnica_SATE.pdf)
 
 ![Status](https://img.shields.io/badge/Status-Em_produção-16A875)
-![Projeto](https://img.shields.io/badge/Projeto-TCC_SENAI-E98BA8)
+![Projeto](https://img.shields.io/badge/Projeto-TCC_SENAI-4EA5D9)
+![Testes](https://img.shields.io/badge/Testes-466_aprovados-16A875)
 
 </div>
 
@@ -29,13 +36,13 @@ Plataforma integrada para gestão esportiva, análise de desempenho e acompanham
 
 ## 📖 Sobre o projeto
 
-O **SATE** é uma plataforma desenvolvida como Trabalho de Conclusão de Curso (TCC) do Técnico em Desenvolvimento de Sistemas do SENAI Osasco.
+O **SATE (Sistema de Acompanhamento e Treinamento Esportivo)** é uma plataforma desenvolvida como Trabalho de Conclusão de Curso (TCC) do curso Técnico em Desenvolvimento de Sistemas do SENAI Osasco.
 
-Seu objetivo é modernizar a gestão esportiva, conectando atletas e treinadores em um ambiente integrado para planejamento, organização e análise de desempenho.
+O projeto tem como objetivo modernizar a gestão esportiva, conectando atletas e treinadores em um ambiente integrado para planejamento, organização e análise de desempenho.
 
-O sistema é composto por um site web, um aplicativo mobile e uma API REST, que compartilham o mesmo banco de dados.
+A plataforma é composta por um site web, um aplicativo mobile e uma API REST, que compartilham o mesmo banco de dados.
 
-O SATE prioriza a evolução individual, sem estabelecer rankings entre atletas.
+O SATE prioriza a evolução individual dos atletas, sem estabelecer rankings entre eles.
 
 ---
 
@@ -44,12 +51,13 @@ O SATE prioriza a evolução individual, sem estabelecer rankings entre atletas.
 | Serviço | Acesso |
 |---|---|
 | 💻 Site Web | [Acessar plataforma](https://sateweb.vercel.app/) |
-| 📱 Aplicativo Android | [GitHub Releases](https://github.com/Carollina-Ferreira/Sate/releases) |
+| 📱 Aplicativo Android | [Baixar SATE.apk](https://github.com/Carollina-Ferreira/Sate/releases/download/lan%C3%A7amentos/SATE.apk) |
 | ⚙️ Backend | [API REST](https://sate-backend.onrender.com/) |
-| 📚 Swagger | [Documentação da API](https://sate-backend.onrender.com/api-docs/) |
+| 🔌 Swagger | [Documentação interativa da API](https://sate-backend.onrender.com/api-docs/) |
+| 📄 Documentação Técnica | [Visualizar PDF](./docs/Documentacao_Tecnica_SATE.pdf) |
 | 🟢 Health Check | [Status do servidor](https://sate-backend.onrender.com/api/health) |
 
-> O APK foi compilado para Android. O download depende da publicação da versão no GitHub Releases.
+> O aplicativo está disponível para instalação em dispositivos Android através do arquivo APK.
 
 ---
 
@@ -57,7 +65,7 @@ O SATE prioriza a evolução individual, sem estabelecer rankings entre atletas.
 
 | 💻 Site Web | 📱 App Treinador | 📱 App Atleta |
 |---|---|---|
-| Dashboard | Planejamento de treinos | Acompanhamento de treinos |
+| Dashboard | Planejamento de treinos | Consulta de treinos |
 | Gestão de equipes | Gestão de atletas | Calendário esportivo |
 | Gestão de atletas | Biblioteca de exercícios | Convocações |
 | Gestão de partidas | Controle de presença | Metas individuais |
@@ -86,6 +94,7 @@ Futebol • Basquete • Vôlei • Rugby • Handebol • Natação • Atletis
 | Testes | Jest, Supertest e Thunder Client |
 | Prototipagem | Figma |
 | Versionamento | Git e GitHub |
+| Automação | GitHub Actions |
 | Hospedagem | Vercel, Render e Aiven |
 
 ---
@@ -96,11 +105,18 @@ O site e o aplicativo utilizam a mesma API REST, permitindo a centralização e 
 
 ```mermaid
 flowchart TD
-    A["Site Web - React / Vercel"] <-->|HTTPS| C["API REST - Node.js / Render"]
-    B["Aplicativo - Flutter"] <-->|HTTPS| C
-    C <--> D["Prisma ORM"]
-    D <--> E[("MySQL - Aiven")]
-    F["Swagger"] --- C
+    A["💻 Site Web<br/>React / Vercel"]
+    B["📱 Aplicativo<br/>Flutter / Dart"]
+    C["⚙️ API REST<br/>Node.js / Render"]
+    D["Prisma ORM"]
+    E[("MySQL / Aiven")]
+    F["Swagger"]
+
+    A <-->|HTTPS| C
+    B <-->|HTTPS| C
+    C <--> D
+    D <--> E
+    F --- C
 
     style A fill:#E6F7F0,stroke:#16A875,color:#005C45
     style B fill:#E7F3FC,stroke:#4EA5D9,color:#14486B
@@ -116,6 +132,9 @@ flowchart TD
 
 ```text
 SATE/
+├── docs/
+│   └── Documentacao_Tecnica_SATE.pdf
+│
 ├── sate_web/
 │   ├── src/
 │   │   ├── components/
@@ -126,8 +145,7 @@ SATE/
 ├── sate_app/
 │   ├── lib/
 │   │   ├── pages/
-│   │   ├── services/
-│   │   └── sate/
+│   │   └── services/
 │   └── pubspec.yaml
 │
 ├── sate_backend/
@@ -135,8 +153,10 @@ SATE/
 │   ├── src/
 │   │   ├── controllers/
 │   │   ├── routes/
+│   │   ├── middleware/
 │   │   ├── config/
 │   │   └── server.js
+│   ├── tests/
 │   └── package.json
 │
 └── README.md
@@ -144,7 +164,7 @@ SATE/
 
 ---
 
-## 🚀 Como executar
+## 🚀 Como executar o projeto
 
 ### Clonar o repositório
 
@@ -158,11 +178,9 @@ cd Sate
 ```bash
 cd sate_backend
 npm install
-npx prisma generate
-npm run dev
 ```
 
-Configure o arquivo `.env` antes de iniciar:
+Configure o arquivo `.env`:
 
 ```env
 DATABASE_URL="mysql://usuario:senha@localhost:3306/sate"
@@ -170,16 +188,21 @@ JWT_SECRET="sua_chave_secreta"
 PORT=3000
 ```
 
-Configure também as demais variáveis exigidas pelo backend. Para um banco local de desenvolvimento, aplique as migrações com `npx prisma migrate dev`.
+Configure as demais variáveis necessárias ao ambiente.
 
-### Frontend
+```bash
+npx prisma generate
+npx prisma migrate dev
+npm run dev
+```
+
+### Frontend Web
 
 Em outro terminal, a partir da raiz do projeto:
 
 ```bash
 cd sate_web
 npm install
-npm run dev
 ```
 
 Configure o arquivo `.env.local`:
@@ -188,9 +211,15 @@ Configure o arquivo `.env.local`:
 VITE_API_URL=http://localhost:3000
 ```
 
-### Aplicativo
+Inicie o frontend:
 
-Em outro terminal, a partir da raiz:
+```bash
+npm run dev
+```
+
+### Aplicativo Flutter
+
+Em outro terminal, a partir da raiz do projeto:
 
 ```bash
 cd sate_app
@@ -210,11 +239,13 @@ Arquivo gerado:
 build/app/outputs/flutter-apk/app-release.apk
 ```
 
+> Nunca publique arquivos `.env`, senhas ou credenciais no repositório.
+
 ---
 
-## 🔌 API REST e Swagger
+## 🔌 API REST
 
-A API foi desenvolvida com Express, utilizando rotas, controllers, autenticação JWT e Prisma ORM.
+O backend foi desenvolvido com Node.js e Express, utilizando uma estrutura organizada em rotas, controllers, middlewares e Prisma ORM.
 
 | Módulo | Endpoint base |
 |---|---|
@@ -227,13 +258,25 @@ A API foi desenvolvida com Express, utilizando rotas, controllers, autenticaçã
 | Vídeos | `/api/videos` |
 | Dashboard | `/api/dashboard` |
 | Estatísticas | `/api/estatisticas` |
+| Configuração de análise | `/api/configuracao-analise` |
 | Aplicativo | `/api/mobile` |
 | Treinos | `/api/treinos` |
 | Notificações | `/api/notificacoes` |
 
-A documentação Swagger possui **36 caminhos de API documentados**, permitindo consultar e testar requisições HTTP.
+A API utiliza os métodos HTTP GET, POST, PUT, PATCH e DELETE, conforme as operações de cada recurso.
 
-📚 **[Acessar documentação completa](https://sate-backend.onrender.com/api-docs/)**
+---
+
+## 📚 Documentação
+
+O projeto disponibiliza dois formatos de documentação:
+
+| Documento | Descrição |
+|---|---|
+| [📄 Documentação Técnica — PDF](./docs/Documentacao_Tecnica_SATE.pdf) | Requisitos, arquitetura, banco de dados, funcionalidades, segurança, testes e implantação |
+| [🔌 Swagger — OpenAPI](https://sate-backend.onrender.com/api-docs/) | Documentação interativa dos endpoints da API REST |
+
+O Swagger possui 36 caminhos documentados na versão validada, permitindo consultar parâmetros, métodos HTTP, respostas e realizar requisições.
 
 ---
 
@@ -241,16 +284,18 @@ A documentação Swagger possui **36 caminhos de API documentados**, permitindo 
 
 O SATE utiliza MySQL, hospedado na plataforma Aiven, com gerenciamento realizado pelo Prisma ORM.
 
-Principais entidades:
+A modelagem consultada possui 26 modelos, organizados nos seguintes domínios:
 
-- Usuário, Atleta e Treinador.
-- Equipe e Partida.
-- Vídeos e Marcações.
-- Treinos, Exercícios e Presenças.
-- Avaliações, Metas e Feedbacks.
-- Documentos e Notificações.
+- Usuários, atletas e treinadores.
+- Equipes e partidas.
+- Vídeos, marcações e anotações.
+- Treinos, exercícios e presenças.
+- Avaliações, metas e feedbacks.
+- Documentos e notificações.
 
-A modelagem está disponível em `sate_backend/prisma/schema.prisma`.
+A modelagem completa está disponível em:
+
+[`sate_backend/prisma/schema.prisma`](./sate_backend/prisma/schema.prisma)
 
 ---
 
@@ -259,42 +304,56 @@ A modelagem está disponível em `sate_backend/prisma/schema.prisma`.
 - Autenticação por JWT.
 - Hash de senhas com Bcrypt.
 - Controle de acesso por perfil.
-- Proteção de rotas.
-- Validação de dados.
+- Proteção de rotas autenticadas.
+- Validação de dados e arquivos.
 - Recuperação de senha.
 - Comunicação HTTPS.
-- Variáveis de ambiente.
+- Gerenciamento de credenciais por variáveis de ambiente.
 
 ---
 
-## 🧪 Testes
+## 🧪 Testes e qualidade de software
 
-O projeto utiliza testes unitários, testes de rotas, testes de integração e validação funcional.
+O backend utiliza Jest e Supertest para a realização de testes automatizados.
 
-### Backend — Jest
+### Resultados registrados
+
+| Indicador | Resultado |
+|---|---:|
+| Suítes aprovadas | 59/59 |
+| Testes aprovados | 466/466 |
+| Statements | 90,81% |
+| Branches | 83,00% |
+| Functions | 99,04% |
+| Lines | 91,94% |
+| Cobertura mínima exigida | 80% |
+
+![Statements](https://img.shields.io/badge/Statements-90.81%25-16A875)
+![Branches](https://img.shields.io/badge/Branches-83.00%25-16A875)
+![Functions](https://img.shields.io/badge/Functions-99.04%25-16A875)
+![Lines](https://img.shields.io/badge/Lines-91.94%25-16A875)
+
+A execução de 18/11/2026 superou a cobertura mínima exigida em todos os indicadores avaliados.
+
+[📊 Visualizar execução no GitHub Actions](https://github.com/Carollina-Ferreira/Sate/actions/runs/44315924386)
+
+### Executar os testes
 
 ```bash
-npm test
+cd sate_backend
+npm install
 npm run test:unit
 npm run test:routes
 npm run test:coverage
 ```
 
-### Frontend — TypeScript e Vite
+Caso necessário, instale as dependências de teste:
 
 ```bash
-npx tsc -b
-npm run build
+npm install --save-dev jest supertest
 ```
 
-### Aplicativo — Flutter
-
-```bash
-flutter analyze
-flutter test
-```
-
-Os resultados de cobertura podem ser consultados no relatório gerado pelo Jest.
+> Os resultados apresentados correspondem à execução registrada no GitHub Actions. Novas alterações no código devem ser acompanhadas de novas execuções dos testes.
 
 ---
 
@@ -305,33 +364,47 @@ Os resultados de cobertura podem ser consultados no relatório gerado pelo Jest.
 | Frontend Web | Vercel |
 | Backend | Render |
 | Banco de dados | Aiven |
-| Aplicativo | APK Android |
-| Documentação | Swagger |
-| Código-fonte | GitHub |
+| Aplicativo Android | GitHub Releases |
+| Documentação da API | Swagger |
+| Documentação Técnica | GitHub — PDF |
+| Versionamento | GitHub |
 
 ---
 
 ## 👥 Equipe de desenvolvimento
 
-- Carolina
-- Eduarda
-- Manuela
-- Nicoly
+| Integrantes |
+|---|
+| Carolina Ferreira Domingues |
+| Manuely da Silva Viana |
+| Maria Eduarda Bezerra da Silva |
+| Nicoly Silva Rodrigues Souza |
 
-**Instituição:** SENAI Osasco  
-**Curso:** Técnico em Desenvolvimento de Sistemas  
+### Professores
+
+- Vitor Lima
+- Jansen Killinger
+- Danilo Sibov
+- Luiz Henrique
+
+**Instituição:** SENAI Osasco
+
+**Curso:** Técnico em Desenvolvimento de Sistemas
+
 **Projeto:** Trabalho de Conclusão de Curso — 2026
 
 ---
 
 <div align="center">
 
-### 💚 SATE
+## 💚 SATE
 
-**Treinar. Acompanhar. Evoluir.**
+### Treinar. Acompanhar. Evoluir.
 
 *Tecnologia para transformar dados em evolução esportiva.*
 
-Desenvolvido pela equipe SATE — SENAI Osasco, 2026.
+**Desenvolvido pela equipe SATE — SENAI Osasco, 2026.**
+
+[![Site](https://img.shields.io/badge/SATE-Acessar_Plataforma-16A875?style=for-the-badge)](https://sateweb.vercel.app/)
 
 </div>

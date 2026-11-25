@@ -1,3 +1,4 @@
+import { API_BASE } from '../../config/api';
 
 import { useEffect, useState } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
@@ -128,7 +129,7 @@ const RedefinirSenha = () => {
 
     try {
       const resposta = await fetch(
-        'http://localhost:3000/api/password/redefinir-senha',
+        `${API_BASE}/password/redefinir-senha`,
         {
           method: 'POST',
           headers: {

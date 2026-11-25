@@ -17,6 +17,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { FormEvent } from 'react';
 import * as XLSX from 'xlsx';
+import { API_ORIGIN as API_URL } from '../../config/api';
 
 import styles from './atletas.module.css';
 import LoadingState from '../../components/ui/LoadingState/LoadingState';
@@ -138,8 +139,6 @@ type TelaAtual =
     | 'partidas';
 
 type ModoCadastro = 'escolha' | 'manual' | 'planilha';
-
-const API_URL = 'http://localhost:3000';
 
 // ============================================================
 // MÁSCARAS
@@ -288,7 +287,9 @@ const Atletas = () => {
 
     const obterToken = () =>
         localStorage.getItem('token') ||
+        sessionStorage.getItem('token') ||
         localStorage.getItem('accessToken') ||
+        sessionStorage.getItem('accessToken') ||
         '';
 
     const headersAutenticacao = () => ({

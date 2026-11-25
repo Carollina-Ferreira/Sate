@@ -18,7 +18,7 @@ type EstatisticasResposta = {
   evolucao: Evolucao[];
 };
 
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace(/\/+$/, '');
+import { API_BASE as API_URL } from '../../config/api';
 const PERIODOS = [
   { value: '30dias', label: 'Últimos 30 dias' },
   { value: '60dias', label: 'Últimos 60 dias' },

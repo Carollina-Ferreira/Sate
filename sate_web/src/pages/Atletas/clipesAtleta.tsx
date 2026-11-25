@@ -49,9 +49,7 @@ interface CategoriaFiltro {
     quantidade: number;
     ordem: number;
 }
-const API_URL = (
-    import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
-).replace(/\/+$/, '');
+import { API_BASE as API_URL } from '../../config/api';
 const API_ORIGIN = API_URL.replace(/\/api$/i, '');
 // ============================================================
 // AUTENTICAÇÃO

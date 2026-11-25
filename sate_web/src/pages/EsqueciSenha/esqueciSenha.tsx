@@ -1,3 +1,4 @@
+import { API_BASE } from '../../config/api';
 import { useEffect, useState } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
 
@@ -112,7 +113,7 @@ const EsqueciSenha = () => {
 
   const solicitarRecuperacao = async () => {
     const resposta = await fetch(
-      'http://localhost:3000/api/password/esqueci-senha',
+      `${API_BASE}/password/esqueci-senha`,
       {
         method: 'POST',
 

@@ -34,9 +34,7 @@ interface Usuario {
   avatarUrl?: string | null;
 }
 
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api')
-  .replace(/\/+$/, '')
-  .replace(/\/api$/i, '');
+import { API_ORIGIN as API_URL } from '../../config/api';
 
 const PREF_ENDPOINT = `${API_URL}/api/usuarios/preferencias`;
 const CHAVE_PREF = 'sate:preferencias:v1:';

@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './dashboard.module.css';
 import LoadingState from '../../components/ui/LoadingState/LoadingState';
-
+import { API_BASE as API_URL } from '../../config/api';
 
 // ============================================================
 // TIPOS
@@ -165,9 +165,7 @@ interface ErroApi {
 // CONFIGURAÇÕES
 // ============================================================
 
-const API_URL = String(
-  import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
-).replace(/\/+$/, '');
+
 
 
 const periodos: Periodo[] = [

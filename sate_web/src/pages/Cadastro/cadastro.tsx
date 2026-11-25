@@ -58,7 +58,7 @@ interface CadastroResponse {
 }
 
 
-const API_URL = (import.meta.env.VITE_API_URL as string | undefined) || 'http://localhost:3000';
+import { API_ORIGIN as API_URL } from '../../config/api';
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 
 const heroSlides = [

@@ -16,8 +16,7 @@ import styles from './comparacoes.module.css';
 import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
 
-const API_URL =
-  'http://localhost:3000/api';
+import { API_BASE as API_URL } from '../../config/api';
 
 
 interface EquipeBackend {

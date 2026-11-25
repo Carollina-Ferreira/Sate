@@ -23,7 +23,7 @@ import {
 import styles from './editarAtleta.module.css';
 import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
-const API_URL = 'http://localhost:3000';
+import { API_ORIGIN as API_URL } from '../../config/api';
 
 // ============================================================
 
@@ -258,7 +258,7 @@ const EditarAtleta = ({
 
         useState<string | null>(null);
 
-    const [fotoArquivo, setFotoArquivo] =
+    const [, setFotoArquivo] =
 
         useState<File | null>(null);
 

@@ -124,7 +124,7 @@ interface DadosExtrasNovaEquipe {
 }
 
 
-const API_URL = 'http://localhost:3000/api';
+import { API_BASE as API_URL } from '../../config/api';
 
 
 function obterToken(): string | null {

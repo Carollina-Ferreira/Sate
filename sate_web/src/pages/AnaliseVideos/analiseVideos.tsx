@@ -50,8 +50,7 @@ import {
 
 import styles from './analiseVideos.module.css';
 import LoadingState from '../../components/ui/LoadingState/LoadingState';
-
-const API_URL = 'http://localhost:3000/api';
+import { API_BASE as API_URL, API_ORIGIN } from '../../config/api';
 
 /* ============================================================
    TIPOS
@@ -319,9 +318,9 @@ function normalizarUrlVideo(url: string): string {
     return url;
   }
 
-  return url.startsWith('/')
-    ? `http://localhost:3000${url}`
-    : `http://localhost:3000/${url}`;
+return url.startsWith('/')
+    ? `${API_ORIGIN}${url}`
+    : `${API_ORIGIN}/${url}`;
 }
 
 function formatarData(data?: string | null): string {

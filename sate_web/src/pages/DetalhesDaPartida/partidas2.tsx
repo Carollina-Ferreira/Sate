@@ -40,7 +40,7 @@ import {
 import styles from './partidas2.module.css';
 import LoadingState from '../../components/ui/LoadingState/LoadingState';
 
-const API_URL = 'http://localhost:3000/api';
+import { API_BASE as API_URL, API_ORIGIN } from '../../config/api';
 
 type StatusAnalise = 'Pendente' | 'Em análise' | 'Analisada';
 
@@ -342,10 +342,10 @@ function normalizarUrlVideo(caminho?: string): string {
   const limpo = caminho.replace(/^\/+/, '');
 
   if (limpo.startsWith('uploads/')) {
-    return `http://localhost:3000/${limpo}`;
+    return `${API_ORIGIN}/${limpo}`;
   }
 
-  return `http://localhost:3000/uploads/${limpo}`;
+  return `${API_ORIGIN}/uploads/${limpo}`;
 }
 
 function extrairMarcacoes(dados: unknown): MarcacaoVideo[] {

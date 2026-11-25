@@ -1,3 +1,4 @@
+import { API_BASE } from '../../config/api';
 
 import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -121,7 +122,7 @@ export default function ConfiguracaoConcluida() {
       }
 
       const resposta = await fetch(
-        'http://localhost:3000/api/equipes',
+        `${API_BASE}/equipes`,
         {
           method: 'POST',
           headers: {

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import Carregamento from '../../pages/Carregamento/carregamento';
+import { API_BASE } from '../../config/api';
 
 const RotaInicial = () => {
   const [carregando, setCarregando] = useState(true);
@@ -22,7 +23,7 @@ const RotaInicial = () => {
 
       try {
         const resposta = await fetch(
-          'http://localhost:3000/api/equipes',
+          `${API_BASE}/equipes`,
           {
             method: 'GET',
             headers: {

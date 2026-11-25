@@ -86,9 +86,7 @@ interface EstatisticasPerfil {
   disponibilidade: { marcacoes: boolean; atributos: boolean };
 }
 
-const API_URL = String(
-  import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
-).replace(/\/$/, '');
+import { API_BASE as API_URL } from '../../config/api';
 
 function tokenDeAcesso(): string {
   return localStorage.getItem('token') || localStorage.getItem('accessToken') || '';

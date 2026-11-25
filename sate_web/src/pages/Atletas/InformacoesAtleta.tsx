@@ -16,9 +16,7 @@ import {
 import styles from './informacoesAtleta.module.css';
 
 // Endereço do backend. Pode ser configurado no .env do Vite.
-const API_ORIGIN = String(import.meta.env.VITE_API_URL || 'http://localhost:3000')
-    .replace(/\/api\/?$/, '')
-    .replace(/\/$/, '');
+import { API_ORIGIN } from '../../config/api';
 
 function enderecoDocumento(url: string): string {
     const caminho = String(url || '').trim();

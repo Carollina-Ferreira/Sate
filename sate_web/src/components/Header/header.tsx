@@ -1,5 +1,4 @@
-﻿
-import {
+﻿import {
   Bell,
   CalendarClock,
   CalendarDays,
@@ -125,7 +124,7 @@ interface NotificacoesResponse {
 type OpenPanel = 'search' | 'notifications' | 'user' | null;
 type Theme = 'light' | 'dark';
 
-const API_URL = 'http://localhost:3000';
+import { API_ORIGIN as API_URL } from '../../config/api';
 const LIMITE_RESULTADOS = 3;
 
 // ============================================================

@@ -8,26 +8,33 @@
     width: 100%;
     min-height: 100vh;
     min-height: 100dvh;
-    overflow-x: hidden;
+    min-width: 0;
     display: flex;
+    align-items: stretch;
     justify-content: center;
     position: relative;
     box-sizing: border-box;
+    background: var(--bg-page, var(--sate-local-bg-page, #f7f9f8));
     background: radial-gradient(ellipse 420px 300px at 97% 0%,
-        color-mix(in srgb, var(--rosa) 11%, transparent), transparent 77%),
-        var(--bg-page);
-    font-family: var(--fonte-base);
-    color: var(--texto);
+        color-mix(in srgb, var(--rosa, #ef476f) 11%, transparent), transparent 77%),
+        var(--bg-page, var(--sate-local-bg-page, #f7f9f8));
+    font-family: var(--fonte-base, Inter, Arial, sans-serif);
+    color: var(--texto, var(--sate-local-texto, #1e302a));
 }
 
-.page * { box-sizing: border-box; }
+.page,
+.page *,
+.page *::before,
+.page *::after {
+    box-sizing: border-box;
+}
 
 /* CONTAINER */
 .container {
     width: 100%;
     max-width: 1280px;
-    min-height: 100vh;
-    min-height: 100dvh;
+    min-width: 0;
+    flex: 1 1 1280px;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -41,14 +48,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 29px;
-    margin-bottom: 27px;
+    flex-shrink: 0;
+    margin-top: clamp(12px, 2.5vh, 29px);
+    margin-bottom: clamp(16px, 3vh, 27px);
     text-align: center;
 }
 
 .sportBadge {
     margin-bottom: 7px;
-    color: var(--rosa);
+    color: var(--rosa, #ef476f);
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
@@ -57,16 +65,16 @@
 
 .header h1 {
     margin: 0;
-    color: var(--texto);
-    font-family: var(--fonte-titulo);
+    color: var(--texto, var(--sate-local-texto, #1e302a));
+    font-family: var(--fonte-titulo, var(--fonte-base, Inter, Arial, sans-serif));
     font-size: clamp(24px, 2.4vw, 40px);
     font-weight: 700;
     line-height: 1.2;
 }
 
 .header h1 span {
-    color: var(--rosa);
-    font-family: var(--fonte-destaque);
+    color: var(--rosa, #ef476f);
+    font-family: var(--fonte-destaque, Georgia, serif);
     font-style: italic;
     font-weight: 400;
 }
@@ -74,26 +82,31 @@
 .header p {
     max-width: 760px;
     margin: 10px 0 0;
-    color: var(--texto-suave);
+    color: var(--texto-suave, var(--sate-local-texto-suave, #66766f));
     font-size: clamp(13px, 1vw, 16px);
     line-height: 1.55;
 }
 
 .header strong {
-    color: var(--verde);
+    color: var(--verde, #16a875);
     font-weight: 700;
 }
 
 /* GRID */
 .fieldsGrid {
     width: 100%;
+    min-width: 0;
+    flex-shrink: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
     gap: clamp(12px, 1.2vw, 20px);
 }
 
 /* CARD DO CAMPO */
 .fieldCard {
+    width: 100%;
+    min-width: 0;
     min-height: 72px;
     display: flex;
     align-items: center;
@@ -101,10 +114,10 @@
     position: relative;
     padding: 10px 17px;
     box-sizing: border-box;
-    border: 1px solid var(--borda);
+    border: 1px solid var(--borda, var(--sate-local-borda, #dce5e0));
     border-radius: 15px;
-    background: var(--bg-surface);
-    color: var(--texto);
+    background: var(--bg-surface, var(--sate-local-bg-surface, #ffffff));
+    color: var(--texto, var(--sate-local-texto, #1e302a));
     font-family: inherit;
     text-align: left;
     cursor: pointer;
@@ -118,15 +131,16 @@
 
 .fieldCard:hover {
     transform: translateY(-2px);
-    border-color: var(--verde);
-    background: var(--bg-surface-2);
+    border-color: var(--verde, #16a875);
+    background: var(--bg-surface-2, var(--sate-local-bg-surface-2, #f5f8f7));
     box-shadow: 0 8px 18px rgba(18, 38, 31, 0.07);
 }
 
 /* CARD SELECIONADO */
-.fieldCardSelected {
-    border-color: var(--rosa);
-    background: var(--bg-surface-2);
+.fieldCardSelected,
+.fieldCardSelected:hover {
+    border-color: var(--rosa, #ef476f);
+    background: var(--bg-surface-2, var(--sate-local-bg-surface-2, #f5f8f7));
     box-shadow: 0 5px 16px rgba(239, 71, 111, 0.08);
 }
 
@@ -139,9 +153,9 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    border: 1px solid var(--borda-forte);
+    border: 1px solid var(--borda-forte, var(--sate-local-borda-forte, #a9bcb3));
     border-radius: 50%;
-    background: var(--bg-surface);
+    background: var(--bg-surface, var(--sate-local-bg-surface, #ffffff));
     color: transparent;
     transition:
         background 0.18s ease,
@@ -152,12 +166,13 @@
 }
 
 .fieldCard:hover .checkbox {
-    border-color: var(--verde);
+    border-color: var(--verde, #16a875);
 }
 
-.checkboxSelected {
-    border-color: var(--rosa);
-    background: var(--rosa);
+.checkboxSelected,
+.fieldCard:hover .checkboxSelected {
+    border-color: var(--rosa, #ef476f);
+    background: var(--rosa, #ef476f);
     color: #ffffff;
     transform: scale(1.04);
     box-shadow: 0 4px 10px rgba(239, 71, 111, 0.18);
@@ -166,7 +181,7 @@
 /* TEXTO DO CAMPO */
 .fieldName {
     flex: 1;
-    color: var(--texto);
+    color: var(--texto, var(--sate-local-texto, #1e302a));
     min-width: 0;
     overflow-wrap: anywhere;
     font-size: clamp(14px, 1.05vw, 17px);
@@ -184,8 +199,8 @@
     justify-content: center;
     margin-left: auto;
     border-radius: 11px;
-    background: var(--bg-verde-suave);
-    color: var(--verde);
+    background: var(--bg-verde-suave, var(--sate-local-bg-verde-suave, #e8f6ef));
+    color: var(--verde, #16a875);
     transition:
         background 0.18s ease,
         color 0.18s ease,
@@ -194,26 +209,28 @@
 
 .fieldCard:hover .fieldIcon {
     transform: scale(1.04);
-    background: var(--bg-verde-suave);
+    background: var(--bg-verde-suave, var(--sate-local-bg-verde-suave, #e8f6ef));
 }
 
 .fieldCardSelected .fieldIcon {
-    background: var(--bg-surface-2);
-    color: var(--rosa);
+    background: var(--bg-surface-2, var(--sate-local-bg-surface-2, #f5f8f7));
+    color: var(--rosa, #ef476f);
 }
 
 /* ADICIONAR CAMPO */
 .addField {
+    width: 100%;
+    min-width: 0;
     min-height: 72px;
     display: flex;
     align-items: center;
     gap: 14px;
     padding: 10px 17px;
     box-sizing: border-box;
-    border: 1px dashed var(--borda-forte);
+    border: 1px dashed var(--borda-forte, var(--sate-local-borda-forte, #a9bcb3));
     border-radius: 15px;
     background: transparent;
-    color: var(--texto);
+    color: var(--texto, var(--sate-local-texto, #1e302a));
     font-family: inherit;
     text-align: left;
     cursor: pointer;
@@ -227,8 +244,8 @@
 
 .addField:hover {
     transform: translateY(-2px);
-    border-color: var(--rosa);
-    background: var(--bg-surface-2);
+    border-color: var(--rosa, #ef476f);
+    background: var(--bg-surface-2, var(--sate-local-bg-surface-2, #f5f8f7));
     box-shadow: 0 7px 17px rgba(18, 38, 31, 0.06);
 }
 
@@ -240,7 +257,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: var(--onboarding-primary-bg, var(--verde-escuro));
+    background: var(--onboarding-primary-bg, var(--verde-escuro, #005c45));
     color: var(--onboarding-primary-text, #ffffff);
 }
 
@@ -252,14 +269,14 @@
 }
 
 .addText strong {
-    color: var(--texto);
+    color: var(--texto, var(--sate-local-texto, #1e302a));
     font-size: 14px;
     font-weight: 600;
 }
 
 .addText span {
     margin-top: 2px;
-    color: var(--texto-suave);
+    color: var(--texto-suave, var(--sate-local-texto-suave, #66766f));
     font-size: 11px;
 }
 
@@ -269,6 +286,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
     margin-top: auto;
     padding-top: 31px;
 }
@@ -281,7 +300,7 @@
     padding: 9px 3px;
     border: none;
     background: transparent;
-    color: var(--verde);
+    color: var(--verde, #16a875);
     font-family: inherit;
     font-size: 14px;
     font-weight: 600;
@@ -292,7 +311,7 @@
 }
 
 .backButton:hover {
-    color: var(--onboarding-primary-hover);
+    color: var(--onboarding-primary-hover, var(--verde, #16a875));
     transform: translateX(-2px);
 }
 
@@ -301,25 +320,29 @@
     display: flex;
     align-items: center;
     gap: 14px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-left: auto;
+    min-width: 0;
 }
 
 .selectedCounter {
-    color: var(--texto-suave);
+    color: var(--texto-suave, var(--sate-local-texto-suave, #66766f));
     font-size: 11px;
 }
 
 /* PRÓXIMO */
 .nextButton {
     min-width: 135px;
-    height: 43px;
+    min-height: 43px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 0 18px;
+    padding: 10px 18px;
     border: none;
     border-radius: 9px;
-    background: var(--onboarding-primary-bg, var(--verde-escuro));
+    background: var(--onboarding-primary-bg, var(--verde-escuro, #005c45));
     color: var(--onboarding-primary-text, #ffffff);
     font-family: inherit;
     font-size: 13px;
@@ -333,7 +356,7 @@
 }
 
 .nextButton:hover:not(:disabled) {
-    background: var(--onboarding-primary-hover, var(--verde));
+    background: var(--onboarding-primary-hover, var(--verde, #16a875));
     transform: translateY(-1px);
 }
 
@@ -344,8 +367,8 @@
 }
 
 .tituloDestaque {
-    color: var(--rosa);
-    font-family: var(--fonte-destaque);
+    color: var(--rosa, #ef476f);
+    font-family: var(--fonte-destaque, Georgia, serif);
     font-style: italic;
     font-weight: 400;
 }
@@ -410,7 +433,7 @@
     }
 
     .selectedCounter {
-        display: none;
+        font-size: 10px;
     }
 
     .footer {
@@ -452,8 +475,16 @@
 
 :global(:root[data-theme='dark']) .page {
     /* Reutiliza a paleta escura global do Dashboard. */
-    background: var(--bg-page);
-    color: var(--texto);
+    --sate-local-texto-suave: #aebfb5;
+    --sate-local-borda-forte: #53685e;
+    --sate-local-borda: #34473e;
+    --sate-local-texto: #e8f0ec;
+    --sate-local-bg-verde-suave: #183b2c;
+    --sate-local-bg-surface-2: #203029;
+    --sate-local-bg-surface: #17231e;
+    --sate-local-bg-page: #101916;
+    background: var(--bg-page, var(--sate-local-bg-page, #f7f9f8));
+    color: var(--texto, var(--sate-local-texto, #1e302a));
 
     /* Valores locais de proteção para a versão atual do global.css.
        Ao centralizar esses tokens globalmente, remova estas três linhas. */
@@ -465,34 +496,35 @@
 :global(:root[data-theme='dark']) .sportBadge,
 :global(:root[data-theme='dark']) .header h1 span,
 :global(:root[data-theme='dark']) .tituloDestaque {
-    color: var(--verde);
+    color: var(--verde, #16a875);
 }
 
 :global(:root[data-theme='dark']) .fieldCard {
-    background: var(--bg-surface);
-    border-color: var(--borda);
-    color: var(--texto);
-    box-shadow: var(--shadow-card);
+    background: var(--bg-surface, var(--sate-local-bg-surface, #ffffff));
+    border-color: var(--borda, var(--sate-local-borda, #dce5e0));
+    color: var(--texto, var(--sate-local-texto, #1e302a));
+    box-shadow: var(--shadow-card, 0 4px 12px rgba(0, 0, 0, .12));
 }
 
 :global(:root[data-theme='dark']) .fieldCard:hover {
-    background: var(--bg-surface-2);
-    border-color: var(--verde);
+    background: var(--bg-surface-2, var(--sate-local-bg-surface-2, #f5f8f7));
+    border-color: var(--verde, #16a875);
 }
 
 :global(:root[data-theme='dark']) .fieldCardSelected,
 :global(:root[data-theme='dark']) .fieldCardSelected:hover {
-    background: var(--bg-verde-suave);
-    border-color: var(--verde);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--verde) 13%, transparent);
+    background: var(--bg-verde-suave, var(--sate-local-bg-verde-suave, #e8f6ef));
+    border-color: var(--verde, #16a875);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--verde, #16a875) 13%, transparent);
 }
 
 :global(:root[data-theme='dark']) .checkbox {
-    background: var(--bg-surface);
-    border-color: var(--borda-forte);
+    background: var(--bg-surface, var(--sate-local-bg-surface, #ffffff));
+    border-color: var(--borda-forte, var(--sate-local-borda-forte, #a9bcb3));
 }
 
-:global(:root[data-theme='dark']) .checkboxSelected {
+:global(:root[data-theme='dark']) .checkboxSelected,
+:global(:root[data-theme='dark']) .fieldCard:hover .checkboxSelected {
     background: #16845f;
     border-color: #16845f;
     color: #ffffff;
@@ -500,18 +532,18 @@
 }
 
 :global(:root[data-theme='dark']) .fieldCardSelected .fieldIcon {
-    background: var(--bg-surface-2);
-    color: var(--verde);
+    background: var(--bg-surface-2, var(--sate-local-bg-surface-2, #f5f8f7));
+    color: var(--verde, #16a875);
 }
 
 :global(:root[data-theme='dark']) .addField {
-    border-color: var(--borda-forte);
-    color: var(--texto);
+    border-color: var(--borda-forte, var(--sate-local-borda-forte, #a9bcb3));
+    color: var(--texto, var(--sate-local-texto, #1e302a));
 }
 
 :global(:root[data-theme='dark']) .addField:hover {
-    background: var(--bg-surface-2);
-    border-color: var(--verde);
+    background: var(--bg-surface-2, var(--sate-local-bg-surface-2, #f5f8f7));
+    border-color: var(--verde, #16a875);
 }
 
 :global(:root[data-theme='dark']) .addIcon,
@@ -525,14 +557,14 @@
 }
 
 :global(:root[data-theme='dark']) .backButton {
-    color: var(--verde);
+    color: var(--verde, #16a875);
 }
 
 .fieldCard:focus-visible,
 .addField:focus-visible,
 .backButton:focus-visible,
 .nextButton:focus-visible {
-    outline: 3px solid var(--verde);
+    outline: 3px solid var(--verde, #16a875);
     outline-offset: 3px;
 }
 
@@ -541,27 +573,30 @@
     .backButton, .nextButton { transition: none; }
 }
 
-
-/* ============================================================
-   CONFIGURAÇÃO DA ANÁLISE — SCROLL INVISÍVEL
-============================================================ */
-
-.container {
-    max-height: 100dvh;
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    /* Firefox */
-    scrollbar-width: none;
-
-    /* Internet Explorer / Edge antigo */
-    -ms-overflow-style: none;
-
-    /* Rolagem suave no celular */
-    -webkit-overflow-scrolling: touch;
+/* Ajustes para notebooks e gravação em telas de menor altura.
+   A página cresce naturalmente, sem uma segunda área de rolagem. */
+@media (min-width: 761px) and (max-height: 820px) {
+    .container {
+        padding-top: 18px;
+        padding-bottom: 20px;
+    }
+    .header {
+        margin-top: 12px;
+        margin-bottom: 18px;
+    }
+    .fieldsGrid { gap: 10px 14px; }
+    .fieldCard, .addField { min-height: 60px; padding-block: 8px; }
+    .footer { padding-top: 22px; }
 }
 
-/* Chrome, Edge e Safari */
-.container::-webkit-scrollbar {
-    display: none;
+@media (max-width: 360px) {
+    .footerRight { gap: 8px; }
+    .selectedCounter { flex-basis: 100%; text-align: right; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fieldCard:hover, .addField:hover, .fieldCard:hover .fieldIcon,
+    .checkboxSelected, .backButton:hover, .nextButton:hover:not(:disabled) {
+        transform: none;
+    }
 }

@@ -1,1191 +1,570 @@
-
+/* SATE — Configuração concluída | CSS Module */
 
 .page {
-
   width: 100%;
-
   min-height: 100vh;
-
   min-height: 100dvh;
-
-  overflow-x: hidden;
-
-  display: flex;
-
-  justify-content: center;
-
-  background-color: var(--onboarding-page);
-
-  background-image:
-
-    radial-gradient(circle at 91% 8%, var(--onboarding-glow), transparent 22%);
-
-  background-position: center;
-
-  background-repeat: no-repeat;
-
-  background-size: cover;
-
-  color: var(--onboarding-text);
-
-  font-family: var(--fonte-base);
-
-}
-
-
-
-.container {
-
-  width: 100%;
-
-  max-width: 1280px;
-
-  min-height: 100vh;
-
-  min-height: 100dvh;
-
-  display: flex;
-
-  flex-direction: column;
-
-  padding: clamp(20px, 4vh, 40px) clamp(16px, 4vw, 56px) clamp(20px, 3vh, 34px);
-
+  min-width: 0;
   box-sizing: border-box;
-
+  display: flex;
+  justify-content: center;
+  background-color: var(--onboarding-page, var(--bg-page, #f8faf9));
+  background-image:
+    radial-gradient(circle at 91% 8%, var(--onboarding-glow, rgba(239, 71, 111, .11)), transparent 22%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: var(--onboarding-text, var(--texto, #20352d));
+  font-family: var(--fonte-base, Inter, Arial, sans-serif);
 }
-
-
+.page *,
+.page *::before,
+.page *::after {
+  box-sizing: border-box;
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(20px, 4vh, 40px) clamp(16px, 4vw, 56px) clamp(20px, 3vh, 34px);
+  box-sizing: border-box;
+}
+/* PROGRESSO — etapa 4 de 4 */
+.progressArea {
+  width: min(960px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.stepBadge {
+  align-self: flex-start;
+  color: var(--verde, #16845f);
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+.progressSteps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+.progressSteps > div {
+  height: 5px;
+  min-width: 0;
+  border-radius: 999px;
+  background: var(--verde, #16A875);
+}
+:global(:root[data-theme='dark']) .stepBadge {
+  color: var(--verde, #65d7a8);
+}
+:global(:root[data-theme='dark']) .progressSteps > div {
+  background: var(--verde, #65d7a8);
+}
 
 /* CABEÇALHO */
-
-
-
 .header {
-
-  width: min(900px, 100%);
-
-  margin: 27px auto 0;
-
+  width: min(960px, 100%);
+  margin: clamp(16px, 3vh, 28px) auto 0;
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   text-align: center;
-
 }
-
-
-
 .completeIcon {
-
   width: 54px;
-
   height: 54px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   margin-bottom: 13px;
-
   border-radius: 50%;
-
-  background: var(--onboarding-solid-accent);
-
-  color: var(--onboarding-accent-text);
-
+  background: var(--onboarding-solid-accent, var(--verde-escuro, #005C45));
+  color: var(--onboarding-accent-text, #ffffff);
   box-shadow: 0 8px 20px rgba(239, 71, 111, 0.16);
-
 }
-
-
-
 .header h1 {
-
   margin: 0;
-
-  color: var(--onboarding-text);
-
+  color: var(--onboarding-text, var(--texto, #20352d));
   font-size: clamp(25px, 2.6vw, 44px);
-
   font-weight: 700;
-
   line-height: 1.2;
-
   letter-spacing: -0.8px;
-
 }
-
-
-
 .header h1 em {
-
-  color: var(--rosa);
-
-  font-family: var(--fonte-destaque);
-
+  color: var(--rosa, #EF476F);
+  font-family: var(--fonte-destaque, Georgia, serif);
   font-weight: 400;
-
   font-style: italic;
-
 }
-
-
-
 .header p {
-
   max-width: 680px;
-
   margin: 9px 0 0;
-
-  color: var(--onboarding-muted);
-
-  font-size: clamp(12px, 1vw, 15px);
-
+  color: var(--onboarding-muted, var(--texto-suave, #60736b));
+  font-size: clamp(14px, 1.1vw, 16px);
   line-height: 1.5;
-
 }
-
-
-
 /* ÁREA DOS CARDS */
-
-
-
 .summaryArea {
-
-  width: min(900px, 100%);
-
-  margin: 27px auto 0;
-
+  width: min(960px, 100%);
+  margin: clamp(16px, 3vh, 28px) auto 0;
   display: grid;
-
   grid-template-columns: repeat(2, minmax(0, 1fr));
-
   gap: 18px;
-
 }
-
-
-
 /* CARD DOS CAMPOS */
-
-
-
 .fieldsCard {
-
-  min-height: 205px;
-
-  padding: 18px;
-
+  min-height: 240px;
+  min-width: 0;
+  padding: clamp(18px, 2vw, 24px);
   box-sizing: border-box;
-
-  border: 1px solid var(--onboarding-border);
-
+  border: 1px solid var(--onboarding-border, var(--borda, #e0e8e4));
   border-radius: 16px;
-
-  background: var(--onboarding-surface);
-
-  color: var(--onboarding-text);
-
+  background: var(--onboarding-surface, var(--bg-surface, #ffffff));
+  color: var(--onboarding-text, var(--texto, #20352d));
   box-shadow: 0 5px 16px rgba(18, 38, 31, 0.025);
-
 }
-
-
-
 .sportHeader {
-
   display: flex;
-
   align-items: center;
-
   gap: 10px;
-
 }
-
-
-
 .sportCircle {
-
   width: 38px;
-
   height: 38px;
-
   flex-shrink: 0;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   border-radius: 50%;
-
   background: rgba(22, 168, 117, 0.12);
-
-  color: var(--verde-principal);
-
+  color: var(--verde-principal, var(--verde, #16A875));
   font-size: 18px;
-
 }
-
-
-
 .sportHeader > div:last-child {
-
   display: flex;
-
   flex-direction: column;
-
-  gap: 1px;
-
+  min-width: 0;
+  overflow-wrap: anywhere;
+  gap: 3px;
 }
-
-
-
 .sportHeader strong {
-
-  color: var(--onboarding-text);
-
+  color: var(--onboarding-text, var(--texto, #20352d));
   font-size: 14px;
-
   font-weight: 700;
-
 }
-
-
-
 .sportHeader span {
-
-  color: var(--onboarding-muted);
-
-  font-size: 8px;
-
+  color: var(--onboarding-muted, var(--texto-suave, #60736b));
+  font-size: 11px;
   font-weight: 700;
-
   letter-spacing: 0.5px;
-
 }
-
-
-
 .divider {
-
   width: 100%;
-
   height: 1px;
-
   margin: 14px 0;
-
-  background: var(--onboarding-border);
-
+  background: var(--onboarding-border, var(--borda, #e0e8e4));
 }
-
-
-
 .fieldsTitle {
-
   display: block;
-
   margin-bottom: 10px;
-
-  color: var(--onboarding-text);
-
-  font-size: 10px;
-
+  color: var(--onboarding-text, var(--texto, #20352d));
+  font-size: 13px;
   font-weight: 600;
-
 }
-
-
-
 .fieldsCard ul {
-
   margin: 0;
-
   padding: 0;
-
   display: flex;
-
   flex-wrap: wrap;
-
   gap: 7px;
-
   list-style: none;
-
 }
-
-
-
 .fieldsCard li {
-
   display: flex;
-
   align-items: center;
-
   gap: 5px;
-
-  padding: 6px 9px;
-
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  padding: 7px 10px;
   border: 1px solid rgba(22, 168, 117, 0.08);
-
   border-radius: 999px;
-
-  background: var(--onboarding-success-bg);
-
-  color: var(--onboarding-success-text);
-
-  font-size: 9px;
-
+  background: var(--onboarding-success-bg, var(--bg-verde-suave, #e9f7ef));
+  color: var(--onboarding-success-text, var(--verde-escuro, #005C45));
+  font-size: 12px;
   font-weight: 500;
-
 }
-
-
-
 .fieldsCard li svg {
-
   flex-shrink: 0;
-
-  color: var(--verde-principal);
-
+  color: var(--verde-principal, var(--verde, #16A875));
 }
-
-
-
 .emptyFields {
-
   margin: 10px 0 0;
-
-  color: var(--onboarding-muted);
-
-  font-size: 9px;
-
+  color: var(--onboarding-muted, var(--texto-suave, #60736b));
+  font-size: 12px;
 }
-
-
-
 .moreFields {
-
   display: block;
-
   margin-top: 10px;
-
-  color: var(--verde-principal);
-
-  font-size: 9px;
-
+  color: var(--verde-principal, var(--verde, #16A875));
+  font-size: 12px;
   font-weight: 600;
-
 }
-
-
-
 /* CARD DA EQUIPE */
-
-
-
 .teamCard {
-
-  min-height: 205px;
-
-  overflow: hidden;
-
-  border: 1px solid var(--onboarding-border);
-
-  border-radius: 16px;
-
-  background: var(--onboarding-surface);
-
-  color: var(--onboarding-text);
-
-  box-shadow: 0 5px 16px rgba(18, 38, 31, 0.025);
-
-}
-
-
-
-.teamImage {
-
-  height: 108px;
-
   display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  overflow: hidden;
-
-  background-color: var(--onboarding-primary-bg);
-
-  background-position: center;
-
-  background-repeat: no-repeat;
-
-  background-size: cover;
-
-  color: var(--onboarding-primary-text);
-
-  font-size: 36px;
-
-}
-
-
-
-.teamInfo {
-
-  min-height: 95px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 12px;
-
-  padding: 13px 16px;
-
-  box-sizing: border-box;
-
-}
-
-
-
-.teamInfo > div:first-child {
-
-  min-width: 0;
-
-}
-
-
-
-.teamInfo span {
-
-  display: block;
-
-  margin-bottom: 3px;
-
-  color: var(--rosa);
-
-  font-size: 8px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.7px;
-
-}
-
-
-
-.teamInfo h2 {
-
-  overflow: hidden;
-
-  margin: 0;
-
-  color: var(--onboarding-text);
-
-  font-size: 16px;
-
-  font-weight: 700;
-
-  white-space: nowrap;
-
-  text-overflow: ellipsis;
-
-}
-
-
-
-.teamInfo p {
-
-  margin: 3px 0 0;
-
-  color: var(--onboarding-muted);
-
-  font-size: 9px;
-
-}
-
-
-
-.sportEmoji {
-
-  width: 34px;
-
-  height: 34px;
-
-  flex-shrink: 0;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: rgba(22, 168, 117, 0.12);
-
-  color: var(--verde-principal);
-
-  font-size: 16px;
-
-}
-
-
-
-/* MENSAGEM FINAL */
-
-
-
-.finalMessage {
-
-  width: min(900px, 100%);
-
-  margin: 14px auto 0;
-
-  padding: 10px 13px;
-
-  box-sizing: border-box;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  border: 1px solid rgba(22, 168, 117, 0.14);
-
-  border-radius: 11px;
-
-  background: var(--onboarding-success-bg);
-
-}
-
-
-
-.finalMessageIcon {
-
-  width: 28px;
-
-  height: 28px;
-
-  flex-shrink: 0;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: var(--onboarding-primary-bg);
-
-  color: var(--onboarding-primary-text);
-
-}
-
-
-
-.finalMessage > div:last-child {
-
-  min-width: 0;
-
-  display: flex;
-
   flex-direction: column;
-
-  gap: 1px;
-
+  min-height: 240px;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--onboarding-border, var(--borda, #e0e8e4));
+  border-radius: 16px;
+  background: var(--onboarding-surface, var(--bg-surface, #ffffff));
+  color: var(--onboarding-text, var(--texto, #20352d));
+  box-shadow: 0 5px 16px rgba(18, 38, 31, 0.025);
 }
-
-
-
-.finalMessage strong {
-
-  color: var(--onboarding-text);
-
-  font-size: 10px;
-
-  font-weight: 700;
-
-}
-
-
-
-.finalMessage span {
-
-  color: var(--onboarding-muted);
-
-  font-size: 8px;
-
-  line-height: 1.4;
-
-}
-
-
-
-/* RODAPÉ */
-
-
-
-.footer {
-
-  width: min(900px, 100%);
-
-  margin: auto auto 0;
-
-  padding-top: 18px;
-
+.teamImage {
+  flex: 1 0 140px;
+  height: 140px;
   display: flex;
-
   align-items: center;
-
-  justify-content: space-between;
-
-  gap: 14px;
-
-}
-
-
-
-.backButton {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 7px;
-
-  padding: 0;
-
-  border: none;
-
-  background: transparent;
-
-  color: var(--verde);
-
-  font-family: inherit;
-
-  font-size: 11px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: opacity 0.2s ease, transform 0.2s ease;
-
-}
-
-
-
-.backButton:hover:not(:disabled) {
-
-  opacity: 0.75;
-
-  transform: translateX(-2px);
-
-}
-
-
-
-.backButton:disabled {
-
-  opacity: 0.5;
-
-  cursor: not-allowed;
-
-}
-
-
-
-.nextButton {
-
-  min-width: 135px;
-
-  height: 40px;
-
-  display: flex;
-
-  align-items: center;
-
   justify-content: center;
-
-  gap: 7px;
-
-  padding: 0 16px;
-
-  border: none;
-
-  border-radius: 9px;
-
-  background: var(--onboarding-solid-accent);
-
-  color: var(--onboarding-accent-text);
-
-  font-family: inherit;
-
+  overflow: hidden;
+  background-color: var(--onboarding-primary-bg, var(--verde-escuro, #005C45));
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: var(--onboarding-primary-text, #ffffff);
+  font-size: 36px;
+}
+.teamInfo {
+  flex-shrink: 0;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  box-sizing: border-box;
+}
+.teamInfo > div:first-child {
+  min-width: 0;
+}
+.teamInfo span {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--rosa, #EF476F);
   font-size: 11px;
-
   font-weight: 700;
-
-  cursor: pointer;
-
-  transition: background-color 0.2s ease, transform 0.2s ease;
-
+  letter-spacing: 0.7px;
 }
-
-
-
-.nextButton:hover:not(:disabled) {
-
-  background: var(--onboarding-solid-accent-hover);
-
-  transform: translateY(-1px);
-
+.teamInfo h2 {
+  margin: 0;
+  color: var(--onboarding-text, var(--texto, #20352d));
+  font-size: 16px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  line-height: 1.3;
 }
-
-
-
-.nextButton:disabled {
-
-  opacity: 0.7;
-
-  cursor: not-allowed;
-
+.teamInfo p {
+  margin: 3px 0 0;
+  color: var(--onboarding-muted, var(--texto-suave, #60736b));
+  font-size: 12px;
 }
-
-
-
-/* LOADING */
-
-
-
-.spinner {
-
-  width: 13px;
-
-  height: 13px;
-
-  border: 2px solid rgba(255, 255, 255, 0.35);
-
-  border-top-color: var(--branco);
-
+.sportEmoji {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
-
+  background: rgba(22, 168, 117, 0.12);
+  color: var(--verde-principal, var(--verde, #16A875));
+  font-size: 16px;
+}
+/* MENSAGEM FINAL */
+.finalMessage {
+  width: min(960px, 100%);
+  margin: 14px auto 0;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(22, 168, 117, 0.14);
+  border-radius: 11px;
+  background: var(--onboarding-success-bg, var(--bg-verde-suave, #e9f7ef));
+}
+.finalMessageIcon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--onboarding-primary-bg, var(--verde-escuro, #005C45));
+  color: var(--onboarding-primary-text, #ffffff);
+}
+.finalMessage > div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: anywhere;
+  gap: 3px;
+}
+.finalMessage strong {
+  color: var(--onboarding-text, var(--texto, #20352d));
+  font-size: 13px;
+  font-weight: 700;
+}
+.finalMessage span {
+  color: var(--onboarding-muted, var(--texto-suave, #60736b));
+  font-size: 11px;
+  line-height: 1.4;
+}
+/* RODAPÉ */
+.footer {
+  width: min(960px, 100%);
+  margin: auto auto 0;
+  padding-top: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 0;
+  min-height: 44px;
+  border: none;
+  background: transparent;
+  color: var(--verde, #16A875);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.backButton:hover:not(:disabled) {
+  opacity: 0.75;
+  transform: translateX(-2px);
+}
+.backButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.nextButton {
+  min-width: 135px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 9px;
+  background: var(--onboarding-solid-accent, var(--verde-escuro, #005C45));
+  color: var(--onboarding-accent-text, #ffffff);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.nextButton:hover:not(:disabled) {
+  background: var(--onboarding-solid-accent-hover, var(--verde, #16A875));
+  transform: translateY(-1px);
+}
+.nextButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+/* LOADING */
+.spinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: var(--branco, #ffffff);
+  border-radius: 50%;
   animation: girar 0.7s linear infinite;
-
 }
-
-
-
 @keyframes girar {
-
   to {
-
     transform: rotate(360deg);
-
   }
-
 }
-
-
-
 /* RESPONSIVO */
-
-
-
 /* Telas muito grandes */
-
 @media (min-width: 1600px) {
-
   .container {
-
     max-width: 1440px;
-
   }
-
-
-
+  .progressArea,
   .summaryArea,
-
   .header,
-
   .finalMessage,
-
   .footer {
-
     width: min(1000px, 100%);
-
   }
-
-
-
-  .fieldsCard li {
-
-    font-size: 11px;
-
-  }
-
 }
-
-
-
 /* Tablets e celulares: cards empilhados */
-
 @media (max-width: 800px) {
-
   .container {
-
     padding: 28px 20px 24px;
-
   }
-
-
-
   .summaryArea {
-
     grid-template-columns: minmax(0, 1fr);
-
   }
-
-
-
   .fieldsCard,
-
   .teamCard {
-
     min-height: auto;
-
   }
-
-
-
   .teamImage {
-
+    flex: 0 0 auto;
     height: clamp(110px, 24vw, 170px);
-
   }
-
 }
-
-
-
 /* Celulares */
-
 @media (max-width: 500px) {
-
   .container {
-
     padding: 22px 15px;
-
   }
-
-
-
   .header {
-
-    margin-top: 24px;
-
+    margin-top: 12px;
   }
-
-
-
   .completeIcon {
-
     width: 48px;
-
     height: 48px;
-
     margin-bottom: 12px;
-
   }
-
-
-
-  .header p {
-
-    font-size: 12px;
-
-  }
-
-
-
   .summaryArea {
-
     margin-top: 24px;
-
     gap: 14px;
-
   }
-
-
-
   .fieldsCard {
-
     padding: 16px;
-
   }
-
-
-
   .fieldsCard li,
-
   .moreFields,
-
   .emptyFields,
-
   .teamInfo p {
-
-    font-size: 10px;
-
+    font-size: 13px;
   }
-
-
-
   .sportHeader span,
-
   .teamInfo span,
-
   .finalMessage span {
-
-    font-size: 10px;
-
+    font-size: 13px;
   }
-
-
-
   .fieldsTitle,
-
   .finalMessage strong {
-
-    font-size: 11px;
-
+    font-size: 13px;
   }
-
-
-
   .teamInfo {
-
     padding: 12px 14px;
-
   }
-
-
-
   .finalMessage {
-
     align-items: flex-start;
-
   }
-
-
-
   .footer {
-
     flex-direction: column-reverse;
-
     align-items: stretch;
-
     padding-top: 18px;
-
   }
-
-
-
   .backButton {
-
     justify-content: center;
-
     min-height: 40px;
-
     font-size: 12px;
-
   }
-
-
-
   .nextButton {
-
     width: 100%;
-
     font-size: 12px;
-
   }
-
 }
-
-
-
 /* Celulares pequenos */
-
 @media (max-width: 360px) {
-
   .container {
-
     padding-left: 12px;
-
     padding-right: 12px;
-
   }
-
-
-
   .teamInfo h2 {
-
     font-size: 14px;
-
   }
-
 }
-
-
-
 /* Telas baixas (celular deitado) */
-
 @media (max-height: 560px) {
-
   .header {
-
     margin-top: 14px;
-
   }
-
-
-
   .summaryArea {
-
     margin-top: 14px;
-
   }
-
-
-
   .footer {
-
     padding-top: 14px;
-
   }
-
 }
-
-
-
-
-
-/* ============================================================
-
-   CONFIGURAÇÃO CONCLUÍDA — SCROLL INVISÍVEL
-
-============================================================ */
-
-
-
-.container {
-
-    min-height: 100dvh;
-
-    height: 100dvh;
-
-    box-sizing: border-box;
-
-
-
-    overflow-x: hidden;
-
-    overflow-y: auto;
-
-
-
-    /* Firefox */
-
-    scrollbar-width: none;
-
-
-
-    /* Edge antigo */
-
-    -ms-overflow-style: none;
-
-
-
-    /* Rolagem no celular */
-
-    -webkit-overflow-scrolling: touch;
-
-}
-
-
-
-/* Chrome, Edge e Safari */
-
-.container::-webkit-scrollbar {
-
-    display: none;
-
-}
-
-
-
 /* ============================================================
    MODO ESCURO — IDENTIDADE SATE
    Verde nos destaques; botão de avançar rosa
 ============================================================ */
-
 :global(:root[data-theme='dark']) .page {
-    background-color: var(--bg-page);
+    --onboarding-text: var(--texto, #eaf2ee);
+    --onboarding-muted: var(--texto-suave, #a6b7ae);
+    --onboarding-border: var(--borda, #35443c);
+    --onboarding-surface: var(--bg-surface, #202b25);
+    --onboarding-success-bg: var(--bg-verde-suave, #193a2c);
+    --onboarding-success-text: var(--verde, #65d7a8);
+    --onboarding-primary-bg: #16845f;
+    --onboarding-primary-text: #ffffff;
+    background-color: var(--bg-page, #151d1a);
     background-image: none;
-    color: var(--texto);
+    color: var(--texto, #eaf2ee);
 }
-
 :global(:root[data-theme='dark']) .header h1 {
-    color: var(--texto);
+    color: var(--texto, #eaf2ee);
 }
-
 :global(:root[data-theme='dark']) .header h1 em,
 :global(:root[data-theme='dark']) .teamInfo span {
-    color: var(--verde);
+    color: var(--verde, #16A875);
 }
-
 :global(:root[data-theme='dark']) .completeIcon {
-    background: var(--onboarding-primary-bg);
-    color: var(--onboarding-primary-text);
+    background: var(--onboarding-primary-bg, var(--verde-escuro, #005C45));
+    color: var(--onboarding-primary-text, #ffffff);
     box-shadow: none;
 }
-
-:global(:root[data-theme='dark']) .nextButton {
-    background: var(--rosa);
-    color: #ffffff;
-}
-
-:global(:root[data-theme='dark']) .nextButton:hover:not(:disabled) {
-    background: var(--rosa);
-    filter: brightness(0.9);
-}
-
 :global(:root[data-theme='dark']) .nextButton:focus-visible {
-    outline: 3px solid var(--verde);
+    outline: 3px solid var(--verde, #16A875);
     outline-offset: 3px;
 }
-
-
 /* BOTÃO DE AVANÇAR — ROSA-ESCURO NO MODO ESCURO */
-
 :global(:root[data-theme='dark']) .nextButton {
     background: #B8325B;
     color: #FFFFFF;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
-
 :global(:root[data-theme='dark']) .nextButton:hover:not(:disabled) {
     background: #982548;
+}
+
+/* Foco e acessibilidade */
+.backButton:focus-visible,
+.nextButton:focus-visible {
+  outline: 3px solid var(--verde, #16A875);
+  outline-offset: 3px;
+}
+.teamImage img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (prefers-reduced-motion: reduce) {
+  .backButton, .nextButton { transition: none; }
+  .spinner { animation: girar 1.5s linear infinite; }
 }

@@ -146,11 +146,14 @@ export default function PerfilAtleta({
         let json: unknown;
         try { json = conteudo ? JSON.parse(conteudo) : {}; }
         catch { json = {}; }
-        const objeto = json as Partial<EstatisticasPerfil> & { mensagem?: string };
+        const objeto = (
+          json !== null && typeof json === 'object' && !Array.isArray(json) ? json : {}
+        ) as Partial<EstatisticasPerfil> & { mensagem?: string };
         if (!resposta.ok) {
-          throw new Error(objeto.mensagem || `Não foi possível carregar (HTTP ${resposta.status}).`);
+          const mensagem = typeof objeto.mensagem === 'string' ? objeto.mensagem : '';
+          throw new Error(mensagem || `Não foi possível carregar (HTTP ${resposta.status}).`);
         }
-        if (!objeto.resumo || !Array.isArray(objeto.evolucao)) {
+        if (!objeto.resumo || typeof objeto.resumo !== 'object' || !Array.isArray(objeto.evolucao)) {
           throw new Error('A API retornou estatísticas em um formato inesperado.');
         }
         if (!abortar.signal.aborted) setDados(objeto as EstatisticasPerfil);
@@ -419,7 +422,9 @@ export default function PerfilAtleta({
               )}
             </div>
             <p className={styles.chartFootnote}>
-              {pontos.length === 1
+              {pontos.length === 0
+                ? 'A evolução aparecerá quando houver partidas avaliadas.'
+                : pontos.length === 1
                 ? 'Uma partida avaliada. A evolução aparecerá após a próxima.'
                 : 'Clique em uma bolinha do gráfico para ver as ações daquela partida.'}
             </p>
@@ -472,7 +477,7 @@ export default function PerfilAtleta({
                         role="progressbar"
                         aria-label={`${item.nome}: ${item.valor} ações nessa partida`}
                         aria-valuemin={0}
-                        aria-valuemax={totalDaPartida}
+                        aria-valuemax={Math.max(totalDaPartida, 1)}
                         aria-valuenow={item.valor}
                       >
                         <div
